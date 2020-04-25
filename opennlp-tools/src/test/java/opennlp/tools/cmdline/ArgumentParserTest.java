@@ -19,6 +19,7 @@ package opennlp.tools.cmdline;
 
 import java.nio.charset.Charset;
 import java.util.Collection;
+import java.lang.IllegalArgumentException;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -28,6 +29,34 @@ import opennlp.tools.cmdline.ArgumentParser.ParameterDescription;
 import opennlp.tools.cmdline.params.EncodingParameter;
 
 public class ArgumentParserTest {
+
+  static String getAlphaNumericString(int n)
+  {
+
+    // chose a Character random from this String
+    String AlphaNumericString = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+            + "0123456789"
+            + "abcdefghijklmnopqrstuvxyz"
+            + " ";
+
+    // create StringBuffer size of AlphaNumericString
+    StringBuilder sb = new StringBuilder(n);
+
+    for (int i = 0; i < n; i++) {
+
+      // generate a random number between
+      // 0 to AlphaNumericString variable length
+      int index
+              = (int)(AlphaNumericString.length()
+              * Math.random());
+
+      // add Character one by one in end of sb
+      sb.append(AlphaNumericString
+              .charAt(index));
+    }
+
+    return sb.toString();
+  }
 
   interface ZeroMethods {
   }
@@ -86,6 +115,7 @@ public class ArgumentParserTest {
     Assert.assertEquals(null, args.getCutoff());
     Assert.assertEquals(false, args.getAlphaNumOpt());
   }
+
 
   @Test(expected = IllegalArgumentException.class)
   public void testSimpleArgumentsMissingEncoding() {
@@ -168,4 +198,51 @@ public class ArgumentParserTest {
     ExtendsEncodingParameter params = ArgumentParser.parse(args, ExtendsEncodingParameter.class);
     Assert.assertEquals(Charset.forName(notTheDefaultCharset), params.getEncoding());
   }
+
+  /* SWE 245 */
+
+  @Test(expected = IllegalArgumentException.class)
+  public void testZeroLength() {
+    String argsString = "";
+    ArgumentParser.parse(argsString.split(""), SimpleArguments.class);
+  }
+
+  @Test
+  public void testMillionLength(){
+    String argString = getAlphaNumericString(1000000);
+    // String argsString = "-encoding " + argString;
+    String argsString = "-encoding " + argString;
+    // ArgumentParser.validateArguments(argsString.split(" "), AllOptionalArguments.class);
+
+    Assert.assertFalse(ArgumentParser.validateArguments(argsString.split(" "), AllOptionalArguments.class));
+    // .assertTrue(ArgumentParser.validateArguments(argsString.split(" "), AllOptionalArguments.class));
+  }
+
+  @Test
+  public void testWrongType() {
+    String argsString = "-encoding UTF-8 -alphaNumOpt 23"; // should be a boolean
+    SimpleArguments args = ArgumentParser.parse(argsString.split(" "), SimpleArguments.class);
+    ArgumentParser.validateArguments(argsString.split(" "), SimpleArguments.class);
+    // BUG FOUND: validateArguments should ideally raise an error saying -alphaNumOpt type is
+    // wrong!
+    Assert.assertEquals(Integer.valueOf(100), args.getIterations());
+    Assert.assertEquals(null, args.getCutoff());
+    Assert.assertEquals(false, args.getAlphaNumOpt());
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void testIncorrectSyntax(){
+    String argsString = "-encoding UTF-8 --alphaNumOpt false"; // double hyphens (commonly confused)
+    SimpleArguments args = ArgumentParser.parse(argsString.split(" "), SimpleArguments.class);
+    ArgumentParser.validateArguments(argsString.split(" "), SimpleArguments.class);
+  }
+
+  @Test
+  public void testAmbiguousSemantics() {
+    String argsString = "-encoding en-GB"; // this encoding doesn't make sense, but the fault is not
+    // caught at the modular level
+    SimpleArguments args = ArgumentParser.parse(argsString.split(" "), SimpleArguments.class);
+    ArgumentParser.validateArguments(argsString.split(" "), SimpleArguments.class);
+  }
 }
+
