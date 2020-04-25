@@ -105,16 +105,7 @@ public class ArgumentParserTest {
   }
 
 
-  @Test
-  public void testSimpleArguments() {
-    String argsString = "-encoding UTF-8 -alphaNumOpt false";
-    SimpleArguments args = ArgumentParser.parse(argsString.split(" "), SimpleArguments.class);
 
-    Assert.assertEquals("UTF-8", args.getEncoding());
-    Assert.assertEquals(Integer.valueOf(100), args.getIterations());
-    Assert.assertEquals(null, args.getCutoff());
-    Assert.assertEquals(false, args.getAlphaNumOpt());
-  }
 
 
   @Test(expected = IllegalArgumentException.class)
@@ -201,6 +192,17 @@ public class ArgumentParserTest {
 
   /* SWE 245 */
 
+  @Test
+  public void testSimpleArguments() {
+    String argsString = "-encoding UTF-8 -alphaNumOpt false";
+    SimpleArguments args = ArgumentParser.parse(argsString.split(" "), SimpleArguments.class);
+
+    Assert.assertEquals("UTF-8", args.getEncoding());
+    Assert.assertEquals(Integer.valueOf(100), args.getIterations());
+    Assert.assertEquals(null, args.getCutoff());
+    Assert.assertEquals(false, args.getAlphaNumOpt());
+  }
+
   @Test(expected = IllegalArgumentException.class)
   public void testZeroLength() {
     String argsString = "";
@@ -218,7 +220,7 @@ public class ArgumentParserTest {
     // .assertTrue(ArgumentParser.validateArguments(argsString.split(" "), AllOptionalArguments.class));
   }
 
-  @Test
+  @Test(expected = IllegalArgumentException.class)
   public void testWrongType() {
     String argsString = "-encoding UTF-8 -alphaNumOpt 23"; // should be a boolean
     SimpleArguments args = ArgumentParser.parse(argsString.split(" "), SimpleArguments.class);
@@ -237,7 +239,7 @@ public class ArgumentParserTest {
     ArgumentParser.validateArguments(argsString.split(" "), SimpleArguments.class);
   }
 
-  @Test
+  @Test(expected = IllegalArgumentException.class)
   public void testAmbiguousSemantics() {
     String argsString = "-encoding en-GB"; // this encoding doesn't make sense, but the fault is not
     // caught at the modular level
