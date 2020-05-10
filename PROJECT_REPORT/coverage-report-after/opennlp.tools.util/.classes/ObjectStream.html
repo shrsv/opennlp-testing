@@ -1,0 +1,162 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: ObjectStream</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">opennlp.tools.util</a> ]
+</div>
+
+<h1>Coverage Summary for Class: ObjectStream (opennlp.tools.util)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">ObjectStream</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    50%
+  </span>
+  <span class="absValue">
+    (1/ 2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    50%
+  </span>
+  <span class="absValue">
+    (1/ 2)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/*
+<i>2</i>&nbsp; * Licensed to the Apache Software Foundation (ASF) under one or more
+<i>3</i>&nbsp; * contributor license agreements.  See the NOTICE file distributed with
+<i>4</i>&nbsp; * this work for additional information regarding copyright ownership.
+<i>5</i>&nbsp; * The ASF licenses this file to You under the Apache License, Version 2.0
+<i>6</i>&nbsp; * (the &quot;License&quot;); you may not use this file except in compliance with
+<i>7</i>&nbsp; * the License. You may obtain a copy of the License at
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; *     http://www.apache.org/licenses/LICENSE-2.0
+<i>10</i>&nbsp; *
+<i>11</i>&nbsp; * Unless required by applicable law or agreed to in writing, software
+<i>12</i>&nbsp; * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<i>13</i>&nbsp; * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<i>14</i>&nbsp; * See the License for the specific language governing permissions and
+<i>15</i>&nbsp; * limitations under the License.
+<i>16</i>&nbsp; */
+<i>17</i>&nbsp;
+<i>18</i>&nbsp;
+<i>19</i>&nbsp;package opennlp.tools.util;
+<i>20</i>&nbsp;
+<i>21</i>&nbsp;import java.io.IOException;
+<i>22</i>&nbsp;import java.io.ObjectStreamException;
+<i>23</i>&nbsp;
+<i>24</i>&nbsp;/**
+<i>25</i>&nbsp; * Reads &lt;code&gt;Object&lt;/code&gt;s from a stream.
+<i>26</i>&nbsp; * &lt;p&gt;
+<i>27</i>&nbsp; * Design Decision:&lt;br&gt;
+<i>28</i>&nbsp; * This interface provides a means for iterating over the
+<i>29</i>&nbsp; * objects in a stream, it does not implement {@link java.util.Iterator} or
+<i>30</i>&nbsp; * {@link Iterable} because:
+<i>31</i>&nbsp; * &lt;ul&gt;
+<i>32</i>&nbsp; * &lt;li&gt;{@link java.util.Iterator#next()} and
+<i>33</i>&nbsp; * {@link java.util.Iterator#hasNext()} are declared as throwing no checked
+<i>34</i>&nbsp; * exceptions. Thus the {@link IOException}s thrown by {@link #read()} would
+<i>35</i>&nbsp; * have to be wrapped in {@link RuntimeException}s, and the compiler would be
+<i>36</i>&nbsp; * unable to force users of this code to catch such exceptions.&lt;/li&gt;
+<i>37</i>&nbsp; * &lt;li&gt;Implementing {@link Iterable} would mean either silently calling
+<i>38</i>&nbsp; * {@link #reset()} to guarantee that all items were always seen on each
+<i>39</i>&nbsp; * iteration, or documenting that the Iterable only iterates over the remaining
+<i>40</i>&nbsp; * elements of the ObjectStream. In either case, users not reading the
+<i>41</i>&nbsp; * documentation carefully might run into unexpected behavior.&lt;/li&gt;
+<i>42</i>&nbsp; * &lt;/ul&gt;
+<i>43</i>&nbsp; *
+<i>44</i>&nbsp; * @see ObjectStreamException
+<i>45</i>&nbsp; */
+<i>46</i>&nbsp;public interface ObjectStream&lt;T&gt; extends AutoCloseable {
+<i>47</i>&nbsp;
+<i>48</i>&nbsp;  /**
+<i>49</i>&nbsp;   * Returns the next object. Calling this method repeatedly until it returns
+<i>50</i>&nbsp;   * null will return each object from the underlying source exactly once.
+<i>51</i>&nbsp;   *
+<i>52</i>&nbsp;   * @return the next object or null to signal that the stream is exhausted
+<i>53</i>&nbsp;   *
+<i>54</i>&nbsp;   * @throws IOException if there is an error during reading
+<i>55</i>&nbsp;   */
+<i>56</i>&nbsp;  T read() throws IOException;
+<i>57</i>&nbsp;
+<i>58</i>&nbsp;  /**
+<i>59</i>&nbsp;   * Repositions the stream at the beginning and the previously seen object sequence
+<i>60</i>&nbsp;   * will be repeated exactly. This method can be used to re-read
+<i>61</i>&nbsp;   * the stream if multiple passes over the objects are required.
+<i>62</i>&nbsp;   *
+<i>63</i>&nbsp;   * The implementation of this method is optional.
+<i>64</i>&nbsp;   *
+<i>65</i>&nbsp;   * @throws IOException if there is an error during reseting the stream
+<i>66</i>&nbsp;   */
+<i>67</i>&nbsp;  default void reset() throws IOException, UnsupportedOperationException {
+<b class="nc"><i>68</i>&nbsp;    throw new UnsupportedOperationException(&quot;reset is not supported on this stream&quot;);</b>
+<i>69</i>&nbsp;  }
+<i>70</i>&nbsp;
+<i>71</i>&nbsp;  /**
+<i>72</i>&nbsp;   * Closes the &lt;code&gt;ObjectStream&lt;/code&gt; and releases all allocated
+<i>73</i>&nbsp;   * resources. After close was called its not allowed to call
+<i>74</i>&nbsp;   * read or reset.
+<i>75</i>&nbsp;   *
+<i>76</i>&nbsp;   * @throws IOException if there is an error during closing the stream
+<i>77</i>&nbsp;   */
+<b class="fc"><i>78</i>&nbsp;  default void close() throws IOException {}</b>
+<i>79</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-09 18:47</div>
+</div>
+</body>
+</html>

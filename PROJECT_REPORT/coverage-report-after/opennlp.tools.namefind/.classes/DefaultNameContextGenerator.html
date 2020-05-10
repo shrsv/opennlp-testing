@@ -1,0 +1,226 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: DefaultNameContextGenerator</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">opennlp.tools.namefind</a> ]
+</div>
+
+<h1>Coverage Summary for Class: DefaultNameContextGenerator (opennlp.tools.namefind)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">DefaultNameContextGenerator</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (7/ 7)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    97.2%
+  </span>
+  <span class="absValue">
+    (35/ 36)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/*
+<i>2</i>&nbsp; * Licensed to the Apache Software Foundation (ASF) under one or more
+<i>3</i>&nbsp; * contributor license agreements.  See the NOTICE file distributed with
+<i>4</i>&nbsp; * this work for additional information regarding copyright ownership.
+<i>5</i>&nbsp; * The ASF licenses this file to You under the Apache License, Version 2.0
+<i>6</i>&nbsp; * (the &quot;License&quot;); you may not use this file except in compliance with
+<i>7</i>&nbsp; * the License. You may obtain a copy of the License at
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; *     http://www.apache.org/licenses/LICENSE-2.0
+<i>10</i>&nbsp; *
+<i>11</i>&nbsp; * Unless required by applicable law or agreed to in writing, software
+<i>12</i>&nbsp; * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<i>13</i>&nbsp; * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<i>14</i>&nbsp; * See the License for the specific language governing permissions and
+<i>15</i>&nbsp; * limitations under the License.
+<i>16</i>&nbsp; */
+<i>17</i>&nbsp;
+<i>18</i>&nbsp;package opennlp.tools.namefind;
+<i>19</i>&nbsp;
+<i>20</i>&nbsp;import java.util.ArrayList;
+<i>21</i>&nbsp;import java.util.List;
+<i>22</i>&nbsp;
+<i>23</i>&nbsp;import opennlp.tools.util.featuregen.AdaptiveFeatureGenerator;
+<i>24</i>&nbsp;import opennlp.tools.util.featuregen.BigramNameFeatureGenerator;
+<i>25</i>&nbsp;import opennlp.tools.util.featuregen.CachedFeatureGenerator;
+<i>26</i>&nbsp;import opennlp.tools.util.featuregen.FeatureGeneratorUtil;
+<i>27</i>&nbsp;import opennlp.tools.util.featuregen.OutcomePriorFeatureGenerator;
+<i>28</i>&nbsp;import opennlp.tools.util.featuregen.PreviousMapFeatureGenerator;
+<i>29</i>&nbsp;import opennlp.tools.util.featuregen.TokenClassFeatureGenerator;
+<i>30</i>&nbsp;import opennlp.tools.util.featuregen.TokenFeatureGenerator;
+<i>31</i>&nbsp;import opennlp.tools.util.featuregen.WindowFeatureGenerator;
+<i>32</i>&nbsp;
+<i>33</i>&nbsp;/**
+<i>34</i>&nbsp; * Class for determining contextual features for a tag/chunk style
+<i>35</i>&nbsp; * named-entity recognizer.
+<i>36</i>&nbsp; */
+<i>37</i>&nbsp;public class DefaultNameContextGenerator implements NameContextGenerator {
+<i>38</i>&nbsp;
+<i>39</i>&nbsp;  protected AdaptiveFeatureGenerator[] featureGenerators;
+<i>40</i>&nbsp;
+<i>41</i>&nbsp;  @Deprecated
+<b class="fc"><i>42</i>&nbsp;  private static AdaptiveFeatureGenerator windowFeatures = new CachedFeatureGenerator(</b>
+<i>43</i>&nbsp;      new WindowFeatureGenerator(new TokenFeatureGenerator(), 2, 2),
+<i>44</i>&nbsp;      new WindowFeatureGenerator(new TokenClassFeatureGenerator(true), 2, 2),
+<i>45</i>&nbsp;      new OutcomePriorFeatureGenerator(),
+<i>46</i>&nbsp;      new PreviousMapFeatureGenerator(),
+<i>47</i>&nbsp;      new BigramNameFeatureGenerator());
+<i>48</i>&nbsp;
+<i>49</i>&nbsp;  /**
+<i>50</i>&nbsp;   * Creates a name context generator.
+<i>51</i>&nbsp;   * @deprecated use the other constructor and always provide the feature generators
+<i>52</i>&nbsp;   */
+<i>53</i>&nbsp;  @Deprecated
+<i>54</i>&nbsp;  public DefaultNameContextGenerator() {
+<b class="fc"><i>55</i>&nbsp;    this((AdaptiveFeatureGenerator[]) null);</b>
+<b class="fc"><i>56</i>&nbsp;  }</b>
+<i>57</i>&nbsp;
+<i>58</i>&nbsp;  /**
+<i>59</i>&nbsp;   * Creates a name context generator with the specified cache size.
+<i>60</i>&nbsp;   */
+<b class="fc"><i>61</i>&nbsp;  public DefaultNameContextGenerator(AdaptiveFeatureGenerator... featureGenerators) {</b>
+<i>62</i>&nbsp;
+<b class="fc"><i>63</i>&nbsp;    if (featureGenerators != null) {</b>
+<b class="fc"><i>64</i>&nbsp;      this.featureGenerators = featureGenerators;</b>
+<i>65</i>&nbsp;    }
+<i>66</i>&nbsp;    else {
+<i>67</i>&nbsp;      // use defaults
+<i>68</i>&nbsp;
+<b class="fc"><i>69</i>&nbsp;      this.featureGenerators = new AdaptiveFeatureGenerator[]{</b>
+<i>70</i>&nbsp;          windowFeatures,
+<i>71</i>&nbsp;          new PreviousMapFeatureGenerator()};
+<i>72</i>&nbsp;    }
+<b class="fc"><i>73</i>&nbsp;  }</b>
+<i>74</i>&nbsp;
+<i>75</i>&nbsp;  public void addFeatureGenerator(AdaptiveFeatureGenerator generator) {
+<b class="fc"><i>76</i>&nbsp;    AdaptiveFeatureGenerator[] generators = featureGenerators;</b>
+<i>77</i>&nbsp;
+<b class="fc"><i>78</i>&nbsp;    featureGenerators = new AdaptiveFeatureGenerator[featureGenerators.length + 1];</b>
+<i>79</i>&nbsp;
+<b class="fc"><i>80</i>&nbsp;    System.arraycopy(generators, 0, featureGenerators, 0, generators.length);</b>
+<i>81</i>&nbsp;
+<b class="fc"><i>82</i>&nbsp;    featureGenerators[featureGenerators.length - 1] = generator;</b>
+<b class="fc"><i>83</i>&nbsp;  }</b>
+<i>84</i>&nbsp;
+<i>85</i>&nbsp;  public void updateAdaptiveData(String[] tokens, String[] outcomes) {
+<i>86</i>&nbsp;
+<b class="fc"><i>87</i>&nbsp;    if (tokens != null &amp;&amp; outcomes != null &amp;&amp; tokens.length != outcomes.length) {</b>
+<b class="nc"><i>88</i>&nbsp;      throw new IllegalArgumentException(</b>
+<i>89</i>&nbsp;          &quot;The tokens and outcome arrays MUST have the same size!&quot;);
+<i>90</i>&nbsp;    }
+<i>91</i>&nbsp;
+<b class="fc"><i>92</i>&nbsp;    for (AdaptiveFeatureGenerator featureGenerator : featureGenerators) {</b>
+<b class="fc"><i>93</i>&nbsp;      featureGenerator.updateAdaptiveData(tokens, outcomes);</b>
+<i>94</i>&nbsp;    }
+<b class="fc"><i>95</i>&nbsp;  }</b>
+<i>96</i>&nbsp;
+<i>97</i>&nbsp;  public void clearAdaptiveData() {
+<b class="fc"><i>98</i>&nbsp;    for (AdaptiveFeatureGenerator featureGenerator : featureGenerators) {</b>
+<b class="fc"><i>99</i>&nbsp;      featureGenerator.clearAdaptiveData();</b>
+<i>100</i>&nbsp;    }
+<b class="fc"><i>101</i>&nbsp;  }</b>
+<i>102</i>&nbsp;
+<i>103</i>&nbsp;  /**
+<i>104</i>&nbsp;   * Return the context for finding names at the specified index.
+<i>105</i>&nbsp;   * @param index The index of the token in the specified toks array for which the
+<i>106</i>&nbsp;   *              context should be constructed.
+<i>107</i>&nbsp;   * @param tokens The tokens of the sentence.  The &lt;code&gt;toString&lt;/code&gt; methods
+<i>108</i>&nbsp;   *               of these objects should return the token text.
+<i>109</i>&nbsp;   * @param preds The previous decisions made in the tagging of this sequence.
+<i>110</i>&nbsp;   *              Only indices less than i will be examined.
+<i>111</i>&nbsp;   * @param additionalContext Addition features which may be based on a context outside of the sentence.
+<i>112</i>&nbsp;   *
+<i>113</i>&nbsp;   * @return the context for finding names at the specified index.
+<i>114</i>&nbsp;   */
+<i>115</i>&nbsp;  public String[] getContext(int index, String[] tokens, String[] preds, Object[] additionalContext) {
+<b class="fc"><i>116</i>&nbsp;    List&lt;String&gt; features = new ArrayList&lt;&gt;();</b>
+<i>117</i>&nbsp;
+<b class="fc"><i>118</i>&nbsp;    for (AdaptiveFeatureGenerator featureGenerator : featureGenerators) {</b>
+<b class="fc"><i>119</i>&nbsp;      featureGenerator.createFeatures(features, tokens, index, preds);</b>
+<i>120</i>&nbsp;    }
+<i>121</i>&nbsp;
+<i>122</i>&nbsp;    //previous outcome features
+<b class="fc"><i>123</i>&nbsp;    String po = NameFinderME.OTHER;</b>
+<b class="fc"><i>124</i>&nbsp;    String ppo = NameFinderME.OTHER;</b>
+<i>125</i>&nbsp;
+<i>126</i>&nbsp;    // TODO: These should be moved out here in its own feature generator!
+<b class="fc"><i>127</i>&nbsp;    if (preds != null) {</b>
+<b class="fc"><i>128</i>&nbsp;      if (index &gt; 1) {</b>
+<b class="fc"><i>129</i>&nbsp;        ppo = preds[index - 2];</b>
+<i>130</i>&nbsp;      }
+<i>131</i>&nbsp;
+<b class="fc"><i>132</i>&nbsp;      if (index &gt; 0) {</b>
+<b class="fc"><i>133</i>&nbsp;        po = preds[index - 1];</b>
+<i>134</i>&nbsp;      }
+<b class="fc"><i>135</i>&nbsp;      features.add(&quot;po=&quot; + po);</b>
+<b class="fc"><i>136</i>&nbsp;      features.add(&quot;pow=&quot; + po + &quot;,&quot; + tokens[index]);</b>
+<b class="fc"><i>137</i>&nbsp;      features.add(&quot;powf=&quot; + po + &quot;,&quot; + FeatureGeneratorUtil.tokenFeature(tokens[index]));</b>
+<b class="fc"><i>138</i>&nbsp;      features.add(&quot;ppo=&quot; + ppo);</b>
+<i>139</i>&nbsp;    }
+<i>140</i>&nbsp;
+<b class="fc"><i>141</i>&nbsp;    return features.toArray(new String[features.size()]);</b>
+<i>142</i>&nbsp;  }
+<i>143</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-09 18:47</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,208 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: POSTaggerEvaluatorTool</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">opennlp.tools.cmdline.postag</a> ]
+</div>
+
+<h1>Coverage Summary for Class: POSTaggerEvaluatorTool (opennlp.tools.cmdline.postag)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">POSTaggerEvaluatorTool</td>
+<td class="coverageStat">
+  <span class="percent">
+    66.7%
+  </span>
+  <span class="absValue">
+    (2/ 3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    7.3%
+  </span>
+  <span class="absValue">
+    (3/ 41)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">POSTaggerEvaluatorTool$EvalToolParams</td>
+  </tr>
+<tr>
+  <td class="name"><strong>total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    66.7%
+  </span>
+  <span class="absValue">
+    (2/ 3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    7.3%
+  </span>
+  <span class="absValue">
+    (3/ 41)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/*
+<i>2</i>&nbsp; * Licensed to the Apache Software Foundation (ASF) under one or more
+<i>3</i>&nbsp; * contributor license agreements.  See the NOTICE file distributed with
+<i>4</i>&nbsp; * this work for additional information regarding copyright ownership.
+<i>5</i>&nbsp; * The ASF licenses this file to You under the Apache License, Version 2.0
+<i>6</i>&nbsp; * (the &quot;License&quot;); you may not use this file except in compliance with
+<i>7</i>&nbsp; * the License. You may obtain a copy of the License at
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; *     http://www.apache.org/licenses/LICENSE-2.0
+<i>10</i>&nbsp; *
+<i>11</i>&nbsp; * Unless required by applicable law or agreed to in writing, software
+<i>12</i>&nbsp; * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<i>13</i>&nbsp; * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<i>14</i>&nbsp; * See the License for the specific language governing permissions and
+<i>15</i>&nbsp; * limitations under the License.
+<i>16</i>&nbsp; */
+<i>17</i>&nbsp;
+<i>18</i>&nbsp;package opennlp.tools.cmdline.postag;
+<i>19</i>&nbsp;
+<i>20</i>&nbsp;import java.io.File;
+<i>21</i>&nbsp;import java.io.FileNotFoundException;
+<i>22</i>&nbsp;import java.io.FileOutputStream;
+<i>23</i>&nbsp;import java.io.IOException;
+<i>24</i>&nbsp;import java.io.OutputStream;
+<i>25</i>&nbsp;
+<i>26</i>&nbsp;import opennlp.tools.cmdline.AbstractEvaluatorTool;
+<i>27</i>&nbsp;import opennlp.tools.cmdline.CmdLineUtil;
+<i>28</i>&nbsp;import opennlp.tools.cmdline.TerminateToolException;
+<i>29</i>&nbsp;import opennlp.tools.cmdline.params.EvaluatorParams;
+<i>30</i>&nbsp;import opennlp.tools.cmdline.params.FineGrainedEvaluatorParams;
+<i>31</i>&nbsp;import opennlp.tools.cmdline.postag.POSTaggerEvaluatorTool.EvalToolParams;
+<i>32</i>&nbsp;import opennlp.tools.postag.POSEvaluator;
+<i>33</i>&nbsp;import opennlp.tools.postag.POSModel;
+<i>34</i>&nbsp;import opennlp.tools.postag.POSSample;
+<i>35</i>&nbsp;import opennlp.tools.postag.POSTaggerEvaluationMonitor;
+<i>36</i>&nbsp;
+<i>37</i>&nbsp;public final class POSTaggerEvaluatorTool
+<i>38</i>&nbsp;    extends AbstractEvaluatorTool&lt;POSSample, EvalToolParams&gt; {
+<i>39</i>&nbsp;
+<i>40</i>&nbsp;  interface EvalToolParams extends EvaluatorParams, FineGrainedEvaluatorParams {
+<i>41</i>&nbsp;  }
+<i>42</i>&nbsp;
+<i>43</i>&nbsp;  public POSTaggerEvaluatorTool() {
+<b class="fc"><i>44</i>&nbsp;    super(POSSample.class, EvalToolParams.class);</b>
+<b class="fc"><i>45</i>&nbsp;  }</b>
+<i>46</i>&nbsp;
+<i>47</i>&nbsp;  public String getShortDescription() {
+<b class="fc"><i>48</i>&nbsp;    return &quot;Measures the performance of the POS tagger model with the reference data&quot;;</b>
+<i>49</i>&nbsp;  }
+<i>50</i>&nbsp;
+<i>51</i>&nbsp;  public void run(String format, String[] args) {
+<b class="nc"><i>52</i>&nbsp;    super.run(format, args);</b>
+<i>53</i>&nbsp;
+<b class="nc"><i>54</i>&nbsp;    POSModel model = new POSModelLoader().load(params.getModel());</b>
+<i>55</i>&nbsp;
+<b class="nc"><i>56</i>&nbsp;    POSTaggerEvaluationMonitor missclassifiedListener = null;</b>
+<b class="nc"><i>57</i>&nbsp;    if (params.getMisclassified()) {</b>
+<b class="nc"><i>58</i>&nbsp;      missclassifiedListener = new POSEvaluationErrorListener();</b>
+<i>59</i>&nbsp;    }
+<i>60</i>&nbsp;
+<b class="nc"><i>61</i>&nbsp;    POSTaggerFineGrainedReportListener reportListener = null;</b>
+<b class="nc"><i>62</i>&nbsp;    File reportFile = params.getReportOutputFile();</b>
+<b class="nc"><i>63</i>&nbsp;    OutputStream reportOutputStream = null;</b>
+<b class="nc"><i>64</i>&nbsp;    if (reportFile != null) {</b>
+<b class="nc"><i>65</i>&nbsp;      CmdLineUtil.checkOutputFile(&quot;Report Output File&quot;, reportFile);</b>
+<i>66</i>&nbsp;      try {
+<b class="nc"><i>67</i>&nbsp;        reportOutputStream = new FileOutputStream(reportFile);</b>
+<b class="nc"><i>68</i>&nbsp;        reportListener = new POSTaggerFineGrainedReportListener(</b>
+<i>69</i>&nbsp;            reportOutputStream);
+<b class="nc"><i>70</i>&nbsp;      } catch (FileNotFoundException e) {</b>
+<b class="nc"><i>71</i>&nbsp;        throw new TerminateToolException(-1,</b>
+<i>72</i>&nbsp;            &quot;IO error while creating POS Tagger fine-grained report file: &quot;
+<b class="nc"><i>73</i>&nbsp;                + e.getMessage());</b>
+<b class="nc"><i>74</i>&nbsp;      }</b>
+<i>75</i>&nbsp;    }
+<i>76</i>&nbsp;
+<b class="nc"><i>77</i>&nbsp;    POSEvaluator evaluator = new POSEvaluator(</b>
+<i>78</i>&nbsp;        new opennlp.tools.postag.POSTaggerME(model), missclassifiedListener,
+<i>79</i>&nbsp;        reportListener);
+<i>80</i>&nbsp;
+<b class="nc"><i>81</i>&nbsp;    System.out.print(&quot;Evaluating ... &quot;);</b>
+<i>82</i>&nbsp;    try {
+<b class="nc"><i>83</i>&nbsp;      evaluator.evaluate(sampleStream);</b>
+<i>84</i>&nbsp;    }
+<b class="nc"><i>85</i>&nbsp;    catch (IOException e) {</b>
+<b class="nc"><i>86</i>&nbsp;      System.err.println(&quot;failed&quot;);</b>
+<b class="nc"><i>87</i>&nbsp;      throw new TerminateToolException(-1, &quot;IO error while reading test data: &quot; + e.getMessage(), e);</b>
+<i>88</i>&nbsp;    } finally {
+<b class="nc"><i>89</i>&nbsp;      try {</b>
+<b class="nc"><i>90</i>&nbsp;        sampleStream.close();</b>
+<b class="nc"><i>91</i>&nbsp;      } catch (IOException e) {</b>
+<i>92</i>&nbsp;        // sorry that this can fail
+<b class="nc"><i>93</i>&nbsp;      }</b>
+<b class="nc"><i>94</i>&nbsp;    }</b>
+<i>95</i>&nbsp;
+<b class="nc"><i>96</i>&nbsp;    System.out.println(&quot;done&quot;);</b>
+<i>97</i>&nbsp;
+<b class="nc"><i>98</i>&nbsp;    if (reportListener != null) {</b>
+<b class="nc"><i>99</i>&nbsp;      System.out.println(&quot;Writing fine-grained report to &quot;</b>
+<b class="nc"><i>100</i>&nbsp;          + params.getReportOutputFile().getAbsolutePath());</b>
+<b class="nc"><i>101</i>&nbsp;      reportListener.writeReport();</b>
+<i>102</i>&nbsp;
+<i>103</i>&nbsp;      try {
+<i>104</i>&nbsp;        // TODO: is it a problem to close the stream now?
+<b class="nc"><i>105</i>&nbsp;        reportOutputStream.close();</b>
+<b class="nc"><i>106</i>&nbsp;      } catch (IOException e) {</b>
+<i>107</i>&nbsp;        // nothing to do
+<b class="nc"><i>108</i>&nbsp;      }</b>
+<i>109</i>&nbsp;    }
+<i>110</i>&nbsp;
+<b class="nc"><i>111</i>&nbsp;    System.out.println();</b>
+<i>112</i>&nbsp;
+<b class="nc"><i>113</i>&nbsp;    System.out.println(&quot;Accuracy: &quot; + evaluator.getWordAccuracy());</b>
+<b class="nc"><i>114</i>&nbsp;  }</b>
+<i>115</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-09 15:05</div>
+</div>
+</body>
+</html>

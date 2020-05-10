@@ -1,0 +1,239 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: BaseLink</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">opennlp.tools.entitylinker</a> ]
+</div>
+
+<h1>Coverage Summary for Class: BaseLink (opennlp.tools.entitylinker)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">BaseLink</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 15)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 28)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/*
+<i>2</i>&nbsp; * Licensed to the Apache Software Foundation (ASF) under one or more
+<i>3</i>&nbsp; * contributor license agreements.  See the NOTICE file distributed with
+<i>4</i>&nbsp; * this work for additional information regarding copyright ownership.
+<i>5</i>&nbsp; * The ASF licenses this file to You under the Apache License, Version 2.0
+<i>6</i>&nbsp; * (the &quot;License&quot;); you may not use this file except in compliance with
+<i>7</i>&nbsp; * the License. You may obtain a copy of the License at
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; *     http://www.apache.org/licenses/LICENSE-2.0
+<i>10</i>&nbsp; *
+<i>11</i>&nbsp; * Unless required by applicable law or agreed to in writing, software
+<i>12</i>&nbsp; * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<i>13</i>&nbsp; * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<i>14</i>&nbsp; * See the License for the specific language governing permissions and
+<i>15</i>&nbsp; * limitations under the License.
+<i>16</i>&nbsp; */
+<i>17</i>&nbsp;
+<i>18</i>&nbsp;package opennlp.tools.entitylinker;
+<i>19</i>&nbsp;
+<i>20</i>&nbsp;import java.util.HashMap;
+<i>21</i>&nbsp;import java.util.Objects;
+<i>22</i>&nbsp;
+<i>23</i>&nbsp;/**
+<i>24</i>&nbsp; * Stores a minimal tuple of information. Intended to be used with LinkedSpan
+<i>25</i>&nbsp; *
+<i>26</i>&nbsp; *
+<i>27</i>&nbsp; */
+<i>28</i>&nbsp;public abstract class BaseLink {
+<i>29</i>&nbsp;
+<i>30</i>&nbsp;  private String itemParentID;
+<i>31</i>&nbsp;  private String itemID;
+<i>32</i>&nbsp;  private String itemName;
+<i>33</i>&nbsp;  private String itemType;
+<b class="nc"><i>34</i>&nbsp;  private HashMap&lt;String, Double&gt; scoreMap = new HashMap&lt;&gt;();</b>
+<i>35</i>&nbsp;
+<b class="nc"><i>36</i>&nbsp;  public BaseLink() {</b>
+<i>37</i>&nbsp;  }
+<i>38</i>&nbsp;
+<b class="nc"><i>39</i>&nbsp;  public BaseLink(String itemParentID, String itemID, String itemName, String itemType) {</b>
+<b class="nc"><i>40</i>&nbsp;    this.itemParentID = itemParentID;</b>
+<b class="nc"><i>41</i>&nbsp;    this.itemID = itemID;</b>
+<b class="nc"><i>42</i>&nbsp;    this.itemName = itemName;</b>
+<b class="nc"><i>43</i>&nbsp;    this.itemType = itemType;</b>
+<i>44</i>&nbsp;  }
+<i>45</i>&nbsp;
+<i>46</i>&nbsp;  /**
+<i>47</i>&nbsp;   * Any parent ID for the linked item
+<i>48</i>&nbsp;   * @return
+<i>49</i>&nbsp;   */
+<i>50</i>&nbsp;  public String getItemParentID() {
+<b class="nc"><i>51</i>&nbsp;    return itemParentID;</b>
+<i>52</i>&nbsp;  }
+<i>53</i>&nbsp;
+<i>54</i>&nbsp;  /**
+<i>55</i>&nbsp;   * returns the parent ID of the linked item
+<i>56</i>&nbsp;   * @param itemParentID
+<i>57</i>&nbsp;   */
+<i>58</i>&nbsp;  public void setItemParentID(String itemParentID) {
+<b class="nc"><i>59</i>&nbsp;    this.itemParentID = itemParentID;</b>
+<i>60</i>&nbsp;  }
+<i>61</i>&nbsp;
+<i>62</i>&nbsp;  /**
+<i>63</i>&nbsp;   * returns the itemid
+<i>64</i>&nbsp;   *
+<i>65</i>&nbsp;   * @return
+<i>66</i>&nbsp;   */
+<i>67</i>&nbsp;  public String getItemID() {
+<b class="nc"><i>68</i>&nbsp;    return itemID;</b>
+<i>69</i>&nbsp;  }
+<i>70</i>&nbsp;
+<i>71</i>&nbsp;  /**
+<i>72</i>&nbsp;   * sets the item id. This field can store, for example, the primary key of a
+<i>73</i>&nbsp;   * row in an external/linked database
+<i>74</i>&nbsp;   *
+<i>75</i>&nbsp;   * @param itemID
+<i>76</i>&nbsp;   */
+<i>77</i>&nbsp;  public void setItemID(String itemID) {
+<b class="nc"><i>78</i>&nbsp;    this.itemID = itemID;</b>
+<i>79</i>&nbsp;  }
+<i>80</i>&nbsp;
+<i>81</i>&nbsp;  /**
+<i>82</i>&nbsp;   * returns the name
+<i>83</i>&nbsp;   *
+<i>84</i>&nbsp;   * @return
+<i>85</i>&nbsp;   */
+<i>86</i>&nbsp;  public String getItemName() {
+<b class="nc"><i>87</i>&nbsp;    return itemName;</b>
+<i>88</i>&nbsp;  }
+<i>89</i>&nbsp;
+<i>90</i>&nbsp;  /**
+<i>91</i>&nbsp;   * Sets the item name. An item name can be the native name (often a normalized
+<i>92</i>&nbsp;   * version of something) from an external linked database
+<i>93</i>&nbsp;   *
+<i>94</i>&nbsp;   * @param itemName
+<i>95</i>&nbsp;   */
+<i>96</i>&nbsp;  public void setItemName(String itemName) {
+<b class="nc"><i>97</i>&nbsp;    this.itemName = itemName;</b>
+<i>98</i>&nbsp;  }
+<i>99</i>&nbsp;
+<i>100</i>&nbsp;  /**
+<i>101</i>&nbsp;   * returns the type
+<i>102</i>&nbsp;   *
+<i>103</i>&nbsp;   * @return
+<i>104</i>&nbsp;   */
+<i>105</i>&nbsp;  public String getItemType() {
+<b class="nc"><i>106</i>&nbsp;    return itemType;</b>
+<i>107</i>&nbsp;  }
+<i>108</i>&nbsp;
+<i>109</i>&nbsp;  /**
+<i>110</i>&nbsp;   * sets the item type. An item type can be the native type from an external
+<i>111</i>&nbsp;   * linked database. For instance, a product type or code
+<i>112</i>&nbsp;   *
+<i>113</i>&nbsp;   * @param itemType
+<i>114</i>&nbsp;   */
+<i>115</i>&nbsp;  public void setItemType(String itemType) {
+<b class="nc"><i>116</i>&nbsp;    this.itemType = itemType;</b>
+<i>117</i>&nbsp;  }
+<i>118</i>&nbsp;
+<i>119</i>&nbsp;  public HashMap&lt;String, Double&gt; getScoreMap() {
+<b class="nc"><i>120</i>&nbsp;    return scoreMap;</b>
+<i>121</i>&nbsp;  }
+<i>122</i>&nbsp;
+<i>123</i>&nbsp;  public void setScoreMap(HashMap&lt;String, Double&gt; scoreMap) {
+<b class="nc"><i>124</i>&nbsp;    this.scoreMap = scoreMap;</b>
+<i>125</i>&nbsp;  }
+<i>126</i>&nbsp;
+<i>127</i>&nbsp;  @Override
+<i>128</i>&nbsp;  public String toString() {
+<b class="nc"><i>129</i>&nbsp;    return &quot;\tBaseLink&quot; + &quot;\n\titemParentID=&quot; + itemParentID + &quot;, \n\titemID=&quot; + itemID</b>
+<i>130</i>&nbsp;        + &quot;, \n\titemName=&quot; + itemName + &quot;, \n\titemType=&quot; + itemType + &quot;, \n\tscoreMap=&quot;
+<i>131</i>&nbsp;        + scoreMap + &quot;\n&quot;;
+<i>132</i>&nbsp;  }
+<i>133</i>&nbsp;
+<i>134</i>&nbsp;  @Override
+<i>135</i>&nbsp;  public int hashCode() {
+<b class="nc"><i>136</i>&nbsp;    return Objects.hash(itemParentID, itemID, itemName, itemType);</b>
+<i>137</i>&nbsp;  }
+<i>138</i>&nbsp;
+<i>139</i>&nbsp;  @Override
+<i>140</i>&nbsp;  public boolean equals(Object obj) {
+<b class="nc"><i>141</i>&nbsp;    if (obj == this) {</b>
+<b class="nc"><i>142</i>&nbsp;      return true;</b>
+<i>143</i>&nbsp;    }
+<i>144</i>&nbsp;
+<b class="nc"><i>145</i>&nbsp;    if (obj instanceof BaseLink) {</b>
+<b class="nc"><i>146</i>&nbsp;      BaseLink other = (BaseLink) obj;</b>
+<i>147</i>&nbsp;
+<b class="nc"><i>148</i>&nbsp;      return Objects.equals(itemParentID, other.itemParentID)</b>
+<b class="nc"><i>149</i>&nbsp;          &amp;&amp; Objects.equals(itemID, other.itemID)</b>
+<b class="nc"><i>150</i>&nbsp;          &amp;&amp; Objects.equals(itemName, other.itemName)</b>
+<b class="nc"><i>151</i>&nbsp;          &amp;&amp; Objects.equals(itemType, other.itemType);</b>
+<i>152</i>&nbsp;    }
+<i>153</i>&nbsp;
+<b class="nc"><i>154</i>&nbsp;    return false;</b>
+<i>155</i>&nbsp;  }
+<i>156</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-09 15:05</div>
+</div>
+</body>
+</html>

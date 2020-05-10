@@ -1,0 +1,247 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: NameFinderResource</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">opennlp.bratann</a> ]
+</div>
+
+<h1>Coverage Summary for Class: NameFinderResource (opennlp.bratann)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">NameFinderResource</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 47)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">NameFinderResource$NameAnn</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 48)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/*
+<i>2</i>&nbsp; * Licensed to the Apache Software Foundation (ASF) under one or more
+<i>3</i>&nbsp; * contributor license agreements.  See the NOTICE file distributed with
+<i>4</i>&nbsp; * this work for additional information regarding copyright ownership.
+<i>5</i>&nbsp; * The ASF licenses this file to You under the Apache License, Version 2.0
+<i>6</i>&nbsp; * (the &quot;License&quot;); you may not use this file except in compliance with
+<i>7</i>&nbsp; * the License. You may obtain a copy of the License at
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; *     http://www.apache.org/licenses/LICENSE-2.0
+<i>10</i>&nbsp; *
+<i>11</i>&nbsp; * Unless required by applicable law or agreed to in writing, software
+<i>12</i>&nbsp; * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<i>13</i>&nbsp; * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<i>14</i>&nbsp; * See the License for the specific language governing permissions and
+<i>15</i>&nbsp; * limitations under the License.
+<i>16</i>&nbsp; */
+<i>17</i>&nbsp;
+<i>18</i>&nbsp;package opennlp.bratann;
+<i>19</i>&nbsp;
+<i>20</i>&nbsp;import java.util.ArrayList;
+<i>21</i>&nbsp;import java.util.HashMap;
+<i>22</i>&nbsp;import java.util.List;
+<i>23</i>&nbsp;import java.util.Map;
+<i>24</i>&nbsp;
+<i>25</i>&nbsp;import javax.ws.rs.Consumes;
+<i>26</i>&nbsp;import javax.ws.rs.POST;
+<i>27</i>&nbsp;import javax.ws.rs.Path;
+<i>28</i>&nbsp;import javax.ws.rs.Produces;
+<i>29</i>&nbsp;import javax.ws.rs.QueryParam;
+<i>30</i>&nbsp;import javax.ws.rs.core.MediaType;
+<i>31</i>&nbsp;
+<i>32</i>&nbsp;import opennlp.tools.namefind.TokenNameFinder;
+<i>33</i>&nbsp;import opennlp.tools.sentdetect.SentenceDetector;
+<i>34</i>&nbsp;import opennlp.tools.tokenize.Tokenizer;
+<i>35</i>&nbsp;import opennlp.tools.util.Span;
+<i>36</i>&nbsp;
+<i>37</i>&nbsp;@Path(&quot;/ner&quot;)
+<b class="nc"><i>38</i>&nbsp;public class NameFinderResource {</b>
+<i>39</i>&nbsp;
+<b class="nc"><i>40</i>&nbsp;  private SentenceDetector sentDetect = NameFinderAnnService.sentenceDetector;</b>
+<b class="nc"><i>41</i>&nbsp;  private Tokenizer tokenizer = NameFinderAnnService.tokenizer;</b>
+<b class="nc"><i>42</i>&nbsp;  private TokenNameFinder[] nameFinders = NameFinderAnnService.nameFinders;</b>
+<i>43</i>&nbsp;
+<i>44</i>&nbsp;  private static int findNextNonWhitespaceChar(CharSequence s, int beginOffset, int endOffset) {
+<b class="nc"><i>45</i>&nbsp;    for (int i = beginOffset; i &lt; endOffset; i++) {</b>
+<b class="nc"><i>46</i>&nbsp;      if (!Character.isSpaceChar(s.charAt(i))) {</b>
+<b class="nc"><i>47</i>&nbsp;        return i;</b>
+<i>48</i>&nbsp;      }
+<i>49</i>&nbsp;    }
+<b class="nc"><i>50</i>&nbsp;    return -1;</b>
+<i>51</i>&nbsp;  }
+<i>52</i>&nbsp;
+<i>53</i>&nbsp;  @POST
+<i>54</i>&nbsp;  @Consumes(MediaType.TEXT_PLAIN)
+<i>55</i>&nbsp;  @Produces(MediaType.APPLICATION_JSON)
+<i>56</i>&nbsp;  public Map&lt;String, NameAnn&gt; findNames(@QueryParam(&quot;model&quot;) String modelName, String text) {
+<b class="nc"><i>57</i>&nbsp;    Span[] sentenceSpans = sentDetect.sentPosDetect(text);</b>
+<b class="nc"><i>58</i>&nbsp;    Map&lt;String, NameAnn&gt; map = new HashMap&lt;&gt;();</b>
+<i>59</i>&nbsp;
+<b class="nc"><i>60</i>&nbsp;    int indexCounter = 0;</b>
+<i>61</i>&nbsp;
+<b class="nc"><i>62</i>&nbsp;    for (Span sentenceSpan : sentenceSpans) {</b>
+<i>63</i>&nbsp;
+<b class="nc"><i>64</i>&nbsp;      String sentenceText = sentenceSpan.getCoveredText(text).toString();</b>
+<i>65</i>&nbsp;
+<i>66</i>&nbsp;      // offset of sentence gets lost here!
+<b class="nc"><i>67</i>&nbsp;      Span[] tokenSpans = tokenizer.tokenizePos(sentenceText);</b>
+<i>68</i>&nbsp;
+<b class="nc"><i>69</i>&nbsp;      String[] tokens = Span.spansToStrings(tokenSpans, sentenceText);</b>
+<i>70</i>&nbsp;
+<b class="nc"><i>71</i>&nbsp;      for (TokenNameFinder nameFinder : nameFinders) {</b>
+<b class="nc"><i>72</i>&nbsp;        Span[] names = nameFinder.find(tokens);</b>
+<i>73</i>&nbsp;
+<b class="nc"><i>74</i>&nbsp;        for (Span name : names) {</b>
+<i>75</i>&nbsp;
+<b class="nc"><i>76</i>&nbsp;          int beginOffset = tokenSpans[name.getStart()].getStart() + sentenceSpan.getStart();</b>
+<b class="nc"><i>77</i>&nbsp;          int endOffset = tokenSpans[name.getEnd() - 1].getEnd() + sentenceSpan.getStart();</b>
+<i>78</i>&nbsp;
+<i>79</i>&nbsp;          // create a list of new line indexes
+<b class="nc"><i>80</i>&nbsp;          List&lt;Integer&gt; newLineIndexes = new ArrayList&lt;&gt;();</b>
+<i>81</i>&nbsp;
+<i>82</i>&nbsp;          // TODO: Code needs to handle case that there are multiple new lines
+<i>83</i>&nbsp;          // in a row
+<i>84</i>&nbsp;
+<b class="nc"><i>85</i>&nbsp;          boolean inNewLineSequence = false;</b>
+<b class="nc"><i>86</i>&nbsp;          for (int ci = beginOffset; ci &lt; endOffset; ci++) {</b>
+<b class="nc"><i>87</i>&nbsp;            if (text.charAt(ci) == &#39;\n&#39; || text.charAt(ci) == &#39;\r&#39;) {</b>
+<b class="nc"><i>88</i>&nbsp;              if (!inNewLineSequence) {</b>
+<b class="nc"><i>89</i>&nbsp;                newLineIndexes.add(ci);</b>
+<i>90</i>&nbsp;              }
+<b class="nc"><i>91</i>&nbsp;              inNewLineSequence = true;</b>
+<i>92</i>&nbsp;            } else {
+<b class="nc"><i>93</i>&nbsp;              inNewLineSequence = false;</b>
+<i>94</i>&nbsp;            }
+<i>95</i>&nbsp;          }
+<i>96</i>&nbsp;
+<b class="nc"><i>97</i>&nbsp;          List&lt;String&gt; textSegments = new ArrayList&lt;&gt;();</b>
+<b class="nc"><i>98</i>&nbsp;          List&lt;int[]&gt; spanSegments = new ArrayList&lt;&gt;();</b>
+<i>99</i>&nbsp;
+<b class="nc"><i>100</i>&nbsp;          int segmentBegin = beginOffset;</b>
+<i>101</i>&nbsp;
+<b class="nc"><i>102</i>&nbsp;          for (int newLineOffset : newLineIndexes) {</b>
+<i>103</i>&nbsp;            // create segment from begin to offset
+<b class="nc"><i>104</i>&nbsp;            textSegments.add(text.substring(segmentBegin, newLineOffset));</b>
+<b class="nc"><i>105</i>&nbsp;            spanSegments.add(new int[] {segmentBegin, newLineOffset});</b>
+<i>106</i>&nbsp;
+<b class="nc"><i>107</i>&nbsp;            segmentBegin = findNextNonWhitespaceChar(text, newLineOffset + 1,</b>
+<i>108</i>&nbsp;                endOffset);
+<i>109</i>&nbsp;
+<b class="nc"><i>110</i>&nbsp;            if (segmentBegin == -1) {</b>
+<b class="nc"><i>111</i>&nbsp;              break;</b>
+<i>112</i>&nbsp;            }
+<b class="nc"><i>113</i>&nbsp;          }</b>
+<i>114</i>&nbsp;
+<i>115</i>&nbsp;          // create left over segment
+<b class="nc"><i>116</i>&nbsp;          if (segmentBegin != -1) {</b>
+<b class="nc"><i>117</i>&nbsp;            textSegments.add(text.substring(segmentBegin, endOffset));</b>
+<b class="nc"><i>118</i>&nbsp;            spanSegments.add(new int[] {segmentBegin, endOffset});</b>
+<i>119</i>&nbsp;          }
+<i>120</i>&nbsp;
+<b class="nc"><i>121</i>&nbsp;          NameAnn ann = new NameAnn();</b>
+<b class="nc"><i>122</i>&nbsp;          ann.texts = textSegments.toArray(new String[textSegments.size()]);</b>
+<b class="nc"><i>123</i>&nbsp;          ann.offsets = spanSegments.toArray(new int[spanSegments.size()][]);</b>
+<b class="nc"><i>124</i>&nbsp;          ann.type = name.getType();</b>
+<i>125</i>&nbsp;
+<b class="nc"><i>126</i>&nbsp;          map.put(Integer.toString(indexCounter++), ann);</b>
+<i>127</i>&nbsp;        }
+<i>128</i>&nbsp;      }
+<i>129</i>&nbsp;    }
+<b class="nc"><i>130</i>&nbsp;    return map;</b>
+<i>131</i>&nbsp;  }
+<i>132</i>&nbsp;
+<b class="nc"><i>133</i>&nbsp;  public static class NameAnn {</b>
+<i>134</i>&nbsp;    public int[][] offsets;
+<i>135</i>&nbsp;    public String[] texts;
+<i>136</i>&nbsp;    public String type;
+<i>137</i>&nbsp;  }
+<i>138</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-09 18:47</div>
+</div>
+</body>
+</html>

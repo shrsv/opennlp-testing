@@ -1,0 +1,155 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: ParserEvaluatorTool</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">opennlp.tools.cmdline.parser</a> ]
+</div>
+
+<h1>Coverage Summary for Class: ParserEvaluatorTool (opennlp.tools.cmdline.parser)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">ParserEvaluatorTool</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    66.7%
+  </span>
+  <span class="absValue">
+    (2/ 3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    14.3%
+  </span>
+  <span class="absValue">
+    (3/ 21)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/*
+<i>2</i>&nbsp; * Licensed to the Apache Software Foundation (ASF) under one or more
+<i>3</i>&nbsp; * contributor license agreements.  See the NOTICE file distributed with
+<i>4</i>&nbsp; * this work for additional information regarding copyright ownership.
+<i>5</i>&nbsp; * The ASF licenses this file to You under the Apache License, Version 2.0
+<i>6</i>&nbsp; * (the &quot;License&quot;); you may not use this file except in compliance with
+<i>7</i>&nbsp; * the License. You may obtain a copy of the License at
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; *     http://www.apache.org/licenses/LICENSE-2.0
+<i>10</i>&nbsp; *
+<i>11</i>&nbsp; * Unless required by applicable law or agreed to in writing, software
+<i>12</i>&nbsp; * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<i>13</i>&nbsp; * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<i>14</i>&nbsp; * See the License for the specific language governing permissions and
+<i>15</i>&nbsp; * limitations under the License.
+<i>16</i>&nbsp; */
+<i>17</i>&nbsp;
+<i>18</i>&nbsp;package opennlp.tools.cmdline.parser;
+<i>19</i>&nbsp;
+<i>20</i>&nbsp;import java.io.IOException;
+<i>21</i>&nbsp;
+<i>22</i>&nbsp;import opennlp.tools.cmdline.AbstractEvaluatorTool;
+<i>23</i>&nbsp;import opennlp.tools.cmdline.TerminateToolException;
+<i>24</i>&nbsp;import opennlp.tools.cmdline.params.EvaluatorParams;
+<i>25</i>&nbsp;import opennlp.tools.parser.Parse;
+<i>26</i>&nbsp;import opennlp.tools.parser.Parser;
+<i>27</i>&nbsp;import opennlp.tools.parser.ParserEvaluator;
+<i>28</i>&nbsp;import opennlp.tools.parser.ParserFactory;
+<i>29</i>&nbsp;import opennlp.tools.parser.ParserModel;
+<i>30</i>&nbsp;
+<i>31</i>&nbsp;public class ParserEvaluatorTool extends AbstractEvaluatorTool&lt;Parse, EvaluatorParams&gt; {
+<i>32</i>&nbsp;
+<i>33</i>&nbsp;  public ParserEvaluatorTool() {
+<b class="fc"><i>34</i>&nbsp;    super(Parse.class, EvaluatorParams.class);</b>
+<b class="fc"><i>35</i>&nbsp;  }</b>
+<i>36</i>&nbsp;
+<i>37</i>&nbsp;  public String getShortDescription() {
+<b class="fc"><i>38</i>&nbsp;    return &quot;Measures the performance of the Parser model with the reference data&quot;;</b>
+<i>39</i>&nbsp;  }
+<i>40</i>&nbsp;
+<i>41</i>&nbsp;  @Override
+<i>42</i>&nbsp;  public void run(String format, String[] args) {
+<i>43</i>&nbsp;
+<b class="nc"><i>44</i>&nbsp;    super.run(format, args);</b>
+<i>45</i>&nbsp;
+<b class="nc"><i>46</i>&nbsp;    ParserModel model = new ParserModelLoader().load(params.getModel());</b>
+<i>47</i>&nbsp;
+<b class="nc"><i>48</i>&nbsp;    Parser parser = ParserFactory.create(model);</b>
+<i>49</i>&nbsp;
+<b class="nc"><i>50</i>&nbsp;    ParserEvaluator evaluator = new ParserEvaluator(parser);</b>
+<i>51</i>&nbsp;
+<b class="nc"><i>52</i>&nbsp;    System.out.print(&quot;Evaluating ... &quot;);</b>
+<i>53</i>&nbsp;    try {
+<b class="nc"><i>54</i>&nbsp;      evaluator.evaluate(sampleStream);</b>
+<i>55</i>&nbsp;    }
+<b class="nc"><i>56</i>&nbsp;    catch (IOException e) {</b>
+<b class="nc"><i>57</i>&nbsp;      System.err.println(&quot;failed&quot;);</b>
+<b class="nc"><i>58</i>&nbsp;      throw new TerminateToolException(-1, &quot;IO error while reading test data: &quot; + e.getMessage(), e);</b>
+<i>59</i>&nbsp;    } finally {
+<b class="nc"><i>60</i>&nbsp;      try {</b>
+<b class="nc"><i>61</i>&nbsp;        sampleStream.close();</b>
+<b class="nc"><i>62</i>&nbsp;      } catch (IOException e) {</b>
+<i>63</i>&nbsp;        // sorry that this can fail
+<b class="nc"><i>64</i>&nbsp;      }</b>
+<b class="nc"><i>65</i>&nbsp;    }</b>
+<b class="nc"><i>66</i>&nbsp;    System.out.println(&quot;done&quot;);</b>
+<i>67</i>&nbsp;
+<b class="nc"><i>68</i>&nbsp;    System.out.println();</b>
+<i>69</i>&nbsp;
+<b class="nc"><i>70</i>&nbsp;    System.out.println(evaluator.getFMeasure());</b>
+<b class="nc"><i>71</i>&nbsp;  }</b>
+<i>72</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-09 18:47</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,1263 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: FineGrainedReportListener</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">opennlp.tools.cmdline</a> ]
+</div>
+
+<h1>Coverage Summary for Class: FineGrainedReportListener (opennlp.tools.cmdline)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">FineGrainedReportListener</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 38)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 218)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">FineGrainedReportListener$ConfusionMatrixLine</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 5)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 22)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">FineGrainedReportListener$Counter</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 4)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">FineGrainedReportListener$GroupedLabelComparator</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 45)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">FineGrainedReportListener$GroupedMatrixLabelComparator</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 45)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">FineGrainedReportListener$MatrixLabelComparator</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 17)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">FineGrainedReportListener$SimpleLabelComparator</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 12)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">FineGrainedReportListener$Stats</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 31)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 125)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 86)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 488)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/*
+<i>2</i>&nbsp; * Licensed to the Apache Software Foundation (ASF) under one or more
+<i>3</i>&nbsp; * contributor license agreements.  See the NOTICE file distributed with
+<i>4</i>&nbsp; * this work for additional information regarding copyright ownership.
+<i>5</i>&nbsp; * The ASF licenses this file to You under the Apache License, Version 2.0
+<i>6</i>&nbsp; * (the &quot;License&quot;); you may not use this file except in compliance with
+<i>7</i>&nbsp; * the License. You may obtain a copy of the License at
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; *     http://www.apache.org/licenses/LICENSE-2.0
+<i>10</i>&nbsp; *
+<i>11</i>&nbsp; * Unless required by applicable law or agreed to in writing, software
+<i>12</i>&nbsp; * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<i>13</i>&nbsp; * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<i>14</i>&nbsp; * See the License for the specific language governing permissions and
+<i>15</i>&nbsp; * limitations under the License.
+<i>16</i>&nbsp; */
+<i>17</i>&nbsp;
+<i>18</i>&nbsp;package opennlp.tools.cmdline;
+<i>19</i>&nbsp;
+<i>20</i>&nbsp;import java.io.OutputStream;
+<i>21</i>&nbsp;import java.io.PrintStream;
+<i>22</i>&nbsp;import java.text.MessageFormat;
+<i>23</i>&nbsp;import java.util.ArrayList;
+<i>24</i>&nbsp;import java.util.Arrays;
+<i>25</i>&nbsp;import java.util.Collections;
+<i>26</i>&nbsp;import java.util.Comparator;
+<i>27</i>&nbsp;import java.util.HashMap;
+<i>28</i>&nbsp;import java.util.HashSet;
+<i>29</i>&nbsp;import java.util.Iterator;
+<i>30</i>&nbsp;import java.util.LinkedList;
+<i>31</i>&nbsp;import java.util.List;
+<i>32</i>&nbsp;import java.util.Map;
+<i>33</i>&nbsp;import java.util.Map.Entry;
+<i>34</i>&nbsp;import java.util.Set;
+<i>35</i>&nbsp;import java.util.SortedSet;
+<i>36</i>&nbsp;import java.util.TreeSet;
+<i>37</i>&nbsp;
+<i>38</i>&nbsp;import opennlp.tools.util.Span;
+<i>39</i>&nbsp;import opennlp.tools.util.eval.FMeasure;
+<i>40</i>&nbsp;import opennlp.tools.util.eval.Mean;
+<i>41</i>&nbsp;
+<i>42</i>&nbsp;public abstract class FineGrainedReportListener {
+<i>43</i>&nbsp;
+<b class="nc"><i>44</i>&nbsp;  private static final char[] alpha = { &#39;a&#39;, &#39;b&#39;, &#39;c&#39;, &#39;d&#39;, &#39;e&#39;, &#39;f&#39;, &#39;g&#39;, &#39;h&#39;,</b>
+<i>45</i>&nbsp;      &#39;i&#39;, &#39;j&#39;, &#39;k&#39;, &#39;l&#39;, &#39;m&#39;, &#39;n&#39;, &#39;o&#39;, &#39;p&#39;, &#39;q&#39;, &#39;r&#39;, &#39;s&#39;, &#39;t&#39;, &#39;u&#39;, &#39;v&#39;,
+<i>46</i>&nbsp;      &#39;w&#39;, &#39;x&#39;, &#39;y&#39;, &#39;z&#39; };
+<i>47</i>&nbsp;  private final PrintStream printStream;
+<b class="nc"><i>48</i>&nbsp;  private final Stats stats = new Stats();</b>
+<i>49</i>&nbsp;
+<b class="nc"><i>50</i>&nbsp;  public FineGrainedReportListener(PrintStream printStream) {</b>
+<b class="nc"><i>51</i>&nbsp;    this.printStream = printStream;</b>
+<i>52</i>&nbsp;  }
+<i>53</i>&nbsp;
+<i>54</i>&nbsp;  /**
+<i>55</i>&nbsp;   * Writes the report to the {@link OutputStream}. Should be called only after
+<i>56</i>&nbsp;   * the evaluation process
+<i>57</i>&nbsp;   */
+<b class="nc"><i>58</i>&nbsp;  public FineGrainedReportListener(OutputStream outputStream) {</b>
+<b class="nc"><i>59</i>&nbsp;    this.printStream = new PrintStream(outputStream);</b>
+<i>60</i>&nbsp;  }
+<i>61</i>&nbsp;
+<i>62</i>&nbsp;  private static String generateAlphaLabel(int index) {
+<i>63</i>&nbsp;
+<b class="nc"><i>64</i>&nbsp;    char[] labelChars = new char[3];</b>
+<i>65</i>&nbsp;    int i;
+<i>66</i>&nbsp;
+<b class="nc"><i>67</i>&nbsp;    for (i = 2; i &gt;= 0; i--) {</b>
+<b class="nc"><i>68</i>&nbsp;      if (index &gt;= 0) {</b>
+<b class="nc"><i>69</i>&nbsp;        labelChars[i] = alpha[index % alpha.length];</b>
+<b class="nc"><i>70</i>&nbsp;        index = index / alpha.length - 1;</b>
+<i>71</i>&nbsp;      } else {
+<b class="nc"><i>72</i>&nbsp;        labelChars[i] = &#39; &#39;;</b>
+<i>73</i>&nbsp;      }
+<i>74</i>&nbsp;    }
+<b class="nc"><i>75</i>&nbsp;    return new String(labelChars);</b>
+<i>76</i>&nbsp;  }
+<i>77</i>&nbsp;
+<i>78</i>&nbsp;  public abstract void writeReport();
+<i>79</i>&nbsp;
+<i>80</i>&nbsp;
+<i>81</i>&nbsp;  // api methods
+<i>82</i>&nbsp;  // general stats
+<i>83</i>&nbsp;
+<i>84</i>&nbsp;  protected Stats getStats() {
+<b class="nc"><i>85</i>&nbsp;    return this.stats;</b>
+<i>86</i>&nbsp;  }
+<i>87</i>&nbsp;
+<i>88</i>&nbsp;  private long getNumberOfSentences() {
+<b class="nc"><i>89</i>&nbsp;    return stats.getNumberOfSentences();</b>
+<i>90</i>&nbsp;  }
+<i>91</i>&nbsp;
+<i>92</i>&nbsp;  private double getAverageSentenceSize() {
+<b class="nc"><i>93</i>&nbsp;    return stats.getAverageSentenceSize();</b>
+<i>94</i>&nbsp;  }
+<i>95</i>&nbsp;
+<i>96</i>&nbsp;  private int getMinSentenceSize() {
+<b class="nc"><i>97</i>&nbsp;    return stats.getMinSentenceSize();</b>
+<i>98</i>&nbsp;  }
+<i>99</i>&nbsp;
+<i>100</i>&nbsp;  private int getMaxSentenceSize() {
+<b class="nc"><i>101</i>&nbsp;    return stats.getMaxSentenceSize();</b>
+<i>102</i>&nbsp;  }
+<i>103</i>&nbsp;
+<i>104</i>&nbsp;  private int getNumberOfTags() {
+<b class="nc"><i>105</i>&nbsp;    return stats.getNumberOfTags();</b>
+<i>106</i>&nbsp;  }
+<i>107</i>&nbsp;
+<i>108</i>&nbsp;  // token stats
+<i>109</i>&nbsp;
+<i>110</i>&nbsp;  private double getAccuracy() {
+<b class="nc"><i>111</i>&nbsp;    return stats.getAccuracy();</b>
+<i>112</i>&nbsp;  }
+<i>113</i>&nbsp;
+<i>114</i>&nbsp;  private double getTokenAccuracy(String token) {
+<b class="nc"><i>115</i>&nbsp;    return stats.getTokenAccuracy(token);</b>
+<i>116</i>&nbsp;  }
+<i>117</i>&nbsp;
+<i>118</i>&nbsp;  private SortedSet&lt;String&gt; getTokensOrderedByFrequency() {
+<b class="nc"><i>119</i>&nbsp;    return stats.getTokensOrderedByFrequency();</b>
+<i>120</i>&nbsp;  }
+<i>121</i>&nbsp;
+<i>122</i>&nbsp;  private int getTokenFrequency(String token) {
+<b class="nc"><i>123</i>&nbsp;    return stats.getTokenFrequency(token);</b>
+<i>124</i>&nbsp;  }
+<i>125</i>&nbsp;
+<i>126</i>&nbsp;  private int getTokenErrors(String token) {
+<b class="nc"><i>127</i>&nbsp;    return stats.getTokenErrors(token);</b>
+<i>128</i>&nbsp;  }
+<i>129</i>&nbsp;
+<i>130</i>&nbsp;  private SortedSet&lt;String&gt; getTokensOrderedByNumberOfErrors() {
+<b class="nc"><i>131</i>&nbsp;    return stats.getTokensOrderedByNumberOfErrors();</b>
+<i>132</i>&nbsp;  }
+<i>133</i>&nbsp;
+<i>134</i>&nbsp;  private SortedSet&lt;String&gt; getTagsOrderedByErrors() {
+<b class="nc"><i>135</i>&nbsp;    return stats.getTagsOrderedByErrors();</b>
+<i>136</i>&nbsp;  }
+<i>137</i>&nbsp;
+<i>138</i>&nbsp;  private int getTagFrequency(String tag) {
+<b class="nc"><i>139</i>&nbsp;    return stats.getTagFrequency(tag);</b>
+<i>140</i>&nbsp;  }
+<i>141</i>&nbsp;
+<i>142</i>&nbsp;  private int getTagErrors(String tag) {
+<b class="nc"><i>143</i>&nbsp;    return stats.getTagErrors(tag);</b>
+<i>144</i>&nbsp;  }
+<i>145</i>&nbsp;
+<i>146</i>&nbsp;  private double getTagPrecision(String tag) {
+<b class="nc"><i>147</i>&nbsp;    return stats.getTagPrecision(tag);</b>
+<i>148</i>&nbsp;  }
+<i>149</i>&nbsp;
+<i>150</i>&nbsp;  private double getTagRecall(String tag) {
+<b class="nc"><i>151</i>&nbsp;    return stats.getTagRecall(tag);</b>
+<i>152</i>&nbsp;  }
+<i>153</i>&nbsp;
+<i>154</i>&nbsp;  private double getTagFMeasure(String tag) {
+<b class="nc"><i>155</i>&nbsp;    return stats.getTagFMeasure(tag);</b>
+<i>156</i>&nbsp;  }
+<i>157</i>&nbsp;
+<i>158</i>&nbsp;  private SortedSet&lt;String&gt; getConfusionMatrixTagset() {
+<b class="nc"><i>159</i>&nbsp;    return stats.getConfusionMatrixTagset();</b>
+<i>160</i>&nbsp;  }
+<i>161</i>&nbsp;
+<i>162</i>&nbsp;  private SortedSet&lt;String&gt; getConfusionMatrixTagset(String token) {
+<b class="nc"><i>163</i>&nbsp;    return stats.getConfusionMatrixTagset(token);</b>
+<i>164</i>&nbsp;  }
+<i>165</i>&nbsp;
+<i>166</i>&nbsp;  private double[][] getConfusionMatrix() {
+<b class="nc"><i>167</i>&nbsp;    return stats.getConfusionMatrix();</b>
+<i>168</i>&nbsp;  }
+<i>169</i>&nbsp;
+<i>170</i>&nbsp;  private double[][] getConfusionMatrix(String token) {
+<b class="nc"><i>171</i>&nbsp;    return stats.getConfusionMatrix(token);</b>
+<i>172</i>&nbsp;  }
+<i>173</i>&nbsp;
+<i>174</i>&nbsp;  private String matrixToString(SortedSet&lt;String&gt; tagset, double[][] data,
+<i>175</i>&nbsp;                                boolean filter) {
+<i>176</i>&nbsp;    // we dont want to print trivial cases (acc=1)
+<b class="nc"><i>177</i>&nbsp;    int initialIndex = 0;</b>
+<b class="nc"><i>178</i>&nbsp;    String[] tags = tagset.toArray(new String[tagset.size()]);</b>
+<b class="nc"><i>179</i>&nbsp;    StringBuilder sb = new StringBuilder();</b>
+<b class="nc"><i>180</i>&nbsp;    int minColumnSize = Integer.MIN_VALUE;</b>
+<b class="nc"><i>181</i>&nbsp;    String[][] matrix = new String[data.length][data[0].length];</b>
+<b class="nc"><i>182</i>&nbsp;    for (int i = 0; i &lt; data.length; i++) {</b>
+<b class="nc"><i>183</i>&nbsp;      int j = 0;</b>
+<b class="nc"><i>184</i>&nbsp;      for (; j &lt; data[i].length - 1; j++) {</b>
+<b class="nc"><i>185</i>&nbsp;        matrix[i][j] = data[i][j] &gt; 0 ? Integer.toString((int) data[i][j])</b>
+<b class="nc"><i>186</i>&nbsp;            : &quot;.&quot;;</b>
+<b class="nc"><i>187</i>&nbsp;        if (minColumnSize &lt; matrix[i][j].length()) {</b>
+<b class="nc"><i>188</i>&nbsp;          minColumnSize = matrix[i][j].length();</b>
+<i>189</i>&nbsp;        }
+<i>190</i>&nbsp;      }
+<b class="nc"><i>191</i>&nbsp;      matrix[i][j] = MessageFormat.format(&quot;{0,number,#.##%}&quot;, data[i][j]);</b>
+<b class="nc"><i>192</i>&nbsp;      if (data[i][j] == 1 &amp;&amp; filter) {</b>
+<b class="nc"><i>193</i>&nbsp;        initialIndex = i + 1;</b>
+<i>194</i>&nbsp;      }
+<i>195</i>&nbsp;    }
+<i>196</i>&nbsp;
+<b class="nc"><i>197</i>&nbsp;    final String headerFormat = &quot;%&quot; + (minColumnSize + 2) + &quot;s &quot;; // | 1234567 |</b>
+<b class="nc"><i>198</i>&nbsp;    final String cellFormat = &quot;%&quot; + (minColumnSize + 2) + &quot;s &quot;; // | 12345 |</b>
+<b class="nc"><i>199</i>&nbsp;    final String diagFormat = &quot; %&quot; + (minColumnSize + 2) + &quot;s&quot;;</b>
+<b class="nc"><i>200</i>&nbsp;    for (int i = initialIndex; i &lt; tagset.size(); i++) {</b>
+<b class="nc"><i>201</i>&nbsp;      sb.append(String.format(headerFormat,</b>
+<b class="nc"><i>202</i>&nbsp;          generateAlphaLabel(i - initialIndex).trim()));</b>
+<i>203</i>&nbsp;    }
+<b class="nc"><i>204</i>&nbsp;    sb.append(&quot;| Accuracy | &lt;-- classified as\n&quot;);</b>
+<b class="nc"><i>205</i>&nbsp;    for (int i = initialIndex; i &lt; data.length; i++) {</b>
+<b class="nc"><i>206</i>&nbsp;      int j = initialIndex;</b>
+<b class="nc"><i>207</i>&nbsp;      for (; j &lt; data[i].length - 1; j++) {</b>
+<b class="nc"><i>208</i>&nbsp;        if (i == j) {</b>
+<b class="nc"><i>209</i>&nbsp;          String val = &quot;&lt;&quot; + matrix[i][j] + &quot;&gt;&quot;;</b>
+<b class="nc"><i>210</i>&nbsp;          sb.append(String.format(diagFormat, val));</b>
+<b class="nc"><i>211</i>&nbsp;        } else {</b>
+<b class="nc"><i>212</i>&nbsp;          sb.append(String.format(cellFormat, matrix[i][j]));</b>
+<i>213</i>&nbsp;        }
+<i>214</i>&nbsp;      }
+<b class="nc"><i>215</i>&nbsp;      sb.append(</b>
+<b class="nc"><i>216</i>&nbsp;          String.format(&quot;|   %-6s |   %3s = &quot;, matrix[i][j],</b>
+<b class="nc"><i>217</i>&nbsp;              generateAlphaLabel(i - initialIndex))).append(tags[i]);</b>
+<b class="nc"><i>218</i>&nbsp;      sb.append(&quot;\n&quot;);</b>
+<i>219</i>&nbsp;    }
+<b class="nc"><i>220</i>&nbsp;    return sb.toString();</b>
+<i>221</i>&nbsp;  }
+<i>222</i>&nbsp;
+<i>223</i>&nbsp;  protected void printGeneralStatistics() {
+<b class="nc"><i>224</i>&nbsp;    printHeader(&quot;Evaluation summary&quot;);</b>
+<b class="nc"><i>225</i>&nbsp;    printStream.append(</b>
+<b class="nc"><i>226</i>&nbsp;        String.format(&quot;%21s: %6s&quot;, &quot;Number of sentences&quot;,</b>
+<b class="nc"><i>227</i>&nbsp;            Long.toString(getNumberOfSentences()))).append(&quot;\n&quot;);</b>
+<b class="nc"><i>228</i>&nbsp;    printStream.append(</b>
+<b class="nc"><i>229</i>&nbsp;        String.format(&quot;%21s: %6s&quot;, &quot;Min sentence size&quot;, getMinSentenceSize()))</b>
+<b class="nc"><i>230</i>&nbsp;        .append(&quot;\n&quot;);</b>
+<b class="nc"><i>231</i>&nbsp;    printStream.append(</b>
+<b class="nc"><i>232</i>&nbsp;        String.format(&quot;%21s: %6s&quot;, &quot;Max sentence size&quot;, getMaxSentenceSize()))</b>
+<b class="nc"><i>233</i>&nbsp;        .append(&quot;\n&quot;);</b>
+<b class="nc"><i>234</i>&nbsp;    printStream.append(</b>
+<b class="nc"><i>235</i>&nbsp;        String.format(&quot;%21s: %6s&quot;, &quot;Average sentence size&quot;,</b>
+<b class="nc"><i>236</i>&nbsp;            MessageFormat.format(&quot;{0,number,#.##}&quot;, getAverageSentenceSize())))</b>
+<b class="nc"><i>237</i>&nbsp;        .append(&quot;\n&quot;);</b>
+<b class="nc"><i>238</i>&nbsp;    printStream.append(</b>
+<b class="nc"><i>239</i>&nbsp;        String.format(&quot;%21s: %6s&quot;, &quot;Tags count&quot;, getNumberOfTags())).append(</b>
+<i>240</i>&nbsp;        &quot;\n&quot;);
+<b class="nc"><i>241</i>&nbsp;    printStream.append(</b>
+<b class="nc"><i>242</i>&nbsp;        String.format(&quot;%21s: %6s&quot;, &quot;Accuracy&quot;,</b>
+<b class="nc"><i>243</i>&nbsp;            MessageFormat.format(&quot;{0,number,#.##%}&quot;, getAccuracy()))).append(</b>
+<i>244</i>&nbsp;        &quot;\n&quot;);
+<b class="nc"><i>245</i>&nbsp;    printFooter(&quot;Evaluation Corpus Statistics&quot;);</b>
+<i>246</i>&nbsp;  }
+<i>247</i>&nbsp;
+<i>248</i>&nbsp;  protected void printTokenOcurrenciesRank() {
+<b class="nc"><i>249</i>&nbsp;    printHeader(&quot;Most frequent tokens&quot;);</b>
+<i>250</i>&nbsp;
+<b class="nc"><i>251</i>&nbsp;    SortedSet&lt;String&gt; toks = getTokensOrderedByFrequency();</b>
+<b class="nc"><i>252</i>&nbsp;    final int maxLines = 20;</b>
+<i>253</i>&nbsp;
+<b class="nc"><i>254</i>&nbsp;    int maxTokSize = 5;</b>
+<i>255</i>&nbsp;
+<b class="nc"><i>256</i>&nbsp;    int count = 0;</b>
+<b class="nc"><i>257</i>&nbsp;    Iterator&lt;String&gt; tokIterator = toks.iterator();</b>
+<b class="nc"><i>258</i>&nbsp;    while (tokIterator.hasNext() &amp;&amp; count++ &lt; maxLines) {</b>
+<b class="nc"><i>259</i>&nbsp;      String tok = tokIterator.next();</b>
+<b class="nc"><i>260</i>&nbsp;      if (tok.length() &gt; maxTokSize) {</b>
+<b class="nc"><i>261</i>&nbsp;        maxTokSize = tok.length();</b>
+<i>262</i>&nbsp;      }
+<b class="nc"><i>263</i>&nbsp;    }</b>
+<i>264</i>&nbsp;
+<b class="nc"><i>265</i>&nbsp;    int tableSize = maxTokSize + 19;</b>
+<b class="nc"><i>266</i>&nbsp;    String format = &quot;| %3s | %6s | %&quot; + maxTokSize + &quot;s |&quot;;</b>
+<i>267</i>&nbsp;
+<b class="nc"><i>268</i>&nbsp;    printLine(tableSize);</b>
+<b class="nc"><i>269</i>&nbsp;    printStream.append(String.format(format, &quot;Pos&quot;, &quot;Count&quot;, &quot;Token&quot;)).append(</b>
+<i>270</i>&nbsp;        &quot;\n&quot;);
+<b class="nc"><i>271</i>&nbsp;    printLine(tableSize);</b>
+<i>272</i>&nbsp;
+<i>273</i>&nbsp;    // get the first 20 errors
+<b class="nc"><i>274</i>&nbsp;    count = 0;</b>
+<b class="nc"><i>275</i>&nbsp;    tokIterator = toks.iterator();</b>
+<b class="nc"><i>276</i>&nbsp;    while (tokIterator.hasNext() &amp;&amp; count++ &lt; maxLines) {</b>
+<b class="nc"><i>277</i>&nbsp;      String tok = tokIterator.next();</b>
+<b class="nc"><i>278</i>&nbsp;      int ocurrencies = getTokenFrequency(tok);</b>
+<i>279</i>&nbsp;
+<b class="nc"><i>280</i>&nbsp;      printStream.append(String.format(format, count, ocurrencies, tok)</b>
+<i>281</i>&nbsp;
+<b class="nc"><i>282</i>&nbsp;      ).append(&quot;\n&quot;);</b>
+<b class="nc"><i>283</i>&nbsp;    }</b>
+<b class="nc"><i>284</i>&nbsp;    printLine(tableSize);</b>
+<b class="nc"><i>285</i>&nbsp;    printFooter(&quot;Most frequent tokens&quot;);</b>
+<i>286</i>&nbsp;  }
+<i>287</i>&nbsp;
+<i>288</i>&nbsp;  protected void printTokenErrorRank() {
+<b class="nc"><i>289</i>&nbsp;    printHeader(&quot;Tokens with the highest number of errors&quot;);</b>
+<b class="nc"><i>290</i>&nbsp;    printStream.append(&quot;\n&quot;);</b>
+<i>291</i>&nbsp;
+<b class="nc"><i>292</i>&nbsp;    SortedSet&lt;String&gt; toks = getTokensOrderedByNumberOfErrors();</b>
+<b class="nc"><i>293</i>&nbsp;    int maxTokenSize = 5;</b>
+<i>294</i>&nbsp;
+<b class="nc"><i>295</i>&nbsp;    int count = 0;</b>
+<b class="nc"><i>296</i>&nbsp;    Iterator&lt;String&gt; tokIterator = toks.iterator();</b>
+<b class="nc"><i>297</i>&nbsp;    while (tokIterator.hasNext() &amp;&amp; count++ &lt; 20) {</b>
+<b class="nc"><i>298</i>&nbsp;      String tok = tokIterator.next();</b>
+<b class="nc"><i>299</i>&nbsp;      if (tok.length() &gt; maxTokenSize) {</b>
+<b class="nc"><i>300</i>&nbsp;        maxTokenSize = tok.length();</b>
+<i>301</i>&nbsp;      }
+<b class="nc"><i>302</i>&nbsp;    }</b>
+<i>303</i>&nbsp;
+<b class="nc"><i>304</i>&nbsp;    int tableSize = 31 + maxTokenSize;</b>
+<i>305</i>&nbsp;
+<b class="nc"><i>306</i>&nbsp;    String format = &quot;| %&quot; + maxTokenSize + &quot;s | %6s | %5s | %7s |\n&quot;;</b>
+<i>307</i>&nbsp;
+<b class="nc"><i>308</i>&nbsp;    printLine(tableSize);</b>
+<b class="nc"><i>309</i>&nbsp;    printStream.append(String.format(format, &quot;Token&quot;, &quot;Errors&quot;, &quot;Count&quot;,</b>
+<i>310</i>&nbsp;        &quot;% Err&quot;));
+<b class="nc"><i>311</i>&nbsp;    printLine(tableSize);</b>
+<i>312</i>&nbsp;
+<i>313</i>&nbsp;    // get the first 20 errors
+<b class="nc"><i>314</i>&nbsp;    count = 0;</b>
+<b class="nc"><i>315</i>&nbsp;    tokIterator = toks.iterator();</b>
+<b class="nc"><i>316</i>&nbsp;    while (tokIterator.hasNext() &amp;&amp; count++ &lt; 20) {</b>
+<b class="nc"><i>317</i>&nbsp;      String tok = tokIterator.next();</b>
+<b class="nc"><i>318</i>&nbsp;      int ocurrencies = getTokenFrequency(tok);</b>
+<b class="nc"><i>319</i>&nbsp;      int errors = getTokenErrors(tok);</b>
+<b class="nc"><i>320</i>&nbsp;      String rate = MessageFormat.format(&quot;{0,number,#.##%}&quot;, (double) errors</b>
+<i>321</i>&nbsp;          / ocurrencies);
+<i>322</i>&nbsp;
+<b class="nc"><i>323</i>&nbsp;      printStream.append(String.format(format, tok, errors, ocurrencies, rate)</b>
+<i>324</i>&nbsp;
+<i>325</i>&nbsp;      );
+<b class="nc"><i>326</i>&nbsp;    }</b>
+<b class="nc"><i>327</i>&nbsp;    printLine(tableSize);</b>
+<b class="nc"><i>328</i>&nbsp;    printFooter(&quot;Tokens with the highest number of errors&quot;);</b>
+<i>329</i>&nbsp;  }
+<i>330</i>&nbsp;
+<i>331</i>&nbsp;  protected void printTagsErrorRank() {
+<b class="nc"><i>332</i>&nbsp;    printHeader(&quot;Detailed Accuracy By Tag&quot;);</b>
+<b class="nc"><i>333</i>&nbsp;    SortedSet&lt;String&gt; tags = getTagsOrderedByErrors();</b>
+<b class="nc"><i>334</i>&nbsp;    printStream.append(&quot;\n&quot;);</b>
+<i>335</i>&nbsp;
+<b class="nc"><i>336</i>&nbsp;    int maxTagSize = 3;</b>
+<i>337</i>&nbsp;
+<b class="nc"><i>338</i>&nbsp;    for (String t : tags) {</b>
+<b class="nc"><i>339</i>&nbsp;      if (t.length() &gt; maxTagSize) {</b>
+<b class="nc"><i>340</i>&nbsp;        maxTagSize = t.length();</b>
+<i>341</i>&nbsp;      }
+<b class="nc"><i>342</i>&nbsp;    }</b>
+<i>343</i>&nbsp;
+<b class="nc"><i>344</i>&nbsp;    int tableSize = 65 + maxTagSize;</b>
+<i>345</i>&nbsp;
+<b class="nc"><i>346</i>&nbsp;    String headerFormat = &quot;| %&quot; + maxTagSize</b>
+<i>347</i>&nbsp;        + &quot;s | %6s | %6s | %7s | %9s | %6s | %9s |\n&quot;;
+<b class="nc"><i>348</i>&nbsp;    String format = &quot;| %&quot; + maxTagSize</b>
+<i>349</i>&nbsp;        + &quot;s | %6s | %6s | %-7s | %-9s | %-6s | %-9s |\n&quot;;
+<i>350</i>&nbsp;
+<b class="nc"><i>351</i>&nbsp;    printLine(tableSize);</b>
+<b class="nc"><i>352</i>&nbsp;    printStream.append(String.format(headerFormat, &quot;Tag&quot;, &quot;Errors&quot;, &quot;Count&quot;,</b>
+<i>353</i>&nbsp;        &quot;% Err&quot;, &quot;Precision&quot;, &quot;Recall&quot;, &quot;F-Measure&quot;));
+<b class="nc"><i>354</i>&nbsp;    printLine(tableSize);</b>
+<i>355</i>&nbsp;
+<b class="nc"><i>356</i>&nbsp;    for (String tag : tags) {</b>
+<b class="nc"><i>357</i>&nbsp;      int ocurrencies = getTagFrequency(tag);</b>
+<b class="nc"><i>358</i>&nbsp;      int errors = getTagErrors(tag);</b>
+<b class="nc"><i>359</i>&nbsp;      String rate = MessageFormat.format(&quot;{0,number,#.###}&quot;, (double) errors</b>
+<i>360</i>&nbsp;          / ocurrencies);
+<i>361</i>&nbsp;
+<b class="nc"><i>362</i>&nbsp;      double p = getTagPrecision(tag);</b>
+<b class="nc"><i>363</i>&nbsp;      double r = getTagRecall(tag);</b>
+<b class="nc"><i>364</i>&nbsp;      double f = getTagFMeasure(tag);</b>
+<i>365</i>&nbsp;
+<b class="nc"><i>366</i>&nbsp;      printStream.append(String.format(format, tag, errors, ocurrencies, rate,</b>
+<b class="nc"><i>367</i>&nbsp;          MessageFormat.format(&quot;{0,number,#.###}&quot;, p &gt; 0 ? p : 0),</b>
+<b class="nc"><i>368</i>&nbsp;          MessageFormat.format(&quot;{0,number,#.###}&quot;, r &gt; 0 ? r : 0),</b>
+<b class="nc"><i>369</i>&nbsp;          MessageFormat.format(&quot;{0,number,#.###}&quot;, f &gt; 0 ? f : 0))</b>
+<i>370</i>&nbsp;
+<i>371</i>&nbsp;      );
+<b class="nc"><i>372</i>&nbsp;    }</b>
+<b class="nc"><i>373</i>&nbsp;    printLine(tableSize);</b>
+<i>374</i>&nbsp;
+<b class="nc"><i>375</i>&nbsp;    printFooter(&quot;Tags with the highest number of errors&quot;);</b>
+<i>376</i>&nbsp;  }
+<i>377</i>&nbsp;
+<i>378</i>&nbsp;  protected void printGeneralConfusionTable() {
+<b class="nc"><i>379</i>&nbsp;    printHeader(&quot;Confusion matrix&quot;);</b>
+<i>380</i>&nbsp;
+<b class="nc"><i>381</i>&nbsp;    SortedSet&lt;String&gt; labels = getConfusionMatrixTagset();</b>
+<i>382</i>&nbsp;
+<b class="nc"><i>383</i>&nbsp;    double[][] confusionMatrix = getConfusionMatrix();</b>
+<i>384</i>&nbsp;
+<b class="nc"><i>385</i>&nbsp;    printStream.append(&quot;\nTags with 100% accuracy: &quot;);</b>
+<b class="nc"><i>386</i>&nbsp;    int line = 0;</b>
+<b class="nc"><i>387</i>&nbsp;    for (String label : labels) {</b>
+<b class="nc"><i>388</i>&nbsp;      if (confusionMatrix[line][confusionMatrix[0].length - 1] == 1) {</b>
+<b class="nc"><i>389</i>&nbsp;        printStream.append(label).append(&quot; (&quot;)</b>
+<b class="nc"><i>390</i>&nbsp;            .append(Integer.toString((int) confusionMatrix[line][line]))</b>
+<b class="nc"><i>391</i>&nbsp;            .append(&quot;) &quot;);</b>
+<i>392</i>&nbsp;      }
+<b class="nc"><i>393</i>&nbsp;      line++;</b>
+<b class="nc"><i>394</i>&nbsp;    }</b>
+<i>395</i>&nbsp;
+<b class="nc"><i>396</i>&nbsp;    printStream.append(&quot;\n\n&quot;);</b>
+<i>397</i>&nbsp;
+<b class="nc"><i>398</i>&nbsp;    printStream.append(matrixToString(labels, confusionMatrix, true));</b>
+<i>399</i>&nbsp;
+<b class="nc"><i>400</i>&nbsp;    printFooter(&quot;Confusion matrix&quot;);</b>
+<i>401</i>&nbsp;  }
+<i>402</i>&nbsp;
+<i>403</i>&nbsp;  protected void printDetailedConfusionMatrix() {
+<b class="nc"><i>404</i>&nbsp;    printHeader(&quot;Confusion matrix for tokens&quot;);</b>
+<b class="nc"><i>405</i>&nbsp;    printStream.append(&quot;  sorted by number of errors\n&quot;);</b>
+<b class="nc"><i>406</i>&nbsp;    SortedSet&lt;String&gt; toks = getTokensOrderedByNumberOfErrors();</b>
+<i>407</i>&nbsp;
+<b class="nc"><i>408</i>&nbsp;    for (String t : toks) {</b>
+<b class="nc"><i>409</i>&nbsp;      double acc = getTokenAccuracy(t);</b>
+<b class="nc"><i>410</i>&nbsp;      if (acc &lt; 1) {</b>
+<b class="nc"><i>411</i>&nbsp;        printStream</b>
+<b class="nc"><i>412</i>&nbsp;            .append(&quot;\n[&quot;)</b>
+<b class="nc"><i>413</i>&nbsp;            .append(t)</b>
+<b class="nc"><i>414</i>&nbsp;            .append(&quot;]\n&quot;)</b>
+<b class="nc"><i>415</i>&nbsp;            .append(</b>
+<b class="nc"><i>416</i>&nbsp;                String.format(&quot;%12s: %-8s&quot;, &quot;Accuracy&quot;,</b>
+<b class="nc"><i>417</i>&nbsp;                    MessageFormat.format(&quot;{0,number,#.##%}&quot;, acc)))</b>
+<b class="nc"><i>418</i>&nbsp;            .append(&quot;\n&quot;);</b>
+<b class="nc"><i>419</i>&nbsp;        printStream.append(</b>
+<b class="nc"><i>420</i>&nbsp;            String.format(&quot;%12s: %-8s&quot;, &quot;Ocurrencies&quot;,</b>
+<b class="nc"><i>421</i>&nbsp;                Integer.toString(getTokenFrequency(t)))).append(&quot;\n&quot;);</b>
+<b class="nc"><i>422</i>&nbsp;        printStream.append(</b>
+<b class="nc"><i>423</i>&nbsp;            String.format(&quot;%12s: %-8s&quot;, &quot;Errors&quot;,</b>
+<b class="nc"><i>424</i>&nbsp;                Integer.toString(getTokenErrors(t)))).append(&quot;\n&quot;);</b>
+<i>425</i>&nbsp;
+<b class="nc"><i>426</i>&nbsp;        SortedSet&lt;String&gt; labels = getConfusionMatrixTagset(t);</b>
+<i>427</i>&nbsp;
+<b class="nc"><i>428</i>&nbsp;        double[][] confusionMatrix = getConfusionMatrix(t);</b>
+<i>429</i>&nbsp;
+<b class="nc"><i>430</i>&nbsp;        printStream.append(matrixToString(labels, confusionMatrix, false));</b>
+<i>431</i>&nbsp;      }
+<b class="nc"><i>432</i>&nbsp;    }</b>
+<b class="nc"><i>433</i>&nbsp;    printFooter(&quot;Confusion matrix for tokens&quot;);</b>
+<i>434</i>&nbsp;  }
+<i>435</i>&nbsp;
+<i>436</i>&nbsp;  /** Auxiliary method that prints a emphasised report header */
+<i>437</i>&nbsp;  private void printHeader(String text) {
+<b class="nc"><i>438</i>&nbsp;    printStream.append(&quot;=== &quot;).append(text).append(&quot; ===\n&quot;);</b>
+<i>439</i>&nbsp;  }
+<i>440</i>&nbsp;
+<i>441</i>&nbsp;  /** Auxiliary method that prints a marker to the end of a report */
+<i>442</i>&nbsp;  private void printFooter(String text) {
+<b class="nc"><i>443</i>&nbsp;    printStream.append(&quot;\n&lt;-end&gt; &quot;).append(text).append(&quot;\n\n&quot;);</b>
+<i>444</i>&nbsp;  }
+<i>445</i>&nbsp;
+<i>446</i>&nbsp;  /** Auxiliary method that prints a horizontal line of a given size */
+<i>447</i>&nbsp;  private void printLine(int size) {
+<b class="nc"><i>448</i>&nbsp;    for (int i = 0; i &lt; size; i++) {</b>
+<b class="nc"><i>449</i>&nbsp;      printStream.append(&quot;-&quot;);</b>
+<i>450</i>&nbsp;    }
+<b class="nc"><i>451</i>&nbsp;    printStream.append(&quot;\n&quot;);</b>
+<i>452</i>&nbsp;  }
+<i>453</i>&nbsp;
+<i>454</i>&nbsp;  /**
+<i>455</i>&nbsp;   * A comparator that sorts the confusion matrix labels according to the
+<i>456</i>&nbsp;   * accuracy of each line
+<i>457</i>&nbsp;   */
+<i>458</i>&nbsp;  public static class MatrixLabelComparator implements Comparator&lt;String&gt; {
+<i>459</i>&nbsp;
+<i>460</i>&nbsp;    private Map&lt;String, ConfusionMatrixLine&gt; confusionMatrix;
+<i>461</i>&nbsp;
+<b class="nc"><i>462</i>&nbsp;    public MatrixLabelComparator(Map&lt;String, ConfusionMatrixLine&gt; confusionMatrix) {</b>
+<b class="nc"><i>463</i>&nbsp;      this.confusionMatrix = confusionMatrix;</b>
+<i>464</i>&nbsp;    }
+<i>465</i>&nbsp;
+<i>466</i>&nbsp;    public int compare(String o1, String o2) {
+<b class="nc"><i>467</i>&nbsp;      if (o1.equals(o2)) {</b>
+<b class="nc"><i>468</i>&nbsp;        return 0;</b>
+<i>469</i>&nbsp;      }
+<b class="nc"><i>470</i>&nbsp;      ConfusionMatrixLine t1 = confusionMatrix.get(o1);</b>
+<b class="nc"><i>471</i>&nbsp;      ConfusionMatrixLine t2 = confusionMatrix.get(o2);</b>
+<b class="nc"><i>472</i>&nbsp;      if (t1 == null || t2 == null) {</b>
+<b class="nc"><i>473</i>&nbsp;        if (t1 == null) {</b>
+<b class="nc"><i>474</i>&nbsp;          return 1;</b>
+<i>475</i>&nbsp;        } else {
+<b class="nc"><i>476</i>&nbsp;          return -1;</b>
+<i>477</i>&nbsp;        }
+<i>478</i>&nbsp;      }
+<b class="nc"><i>479</i>&nbsp;      double r1 = t1.getAccuracy();</b>
+<b class="nc"><i>480</i>&nbsp;      double r2 = t2.getAccuracy();</b>
+<b class="nc"><i>481</i>&nbsp;      if (r1 == r2) {</b>
+<b class="nc"><i>482</i>&nbsp;        return o1.compareTo(o2);</b>
+<i>483</i>&nbsp;      }
+<b class="nc"><i>484</i>&nbsp;      if (r2 &gt; r1) {</b>
+<b class="nc"><i>485</i>&nbsp;        return 1;</b>
+<i>486</i>&nbsp;      }
+<b class="nc"><i>487</i>&nbsp;      return -1;</b>
+<i>488</i>&nbsp;    }
+<i>489</i>&nbsp;  }
+<i>490</i>&nbsp;
+<i>491</i>&nbsp;  public static class GroupedMatrixLabelComparator implements Comparator&lt;String&gt; {
+<i>492</i>&nbsp;
+<i>493</i>&nbsp;    private final HashMap&lt;String, Double&gt; categoryAccuracy;
+<i>494</i>&nbsp;    private Map&lt;String, ConfusionMatrixLine&gt; confusionMatrix;
+<i>495</i>&nbsp;
+<b class="nc"><i>496</i>&nbsp;    public GroupedMatrixLabelComparator(Map&lt;String, ConfusionMatrixLine&gt; confusionMatrix) {</b>
+<b class="nc"><i>497</i>&nbsp;      this.confusionMatrix = confusionMatrix;</b>
+<b class="nc"><i>498</i>&nbsp;      this.categoryAccuracy = new HashMap&lt;&gt;();</b>
+<i>499</i>&nbsp;
+<i>500</i>&nbsp;      // compute grouped categories
+<b class="nc"><i>501</i>&nbsp;      for (Entry&lt;String, ConfusionMatrixLine&gt; entry : confusionMatrix.entrySet()) {</b>
+<b class="nc"><i>502</i>&nbsp;        final String key = entry.getKey();</b>
+<b class="nc"><i>503</i>&nbsp;        final ConfusionMatrixLine confusionMatrixLine = entry.getValue();</b>
+<i>504</i>&nbsp;        final String category;
+<b class="nc"><i>505</i>&nbsp;        if (key.contains(&quot;-&quot;)) {</b>
+<b class="nc"><i>506</i>&nbsp;          category = key.split(&quot;-&quot;)[0];</b>
+<i>507</i>&nbsp;        } else {
+<b class="nc"><i>508</i>&nbsp;          category = key;</b>
+<i>509</i>&nbsp;        }
+<b class="nc"><i>510</i>&nbsp;        double currentAccuracy = categoryAccuracy.getOrDefault(category, 0.0d);</b>
+<b class="nc"><i>511</i>&nbsp;        categoryAccuracy.put(category, currentAccuracy + confusionMatrixLine.getAccuracy());</b>
+<b class="nc"><i>512</i>&nbsp;      }</b>
+<i>513</i>&nbsp;    }
+<i>514</i>&nbsp;
+<i>515</i>&nbsp;    public int compare(String o1, String o2) {
+<b class="nc"><i>516</i>&nbsp;      if (o1.equals(o2)) {</b>
+<b class="nc"><i>517</i>&nbsp;        return 0;</b>
+<i>518</i>&nbsp;      }
+<b class="nc"><i>519</i>&nbsp;      String c1 = o1;</b>
+<b class="nc"><i>520</i>&nbsp;      String c2 = o2;</b>
+<i>521</i>&nbsp;
+<b class="nc"><i>522</i>&nbsp;      if (o1.contains(&quot;-&quot;)) {</b>
+<b class="nc"><i>523</i>&nbsp;        c1 = o1.split(&quot;-&quot;)[0];</b>
+<i>524</i>&nbsp;      }
+<b class="nc"><i>525</i>&nbsp;      if (o2.contains(&quot;-&quot;)) {</b>
+<b class="nc"><i>526</i>&nbsp;        c2 = o2.split(&quot;-&quot;)[0];</b>
+<i>527</i>&nbsp;      }
+<i>528</i>&nbsp;
+<b class="nc"><i>529</i>&nbsp;      if (c1.equals(c2)) { // same category - sort by confusion matrix</b>
+<i>530</i>&nbsp;
+<b class="nc"><i>531</i>&nbsp;        ConfusionMatrixLine t1 = confusionMatrix.get(o1);</b>
+<b class="nc"><i>532</i>&nbsp;        ConfusionMatrixLine t2 = confusionMatrix.get(o2);</b>
+<b class="nc"><i>533</i>&nbsp;        if (t1 == null || t2 == null) {</b>
+<b class="nc"><i>534</i>&nbsp;          if (t1 == null) {</b>
+<b class="nc"><i>535</i>&nbsp;            return 1;</b>
+<i>536</i>&nbsp;          } else {
+<b class="nc"><i>537</i>&nbsp;            return -1;</b>
+<i>538</i>&nbsp;          }
+<i>539</i>&nbsp;        }
+<b class="nc"><i>540</i>&nbsp;        double r1 = t1.getAccuracy();</b>
+<b class="nc"><i>541</i>&nbsp;        double r2 = t2.getAccuracy();</b>
+<b class="nc"><i>542</i>&nbsp;        if (r1 == r2) {</b>
+<b class="nc"><i>543</i>&nbsp;          return o1.compareTo(o2);</b>
+<i>544</i>&nbsp;        }
+<b class="nc"><i>545</i>&nbsp;        if (r2 &gt; r1) {</b>
+<b class="nc"><i>546</i>&nbsp;          return 1;</b>
+<i>547</i>&nbsp;        }
+<b class="nc"><i>548</i>&nbsp;        return -1;</b>
+<i>549</i>&nbsp;      } else { // different category - sort by category
+<b class="nc"><i>550</i>&nbsp;        Double t1 = categoryAccuracy.get(c1);</b>
+<b class="nc"><i>551</i>&nbsp;        Double t2 = categoryAccuracy.get(c2);</b>
+<b class="nc"><i>552</i>&nbsp;        if (t1 == null || t2 == null) {</b>
+<b class="nc"><i>553</i>&nbsp;          if (t1 == null) {</b>
+<b class="nc"><i>554</i>&nbsp;            return 1;</b>
+<i>555</i>&nbsp;          } else {
+<b class="nc"><i>556</i>&nbsp;            return -1;</b>
+<i>557</i>&nbsp;          }
+<i>558</i>&nbsp;        }
+<b class="nc"><i>559</i>&nbsp;        if (t1.equals(t2)) {</b>
+<b class="nc"><i>560</i>&nbsp;          return o1.compareTo(o2);</b>
+<i>561</i>&nbsp;        }
+<b class="nc"><i>562</i>&nbsp;        if (t2 &gt; t1) {</b>
+<b class="nc"><i>563</i>&nbsp;          return 1;</b>
+<i>564</i>&nbsp;        }
+<b class="nc"><i>565</i>&nbsp;        return -1;</b>
+<i>566</i>&nbsp;      }
+<i>567</i>&nbsp;    }
+<i>568</i>&nbsp;  }
+<i>569</i>&nbsp;
+<i>570</i>&nbsp;  public Comparator&lt;String&gt; getMatrixLabelComparator(Map&lt;String, ConfusionMatrixLine&gt; confusionMatrix) {
+<b class="nc"><i>571</i>&nbsp;    return new MatrixLabelComparator(confusionMatrix);</b>
+<i>572</i>&nbsp;  }
+<i>573</i>&nbsp;
+<i>574</i>&nbsp;  public static class SimpleLabelComparator implements Comparator&lt;String&gt; {
+<i>575</i>&nbsp;
+<i>576</i>&nbsp;    private Map&lt;String, Counter&gt; map;
+<i>577</i>&nbsp;
+<b class="nc"><i>578</i>&nbsp;    public SimpleLabelComparator(Map&lt;String, Counter&gt; map) {</b>
+<b class="nc"><i>579</i>&nbsp;      this.map = map;</b>
+<i>580</i>&nbsp;    }
+<i>581</i>&nbsp;
+<i>582</i>&nbsp;    @Override
+<i>583</i>&nbsp;    public int compare(String o1, String o2) {
+<b class="nc"><i>584</i>&nbsp;      if (o1.equals(o2)) {</b>
+<b class="nc"><i>585</i>&nbsp;        return 0;</b>
+<i>586</i>&nbsp;      }
+<b class="nc"><i>587</i>&nbsp;      int e1 = 0, e2 = 0;</b>
+<b class="nc"><i>588</i>&nbsp;      if (map.containsKey(o1))</b>
+<b class="nc"><i>589</i>&nbsp;        e1 = map.get(o1).value();</b>
+<b class="nc"><i>590</i>&nbsp;      if (map.containsKey(o2))</b>
+<b class="nc"><i>591</i>&nbsp;        e2 = map.get(o2).value();</b>
+<b class="nc"><i>592</i>&nbsp;      if (e1 == e2) {</b>
+<b class="nc"><i>593</i>&nbsp;        return o1.compareTo(o2);</b>
+<i>594</i>&nbsp;      }
+<b class="nc"><i>595</i>&nbsp;      return e2 - e1;</b>
+<i>596</i>&nbsp;    }
+<i>597</i>&nbsp;  }
+<i>598</i>&nbsp;
+<i>599</i>&nbsp;  public Comparator&lt;String&gt; getLabelComparator(Map&lt;String, Counter&gt; map) {
+<b class="nc"><i>600</i>&nbsp;    return new SimpleLabelComparator(map);</b>
+<i>601</i>&nbsp;  }
+<i>602</i>&nbsp;
+<i>603</i>&nbsp;  public static class GroupedLabelComparator implements Comparator&lt;String&gt; {
+<i>604</i>&nbsp;
+<i>605</i>&nbsp;    private final HashMap&lt;String, Integer&gt; categoryCounter;
+<i>606</i>&nbsp;    private Map&lt;String, Counter&gt; labelCounter;
+<i>607</i>&nbsp;
+<b class="nc"><i>608</i>&nbsp;    public GroupedLabelComparator(Map&lt;String, Counter&gt; map) {</b>
+<b class="nc"><i>609</i>&nbsp;      this.labelCounter = map;</b>
+<b class="nc"><i>610</i>&nbsp;      this.categoryCounter = new HashMap&lt;&gt;();</b>
+<i>611</i>&nbsp;
+<i>612</i>&nbsp;      // compute grouped categories
+<b class="nc"><i>613</i>&nbsp;      for (Entry&lt;String, Counter&gt; entry : labelCounter.entrySet()) {</b>
+<b class="nc"><i>614</i>&nbsp;        final String key = entry.getKey();</b>
+<b class="nc"><i>615</i>&nbsp;        final Counter value = entry.getValue();</b>
+<i>616</i>&nbsp;        final String category;
+<b class="nc"><i>617</i>&nbsp;        if (key.contains(&quot;-&quot;)) {</b>
+<b class="nc"><i>618</i>&nbsp;          category = key.split(&quot;-&quot;)[0];</b>
+<i>619</i>&nbsp;        } else {
+<b class="nc"><i>620</i>&nbsp;          category = key;</b>
+<i>621</i>&nbsp;        }
+<b class="nc"><i>622</i>&nbsp;        int currentCount = categoryCounter.getOrDefault(category, 0);</b>
+<b class="nc"><i>623</i>&nbsp;        categoryCounter.put(category, currentCount + value.value());</b>
+<b class="nc"><i>624</i>&nbsp;      }</b>
+<i>625</i>&nbsp;    }
+<i>626</i>&nbsp;
+<i>627</i>&nbsp;    public int compare(String o1, String o2) {
+<b class="nc"><i>628</i>&nbsp;      if (o1.equals(o2)) {</b>
+<b class="nc"><i>629</i>&nbsp;        return 0;</b>
+<i>630</i>&nbsp;      }
+<b class="nc"><i>631</i>&nbsp;      String c1 = o1;</b>
+<b class="nc"><i>632</i>&nbsp;      String c2 = o2;</b>
+<i>633</i>&nbsp;
+<b class="nc"><i>634</i>&nbsp;      if (o1.contains(&quot;-&quot;)) {</b>
+<b class="nc"><i>635</i>&nbsp;        c1 = o1.split(&quot;-&quot;)[0];</b>
+<i>636</i>&nbsp;      }
+<b class="nc"><i>637</i>&nbsp;      if (o2.contains(&quot;-&quot;)) {</b>
+<b class="nc"><i>638</i>&nbsp;        c2 = o2.split(&quot;-&quot;)[0];</b>
+<i>639</i>&nbsp;      }
+<i>640</i>&nbsp;
+<b class="nc"><i>641</i>&nbsp;      if (c1.equals(c2)) { // same category - sort by confusion matrix</b>
+<i>642</i>&nbsp;
+<b class="nc"><i>643</i>&nbsp;        Counter t1 = labelCounter.get(o1);</b>
+<b class="nc"><i>644</i>&nbsp;        Counter t2 = labelCounter.get(o2);</b>
+<b class="nc"><i>645</i>&nbsp;        if (t1 == null || t2 == null) {</b>
+<b class="nc"><i>646</i>&nbsp;          if (t1 == null) {</b>
+<b class="nc"><i>647</i>&nbsp;            return 1;</b>
+<i>648</i>&nbsp;          } else {
+<b class="nc"><i>649</i>&nbsp;            return -1;</b>
+<i>650</i>&nbsp;          }
+<i>651</i>&nbsp;        }
+<b class="nc"><i>652</i>&nbsp;        int r1 = t1.value();</b>
+<b class="nc"><i>653</i>&nbsp;        int r2 = t2.value();</b>
+<b class="nc"><i>654</i>&nbsp;        if (r1 == r2) {</b>
+<b class="nc"><i>655</i>&nbsp;          return o1.compareTo(o2);</b>
+<i>656</i>&nbsp;        }
+<b class="nc"><i>657</i>&nbsp;        if (r2 &gt; r1) {</b>
+<b class="nc"><i>658</i>&nbsp;          return 1;</b>
+<i>659</i>&nbsp;        }
+<b class="nc"><i>660</i>&nbsp;        return -1;</b>
+<i>661</i>&nbsp;      } else { // different category - sort by category
+<b class="nc"><i>662</i>&nbsp;        Integer t1 = categoryCounter.get(c1);</b>
+<b class="nc"><i>663</i>&nbsp;        Integer t2 = categoryCounter.get(c2);</b>
+<b class="nc"><i>664</i>&nbsp;        if (t1 == null || t2 == null) {</b>
+<b class="nc"><i>665</i>&nbsp;          if (t1 == null) {</b>
+<b class="nc"><i>666</i>&nbsp;            return 1;</b>
+<i>667</i>&nbsp;          } else {
+<b class="nc"><i>668</i>&nbsp;            return -1;</b>
+<i>669</i>&nbsp;          }
+<i>670</i>&nbsp;        }
+<b class="nc"><i>671</i>&nbsp;        if (t1.equals(t2)) {</b>
+<b class="nc"><i>672</i>&nbsp;          return o1.compareTo(o2);</b>
+<i>673</i>&nbsp;        }
+<b class="nc"><i>674</i>&nbsp;        if (t2 &gt; t1) {</b>
+<b class="nc"><i>675</i>&nbsp;          return 1;</b>
+<i>676</i>&nbsp;        }
+<b class="nc"><i>677</i>&nbsp;        return -1;</b>
+<i>678</i>&nbsp;      }
+<i>679</i>&nbsp;    }
+<i>680</i>&nbsp;  }
+<i>681</i>&nbsp;
+<i>682</i>&nbsp;  /**
+<i>683</i>&nbsp;   * Represents a line in the confusion table.
+<i>684</i>&nbsp;   */
+<b class="nc"><i>685</i>&nbsp;  public static class ConfusionMatrixLine {</b>
+<i>686</i>&nbsp;
+<b class="nc"><i>687</i>&nbsp;    private Map&lt;String, Counter&gt; line = new HashMap&lt;&gt;();</b>
+<i>688</i>&nbsp;    private String ref;
+<b class="nc"><i>689</i>&nbsp;    private int total = 0;</b>
+<b class="nc"><i>690</i>&nbsp;    private int correct = 0;</b>
+<b class="nc"><i>691</i>&nbsp;    private double acc = -1;</b>
+<i>692</i>&nbsp;
+<i>693</i>&nbsp;    /**
+<i>694</i>&nbsp;     * Creates a new {@link ConfusionMatrixLine}
+<i>695</i>&nbsp;     *
+<i>696</i>&nbsp;     * @param ref
+<i>697</i>&nbsp;     *          the reference column
+<i>698</i>&nbsp;     */
+<b class="nc"><i>699</i>&nbsp;    private ConfusionMatrixLine(String ref) {</b>
+<b class="nc"><i>700</i>&nbsp;      this.ref = ref;</b>
+<i>701</i>&nbsp;    }
+<i>702</i>&nbsp;
+<i>703</i>&nbsp;    /**
+<i>704</i>&nbsp;     * Increments the counter for the given column and updates the statistics.
+<i>705</i>&nbsp;     *
+<i>706</i>&nbsp;     * @param column
+<i>707</i>&nbsp;     *          the column to be incremented
+<i>708</i>&nbsp;     */
+<i>709</i>&nbsp;    private void increment(String column) {
+<b class="nc"><i>710</i>&nbsp;      total++;</b>
+<b class="nc"><i>711</i>&nbsp;      if (column.equals(ref))</b>
+<b class="nc"><i>712</i>&nbsp;        correct++;</b>
+<b class="nc"><i>713</i>&nbsp;      if (!line.containsKey(column)) {</b>
+<b class="nc"><i>714</i>&nbsp;        line.put(column, new Counter());</b>
+<i>715</i>&nbsp;      }
+<b class="nc"><i>716</i>&nbsp;      line.get(column).increment();</b>
+<i>717</i>&nbsp;    }
+<i>718</i>&nbsp;
+<i>719</i>&nbsp;    /**
+<i>720</i>&nbsp;     * Gets the calculated accuracy of this element
+<i>721</i>&nbsp;     *
+<i>722</i>&nbsp;     * @return the accuracy
+<i>723</i>&nbsp;     */
+<i>724</i>&nbsp;    public double getAccuracy() {
+<i>725</i>&nbsp;      // we save the accuracy because it is frequently used by the comparator
+<b class="nc"><i>726</i>&nbsp;      if (Math.abs(acc - 1.0d) &lt; 0.0000000001) {</b>
+<b class="nc"><i>727</i>&nbsp;        if (total == 0)</b>
+<b class="nc"><i>728</i>&nbsp;          acc = 0.0d;</b>
+<b class="nc"><i>729</i>&nbsp;        acc = (double) correct / (double) total;</b>
+<i>730</i>&nbsp;      }
+<b class="nc"><i>731</i>&nbsp;      return acc;</b>
+<i>732</i>&nbsp;    }
+<i>733</i>&nbsp;
+<i>734</i>&nbsp;    /**
+<i>735</i>&nbsp;     * Gets the value given a column
+<i>736</i>&nbsp;     *
+<i>737</i>&nbsp;     * @param column
+<i>738</i>&nbsp;     *          the column
+<i>739</i>&nbsp;     * @return the counter value
+<i>740</i>&nbsp;     */
+<i>741</i>&nbsp;    public int getValue(String column) {
+<b class="nc"><i>742</i>&nbsp;      Counter c = line.get(column);</b>
+<b class="nc"><i>743</i>&nbsp;      if (c == null)</b>
+<b class="nc"><i>744</i>&nbsp;        return 0;</b>
+<b class="nc"><i>745</i>&nbsp;      return c.value();</b>
+<i>746</i>&nbsp;    }
+<i>747</i>&nbsp;  }
+<i>748</i>&nbsp;
+<i>749</i>&nbsp;  /**
+<i>750</i>&nbsp;   * Implements a simple counter
+<i>751</i>&nbsp;   */
+<b class="nc"><i>752</i>&nbsp;  public static class Counter {</b>
+<b class="nc"><i>753</i>&nbsp;    private int c = 0;</b>
+<i>754</i>&nbsp;
+<i>755</i>&nbsp;    private void increment() {
+<b class="nc"><i>756</i>&nbsp;      c++;</b>
+<i>757</i>&nbsp;    }
+<i>758</i>&nbsp;
+<i>759</i>&nbsp;    public int value() {
+<b class="nc"><i>760</i>&nbsp;      return c;</b>
+<i>761</i>&nbsp;    }
+<i>762</i>&nbsp;  }
+<i>763</i>&nbsp;
+<b class="nc"><i>764</i>&nbsp;  public class Stats {</b>
+<i>765</i>&nbsp;
+<i>766</i>&nbsp;    // general statistics
+<b class="nc"><i>767</i>&nbsp;    private final Mean accuracy = new Mean();</b>
+<b class="nc"><i>768</i>&nbsp;    private final Mean averageSentenceLength = new Mean();</b>
+<i>769</i>&nbsp;    // token statistics
+<b class="nc"><i>770</i>&nbsp;    private final Map&lt;String, Mean&gt; tokAccuracies = new HashMap&lt;&gt;();</b>
+<b class="nc"><i>771</i>&nbsp;    private final Map&lt;String, Counter&gt; tokOcurrencies = new HashMap&lt;&gt;();</b>
+<b class="nc"><i>772</i>&nbsp;    private final Map&lt;String, Counter&gt; tokErrors = new HashMap&lt;&gt;();</b>
+<i>773</i>&nbsp;    // tag statistics
+<b class="nc"><i>774</i>&nbsp;    private final Map&lt;String, Counter&gt; tagOcurrencies = new HashMap&lt;&gt;();</b>
+<b class="nc"><i>775</i>&nbsp;    private final Map&lt;String, Counter&gt; tagErrors = new HashMap&lt;&gt;();</b>
+<b class="nc"><i>776</i>&nbsp;    private final Map&lt;String, FMeasure&gt; tagFMeasure = new HashMap&lt;&gt;();</b>
+<i>777</i>&nbsp;    // represents a Confusion Matrix that aggregates all tokens
+<b class="nc"><i>778</i>&nbsp;    private final Map&lt;String, ConfusionMatrixLine&gt; generalConfusionMatrix = new HashMap&lt;&gt;();</b>
+<i>779</i>&nbsp;    // represents a set of Confusion Matrix for each token
+<b class="nc"><i>780</i>&nbsp;    private final Map&lt;String, Map&lt;String, ConfusionMatrixLine&gt;&gt; tokenConfusionMatrix = new HashMap&lt;&gt;();</b>
+<b class="nc"><i>781</i>&nbsp;    private int minimalSentenceLength = Integer.MAX_VALUE;</b>
+<b class="nc"><i>782</i>&nbsp;    private int maximumSentenceLength = Integer.MIN_VALUE;</b>
+<i>783</i>&nbsp;
+<i>784</i>&nbsp;    public void add(String[] toks, String[] refs, String[] preds) {
+<b class="nc"><i>785</i>&nbsp;      int length = toks.length;</b>
+<b class="nc"><i>786</i>&nbsp;      averageSentenceLength.add(length);</b>
+<i>787</i>&nbsp;
+<b class="nc"><i>788</i>&nbsp;      if (minimalSentenceLength &gt; length) {</b>
+<b class="nc"><i>789</i>&nbsp;        minimalSentenceLength = length;</b>
+<i>790</i>&nbsp;      }
+<b class="nc"><i>791</i>&nbsp;      if (maximumSentenceLength &lt; length) {</b>
+<b class="nc"><i>792</i>&nbsp;        maximumSentenceLength = length;</b>
+<i>793</i>&nbsp;      }
+<i>794</i>&nbsp;
+<b class="nc"><i>795</i>&nbsp;      updateTagFMeasure(refs, preds);</b>
+<i>796</i>&nbsp;
+<b class="nc"><i>797</i>&nbsp;      for (int i = 0; i &lt; toks.length; i++) {</b>
+<b class="nc"><i>798</i>&nbsp;        commit(toks[i], refs[i], preds[i]);</b>
+<i>799</i>&nbsp;      }
+<i>800</i>&nbsp;    }
+<i>801</i>&nbsp;
+<i>802</i>&nbsp;    public void add(int length, String ref, String pred) {
+<i>803</i>&nbsp;
+<b class="nc"><i>804</i>&nbsp;      averageSentenceLength.add(length);</b>
+<i>805</i>&nbsp;
+<b class="nc"><i>806</i>&nbsp;      if (minimalSentenceLength &gt; length) {</b>
+<b class="nc"><i>807</i>&nbsp;        minimalSentenceLength = length;</b>
+<i>808</i>&nbsp;      }
+<b class="nc"><i>809</i>&nbsp;      if (maximumSentenceLength &lt; length) {</b>
+<b class="nc"><i>810</i>&nbsp;        maximumSentenceLength = length;</b>
+<i>811</i>&nbsp;      }
+<i>812</i>&nbsp;
+<i>813</i>&nbsp;      // String[] toks = reference.getSentence();
+<b class="nc"><i>814</i>&nbsp;      String[] refs = { ref };</b>
+<b class="nc"><i>815</i>&nbsp;      String[] preds = { pred };</b>
+<i>816</i>&nbsp;
+<b class="nc"><i>817</i>&nbsp;      updateTagFMeasure(refs, preds);</b>
+<i>818</i>&nbsp;
+<b class="nc"><i>819</i>&nbsp;      commit(&quot;&quot;, ref, pred);</b>
+<i>820</i>&nbsp;    }
+<i>821</i>&nbsp;
+<i>822</i>&nbsp;    public void add(String[] text, String ref, String pred) {
+<b class="nc"><i>823</i>&nbsp;      int length = text.length;</b>
+<b class="nc"><i>824</i>&nbsp;      this.add(length, ref, pred);</b>
+<i>825</i>&nbsp;    }
+<i>826</i>&nbsp;
+<i>827</i>&nbsp;    public void add(CharSequence text, String ref, String pred) {
+<b class="nc"><i>828</i>&nbsp;      int length = text.length();</b>
+<b class="nc"><i>829</i>&nbsp;      this.add(length, ref, pred);</b>
+<i>830</i>&nbsp;    }
+<i>831</i>&nbsp;
+<i>832</i>&nbsp;
+<i>833</i>&nbsp;    /**
+<i>834</i>&nbsp;     * Includes a new evaluation data
+<i>835</i>&nbsp;     *
+<i>836</i>&nbsp;     * @param tok
+<i>837</i>&nbsp;     *          the evaluated token
+<i>838</i>&nbsp;     * @param ref
+<i>839</i>&nbsp;     *          the reference pos tag
+<i>840</i>&nbsp;     * @param pred
+<i>841</i>&nbsp;     *          the predicted pos tag
+<i>842</i>&nbsp;     */
+<i>843</i>&nbsp;    private void commit(String tok, String ref, String pred) {
+<i>844</i>&nbsp;      // token stats
+<b class="nc"><i>845</i>&nbsp;      if (!tokAccuracies.containsKey(tok)) {</b>
+<b class="nc"><i>846</i>&nbsp;        tokAccuracies.put(tok, new Mean());</b>
+<b class="nc"><i>847</i>&nbsp;        tokOcurrencies.put(tok, new Counter());</b>
+<b class="nc"><i>848</i>&nbsp;        tokErrors.put(tok, new Counter());</b>
+<i>849</i>&nbsp;      }
+<b class="nc"><i>850</i>&nbsp;      tokOcurrencies.get(tok).increment();</b>
+<i>851</i>&nbsp;
+<i>852</i>&nbsp;      // tag stats
+<b class="nc"><i>853</i>&nbsp;      if (!tagOcurrencies.containsKey(ref)) {</b>
+<b class="nc"><i>854</i>&nbsp;        tagOcurrencies.put(ref, new Counter());</b>
+<b class="nc"><i>855</i>&nbsp;        tagErrors.put(ref, new Counter());</b>
+<i>856</i>&nbsp;      }
+<b class="nc"><i>857</i>&nbsp;      tagOcurrencies.get(ref).increment();</b>
+<i>858</i>&nbsp;
+<i>859</i>&nbsp;      // updates general, token and tag error stats
+<b class="nc"><i>860</i>&nbsp;      if (ref.equals(pred)) {</b>
+<b class="nc"><i>861</i>&nbsp;        tokAccuracies.get(tok).add(1);</b>
+<b class="nc"><i>862</i>&nbsp;        accuracy.add(1);</b>
+<i>863</i>&nbsp;      } else {
+<b class="nc"><i>864</i>&nbsp;        tokAccuracies.get(tok).add(0);</b>
+<b class="nc"><i>865</i>&nbsp;        tokErrors.get(tok).increment();</b>
+<b class="nc"><i>866</i>&nbsp;        tagErrors.get(ref).increment();</b>
+<b class="nc"><i>867</i>&nbsp;        accuracy.add(0);</b>
+<i>868</i>&nbsp;      }
+<i>869</i>&nbsp;
+<i>870</i>&nbsp;      // populate confusion matrixes
+<b class="nc"><i>871</i>&nbsp;      if (!generalConfusionMatrix.containsKey(ref)) {</b>
+<b class="nc"><i>872</i>&nbsp;        generalConfusionMatrix.put(ref, new ConfusionMatrixLine(ref));</b>
+<i>873</i>&nbsp;      }
+<b class="nc"><i>874</i>&nbsp;      generalConfusionMatrix.get(ref).increment(pred);</b>
+<i>875</i>&nbsp;
+<b class="nc"><i>876</i>&nbsp;      if (!tokenConfusionMatrix.containsKey(tok)) {</b>
+<b class="nc"><i>877</i>&nbsp;        tokenConfusionMatrix.put(tok, new HashMap&lt;&gt;());</b>
+<i>878</i>&nbsp;      }
+<b class="nc"><i>879</i>&nbsp;      if (!tokenConfusionMatrix.get(tok).containsKey(ref)) {</b>
+<b class="nc"><i>880</i>&nbsp;        tokenConfusionMatrix.get(tok).put(ref, new ConfusionMatrixLine(ref));</b>
+<i>881</i>&nbsp;      }
+<b class="nc"><i>882</i>&nbsp;      tokenConfusionMatrix.get(tok).get(ref).increment(pred);</b>
+<i>883</i>&nbsp;    }
+<i>884</i>&nbsp;
+<i>885</i>&nbsp;    private void updateTagFMeasure(String[] refs, String[] preds) {
+<i>886</i>&nbsp;      // create a set with all tags
+<b class="nc"><i>887</i>&nbsp;      Set&lt;String&gt; tags = new HashSet&lt;&gt;(Arrays.asList(refs));</b>
+<b class="nc"><i>888</i>&nbsp;      tags.addAll(Arrays.asList(preds));</b>
+<i>889</i>&nbsp;
+<i>890</i>&nbsp;      // create samples for each tag
+<b class="nc"><i>891</i>&nbsp;      for (String tag : tags) {</b>
+<b class="nc"><i>892</i>&nbsp;        List&lt;Span&gt; reference = new ArrayList&lt;&gt;();</b>
+<b class="nc"><i>893</i>&nbsp;        List&lt;Span&gt; prediction = new ArrayList&lt;&gt;();</b>
+<b class="nc"><i>894</i>&nbsp;        for (int i = 0; i &lt; refs.length; i++) {</b>
+<b class="nc"><i>895</i>&nbsp;          if (refs[i].equals(tag)) {</b>
+<b class="nc"><i>896</i>&nbsp;            reference.add(new Span(i, i + 1));</b>
+<i>897</i>&nbsp;          }
+<b class="nc"><i>898</i>&nbsp;          if (preds[i].equals(tag)) {</b>
+<b class="nc"><i>899</i>&nbsp;            prediction.add(new Span(i, i + 1));</b>
+<i>900</i>&nbsp;          }
+<i>901</i>&nbsp;        }
+<b class="nc"><i>902</i>&nbsp;        if (!this.tagFMeasure.containsKey(tag)) {</b>
+<b class="nc"><i>903</i>&nbsp;          this.tagFMeasure.put(tag, new FMeasure());</b>
+<i>904</i>&nbsp;        }
+<i>905</i>&nbsp;        // populate the fmeasure
+<b class="nc"><i>906</i>&nbsp;        this.tagFMeasure.get(tag).updateScores(</b>
+<b class="nc"><i>907</i>&nbsp;            reference.toArray(new Span[reference.size()]),</b>
+<b class="nc"><i>908</i>&nbsp;            prediction.toArray(new Span[prediction.size()]));</b>
+<b class="nc"><i>909</i>&nbsp;      }</b>
+<i>910</i>&nbsp;    }
+<i>911</i>&nbsp;
+<i>912</i>&nbsp;    private double getAccuracy() {
+<b class="nc"><i>913</i>&nbsp;      return accuracy.mean();</b>
+<i>914</i>&nbsp;    }
+<i>915</i>&nbsp;
+<i>916</i>&nbsp;    private int getNumberOfTags() {
+<b class="nc"><i>917</i>&nbsp;      return this.tagOcurrencies.keySet().size();</b>
+<i>918</i>&nbsp;    }
+<i>919</i>&nbsp;
+<i>920</i>&nbsp;    private long getNumberOfSentences() {
+<b class="nc"><i>921</i>&nbsp;      return this.averageSentenceLength.count();</b>
+<i>922</i>&nbsp;    }
+<i>923</i>&nbsp;
+<i>924</i>&nbsp;    private double getAverageSentenceSize() {
+<b class="nc"><i>925</i>&nbsp;      return this.averageSentenceLength.mean();</b>
+<i>926</i>&nbsp;    }
+<i>927</i>&nbsp;
+<i>928</i>&nbsp;    private int getMinSentenceSize() {
+<b class="nc"><i>929</i>&nbsp;      return this.minimalSentenceLength;</b>
+<i>930</i>&nbsp;    }
+<i>931</i>&nbsp;
+<i>932</i>&nbsp;    private int getMaxSentenceSize() {
+<b class="nc"><i>933</i>&nbsp;      return this.maximumSentenceLength;</b>
+<i>934</i>&nbsp;    }
+<i>935</i>&nbsp;
+<i>936</i>&nbsp;    private double getTokenAccuracy(String token) {
+<b class="nc"><i>937</i>&nbsp;      return tokAccuracies.get(token).mean();</b>
+<i>938</i>&nbsp;    }
+<i>939</i>&nbsp;
+<i>940</i>&nbsp;    private int getTokenErrors(String token) {
+<b class="nc"><i>941</i>&nbsp;      return tokErrors.get(token).value();</b>
+<i>942</i>&nbsp;    }
+<i>943</i>&nbsp;
+<i>944</i>&nbsp;    private int getTokenFrequency(String token) {
+<b class="nc"><i>945</i>&nbsp;      return tokOcurrencies.get(token).value();</b>
+<i>946</i>&nbsp;    }
+<i>947</i>&nbsp;
+<i>948</i>&nbsp;    private SortedSet&lt;String&gt; getTokensOrderedByFrequency() {
+<b class="nc"><i>949</i>&nbsp;      SortedSet&lt;String&gt; toks = new TreeSet&lt;&gt;(new SimpleLabelComparator(tokOcurrencies));</b>
+<b class="nc"><i>950</i>&nbsp;      toks.addAll(tokOcurrencies.keySet());</b>
+<b class="nc"><i>951</i>&nbsp;      return Collections.unmodifiableSortedSet(toks);</b>
+<i>952</i>&nbsp;    }
+<i>953</i>&nbsp;
+<i>954</i>&nbsp;    private SortedSet&lt;String&gt; getTokensOrderedByNumberOfErrors() {
+<b class="nc"><i>955</i>&nbsp;      SortedSet&lt;String&gt; toks = new TreeSet&lt;&gt;(new SimpleLabelComparator(tokErrors));</b>
+<b class="nc"><i>956</i>&nbsp;      toks.addAll(tokErrors.keySet());</b>
+<b class="nc"><i>957</i>&nbsp;      return toks;</b>
+<i>958</i>&nbsp;    }
+<i>959</i>&nbsp;
+<i>960</i>&nbsp;    private int getTagFrequency(String tag) {
+<b class="nc"><i>961</i>&nbsp;      return tagOcurrencies.get(tag).value();</b>
+<i>962</i>&nbsp;    }
+<i>963</i>&nbsp;
+<i>964</i>&nbsp;    private int getTagErrors(String tag) {
+<b class="nc"><i>965</i>&nbsp;      return tagErrors.get(tag).value();</b>
+<i>966</i>&nbsp;    }
+<i>967</i>&nbsp;
+<i>968</i>&nbsp;    private double getTagFMeasure(String tag) {
+<b class="nc"><i>969</i>&nbsp;      return tagFMeasure.get(tag).getFMeasure();</b>
+<i>970</i>&nbsp;    }
+<i>971</i>&nbsp;
+<i>972</i>&nbsp;    private double getTagRecall(String tag) {
+<b class="nc"><i>973</i>&nbsp;      return tagFMeasure.get(tag).getRecallScore();</b>
+<i>974</i>&nbsp;    }
+<i>975</i>&nbsp;
+<i>976</i>&nbsp;    private double getTagPrecision(String tag) {
+<b class="nc"><i>977</i>&nbsp;      return tagFMeasure.get(tag).getPrecisionScore();</b>
+<i>978</i>&nbsp;    }
+<i>979</i>&nbsp;
+<i>980</i>&nbsp;    private SortedSet&lt;String&gt; getTagsOrderedByErrors() {
+<b class="nc"><i>981</i>&nbsp;      SortedSet&lt;String&gt; tags = new TreeSet&lt;&gt;(getLabelComparator(tagErrors));</b>
+<b class="nc"><i>982</i>&nbsp;      tags.addAll(tagErrors.keySet());</b>
+<b class="nc"><i>983</i>&nbsp;      return Collections.unmodifiableSortedSet(tags);</b>
+<i>984</i>&nbsp;    }
+<i>985</i>&nbsp;
+<i>986</i>&nbsp;    private SortedSet&lt;String&gt; getConfusionMatrixTagset() {
+<b class="nc"><i>987</i>&nbsp;      return getConfusionMatrixTagset(generalConfusionMatrix);</b>
+<i>988</i>&nbsp;    }
+<i>989</i>&nbsp;
+<i>990</i>&nbsp;    private double[][] getConfusionMatrix() {
+<b class="nc"><i>991</i>&nbsp;      return createConfusionMatrix(getConfusionMatrixTagset(),</b>
+<i>992</i>&nbsp;          generalConfusionMatrix);
+<i>993</i>&nbsp;    }
+<i>994</i>&nbsp;
+<i>995</i>&nbsp;    private SortedSet&lt;String&gt; getConfusionMatrixTagset(String token) {
+<b class="nc"><i>996</i>&nbsp;      return getConfusionMatrixTagset(tokenConfusionMatrix.get(token));</b>
+<i>997</i>&nbsp;    }
+<i>998</i>&nbsp;
+<i>999</i>&nbsp;    private double[][] getConfusionMatrix(String token) {
+<b class="nc"><i>1000</i>&nbsp;      return createConfusionMatrix(getConfusionMatrixTagset(token),</b>
+<b class="nc"><i>1001</i>&nbsp;          tokenConfusionMatrix.get(token));</b>
+<i>1002</i>&nbsp;    }
+<i>1003</i>&nbsp;
+<i>1004</i>&nbsp;    /**
+<i>1005</i>&nbsp;     * Creates a matrix with N lines and N + 1 columns with the data from
+<i>1006</i>&nbsp;     * confusion matrix. The last column is the accuracy.
+<i>1007</i>&nbsp;     */
+<i>1008</i>&nbsp;    private double[][] createConfusionMatrix(SortedSet&lt;String&gt; tagset,
+<i>1009</i>&nbsp;                                             Map&lt;String, ConfusionMatrixLine&gt; data) {
+<b class="nc"><i>1010</i>&nbsp;      int size = tagset.size();</b>
+<b class="nc"><i>1011</i>&nbsp;      double[][] matrix = new double[size][size + 1];</b>
+<b class="nc"><i>1012</i>&nbsp;      int line = 0;</b>
+<b class="nc"><i>1013</i>&nbsp;      for (String ref : tagset) {</b>
+<b class="nc"><i>1014</i>&nbsp;        int column = 0;</b>
+<b class="nc"><i>1015</i>&nbsp;        for (String pred : tagset) {</b>
+<b class="nc"><i>1016</i>&nbsp;          matrix[line][column] = data.get(ref) != null ? data</b>
+<b class="nc"><i>1017</i>&nbsp;              .get(ref).getValue(pred) : 0;</b>
+<b class="nc"><i>1018</i>&nbsp;          column++;</b>
+<b class="nc"><i>1019</i>&nbsp;        }</b>
+<i>1020</i>&nbsp;        // set accuracy
+<b class="nc"><i>1021</i>&nbsp;        matrix[line][column] = data.get(ref) != null ? data.get(ref).getAccuracy() : 0;</b>
+<b class="nc"><i>1022</i>&nbsp;        line++;</b>
+<b class="nc"><i>1023</i>&nbsp;      }</b>
+<i>1024</i>&nbsp;
+<b class="nc"><i>1025</i>&nbsp;      return matrix;</b>
+<i>1026</i>&nbsp;    }
+<i>1027</i>&nbsp;
+<i>1028</i>&nbsp;    private SortedSet&lt;String&gt; getConfusionMatrixTagset(
+<i>1029</i>&nbsp;        Map&lt;String, ConfusionMatrixLine&gt; data) {
+<b class="nc"><i>1030</i>&nbsp;      SortedSet&lt;String&gt; tags = new TreeSet&lt;&gt;(getMatrixLabelComparator(data));</b>
+<b class="nc"><i>1031</i>&nbsp;      tags.addAll(data.keySet());</b>
+<b class="nc"><i>1032</i>&nbsp;      List&lt;String&gt; col = new LinkedList&lt;&gt;();</b>
+<b class="nc"><i>1033</i>&nbsp;      for (String t : tags) {</b>
+<b class="nc"><i>1034</i>&nbsp;        col.addAll(data.get(t).line.keySet());</b>
+<b class="nc"><i>1035</i>&nbsp;      }</b>
+<b class="nc"><i>1036</i>&nbsp;      tags.addAll(col);</b>
+<b class="nc"><i>1037</i>&nbsp;      return Collections.unmodifiableSortedSet(tags);</b>
+<i>1038</i>&nbsp;    }
+<i>1039</i>&nbsp;  }
+<i>1040</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-09 18:47</div>
+</div>
+</body>
+</html>

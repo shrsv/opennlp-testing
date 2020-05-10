@@ -1,0 +1,120 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: EndOfSentenceScanner</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">opennlp.tools.sentdetect</a> ]
+</div>
+
+<h1>Coverage Summary for Class: EndOfSentenceScanner (opennlp.tools.sentdetect)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+</tr>
+<tr>
+  <td class="name">EndOfSentenceScanner</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/*
+<i>2</i>&nbsp; * Licensed to the Apache Software Foundation (ASF) under one or more
+<i>3</i>&nbsp; * contributor license agreements.  See the NOTICE file distributed with
+<i>4</i>&nbsp; * this work for additional information regarding copyright ownership.
+<i>5</i>&nbsp; * The ASF licenses this file to You under the Apache License, Version 2.0
+<i>6</i>&nbsp; * (the &quot;License&quot;); you may not use this file except in compliance with
+<i>7</i>&nbsp; * the License. You may obtain a copy of the License at
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; *     http://www.apache.org/licenses/LICENSE-2.0
+<i>10</i>&nbsp; *
+<i>11</i>&nbsp; * Unless required by applicable law or agreed to in writing, software
+<i>12</i>&nbsp; * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<i>13</i>&nbsp; * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<i>14</i>&nbsp; * See the License for the specific language governing permissions and
+<i>15</i>&nbsp; * limitations under the License.
+<i>16</i>&nbsp; */
+<i>17</i>&nbsp;
+<i>18</i>&nbsp;package opennlp.tools.sentdetect;
+<i>19</i>&nbsp;
+<i>20</i>&nbsp;import java.util.List;
+<i>21</i>&nbsp;import java.util.Set;
+<i>22</i>&nbsp;
+<i>23</i>&nbsp;/**
+<i>24</i>&nbsp; * Scans Strings, StringBuffers, and char[] arrays for the offsets of
+<i>25</i>&nbsp; * sentence ending characters.
+<i>26</i>&nbsp; *
+<i>27</i>&nbsp; * &lt;p&gt;Implementations of this interface can use regular expressions,
+<i>28</i>&nbsp; * hand-coded DFAs, and other scanning techniques to locate end of
+<i>29</i>&nbsp; * sentence offsets.&lt;/p&gt;
+<i>30</i>&nbsp; */
+<i>31</i>&nbsp;
+<i>32</i>&nbsp;public interface EndOfSentenceScanner {
+<i>33</i>&nbsp;
+<i>34</i>&nbsp;  /**
+<i>35</i>&nbsp;   * Returns an array of character which can indicate the end of a sentence.
+<i>36</i>&nbsp;   * @return an array of character which can indicate the end of a sentence.
+<i>37</i>&nbsp;   */
+<i>38</i>&nbsp;  @Deprecated
+<i>39</i>&nbsp;  char[] getEndOfSentenceCharacters();
+<i>40</i>&nbsp;
+<i>41</i>&nbsp;  /**
+<i>42</i>&nbsp;   * Returns a set of character which can indicate the end of a sentence.
+<i>43</i>&nbsp;   * @return a set of character which can indicate the end of a sentence.
+<i>44</i>&nbsp;   */
+<i>45</i>&nbsp;  Set&lt;Character&gt; getEOSCharacters();
+<i>46</i>&nbsp;
+<i>47</i>&nbsp;  /**
+<i>48</i>&nbsp;   * The receiver scans the specified string for sentence ending characters and
+<i>49</i>&nbsp;   * returns their offsets.
+<i>50</i>&nbsp;   *
+<i>51</i>&nbsp;   * @param s a &lt;code&gt;String&lt;/code&gt; value
+<i>52</i>&nbsp;   * @return a &lt;code&gt;List&lt;/code&gt; of Integer objects.
+<i>53</i>&nbsp;   */
+<i>54</i>&nbsp;  List&lt;Integer&gt; getPositions(String s);
+<i>55</i>&nbsp;
+<i>56</i>&nbsp;  /**
+<i>57</i>&nbsp;   * The receiver scans `buf&#39; for sentence ending characters and
+<i>58</i>&nbsp;   * returns their offsets.
+<i>59</i>&nbsp;   *
+<i>60</i>&nbsp;   * @param buf a &lt;code&gt;StringBuffer&lt;/code&gt; value
+<i>61</i>&nbsp;   * @return a &lt;code&gt;List&lt;/code&gt; of Integer objects.
+<i>62</i>&nbsp;   */
+<i>63</i>&nbsp;  List&lt;Integer&gt; getPositions(StringBuffer buf);
+<i>64</i>&nbsp;
+<i>65</i>&nbsp;  /**
+<i>66</i>&nbsp;   * The receiver scans `cbuf&#39; for sentence ending characters and
+<i>67</i>&nbsp;   * returns their offsets.
+<i>68</i>&nbsp;   *
+<i>69</i>&nbsp;   * @param cbuf a &lt;code&gt;char[]&lt;/code&gt; value
+<i>70</i>&nbsp;   * @return a &lt;code&gt;List&lt;/code&gt; of Integer objects.
+<i>71</i>&nbsp;   */
+<i>72</i>&nbsp;  List&lt;Integer&gt; getPositions(char[] cbuf);
+<i>73</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-09 18:47</div>
+</div>
+</body>
+</html>

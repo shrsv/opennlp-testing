@@ -1,0 +1,138 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: DataIndexer</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">opennlp.tools.ml.model</a> ]
+</div>
+
+<h1>Coverage Summary for Class: DataIndexer (opennlp.tools.ml.model)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+</tr>
+<tr>
+  <td class="name">DataIndexer</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/*
+<i>2</i>&nbsp; * Licensed to the Apache Software Foundation (ASF) under one or more
+<i>3</i>&nbsp; * contributor license agreements.  See the NOTICE file distributed with
+<i>4</i>&nbsp; * this work for additional information regarding copyright ownership.
+<i>5</i>&nbsp; * The ASF licenses this file to You under the Apache License, Version 2.0
+<i>6</i>&nbsp; * (the &quot;License&quot;); you may not use this file except in compliance with
+<i>7</i>&nbsp; * the License. You may obtain a copy of the License at
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; *     http://www.apache.org/licenses/LICENSE-2.0
+<i>10</i>&nbsp; *
+<i>11</i>&nbsp; * Unless required by applicable law or agreed to in writing, software
+<i>12</i>&nbsp; * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<i>13</i>&nbsp; * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<i>14</i>&nbsp; * See the License for the specific language governing permissions and
+<i>15</i>&nbsp; * limitations under the License.
+<i>16</i>&nbsp; */
+<i>17</i>&nbsp;
+<i>18</i>&nbsp;package opennlp.tools.ml.model;
+<i>19</i>&nbsp;
+<i>20</i>&nbsp;import java.io.IOException;
+<i>21</i>&nbsp;import java.util.Map;
+<i>22</i>&nbsp;
+<i>23</i>&nbsp;import opennlp.tools.util.ObjectStream;
+<i>24</i>&nbsp;import opennlp.tools.util.TrainingParameters;
+<i>25</i>&nbsp;
+<i>26</i>&nbsp;/** Object which compresses events in memory and performs feature selection.
+<i>27</i>&nbsp; */
+<i>28</i>&nbsp;public interface DataIndexer {
+<i>29</i>&nbsp;  /**
+<i>30</i>&nbsp;   * Returns the array of predicates seen in each event.
+<i>31</i>&nbsp;   * @return a 2-D array whose first dimension is the event index and array this refers to contains
+<i>32</i>&nbsp;   *     the contexts for that event.
+<i>33</i>&nbsp;   */
+<i>34</i>&nbsp;  int[][] getContexts();
+<i>35</i>&nbsp;
+<i>36</i>&nbsp;  /**
+<i>37</i>&nbsp;   * Returns an array indicating the number of times a particular event was seen.
+<i>38</i>&nbsp;   * @return an array indexed by the event index indicating the number of times a particular event was seen.
+<i>39</i>&nbsp;   */
+<i>40</i>&nbsp;  int[] getNumTimesEventsSeen();
+<i>41</i>&nbsp;
+<i>42</i>&nbsp;  /**
+<i>43</i>&nbsp;   * Returns an array indicating the outcome index for each event.
+<i>44</i>&nbsp;   * @return an array indicating the outcome index for each event.
+<i>45</i>&nbsp;   */
+<i>46</i>&nbsp;  int[] getOutcomeList();
+<i>47</i>&nbsp;
+<i>48</i>&nbsp;  /**
+<i>49</i>&nbsp;   * Returns an array of predicate/context names.
+<i>50</i>&nbsp;   * @return an array of predicate/context names indexed by context index.  These indices are the
+<i>51</i>&nbsp;   *     value of the array returned by &lt;code&gt;getContexts&lt;/code&gt;.
+<i>52</i>&nbsp;   */
+<i>53</i>&nbsp;  String[] getPredLabels();
+<i>54</i>&nbsp;
+<i>55</i>&nbsp;  /**
+<i>56</i>&nbsp;   * Returns an array of the count of each predicate in the events.
+<i>57</i>&nbsp;   * @return an array of the count of each predicate in the events.
+<i>58</i>&nbsp;   */
+<i>59</i>&nbsp;  int[] getPredCounts();
+<i>60</i>&nbsp;
+<i>61</i>&nbsp;  /**
+<i>62</i>&nbsp;   * Returns an array of outcome names.
+<i>63</i>&nbsp;   * @return an array of outcome names indexed by outcome index.
+<i>64</i>&nbsp;   */
+<i>65</i>&nbsp;  String[] getOutcomeLabels();
+<i>66</i>&nbsp;
+<i>67</i>&nbsp;  /**
+<i>68</i>&nbsp;   * Returns the values associated with each event context or null if integer values are to be used.
+<i>69</i>&nbsp;   * @return the values associated with each event context.
+<i>70</i>&nbsp;   */
+<i>71</i>&nbsp;  float[][] getValues();
+<i>72</i>&nbsp;
+<i>73</i>&nbsp;  /**
+<i>74</i>&nbsp;   * Returns the number of total events indexed.
+<i>75</i>&nbsp;   * @return The number of total events indexed.
+<i>76</i>&nbsp;   */
+<i>77</i>&nbsp;  int getNumEvents();
+<i>78</i>&nbsp;  
+<i>79</i>&nbsp;  /**
+<i>80</i>&nbsp;   * Sets parameters used during the data indexing.
+<i>81</i>&nbsp;   * @param trainParams {@link TrainingParameters}
+<i>82</i>&nbsp;   */
+<i>83</i>&nbsp;  void init(TrainingParameters trainParams,Map&lt;String,String&gt; reportMap);
+<i>84</i>&nbsp;
+<i>85</i>&nbsp;  /**
+<i>86</i>&nbsp;   * Performs the data indexing. Make sure the init(...) method is called first.
+<i>87</i>&nbsp;   * 
+<i>88</i>&nbsp;   * @param eventStream a stream of events
+<i>89</i>&nbsp;   */
+<i>90</i>&nbsp;  void index(ObjectStream&lt;Event&gt; eventStream) throws IOException;
+<i>91</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-09 15:05</div>
+</div>
+</body>
+</html>

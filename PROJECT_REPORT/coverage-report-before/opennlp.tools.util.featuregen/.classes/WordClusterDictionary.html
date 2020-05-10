@@ -1,0 +1,194 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: WordClusterDictionary</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">opennlp.tools.util.featuregen</a> ]
+</div>
+
+<h1>Coverage Summary for Class: WordClusterDictionary (opennlp.tools.util.featuregen)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">WordClusterDictionary</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 17)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">WordClusterDictionary$WordClusterDictionarySerializer</td>
+<td class="coverageStat">
+  <span class="percent">
+    33.3%
+  </span>
+  <span class="absValue">
+    (1/ 3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    25%
+  </span>
+  <span class="absValue">
+    (1/ 4)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    14.3%
+  </span>
+  <span class="absValue">
+    (1/ 7)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    4.8%
+  </span>
+  <span class="absValue">
+    (1/ 21)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/*
+<i>2</i>&nbsp; * Licensed to the Apache Software Foundation (ASF) under one or more
+<i>3</i>&nbsp; * contributor license agreements.  See the NOTICE file distributed with
+<i>4</i>&nbsp; * this work for additional information regarding copyright ownership.
+<i>5</i>&nbsp; * The ASF licenses this file to You under the Apache License, Version 2.0
+<i>6</i>&nbsp; * (the &quot;License&quot;); you may not use this file except in compliance with
+<i>7</i>&nbsp; * the License. You may obtain a copy of the License at
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; *     http://www.apache.org/licenses/LICENSE-2.0
+<i>10</i>&nbsp; *
+<i>11</i>&nbsp; * Unless required by applicable law or agreed to in writing, software
+<i>12</i>&nbsp; * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<i>13</i>&nbsp; * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<i>14</i>&nbsp; * See the License for the specific language governing permissions and
+<i>15</i>&nbsp; * limitations under the License.
+<i>16</i>&nbsp; */
+<i>17</i>&nbsp;
+<i>18</i>&nbsp;package opennlp.tools.util.featuregen;
+<i>19</i>&nbsp;
+<i>20</i>&nbsp;import java.io.BufferedReader;
+<i>21</i>&nbsp;import java.io.BufferedWriter;
+<i>22</i>&nbsp;import java.io.IOException;
+<i>23</i>&nbsp;import java.io.InputStream;
+<i>24</i>&nbsp;import java.io.InputStreamReader;
+<i>25</i>&nbsp;import java.io.OutputStream;
+<i>26</i>&nbsp;import java.io.OutputStreamWriter;
+<i>27</i>&nbsp;import java.io.Writer;
+<i>28</i>&nbsp;import java.nio.charset.StandardCharsets;
+<i>29</i>&nbsp;import java.util.HashMap;
+<i>30</i>&nbsp;import java.util.Map;
+<i>31</i>&nbsp;
+<i>32</i>&nbsp;import opennlp.tools.util.model.ArtifactSerializer;
+<i>33</i>&nbsp;import opennlp.tools.util.model.SerializableArtifact;
+<i>34</i>&nbsp;
+<i>35</i>&nbsp;public class WordClusterDictionary implements SerializableArtifact {
+<i>36</i>&nbsp;
+<b class="fc"><i>37</i>&nbsp;  public static class WordClusterDictionarySerializer implements ArtifactSerializer&lt;WordClusterDictionary&gt; {</b>
+<i>38</i>&nbsp;
+<i>39</i>&nbsp;    public WordClusterDictionary create(InputStream in) throws IOException {
+<b class="nc"><i>40</i>&nbsp;      return new WordClusterDictionary(in);</b>
+<i>41</i>&nbsp;    }
+<i>42</i>&nbsp;
+<i>43</i>&nbsp;    public void serialize(WordClusterDictionary artifact, OutputStream out) throws IOException {
+<b class="nc"><i>44</i>&nbsp;      artifact.serialize(out);</b>
+<b class="nc"><i>45</i>&nbsp;    }</b>
+<i>46</i>&nbsp;  }
+<i>47</i>&nbsp;
+<b class="nc"><i>48</i>&nbsp;  private Map&lt;String, String&gt; tokenToClusterMap = new HashMap&lt;&gt;();</b>
+<i>49</i>&nbsp;
+<i>50</i>&nbsp;  /**
+<i>51</i>&nbsp;   * Read word2vec and clark clustering style lexicons.
+<i>52</i>&nbsp;   * @param in the inputstream
+<i>53</i>&nbsp;   * @throws IOException the io exception
+<i>54</i>&nbsp;   */
+<b class="nc"><i>55</i>&nbsp;  public WordClusterDictionary(InputStream in) throws IOException {</b>
+<b class="nc"><i>56</i>&nbsp;    BufferedReader reader = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));</b>
+<i>57</i>&nbsp;    String line;
+<b class="nc"><i>58</i>&nbsp;    while ((line = reader.readLine()) != null) {</b>
+<b class="nc"><i>59</i>&nbsp;      String[] parts = line.split(&quot; &quot;);</b>
+<b class="nc"><i>60</i>&nbsp;      if (parts.length == 3) {</b>
+<b class="nc"><i>61</i>&nbsp;        tokenToClusterMap.put(parts[0], parts[1].intern());</b>
+<b class="nc"><i>62</i>&nbsp;      } else if (parts.length == 2) {</b>
+<b class="nc"><i>63</i>&nbsp;        tokenToClusterMap.put(parts[0], parts[1].intern());</b>
+<i>64</i>&nbsp;      }
+<b class="nc"><i>65</i>&nbsp;    }</b>
+<i>66</i>&nbsp;  }
+<i>67</i>&nbsp;
+<i>68</i>&nbsp;  public String lookupToken(String string) {
+<b class="nc"><i>69</i>&nbsp;    return tokenToClusterMap.get(string);</b>
+<i>70</i>&nbsp;  }
+<i>71</i>&nbsp;
+<i>72</i>&nbsp;  public void serialize(OutputStream out) throws IOException {
+<b class="nc"><i>73</i>&nbsp;    Writer writer = new BufferedWriter(new OutputStreamWriter(out));</b>
+<i>74</i>&nbsp;
+<b class="nc"><i>75</i>&nbsp;    for (Map.Entry&lt;String, String&gt; entry : tokenToClusterMap.entrySet()) {</b>
+<b class="nc"><i>76</i>&nbsp;      writer.write(entry.getKey() + &quot; &quot; + entry.getValue() + &quot;\n&quot;);</b>
+<b class="nc"><i>77</i>&nbsp;    }</b>
+<i>78</i>&nbsp;
+<b class="nc"><i>79</i>&nbsp;    writer.flush();</b>
+<i>80</i>&nbsp;  }
+<i>81</i>&nbsp;
+<i>82</i>&nbsp;  public Class&lt;?&gt; getArtifactSerializerClass() {
+<b class="nc"><i>83</i>&nbsp;    return WordClusterDictionarySerializer.class;</b>
+<i>84</i>&nbsp;  }
+<i>85</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-09 15:05</div>
+</div>
+</body>
+</html>

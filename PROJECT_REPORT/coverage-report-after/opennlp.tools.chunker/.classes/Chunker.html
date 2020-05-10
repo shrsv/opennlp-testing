@@ -1,0 +1,113 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: Chunker</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">opennlp.tools.chunker</a> ]
+</div>
+
+<h1>Coverage Summary for Class: Chunker (opennlp.tools.chunker)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+</tr>
+<tr>
+  <td class="name">Chunker</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/*
+<i>2</i>&nbsp; * Licensed to the Apache Software Foundation (ASF) under one or more
+<i>3</i>&nbsp; * contributor license agreements.  See the NOTICE file distributed with
+<i>4</i>&nbsp; * this work for additional information regarding copyright ownership.
+<i>5</i>&nbsp; * The ASF licenses this file to You under the Apache License, Version 2.0
+<i>6</i>&nbsp; * (the &quot;License&quot;); you may not use this file except in compliance with
+<i>7</i>&nbsp; * the License. You may obtain a copy of the License at
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; *     http://www.apache.org/licenses/LICENSE-2.0
+<i>10</i>&nbsp; *
+<i>11</i>&nbsp; * Unless required by applicable law or agreed to in writing, software
+<i>12</i>&nbsp; * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<i>13</i>&nbsp; * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<i>14</i>&nbsp; * See the License for the specific language governing permissions and
+<i>15</i>&nbsp; * limitations under the License.
+<i>16</i>&nbsp; */
+<i>17</i>&nbsp;
+<i>18</i>&nbsp;package opennlp.tools.chunker;
+<i>19</i>&nbsp;
+<i>20</i>&nbsp;import opennlp.tools.util.Sequence;
+<i>21</i>&nbsp;import opennlp.tools.util.Span;
+<i>22</i>&nbsp;
+<i>23</i>&nbsp;/**
+<i>24</i>&nbsp; * The interface for chunkers which provide chunk tags for a sequence of tokens.
+<i>25</i>&nbsp; */
+<i>26</i>&nbsp;public interface Chunker {
+<i>27</i>&nbsp;
+<i>28</i>&nbsp;  /**
+<i>29</i>&nbsp;   * Generates chunk tags for the given sequence returning the result in an array.
+<i>30</i>&nbsp;   *
+<i>31</i>&nbsp;   * @param toks an array of the tokens or words of the sequence.
+<i>32</i>&nbsp;   * @param tags an array of the pos tags of the sequence.
+<i>33</i>&nbsp;   *
+<i>34</i>&nbsp;   * @return an array of chunk tags for each token in the sequence.
+<i>35</i>&nbsp;   */
+<i>36</i>&nbsp;  String[] chunk(String[] toks, String[] tags);
+<i>37</i>&nbsp;
+<i>38</i>&nbsp;  /**
+<i>39</i>&nbsp;   * Generates tagged chunk spans for the given sequence returning the result in a span array.
+<i>40</i>&nbsp;   *
+<i>41</i>&nbsp;   * @param toks an array of the tokens or words of the sequence.
+<i>42</i>&nbsp;   * @param tags an array of the pos tags of the sequence.
+<i>43</i>&nbsp;   *
+<i>44</i>&nbsp;   * @return an array of spans with chunk tags for each chunk in the sequence.
+<i>45</i>&nbsp;   */
+<i>46</i>&nbsp;  Span[] chunkAsSpans(String[] toks, String[] tags);
+<i>47</i>&nbsp;
+<i>48</i>&nbsp;  /**
+<i>49</i>&nbsp;   * Returns the top k chunk sequences for the specified sentence with the specified pos-tags
+<i>50</i>&nbsp;   * @param sentence The tokens of the sentence.
+<i>51</i>&nbsp;   * @param tags The pos-tags for the specified sentence.
+<i>52</i>&nbsp;   *
+<i>53</i>&nbsp;   * @return the top k chunk sequences for the specified sentence.
+<i>54</i>&nbsp;   */
+<i>55</i>&nbsp;  Sequence[] topKSequences(String[] sentence, String[] tags);
+<i>56</i>&nbsp;
+<i>57</i>&nbsp;  /**
+<i>58</i>&nbsp;   * Returns the top k chunk sequences for the specified sentence with the specified pos-tags
+<i>59</i>&nbsp;   * @param sentence The tokens of the sentence.
+<i>60</i>&nbsp;   * @param tags The pos-tags for the specified sentence.
+<i>61</i>&nbsp;   * @param minSequenceScore A lower bound on the score of a returned sequence.
+<i>62</i>&nbsp;   *
+<i>63</i>&nbsp;   * @return the top k chunk sequences for the specified sentence.
+<i>64</i>&nbsp;   */
+<i>65</i>&nbsp;  Sequence[] topKSequences(String[] sentence, String[] tags, double minSequenceScore);
+<i>66</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-09 18:47</div>
+</div>
+</body>
+</html>

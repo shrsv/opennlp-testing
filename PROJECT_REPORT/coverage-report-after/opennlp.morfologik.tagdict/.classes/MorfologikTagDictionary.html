@@ -1,0 +1,174 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: MorfologikTagDictionary</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">opennlp.morfologik.tagdict</a> ]
+</div>
+
+<h1>Coverage Summary for Class: MorfologikTagDictionary (opennlp.morfologik.tagdict)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">MorfologikTagDictionary</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 16)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/*
+<i>2</i>&nbsp; * Licensed to the Apache Software Foundation (ASF) under one or more
+<i>3</i>&nbsp; * contributor license agreements.  See the NOTICE file distributed with
+<i>4</i>&nbsp; * this work for additional information regarding copyright ownership.
+<i>5</i>&nbsp; * The ASF licenses this file to You under the Apache License, Version 2.0
+<i>6</i>&nbsp; * (the &quot;License&quot;); you may not use this file except in compliance with
+<i>7</i>&nbsp; * the License. You may obtain a copy of the License at
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; *     http://www.apache.org/licenses/LICENSE-2.0
+<i>10</i>&nbsp; *
+<i>11</i>&nbsp; * Unless required by applicable law or agreed to in writing, software
+<i>12</i>&nbsp; * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<i>13</i>&nbsp; * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<i>14</i>&nbsp; * See the License for the specific language governing permissions and
+<i>15</i>&nbsp; * limitations under the License.
+<i>16</i>&nbsp; */
+<i>17</i>&nbsp;
+<i>18</i>&nbsp;package opennlp.morfologik.tagdict;
+<i>19</i>&nbsp;
+<i>20</i>&nbsp;import java.io.IOException;
+<i>21</i>&nbsp;import java.util.ArrayList;
+<i>22</i>&nbsp;import java.util.List;
+<i>23</i>&nbsp;
+<i>24</i>&nbsp;import morfologik.stemming.Dictionary;
+<i>25</i>&nbsp;import morfologik.stemming.DictionaryLookup;
+<i>26</i>&nbsp;import morfologik.stemming.IStemmer;
+<i>27</i>&nbsp;import morfologik.stemming.WordData;
+<i>28</i>&nbsp;
+<i>29</i>&nbsp;import opennlp.tools.postag.TagDictionary;
+<i>30</i>&nbsp;
+<i>31</i>&nbsp;/**
+<i>32</i>&nbsp; * A POS Tagger dictionary implementation based on Morfologik binary
+<i>33</i>&nbsp; * dictionaries
+<i>34</i>&nbsp; */
+<i>35</i>&nbsp;public class MorfologikTagDictionary implements TagDictionary {
+<i>36</i>&nbsp;
+<i>37</i>&nbsp;  private IStemmer dictLookup;
+<i>38</i>&nbsp;  private boolean isCaseSensitive;
+<i>39</i>&nbsp;
+<i>40</i>&nbsp;  /**
+<i>41</i>&nbsp;   * Creates a case sensitive {@link MorfologikTagDictionary}
+<i>42</i>&nbsp;   *
+<i>43</i>&nbsp;   * @param dict
+<i>44</i>&nbsp;   *          a Morfologik FSA dictionary
+<i>45</i>&nbsp;   * @throws IllegalArgumentException
+<i>46</i>&nbsp;   *           if FSA&#39;s root node cannot be acquired (dictionary is empty).
+<i>47</i>&nbsp;   * @throws IOException
+<i>48</i>&nbsp;   *           could not read dictionary from dictURL
+<i>49</i>&nbsp;   */
+<i>50</i>&nbsp;  public MorfologikTagDictionary(Dictionary dict)
+<i>51</i>&nbsp;      throws IllegalArgumentException, IOException {
+<b class="nc"><i>52</i>&nbsp;    this(dict, true);</b>
+<i>53</i>&nbsp;  }
+<i>54</i>&nbsp;
+<i>55</i>&nbsp;  /**
+<i>56</i>&nbsp;   * Creates MorfologikLemmatizer
+<i>57</i>&nbsp;   *
+<i>58</i>&nbsp;   * @param dict
+<i>59</i>&nbsp;   *          a Morfologik FSA dictionary
+<i>60</i>&nbsp;   * @param caseSensitive
+<i>61</i>&nbsp;   *          if true it performs case sensitive lookup
+<i>62</i>&nbsp;   * @throws IllegalArgumentException
+<i>63</i>&nbsp;   *           if FSA&#39;s root node cannot be acquired (dictionary is empty).
+<i>64</i>&nbsp;   * @throws IOException
+<i>65</i>&nbsp;   *           could not read dictionary from dictURL
+<i>66</i>&nbsp;   */
+<i>67</i>&nbsp;  public MorfologikTagDictionary(Dictionary dict, boolean caseSensitive)
+<b class="nc"><i>68</i>&nbsp;      throws IllegalArgumentException, IOException {</b>
+<b class="nc"><i>69</i>&nbsp;    this.dictLookup = new DictionaryLookup(dict);</b>
+<b class="nc"><i>70</i>&nbsp;    this.isCaseSensitive = caseSensitive;</b>
+<i>71</i>&nbsp;  }
+<i>72</i>&nbsp;
+<i>73</i>&nbsp;  @Override
+<i>74</i>&nbsp;  public String[] getTags(String word) {
+<b class="nc"><i>75</i>&nbsp;    if (!isCaseSensitive) {</b>
+<b class="nc"><i>76</i>&nbsp;      word = word.toLowerCase();</b>
+<i>77</i>&nbsp;    }
+<i>78</i>&nbsp;
+<b class="nc"><i>79</i>&nbsp;    List&lt;WordData&gt; data = dictLookup.lookup(word);</b>
+<b class="nc"><i>80</i>&nbsp;    if (data != null &amp;&amp; data.size() &gt; 0) {</b>
+<b class="nc"><i>81</i>&nbsp;      List&lt;String&gt; tags = new ArrayList&lt;&gt;(data.size());</b>
+<b class="nc"><i>82</i>&nbsp;      for (WordData aData : data) {</b>
+<b class="nc"><i>83</i>&nbsp;        tags.add(aData.getTag().toString());</b>
+<b class="nc"><i>84</i>&nbsp;      }</b>
+<b class="nc"><i>85</i>&nbsp;      if (tags.size() &gt; 0)</b>
+<b class="nc"><i>86</i>&nbsp;        return tags.toArray(new String[tags.size()]);</b>
+<b class="nc"><i>87</i>&nbsp;      return null;</b>
+<i>88</i>&nbsp;    }
+<b class="nc"><i>89</i>&nbsp;    return null;</b>
+<i>90</i>&nbsp;  }
+<i>91</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-09 18:47</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,408 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: Parser</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">opennlp.tools.parser.chunking</a> ]
+</div>
+
+<h1>Coverage Summary for Class: Parser (opennlp.tools.parser.chunking)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Parser</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    57.1%
+  </span>
+  <span class="absValue">
+    (4/ 7)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    39.9%
+  </span>
+  <span class="absValue">
+    (57/ 143)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/*
+<i>2</i>&nbsp; * Licensed to the Apache Software Foundation (ASF) under one or more
+<i>3</i>&nbsp; * contributor license agreements.  See the NOTICE file distributed with
+<i>4</i>&nbsp; * this work for additional information regarding copyright ownership.
+<i>5</i>&nbsp; * The ASF licenses this file to You under the Apache License, Version 2.0
+<i>6</i>&nbsp; * (the &quot;License&quot;); you may not use this file except in compliance with
+<i>7</i>&nbsp; * the License. You may obtain a copy of the License at
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; *     http://www.apache.org/licenses/LICENSE-2.0
+<i>10</i>&nbsp; *
+<i>11</i>&nbsp; * Unless required by applicable law or agreed to in writing, software
+<i>12</i>&nbsp; * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<i>13</i>&nbsp; * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<i>14</i>&nbsp; * See the License for the specific language governing permissions and
+<i>15</i>&nbsp; * limitations under the License.
+<i>16</i>&nbsp; */
+<i>17</i>&nbsp;
+<i>18</i>&nbsp;
+<i>19</i>&nbsp;package opennlp.tools.parser.chunking;
+<i>20</i>&nbsp;
+<i>21</i>&nbsp;import java.io.IOException;
+<i>22</i>&nbsp;import java.util.ArrayList;
+<i>23</i>&nbsp;import java.util.HashMap;
+<i>24</i>&nbsp;import java.util.List;
+<i>25</i>&nbsp;import java.util.Map;
+<i>26</i>&nbsp;
+<i>27</i>&nbsp;import opennlp.tools.chunker.Chunker;
+<i>28</i>&nbsp;import opennlp.tools.chunker.ChunkerME;
+<i>29</i>&nbsp;import opennlp.tools.chunker.ChunkerModel;
+<i>30</i>&nbsp;import opennlp.tools.dictionary.Dictionary;
+<i>31</i>&nbsp;import opennlp.tools.ml.BeamSearch;
+<i>32</i>&nbsp;import opennlp.tools.ml.EventTrainer;
+<i>33</i>&nbsp;import opennlp.tools.ml.TrainerFactory;
+<i>34</i>&nbsp;import opennlp.tools.ml.model.Event;
+<i>35</i>&nbsp;import opennlp.tools.ml.model.MaxentModel;
+<i>36</i>&nbsp;import opennlp.tools.parser.AbstractBottomUpParser;
+<i>37</i>&nbsp;import opennlp.tools.parser.ChunkSampleStream;
+<i>38</i>&nbsp;import opennlp.tools.parser.HeadRules;
+<i>39</i>&nbsp;import opennlp.tools.parser.Parse;
+<i>40</i>&nbsp;import opennlp.tools.parser.ParserChunkerFactory;
+<i>41</i>&nbsp;import opennlp.tools.parser.ParserEventTypeEnum;
+<i>42</i>&nbsp;import opennlp.tools.parser.ParserModel;
+<i>43</i>&nbsp;import opennlp.tools.parser.ParserType;
+<i>44</i>&nbsp;import opennlp.tools.parser.PosSampleStream;
+<i>45</i>&nbsp;import opennlp.tools.postag.POSModel;
+<i>46</i>&nbsp;import opennlp.tools.postag.POSTagger;
+<i>47</i>&nbsp;import opennlp.tools.postag.POSTaggerFactory;
+<i>48</i>&nbsp;import opennlp.tools.postag.POSTaggerME;
+<i>49</i>&nbsp;import opennlp.tools.util.ObjectStream;
+<i>50</i>&nbsp;import opennlp.tools.util.Span;
+<i>51</i>&nbsp;import opennlp.tools.util.TrainingParameters;
+<i>52</i>&nbsp;
+<i>53</i>&nbsp;/**
+<i>54</i>&nbsp; * Class for a shift reduce style parser based on Adwait Ratnaparkhi&#39;s 1998 thesis.
+<i>55</i>&nbsp; */
+<i>56</i>&nbsp;public class Parser extends AbstractBottomUpParser {
+<i>57</i>&nbsp;
+<i>58</i>&nbsp;  private MaxentModel buildModel;
+<i>59</i>&nbsp;  private MaxentModel checkModel;
+<i>60</i>&nbsp;
+<i>61</i>&nbsp;  private BuildContextGenerator buildContextGenerator;
+<i>62</i>&nbsp;  private CheckContextGenerator checkContextGenerator;
+<i>63</i>&nbsp;
+<i>64</i>&nbsp;  private double[] bprobs;
+<i>65</i>&nbsp;  private double[] cprobs;
+<i>66</i>&nbsp;
+<i>67</i>&nbsp;  private static final String TOP_START = START + TOP_NODE;
+<i>68</i>&nbsp;  private int topStartIndex;
+<i>69</i>&nbsp;  private Map&lt;String, String&gt; startTypeMap;
+<i>70</i>&nbsp;  private Map&lt;String, String&gt; contTypeMap;
+<i>71</i>&nbsp;
+<i>72</i>&nbsp;  private int completeIndex;
+<i>73</i>&nbsp;  private int incompleteIndex;
+<i>74</i>&nbsp;
+<i>75</i>&nbsp;  public Parser(ParserModel model, int beamSize, double advancePercentage) {
+<b class="fc"><i>76</i>&nbsp;    this(model.getBuildModel(), model.getCheckModel(),</b>
+<b class="fc"><i>77</i>&nbsp;        new POSTaggerME(model.getParserTaggerModel()),</b>
+<b class="fc"><i>78</i>&nbsp;        new ChunkerME(model.getParserChunkerModel()),</b>
+<b class="fc"><i>79</i>&nbsp;            model.getHeadRules(), beamSize, advancePercentage);</b>
+<b class="fc"><i>80</i>&nbsp;  }</b>
+<i>81</i>&nbsp;
+<i>82</i>&nbsp;  public Parser(ParserModel model) {
+<b class="nc"><i>83</i>&nbsp;    this(model, defaultBeamSize, defaultAdvancePercentage);</b>
+<b class="nc"><i>84</i>&nbsp;  }</b>
+<i>85</i>&nbsp;
+<i>86</i>&nbsp;  /**
+<i>87</i>&nbsp;   * Creates a new parser using the specified models and head rules using the specified beam
+<i>88</i>&nbsp;   * size and advance percentage.
+<i>89</i>&nbsp;   * @param buildModel The model to assign constituent labels.
+<i>90</i>&nbsp;   * @param checkModel The model to determine a constituent is complete.
+<i>91</i>&nbsp;   * @param tagger The model to assign pos-tags.
+<i>92</i>&nbsp;   * @param chunker The model to assign flat constituent labels.
+<i>93</i>&nbsp;   * @param headRules The head rules for head word perculation.
+<i>94</i>&nbsp;   * @param beamSize The number of different parses kept during parsing.
+<i>95</i>&nbsp;   * @param advancePercentage The minimal amount of probability mass which advanced outcomes must represent.
+<i>96</i>&nbsp;   *     Only outcomes which contribute to the top &quot;advancePercentage&quot; will be explored.
+<i>97</i>&nbsp;   */
+<i>98</i>&nbsp;  private Parser(MaxentModel buildModel, MaxentModel checkModel, POSTagger tagger, Chunker chunker,
+<i>99</i>&nbsp;                 HeadRules headRules, int beamSize, double advancePercentage) {
+<b class="fc"><i>100</i>&nbsp;    super(tagger, chunker, headRules, beamSize, advancePercentage);</b>
+<b class="fc"><i>101</i>&nbsp;    this.buildModel = buildModel;</b>
+<b class="fc"><i>102</i>&nbsp;    this.checkModel = checkModel;</b>
+<b class="fc"><i>103</i>&nbsp;    bprobs = new double[buildModel.getNumOutcomes()];</b>
+<b class="fc"><i>104</i>&nbsp;    cprobs = new double[checkModel.getNumOutcomes()];</b>
+<b class="fc"><i>105</i>&nbsp;    this.buildContextGenerator = new BuildContextGenerator();</b>
+<b class="fc"><i>106</i>&nbsp;    this.checkContextGenerator = new CheckContextGenerator();</b>
+<b class="fc"><i>107</i>&nbsp;    startTypeMap = new HashMap&lt;&gt;();</b>
+<b class="fc"><i>108</i>&nbsp;    contTypeMap = new HashMap&lt;&gt;();</b>
+<b class="fc"><i>109</i>&nbsp;    for (int boi = 0, bon = buildModel.getNumOutcomes(); boi &lt; bon; boi++) {</b>
+<b class="fc"><i>110</i>&nbsp;      String outcome = buildModel.getOutcome(boi);</b>
+<b class="fc"><i>111</i>&nbsp;      if (outcome.startsWith(START)) {</b>
+<i>112</i>&nbsp;        //System.err.println(&quot;startMap &quot;+outcome+&quot;-&gt;&quot;+outcome.substring(START.length()));
+<b class="fc"><i>113</i>&nbsp;        startTypeMap.put(outcome, outcome.substring(START.length()));</b>
+<i>114</i>&nbsp;      }
+<b class="fc"><i>115</i>&nbsp;      else if (outcome.startsWith(CONT)) {</b>
+<i>116</i>&nbsp;        //System.err.println(&quot;contMap &quot;+outcome+&quot;-&gt;&quot;+outcome.substring(CONT.length()));
+<b class="fc"><i>117</i>&nbsp;        contTypeMap.put(outcome, outcome.substring(CONT.length()));</b>
+<i>118</i>&nbsp;      }
+<i>119</i>&nbsp;    }
+<b class="fc"><i>120</i>&nbsp;    topStartIndex = buildModel.getIndex(TOP_START);</b>
+<b class="fc"><i>121</i>&nbsp;    completeIndex = checkModel.getIndex(COMPLETE);</b>
+<b class="fc"><i>122</i>&nbsp;    incompleteIndex = checkModel.getIndex(INCOMPLETE);</b>
+<b class="fc"><i>123</i>&nbsp;  }</b>
+<i>124</i>&nbsp;
+<i>125</i>&nbsp;  @Override
+<i>126</i>&nbsp;  protected void advanceTop(Parse p) {
+<b class="nc"><i>127</i>&nbsp;    buildModel.eval(buildContextGenerator.getContext(p.getChildren(), 0), bprobs);</b>
+<b class="nc"><i>128</i>&nbsp;    p.addProb(Math.log(bprobs[topStartIndex]));</b>
+<b class="nc"><i>129</i>&nbsp;    checkModel.eval(checkContextGenerator.getContext(p.getChildren(), TOP_NODE, 0, 0), cprobs);</b>
+<b class="nc"><i>130</i>&nbsp;    p.addProb(Math.log(cprobs[completeIndex]));</b>
+<b class="nc"><i>131</i>&nbsp;    p.setType(TOP_NODE);</b>
+<b class="nc"><i>132</i>&nbsp;  }</b>
+<i>133</i>&nbsp;
+<i>134</i>&nbsp;  @Override
+<i>135</i>&nbsp;  protected Parse[] advanceParses(final Parse p, double probMass) {
+<b class="nc"><i>136</i>&nbsp;    double q = 1 - probMass;</b>
+<i>137</i>&nbsp;    /* The closest previous node which has been labeled as a start node. */
+<b class="nc"><i>138</i>&nbsp;    Parse lastStartNode = null;</b>
+<i>139</i>&nbsp;    /* The index of the closest previous node which has been labeled as a start node. */
+<b class="nc"><i>140</i>&nbsp;    int lastStartIndex = -1;</b>
+<i>141</i>&nbsp;    /* The type of the closest previous node which has been labeled as a start node. */
+<b class="nc"><i>142</i>&nbsp;    String lastStartType = null;</b>
+<i>143</i>&nbsp;    /* The index of the node which will be labeled in this iteration of advancing the parse. */
+<i>144</i>&nbsp;    int advanceNodeIndex;
+<i>145</i>&nbsp;    /* The node which will be labeled in this iteration of advancing the parse. */
+<b class="nc"><i>146</i>&nbsp;    Parse advanceNode = null;</b>
+<b class="nc"><i>147</i>&nbsp;    Parse[] originalChildren = p.getChildren();</b>
+<b class="nc"><i>148</i>&nbsp;    Parse[] children = collapsePunctuation(originalChildren,punctSet);</b>
+<b class="nc"><i>149</i>&nbsp;    int numNodes = children.length;</b>
+<b class="nc"><i>150</i>&nbsp;    if (numNodes == 0) {</b>
+<b class="nc"><i>151</i>&nbsp;      return null;</b>
+<i>152</i>&nbsp;    }
+<i>153</i>&nbsp;    //determines which node needs to be labeled and prior labels.
+<b class="nc"><i>154</i>&nbsp;    for (advanceNodeIndex = 0; advanceNodeIndex &lt; numNodes; advanceNodeIndex++) {</b>
+<b class="nc"><i>155</i>&nbsp;      advanceNode = children[advanceNodeIndex];</b>
+<b class="nc"><i>156</i>&nbsp;      if (advanceNode.getLabel() == null) {</b>
+<b class="nc"><i>157</i>&nbsp;        break;</b>
+<i>158</i>&nbsp;      }
+<b class="nc"><i>159</i>&nbsp;      else if (startTypeMap.containsKey(advanceNode.getLabel())) {</b>
+<b class="nc"><i>160</i>&nbsp;        lastStartType = startTypeMap.get(advanceNode.getLabel());</b>
+<b class="nc"><i>161</i>&nbsp;        lastStartNode = advanceNode;</b>
+<b class="nc"><i>162</i>&nbsp;        lastStartIndex = advanceNodeIndex;</b>
+<i>163</i>&nbsp;        //System.err.println(&quot;lastStart &quot;+i+&quot; &quot;+lastStart.label+&quot; &quot;+lastStart.prob);
+<i>164</i>&nbsp;      }
+<i>165</i>&nbsp;    }
+<b class="nc"><i>166</i>&nbsp;    int originalAdvanceIndex = mapParseIndex(advanceNodeIndex,children,originalChildren);</b>
+<b class="nc"><i>167</i>&nbsp;    List&lt;Parse&gt; newParsesList = new ArrayList&lt;&gt;(buildModel.getNumOutcomes());</b>
+<i>168</i>&nbsp;    //call build
+<b class="nc"><i>169</i>&nbsp;    buildModel.eval(buildContextGenerator.getContext(children, advanceNodeIndex), bprobs);</b>
+<b class="nc"><i>170</i>&nbsp;    double bprobSum = 0;</b>
+<b class="nc"><i>171</i>&nbsp;    while (bprobSum &lt; probMass) {</b>
+<i>172</i>&nbsp;      // The largest unadvanced labeling.
+<b class="nc"><i>173</i>&nbsp;      int max = 0;</b>
+<b class="nc"><i>174</i>&nbsp;      for (int pi = 1; pi &lt; bprobs.length; pi++) { //for each build outcome</b>
+<b class="nc"><i>175</i>&nbsp;        if (bprobs[pi] &gt; bprobs[max]) {</b>
+<b class="nc"><i>176</i>&nbsp;          max = pi;</b>
+<i>177</i>&nbsp;        }
+<i>178</i>&nbsp;      }
+<b class="nc"><i>179</i>&nbsp;      if (bprobs[max] == 0) {</b>
+<b class="nc"><i>180</i>&nbsp;        break;</b>
+<i>181</i>&nbsp;      }
+<b class="nc"><i>182</i>&nbsp;      double bprob = bprobs[max];</b>
+<b class="nc"><i>183</i>&nbsp;      bprobs[max] = 0; //zero out so new max can be found</b>
+<b class="nc"><i>184</i>&nbsp;      bprobSum += bprob;</b>
+<b class="nc"><i>185</i>&nbsp;      String tag = buildModel.getOutcome(max);</b>
+<i>186</i>&nbsp;      //System.out.println(&quot;trying &quot;+tag+&quot; &quot;+bprobSum+&quot; lst=&quot;+lst);
+<b class="nc"><i>187</i>&nbsp;      if (max == topStartIndex) { // can&#39;t have top until complete</b>
+<b class="nc"><i>188</i>&nbsp;        continue;</b>
+<i>189</i>&nbsp;      }
+<i>190</i>&nbsp;      //System.err.println(i+&quot; &quot;+tag+&quot; &quot;+bprob);
+<b class="nc"><i>191</i>&nbsp;      if (startTypeMap.containsKey(tag)) { //update last start</b>
+<b class="nc"><i>192</i>&nbsp;        lastStartIndex = advanceNodeIndex;</b>
+<b class="nc"><i>193</i>&nbsp;        lastStartNode = advanceNode;</b>
+<b class="nc"><i>194</i>&nbsp;        lastStartType = startTypeMap.get(tag);</b>
+<i>195</i>&nbsp;      }
+<b class="nc"><i>196</i>&nbsp;      else if (contTypeMap.containsKey(tag)) {</b>
+<b class="nc"><i>197</i>&nbsp;        if (lastStartNode == null || !lastStartType.equals(contTypeMap.get(tag))) {</b>
+<b class="nc"><i>198</i>&nbsp;          continue; //Cont must match previous start or continue</b>
+<i>199</i>&nbsp;        }
+<i>200</i>&nbsp;      }
+<b class="nc"><i>201</i>&nbsp;      Parse newParse1 = (Parse) p.clone(); //clone parse</b>
+<b class="nc"><i>202</i>&nbsp;      if (createDerivationString) newParse1.getDerivation().append(max).append(&quot;-&quot;);</b>
+<i>203</i>&nbsp;      //replace constituent being labeled to create new derivation
+<b class="nc"><i>204</i>&nbsp;      newParse1.setChild(originalAdvanceIndex,tag);</b>
+<b class="nc"><i>205</i>&nbsp;      newParse1.addProb(Math.log(bprob));</b>
+<i>206</i>&nbsp;      //check
+<i>207</i>&nbsp;      //String[] context = checkContextGenerator.getContext(newParse1.getChildren(), lastStartType,
+<i>208</i>&nbsp;      // lastStartIndex, advanceNodeIndex);
+<b class="nc"><i>209</i>&nbsp;      checkModel.eval(checkContextGenerator.getContext(</b>
+<b class="nc"><i>210</i>&nbsp;          collapsePunctuation(newParse1.getChildren(),punctSet), lastStartType, lastStartIndex,</b>
+<i>211</i>&nbsp;          advanceNodeIndex), cprobs);
+<i>212</i>&nbsp;      //System.out.println(&quot;check &quot;+lastStartType+&quot; &quot;+cprobs[completeIndex]+&quot; &quot;+cprobs[incompleteIndex]
+<i>213</i>&nbsp;      // +&quot; &quot;+tag+&quot; &quot;+java.util.Arrays.asList(context));
+<i>214</i>&nbsp;      Parse newParse2;
+<b class="nc"><i>215</i>&nbsp;      if (cprobs[completeIndex] &gt; q) { //make sure a reduce is likely</b>
+<b class="nc"><i>216</i>&nbsp;        newParse2 = (Parse) newParse1.clone();</b>
+<b class="nc"><i>217</i>&nbsp;        if (createDerivationString) newParse2.getDerivation().append(1).append(&quot;.&quot;);</b>
+<b class="nc"><i>218</i>&nbsp;        newParse2.addProb(Math.log(cprobs[completeIndex]));</b>
+<b class="nc"><i>219</i>&nbsp;        Parse[] cons = new Parse[advanceNodeIndex - lastStartIndex + 1];</b>
+<b class="nc"><i>220</i>&nbsp;        boolean flat = true;</b>
+<i>221</i>&nbsp;        //first
+<b class="nc"><i>222</i>&nbsp;        cons[0] = lastStartNode;</b>
+<b class="nc"><i>223</i>&nbsp;        flat &amp;= cons[0].isPosTag();</b>
+<i>224</i>&nbsp;        //last
+<b class="nc"><i>225</i>&nbsp;        cons[advanceNodeIndex - lastStartIndex] = advanceNode;</b>
+<b class="nc"><i>226</i>&nbsp;        flat &amp;= cons[advanceNodeIndex - lastStartIndex].isPosTag();</b>
+<i>227</i>&nbsp;        //middle
+<b class="nc"><i>228</i>&nbsp;        for (int ci = 1; ci &lt; advanceNodeIndex - lastStartIndex; ci++) {</b>
+<b class="nc"><i>229</i>&nbsp;          cons[ci] = children[ci + lastStartIndex];</b>
+<b class="nc"><i>230</i>&nbsp;          flat &amp;= cons[ci].isPosTag();</b>
+<i>231</i>&nbsp;        }
+<b class="nc"><i>232</i>&nbsp;        if (!flat) { //flat chunks are done by chunker</b>
+<i>233</i>&nbsp;          //check for top node to include end and begining punctuation
+<b class="nc"><i>234</i>&nbsp;          if (lastStartIndex == 0 &amp;&amp; advanceNodeIndex == numNodes - 1) {</b>
+<i>235</i>&nbsp;            //System.err.println(&quot;ParserME.advanceParses: reducing entire span: &quot;
+<i>236</i>&nbsp;            // +new Span(lastStartNode.getSpan().getStart(), advanceNode.getSpan().getEnd())+&quot; &quot;
+<i>237</i>&nbsp;            // +lastStartType+&quot; &quot;+java.util.Arrays.asList(children));
+<b class="nc"><i>238</i>&nbsp;            newParse2.insert(new Parse(p.getText(), p.getSpan(), lastStartType, cprobs[1],</b>
+<b class="nc"><i>239</i>&nbsp;                headRules.getHead(cons, lastStartType)));</b>
+<i>240</i>&nbsp;          }
+<i>241</i>&nbsp;          else {
+<b class="nc"><i>242</i>&nbsp;            newParse2.insert(new Parse(p.getText(), new Span(lastStartNode.getSpan().getStart(),</b>
+<b class="nc"><i>243</i>&nbsp;                advanceNode.getSpan().getEnd()), lastStartType, cprobs[1],</b>
+<b class="nc"><i>244</i>&nbsp;                headRules.getHead(cons, lastStartType)));</b>
+<i>245</i>&nbsp;          }
+<b class="nc"><i>246</i>&nbsp;          newParsesList.add(newParse2);</b>
+<i>247</i>&nbsp;        }
+<i>248</i>&nbsp;      }
+<b class="nc"><i>249</i>&nbsp;      if (cprobs[incompleteIndex] &gt; q) { //make sure a shift is likely</b>
+<b class="nc"><i>250</i>&nbsp;        if (createDerivationString) newParse1.getDerivation().append(0).append(&quot;.&quot;);</b>
+<b class="nc"><i>251</i>&nbsp;        if (advanceNodeIndex != numNodes - 1) { //can&#39;t shift last element</b>
+<b class="nc"><i>252</i>&nbsp;          newParse1.addProb(Math.log(cprobs[incompleteIndex]));</b>
+<b class="nc"><i>253</i>&nbsp;          newParsesList.add(newParse1);</b>
+<i>254</i>&nbsp;        }
+<i>255</i>&nbsp;      }
+<b class="nc"><i>256</i>&nbsp;    }</b>
+<b class="nc"><i>257</i>&nbsp;    Parse[] newParses = new Parse[newParsesList.size()];</b>
+<b class="nc"><i>258</i>&nbsp;    newParsesList.toArray(newParses);</b>
+<b class="nc"><i>259</i>&nbsp;    return newParses;</b>
+<i>260</i>&nbsp;  }
+<i>261</i>&nbsp;
+<i>262</i>&nbsp;  public static void mergeReportIntoManifest(Map&lt;String, String&gt; manifest,
+<i>263</i>&nbsp;      Map&lt;String, String&gt; report, String namespace) {
+<i>264</i>&nbsp;
+<b class="fc"><i>265</i>&nbsp;    for (Map.Entry&lt;String, String&gt; entry : report.entrySet()) {</b>
+<b class="fc"><i>266</i>&nbsp;      manifest.put(namespace + &quot;.&quot; + entry.getKey(), entry.getValue());</b>
+<b class="fc"><i>267</i>&nbsp;    }</b>
+<b class="fc"><i>268</i>&nbsp;  }</b>
+<i>269</i>&nbsp;
+<i>270</i>&nbsp;  public static ParserModel train(String languageCode, ObjectStream&lt;Parse&gt; parseSamples,
+<i>271</i>&nbsp;                                  HeadRules rules, TrainingParameters mlParams)
+<i>272</i>&nbsp;          throws IOException {
+<i>273</i>&nbsp;
+<b class="fc"><i>274</i>&nbsp;    System.err.println(&quot;Building dictionary&quot;);</b>
+<i>275</i>&nbsp;
+<b class="fc"><i>276</i>&nbsp;    Dictionary mdict = buildDictionary(parseSamples, rules, mlParams);</b>
+<i>277</i>&nbsp;
+<b class="fc"><i>278</i>&nbsp;    parseSamples.reset();</b>
+<i>279</i>&nbsp;
+<b class="fc"><i>280</i>&nbsp;    Map&lt;String, String&gt; manifestInfoEntries = new HashMap&lt;&gt;();</b>
+<i>281</i>&nbsp;
+<i>282</i>&nbsp;    // build
+<b class="fc"><i>283</i>&nbsp;    System.err.println(&quot;Training builder&quot;);</b>
+<b class="fc"><i>284</i>&nbsp;    ObjectStream&lt;Event&gt; bes = new ParserEventStream(parseSamples, rules, ParserEventTypeEnum.BUILD, mdict);</b>
+<b class="fc"><i>285</i>&nbsp;    Map&lt;String, String&gt; buildReportMap = new HashMap&lt;&gt;();</b>
+<b class="fc"><i>286</i>&nbsp;    EventTrainer buildTrainer =</b>
+<b class="fc"><i>287</i>&nbsp;        TrainerFactory.getEventTrainer(mlParams.getParameters(&quot;build&quot;), buildReportMap);</b>
+<b class="fc"><i>288</i>&nbsp;    MaxentModel buildModel = buildTrainer.train(bes);</b>
+<b class="fc"><i>289</i>&nbsp;    mergeReportIntoManifest(manifestInfoEntries, buildReportMap, &quot;build&quot;);</b>
+<i>290</i>&nbsp;
+<b class="fc"><i>291</i>&nbsp;    parseSamples.reset();</b>
+<i>292</i>&nbsp;
+<i>293</i>&nbsp;    // tag
+<b class="fc"><i>294</i>&nbsp;    TrainingParameters posTaggerParams = mlParams.getParameters(&quot;tagger&quot;);</b>
+<i>295</i>&nbsp;
+<b class="fc"><i>296</i>&nbsp;    if (!posTaggerParams.getObjectSettings().containsKey(BeamSearch.BEAM_SIZE_PARAMETER)) {</b>
+<b class="fc"><i>297</i>&nbsp;      mlParams.put(&quot;tagger&quot;, BeamSearch.BEAM_SIZE_PARAMETER, 10);</b>
+<i>298</i>&nbsp;    }
+<i>299</i>&nbsp;
+<b class="fc"><i>300</i>&nbsp;    POSModel posModel = POSTaggerME.train(languageCode, new PosSampleStream(parseSamples),</b>
+<b class="fc"><i>301</i>&nbsp;        mlParams.getParameters(&quot;tagger&quot;), new POSTaggerFactory());</b>
+<i>302</i>&nbsp;
+<b class="fc"><i>303</i>&nbsp;    parseSamples.reset();</b>
+<i>304</i>&nbsp;
+<i>305</i>&nbsp;    // chunk
+<b class="fc"><i>306</i>&nbsp;    ChunkerModel chunkModel = ChunkerME.train(languageCode,</b>
+<b class="fc"><i>307</i>&nbsp;        new ChunkSampleStream(parseSamples), mlParams.getParameters(&quot;chunker&quot;), new ParserChunkerFactory());</b>
+<i>308</i>&nbsp;
+<b class="fc"><i>309</i>&nbsp;    parseSamples.reset();</b>
+<i>310</i>&nbsp;
+<i>311</i>&nbsp;    // check
+<b class="fc"><i>312</i>&nbsp;    System.err.println(&quot;Training checker&quot;);</b>
+<b class="fc"><i>313</i>&nbsp;    ObjectStream&lt;Event&gt; kes = new ParserEventStream(parseSamples, rules, ParserEventTypeEnum.CHECK);</b>
+<b class="fc"><i>314</i>&nbsp;    Map&lt;String, String&gt; checkReportMap = new HashMap&lt;&gt;();</b>
+<b class="fc"><i>315</i>&nbsp;    EventTrainer checkTrainer =</b>
+<b class="fc"><i>316</i>&nbsp;        TrainerFactory.getEventTrainer(mlParams.getParameters(&quot;check&quot;), checkReportMap);</b>
+<b class="fc"><i>317</i>&nbsp;    MaxentModel checkModel = checkTrainer.train(kes);</b>
+<b class="fc"><i>318</i>&nbsp;    mergeReportIntoManifest(manifestInfoEntries, checkReportMap, &quot;check&quot;);</b>
+<i>319</i>&nbsp;
+<i>320</i>&nbsp;    // TODO: Remove cast for HeadRules
+<b class="fc"><i>321</i>&nbsp;    return new ParserModel(languageCode, buildModel, checkModel,</b>
+<i>322</i>&nbsp;        posModel, chunkModel, rules,
+<i>323</i>&nbsp;        ParserType.CHUNKING, manifestInfoEntries);
+<i>324</i>&nbsp;  }
+<i>325</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-09 15:05</div>
+</div>
+</body>
+</html>

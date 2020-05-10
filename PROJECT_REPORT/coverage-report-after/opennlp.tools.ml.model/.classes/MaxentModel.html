@@ -1,0 +1,160 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: MaxentModel</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">opennlp.tools.ml.model</a> ]
+</div>
+
+<h1>Coverage Summary for Class: MaxentModel (opennlp.tools.ml.model)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+</tr>
+<tr>
+  <td class="name">MaxentModel</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/*
+<i>2</i>&nbsp; * Licensed to the Apache Software Foundation (ASF) under one or more
+<i>3</i>&nbsp; * contributor license agreements.  See the NOTICE file distributed with
+<i>4</i>&nbsp; * this work for additional information regarding copyright ownership.
+<i>5</i>&nbsp; * The ASF licenses this file to You under the Apache License, Version 2.0
+<i>6</i>&nbsp; * (the &quot;License&quot;); you may not use this file except in compliance with
+<i>7</i>&nbsp; * the License. You may obtain a copy of the License at
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; *     http://www.apache.org/licenses/LICENSE-2.0
+<i>10</i>&nbsp; *
+<i>11</i>&nbsp; * Unless required by applicable law or agreed to in writing, software
+<i>12</i>&nbsp; * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<i>13</i>&nbsp; * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<i>14</i>&nbsp; * See the License for the specific language governing permissions and
+<i>15</i>&nbsp; * limitations under the License.
+<i>16</i>&nbsp; */
+<i>17</i>&nbsp;
+<i>18</i>&nbsp;package opennlp.tools.ml.model;
+<i>19</i>&nbsp;
+<i>20</i>&nbsp;/**
+<i>21</i>&nbsp; * Interface for maximum entropy models.
+<i>22</i>&nbsp; **/
+<i>23</i>&nbsp;public interface MaxentModel {
+<i>24</i>&nbsp;
+<i>25</i>&nbsp;  /**
+<i>26</i>&nbsp;   * Evaluates a context.
+<i>27</i>&nbsp;   *
+<i>28</i>&nbsp;   * @param context A list of String names of the contextual predicates
+<i>29</i>&nbsp;   *                which are to be evaluated together.
+<i>30</i>&nbsp;   * @return an array of the probabilities for each of the different
+<i>31</i>&nbsp;   *         outcomes, all of which sum to 1.
+<i>32</i>&nbsp;   *
+<i>33</i>&nbsp;   **/
+<i>34</i>&nbsp;  double[] eval(String[] context);
+<i>35</i>&nbsp;
+<i>36</i>&nbsp;  /**
+<i>37</i>&nbsp;     * Evaluates a context.
+<i>38</i>&nbsp;     *
+<i>39</i>&nbsp;     * @param context A list of String names of the contextual predicates
+<i>40</i>&nbsp;     *                which are to be evaluated together.
+<i>41</i>&nbsp;     * @param probs An array which is populated with the probabilities for each of the different
+<i>42</i>&nbsp;     *         outcomes, all of which sum to 1.
+<i>43</i>&nbsp;     * @return an array of the probabilities for each of the different outcomes, all of which sum to 1.
+<i>44</i>&nbsp;     **/
+<i>45</i>&nbsp;  double[] eval(String[] context, double[] probs);
+<i>46</i>&nbsp;
+<i>47</i>&nbsp;  /**
+<i>48</i>&nbsp;   * Evaluates a contexts with the specified context values.
+<i>49</i>&nbsp;   * @param context A list of String names of the contextual predicates
+<i>50</i>&nbsp;     *                which are to be evaluated together.
+<i>51</i>&nbsp;   * @param values The values associated with each context.
+<i>52</i>&nbsp;   * @return an array of the probabilities for each of the different outcomes, all of which sum to 1.
+<i>53</i>&nbsp;   */
+<i>54</i>&nbsp;  double[] eval(String[] context, float[] values);
+<i>55</i>&nbsp;
+<i>56</i>&nbsp;  /**
+<i>57</i>&nbsp;   * Simple function to return the outcome associated with the index
+<i>58</i>&nbsp;   * containing the highest probability in the double[].
+<i>59</i>&nbsp;   *
+<i>60</i>&nbsp;   * @param outcomes A &lt;code&gt;double[]&lt;/code&gt; as returned by the
+<i>61</i>&nbsp;   *            &lt;code&gt;eval(String[] context)&lt;/code&gt;
+<i>62</i>&nbsp;   *            method.
+<i>63</i>&nbsp;   * @return the String name of the best outcome
+<i>64</i>&nbsp;   **/
+<i>65</i>&nbsp;  String getBestOutcome(double[] outcomes);
+<i>66</i>&nbsp;
+<i>67</i>&nbsp;  /**
+<i>68</i>&nbsp;   * Return a string matching all the outcome names with all the
+<i>69</i>&nbsp;   * probabilities produced by the &lt;code&gt;eval(String[]
+<i>70</i>&nbsp;   * context)&lt;/code&gt; method.
+<i>71</i>&nbsp;   *
+<i>72</i>&nbsp;   * @param outcomes A &lt;code&gt;double[]&lt;/code&gt; as returned by the
+<i>73</i>&nbsp;   *            &lt;code&gt;eval(String[] context)&lt;/code&gt;
+<i>74</i>&nbsp;   *            method.
+<i>75</i>&nbsp;   * @return    String containing outcome names paired with the normalized
+<i>76</i>&nbsp;   *            probability (contained in the &lt;code&gt;double[] ocs&lt;/code&gt;)
+<i>77</i>&nbsp;   *            for each one.
+<i>78</i>&nbsp;   **/
+<i>79</i>&nbsp;  // TODO: This should be removed, can&#39;t be used anyway without format spec
+<i>80</i>&nbsp;  String getAllOutcomes(double[] outcomes);
+<i>81</i>&nbsp;
+<i>82</i>&nbsp;  /**
+<i>83</i>&nbsp;   * Gets the String name of the outcome associated with the index
+<i>84</i>&nbsp;   * i.
+<i>85</i>&nbsp;   *
+<i>86</i>&nbsp;   * @param i the index for which the name of the associated outcome is
+<i>87</i>&nbsp;   *          desired.
+<i>88</i>&nbsp;   * @return the String name of the outcome
+<i>89</i>&nbsp;   **/
+<i>90</i>&nbsp;  String getOutcome(int i);
+<i>91</i>&nbsp;
+<i>92</i>&nbsp;  /**
+<i>93</i>&nbsp;   * Gets the index associated with the String name of the given
+<i>94</i>&nbsp;   * outcome.
+<i>95</i>&nbsp;   *
+<i>96</i>&nbsp;   * @param outcome the String name of the outcome for which the
+<i>97</i>&nbsp;   *          index is desired
+<i>98</i>&nbsp;   * @return the index if the given outcome label exists for this
+<i>99</i>&nbsp;   *     model, -1 if it does not.
+<i>100</i>&nbsp;   **/
+<i>101</i>&nbsp;  int getIndex(String outcome);
+<i>102</i>&nbsp;
+<i>103</i>&nbsp;  /*
+<i>104</i>&nbsp;   * Returns the data structures relevant to storing the model.
+<i>105</i>&nbsp;   **/
+<i>106</i>&nbsp;  // public Object[] getDataStructures();
+<i>107</i>&nbsp;
+<i>108</i>&nbsp;  /** Returns the number of outcomes for this model.
+<i>109</i>&nbsp;   *  @return The number of outcomes.
+<i>110</i>&nbsp;   **/
+<i>111</i>&nbsp;  int getNumOutcomes();
+<i>112</i>&nbsp;
+<i>113</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-09 18:47</div>
+</div>
+</body>
+</html>

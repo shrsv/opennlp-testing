@@ -1,0 +1,232 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: EntityLinkerTool</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">opennlp.tools.cmdline.entitylinker</a> ]
+</div>
+
+<h1>Coverage Summary for Class: EntityLinkerTool (opennlp.tools.cmdline.entitylinker)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">EntityLinkerTool</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    75%
+  </span>
+  <span class="absValue">
+    (3/ 4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    5.8%
+  </span>
+  <span class="absValue">
+    (3/ 52)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/*
+<i>2</i>&nbsp; * Licensed to the Apache Software Foundation (ASF) under one or more
+<i>3</i>&nbsp; * contributor license agreements.  See the NOTICE file distributed with
+<i>4</i>&nbsp; * this work for additional information regarding copyright ownership.
+<i>5</i>&nbsp; * The ASF licenses this file to You under the Apache License, Version 2.0
+<i>6</i>&nbsp; * (the &quot;License&quot;); you may not use this file except in compliance with
+<i>7</i>&nbsp; * the License. You may obtain a copy of the License at
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; *     http://www.apache.org/licenses/LICENSE-2.0
+<i>10</i>&nbsp; *
+<i>11</i>&nbsp; * Unless required by applicable law or agreed to in writing, software
+<i>12</i>&nbsp; * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<i>13</i>&nbsp; * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<i>14</i>&nbsp; * See the License for the specific language governing permissions and
+<i>15</i>&nbsp; * limitations under the License.
+<i>16</i>&nbsp; */
+<i>17</i>&nbsp;
+<i>18</i>&nbsp;package opennlp.tools.cmdline.entitylinker;
+<i>19</i>&nbsp;
+<i>20</i>&nbsp;import java.io.File;
+<i>21</i>&nbsp;import java.io.IOException;
+<i>22</i>&nbsp;import java.util.ArrayList;
+<i>23</i>&nbsp;import java.util.List;
+<i>24</i>&nbsp;
+<i>25</i>&nbsp;import opennlp.tools.cmdline.BasicCmdLineTool;
+<i>26</i>&nbsp;import opennlp.tools.cmdline.CLI;
+<i>27</i>&nbsp;import opennlp.tools.cmdline.CmdLineUtil;
+<i>28</i>&nbsp;import opennlp.tools.cmdline.PerformanceMonitor;
+<i>29</i>&nbsp;import opennlp.tools.cmdline.SystemInputStreamFactory;
+<i>30</i>&nbsp;import opennlp.tools.cmdline.TerminateToolException;
+<i>31</i>&nbsp;import opennlp.tools.entitylinker.EntityLinker;
+<i>32</i>&nbsp;import opennlp.tools.entitylinker.EntityLinkerFactory;
+<i>33</i>&nbsp;import opennlp.tools.entitylinker.EntityLinkerProperties;
+<i>34</i>&nbsp;import opennlp.tools.namefind.NameSample;
+<i>35</i>&nbsp;import opennlp.tools.util.ObjectStream;
+<i>36</i>&nbsp;import opennlp.tools.util.PlainTextByLineStream;
+<i>37</i>&nbsp;import opennlp.tools.util.Span;
+<i>38</i>&nbsp;
+<b class="fc"><i>39</i>&nbsp;public class EntityLinkerTool extends BasicCmdLineTool {</b>
+<i>40</i>&nbsp;
+<i>41</i>&nbsp;  @Override
+<i>42</i>&nbsp;  public String getShortDescription() {
+<b class="fc"><i>43</i>&nbsp;    return &quot;links an entity to an external data set&quot;;</b>
+<i>44</i>&nbsp;  }
+<i>45</i>&nbsp;
+<i>46</i>&nbsp;  @Override
+<i>47</i>&nbsp;  public void run(String[] args) {
+<i>48</i>&nbsp;
+<b class="nc"><i>49</i>&nbsp;    if (0 == args.length) {</b>
+<b class="nc"><i>50</i>&nbsp;      System.out.println(getHelp());</b>
+<i>51</i>&nbsp;    }
+<i>52</i>&nbsp;    else {
+<i>53</i>&nbsp;      // TODO: Ask Mark if we can remove the type, the user knows upfront if he tries
+<i>54</i>&nbsp;      // to link place names or company mentions ...
+<b class="nc"><i>55</i>&nbsp;      String entityType = &quot;location&quot;;</b>
+<i>56</i>&nbsp;
+<i>57</i>&nbsp;      // Load the properties, they should contain everything that is necessary to instantiate
+<i>58</i>&nbsp;      // the component
+<i>59</i>&nbsp;
+<i>60</i>&nbsp;      // TODO: Entity Linker Properties constructor should not duplicate code
+<i>61</i>&nbsp;      EntityLinkerProperties properties;
+<i>62</i>&nbsp;      try {
+<b class="nc"><i>63</i>&nbsp;        properties = new EntityLinkerProperties(new File(args[0]));</b>
+<i>64</i>&nbsp;      }
+<b class="nc"><i>65</i>&nbsp;      catch (IOException e) {</b>
+<b class="nc"><i>66</i>&nbsp;        throw new TerminateToolException(-1, &quot;Failed to load the properties file!&quot;);</b>
+<b class="nc"><i>67</i>&nbsp;      }</b>
+<i>68</i>&nbsp;
+<i>69</i>&nbsp;      // TODO: It should not just throw Exception.
+<i>70</i>&nbsp;
+<i>71</i>&nbsp;      EntityLinker entityLinker;
+<i>72</i>&nbsp;      try {
+<b class="nc"><i>73</i>&nbsp;        entityLinker = EntityLinkerFactory.getLinker(entityType, properties);</b>
+<i>74</i>&nbsp;      }
+<b class="nc"><i>75</i>&nbsp;      catch (Exception e) {</b>
+<b class="nc"><i>76</i>&nbsp;        throw new TerminateToolException(-1, &quot;Failed to instantiate the Entity Linker: &quot; + e.getMessage());</b>
+<b class="nc"><i>77</i>&nbsp;      }</b>
+<i>78</i>&nbsp;
+<b class="nc"><i>79</i>&nbsp;      PerformanceMonitor perfMon = new PerformanceMonitor(System.err, &quot;sent&quot;);</b>
+<b class="nc"><i>80</i>&nbsp;      perfMon.start();</b>
+<i>81</i>&nbsp;
+<b class="nc"><i>82</i>&nbsp;      try (ObjectStream&lt;String&gt; untokenizedLineStream = new PlainTextByLineStream(</b>
+<b class="nc"><i>83</i>&nbsp;          new SystemInputStreamFactory(), SystemInputStreamFactory.encoding())) {</b>
+<i>84</i>&nbsp;
+<b class="nc"><i>85</i>&nbsp;        List&lt;NameSample&gt; document = new ArrayList&lt;&gt;();</b>
+<i>86</i>&nbsp;
+<i>87</i>&nbsp;        String line;
+<b class="nc"><i>88</i>&nbsp;        while ((line = untokenizedLineStream.read()) != null) {</b>
+<i>89</i>&nbsp;
+<b class="nc"><i>90</i>&nbsp;          if (line.trim().isEmpty()) {</b>
+<i>91</i>&nbsp;            // Run entity linker ... and output result ...
+<i>92</i>&nbsp;
+<b class="nc"><i>93</i>&nbsp;            StringBuilder text = new StringBuilder();</b>
+<b class="nc"><i>94</i>&nbsp;            Span[] sentences = new Span[document.size()];</b>
+<b class="nc"><i>95</i>&nbsp;            Span[][] tokensBySentence = new Span[document.size()][];</b>
+<b class="nc"><i>96</i>&nbsp;            Span[][] namesBySentence = new Span[document.size()][];</b>
+<i>97</i>&nbsp;
+<b class="nc"><i>98</i>&nbsp;            for (int i = 0; i &lt; document.size(); i++) {</b>
+<i>99</i>&nbsp;
+<b class="nc"><i>100</i>&nbsp;              NameSample sample = document.get(i);</b>
+<i>101</i>&nbsp;
+<b class="nc"><i>102</i>&nbsp;              namesBySentence[i] = sample.getNames();</b>
+<i>103</i>&nbsp;
+<b class="nc"><i>104</i>&nbsp;              int sentenceBegin = text.length();</b>
+<i>105</i>&nbsp;
+<b class="nc"><i>106</i>&nbsp;              Span[] tokens = new Span[sample.getSentence().length];</b>
+<i>107</i>&nbsp;
+<i>108</i>&nbsp;              // for all tokens
+<b class="nc"><i>109</i>&nbsp;              for (int ti = 0; ti &lt; sample.getSentence().length; ti++) {</b>
+<b class="nc"><i>110</i>&nbsp;                int tokenBegin = text.length();</b>
+<b class="nc"><i>111</i>&nbsp;                text.append(sample.getSentence()[ti]);</b>
+<b class="nc"><i>112</i>&nbsp;                text.append(&quot; &quot;);</b>
+<b class="nc"><i>113</i>&nbsp;                tokens[ti] = new Span(tokenBegin, text.length());</b>
+<i>114</i>&nbsp;              }
+<i>115</i>&nbsp;
+<b class="nc"><i>116</i>&nbsp;              tokensBySentence[i] = tokens;</b>
+<i>117</i>&nbsp;
+<b class="nc"><i>118</i>&nbsp;              sentences[i] = new Span(sentenceBegin, text.length());</b>
+<b class="nc"><i>119</i>&nbsp;              text.append(&quot;\n&quot;);</b>
+<i>120</i>&nbsp;            }
+<i>121</i>&nbsp;
+<b class="nc"><i>122</i>&nbsp;            List&lt;Span&gt; linkedSpans =</b>
+<b class="nc"><i>123</i>&nbsp;                entityLinker.find(text.toString(), sentences, tokensBySentence, namesBySentence);</b>
+<i>124</i>&nbsp;
+<b class="nc"><i>125</i>&nbsp;            for (int i = 0; i &lt; linkedSpans.size(); i++) {</b>
+<b class="nc"><i>126</i>&nbsp;              System.out.println(linkedSpans.get(i));</b>
+<i>127</i>&nbsp;            }
+<i>128</i>&nbsp;
+<b class="nc"><i>129</i>&nbsp;            perfMon.incrementCounter(document.size());</b>
+<b class="nc"><i>130</i>&nbsp;            document.clear();</b>
+<b class="nc"><i>131</i>&nbsp;          }</b>
+<i>132</i>&nbsp;          else {
+<b class="nc"><i>133</i>&nbsp;            document.add(NameSample.parse(line, false));</b>
+<i>134</i>&nbsp;          }
+<i>135</i>&nbsp;        }
+<b class="nc"><i>136</i>&nbsp;      }</b>
+<b class="nc"><i>137</i>&nbsp;      catch (IOException e) {</b>
+<b class="nc"><i>138</i>&nbsp;        CmdLineUtil.handleStdinIoError(e);</b>
+<b class="nc"><i>139</i>&nbsp;      }</b>
+<i>140</i>&nbsp;
+<b class="nc"><i>141</i>&nbsp;      perfMon.stopAndPrintFinalResult();</b>
+<i>142</i>&nbsp;    }
+<b class="nc"><i>143</i>&nbsp;  }</b>
+<i>144</i>&nbsp;
+<i>145</i>&nbsp;  @Override
+<i>146</i>&nbsp;  public String getHelp() {
+<b class="fc"><i>147</i>&nbsp;    return &quot;Usage: &quot; + CLI.CMD + &quot; &quot; + getName() + &quot; model &lt; sentences&quot;;</b>
+<i>148</i>&nbsp;  }
+<i>149</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-09 15:05</div>
+</div>
+</body>
+</html>

@@ -71,6 +71,8 @@ public class GenerateManualTool {
     // output to file
     try (PrintWriter out = new PrintWriter(args[0])) {
       out.println(sb);
+    } catch (java.io.FileNotFoundException e) {
+      System.out.println("File not found");
     }
   }
 

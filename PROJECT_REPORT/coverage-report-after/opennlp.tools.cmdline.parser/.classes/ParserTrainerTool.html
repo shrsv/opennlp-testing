@@ -1,0 +1,279 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: ParserTrainerTool</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">opennlp.tools.cmdline.parser</a> ]
+</div>
+
+<h1>Coverage Summary for Class: ParserTrainerTool (opennlp.tools.cmdline.parser)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">ParserTrainerTool</td>
+<td class="coverageStat">
+  <span class="percent">
+    83.3%
+  </span>
+  <span class="absValue">
+    (5/ 6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    53%
+  </span>
+  <span class="absValue">
+    (35/ 66)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">ParserTrainerTool$TrainerToolParams</td>
+  </tr>
+<tr>
+  <td class="name"><strong>total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    83.3%
+  </span>
+  <span class="absValue">
+    (5/ 6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    53%
+  </span>
+  <span class="absValue">
+    (35/ 66)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/*
+<i>2</i>&nbsp; * Licensed to the Apache Software Foundation (ASF) under one or more
+<i>3</i>&nbsp; * contributor license agreements.  See the NOTICE file distributed with
+<i>4</i>&nbsp; * this work for additional information regarding copyright ownership.
+<i>5</i>&nbsp; * The ASF licenses this file to You under the Apache License, Version 2.0
+<i>6</i>&nbsp; * (the &quot;License&quot;); you may not use this file except in compliance with
+<i>7</i>&nbsp; * the License. You may obtain a copy of the License at
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; *     http://www.apache.org/licenses/LICENSE-2.0
+<i>10</i>&nbsp; *
+<i>11</i>&nbsp; * Unless required by applicable law or agreed to in writing, software
+<i>12</i>&nbsp; * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<i>13</i>&nbsp; * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<i>14</i>&nbsp; * See the License for the specific language governing permissions and
+<i>15</i>&nbsp; * limitations under the License.
+<i>16</i>&nbsp; */
+<i>17</i>&nbsp;
+<i>18</i>&nbsp;package opennlp.tools.cmdline.parser;
+<i>19</i>&nbsp;
+<i>20</i>&nbsp;import java.io.File;
+<i>21</i>&nbsp;import java.io.FileInputStream;
+<i>22</i>&nbsp;import java.io.IOException;
+<i>23</i>&nbsp;
+<i>24</i>&nbsp;import opennlp.tools.cmdline.AbstractTrainerTool;
+<i>25</i>&nbsp;import opennlp.tools.cmdline.CmdLineUtil;
+<i>26</i>&nbsp;import opennlp.tools.cmdline.TerminateToolException;
+<i>27</i>&nbsp;import opennlp.tools.cmdline.params.EncodingParameter;
+<i>28</i>&nbsp;import opennlp.tools.cmdline.params.TrainingToolParams;
+<i>29</i>&nbsp;import opennlp.tools.cmdline.parser.ParserTrainerTool.TrainerToolParams;
+<i>30</i>&nbsp;import opennlp.tools.dictionary.Dictionary;
+<i>31</i>&nbsp;import opennlp.tools.ml.TrainerFactory;
+<i>32</i>&nbsp;import opennlp.tools.parser.HeadRules;
+<i>33</i>&nbsp;import opennlp.tools.parser.Parse;
+<i>34</i>&nbsp;import opennlp.tools.parser.ParserModel;
+<i>35</i>&nbsp;import opennlp.tools.parser.ParserType;
+<i>36</i>&nbsp;import opennlp.tools.parser.chunking.Parser;
+<i>37</i>&nbsp;import opennlp.tools.util.ObjectStream;
+<i>38</i>&nbsp;import opennlp.tools.util.ext.ExtensionLoader;
+<i>39</i>&nbsp;import opennlp.tools.util.model.ArtifactSerializer;
+<i>40</i>&nbsp;import opennlp.tools.util.model.ModelUtil;
+<i>41</i>&nbsp;
+<i>42</i>&nbsp;public final class ParserTrainerTool extends AbstractTrainerTool&lt;Parse, TrainerToolParams&gt; {
+<i>43</i>&nbsp;
+<i>44</i>&nbsp;  interface TrainerToolParams extends TrainingParams, TrainingToolParams, EncodingParameter {
+<i>45</i>&nbsp;  }
+<i>46</i>&nbsp;
+<i>47</i>&nbsp;  public ParserTrainerTool() {
+<b class="fc"><i>48</i>&nbsp;    super(Parse.class, TrainerToolParams.class);</b>
+<b class="fc"><i>49</i>&nbsp;  }</b>
+<i>50</i>&nbsp;
+<i>51</i>&nbsp;  public String getShortDescription() {
+<b class="fc"><i>52</i>&nbsp;    return &quot;trains the learnable parser&quot;;</b>
+<i>53</i>&nbsp;  }
+<i>54</i>&nbsp;
+<i>55</i>&nbsp;  static Dictionary buildDictionary(ObjectStream&lt;Parse&gt; parseSamples, HeadRules headRules, int cutoff) {
+<b class="nc"><i>56</i>&nbsp;    System.err.print(&quot;Building dictionary ...&quot;);</b>
+<i>57</i>&nbsp;
+<i>58</i>&nbsp;    Dictionary mdict;
+<i>59</i>&nbsp;    try {
+<b class="nc"><i>60</i>&nbsp;      mdict = Parser.</b>
+<b class="nc"><i>61</i>&nbsp;          buildDictionary(parseSamples, headRules, cutoff);</b>
+<b class="nc"><i>62</i>&nbsp;    } catch (IOException e) {</b>
+<b class="nc"><i>63</i>&nbsp;      System.err.println(&quot;Error while building dictionary: &quot; + e.getMessage());</b>
+<b class="nc"><i>64</i>&nbsp;      mdict = null;</b>
+<b class="nc"><i>65</i>&nbsp;    }</b>
+<b class="nc"><i>66</i>&nbsp;    System.err.println(&quot;done&quot;);</b>
+<i>67</i>&nbsp;
+<b class="nc"><i>68</i>&nbsp;    return mdict;</b>
+<i>69</i>&nbsp;  }
+<i>70</i>&nbsp;
+<i>71</i>&nbsp;  static ParserType parseParserType(String typeAsString) {
+<b class="fc"><i>72</i>&nbsp;    ParserType type = null;</b>
+<b class="fc"><i>73</i>&nbsp;    if (typeAsString != null &amp;&amp; typeAsString.length() &gt; 0) {</b>
+<b class="fc"><i>74</i>&nbsp;      type = ParserType.parse(typeAsString);</b>
+<b class="fc"><i>75</i>&nbsp;      if (type == null) {</b>
+<b class="fc"><i>76</i>&nbsp;        throw new TerminateToolException(1, &quot;ParserType training parameter &#39;&quot; + typeAsString +</b>
+<i>77</i>&nbsp;            &quot;&#39; is invalid!&quot;);
+<i>78</i>&nbsp;      }
+<i>79</i>&nbsp;    }
+<i>80</i>&nbsp;
+<b class="fc"><i>81</i>&nbsp;    return type;</b>
+<i>82</i>&nbsp;  }
+<i>83</i>&nbsp;
+<i>84</i>&nbsp;  static HeadRules creaeHeadRules(TrainerToolParams params) throws IOException {
+<i>85</i>&nbsp;
+<i>86</i>&nbsp;    ArtifactSerializer headRulesSerializer;
+<i>87</i>&nbsp;
+<b class="fc"><i>88</i>&nbsp;    if (params.getHeadRulesSerializerImpl() != null) {</b>
+<b class="nc"><i>89</i>&nbsp;      headRulesSerializer = ExtensionLoader.instantiateExtension(ArtifactSerializer.class,</b>
+<b class="nc"><i>90</i>&nbsp;              params.getHeadRulesSerializerImpl());</b>
+<i>91</i>&nbsp;    }
+<i>92</i>&nbsp;    else {
+<b class="fc"><i>93</i>&nbsp;      if (&quot;en&quot;.equals(params.getLang()) || &quot;eng&quot;.equals(params.getLang())) {</b>
+<b class="nc"><i>94</i>&nbsp;        headRulesSerializer = new opennlp.tools.parser.lang.en.HeadRules.HeadRulesSerializer();</b>
+<i>95</i>&nbsp;      }
+<b class="fc"><i>96</i>&nbsp;      else if (&quot;es&quot;.equals(params.getLang()) || &quot;spa&quot;.equals(params.getLang())) {</b>
+<b class="nc"><i>97</i>&nbsp;        headRulesSerializer = new opennlp.tools.parser.lang.es.AncoraSpanishHeadRules.HeadRulesSerializer();</b>
+<i>98</i>&nbsp;      }
+<i>99</i>&nbsp;      else {
+<i>100</i>&nbsp;        // default for now, this case should probably cause an error ...
+<b class="fc"><i>101</i>&nbsp;        headRulesSerializer = new opennlp.tools.parser.lang.en.HeadRules.HeadRulesSerializer();</b>
+<i>102</i>&nbsp;      }
+<i>103</i>&nbsp;    }
+<i>104</i>&nbsp;
+<b class="fc"><i>105</i>&nbsp;    Object headRulesObject = headRulesSerializer.create(new FileInputStream(params.getHeadRules()));</b>
+<i>106</i>&nbsp;
+<b class="fc"><i>107</i>&nbsp;    if (headRulesObject instanceof HeadRules) {</b>
+<b class="fc"><i>108</i>&nbsp;      return (HeadRules) headRulesObject;</b>
+<i>109</i>&nbsp;    }
+<i>110</i>&nbsp;    else {
+<b class="nc"><i>111</i>&nbsp;      throw new TerminateToolException(-1,</b>
+<i>112</i>&nbsp;          &quot;HeadRules Artifact Serializer must create an object of type HeadRules!&quot;);
+<i>113</i>&nbsp;    }
+<i>114</i>&nbsp;  }
+<i>115</i>&nbsp;
+<i>116</i>&nbsp;  // TODO: Add param to train tree insert parser
+<i>117</i>&nbsp;  public void run(String format, String[] args) {
+<b class="fc"><i>118</i>&nbsp;    super.run(format, args);</b>
+<i>119</i>&nbsp;
+<b class="fc"><i>120</i>&nbsp;    mlParams = CmdLineUtil.loadTrainingParameters(params.getParams(), true);</b>
+<i>121</i>&nbsp;
+<b class="fc"><i>122</i>&nbsp;    if (mlParams != null) {</b>
+<b class="nc"><i>123</i>&nbsp;      if (!TrainerFactory.isValid(mlParams.getParameters(&quot;build&quot;))) {</b>
+<b class="nc"><i>124</i>&nbsp;        throw new TerminateToolException(1, &quot;Build training parameters are invalid!&quot;);</b>
+<i>125</i>&nbsp;      }
+<i>126</i>&nbsp;
+<b class="nc"><i>127</i>&nbsp;      if (!TrainerFactory.isValid(mlParams.getParameters(&quot;check&quot;))) {</b>
+<b class="nc"><i>128</i>&nbsp;        throw new TerminateToolException(1, &quot;Check training parameters are invalid!&quot;);</b>
+<i>129</i>&nbsp;      }
+<i>130</i>&nbsp;
+<b class="nc"><i>131</i>&nbsp;      if (!TrainerFactory.isValid(mlParams.getParameters(&quot;attach&quot;))) {</b>
+<b class="nc"><i>132</i>&nbsp;        throw new TerminateToolException(1, &quot;Attach training parameters are invalid!&quot;);</b>
+<i>133</i>&nbsp;      }
+<i>134</i>&nbsp;
+<b class="nc"><i>135</i>&nbsp;      if (!TrainerFactory.isValid(mlParams.getParameters(&quot;tagger&quot;))) {</b>
+<b class="nc"><i>136</i>&nbsp;        throw new TerminateToolException(1, &quot;Tagger training parameters are invalid!&quot;);</b>
+<i>137</i>&nbsp;      }
+<i>138</i>&nbsp;
+<b class="nc"><i>139</i>&nbsp;      if (!TrainerFactory.isValid(mlParams.getParameters(&quot;chunker&quot;))) {</b>
+<b class="nc"><i>140</i>&nbsp;        throw new TerminateToolException(1, &quot;Chunker training parameters are invalid!&quot;);</b>
+<i>141</i>&nbsp;      }
+<i>142</i>&nbsp;    }
+<i>143</i>&nbsp;
+<b class="fc"><i>144</i>&nbsp;    if (mlParams == null) {</b>
+<b class="fc"><i>145</i>&nbsp;      mlParams = ModelUtil.createDefaultTrainingParameters();</b>
+<i>146</i>&nbsp;    }
+<i>147</i>&nbsp;
+<b class="fc"><i>148</i>&nbsp;    File modelOutFile = params.getModel();</b>
+<b class="fc"><i>149</i>&nbsp;    CmdLineUtil.checkOutputFile(&quot;parser model&quot;, modelOutFile);</b>
+<i>150</i>&nbsp;
+<i>151</i>&nbsp;    ParserModel model;
+<i>152</i>&nbsp;    try {
+<b class="fc"><i>153</i>&nbsp;      HeadRules rules = creaeHeadRules(params);</b>
+<i>154</i>&nbsp;
+<b class="fc"><i>155</i>&nbsp;      ParserType type = parseParserType(params.getParserType());</b>
+<b class="fc"><i>156</i>&nbsp;      if (params.getFun()) {</b>
+<b class="nc"><i>157</i>&nbsp;        Parse.useFunctionTags(true);</b>
+<i>158</i>&nbsp;      }
+<i>159</i>&nbsp;
+<b class="fc"><i>160</i>&nbsp;      if (ParserType.CHUNKING.equals(type)) {</b>
+<b class="nc"><i>161</i>&nbsp;        model = opennlp.tools.parser.chunking.Parser.train(</b>
+<b class="nc"><i>162</i>&nbsp;            params.getLang(), sampleStream, rules,</b>
+<i>163</i>&nbsp;            mlParams);
+<i>164</i>&nbsp;      }
+<b class="fc"><i>165</i>&nbsp;      else if (ParserType.TREEINSERT.equals(type)) {</b>
+<b class="fc"><i>166</i>&nbsp;        model = opennlp.tools.parser.treeinsert.Parser.train(params.getLang(), sampleStream, rules,</b>
+<i>167</i>&nbsp;            mlParams);
+<i>168</i>&nbsp;      }
+<i>169</i>&nbsp;      else {
+<b class="nc"><i>170</i>&nbsp;        throw new IllegalStateException();</b>
+<i>171</i>&nbsp;      }
+<i>172</i>&nbsp;    }
+<b class="fc"><i>173</i>&nbsp;    catch (IOException e) {</b>
+<b class="fc"><i>174</i>&nbsp;      throw createTerminationIOException(e);</b>
+<i>175</i>&nbsp;    }
+<i>176</i>&nbsp;    finally {
+<b class="fc"><i>177</i>&nbsp;      try {</b>
+<b class="fc"><i>178</i>&nbsp;        sampleStream.close();</b>
+<b class="nc"><i>179</i>&nbsp;      } catch (IOException e) {</b>
+<i>180</i>&nbsp;        // sorry that this can fail
+<b class="fc"><i>181</i>&nbsp;      }</b>
+<b class="fc"><i>182</i>&nbsp;    }</b>
+<i>183</i>&nbsp;
+<b class="nc"><i>184</i>&nbsp;    CmdLineUtil.writeModel(&quot;parser&quot;, modelOutFile, model);</b>
+<b class="nc"><i>185</i>&nbsp;  }</b>
+<i>186</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-09 18:47</div>
+</div>
+</body>
+</html>

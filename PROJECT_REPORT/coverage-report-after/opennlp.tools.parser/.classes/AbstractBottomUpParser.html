@@ -1,0 +1,704 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: AbstractBottomUpParser</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">opennlp.tools.parser</a> ]
+</div>
+
+<h1>Coverage Summary for Class: AbstractBottomUpParser (opennlp.tools.parser)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">AbstractBottomUpParser</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    46.2%
+  </span>
+  <span class="absValue">
+    (6/ 13)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    38.1%
+  </span>
+  <span class="absValue">
+    (83/ 218)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/*
+<i>2</i>&nbsp; * Licensed to the Apache Software Foundation (ASF) under one or more
+<i>3</i>&nbsp; * contributor license agreements.  See the NOTICE file distributed with
+<i>4</i>&nbsp; * this work for additional information regarding copyright ownership.
+<i>5</i>&nbsp; * The ASF licenses this file to You under the Apache License, Version 2.0
+<i>6</i>&nbsp; * (the &quot;License&quot;); you may not use this file except in compliance with
+<i>7</i>&nbsp; * the License. You may obtain a copy of the License at
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; *     http://www.apache.org/licenses/LICENSE-2.0
+<i>10</i>&nbsp; *
+<i>11</i>&nbsp; * Unless required by applicable law or agreed to in writing, software
+<i>12</i>&nbsp; * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<i>13</i>&nbsp; * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<i>14</i>&nbsp; * See the License for the specific language governing permissions and
+<i>15</i>&nbsp; * limitations under the License.
+<i>16</i>&nbsp; */
+<i>17</i>&nbsp;
+<i>18</i>&nbsp;package opennlp.tools.parser;
+<i>19</i>&nbsp;
+<i>20</i>&nbsp;import java.io.IOException;
+<i>21</i>&nbsp;import java.util.ArrayList;
+<i>22</i>&nbsp;import java.util.Iterator;
+<i>23</i>&nbsp;import java.util.List;
+<i>24</i>&nbsp;import java.util.Set;
+<i>25</i>&nbsp;import java.util.SortedSet;
+<i>26</i>&nbsp;import java.util.TreeSet;
+<i>27</i>&nbsp;
+<i>28</i>&nbsp;import opennlp.tools.chunker.Chunker;
+<i>29</i>&nbsp;import opennlp.tools.dictionary.Dictionary;
+<i>30</i>&nbsp;import opennlp.tools.ngram.NGramModel;
+<i>31</i>&nbsp;import opennlp.tools.parser.chunking.ParserEventStream;
+<i>32</i>&nbsp;import opennlp.tools.postag.POSTagger;
+<i>33</i>&nbsp;import opennlp.tools.util.ObjectStream;
+<i>34</i>&nbsp;import opennlp.tools.util.Sequence;
+<i>35</i>&nbsp;import opennlp.tools.util.Span;
+<i>36</i>&nbsp;import opennlp.tools.util.StringList;
+<i>37</i>&nbsp;import opennlp.tools.util.TrainingParameters;
+<i>38</i>&nbsp;
+<i>39</i>&nbsp;/**
+<i>40</i>&nbsp; * Abstract class which contains code to tag and chunk parses for bottom up parsing and
+<i>41</i>&nbsp; * leaves implementation of advancing parses and completing parses to extend class.
+<i>42</i>&nbsp; * &lt;p&gt;
+<i>43</i>&nbsp; * &lt;b&gt;Note:&lt;/b&gt; &lt;br&gt; The nodes within the returned parses are shared with other parses
+<i>44</i>&nbsp; * and therefore their parent node references will not be consistent with their child
+<i>45</i>&nbsp; * node reference.  {@link #setParents setParents} can be used to make the parents consistent
+<i>46</i>&nbsp; * with a particular parse, but subsequent calls to &lt;code&gt;setParents&lt;/code&gt; can invalidate
+<i>47</i>&nbsp; * the results of earlier calls.&lt;br&gt;
+<i>48</i>&nbsp; */
+<i>49</i>&nbsp;public abstract class AbstractBottomUpParser implements Parser {
+<i>50</i>&nbsp;
+<i>51</i>&nbsp;  /**
+<i>52</i>&nbsp;   * The maximum number of parses advanced from all preceding
+<i>53</i>&nbsp;   * parses at each derivation step.
+<i>54</i>&nbsp;   */
+<i>55</i>&nbsp;  protected int M;
+<i>56</i>&nbsp;
+<i>57</i>&nbsp;  /**
+<i>58</i>&nbsp;   * The maximum number of parses to advance from a single preceding parse.
+<i>59</i>&nbsp;   */
+<i>60</i>&nbsp;  protected int K;
+<i>61</i>&nbsp;
+<i>62</i>&nbsp;  /**
+<i>63</i>&nbsp;   * The minimum total probability mass of advanced outcomes.
+<i>64</i>&nbsp;   */
+<i>65</i>&nbsp;  protected double Q;
+<i>66</i>&nbsp;
+<i>67</i>&nbsp;  /**
+<i>68</i>&nbsp;   * The default beam size used if no beam size is given.
+<i>69</i>&nbsp;   */
+<i>70</i>&nbsp;  public static final int defaultBeamSize = 20;
+<i>71</i>&nbsp;
+<i>72</i>&nbsp;  /**
+<i>73</i>&nbsp;   * The default amount of probability mass required of advanced outcomes.
+<i>74</i>&nbsp;   */
+<i>75</i>&nbsp;  public static final double defaultAdvancePercentage = 0.95;
+<i>76</i>&nbsp;
+<i>77</i>&nbsp;  /**
+<i>78</i>&nbsp;   * Completed parses.
+<i>79</i>&nbsp;   */
+<i>80</i>&nbsp;  private SortedSet&lt;Parse&gt; completeParses;
+<i>81</i>&nbsp;
+<i>82</i>&nbsp;  /**
+<i>83</i>&nbsp;   * Incomplete parses which will be advanced.
+<i>84</i>&nbsp;   */
+<i>85</i>&nbsp;  private SortedSet&lt;Parse&gt; odh;
+<i>86</i>&nbsp;
+<i>87</i>&nbsp;  /**
+<i>88</i>&nbsp;   * Incomplete parses which have been advanced.
+<i>89</i>&nbsp;   */
+<i>90</i>&nbsp;  private SortedSet&lt;Parse&gt; ndh;
+<i>91</i>&nbsp;
+<i>92</i>&nbsp;  /**
+<i>93</i>&nbsp;   * The head rules for the parser.
+<i>94</i>&nbsp;   */
+<i>95</i>&nbsp;  protected HeadRules headRules;
+<i>96</i>&nbsp;
+<i>97</i>&nbsp;  /**
+<i>98</i>&nbsp;   * The set strings which are considered punctuation for the parser.
+<i>99</i>&nbsp;   * Punctuation is not attached, but floats to the top of the parse as attachment
+<i>100</i>&nbsp;   * decisions are made about its non-punctuation sister nodes.
+<i>101</i>&nbsp;   */
+<i>102</i>&nbsp;  protected Set&lt;String&gt; punctSet;
+<i>103</i>&nbsp;
+<i>104</i>&nbsp;  /**
+<i>105</i>&nbsp;   * The label for the top node.
+<i>106</i>&nbsp;   */
+<i>107</i>&nbsp;  public static final String TOP_NODE = &quot;TOP&quot;;
+<i>108</i>&nbsp;
+<i>109</i>&nbsp;  /**
+<i>110</i>&nbsp;   * The label for the top if an incomplete node.
+<i>111</i>&nbsp;   */
+<i>112</i>&nbsp;  public static final String INC_NODE = &quot;INC&quot;;
+<i>113</i>&nbsp;
+<i>114</i>&nbsp;  /**
+<i>115</i>&nbsp;   * The label for a token node.
+<i>116</i>&nbsp;   */
+<i>117</i>&nbsp;  public static final String TOK_NODE = &quot;TK&quot;;
+<i>118</i>&nbsp;
+<i>119</i>&nbsp;  /**
+<i>120</i>&nbsp;   * The integer 0.
+<i>121</i>&nbsp;   */
+<b class="fc"><i>122</i>&nbsp;  public static final Integer ZERO = 0;</b>
+<i>123</i>&nbsp;
+<i>124</i>&nbsp;  /**
+<i>125</i>&nbsp;   * Prefix for outcomes starting a constituent.
+<i>126</i>&nbsp;   */
+<i>127</i>&nbsp;  public static final String START = &quot;S-&quot;;
+<i>128</i>&nbsp;
+<i>129</i>&nbsp;  /**
+<i>130</i>&nbsp;   * Prefix for outcomes continuing a constituent.
+<i>131</i>&nbsp;   */
+<i>132</i>&nbsp;  public static final String CONT = &quot;C-&quot;;
+<i>133</i>&nbsp;
+<i>134</i>&nbsp;  /**
+<i>135</i>&nbsp;   * Outcome for token which is not contained in a basal constituent.
+<i>136</i>&nbsp;   */
+<i>137</i>&nbsp;  public static final String OTHER = &quot;O&quot;;
+<i>138</i>&nbsp;
+<i>139</i>&nbsp;  /**
+<i>140</i>&nbsp;   * Outcome used when a constituent is complete.
+<i>141</i>&nbsp;   */
+<i>142</i>&nbsp;  public static final String COMPLETE = &quot;c&quot;;
+<i>143</i>&nbsp;
+<i>144</i>&nbsp;  /**
+<i>145</i>&nbsp;   * Outcome used when a constituent is incomplete.
+<i>146</i>&nbsp;   */
+<i>147</i>&nbsp;  public static final String INCOMPLETE = &quot;i&quot;;
+<i>148</i>&nbsp;
+<i>149</i>&nbsp;  /**
+<i>150</i>&nbsp;   * The pos-tagger that the parser uses.
+<i>151</i>&nbsp;   */
+<i>152</i>&nbsp;  protected POSTagger tagger;
+<i>153</i>&nbsp;
+<i>154</i>&nbsp;  /**
+<i>155</i>&nbsp;   * The chunker that the parser uses to chunk non-recursive structures.
+<i>156</i>&nbsp;   */
+<i>157</i>&nbsp;  protected Chunker chunker;
+<i>158</i>&nbsp;
+<i>159</i>&nbsp;  /**
+<i>160</i>&nbsp;   * Specifies whether failed parses should be reported to standard error.
+<i>161</i>&nbsp;   */
+<i>162</i>&nbsp;  protected boolean reportFailedParse;
+<i>163</i>&nbsp;
+<i>164</i>&nbsp;  /**
+<i>165</i>&nbsp;   * Specifies whether a derivation string should be created during parsing.
+<i>166</i>&nbsp;   * This is useful for debugging.
+<i>167</i>&nbsp;   */
+<b class="fc"><i>168</i>&nbsp;  protected boolean createDerivationString = false;</b>
+<i>169</i>&nbsp;
+<i>170</i>&nbsp;  /**
+<i>171</i>&nbsp;   * Turns debug print on or off.
+<i>172</i>&nbsp;   */
+<b class="fc"><i>173</i>&nbsp;  protected boolean debugOn = false;</b>
+<i>174</i>&nbsp;
+<i>175</i>&nbsp;  public AbstractBottomUpParser(POSTagger tagger, Chunker chunker, HeadRules headRules,
+<b class="fc"><i>176</i>&nbsp;      int beamSize, double advancePercentage) {</b>
+<b class="fc"><i>177</i>&nbsp;    this.tagger = tagger;</b>
+<b class="fc"><i>178</i>&nbsp;    this.chunker = chunker;</b>
+<b class="fc"><i>179</i>&nbsp;    this.M = beamSize;</b>
+<b class="fc"><i>180</i>&nbsp;    this.K = beamSize;</b>
+<b class="fc"><i>181</i>&nbsp;    this.Q = advancePercentage;</b>
+<b class="fc"><i>182</i>&nbsp;    reportFailedParse = true;</b>
+<b class="fc"><i>183</i>&nbsp;    this.headRules = headRules;</b>
+<b class="fc"><i>184</i>&nbsp;    this.punctSet = headRules.getPunctuationTags();</b>
+<b class="fc"><i>185</i>&nbsp;    odh = new TreeSet&lt;&gt;();</b>
+<b class="fc"><i>186</i>&nbsp;    ndh = new TreeSet&lt;&gt;();</b>
+<b class="fc"><i>187</i>&nbsp;    completeParses = new TreeSet&lt;&gt;();</b>
+<b class="fc"><i>188</i>&nbsp;  }</b>
+<i>189</i>&nbsp;
+<i>190</i>&nbsp;  /**
+<i>191</i>&nbsp;   * Specifies whether the parser should report when it was unable to find a parse for
+<i>192</i>&nbsp;   * a particular sentence.
+<i>193</i>&nbsp;   * @param errorReporting If true then un-parsed sentences are reported, false otherwise.
+<i>194</i>&nbsp;   */
+<i>195</i>&nbsp;  public void setErrorReporting(boolean errorReporting) {
+<b class="nc"><i>196</i>&nbsp;    this.reportFailedParse = errorReporting;</b>
+<b class="nc"><i>197</i>&nbsp;  }</b>
+<i>198</i>&nbsp;
+<i>199</i>&nbsp;  /**
+<i>200</i>&nbsp;   * Assigns parent references for the specified parse so that they
+<i>201</i>&nbsp;   * are consistent with the children references.
+<i>202</i>&nbsp;   * @param p The parse whose parent references need to be assigned.
+<i>203</i>&nbsp;   */
+<i>204</i>&nbsp;  public static void setParents(Parse p) {
+<b class="nc"><i>205</i>&nbsp;    Parse[] children = p.getChildren();</b>
+<b class="nc"><i>206</i>&nbsp;    for (int ci = 0; ci &lt; children.length; ci++) {</b>
+<b class="nc"><i>207</i>&nbsp;      children[ci].setParent(p);</b>
+<b class="nc"><i>208</i>&nbsp;      setParents(children[ci]);</b>
+<i>209</i>&nbsp;    }
+<b class="nc"><i>210</i>&nbsp;  }</b>
+<i>211</i>&nbsp;
+<i>212</i>&nbsp;  /**
+<i>213</i>&nbsp;   * Removes the punctuation from the specified set of chunks, adds it to the parses
+<i>214</i>&nbsp;   * adjacent to the punctuation is specified, and returns a new array of parses with
+<i>215</i>&nbsp;   * the punctuation removed.
+<i>216</i>&nbsp;   *
+<i>217</i>&nbsp;   * @param chunks A set of parses.
+<i>218</i>&nbsp;   * @param punctSet The set of punctuation which is to be removed.
+<i>219</i>&nbsp;   * @return An array of parses which is a subset of chunks with punctuation removed.
+<i>220</i>&nbsp;   */
+<i>221</i>&nbsp;  public static Parse[] collapsePunctuation(Parse[] chunks, Set&lt;String&gt; punctSet) {
+<b class="fc"><i>222</i>&nbsp;    List&lt;Parse&gt; collapsedParses = new ArrayList&lt;&gt;(chunks.length);</b>
+<b class="fc"><i>223</i>&nbsp;    int lastNonPunct = -1;</b>
+<i>224</i>&nbsp;    int nextNonPunct;
+<b class="fc"><i>225</i>&nbsp;    for (int ci = 0, cn = chunks.length; ci &lt; cn; ci++) {</b>
+<b class="fc"><i>226</i>&nbsp;      if (punctSet.contains(chunks[ci].getType())) {</b>
+<b class="fc"><i>227</i>&nbsp;        if (lastNonPunct &gt;= 0) {</b>
+<b class="fc"><i>228</i>&nbsp;          chunks[lastNonPunct].addNextPunctuation(chunks[ci]);</b>
+<i>229</i>&nbsp;        }
+<b class="fc"><i>230</i>&nbsp;        for (nextNonPunct = ci + 1; nextNonPunct &lt; cn; nextNonPunct++) {</b>
+<b class="fc"><i>231</i>&nbsp;          if (!punctSet.contains(chunks[nextNonPunct].getType())) {</b>
+<b class="fc"><i>232</i>&nbsp;            break;</b>
+<i>233</i>&nbsp;          }
+<i>234</i>&nbsp;        }
+<b class="fc"><i>235</i>&nbsp;        if (nextNonPunct &lt; cn) {</b>
+<b class="fc"><i>236</i>&nbsp;          chunks[nextNonPunct].addPreviousPunctuation(chunks[ci]);</b>
+<i>237</i>&nbsp;        }
+<i>238</i>&nbsp;      }
+<i>239</i>&nbsp;      else {
+<b class="fc"><i>240</i>&nbsp;        collapsedParses.add(chunks[ci]);</b>
+<b class="fc"><i>241</i>&nbsp;        lastNonPunct = ci;</b>
+<i>242</i>&nbsp;      }
+<i>243</i>&nbsp;    }
+<b class="fc"><i>244</i>&nbsp;    if (collapsedParses.size() == chunks.length) {</b>
+<b class="fc"><i>245</i>&nbsp;      return chunks;</b>
+<i>246</i>&nbsp;    }
+<i>247</i>&nbsp;    //System.err.println(&quot;collapsedPunctuation: collapsedParses&quot;+collapsedParses);
+<b class="fc"><i>248</i>&nbsp;    return collapsedParses.toArray(new Parse[collapsedParses.size()]);</b>
+<i>249</i>&nbsp;  }
+<i>250</i>&nbsp;
+<i>251</i>&nbsp;
+<i>252</i>&nbsp;
+<i>253</i>&nbsp;  /**
+<i>254</i>&nbsp;   * Advances the specified parse and returns the an array advanced parses whose
+<i>255</i>&nbsp;   * probability accounts for more than the specified amount of probability mass.
+<i>256</i>&nbsp;   *
+<i>257</i>&nbsp;   * @param p The parse to advance.
+<i>258</i>&nbsp;   * @param probMass The amount of probability mass that should be accounted for
+<i>259</i>&nbsp;   *                 by the advanced parses.
+<i>260</i>&nbsp;   */
+<i>261</i>&nbsp;  protected abstract Parse[] advanceParses(final Parse p, double probMass);
+<i>262</i>&nbsp;
+<i>263</i>&nbsp;  /**
+<i>264</i>&nbsp;   * Adds the &quot;TOP&quot; node to the specified parse.
+<i>265</i>&nbsp;   * @param p The complete parse.
+<i>266</i>&nbsp;   */
+<i>267</i>&nbsp;  protected abstract void advanceTop(Parse p);
+<i>268</i>&nbsp;
+<i>269</i>&nbsp;  public Parse[] parse(Parse tokens, int numParses) {
+<b class="nc"><i>270</i>&nbsp;    if (createDerivationString) tokens.setDerivation(new StringBuffer(100));</b>
+<b class="nc"><i>271</i>&nbsp;    odh.clear();</b>
+<b class="nc"><i>272</i>&nbsp;    ndh.clear();</b>
+<b class="nc"><i>273</i>&nbsp;    completeParses.clear();</b>
+<b class="nc"><i>274</i>&nbsp;    int derivationStage = 0; //derivation length</b>
+<b class="nc"><i>275</i>&nbsp;    int maxDerivationLength = 2 * tokens.getChildCount() + 3;</b>
+<b class="nc"><i>276</i>&nbsp;    odh.add(tokens);</b>
+<b class="nc"><i>277</i>&nbsp;    Parse guess = null;</b>
+<b class="nc"><i>278</i>&nbsp;    double minComplete = 2;</b>
+<b class="nc"><i>279</i>&nbsp;    double bestComplete = -100000; //approximating -infinity/0 in ln domain</b>
+<b class="nc"><i>280</i>&nbsp;    while (odh.size() &gt; 0 &amp;&amp; (completeParses.size() &lt; M || (odh.first()).getProb() &lt; minComplete)</b>
+<i>281</i>&nbsp;        &amp;&amp; derivationStage &lt; maxDerivationLength) {
+<b class="nc"><i>282</i>&nbsp;      ndh = new TreeSet&lt;&gt;();</b>
+<i>283</i>&nbsp;
+<b class="nc"><i>284</i>&nbsp;      int derivationRank = 0;</b>
+<b class="nc"><i>285</i>&nbsp;      for (Iterator&lt;Parse&gt; pi = odh.iterator(); pi.hasNext()</b>
+<b class="nc"><i>286</i>&nbsp;          &amp;&amp; derivationRank &lt; K; derivationRank++) { // foreach derivation</b>
+<b class="nc"><i>287</i>&nbsp;        Parse tp = pi.next();</b>
+<i>288</i>&nbsp;        //TODO: Need to look at this for K-best parsing cases
+<i>289</i>&nbsp;        /*
+<i>290</i>&nbsp;         //this parse and the ones which follow will never win, stop advancing.
+<i>291</i>&nbsp;         if (tp.getProb() &lt; bestComplete) {
+<i>292</i>&nbsp;         break;
+<i>293</i>&nbsp;         }
+<i>294</i>&nbsp;         */
+<b class="nc"><i>295</i>&nbsp;        if (guess == null &amp;&amp; derivationStage == 2) {</b>
+<b class="nc"><i>296</i>&nbsp;          guess = tp;</b>
+<i>297</i>&nbsp;        }
+<b class="nc"><i>298</i>&nbsp;        if (debugOn) {</b>
+<b class="nc"><i>299</i>&nbsp;          System.out.print(derivationStage + &quot; &quot; + derivationRank + &quot; &quot; + tp.getProb());</b>
+<b class="nc"><i>300</i>&nbsp;          tp.show();</b>
+<b class="nc"><i>301</i>&nbsp;          System.out.println();</b>
+<i>302</i>&nbsp;        }
+<i>303</i>&nbsp;        Parse[] nd;
+<b class="nc"><i>304</i>&nbsp;        if (0 == derivationStage) {</b>
+<b class="nc"><i>305</i>&nbsp;          nd = advanceTags(tp);</b>
+<i>306</i>&nbsp;        }
+<b class="nc"><i>307</i>&nbsp;        else if (1 == derivationStage) {</b>
+<b class="nc"><i>308</i>&nbsp;          if (ndh.size() &lt; K) {</b>
+<i>309</i>&nbsp;            //System.err.println(&quot;advancing ts &quot;+j+&quot; &quot;+ndh.size()+&quot; &lt; &quot;+K);
+<b class="nc"><i>310</i>&nbsp;            nd = advanceChunks(tp,bestComplete);</b>
+<i>311</i>&nbsp;          }
+<i>312</i>&nbsp;          else {
+<i>313</i>&nbsp;            //System.err.println(&quot;advancing ts &quot;+j+&quot; prob=&quot;+((Parse) ndh.last()).getProb());
+<b class="nc"><i>314</i>&nbsp;            nd = advanceChunks(tp,(ndh.last()).getProb());</b>
+<i>315</i>&nbsp;          }
+<i>316</i>&nbsp;        }
+<i>317</i>&nbsp;        else { // i &gt; 1
+<b class="nc"><i>318</i>&nbsp;          nd = advanceParses(tp, Q);</b>
+<i>319</i>&nbsp;        }
+<b class="nc"><i>320</i>&nbsp;        if (nd != null) {</b>
+<b class="nc"><i>321</i>&nbsp;          for (int k = 0, kl = nd.length; k &lt; kl; k++) {</b>
+<b class="nc"><i>322</i>&nbsp;            if (nd[k].complete()) {</b>
+<b class="nc"><i>323</i>&nbsp;              advanceTop(nd[k]);</b>
+<b class="nc"><i>324</i>&nbsp;              if (nd[k].getProb() &gt; bestComplete) {</b>
+<b class="nc"><i>325</i>&nbsp;                bestComplete = nd[k].getProb();</b>
+<i>326</i>&nbsp;              }
+<b class="nc"><i>327</i>&nbsp;              if (nd[k].getProb() &lt; minComplete) {</b>
+<b class="nc"><i>328</i>&nbsp;                minComplete = nd[k].getProb();</b>
+<i>329</i>&nbsp;              }
+<b class="nc"><i>330</i>&nbsp;              completeParses.add(nd[k]);</b>
+<i>331</i>&nbsp;            }
+<i>332</i>&nbsp;            else {
+<b class="nc"><i>333</i>&nbsp;              ndh.add(nd[k]);</b>
+<i>334</i>&nbsp;            }
+<i>335</i>&nbsp;          }
+<i>336</i>&nbsp;        }
+<i>337</i>&nbsp;        else {
+<i>338</i>&nbsp;          //if (reportFailedParse) {
+<i>339</i>&nbsp;          //  System.err.println(&quot;Couldn&#39;t advance parse &quot; + derivationStage
+<i>340</i>&nbsp;          //      + &quot; stage &quot; + derivationRank + &quot;!\n&quot;);
+<i>341</i>&nbsp;          //}
+<b class="nc"><i>342</i>&nbsp;          advanceTop(tp);</b>
+<b class="nc"><i>343</i>&nbsp;          completeParses.add(tp);</b>
+<i>344</i>&nbsp;        }
+<i>345</i>&nbsp;      }
+<b class="nc"><i>346</i>&nbsp;      derivationStage++;</b>
+<b class="nc"><i>347</i>&nbsp;      odh = ndh;</b>
+<b class="nc"><i>348</i>&nbsp;    }</b>
+<b class="nc"><i>349</i>&nbsp;    if (completeParses.size() == 0) {</b>
+<i>350</i>&nbsp;      // if (reportFailedParse) System.err.println(&quot;Couldn&#39;t find parse for: &quot; + tokens);
+<i>351</i>&nbsp;      //Parse r = (Parse) odh.first();
+<i>352</i>&nbsp;      //r.show();
+<i>353</i>&nbsp;      //System.out.println();
+<b class="nc"><i>354</i>&nbsp;      return new Parse[] {guess};</b>
+<i>355</i>&nbsp;    }
+<b class="nc"><i>356</i>&nbsp;    else if (numParses == 1) {</b>
+<b class="nc"><i>357</i>&nbsp;      return new Parse[] {completeParses.first()};</b>
+<i>358</i>&nbsp;    }
+<i>359</i>&nbsp;    else {
+<b class="nc"><i>360</i>&nbsp;      List&lt;Parse&gt; topParses = new ArrayList&lt;&gt;(numParses);</b>
+<b class="nc"><i>361</i>&nbsp;      while (!completeParses.isEmpty() &amp;&amp; topParses.size() &lt; numParses) {</b>
+<b class="nc"><i>362</i>&nbsp;        Parse tp = completeParses.last();</b>
+<b class="nc"><i>363</i>&nbsp;        completeParses.remove(tp);</b>
+<b class="nc"><i>364</i>&nbsp;        topParses.add(tp);</b>
+<i>365</i>&nbsp;        //parses.remove(tp);
+<b class="nc"><i>366</i>&nbsp;      }</b>
+<b class="nc"><i>367</i>&nbsp;      return topParses.toArray(new Parse[topParses.size()]);</b>
+<i>368</i>&nbsp;    }
+<i>369</i>&nbsp;  }
+<i>370</i>&nbsp;
+<i>371</i>&nbsp;  public Parse parse(Parse tokens) {
+<i>372</i>&nbsp;
+<b class="fc"><i>373</i>&nbsp;    if (tokens.getChildCount() &gt; 0) {</b>
+<b class="nc"><i>374</i>&nbsp;      Parse p = parse(tokens,1)[0];</b>
+<b class="nc"><i>375</i>&nbsp;      setParents(p);</b>
+<b class="nc"><i>376</i>&nbsp;      return p;</b>
+<i>377</i>&nbsp;    }
+<i>378</i>&nbsp;    else {
+<b class="fc"><i>379</i>&nbsp;      return tokens;</b>
+<i>380</i>&nbsp;    }
+<i>381</i>&nbsp;  }
+<i>382</i>&nbsp;
+<i>383</i>&nbsp;  /**
+<i>384</i>&nbsp;   * Returns the top chunk sequences for the specified parse.
+<i>385</i>&nbsp;   * @param p A pos-tag assigned parse.
+<i>386</i>&nbsp;   * @param minChunkScore A minimum score below which chunks should not be advanced.
+<i>387</i>&nbsp;   * @return The top chunk assignments to the specified parse.
+<i>388</i>&nbsp;   */
+<i>389</i>&nbsp;  protected Parse[] advanceChunks(final Parse p, double minChunkScore) {
+<i>390</i>&nbsp;    // chunk
+<b class="nc"><i>391</i>&nbsp;    Parse[] children = p.getChildren();</b>
+<b class="nc"><i>392</i>&nbsp;    String[] words = new String[children.length];</b>
+<b class="nc"><i>393</i>&nbsp;    String[] ptags = new String[words.length];</b>
+<b class="nc"><i>394</i>&nbsp;    double[] probs = new double[words.length];</b>
+<i>395</i>&nbsp;
+<b class="nc"><i>396</i>&nbsp;    for (int i = 0, il = children.length; i &lt; il; i++) {</b>
+<b class="nc"><i>397</i>&nbsp;      Parse sp = children[i];</b>
+<b class="nc"><i>398</i>&nbsp;      words[i] = sp.getHead().getCoveredText();</b>
+<b class="nc"><i>399</i>&nbsp;      ptags[i] = sp.getType();</b>
+<i>400</i>&nbsp;    }
+<i>401</i>&nbsp;    //System.err.println(&quot;adjusted mcs = &quot;+(minChunkScore-p.getProb()));
+<b class="nc"><i>402</i>&nbsp;    Sequence[] cs = chunker.topKSequences(words, ptags,minChunkScore - p.getProb());</b>
+<b class="nc"><i>403</i>&nbsp;    Parse[] newParses = new Parse[cs.length];</b>
+<b class="nc"><i>404</i>&nbsp;    for (int si = 0, sl = cs.length; si &lt; sl; si++) {</b>
+<b class="nc"><i>405</i>&nbsp;      newParses[si] = (Parse) p.clone(); //copies top level</b>
+<b class="nc"><i>406</i>&nbsp;      if (createDerivationString) newParses[si].getDerivation().append(si).append(&quot;.&quot;);</b>
+<b class="nc"><i>407</i>&nbsp;      String[] tags = cs[si].getOutcomes().toArray(new String[words.length]);</b>
+<b class="nc"><i>408</i>&nbsp;      cs[si].getProbs(probs);</b>
+<b class="nc"><i>409</i>&nbsp;      int start = -1;</b>
+<b class="nc"><i>410</i>&nbsp;      int end = 0;</b>
+<b class="nc"><i>411</i>&nbsp;      String type = null;</b>
+<i>412</i>&nbsp;      //System.err.print(&quot;sequence &quot;+si+&quot; &quot;);
+<b class="nc"><i>413</i>&nbsp;      for (int j = 0; j &lt;= tags.length; j++) {</b>
+<i>414</i>&nbsp;        // if (j != tags.length) {System.err.println(words[j]+&quot; &quot;
+<i>415</i>&nbsp;        // +ptags[j]+&quot; &quot;+tags[j]+&quot; &quot;+probs.get(j));}
+<b class="nc"><i>416</i>&nbsp;        if (j != tags.length) {</b>
+<b class="nc"><i>417</i>&nbsp;          newParses[si].addProb(Math.log(probs[j]));</b>
+<i>418</i>&nbsp;        }
+<i>419</i>&nbsp;        // if continue just update end chunking tag don&#39;t use contTypeMap
+<b class="nc"><i>420</i>&nbsp;        if (j != tags.length &amp;&amp; tags[j].startsWith(CONT)) {</b>
+<b class="nc"><i>421</i>&nbsp;          end = j;</b>
+<i>422</i>&nbsp;        }
+<i>423</i>&nbsp;        else { //make previous constituent if it exists
+<b class="nc"><i>424</i>&nbsp;          if (type != null) {</b>
+<i>425</i>&nbsp;            //System.err.println(&quot;inserting tag &quot;+tags[j]);
+<b class="nc"><i>426</i>&nbsp;            Parse p1 = p.getChildren()[start];</b>
+<b class="nc"><i>427</i>&nbsp;            Parse p2 = p.getChildren()[end];</b>
+<i>428</i>&nbsp;            // System.err.println(&quot;Putting &quot;+type+&quot; at &quot;+start+&quot;,&quot;+end+&quot; for &quot;
+<i>429</i>&nbsp;            // +j+&quot; &quot;+newParses[si].getProb());
+<b class="nc"><i>430</i>&nbsp;            Parse[] cons = new Parse[end - start + 1];</b>
+<b class="nc"><i>431</i>&nbsp;            cons[0] = p1;</b>
+<i>432</i>&nbsp;            //cons[0].label=&quot;Start-&quot;+type;
+<b class="nc"><i>433</i>&nbsp;            if (end - start != 0) {</b>
+<b class="nc"><i>434</i>&nbsp;              cons[end - start] = p2;</b>
+<i>435</i>&nbsp;              //cons[end-start].label=&quot;Cont-&quot;+type;
+<b class="nc"><i>436</i>&nbsp;              for (int ci = 1; ci &lt; end - start; ci++) {</b>
+<b class="nc"><i>437</i>&nbsp;                cons[ci] = p.getChildren()[ci + start];</b>
+<i>438</i>&nbsp;                //cons[ci].label=&quot;Cont-&quot;+type;
+<i>439</i>&nbsp;              }
+<i>440</i>&nbsp;            }
+<b class="nc"><i>441</i>&nbsp;            Parse chunk = new Parse(p1.getText(), new Span(p1.getSpan().getStart(),</b>
+<b class="nc"><i>442</i>&nbsp;                p2.getSpan().getEnd()), type, 1, headRules.getHead(cons, type));</b>
+<b class="nc"><i>443</i>&nbsp;            chunk.isChunk(true);</b>
+<b class="nc"><i>444</i>&nbsp;            newParses[si].insert(chunk);</b>
+<i>445</i>&nbsp;          }
+<b class="nc"><i>446</i>&nbsp;          if (j != tags.length) { //update for new constituent</b>
+<b class="nc"><i>447</i>&nbsp;            if (tags[j].startsWith(START)) { // don&#39;t use startTypeMap these are chunk tags</b>
+<b class="nc"><i>448</i>&nbsp;              type = tags[j].substring(START.length());</b>
+<b class="nc"><i>449</i>&nbsp;              start = j;</b>
+<b class="nc"><i>450</i>&nbsp;              end = j;</b>
+<i>451</i>&nbsp;            }
+<i>452</i>&nbsp;            else { // other
+<b class="nc"><i>453</i>&nbsp;              type = null;</b>
+<i>454</i>&nbsp;            }
+<i>455</i>&nbsp;          }
+<i>456</i>&nbsp;        }
+<i>457</i>&nbsp;      }
+<i>458</i>&nbsp;      //newParses[si].show();System.out.println();
+<i>459</i>&nbsp;    }
+<b class="nc"><i>460</i>&nbsp;    return newParses;</b>
+<i>461</i>&nbsp;  }
+<i>462</i>&nbsp;
+<i>463</i>&nbsp;  /**
+<i>464</i>&nbsp;   * Advances the parse by assigning it POS tags and returns multiple tag sequences.
+<i>465</i>&nbsp;   * @param p The parse to be tagged.
+<i>466</i>&nbsp;   * @return Parses with different POS-tag sequence assignments.
+<i>467</i>&nbsp;   */
+<i>468</i>&nbsp;  protected Parse[] advanceTags(final Parse p) {
+<b class="nc"><i>469</i>&nbsp;    Parse[] children = p.getChildren();</b>
+<b class="nc"><i>470</i>&nbsp;    String[] words = new String[children.length];</b>
+<b class="nc"><i>471</i>&nbsp;    double[] probs = new double[words.length];</b>
+<b class="nc"><i>472</i>&nbsp;    for (int i = 0,il = children.length; i &lt; il; i++) {</b>
+<b class="nc"><i>473</i>&nbsp;      words[i] = children[i].getCoveredText();</b>
+<i>474</i>&nbsp;    }
+<b class="nc"><i>475</i>&nbsp;    Sequence[] ts = tagger.topKSequences(words);</b>
+<b class="nc"><i>476</i>&nbsp;    Parse[] newParses = new Parse[ts.length];</b>
+<b class="nc"><i>477</i>&nbsp;    for (int i = 0; i &lt; ts.length; i++) {</b>
+<b class="nc"><i>478</i>&nbsp;      String[] tags = ts[i].getOutcomes().toArray(new String[words.length]);</b>
+<b class="nc"><i>479</i>&nbsp;      ts[i].getProbs(probs);</b>
+<b class="nc"><i>480</i>&nbsp;      newParses[i] = (Parse) p.clone(); //copies top level</b>
+<b class="nc"><i>481</i>&nbsp;      if (createDerivationString) newParses[i].getDerivation().append(i).append(&quot;.&quot;);</b>
+<b class="nc"><i>482</i>&nbsp;      for (int j = 0; j &lt; words.length; j++) {</b>
+<b class="nc"><i>483</i>&nbsp;        Parse word = children[j];</b>
+<i>484</i>&nbsp;        //System.err.println(&quot;inserting tag &quot;+tags[j]);
+<b class="nc"><i>485</i>&nbsp;        double prob = probs[j];</b>
+<b class="nc"><i>486</i>&nbsp;        newParses[i].insert(new Parse(word.getText(), word.getSpan(), tags[j], prob,j));</b>
+<b class="nc"><i>487</i>&nbsp;        newParses[i].addProb(Math.log(prob));</b>
+<i>488</i>&nbsp;      }
+<i>489</i>&nbsp;    }
+<b class="nc"><i>490</i>&nbsp;    return newParses;</b>
+<i>491</i>&nbsp;  }
+<i>492</i>&nbsp;
+<i>493</i>&nbsp;  /**
+<i>494</i>&nbsp;   * Determines the mapping between the specified index into the specified parses without punctuation to
+<i>495</i>&nbsp;   * the corresponding index into the specified parses.
+<i>496</i>&nbsp;   * @param index An index into the parses without punctuation.
+<i>497</i>&nbsp;   * @param nonPunctParses The parses without punctuation.
+<i>498</i>&nbsp;   * @param parses The parses wit punctuation.
+<i>499</i>&nbsp;   * @return An index into the specified parses which corresponds to the same node the specified index
+<i>500</i>&nbsp;   *     into the parses with punctuation.
+<i>501</i>&nbsp;   */
+<i>502</i>&nbsp;  protected int mapParseIndex(int index, Parse[] nonPunctParses, Parse[] parses) {
+<b class="nc"><i>503</i>&nbsp;    int parseIndex = index;</b>
+<b class="nc"><i>504</i>&nbsp;    while (parses[parseIndex] != nonPunctParses[index]) {</b>
+<b class="nc"><i>505</i>&nbsp;      parseIndex++;</b>
+<i>506</i>&nbsp;    }
+<b class="nc"><i>507</i>&nbsp;    return parseIndex;</b>
+<i>508</i>&nbsp;  }
+<i>509</i>&nbsp;
+<i>510</i>&nbsp;  private static boolean lastChild(Parse child, Parse parent, Set&lt;String&gt; punctSet) {
+<b class="fc"><i>511</i>&nbsp;    if (parent == null) {</b>
+<b class="nc"><i>512</i>&nbsp;      return false;</b>
+<i>513</i>&nbsp;    }
+<i>514</i>&nbsp;
+<b class="fc"><i>515</i>&nbsp;    Parse[] kids = collapsePunctuation(parent.getChildren(), punctSet);</b>
+<b class="fc"><i>516</i>&nbsp;    return (kids[kids.length - 1] == child);</b>
+<i>517</i>&nbsp;  }
+<i>518</i>&nbsp;
+<i>519</i>&nbsp;  /**
+<i>520</i>&nbsp;   * Creates a n-gram dictionary from the specified data stream using the specified
+<i>521</i>&nbsp;   * head rule and specified cut-off.
+<i>522</i>&nbsp;   *
+<i>523</i>&nbsp;   * @param data The data stream of parses.
+<i>524</i>&nbsp;   * @param rules The head rules for the parses.
+<i>525</i>&nbsp;   * @param params can contain a cutoff, the minimum number of entries required for the
+<i>526</i>&nbsp;   *        n-gram to be saved as part of the dictionary.
+<i>527</i>&nbsp;   * @return A dictionary object.
+<i>528</i>&nbsp;   */
+<i>529</i>&nbsp;  public static Dictionary buildDictionary(ObjectStream&lt;Parse&gt; data, HeadRules rules,
+<i>530</i>&nbsp;      TrainingParameters params) throws IOException {
+<i>531</i>&nbsp;
+<b class="fc"><i>532</i>&nbsp;    int cutoff = params.getIntParameter(&quot;dict&quot;, TrainingParameters.CUTOFF_PARAM, 5);</b>
+<i>533</i>&nbsp;
+<b class="fc"><i>534</i>&nbsp;    NGramModel mdict = new NGramModel();</b>
+<i>535</i>&nbsp;    Parse p;
+<b class="fc"><i>536</i>&nbsp;    while ((p = data.read()) != null) {</b>
+<b class="fc"><i>537</i>&nbsp;      p.updateHeads(rules);</b>
+<b class="fc"><i>538</i>&nbsp;      Parse[] pwords = p.getTagNodes();</b>
+<b class="fc"><i>539</i>&nbsp;      String[] words = new String[pwords.length];</b>
+<i>540</i>&nbsp;      //add all uni-grams
+<b class="fc"><i>541</i>&nbsp;      for (int wi = 0;wi &lt; words.length; wi++) {</b>
+<b class="fc"><i>542</i>&nbsp;        words[wi] = pwords[wi].getCoveredText();</b>
+<i>543</i>&nbsp;      }
+<i>544</i>&nbsp;
+<b class="fc"><i>545</i>&nbsp;      mdict.add(new StringList(words), 1, 1);</b>
+<i>546</i>&nbsp;      //add tri-grams and bi-grams for inital sequence
+<b class="fc"><i>547</i>&nbsp;      Parse[] chunks = collapsePunctuation(ParserEventStream.getInitialChunks(p),</b>
+<b class="fc"><i>548</i>&nbsp;          rules.getPunctuationTags());</b>
+<b class="fc"><i>549</i>&nbsp;      String[] cwords = new String[chunks.length];</b>
+<b class="fc"><i>550</i>&nbsp;      for (int wi = 0; wi &lt; cwords.length; wi++) {</b>
+<b class="fc"><i>551</i>&nbsp;        cwords[wi] = chunks[wi].getHead().getCoveredText();</b>
+<i>552</i>&nbsp;      }
+<b class="fc"><i>553</i>&nbsp;      mdict.add(new StringList(cwords), 2, 3);</b>
+<i>554</i>&nbsp;
+<i>555</i>&nbsp;      //emulate reductions to produce additional n-grams
+<b class="fc"><i>556</i>&nbsp;      int ci = 0;</b>
+<b class="fc"><i>557</i>&nbsp;      while (ci &lt; chunks.length) {</b>
+<i>558</i>&nbsp;        // System.err.println(&quot;chunks[&quot;+ci+&quot;]=&quot;+chunks[ci].getHead().getCoveredText()
+<i>559</i>&nbsp;        // +&quot; chunks.length=&quot;+chunks.length + &quot;  &quot; + chunks[ci].getParent());
+<i>560</i>&nbsp;
+<b class="fc"><i>561</i>&nbsp;        if (chunks[ci].getParent() == null) {</b>
+<b class="nc"><i>562</i>&nbsp;          chunks[ci].show();</b>
+<i>563</i>&nbsp;        }
+<b class="fc"><i>564</i>&nbsp;        if (lastChild(chunks[ci], chunks[ci].getParent(),rules.getPunctuationTags())) {</b>
+<i>565</i>&nbsp;          //perform reduce
+<b class="fc"><i>566</i>&nbsp;          int reduceStart = ci;</b>
+<b class="fc"><i>567</i>&nbsp;          while (reduceStart &gt;= 0 &amp;&amp; chunks[reduceStart].getParent() == chunks[ci].getParent()) {</b>
+<b class="fc"><i>568</i>&nbsp;            reduceStart--;</b>
+<i>569</i>&nbsp;          }
+<b class="fc"><i>570</i>&nbsp;          reduceStart++;</b>
+<b class="fc"><i>571</i>&nbsp;          chunks = ParserEventStream.reduceChunks(chunks,ci,chunks[ci].getParent());</b>
+<b class="fc"><i>572</i>&nbsp;          ci = reduceStart;</b>
+<b class="fc"><i>573</i>&nbsp;          if (chunks.length != 0) {</b>
+<b class="fc"><i>574</i>&nbsp;            String[] window = new String[5];</b>
+<b class="fc"><i>575</i>&nbsp;            int wi = 0;</b>
+<b class="fc"><i>576</i>&nbsp;            if (ci - 2 &gt;= 0) window[wi++] = chunks[ci - 2].getHead().getCoveredText();</b>
+<b class="fc"><i>577</i>&nbsp;            if (ci - 1 &gt;= 0) window[wi++] = chunks[ci - 1].getHead().getCoveredText();</b>
+<b class="fc"><i>578</i>&nbsp;            window[wi++] = chunks[ci].getHead().getCoveredText();</b>
+<b class="fc"><i>579</i>&nbsp;            if (ci + 1 &lt; chunks.length) window[wi++] = chunks[ci + 1].getHead().getCoveredText();</b>
+<b class="fc"><i>580</i>&nbsp;            if (ci + 2 &lt; chunks.length) window[wi++] = chunks[ci + 2].getHead().getCoveredText();</b>
+<b class="fc"><i>581</i>&nbsp;            if (wi &lt; 5) {</b>
+<b class="fc"><i>582</i>&nbsp;              String[] subWindow = new String[wi];</b>
+<b class="fc"><i>583</i>&nbsp;              System.arraycopy(window, 0, subWindow, 0, wi);</b>
+<b class="fc"><i>584</i>&nbsp;              window = subWindow;</b>
+<i>585</i>&nbsp;            }
+<b class="fc"><i>586</i>&nbsp;            if (window.length &gt;= 3) {</b>
+<b class="fc"><i>587</i>&nbsp;              mdict.add(new StringList(window), 2, 3);</b>
+<i>588</i>&nbsp;            }
+<b class="fc"><i>589</i>&nbsp;            else if (window.length == 2) {</b>
+<b class="fc"><i>590</i>&nbsp;              mdict.add(new StringList(window), 2, 2);</b>
+<i>591</i>&nbsp;            }
+<i>592</i>&nbsp;          }
+<b class="fc"><i>593</i>&nbsp;          ci = reduceStart - 1; //ci will be incremented at end of loop</b>
+<i>594</i>&nbsp;        }
+<b class="fc"><i>595</i>&nbsp;        ci++;</b>
+<i>596</i>&nbsp;      }
+<b class="fc"><i>597</i>&nbsp;    }</b>
+<i>598</i>&nbsp;    //System.err.println(&quot;gas,and=&quot;+mdict.getCount((new TokenList(new String[] {&quot;gas&quot;,&quot;and&quot;}))));
+<b class="fc"><i>599</i>&nbsp;    mdict.cutoff(cutoff, Integer.MAX_VALUE);</b>
+<b class="fc"><i>600</i>&nbsp;    return mdict.toDictionary(true);</b>
+<i>601</i>&nbsp;  }
+<i>602</i>&nbsp;
+<i>603</i>&nbsp;  /**
+<i>604</i>&nbsp;   * Creates a n-gram dictionary from the specified data stream using the specified
+<i>605</i>&nbsp;   * head rule and specified cut-off.
+<i>606</i>&nbsp;   *
+<i>607</i>&nbsp;   * @param data The data stream of parses.
+<i>608</i>&nbsp;   * @param rules The head rules for the parses.
+<i>609</i>&nbsp;   * @param cutoff The minimum number of entries required for the n-gram to be
+<i>610</i>&nbsp;   *               saved as part of the dictionary.
+<i>611</i>&nbsp;   * @return A dictionary object.
+<i>612</i>&nbsp;   */
+<i>613</i>&nbsp;  public static Dictionary buildDictionary(ObjectStream&lt;Parse&gt; data, HeadRules rules, int cutoff)
+<i>614</i>&nbsp;      throws IOException {
+<i>615</i>&nbsp;
+<b class="nc"><i>616</i>&nbsp;    TrainingParameters params = new TrainingParameters();</b>
+<b class="nc"><i>617</i>&nbsp;    params.put(&quot;dict&quot;, TrainingParameters.CUTOFF_PARAM, cutoff);</b>
+<i>618</i>&nbsp;
+<b class="nc"><i>619</i>&nbsp;    return buildDictionary(data, rules, params);</b>
+<i>620</i>&nbsp;  }
+<i>621</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-09 18:47</div>
+</div>
+</body>
+</html>

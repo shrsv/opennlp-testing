@@ -1,0 +1,252 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: NameFinderEventStream</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">opennlp.tools.namefind</a> ]
+</div>
+
+<h1>Coverage Summary for Class: NameFinderEventStream (opennlp.tools.namefind)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">NameFinderEventStream</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    71.4%
+  </span>
+  <span class="absValue">
+    (5/ 7)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    65.3%
+  </span>
+  <span class="absValue">
+    (32/ 49)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/*
+<i>2</i>&nbsp; * Licensed to the Apache Software Foundation (ASF) under one or more
+<i>3</i>&nbsp; * contributor license agreements.  See the NOTICE file distributed with
+<i>4</i>&nbsp; * this work for additional information regarding copyright ownership.
+<i>5</i>&nbsp; * The ASF licenses this file to You under the Apache License, Version 2.0
+<i>6</i>&nbsp; * (the &quot;License&quot;); you may not use this file except in compliance with
+<i>7</i>&nbsp; * the License. You may obtain a copy of the License at
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; *     http://www.apache.org/licenses/LICENSE-2.0
+<i>10</i>&nbsp; *
+<i>11</i>&nbsp; * Unless required by applicable law or agreed to in writing, software
+<i>12</i>&nbsp; * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<i>13</i>&nbsp; * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<i>14</i>&nbsp; * See the License for the specific language governing permissions and
+<i>15</i>&nbsp; * limitations under the License.
+<i>16</i>&nbsp; */
+<i>17</i>&nbsp;
+<i>18</i>&nbsp;package opennlp.tools.namefind;
+<i>19</i>&nbsp;
+<i>20</i>&nbsp;import java.util.ArrayList;
+<i>21</i>&nbsp;import java.util.Iterator;
+<i>22</i>&nbsp;import java.util.List;
+<i>23</i>&nbsp;import java.util.Map;
+<i>24</i>&nbsp;import java.util.Objects;
+<i>25</i>&nbsp;
+<i>26</i>&nbsp;import opennlp.tools.ml.model.Event;
+<i>27</i>&nbsp;import opennlp.tools.util.ObjectStream;
+<i>28</i>&nbsp;import opennlp.tools.util.SequenceCodec;
+<i>29</i>&nbsp;import opennlp.tools.util.Span;
+<i>30</i>&nbsp;import opennlp.tools.util.featuregen.AdditionalContextFeatureGenerator;
+<i>31</i>&nbsp;import opennlp.tools.util.featuregen.WindowFeatureGenerator;
+<i>32</i>&nbsp;
+<i>33</i>&nbsp;/**
+<i>34</i>&nbsp; * Class for creating an event stream out of data files for training an name
+<i>35</i>&nbsp; * finder.
+<i>36</i>&nbsp; */
+<i>37</i>&nbsp;public class NameFinderEventStream extends opennlp.tools.util.AbstractEventStream&lt;NameSample&gt; {
+<i>38</i>&nbsp;
+<i>39</i>&nbsp;  private NameContextGenerator contextGenerator;
+<i>40</i>&nbsp;
+<b class="fc"><i>41</i>&nbsp;  private AdditionalContextFeatureGenerator additionalContextFeatureGenerator =</b>
+<i>42</i>&nbsp;      new AdditionalContextFeatureGenerator();
+<i>43</i>&nbsp;
+<i>44</i>&nbsp;  private SequenceCodec&lt;String&gt; codec;
+<i>45</i>&nbsp;
+<i>46</i>&nbsp;  private final String defaultType;
+<i>47</i>&nbsp;
+<i>48</i>&nbsp;  /**
+<i>49</i>&nbsp;   * Creates a new name finder event stream using the specified data stream and context generator.
+<i>50</i>&nbsp;   * @param dataStream The data stream of events.
+<i>51</i>&nbsp;   * @param type null or overrides the type parameter in the provided samples
+<i>52</i>&nbsp;   * @param contextGenerator The context generator used to generate features for the event stream.
+<i>53</i>&nbsp;   */
+<i>54</i>&nbsp;  public NameFinderEventStream(ObjectStream&lt;NameSample&gt; dataStream, String type,
+<i>55</i>&nbsp;                               NameContextGenerator contextGenerator, SequenceCodec&lt;String&gt; codec) {
+<b class="fc"><i>56</i>&nbsp;    super(dataStream);</b>
+<i>57</i>&nbsp;
+<b class="fc"><i>58</i>&nbsp;    this.codec = codec;</b>
+<i>59</i>&nbsp;
+<b class="fc"><i>60</i>&nbsp;    if (codec == null) {</b>
+<b class="fc"><i>61</i>&nbsp;      this.codec = new BioCodec();</b>
+<i>62</i>&nbsp;    }
+<i>63</i>&nbsp;
+<b class="fc"><i>64</i>&nbsp;    this.contextGenerator = contextGenerator;</b>
+<b class="fc"><i>65</i>&nbsp;    this.contextGenerator.addFeatureGenerator(</b>
+<i>66</i>&nbsp;        new WindowFeatureGenerator(additionalContextFeatureGenerator, 8, 8));
+<i>67</i>&nbsp;
+<b class="fc"><i>68</i>&nbsp;    this.defaultType = type;</b>
+<b class="fc"><i>69</i>&nbsp;  }</b>
+<i>70</i>&nbsp;
+<i>71</i>&nbsp;  public NameFinderEventStream(ObjectStream&lt;NameSample&gt; dataStream) {
+<b class="fc"><i>72</i>&nbsp;    this(dataStream, null, new DefaultNameContextGenerator(), null);</b>
+<b class="fc"><i>73</i>&nbsp;  }</b>
+<i>74</i>&nbsp;
+<i>75</i>&nbsp;  /**
+<i>76</i>&nbsp;   * Generates the name tag outcomes (start, continue, other) for each token in a sentence
+<i>77</i>&nbsp;   * with the specified length using the specified name spans.
+<i>78</i>&nbsp;   * @param names Token spans for each of the names.
+<i>79</i>&nbsp;   * @param type null or overrides the type parameter in the provided samples
+<i>80</i>&nbsp;   * @param length The length of the sentence.
+<i>81</i>&nbsp;   * @return An array of start, continue, other outcomes based on the specified names and sentence length.
+<i>82</i>&nbsp;   *
+<i>83</i>&nbsp;   * @deprecated use the BioCodec implementation of the SequenceValidator instead!
+<i>84</i>&nbsp;   */
+<i>85</i>&nbsp;  @Deprecated
+<i>86</i>&nbsp;  public static String[] generateOutcomes(Span[] names, String type, int length) {
+<b class="nc"><i>87</i>&nbsp;    String[] outcomes = new String[length];</b>
+<b class="nc"><i>88</i>&nbsp;    for (int i = 0; i &lt; outcomes.length; i++) {</b>
+<b class="nc"><i>89</i>&nbsp;      outcomes[i] = NameFinderME.OTHER;</b>
+<i>90</i>&nbsp;    }
+<b class="nc"><i>91</i>&nbsp;    for (Span name : names) {</b>
+<b class="nc"><i>92</i>&nbsp;      if (name.getType() == null) {</b>
+<b class="nc"><i>93</i>&nbsp;        outcomes[name.getStart()] = type + &quot;-&quot; + NameFinderME.START;</b>
+<i>94</i>&nbsp;      }
+<i>95</i>&nbsp;      else {
+<b class="nc"><i>96</i>&nbsp;        outcomes[name.getStart()] = name.getType() + &quot;-&quot; + NameFinderME.START;</b>
+<i>97</i>&nbsp;      }
+<i>98</i>&nbsp;      // now iterate from begin + 1 till end
+<b class="nc"><i>99</i>&nbsp;      for (int i = name.getStart() + 1; i &lt; name.getEnd(); i++) {</b>
+<b class="nc"><i>100</i>&nbsp;        if (name.getType() == null) {</b>
+<b class="nc"><i>101</i>&nbsp;          outcomes[i] = type + &quot;-&quot; + NameFinderME.CONTINUE;</b>
+<i>102</i>&nbsp;        }
+<i>103</i>&nbsp;        else {
+<b class="nc"><i>104</i>&nbsp;          outcomes[i] = name.getType() + &quot;-&quot; + NameFinderME.CONTINUE;</b>
+<i>105</i>&nbsp;        }
+<i>106</i>&nbsp;      }
+<i>107</i>&nbsp;    }
+<b class="nc"><i>108</i>&nbsp;    return outcomes;</b>
+<i>109</i>&nbsp;  }
+<i>110</i>&nbsp;
+<i>111</i>&nbsp;  public static List&lt;Event&gt; generateEvents(String[] sentence, String[] outcomes,
+<i>112</i>&nbsp;                                           NameContextGenerator cg) {
+<b class="fc"><i>113</i>&nbsp;    List&lt;Event&gt; events = new ArrayList&lt;&gt;(outcomes.length);</b>
+<b class="fc"><i>114</i>&nbsp;    for (int i = 0; i &lt; outcomes.length; i++) {</b>
+<b class="fc"><i>115</i>&nbsp;      events.add(new Event(outcomes[i], cg.getContext(i, sentence, outcomes,null)));</b>
+<i>116</i>&nbsp;    }
+<i>117</i>&nbsp;
+<b class="fc"><i>118</i>&nbsp;    cg.updateAdaptiveData(sentence, outcomes);</b>
+<i>119</i>&nbsp;
+<b class="fc"><i>120</i>&nbsp;    return events;</b>
+<i>121</i>&nbsp;  }
+<i>122</i>&nbsp;
+<i>123</i>&nbsp;  @Override
+<i>124</i>&nbsp;  protected Iterator&lt;Event&gt; createEvents(NameSample sample) {
+<i>125</i>&nbsp;
+<b class="fc"><i>126</i>&nbsp;    if (sample.isClearAdaptiveDataSet()) {</b>
+<b class="fc"><i>127</i>&nbsp;      contextGenerator.clearAdaptiveData();</b>
+<i>128</i>&nbsp;    }
+<i>129</i>&nbsp;
+<b class="fc"><i>130</i>&nbsp;    Span[] names = sample.getNames();</b>
+<b class="fc"><i>131</i>&nbsp;    if (!Objects.isNull(this.defaultType)) {</b>
+<b class="fc"><i>132</i>&nbsp;      overrideType(names);</b>
+<i>133</i>&nbsp;    }
+<i>134</i>&nbsp;
+<b class="fc"><i>135</i>&nbsp;    String[] outcomes = codec.encode(names, sample.getSentence().length);</b>
+<i>136</i>&nbsp;    // String outcomes[] = generateOutcomes(sample.getNames(), type, sample.getSentence().length);
+<b class="fc"><i>137</i>&nbsp;    additionalContextFeatureGenerator.setCurrentContext(sample.getAdditionalContext());</b>
+<b class="fc"><i>138</i>&nbsp;    String[] tokens = new String[sample.getSentence().length];</b>
+<i>139</i>&nbsp;
+<b class="fc"><i>140</i>&nbsp;    for (int i = 0; i &lt; sample.getSentence().length; i++) {</b>
+<b class="fc"><i>141</i>&nbsp;      tokens[i] = sample.getSentence()[i];</b>
+<i>142</i>&nbsp;    }
+<i>143</i>&nbsp;
+<b class="fc"><i>144</i>&nbsp;    return generateEvents(tokens, outcomes, contextGenerator).iterator();</b>
+<i>145</i>&nbsp;  }
+<i>146</i>&nbsp;
+<i>147</i>&nbsp;  private void overrideType(Span[] names) {
+<b class="fc"><i>148</i>&nbsp;    for (int i = 0; i &lt; names.length; i++) {</b>
+<b class="fc"><i>149</i>&nbsp;      Span n = names[i];</b>
+<b class="fc"><i>150</i>&nbsp;      names[i] = new Span(n.getStart(), n.getEnd(), this.defaultType,</b>
+<b class="fc"><i>151</i>&nbsp;              n.getProb());</b>
+<i>152</i>&nbsp;    }
+<b class="fc"><i>153</i>&nbsp;  }</b>
+<i>154</i>&nbsp;
+<i>155</i>&nbsp;  /**
+<i>156</i>&nbsp;   * Generated previous decision features for each token based on contents of the specified map.
+<i>157</i>&nbsp;   * @param tokens The token for which the context is generated.
+<i>158</i>&nbsp;   * @param prevMap A mapping of tokens to their previous decisions.
+<i>159</i>&nbsp;   * @return An additional context array with features for each token.
+<i>160</i>&nbsp;   */
+<i>161</i>&nbsp;  public static String[][] additionalContext(String[] tokens, Map&lt;String, String&gt; prevMap) {
+<b class="nc"><i>162</i>&nbsp;    String[][] ac = new String[tokens.length][1];</b>
+<b class="nc"><i>163</i>&nbsp;    for (int ti = 0; ti &lt; tokens.length; ti++) {</b>
+<b class="nc"><i>164</i>&nbsp;      String pt = prevMap.get(tokens[ti]);</b>
+<b class="nc"><i>165</i>&nbsp;      ac[ti][0] = &quot;pd=&quot; + pt;</b>
+<i>166</i>&nbsp;    }
+<b class="nc"><i>167</i>&nbsp;    return ac;</b>
+<i>168</i>&nbsp;  }
+<i>169</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-09 15:05</div>
+</div>
+</body>
+</html>

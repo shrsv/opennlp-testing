@@ -1,0 +1,142 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: POSModelSerializer</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">opennlp.tools.util.model</a> ]
+</div>
+
+<h1>Coverage Summary for Class: POSModelSerializer (opennlp.tools.util.model)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">POSModelSerializer</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (3/ 3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    58.3%
+  </span>
+  <span class="absValue">
+    (7/ 12)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/*
+<i>2</i>&nbsp; * Licensed to the Apache Software Foundation (ASF) under one or more
+<i>3</i>&nbsp; * contributor license agreements.  See the NOTICE file distributed with
+<i>4</i>&nbsp; * this work for additional information regarding copyright ownership.
+<i>5</i>&nbsp; * The ASF licenses this file to You under the Apache License, Version 2.0
+<i>6</i>&nbsp; * (the &quot;License&quot;); you may not use this file except in compliance with
+<i>7</i>&nbsp; * the License. You may obtain a copy of the License at
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; *     http://www.apache.org/licenses/LICENSE-2.0
+<i>10</i>&nbsp; *
+<i>11</i>&nbsp; * Unless required by applicable law or agreed to in writing, software
+<i>12</i>&nbsp; * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<i>13</i>&nbsp; * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<i>14</i>&nbsp; * See the License for the specific language governing permissions and
+<i>15</i>&nbsp; * limitations under the License.
+<i>16</i>&nbsp; */
+<i>17</i>&nbsp;
+<i>18</i>&nbsp;package opennlp.tools.util.model;
+<i>19</i>&nbsp;
+<i>20</i>&nbsp;import java.io.IOException;
+<i>21</i>&nbsp;import java.io.InputStream;
+<i>22</i>&nbsp;import java.io.OutputStream;
+<i>23</i>&nbsp;import java.util.HashMap;
+<i>24</i>&nbsp;import java.util.Map;
+<i>25</i>&nbsp;
+<i>26</i>&nbsp;import opennlp.tools.ml.BeamSearch;
+<i>27</i>&nbsp;import opennlp.tools.postag.POSModel;
+<i>28</i>&nbsp;import opennlp.tools.util.Version;
+<i>29</i>&nbsp;
+<b class="fc"><i>30</i>&nbsp;public class POSModelSerializer implements ArtifactSerializer&lt;POSModel&gt; {</b>
+<i>31</i>&nbsp;
+<i>32</i>&nbsp;  public POSModel create(InputStream in) throws IOException {
+<b class="fc"><i>33</i>&nbsp;    POSModel posModel = new POSModel(new UncloseableInputStream(in));</b>
+<i>34</i>&nbsp;
+<i>35</i>&nbsp;    // The 1.6.x models write the non-default beam size into the model itself.
+<i>36</i>&nbsp;    // In 1.5.x the parser configured the beam size when the model was loaded,
+<i>37</i>&nbsp;    // this is not possible anymore with the new APIs
+<b class="fc"><i>38</i>&nbsp;    Version version = posModel.getVersion();</b>
+<b class="fc"><i>39</i>&nbsp;    if (version.getMajor() == 1 &amp;&amp; version.getMinor() == 5) {</b>
+<b class="nc"><i>40</i>&nbsp;      if (posModel.getManifestProperty(BeamSearch.BEAM_SIZE_PARAMETER) == null) {</b>
+<b class="nc"><i>41</i>&nbsp;        Map&lt;String, String&gt; manifestInfoEntries = new HashMap&lt;&gt;();</b>
+<i>42</i>&nbsp;
+<i>43</i>&nbsp;        // The version in the model must be correct or otherwise version
+<i>44</i>&nbsp;        // dependent code branches in other places fail
+<b class="nc"><i>45</i>&nbsp;        manifestInfoEntries.put(&quot;OpenNLP-Version&quot;, &quot;1.5.0&quot;);</b>
+<i>46</i>&nbsp;
+<b class="nc"><i>47</i>&nbsp;        posModel = new POSModel(posModel.getLanguage(), posModel.getPosModel(), 10,</b>
+<b class="nc"><i>48</i>&nbsp;            manifestInfoEntries, posModel.getFactory());</b>
+<i>49</i>&nbsp;      }
+<i>50</i>&nbsp;    }
+<i>51</i>&nbsp;
+<b class="fc"><i>52</i>&nbsp;    return posModel;</b>
+<i>53</i>&nbsp;  }
+<i>54</i>&nbsp;
+<i>55</i>&nbsp;  public void serialize(POSModel artifact, OutputStream out)
+<i>56</i>&nbsp;      throws IOException {
+<b class="fc"><i>57</i>&nbsp;    artifact.serialize(out);</b>
+<b class="fc"><i>58</i>&nbsp;  }</b>
+<i>59</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-09 15:05</div>
+</div>
+</body>
+</html>

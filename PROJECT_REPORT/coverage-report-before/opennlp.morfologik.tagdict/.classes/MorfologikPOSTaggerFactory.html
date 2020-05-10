@@ -1,0 +1,235 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: MorfologikPOSTaggerFactory</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">opennlp.morfologik.tagdict</a> ]
+</div>
+
+<h1>Coverage Summary for Class: MorfologikPOSTaggerFactory (opennlp.morfologik.tagdict)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">MorfologikPOSTaggerFactory</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 10)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 40)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/*
+<i>2</i>&nbsp; * Licensed to the Apache Software Foundation (ASF) under one or more
+<i>3</i>&nbsp; * contributor license agreements.  See the NOTICE file distributed with
+<i>4</i>&nbsp; * this work for additional information regarding copyright ownership.
+<i>5</i>&nbsp; * The ASF licenses this file to You under the Apache License, Version 2.0
+<i>6</i>&nbsp; * (the &quot;License&quot;); you may not use this file except in compliance with
+<i>7</i>&nbsp; * the License. You may obtain a copy of the License at
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; *     http://www.apache.org/licenses/LICENSE-2.0
+<i>10</i>&nbsp; *
+<i>11</i>&nbsp; * Unless required by applicable law or agreed to in writing, software
+<i>12</i>&nbsp; * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<i>13</i>&nbsp; * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<i>14</i>&nbsp; * See the License for the specific language governing permissions and
+<i>15</i>&nbsp; * limitations under the License.
+<i>16</i>&nbsp; */
+<i>17</i>&nbsp;
+<i>18</i>&nbsp;package opennlp.morfologik.tagdict;
+<i>19</i>&nbsp;
+<i>20</i>&nbsp;import java.io.ByteArrayInputStream;
+<i>21</i>&nbsp;import java.io.File;
+<i>22</i>&nbsp;import java.io.FileNotFoundException;
+<i>23</i>&nbsp;import java.io.IOException;
+<i>24</i>&nbsp;import java.io.InputStream;
+<i>25</i>&nbsp;import java.nio.file.Files;
+<i>26</i>&nbsp;import java.nio.file.Path;
+<i>27</i>&nbsp;import java.util.Map;
+<i>28</i>&nbsp;
+<i>29</i>&nbsp;import morfologik.stemming.DictionaryMetadata;
+<i>30</i>&nbsp;
+<i>31</i>&nbsp;import opennlp.tools.dictionary.Dictionary;
+<i>32</i>&nbsp;import opennlp.tools.postag.POSTaggerFactory;
+<i>33</i>&nbsp;import opennlp.tools.postag.TagDictionary;
+<i>34</i>&nbsp;import opennlp.tools.util.model.ArtifactSerializer;
+<i>35</i>&nbsp;import opennlp.tools.util.model.ByteArraySerializer;
+<i>36</i>&nbsp;
+<i>37</i>&nbsp;public class MorfologikPOSTaggerFactory extends POSTaggerFactory {
+<i>38</i>&nbsp;
+<i>39</i>&nbsp;  private static final String MORFOLOGIK_POSDICT_SUF = &quot;morfologik_dict&quot;;
+<i>40</i>&nbsp;  private static final String MORFOLOGIK_DICT_INFO_SUF = &quot;morfologik_info&quot;;
+<i>41</i>&nbsp;
+<i>42</i>&nbsp;  private static final String MORFOLOGIK_POSDICT = &quot;tagdict.&quot;
+<i>43</i>&nbsp;      + MORFOLOGIK_POSDICT_SUF;
+<i>44</i>&nbsp;  private static final String MORFOLOGIK_DICT_INFO = &quot;tagdict.&quot;
+<i>45</i>&nbsp;      + MORFOLOGIK_DICT_INFO_SUF;
+<i>46</i>&nbsp;
+<i>47</i>&nbsp;  private TagDictionary dict;
+<i>48</i>&nbsp;
+<i>49</i>&nbsp;  private byte[] dictInfo;
+<i>50</i>&nbsp;  private byte[] dictData;
+<i>51</i>&nbsp;
+<b class="nc"><i>52</i>&nbsp;  public MorfologikPOSTaggerFactory() {</b>
+<i>53</i>&nbsp;  }
+<i>54</i>&nbsp;
+<i>55</i>&nbsp;  public TagDictionary createTagDictionary(File dictionary) throws IOException {
+<i>56</i>&nbsp;
+<b class="nc"><i>57</i>&nbsp;    if (!dictionary.canRead()) {</b>
+<b class="nc"><i>58</i>&nbsp;      throw new FileNotFoundException(&quot;Could not read dictionary: &quot; + dictionary.getAbsolutePath());</b>
+<i>59</i>&nbsp;    }
+<i>60</i>&nbsp;
+<b class="nc"><i>61</i>&nbsp;    Path dictionaryMeta = DictionaryMetadata.getExpectedMetadataLocation(dictionary.toPath());</b>
+<i>62</i>&nbsp;
+<b class="nc"><i>63</i>&nbsp;    if (dictionaryMeta == null || !dictionaryMeta.toFile().canRead()) {</b>
+<b class="nc"><i>64</i>&nbsp;      throw new FileNotFoundException(&quot;Could not read dictionary metadata: &quot; + dictionaryMeta.getFileName());</b>
+<i>65</i>&nbsp;    }
+<i>66</i>&nbsp;
+<b class="nc"><i>67</i>&nbsp;    this.dictData = Files.readAllBytes(dictionary.toPath());</b>
+<b class="nc"><i>68</i>&nbsp;    this.dictInfo = Files.readAllBytes(dictionaryMeta);</b>
+<i>69</i>&nbsp;
+<b class="nc"><i>70</i>&nbsp;    return createMorfologikDictionary(dictData, dictInfo);</b>
+<i>71</i>&nbsp;  }
+<i>72</i>&nbsp;
+<i>73</i>&nbsp;
+<i>74</i>&nbsp;  @Override
+<i>75</i>&nbsp;  protected void init(Dictionary ngramDictionary, TagDictionary posDictionary) {
+<b class="nc"><i>76</i>&nbsp;    super.init(ngramDictionary, null);</b>
+<b class="nc"><i>77</i>&nbsp;    this.dict = posDictionary;</b>
+<i>78</i>&nbsp;  }
+<i>79</i>&nbsp;
+<i>80</i>&nbsp;  @Override
+<i>81</i>&nbsp;  public TagDictionary getTagDictionary() {
+<b class="nc"><i>82</i>&nbsp;    if (this.dict == null) {</b>
+<i>83</i>&nbsp;
+<b class="nc"><i>84</i>&nbsp;      if (artifactProvider != null) {</b>
+<b class="nc"><i>85</i>&nbsp;        Object obj = artifactProvider.getArtifact(MORFOLOGIK_POSDICT);</b>
+<b class="nc"><i>86</i>&nbsp;        if (obj != null) {</b>
+<b class="nc"><i>87</i>&nbsp;          byte[] data = artifactProvider</b>
+<b class="nc"><i>88</i>&nbsp;              .getArtifact(MORFOLOGIK_POSDICT);</b>
+<b class="nc"><i>89</i>&nbsp;          byte[] info = artifactProvider</b>
+<b class="nc"><i>90</i>&nbsp;              .getArtifact(MORFOLOGIK_DICT_INFO);</b>
+<i>91</i>&nbsp;
+<i>92</i>&nbsp;          try {
+<b class="nc"><i>93</i>&nbsp;            this.dict = createMorfologikDictionary(data, info);</b>
+<b class="nc"><i>94</i>&nbsp;          } catch (IllegalArgumentException e) {</b>
+<b class="nc"><i>95</i>&nbsp;            throw new RuntimeException(</b>
+<i>96</i>&nbsp;                &quot;Could not load the dictionary files to Morfologik.&quot;, e);
+<b class="nc"><i>97</i>&nbsp;          } catch (IOException e) {</b>
+<b class="nc"><i>98</i>&nbsp;            throw new RuntimeException(</b>
+<i>99</i>&nbsp;                &quot;IO error while reading the Morfologik dictionary files.&quot;, e);
+<b class="nc"><i>100</i>&nbsp;          }</b>
+<i>101</i>&nbsp;        }
+<i>102</i>&nbsp;      }
+<i>103</i>&nbsp;    }
+<i>104</i>&nbsp;
+<b class="nc"><i>105</i>&nbsp;    return this.dict;</b>
+<i>106</i>&nbsp;  }
+<i>107</i>&nbsp;
+<i>108</i>&nbsp;  @Override
+<i>109</i>&nbsp;  public void setTagDictionary(TagDictionary dictionary) {
+<b class="nc"><i>110</i>&nbsp;    this.dict = dictionary;</b>
+<i>111</i>&nbsp;  }
+<i>112</i>&nbsp;
+<i>113</i>&nbsp;  @Override
+<i>114</i>&nbsp;  public TagDictionary createEmptyTagDictionary() {
+<b class="nc"><i>115</i>&nbsp;    throw new UnsupportedOperationException(</b>
+<i>116</i>&nbsp;        &quot;Morfologik POS Tagger factory does not support this operation&quot;);
+<i>117</i>&nbsp;  }
+<i>118</i>&nbsp;
+<i>119</i>&nbsp;  @Override
+<i>120</i>&nbsp;  public TagDictionary createTagDictionary(InputStream in)
+<i>121</i>&nbsp;      throws IOException {
+<b class="nc"><i>122</i>&nbsp;    throw new UnsupportedOperationException(</b>
+<i>123</i>&nbsp;        &quot;Morfologik POS Tagger factory does not support this operation&quot;);
+<i>124</i>&nbsp;  }
+<i>125</i>&nbsp;
+<i>126</i>&nbsp;  @Override
+<i>127</i>&nbsp;  @SuppressWarnings(&quot;rawtypes&quot;)
+<i>128</i>&nbsp;  public Map&lt;String, ArtifactSerializer&gt; createArtifactSerializersMap() {
+<b class="nc"><i>129</i>&nbsp;    Map&lt;String, ArtifactSerializer&gt; serializers = super.createArtifactSerializersMap();</b>
+<i>130</i>&nbsp;
+<b class="nc"><i>131</i>&nbsp;    serializers.put(MORFOLOGIK_POSDICT_SUF, new ByteArraySerializer());</b>
+<b class="nc"><i>132</i>&nbsp;    serializers.put(MORFOLOGIK_DICT_INFO_SUF, new ByteArraySerializer());</b>
+<i>133</i>&nbsp;
+<b class="nc"><i>134</i>&nbsp;    return serializers;</b>
+<i>135</i>&nbsp;  }
+<i>136</i>&nbsp;
+<i>137</i>&nbsp;  @Override
+<i>138</i>&nbsp;  public Map&lt;String, Object&gt; createArtifactMap() {
+<b class="nc"><i>139</i>&nbsp;    Map&lt;String, Object&gt; artifactMap = super.createArtifactMap();</b>
+<b class="nc"><i>140</i>&nbsp;    artifactMap.put(MORFOLOGIK_POSDICT, this.dictData);</b>
+<b class="nc"><i>141</i>&nbsp;    artifactMap.put(MORFOLOGIK_DICT_INFO, this.dictInfo);</b>
+<b class="nc"><i>142</i>&nbsp;    return artifactMap;</b>
+<i>143</i>&nbsp;  }
+<i>144</i>&nbsp;
+<i>145</i>&nbsp;  private TagDictionary createMorfologikDictionary(byte[] data, byte[] info)
+<i>146</i>&nbsp;      throws IOException {
+<b class="nc"><i>147</i>&nbsp;    morfologik.stemming.Dictionary dict = morfologik.stemming.Dictionary</b>
+<b class="nc"><i>148</i>&nbsp;        .read(new ByteArrayInputStream(data), new ByteArrayInputStream(</b>
+<i>149</i>&nbsp;            info));
+<b class="nc"><i>150</i>&nbsp;    return new MorfologikTagDictionary(dict);</b>
+<i>151</i>&nbsp;  }
+<i>152</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-09 15:05</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,207 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: XMLDictionaryToTableTool</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">opennlp.morfologik.cmdline.builder</a> ]
+</div>
+
+<h1>Coverage Summary for Class: XMLDictionaryToTableTool (opennlp.morfologik.cmdline.builder)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">XMLDictionaryToTableTool</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 48)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/*
+<i>2</i>&nbsp; * Licensed to the Apache Software Foundation (ASF) under one or more
+<i>3</i>&nbsp; * contributor license agreements.  See the NOTICE file distributed with
+<i>4</i>&nbsp; * this work for additional information regarding copyright ownership.
+<i>5</i>&nbsp; * The ASF licenses this file to You under the Apache License, Version 2.0
+<i>6</i>&nbsp; * (the &quot;License&quot;); you may not use this file except in compliance with
+<i>7</i>&nbsp; * the License. You may obtain a copy of the License at
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; *     http://www.apache.org/licenses/LICENSE-2.0
+<i>10</i>&nbsp; *
+<i>11</i>&nbsp; * Unless required by applicable law or agreed to in writing, software
+<i>12</i>&nbsp; * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<i>13</i>&nbsp; * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<i>14</i>&nbsp; * See the License for the specific language governing permissions and
+<i>15</i>&nbsp; * limitations under the License.
+<i>16</i>&nbsp; */
+<i>17</i>&nbsp;
+<i>18</i>&nbsp;package opennlp.morfologik.cmdline.builder;
+<i>19</i>&nbsp;
+<i>20</i>&nbsp;import java.io.BufferedWriter;
+<i>21</i>&nbsp;import java.io.File;
+<i>22</i>&nbsp;import java.io.FileInputStream;
+<i>23</i>&nbsp;import java.io.IOException;
+<i>24</i>&nbsp;import java.nio.charset.Charset;
+<i>25</i>&nbsp;import java.nio.file.Files;
+<i>26</i>&nbsp;import java.nio.file.Path;
+<i>27</i>&nbsp;import java.util.Iterator;
+<i>28</i>&nbsp;import java.util.Properties;
+<i>29</i>&nbsp;
+<i>30</i>&nbsp;import morfologik.stemming.DictionaryMetadata;
+<i>31</i>&nbsp;
+<i>32</i>&nbsp;import opennlp.tools.cmdline.BasicCmdLineTool;
+<i>33</i>&nbsp;import opennlp.tools.cmdline.CmdLineUtil;
+<i>34</i>&nbsp;import opennlp.tools.cmdline.TerminateToolException;
+<i>35</i>&nbsp;import opennlp.tools.postag.POSDictionary;
+<i>36</i>&nbsp;
+<b class="nc"><i>37</i>&nbsp;public class XMLDictionaryToTableTool extends BasicCmdLineTool {</b>
+<i>38</i>&nbsp;
+<i>39</i>&nbsp;  private String SEPARATOR;
+<i>40</i>&nbsp;
+<i>41</i>&nbsp;  public String getShortDescription() {
+<b class="nc"><i>42</i>&nbsp;    return &quot;reads an OpenNLP XML tag dictionary and outputs it in a tabular file&quot;;</b>
+<i>43</i>&nbsp;  }
+<i>44</i>&nbsp;
+<i>45</i>&nbsp;  public String getHelp() {
+<b class="nc"><i>46</i>&nbsp;    return getBasicHelp(Params.class);</b>
+<i>47</i>&nbsp;  }
+<i>48</i>&nbsp;
+<i>49</i>&nbsp;  public void run(String[] args) {
+<b class="nc"><i>50</i>&nbsp;    Params params = validateAndParseParams(args, Params.class);</b>
+<i>51</i>&nbsp;
+<b class="nc"><i>52</i>&nbsp;    File dictInFile = params.getInputFile();</b>
+<b class="nc"><i>53</i>&nbsp;    File dictOutFile = params.getOutputFile();</b>
+<b class="nc"><i>54</i>&nbsp;    Charset encoding = params.getEncoding();</b>
+<b class="nc"><i>55</i>&nbsp;    SEPARATOR = params.getSeparator();</b>
+<i>56</i>&nbsp;
+<b class="nc"><i>57</i>&nbsp;    CmdLineUtil.checkInputFile(&quot;dictionary input file&quot;, dictInFile);</b>
+<b class="nc"><i>58</i>&nbsp;    CmdLineUtil.checkOutputFile(&quot;dictionary output file&quot;, dictOutFile);</b>
+<i>59</i>&nbsp;
+<i>60</i>&nbsp;    POSDictionary tagDictionary;
+<i>61</i>&nbsp;    try {
+<b class="nc"><i>62</i>&nbsp;      tagDictionary = POSDictionary.create(new FileInputStream(dictInFile));</b>
+<b class="nc"><i>63</i>&nbsp;    } catch (IOException e) {</b>
+<b class="nc"><i>64</i>&nbsp;      throw new TerminateToolException(-1,</b>
+<b class="nc"><i>65</i>&nbsp;          &quot;Error while loading XML POS Dictionay: &quot; + e.getMessage(), e);</b>
+<b class="nc"><i>66</i>&nbsp;    }</b>
+<b class="nc"><i>67</i>&nbsp;    Iterator&lt;String&gt; iterator = tagDictionary.iterator();</b>
+<i>68</i>&nbsp;
+<b class="nc"><i>69</i>&nbsp;    try (BufferedWriter writer = Files.newBufferedWriter(dictOutFile.toPath(),</b>
+<i>70</i>&nbsp;        encoding)) {
+<b class="nc"><i>71</i>&nbsp;      while (iterator.hasNext()) {</b>
+<b class="nc"><i>72</i>&nbsp;        String word = iterator.next();</b>
+<b class="nc"><i>73</i>&nbsp;        for (String tag : tagDictionary.getTags(word)) {</b>
+<b class="nc"><i>74</i>&nbsp;          if (valid(word, tag)) {</b>
+<b class="nc"><i>75</i>&nbsp;            String entry = createEntry(word, tag);</b>
+<b class="nc"><i>76</i>&nbsp;            writer.write(entry);</b>
+<b class="nc"><i>77</i>&nbsp;            writer.newLine();</b>
+<i>78</i>&nbsp;          }
+<i>79</i>&nbsp;        }
+<b class="nc"><i>80</i>&nbsp;      }</b>
+<b class="nc"><i>81</i>&nbsp;      writer.close();</b>
+<b class="nc"><i>82</i>&nbsp;      System.out.println(&quot;Created dictionary: &quot; + dictOutFile.toPath());</b>
+<b class="nc"><i>83</i>&nbsp;    } catch (IOException e) {</b>
+<b class="nc"><i>84</i>&nbsp;      throw new TerminateToolException(-1, &quot;Error while writing output: &quot;</b>
+<b class="nc"><i>85</i>&nbsp;          + e.getMessage(), e);</b>
+<b class="nc"><i>86</i>&nbsp;    }</b>
+<i>87</i>&nbsp;
+<b class="nc"><i>88</i>&nbsp;    Properties info = new Properties();</b>
+<b class="nc"><i>89</i>&nbsp;    info.setProperty(&quot;fsa.dict.separator&quot;, SEPARATOR);</b>
+<b class="nc"><i>90</i>&nbsp;    info.setProperty(&quot;fsa.dict.encoding&quot;, params.getEncoding().name());</b>
+<b class="nc"><i>91</i>&nbsp;    info.setProperty(&quot;fsa.dict.encoder&quot;, params.getEncoder());</b>
+<i>92</i>&nbsp;
+<b class="nc"><i>93</i>&nbsp;    Path metaPath = DictionaryMetadata.getExpectedMetadataLocation(dictOutFile.toPath());</b>
+<i>94</i>&nbsp;
+<i>95</i>&nbsp;    try {
+<b class="nc"><i>96</i>&nbsp;      info.store(Files.newOutputStream(metaPath), &quot;Info file for FSA Morfologik dictionary.&quot;);</b>
+<b class="nc"><i>97</i>&nbsp;    } catch (IOException e) {</b>
+<b class="nc"><i>98</i>&nbsp;      throw new TerminateToolException(-1, &quot;Error while writing metadata output: &quot;</b>
+<b class="nc"><i>99</i>&nbsp;          + e.getMessage(), e);</b>
+<b class="nc"><i>100</i>&nbsp;    }</b>
+<b class="nc"><i>101</i>&nbsp;    System.out.println(&quot;Created metadata: &quot; + dictOutFile.toPath());</b>
+<i>102</i>&nbsp;
+<i>103</i>&nbsp;  }
+<i>104</i>&nbsp;
+<i>105</i>&nbsp;  private boolean valid(String word, String tag) {
+<b class="nc"><i>106</i>&nbsp;    if (word.contains(SEPARATOR) || tag.contains(SEPARATOR)) {</b>
+<b class="nc"><i>107</i>&nbsp;      System.out</b>
+<b class="nc"><i>108</i>&nbsp;          .println(&quot;Warn: invalid entry because contains separator - word: &quot;</b>
+<i>109</i>&nbsp;              + word + &quot; tag: &quot; + tag);
+<b class="nc"><i>110</i>&nbsp;      return false;</b>
+<i>111</i>&nbsp;    }
+<i>112</i>&nbsp;
+<b class="nc"><i>113</i>&nbsp;    return true;</b>
+<i>114</i>&nbsp;  }
+<i>115</i>&nbsp;
+<i>116</i>&nbsp;  private String createEntry(String word, String tag) {
+<i>117</i>&nbsp;
+<b class="nc"><i>118</i>&nbsp;    return &quot;&quot; + SEPARATOR + // base</b>
+<i>119</i>&nbsp;        word + SEPARATOR + tag;
+<i>120</i>&nbsp;  }
+<i>121</i>&nbsp;
+<i>122</i>&nbsp;  interface Params extends XMLDictionaryToTableParams {
+<i>123</i>&nbsp;  }
+<i>124</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-09 18:47</div>
+</div>
+</body>
+</html>

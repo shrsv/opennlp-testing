@@ -1,0 +1,180 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: LanguageDetectorME</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">opennlp.tools.langdetect</a> ]
+</div>
+
+<h1>Coverage Summary for Class: LanguageDetectorME (opennlp.tools.langdetect)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">LanguageDetectorME</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (5/ 5)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (22/ 22)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/*
+<i>2</i>&nbsp; * Licensed to the Apache Software Foundation (ASF) under one or more
+<i>3</i>&nbsp; * contributor license agreements.  See the NOTICE file distributed with
+<i>4</i>&nbsp; * this work for additional information regarding copyright ownership.
+<i>5</i>&nbsp; * The ASF licenses this file to You under the Apache License, Version 2.0
+<i>6</i>&nbsp; * (the &quot;License&quot;); you may not use this file except in compliance with
+<i>7</i>&nbsp; * the License. You may obtain a copy of the License at
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; *     http://www.apache.org/licenses/LICENSE-2.0
+<i>10</i>&nbsp; *
+<i>11</i>&nbsp; * Unless required by applicable law or agreed to in writing, software
+<i>12</i>&nbsp; * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<i>13</i>&nbsp; * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<i>14</i>&nbsp; * See the License for the specific language governing permissions and
+<i>15</i>&nbsp; * limitations under the License.
+<i>16</i>&nbsp; */
+<i>17</i>&nbsp;
+<i>18</i>&nbsp;package opennlp.tools.langdetect;
+<i>19</i>&nbsp;
+<i>20</i>&nbsp;import java.io.IOException;
+<i>21</i>&nbsp;import java.util.Arrays;
+<i>22</i>&nbsp;import java.util.HashMap;
+<i>23</i>&nbsp;import java.util.Map;
+<i>24</i>&nbsp;
+<i>25</i>&nbsp;import opennlp.tools.ml.AbstractEventTrainer;
+<i>26</i>&nbsp;import opennlp.tools.ml.EventTrainer;
+<i>27</i>&nbsp;import opennlp.tools.ml.TrainerFactory;
+<i>28</i>&nbsp;import opennlp.tools.ml.model.MaxentModel;
+<i>29</i>&nbsp;import opennlp.tools.util.ObjectStream;
+<i>30</i>&nbsp;import opennlp.tools.util.TrainingParameters;
+<i>31</i>&nbsp;
+<i>32</i>&nbsp;/**
+<i>33</i>&nbsp; * Implements learnable Language Detector
+<i>34</i>&nbsp; */
+<i>35</i>&nbsp;public class LanguageDetectorME implements LanguageDetector {
+<i>36</i>&nbsp;
+<i>37</i>&nbsp;  private LanguageDetectorModel model;
+<i>38</i>&nbsp;  private LanguageDetectorContextGenerator mContextGenerator;
+<i>39</i>&nbsp;
+<i>40</i>&nbsp;  /**
+<i>41</i>&nbsp;   * Initializes the current instance with a language detector model. Default feature
+<i>42</i>&nbsp;   * generation is used.
+<i>43</i>&nbsp;   *
+<i>44</i>&nbsp;   * @param model the language detector model
+<i>45</i>&nbsp;   */
+<b class="fc"><i>46</i>&nbsp;  public LanguageDetectorME(LanguageDetectorModel model) {</b>
+<b class="fc"><i>47</i>&nbsp;    this.model = model;</b>
+<b class="fc"><i>48</i>&nbsp;    this.mContextGenerator = model.getFactory().getContextGenerator();</b>
+<b class="fc"><i>49</i>&nbsp;  }</b>
+<i>50</i>&nbsp;
+<i>51</i>&nbsp;  @Override
+<i>52</i>&nbsp;  public Language[] predictLanguages(CharSequence content) {
+<b class="fc"><i>53</i>&nbsp;    double[] eval = model.getMaxentModel().eval(mContextGenerator.getContext(content.toString()));</b>
+<b class="fc"><i>54</i>&nbsp;    Language[] arr = new Language[eval.length];</b>
+<b class="fc"><i>55</i>&nbsp;    for (int i = 0; i &lt; eval.length; i++) {</b>
+<b class="fc"><i>56</i>&nbsp;      arr[i] = new Language(model.getMaxentModel().getOutcome(i), eval[i]);</b>
+<i>57</i>&nbsp;    }
+<i>58</i>&nbsp;
+<b class="fc"><i>59</i>&nbsp;    Arrays.sort(arr, (o1, o2) -&gt; Double.compare(o2.getConfidence(), o1.getConfidence()));</b>
+<b class="fc"><i>60</i>&nbsp;    return arr;</b>
+<i>61</i>&nbsp;  }
+<i>62</i>&nbsp;
+<i>63</i>&nbsp;  @Override
+<i>64</i>&nbsp;  public Language predictLanguage(CharSequence content) {
+<b class="fc"><i>65</i>&nbsp;    return predictLanguages(content)[0];</b>
+<i>66</i>&nbsp;  }
+<i>67</i>&nbsp;
+<i>68</i>&nbsp;  @Override
+<i>69</i>&nbsp;  public String[] getSupportedLanguages() {
+<b class="fc"><i>70</i>&nbsp;    int numberLanguages = model.getMaxentModel().getNumOutcomes();</b>
+<b class="fc"><i>71</i>&nbsp;    String[] languages = new String[numberLanguages];</b>
+<b class="fc"><i>72</i>&nbsp;    for (int i = 0; i &lt; numberLanguages; i++) {</b>
+<b class="fc"><i>73</i>&nbsp;      languages[i] = model.getMaxentModel().getOutcome(i);</b>
+<i>74</i>&nbsp;    }
+<b class="fc"><i>75</i>&nbsp;    return languages;</b>
+<i>76</i>&nbsp;  }
+<i>77</i>&nbsp;
+<i>78</i>&nbsp;
+<i>79</i>&nbsp;  public static LanguageDetectorModel train(ObjectStream&lt;LanguageSample&gt; samples,
+<i>80</i>&nbsp;                                            TrainingParameters mlParams,
+<i>81</i>&nbsp;                                            LanguageDetectorFactory factory)
+<i>82</i>&nbsp;      throws IOException {
+<i>83</i>&nbsp;
+<b class="fc"><i>84</i>&nbsp;    Map&lt;String, String&gt; manifestInfoEntries = new HashMap&lt;&gt;();</b>
+<i>85</i>&nbsp;
+<b class="fc"><i>86</i>&nbsp;    mlParams.putIfAbsent(AbstractEventTrainer.DATA_INDEXER_PARAM,</b>
+<i>87</i>&nbsp;        AbstractEventTrainer.DATA_INDEXER_ONE_PASS_VALUE);
+<i>88</i>&nbsp;
+<b class="fc"><i>89</i>&nbsp;    EventTrainer trainer = TrainerFactory.getEventTrainer(</b>
+<i>90</i>&nbsp;        mlParams, manifestInfoEntries);
+<i>91</i>&nbsp;
+<b class="fc"><i>92</i>&nbsp;    MaxentModel model = trainer.train(</b>
+<b class="fc"><i>93</i>&nbsp;        new LanguageDetectorEventStream(samples, factory.getContextGenerator()));</b>
+<i>94</i>&nbsp;
+<b class="fc"><i>95</i>&nbsp;    return new LanguageDetectorModel(model, manifestInfoEntries, factory);</b>
+<i>96</i>&nbsp;  }
+<i>97</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-09 18:47</div>
+</div>
+</body>
+</html>

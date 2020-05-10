@@ -1,0 +1,137 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: AbstractTrainerTool</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">opennlp.tools.cmdline</a> ]
+</div>
+
+<h1>Coverage Summary for Class: AbstractTrainerTool (opennlp.tools.cmdline)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">AbstractTrainerTool</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (2/ 2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    66.7%
+  </span>
+  <span class="absValue">
+    (4/ 6)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/*
+<i>2</i>&nbsp; * Licensed to the Apache Software Foundation (ASF) under one or more
+<i>3</i>&nbsp; * contributor license agreements.  See the NOTICE file distributed with
+<i>4</i>&nbsp; * this work for additional information regarding copyright ownership.
+<i>5</i>&nbsp; * The ASF licenses this file to You under the Apache License, Version 2.0
+<i>6</i>&nbsp; * (the &quot;License&quot;); you may not use this file except in compliance with
+<i>7</i>&nbsp; * the License. You may obtain a copy of the License at
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; *     http://www.apache.org/licenses/LICENSE-2.0
+<i>10</i>&nbsp; *
+<i>11</i>&nbsp; * Unless required by applicable law or agreed to in writing, software
+<i>12</i>&nbsp; * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<i>13</i>&nbsp; * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<i>14</i>&nbsp; * See the License for the specific language governing permissions and
+<i>15</i>&nbsp; * limitations under the License.
+<i>16</i>&nbsp; */
+<i>17</i>&nbsp;
+<i>18</i>&nbsp;package opennlp.tools.cmdline;
+<i>19</i>&nbsp;
+<i>20</i>&nbsp;import java.io.IOException;
+<i>21</i>&nbsp;
+<i>22</i>&nbsp;import opennlp.tools.util.InsufficientTrainingDataException;
+<i>23</i>&nbsp;import opennlp.tools.util.TrainingParameters;
+<i>24</i>&nbsp;
+<i>25</i>&nbsp;/**
+<i>26</i>&nbsp; * Base class for trainer tools.
+<i>27</i>&nbsp; */
+<i>28</i>&nbsp;public class AbstractTrainerTool&lt;T, P&gt; extends AbstractEvaluatorTool&lt;T, P&gt; {
+<i>29</i>&nbsp;
+<i>30</i>&nbsp;  protected TrainingParameters mlParams;
+<i>31</i>&nbsp;
+<i>32</i>&nbsp;  /**
+<i>33</i>&nbsp;   * Constructor with type parameters.
+<i>34</i>&nbsp;   *
+<i>35</i>&nbsp;   * @param sampleType class of the template parameter
+<i>36</i>&nbsp;   * @param params     interface with parameters
+<i>37</i>&nbsp;   */
+<i>38</i>&nbsp;  protected AbstractTrainerTool(Class&lt;T&gt; sampleType, Class&lt;P&gt; params) {
+<b class="fc"><i>39</i>&nbsp;    super(sampleType, params);</b>
+<b class="fc"><i>40</i>&nbsp;  }</b>
+<i>41</i>&nbsp;
+<i>42</i>&nbsp;  protected TerminateToolException createTerminationIOException(IOException e) {
+<i>43</i>&nbsp;
+<b class="fc"><i>44</i>&nbsp;    if (e instanceof InsufficientTrainingDataException) {</b>
+<b class="fc"><i>45</i>&nbsp;      return new TerminateToolException(-1, &quot;\n\nERROR: Not enough training data\n&quot; +</b>
+<i>46</i>&nbsp;          &quot;The provided training data is not sufficient to create enough events to train a model.\n&quot; +
+<i>47</i>&nbsp;          &quot;To resolve this error use more training data, if this doesn&#39;t help there might\n&quot; +
+<i>48</i>&nbsp;          &quot;be some fundamental problem with the training data itself.&quot;);
+<i>49</i>&nbsp;    }
+<i>50</i>&nbsp;
+<b class="nc"><i>51</i>&nbsp;    return new TerminateToolException(-1, &quot;IO error while reading training data or indexing data: &quot; +</b>
+<b class="nc"><i>52</i>&nbsp;        e.getMessage(), e);</b>
+<i>53</i>&nbsp;  }
+<i>54</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-09 15:05</div>
+</div>
+</body>
+</html>

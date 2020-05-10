@@ -1,0 +1,228 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: BioCodec</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">opennlp.tools.namefind</a> ]
+</div>
+
+<h1>Coverage Summary for Class: BioCodec (opennlp.tools.namefind)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">BioCodec</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (7/ 7)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    98.3%
+  </span>
+  <span class="absValue">
+    (57/ 58)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/*
+<i>2</i>&nbsp; * Licensed to the Apache Software Foundation (ASF) under one or more
+<i>3</i>&nbsp; * contributor license agreements.  See the NOTICE file distributed with
+<i>4</i>&nbsp; * this work for additional information regarding copyright ownership.
+<i>5</i>&nbsp; * The ASF licenses this file to You under the Apache License, Version 2.0
+<i>6</i>&nbsp; * (the &quot;License&quot;); you may not use this file except in compliance with
+<i>7</i>&nbsp; * the License. You may obtain a copy of the License at
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; *     http://www.apache.org/licenses/LICENSE-2.0
+<i>10</i>&nbsp; *
+<i>11</i>&nbsp; * Unless required by applicable law or agreed to in writing, software
+<i>12</i>&nbsp; * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<i>13</i>&nbsp; * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<i>14</i>&nbsp; * See the License for the specific language governing permissions and
+<i>15</i>&nbsp; * limitations under the License.
+<i>16</i>&nbsp; */
+<i>17</i>&nbsp;
+<i>18</i>&nbsp;package opennlp.tools.namefind;
+<i>19</i>&nbsp;
+<i>20</i>&nbsp;import java.util.ArrayList;
+<i>21</i>&nbsp;import java.util.List;
+<i>22</i>&nbsp;import java.util.regex.Matcher;
+<i>23</i>&nbsp;import java.util.regex.Pattern;
+<i>24</i>&nbsp;
+<i>25</i>&nbsp;import opennlp.tools.util.SequenceCodec;
+<i>26</i>&nbsp;import opennlp.tools.util.Span;
+<i>27</i>&nbsp;
+<b class="fc"><i>28</i>&nbsp;public class BioCodec implements SequenceCodec&lt;String&gt; {</b>
+<i>29</i>&nbsp;
+<i>30</i>&nbsp;  public static final String START = &quot;start&quot;;
+<i>31</i>&nbsp;  public static final String CONTINUE = &quot;cont&quot;;
+<i>32</i>&nbsp;  public static final String OTHER = &quot;other&quot;;
+<i>33</i>&nbsp;
+<b class="fc"><i>34</i>&nbsp;  private static final Pattern typedOutcomePattern = Pattern.compile(&quot;(.+)-\\w+&quot;);</b>
+<i>35</i>&nbsp;
+<i>36</i>&nbsp;  static String extractNameType(String outcome) {
+<b class="fc"><i>37</i>&nbsp;    Matcher matcher = typedOutcomePattern.matcher(outcome);</b>
+<b class="fc"><i>38</i>&nbsp;    if (matcher.matches()) {</b>
+<b class="fc"><i>39</i>&nbsp;      return matcher.group(1);</b>
+<i>40</i>&nbsp;    }
+<i>41</i>&nbsp;
+<b class="nc"><i>42</i>&nbsp;    return null;</b>
+<i>43</i>&nbsp;  }
+<i>44</i>&nbsp;
+<i>45</i>&nbsp;  public Span[] decode(List&lt;String&gt; c) {
+<b class="fc"><i>46</i>&nbsp;    int start = -1;</b>
+<b class="fc"><i>47</i>&nbsp;    int end = -1;</b>
+<b class="fc"><i>48</i>&nbsp;    List&lt;Span&gt; spans = new ArrayList&lt;&gt;(c.size());</b>
+<b class="fc"><i>49</i>&nbsp;    for (int li = 0; li &lt; c.size(); li++) {</b>
+<b class="fc"><i>50</i>&nbsp;      String chunkTag = c.get(li);</b>
+<b class="fc"><i>51</i>&nbsp;      if (chunkTag.endsWith(BioCodec.START)) {</b>
+<b class="fc"><i>52</i>&nbsp;        if (start != -1) {</b>
+<b class="fc"><i>53</i>&nbsp;          spans.add(new Span(start, end, extractNameType(c.get(li - 1))));</b>
+<i>54</i>&nbsp;        }
+<i>55</i>&nbsp;
+<b class="fc"><i>56</i>&nbsp;        start = li;</b>
+<b class="fc"><i>57</i>&nbsp;        end = li + 1;</b>
+<i>58</i>&nbsp;
+<i>59</i>&nbsp;      }
+<b class="fc"><i>60</i>&nbsp;      else if (chunkTag.endsWith(BioCodec.CONTINUE)) {</b>
+<b class="fc"><i>61</i>&nbsp;        end = li + 1;</b>
+<i>62</i>&nbsp;      }
+<b class="fc"><i>63</i>&nbsp;      else if (chunkTag.endsWith(BioCodec.OTHER)) {</b>
+<b class="fc"><i>64</i>&nbsp;        if (start != -1) {</b>
+<b class="fc"><i>65</i>&nbsp;          spans.add(new Span(start, end, extractNameType(c.get(li - 1))));</b>
+<b class="fc"><i>66</i>&nbsp;          start = -1;</b>
+<b class="fc"><i>67</i>&nbsp;          end = -1;</b>
+<i>68</i>&nbsp;        }
+<i>69</i>&nbsp;      }
+<i>70</i>&nbsp;    }
+<i>71</i>&nbsp;
+<b class="fc"><i>72</i>&nbsp;    if (start != -1) {</b>
+<b class="fc"><i>73</i>&nbsp;      spans.add(new Span(start, end, extractNameType(c.get(c.size() - 1))));</b>
+<i>74</i>&nbsp;    }
+<i>75</i>&nbsp;
+<b class="fc"><i>76</i>&nbsp;    return spans.toArray(new Span[spans.size()]);</b>
+<i>77</i>&nbsp;  }
+<i>78</i>&nbsp;
+<i>79</i>&nbsp;  public String[] encode(Span[] names, int length) {
+<b class="fc"><i>80</i>&nbsp;    String[] outcomes = new String[length];</b>
+<b class="fc"><i>81</i>&nbsp;    for (int i = 0; i &lt; outcomes.length; i++) {</b>
+<b class="fc"><i>82</i>&nbsp;      outcomes[i] = BioCodec.OTHER;</b>
+<i>83</i>&nbsp;    }
+<b class="fc"><i>84</i>&nbsp;    for (Span name : names) {</b>
+<b class="fc"><i>85</i>&nbsp;      if (name.getType() == null) {</b>
+<b class="fc"><i>86</i>&nbsp;        outcomes[name.getStart()] = &quot;default&quot; + &quot;-&quot; + BioCodec.START;</b>
+<i>87</i>&nbsp;      }
+<i>88</i>&nbsp;      else {
+<b class="fc"><i>89</i>&nbsp;        outcomes[name.getStart()] = name.getType() + &quot;-&quot; + BioCodec.START;</b>
+<i>90</i>&nbsp;      }
+<i>91</i>&nbsp;      // now iterate from begin + 1 till end
+<b class="fc"><i>92</i>&nbsp;      for (int i = name.getStart() + 1; i &lt; name.getEnd(); i++) {</b>
+<b class="fc"><i>93</i>&nbsp;        if (name.getType() == null) {</b>
+<b class="fc"><i>94</i>&nbsp;          outcomes[i] = &quot;default&quot; + &quot;-&quot; + BioCodec.CONTINUE;</b>
+<i>95</i>&nbsp;        }
+<i>96</i>&nbsp;        else {
+<b class="fc"><i>97</i>&nbsp;          outcomes[i] = name.getType() + &quot;-&quot; + BioCodec.CONTINUE;</b>
+<i>98</i>&nbsp;        }
+<i>99</i>&nbsp;      }
+<i>100</i>&nbsp;    }
+<i>101</i>&nbsp;
+<b class="fc"><i>102</i>&nbsp;    return outcomes;</b>
+<i>103</i>&nbsp;  }
+<i>104</i>&nbsp;
+<i>105</i>&nbsp;  public NameFinderSequenceValidator createSequenceValidator() {
+<b class="fc"><i>106</i>&nbsp;    return new NameFinderSequenceValidator();</b>
+<i>107</i>&nbsp;  }
+<i>108</i>&nbsp;
+<i>109</i>&nbsp;  @Override
+<i>110</i>&nbsp;  public boolean areOutcomesCompatible(String[] outcomes) {
+<i>111</i>&nbsp;    // We should have *optionally* one outcome named &quot;other&quot;, some named xyz-start and sometimes
+<i>112</i>&nbsp;    // they have a pair xyz-cont. We should not have any other outcome
+<i>113</i>&nbsp;    // To validate the model we check if we have one outcome named &quot;other&quot;, at least
+<i>114</i>&nbsp;    // one outcome with suffix start. After that we check if all outcomes that ends with
+<i>115</i>&nbsp;    // &quot;cont&quot; have a pair that ends with &quot;start&quot;.
+<b class="fc"><i>116</i>&nbsp;    List&lt;String&gt; start = new ArrayList&lt;&gt;();</b>
+<b class="fc"><i>117</i>&nbsp;    List&lt;String&gt; cont = new ArrayList&lt;&gt;();</b>
+<i>118</i>&nbsp;
+<b class="fc"><i>119</i>&nbsp;    for (int i = 0; i &lt; outcomes.length; i++) {</b>
+<b class="fc"><i>120</i>&nbsp;      String outcome = outcomes[i];</b>
+<b class="fc"><i>121</i>&nbsp;      if (outcome.endsWith(BioCodec.START)) {</b>
+<b class="fc"><i>122</i>&nbsp;        start.add(outcome.substring(0, outcome.length()</b>
+<b class="fc"><i>123</i>&nbsp;            - BioCodec.START.length()));</b>
+<b class="fc"><i>124</i>&nbsp;      } else if (outcome.endsWith(BioCodec.CONTINUE)) {</b>
+<b class="fc"><i>125</i>&nbsp;        cont.add(outcome.substring(0, outcome.length()</b>
+<b class="fc"><i>126</i>&nbsp;            - BioCodec.CONTINUE.length()));</b>
+<b class="fc"><i>127</i>&nbsp;      } else if (!outcome.equals(BioCodec.OTHER)) {</b>
+<i>128</i>&nbsp;        // got unexpected outcome
+<b class="fc"><i>129</i>&nbsp;        return false;</b>
+<i>130</i>&nbsp;      }
+<i>131</i>&nbsp;    }
+<i>132</i>&nbsp;
+<b class="fc"><i>133</i>&nbsp;    if (start.size() == 0) {</b>
+<b class="fc"><i>134</i>&nbsp;      return false;</b>
+<i>135</i>&nbsp;    } else {
+<b class="fc"><i>136</i>&nbsp;      for (String contPreffix : cont) {</b>
+<b class="fc"><i>137</i>&nbsp;        if (!start.contains(contPreffix)) {</b>
+<b class="fc"><i>138</i>&nbsp;          return false;</b>
+<i>139</i>&nbsp;        }
+<b class="fc"><i>140</i>&nbsp;      }</b>
+<i>141</i>&nbsp;    }
+<i>142</i>&nbsp;
+<b class="fc"><i>143</i>&nbsp;    return true;</b>
+<i>144</i>&nbsp;  }
+<i>145</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-09 15:05</div>
+</div>
+</body>
+</html>

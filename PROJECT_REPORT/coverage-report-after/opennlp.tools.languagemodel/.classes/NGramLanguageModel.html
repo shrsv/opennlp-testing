@@ -1,0 +1,243 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: NGramLanguageModel</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">opennlp.tools.languagemodel</a> ]
+</div>
+
+<h1>Coverage Summary for Class: NGramLanguageModel (opennlp.tools.languagemodel)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">NGramLanguageModel</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    70%
+  </span>
+  <span class="absValue">
+    (7/ 10)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    58.7%
+  </span>
+  <span class="absValue">
+    (44/ 75)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/*
+<i>2</i>&nbsp; * Licensed to the Apache Software Foundation (ASF) under one or more
+<i>3</i>&nbsp; * contributor license agreements.  See the NOTICE file distributed with
+<i>4</i>&nbsp; * this work for additional information regarding copyright ownership.
+<i>5</i>&nbsp; * The ASF licenses this file to You under the Apache License, Version 2.0
+<i>6</i>&nbsp; * (the &quot;License&quot;); you may not use this file except in compliance with
+<i>7</i>&nbsp; * the License. You may obtain a copy of the License at
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; *     http://www.apache.org/licenses/LICENSE-2.0
+<i>10</i>&nbsp; *
+<i>11</i>&nbsp; * Unless required by applicable law or agreed to in writing, software
+<i>12</i>&nbsp; * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<i>13</i>&nbsp; * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<i>14</i>&nbsp; * See the License for the specific language governing permissions and
+<i>15</i>&nbsp; * limitations under the License.
+<i>16</i>&nbsp; */
+<i>17</i>&nbsp;
+<i>18</i>&nbsp;package opennlp.tools.languagemodel;
+<i>19</i>&nbsp;
+<i>20</i>&nbsp;import java.io.IOException;
+<i>21</i>&nbsp;import java.io.InputStream;
+<i>22</i>&nbsp;
+<i>23</i>&nbsp;import opennlp.tools.ngram.NGramModel;
+<i>24</i>&nbsp;import opennlp.tools.ngram.NGramUtils;
+<i>25</i>&nbsp;import opennlp.tools.util.StringList;
+<i>26</i>&nbsp;
+<i>27</i>&nbsp;/**
+<i>28</i>&nbsp; * A {@link opennlp.tools.languagemodel.LanguageModel} based on a {@link opennlp.tools.ngram.NGramModel}
+<i>29</i>&nbsp; * using Stupid Backoff to get the probabilities of the ngrams.
+<i>30</i>&nbsp; */
+<i>31</i>&nbsp;public class NGramLanguageModel extends NGramModel implements LanguageModel {
+<i>32</i>&nbsp;
+<i>33</i>&nbsp;  private static final int DEFAULT_N = 3;
+<i>34</i>&nbsp;
+<i>35</i>&nbsp;  private final int n;
+<i>36</i>&nbsp;
+<i>37</i>&nbsp;  public NGramLanguageModel() {
+<b class="fc"><i>38</i>&nbsp;    this(DEFAULT_N);</b>
+<b class="fc"><i>39</i>&nbsp;  }</b>
+<i>40</i>&nbsp;
+<b class="fc"><i>41</i>&nbsp;  public NGramLanguageModel(int n) {</b>
+<b class="fc"><i>42</i>&nbsp;    this.n = n;</b>
+<b class="fc"><i>43</i>&nbsp;  }</b>
+<i>44</i>&nbsp;
+<i>45</i>&nbsp;  public NGramLanguageModel(InputStream in) throws IOException {
+<b class="nc"><i>46</i>&nbsp;    this(in, DEFAULT_N);</b>
+<b class="nc"><i>47</i>&nbsp;  }</b>
+<i>48</i>&nbsp;
+<i>49</i>&nbsp;  public NGramLanguageModel(InputStream in, int n)
+<i>50</i>&nbsp;      throws IOException {
+<b class="fc"><i>51</i>&nbsp;    super(in);</b>
+<b class="fc"><i>52</i>&nbsp;    this.n = n;</b>
+<b class="fc"><i>53</i>&nbsp;  }</b>
+<i>54</i>&nbsp;
+<i>55</i>&nbsp;  public void add(String... tokens) {
+<b class="fc"><i>56</i>&nbsp;    add(new StringList(tokens), 1, n);</b>
+<b class="fc"><i>57</i>&nbsp;  }</b>
+<i>58</i>&nbsp;
+<i>59</i>&nbsp;  @Override
+<i>60</i>&nbsp;  public double calculateProbability(StringList tokens) {
+<b class="nc"><i>61</i>&nbsp;    double probability = 0d;</b>
+<b class="nc"><i>62</i>&nbsp;    if (size() &gt; 0) {</b>
+<b class="nc"><i>63</i>&nbsp;      for (StringList ngram : NGramUtils.getNGrams(tokens, n)) {</b>
+<b class="nc"><i>64</i>&nbsp;        double score = stupidBackoff(ngram);</b>
+<b class="nc"><i>65</i>&nbsp;        probability += Math.log(score);</b>
+<b class="nc"><i>66</i>&nbsp;        if (Double.isNaN(probability)) {</b>
+<b class="nc"><i>67</i>&nbsp;          probability = 0d;</b>
+<b class="nc"><i>68</i>&nbsp;          break;</b>
+<i>69</i>&nbsp;        }
+<b class="nc"><i>70</i>&nbsp;      }</b>
+<b class="nc"><i>71</i>&nbsp;      probability = Math.exp(probability);</b>
+<i>72</i>&nbsp;    }
+<b class="nc"><i>73</i>&nbsp;    return probability;</b>
+<i>74</i>&nbsp;  }
+<i>75</i>&nbsp;
+<i>76</i>&nbsp;  @Override
+<i>77</i>&nbsp;  public double calculateProbability(String... tokens) {
+<b class="fc"><i>78</i>&nbsp;    double probability = 0d;</b>
+<b class="fc"><i>79</i>&nbsp;    if (size() &gt; 0) {</b>
+<b class="fc"><i>80</i>&nbsp;      for (String[] ngram : NGramUtils.getNGrams(tokens, n)) {</b>
+<b class="fc"><i>81</i>&nbsp;        double score = stupidBackoff(new StringList(ngram));</b>
+<b class="fc"><i>82</i>&nbsp;        probability += Math.log(score);</b>
+<b class="fc"><i>83</i>&nbsp;        if (Double.isNaN(probability)) {</b>
+<b class="nc"><i>84</i>&nbsp;          probability = 0d;</b>
+<b class="nc"><i>85</i>&nbsp;          break;</b>
+<i>86</i>&nbsp;        }
+<b class="fc"><i>87</i>&nbsp;      }</b>
+<b class="fc"><i>88</i>&nbsp;      probability = Math.exp(probability);</b>
+<i>89</i>&nbsp;    }
+<b class="fc"><i>90</i>&nbsp;    return probability;</b>
+<i>91</i>&nbsp;  }
+<i>92</i>&nbsp;
+<i>93</i>&nbsp;  @Override
+<i>94</i>&nbsp;  public StringList predictNextTokens(StringList tokens) {
+<b class="nc"><i>95</i>&nbsp;    double maxProb = Double.NEGATIVE_INFINITY;</b>
+<b class="nc"><i>96</i>&nbsp;    StringList token = null;</b>
+<i>97</i>&nbsp;
+<b class="nc"><i>98</i>&nbsp;    for (StringList ngram : this) {</b>
+<b class="nc"><i>99</i>&nbsp;      String[] sequence = new String[ngram.size() + tokens.size()];</b>
+<b class="nc"><i>100</i>&nbsp;      for (int i = 0; i &lt; tokens.size(); i++) {</b>
+<b class="nc"><i>101</i>&nbsp;        sequence[i] = tokens.getToken(i);</b>
+<i>102</i>&nbsp;      }
+<b class="nc"><i>103</i>&nbsp;      for (int i = 0; i &lt; ngram.size(); i++) {</b>
+<b class="nc"><i>104</i>&nbsp;        sequence[i + tokens.size()] = ngram.getToken(i);</b>
+<i>105</i>&nbsp;      }
+<b class="nc"><i>106</i>&nbsp;      StringList sample = new StringList(sequence);</b>
+<b class="nc"><i>107</i>&nbsp;      double v = calculateProbability(sample);</b>
+<b class="nc"><i>108</i>&nbsp;      if (v &gt; maxProb) {</b>
+<b class="nc"><i>109</i>&nbsp;        maxProb = v;</b>
+<b class="nc"><i>110</i>&nbsp;        token = ngram;</b>
+<i>111</i>&nbsp;      }
+<b class="nc"><i>112</i>&nbsp;    }</b>
+<i>113</i>&nbsp;
+<b class="nc"><i>114</i>&nbsp;    return token;</b>
+<i>115</i>&nbsp;  }
+<i>116</i>&nbsp;
+<i>117</i>&nbsp;  @Override
+<i>118</i>&nbsp;  public String[] predictNextTokens(String... tokens) {
+<b class="fc"><i>119</i>&nbsp;    double maxProb = Double.NEGATIVE_INFINITY;</b>
+<b class="fc"><i>120</i>&nbsp;    String[] token = null;</b>
+<i>121</i>&nbsp;
+<b class="fc"><i>122</i>&nbsp;    for (StringList ngram : this) {</b>
+<b class="fc"><i>123</i>&nbsp;      String[] sequence = new String[ngram.size() + tokens.length];</b>
+<b class="fc"><i>124</i>&nbsp;      for (int i = 0; i &lt; tokens.length; i++) {</b>
+<b class="fc"><i>125</i>&nbsp;        sequence[i] = tokens[i];</b>
+<i>126</i>&nbsp;      }
+<b class="fc"><i>127</i>&nbsp;      for (int i = 0; i &lt; ngram.size(); i++) {</b>
+<b class="fc"><i>128</i>&nbsp;        sequence[i + tokens.length] = ngram.getToken(i);</b>
+<i>129</i>&nbsp;      }
+<b class="fc"><i>130</i>&nbsp;      double v = calculateProbability(sequence);</b>
+<b class="fc"><i>131</i>&nbsp;      if (v &gt; maxProb) {</b>
+<b class="fc"><i>132</i>&nbsp;        maxProb = v;</b>
+<b class="fc"><i>133</i>&nbsp;        token = new String[ngram.size()];</b>
+<b class="fc"><i>134</i>&nbsp;        for (int i = 0; i &lt; ngram.size(); i++) {</b>
+<b class="fc"><i>135</i>&nbsp;          token[i] = ngram.getToken(i);</b>
+<i>136</i>&nbsp;        }
+<i>137</i>&nbsp;      }
+<b class="fc"><i>138</i>&nbsp;    }</b>
+<i>139</i>&nbsp;
+<b class="fc"><i>140</i>&nbsp;    return token;</b>
+<i>141</i>&nbsp;  }
+<i>142</i>&nbsp;
+<i>143</i>&nbsp;  private double stupidBackoff(StringList ngram) {
+<b class="fc"><i>144</i>&nbsp;    int count = getCount(ngram);</b>
+<b class="fc"><i>145</i>&nbsp;    StringList nMinusOneToken = NGramUtils.getNMinusOneTokenFirst(ngram);</b>
+<b class="fc"><i>146</i>&nbsp;    if (nMinusOneToken == null || nMinusOneToken.size() == 0) {</b>
+<b class="fc"><i>147</i>&nbsp;      return (double) count / (double) size();</b>
+<b class="fc"><i>148</i>&nbsp;    } else if (count &gt; 0) {</b>
+<b class="fc"><i>149</i>&nbsp;      double countM1 = getCount(nMinusOneToken);</b>
+<b class="fc"><i>150</i>&nbsp;      if (countM1 == 0d) {</b>
+<b class="nc"><i>151</i>&nbsp;        countM1 = size(); // to avoid Infinite if n-1grams do not exist</b>
+<i>152</i>&nbsp;      }
+<b class="fc"><i>153</i>&nbsp;      return (double) count / countM1;</b>
+<i>154</i>&nbsp;    } else {
+<b class="fc"><i>155</i>&nbsp;      return 0.4 * stupidBackoff(NGramUtils.getNMinusOneTokenLast(ngram));</b>
+<i>156</i>&nbsp;    }
+<i>157</i>&nbsp;
+<i>158</i>&nbsp;  }
+<i>159</i>&nbsp;
+<i>160</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-09 18:47</div>
+</div>
+</body>
+</html>

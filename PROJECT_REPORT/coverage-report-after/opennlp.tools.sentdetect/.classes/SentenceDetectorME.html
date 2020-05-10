@@ -1,0 +1,424 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: SentenceDetectorME</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">opennlp.tools.sentdetect</a> ]
+</div>
+
+<h1>Coverage Summary for Class: SentenceDetectorME (opennlp.tools.sentdetect)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">SentenceDetectorME</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    66.7%
+  </span>
+  <span class="absValue">
+    (8/ 12)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    78.6%
+  </span>
+  <span class="absValue">
+    (81/ 103)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/*
+<i>2</i>&nbsp; * Licensed to the Apache Software Foundation (ASF) under one or more
+<i>3</i>&nbsp; * contributor license agreements.  See the NOTICE file distributed with
+<i>4</i>&nbsp; * this work for additional information regarding copyright ownership.
+<i>5</i>&nbsp; * The ASF licenses this file to You under the Apache License, Version 2.0
+<i>6</i>&nbsp; * (the &quot;License&quot;); you may not use this file except in compliance with
+<i>7</i>&nbsp; * the License. You may obtain a copy of the License at
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; *     http://www.apache.org/licenses/LICENSE-2.0
+<i>10</i>&nbsp; *
+<i>11</i>&nbsp; * Unless required by applicable law or agreed to in writing, software
+<i>12</i>&nbsp; * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<i>13</i>&nbsp; * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<i>14</i>&nbsp; * See the License for the specific language governing permissions and
+<i>15</i>&nbsp; * limitations under the License.
+<i>16</i>&nbsp; */
+<i>17</i>&nbsp;
+<i>18</i>&nbsp;
+<i>19</i>&nbsp;package opennlp.tools.sentdetect;
+<i>20</i>&nbsp;
+<i>21</i>&nbsp;import java.io.IOException;
+<i>22</i>&nbsp;import java.util.ArrayList;
+<i>23</i>&nbsp;import java.util.Collections;
+<i>24</i>&nbsp;import java.util.HashMap;
+<i>25</i>&nbsp;import java.util.List;
+<i>26</i>&nbsp;import java.util.Map;
+<i>27</i>&nbsp;import java.util.Set;
+<i>28</i>&nbsp;
+<i>29</i>&nbsp;import opennlp.tools.dictionary.Dictionary;
+<i>30</i>&nbsp;import opennlp.tools.ml.EventTrainer;
+<i>31</i>&nbsp;import opennlp.tools.ml.TrainerFactory;
+<i>32</i>&nbsp;import opennlp.tools.ml.model.Event;
+<i>33</i>&nbsp;import opennlp.tools.ml.model.MaxentModel;
+<i>34</i>&nbsp;import opennlp.tools.sentdetect.lang.Factory;
+<i>35</i>&nbsp;import opennlp.tools.util.ObjectStream;
+<i>36</i>&nbsp;import opennlp.tools.util.Span;
+<i>37</i>&nbsp;import opennlp.tools.util.StringUtil;
+<i>38</i>&nbsp;import opennlp.tools.util.TrainingParameters;
+<i>39</i>&nbsp;import opennlp.tools.util.model.ModelUtil;
+<i>40</i>&nbsp;
+<i>41</i>&nbsp;/**
+<i>42</i>&nbsp; * A sentence detector for splitting up raw text into sentences.
+<i>43</i>&nbsp; * &lt;p&gt;
+<i>44</i>&nbsp; * A maximum entropy model is used to evaluate end-of-sentence characters in a
+<i>45</i>&nbsp; * string to determine if they signify the end of a sentence.
+<i>46</i>&nbsp; */
+<i>47</i>&nbsp;public class SentenceDetectorME implements SentenceDetector {
+<i>48</i>&nbsp;
+<i>49</i>&nbsp;  /**
+<i>50</i>&nbsp;   * Constant indicates a sentence split.
+<i>51</i>&nbsp;   */
+<i>52</i>&nbsp;  public static final String SPLIT = &quot;s&quot;;
+<i>53</i>&nbsp;
+<i>54</i>&nbsp;  /**
+<i>55</i>&nbsp;   * Constant indicates no sentence split.
+<i>56</i>&nbsp;   */
+<i>57</i>&nbsp;  public static final String NO_SPLIT = &quot;n&quot;;
+<i>58</i>&nbsp;
+<i>59</i>&nbsp;  /**
+<i>60</i>&nbsp;   * The maximum entropy model to use to evaluate contexts.
+<i>61</i>&nbsp;   */
+<i>62</i>&nbsp;  private MaxentModel model;
+<i>63</i>&nbsp;
+<i>64</i>&nbsp;  /**
+<i>65</i>&nbsp;   * The feature context generator.
+<i>66</i>&nbsp;   */
+<i>67</i>&nbsp;  private final SDContextGenerator cgen;
+<i>68</i>&nbsp;
+<i>69</i>&nbsp;  /**
+<i>70</i>&nbsp;   * The {@link EndOfSentenceScanner} to use when scanning for end of sentence offsets.
+<i>71</i>&nbsp;   */
+<i>72</i>&nbsp;  private final EndOfSentenceScanner scanner;
+<i>73</i>&nbsp;
+<i>74</i>&nbsp;  /**
+<i>75</i>&nbsp;   * The list of probabilities associated with each decision.
+<i>76</i>&nbsp;   */
+<b class="fc"><i>77</i>&nbsp;  private List&lt;Double&gt; sentProbs = new ArrayList&lt;&gt;();</b>
+<i>78</i>&nbsp;
+<i>79</i>&nbsp;  protected boolean useTokenEnd;
+<i>80</i>&nbsp;
+<i>81</i>&nbsp;  /**
+<i>82</i>&nbsp;   * Initializes the current instance.
+<i>83</i>&nbsp;   *
+<i>84</i>&nbsp;   * @param model the {@link SentenceModel}
+<i>85</i>&nbsp;   */
+<b class="fc"><i>86</i>&nbsp;  public SentenceDetectorME(SentenceModel model) {</b>
+<b class="fc"><i>87</i>&nbsp;    SentenceDetectorFactory sdFactory = model.getFactory();</b>
+<b class="fc"><i>88</i>&nbsp;    this.model = model.getMaxentModel();</b>
+<b class="fc"><i>89</i>&nbsp;    cgen = sdFactory.getSDContextGenerator();</b>
+<b class="fc"><i>90</i>&nbsp;    scanner = sdFactory.getEndOfSentenceScanner();</b>
+<b class="fc"><i>91</i>&nbsp;    useTokenEnd = sdFactory.isUseTokenEnd();</b>
+<b class="fc"><i>92</i>&nbsp;  }</b>
+<i>93</i>&nbsp;
+<i>94</i>&nbsp;  /**
+<i>95</i>&nbsp;   * @deprecated Use a {@link SentenceDetectorFactory} to extend
+<i>96</i>&nbsp;   *             SentenceDetector functionality.
+<i>97</i>&nbsp;   */
+<b class="nc"><i>98</i>&nbsp;  public SentenceDetectorME(SentenceModel model, Factory factory) {</b>
+<b class="nc"><i>99</i>&nbsp;    this.model = model.getMaxentModel();</b>
+<i>100</i>&nbsp;    // if the model has custom EOS characters set, use this to get the context
+<i>101</i>&nbsp;    // generator and the EOS scanner; otherwise use language-specific defaults
+<b class="nc"><i>102</i>&nbsp;    char[] customEOSCharacters = model.getEosCharacters();</b>
+<b class="nc"><i>103</i>&nbsp;    if (customEOSCharacters == null) {</b>
+<b class="nc"><i>104</i>&nbsp;      cgen = factory.createSentenceContextGenerator(model.getLanguage(),</b>
+<b class="nc"><i>105</i>&nbsp;          getAbbreviations(model.getAbbreviations()));</b>
+<b class="nc"><i>106</i>&nbsp;      scanner = factory.createEndOfSentenceScanner(model.getLanguage());</b>
+<i>107</i>&nbsp;    } else {
+<b class="nc"><i>108</i>&nbsp;      cgen = factory.createSentenceContextGenerator(</b>
+<b class="nc"><i>109</i>&nbsp;          getAbbreviations(model.getAbbreviations()), customEOSCharacters);</b>
+<b class="nc"><i>110</i>&nbsp;      scanner = factory.createEndOfSentenceScanner(customEOSCharacters);</b>
+<i>111</i>&nbsp;    }
+<b class="nc"><i>112</i>&nbsp;    useTokenEnd = model.useTokenEnd();</b>
+<b class="nc"><i>113</i>&nbsp;  }</b>
+<i>114</i>&nbsp;
+<i>115</i>&nbsp;  private static Set&lt;String&gt; getAbbreviations(Dictionary abbreviations) {
+<b class="nc"><i>116</i>&nbsp;    if (abbreviations == null) {</b>
+<b class="nc"><i>117</i>&nbsp;      return Collections.emptySet();</b>
+<i>118</i>&nbsp;    }
+<b class="nc"><i>119</i>&nbsp;    return abbreviations.asStringSet();</b>
+<i>120</i>&nbsp;  }
+<i>121</i>&nbsp;
+<i>122</i>&nbsp;  /**
+<i>123</i>&nbsp;   * Detect sentences in a String.
+<i>124</i>&nbsp;   *
+<i>125</i>&nbsp;   * @param s  The string to be processed.
+<i>126</i>&nbsp;   *
+<i>127</i>&nbsp;   * @return   A string array containing individual sentences as elements.
+<i>128</i>&nbsp;   */
+<i>129</i>&nbsp;  public String[] sentDetect(String s) {
+<b class="fc"><i>130</i>&nbsp;    Span[] spans = sentPosDetect(s);</b>
+<i>131</i>&nbsp;    String[] sentences;
+<b class="fc"><i>132</i>&nbsp;    if (spans.length != 0) {</b>
+<b class="fc"><i>133</i>&nbsp;      sentences = new String[spans.length];</b>
+<b class="fc"><i>134</i>&nbsp;      for (int si = 0; si &lt; spans.length; si++) {</b>
+<b class="fc"><i>135</i>&nbsp;        sentences[si] = spans[si].getCoveredText(s).toString();</b>
+<i>136</i>&nbsp;      }
+<i>137</i>&nbsp;    }
+<i>138</i>&nbsp;    else {
+<b class="fc"><i>139</i>&nbsp;      sentences = new String[] {};</b>
+<i>140</i>&nbsp;    }
+<b class="fc"><i>141</i>&nbsp;    return sentences;</b>
+<i>142</i>&nbsp;  }
+<i>143</i>&nbsp;
+<i>144</i>&nbsp;  private int getFirstWS(String s, int pos) {
+<b class="fc"><i>145</i>&nbsp;    while (pos &lt; s.length() &amp;&amp; !StringUtil.isWhitespace(s.charAt(pos)))</b>
+<b class="fc"><i>146</i>&nbsp;      pos++;</b>
+<b class="fc"><i>147</i>&nbsp;    return pos;</b>
+<i>148</i>&nbsp;  }
+<i>149</i>&nbsp;
+<i>150</i>&nbsp;  private int getFirstNonWS(String s, int pos) {
+<b class="fc"><i>151</i>&nbsp;    while (pos &lt; s.length() &amp;&amp; StringUtil.isWhitespace(s.charAt(pos)))</b>
+<b class="fc"><i>152</i>&nbsp;      pos++;</b>
+<b class="fc"><i>153</i>&nbsp;    return pos;</b>
+<i>154</i>&nbsp;  }
+<i>155</i>&nbsp;
+<i>156</i>&nbsp;  /**
+<i>157</i>&nbsp;   * Detect the position of the first words of sentences in a String.
+<i>158</i>&nbsp;   *
+<i>159</i>&nbsp;   * @param s  The string to be processed.
+<i>160</i>&nbsp;   * @return   A integer array containing the positions of the end index of
+<i>161</i>&nbsp;   *          every sentence
+<i>162</i>&nbsp;   *
+<i>163</i>&nbsp;   */
+<i>164</i>&nbsp;  public Span[] sentPosDetect(String s) {
+<b class="fc"><i>165</i>&nbsp;    sentProbs.clear();</b>
+<b class="fc"><i>166</i>&nbsp;    StringBuffer sb = new StringBuffer(s);</b>
+<b class="fc"><i>167</i>&nbsp;    List&lt;Integer&gt; enders = scanner.getPositions(s);</b>
+<b class="fc"><i>168</i>&nbsp;    List&lt;Integer&gt; positions = new ArrayList&lt;&gt;(enders.size());</b>
+<i>169</i>&nbsp;
+<b class="fc"><i>170</i>&nbsp;    for (int i = 0, end = enders.size(), index = 0; i &lt; end; i++) {</b>
+<b class="fc"><i>171</i>&nbsp;      int cint = enders.get(i);</b>
+<i>172</i>&nbsp;      // skip over the leading parts of non-token final delimiters
+<b class="fc"><i>173</i>&nbsp;      int fws = getFirstWS(s,cint + 1);</b>
+<b class="fc"><i>174</i>&nbsp;      if (i + 1 &lt; end &amp;&amp; enders.get(i + 1) &lt; fws) {</b>
+<b class="nc"><i>175</i>&nbsp;        continue;</b>
+<i>176</i>&nbsp;      }
+<b class="fc"><i>177</i>&nbsp;      if (positions.size() &gt; 0 &amp;&amp; cint &lt; positions.get(positions.size() - 1)) continue;</b>
+<i>178</i>&nbsp;
+<b class="fc"><i>179</i>&nbsp;      double[] probs = model.eval(cgen.getContext(sb, cint));</b>
+<b class="fc"><i>180</i>&nbsp;      String bestOutcome = model.getBestOutcome(probs);</b>
+<i>181</i>&nbsp;
+<b class="fc"><i>182</i>&nbsp;      if (bestOutcome.equals(SPLIT) &amp;&amp; isAcceptableBreak(s, index, cint)) {</b>
+<b class="fc"><i>183</i>&nbsp;        if (index != cint) {</b>
+<b class="fc"><i>184</i>&nbsp;          if (useTokenEnd) {</b>
+<b class="fc"><i>185</i>&nbsp;            positions.add(getFirstNonWS(s, getFirstWS(s,cint + 1)));</b>
+<i>186</i>&nbsp;          }
+<i>187</i>&nbsp;          else {
+<b class="nc"><i>188</i>&nbsp;            positions.add(getFirstNonWS(s, cint + 1));</b>
+<i>189</i>&nbsp;          }
+<b class="fc"><i>190</i>&nbsp;          sentProbs.add(probs[model.getIndex(bestOutcome)]);</b>
+<i>191</i>&nbsp;        }
+<i>192</i>&nbsp;
+<b class="fc"><i>193</i>&nbsp;        index = cint + 1;</b>
+<i>194</i>&nbsp;      }
+<i>195</i>&nbsp;    }
+<i>196</i>&nbsp;
+<b class="fc"><i>197</i>&nbsp;    int[] starts = new int[positions.size()];</b>
+<b class="fc"><i>198</i>&nbsp;    for (int i = 0; i &lt; starts.length; i++) {</b>
+<b class="fc"><i>199</i>&nbsp;      starts[i] = positions.get(i);</b>
+<i>200</i>&nbsp;    }
+<i>201</i>&nbsp;
+<i>202</i>&nbsp;    // string does not contain sentence end positions
+<b class="fc"><i>203</i>&nbsp;    if (starts.length == 0) {</b>
+<i>204</i>&nbsp;
+<i>205</i>&nbsp;      // remove leading and trailing whitespace
+<b class="fc"><i>206</i>&nbsp;      int start = 0;</b>
+<b class="fc"><i>207</i>&nbsp;      int end = s.length();</b>
+<i>208</i>&nbsp;
+<b class="fc"><i>209</i>&nbsp;      while (start &lt; s.length() &amp;&amp; StringUtil.isWhitespace(s.charAt(start)))</b>
+<b class="fc"><i>210</i>&nbsp;        start++;</b>
+<i>211</i>&nbsp;
+<b class="fc"><i>212</i>&nbsp;      while (end &gt; 0 &amp;&amp; StringUtil.isWhitespace(s.charAt(end - 1)))</b>
+<b class="fc"><i>213</i>&nbsp;        end--;</b>
+<i>214</i>&nbsp;
+<b class="fc"><i>215</i>&nbsp;      if (end - start &gt; 0) {</b>
+<b class="fc"><i>216</i>&nbsp;        sentProbs.add(1d);</b>
+<b class="fc"><i>217</i>&nbsp;        return new Span[] {new Span(start, end)};</b>
+<i>218</i>&nbsp;      }
+<i>219</i>&nbsp;      else
+<b class="fc"><i>220</i>&nbsp;        return new Span[0];</b>
+<i>221</i>&nbsp;    }
+<i>222</i>&nbsp;
+<i>223</i>&nbsp;    // Convert the sentence end indexes to spans
+<i>224</i>&nbsp;
+<b class="fc"><i>225</i>&nbsp;    boolean leftover = starts[starts.length - 1] != s.length();</b>
+<b class="fc"><i>226</i>&nbsp;    Span[] spans = new Span[leftover ? starts.length + 1 : starts.length];</b>
+<i>227</i>&nbsp;
+<b class="fc"><i>228</i>&nbsp;    for (int si = 0; si &lt; starts.length; si++) {</b>
+<i>229</i>&nbsp;      int start;
+<i>230</i>&nbsp;
+<b class="fc"><i>231</i>&nbsp;      if (si == 0) {</b>
+<b class="fc"><i>232</i>&nbsp;        start = 0;</b>
+<i>233</i>&nbsp;      }
+<i>234</i>&nbsp;      else {
+<b class="fc"><i>235</i>&nbsp;        start = starts[si - 1];</b>
+<i>236</i>&nbsp;      }
+<i>237</i>&nbsp;
+<i>238</i>&nbsp;      // A span might contain only white spaces, in this case the length of
+<i>239</i>&nbsp;      // the span will be zero after trimming and should be ignored.
+<b class="fc"><i>240</i>&nbsp;      Span span = new Span(start, starts[si]).trim(s);</b>
+<b class="fc"><i>241</i>&nbsp;      if (span.length() &gt; 0) {</b>
+<b class="fc"><i>242</i>&nbsp;        spans[si] = span;</b>
+<i>243</i>&nbsp;      }
+<i>244</i>&nbsp;      else {
+<b class="nc"><i>245</i>&nbsp;        sentProbs.remove(si);</b>
+<i>246</i>&nbsp;      }
+<i>247</i>&nbsp;    }
+<i>248</i>&nbsp;
+<b class="fc"><i>249</i>&nbsp;    if (leftover) {</b>
+<b class="fc"><i>250</i>&nbsp;      Span span = new Span(starts[starts.length - 1], s.length()).trim(s);</b>
+<b class="fc"><i>251</i>&nbsp;      if (span.length() &gt; 0) {</b>
+<b class="fc"><i>252</i>&nbsp;        spans[spans.length - 1] = span;</b>
+<b class="fc"><i>253</i>&nbsp;        sentProbs.add(1d);</b>
+<i>254</i>&nbsp;      }
+<i>255</i>&nbsp;    }
+<i>256</i>&nbsp;    /*
+<i>257</i>&nbsp;     * set the prob for each span
+<i>258</i>&nbsp;     */
+<b class="fc"><i>259</i>&nbsp;    for (int i = 0; i &lt; spans.length; i++) {</b>
+<b class="fc"><i>260</i>&nbsp;      double prob = sentProbs.get(i);</b>
+<b class="fc"><i>261</i>&nbsp;      spans[i] = new Span(spans[i], prob);</b>
+<i>262</i>&nbsp;
+<i>263</i>&nbsp;    }
+<i>264</i>&nbsp;
+<b class="fc"><i>265</i>&nbsp;    return spans;</b>
+<i>266</i>&nbsp;  }
+<i>267</i>&nbsp;
+<i>268</i>&nbsp;  /**
+<i>269</i>&nbsp;   * Returns the probabilities associated with the most recent
+<i>270</i>&nbsp;   * calls to sentDetect().
+<i>271</i>&nbsp;   *
+<i>272</i>&nbsp;   * @return probability for each sentence returned for the most recent
+<i>273</i>&nbsp;   *     call to sentDetect.  If not applicable an empty array is returned.
+<i>274</i>&nbsp;   */
+<i>275</i>&nbsp;  public double[] getSentenceProbabilities() {
+<b class="fc"><i>276</i>&nbsp;    double[] sentProbArray = new double[sentProbs.size()];</b>
+<b class="fc"><i>277</i>&nbsp;    for (int i = 0; i &lt; sentProbArray.length; i++) {</b>
+<b class="fc"><i>278</i>&nbsp;      sentProbArray[i] = sentProbs.get(i);</b>
+<i>279</i>&nbsp;    }
+<b class="fc"><i>280</i>&nbsp;    return sentProbArray;</b>
+<i>281</i>&nbsp;  }
+<i>282</i>&nbsp;
+<i>283</i>&nbsp;  /**
+<i>284</i>&nbsp;   * Allows subclasses to check an overzealous (read: poorly
+<i>285</i>&nbsp;   * trained) model from flagging obvious non-breaks as breaks based
+<i>286</i>&nbsp;   * on some boolean determination of a break&#39;s acceptability.
+<i>287</i>&nbsp;   *
+<i>288</i>&nbsp;   * &lt;p&gt;The implementation here always returns true, which means
+<i>289</i>&nbsp;   * that the MaxentModel&#39;s outcome is taken as is.&lt;/p&gt;
+<i>290</i>&nbsp;   *
+<i>291</i>&nbsp;   * @param s the string in which the break occurred.
+<i>292</i>&nbsp;   * @param fromIndex the start of the segment currently being evaluated
+<i>293</i>&nbsp;   * @param candidateIndex the index of the candidate sentence ending
+<i>294</i>&nbsp;   * @return true if the break is acceptable
+<i>295</i>&nbsp;   */
+<i>296</i>&nbsp;  protected boolean isAcceptableBreak(String s, int fromIndex, int candidateIndex) {
+<b class="fc"><i>297</i>&nbsp;    return true;</b>
+<i>298</i>&nbsp;  }
+<i>299</i>&nbsp;
+<i>300</i>&nbsp;  /**
+<i>301</i>&nbsp;   * @deprecated Use
+<i>302</i>&nbsp;   *             {@link #train(String, ObjectStream, SentenceDetectorFactory, TrainingParameters)}
+<i>303</i>&nbsp;   *             and pass in af {@link SentenceDetectorFactory}.
+<i>304</i>&nbsp;   */
+<i>305</i>&nbsp;  public static SentenceModel train(String languageCode,
+<i>306</i>&nbsp;      ObjectStream&lt;SentenceSample&gt; samples, boolean useTokenEnd,
+<i>307</i>&nbsp;      Dictionary abbreviations, TrainingParameters mlParams) throws IOException {
+<b class="nc"><i>308</i>&nbsp;    SentenceDetectorFactory sdFactory = new SentenceDetectorFactory(</b>
+<i>309</i>&nbsp;        languageCode, useTokenEnd, abbreviations, null);
+<b class="nc"><i>310</i>&nbsp;    return train(languageCode, samples, sdFactory, mlParams);</b>
+<i>311</i>&nbsp;  }
+<i>312</i>&nbsp;
+<i>313</i>&nbsp;  public static SentenceModel train(String languageCode,
+<i>314</i>&nbsp;      ObjectStream&lt;SentenceSample&gt; samples, SentenceDetectorFactory sdFactory,
+<i>315</i>&nbsp;      TrainingParameters mlParams) throws IOException {
+<i>316</i>&nbsp;
+<b class="fc"><i>317</i>&nbsp;    Map&lt;String, String&gt; manifestInfoEntries = new HashMap&lt;&gt;();</b>
+<i>318</i>&nbsp;
+<i>319</i>&nbsp;    // TODO: Fix the EventStream to throw exceptions when training goes wrong
+<b class="fc"><i>320</i>&nbsp;    ObjectStream&lt;Event&gt; eventStream = new SDEventStream(samples,</b>
+<b class="fc"><i>321</i>&nbsp;        sdFactory.getSDContextGenerator(), sdFactory.getEndOfSentenceScanner());</b>
+<i>322</i>&nbsp;
+<b class="fc"><i>323</i>&nbsp;    EventTrainer trainer = TrainerFactory.getEventTrainer(mlParams, manifestInfoEntries);</b>
+<i>324</i>&nbsp;
+<b class="fc"><i>325</i>&nbsp;    MaxentModel sentModel = trainer.train(eventStream);</b>
+<i>326</i>&nbsp;
+<b class="fc"><i>327</i>&nbsp;    return new SentenceModel(languageCode, sentModel, manifestInfoEntries, sdFactory);</b>
+<i>328</i>&nbsp;  }
+<i>329</i>&nbsp;
+<i>330</i>&nbsp;  /**
+<i>331</i>&nbsp;   * @deprecated Use
+<i>332</i>&nbsp;   *             {@link #train(String, ObjectStream, SentenceDetectorFactory, TrainingParameters)}
+<i>333</i>&nbsp;   *             and pass in af {@link SentenceDetectorFactory}.
+<i>334</i>&nbsp;   */
+<i>335</i>&nbsp;  @Deprecated
+<i>336</i>&nbsp;  public static SentenceModel train(String languageCode, ObjectStream&lt;SentenceSample&gt; samples,
+<i>337</i>&nbsp;      boolean useTokenEnd, Dictionary abbreviations) throws IOException {
+<b class="nc"><i>338</i>&nbsp;    return train(languageCode, samples, useTokenEnd, abbreviations,</b>
+<b class="nc"><i>339</i>&nbsp;        ModelUtil.createDefaultTrainingParameters());</b>
+<i>340</i>&nbsp;  }
+<i>341</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-09 18:47</div>
+</div>
+</body>
+</html>

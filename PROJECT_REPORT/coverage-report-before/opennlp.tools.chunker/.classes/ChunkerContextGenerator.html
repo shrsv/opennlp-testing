@@ -1,0 +1,86 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: ChunkerContextGenerator</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">opennlp.tools.chunker</a> ]
+</div>
+
+<h1>Coverage Summary for Class: ChunkerContextGenerator (opennlp.tools.chunker)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+</tr>
+<tr>
+  <td class="name">ChunkerContextGenerator</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/*
+<i>2</i>&nbsp; * Licensed to the Apache Software Foundation (ASF) under one or more
+<i>3</i>&nbsp; * contributor license agreements.  See the NOTICE file distributed with
+<i>4</i>&nbsp; * this work for additional information regarding copyright ownership.
+<i>5</i>&nbsp; * The ASF licenses this file to You under the Apache License, Version 2.0
+<i>6</i>&nbsp; * (the &quot;License&quot;); you may not use this file except in compliance with
+<i>7</i>&nbsp; * the License. You may obtain a copy of the License at
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; *     http://www.apache.org/licenses/LICENSE-2.0
+<i>10</i>&nbsp; *
+<i>11</i>&nbsp; * Unless required by applicable law or agreed to in writing, software
+<i>12</i>&nbsp; * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<i>13</i>&nbsp; * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<i>14</i>&nbsp; * See the License for the specific language governing permissions and
+<i>15</i>&nbsp; * limitations under the License.
+<i>16</i>&nbsp; */
+<i>17</i>&nbsp;
+<i>18</i>&nbsp;package opennlp.tools.chunker;
+<i>19</i>&nbsp;
+<i>20</i>&nbsp;import opennlp.tools.util.BeamSearchContextGenerator;
+<i>21</i>&nbsp;import opennlp.tools.util.TokenTag;
+<i>22</i>&nbsp;
+<i>23</i>&nbsp;/**
+<i>24</i>&nbsp; * Interface for the context generator used in syntactic chunking.
+<i>25</i>&nbsp; */
+<i>26</i>&nbsp;public interface ChunkerContextGenerator extends BeamSearchContextGenerator&lt;TokenTag&gt; {
+<i>27</i>&nbsp;
+<i>28</i>&nbsp;  /**
+<i>29</i>&nbsp;   * Returns the contexts for chunking of the specified index.
+<i>30</i>&nbsp;   * @param i The index of the token in the specified toks array for which the context should be constructed.
+<i>31</i>&nbsp;   * @param toks The tokens of the sentence.  The &lt;code&gt;toString&lt;/code&gt; methods of these objects
+<i>32</i>&nbsp;   *             should return the token text.
+<i>33</i>&nbsp;   * @param tags The POS tags for the the specified tokens.
+<i>34</i>&nbsp;   * @param preds The previous decisions made in the taging of this sequence.
+<i>35</i>&nbsp;   *              Only indices less than i will be examined.
+<i>36</i>&nbsp;   * @return An array of predictive contexts on which a model basis its decisions.
+<i>37</i>&nbsp;   */
+<i>38</i>&nbsp;  String[] getContext(int i, String[] toks, String[] tags, String[] preds);
+<i>39</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-09 15:05</div>
+</div>
+</body>
+</html>

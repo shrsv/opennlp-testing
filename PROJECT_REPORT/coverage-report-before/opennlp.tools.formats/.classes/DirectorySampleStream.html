@@ -1,0 +1,218 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: DirectorySampleStream</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">opennlp.tools.formats</a> ]
+</div>
+
+<h1>Coverage Summary for Class: DirectorySampleStream (opennlp.tools.formats)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">DirectorySampleStream</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (5/ 5)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (36/ 36)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/*
+<i>2</i>&nbsp; * Licensed to the Apache Software Foundation (ASF) under one or more
+<i>3</i>&nbsp; * contributor license agreements.  See the NOTICE file distributed with
+<i>4</i>&nbsp; * this work for additional information regarding copyright ownership.
+<i>5</i>&nbsp; * The ASF licenses this file to You under the Apache License, Version 2.0
+<i>6</i>&nbsp; * (the &quot;License&quot;); you may not use this file except in compliance with
+<i>7</i>&nbsp; * the License. You may obtain a copy of the License at
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; *     http://www.apache.org/licenses/LICENSE-2.0
+<i>10</i>&nbsp; *
+<i>11</i>&nbsp; * Unless required by applicable law or agreed to in writing, software
+<i>12</i>&nbsp; * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<i>13</i>&nbsp; * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<i>14</i>&nbsp; * See the License for the specific language governing permissions and
+<i>15</i>&nbsp; * limitations under the License.
+<i>16</i>&nbsp; */
+<i>17</i>&nbsp;
+<i>18</i>&nbsp;package opennlp.tools.formats;
+<i>19</i>&nbsp;
+<i>20</i>&nbsp;import java.io.File;
+<i>21</i>&nbsp;import java.io.FileFilter;
+<i>22</i>&nbsp;import java.io.IOException;
+<i>23</i>&nbsp;import java.util.ArrayList;
+<i>24</i>&nbsp;import java.util.Arrays;
+<i>25</i>&nbsp;import java.util.Collections;
+<i>26</i>&nbsp;import java.util.List;
+<i>27</i>&nbsp;import java.util.Stack;
+<i>28</i>&nbsp;
+<i>29</i>&nbsp;import opennlp.tools.util.ObjectStream;
+<i>30</i>&nbsp;
+<i>31</i>&nbsp;/**
+<i>32</i>&nbsp; * The directory sample stream allows for creating a stream
+<i>33</i>&nbsp; * from a directory listing of files.
+<i>34</i>&nbsp; */
+<i>35</i>&nbsp;public class DirectorySampleStream implements ObjectStream&lt;File&gt; {
+<i>36</i>&nbsp;
+<i>37</i>&nbsp;  private final List&lt;File&gt; inputDirectories;
+<i>38</i>&nbsp;
+<i>39</i>&nbsp;  private final boolean recursive;
+<i>40</i>&nbsp;
+<i>41</i>&nbsp;  private final FileFilter fileFilter;
+<i>42</i>&nbsp;
+<b class="fc"><i>43</i>&nbsp;  private Stack&lt;File&gt; directories = new Stack&lt;&gt;();</b>
+<i>44</i>&nbsp;
+<b class="fc"><i>45</i>&nbsp;  private Stack&lt;File&gt; textFiles = new Stack&lt;&gt;();</b>
+<i>46</i>&nbsp;  
+<i>47</i>&nbsp;  /**
+<i>48</i>&nbsp;   * Creates a new directory sample stream.
+<i>49</i>&nbsp;   * @param dirs The directories to read.
+<i>50</i>&nbsp;   * @param fileFilter The {@link FileFilter filter} to apply while enumerating files.
+<i>51</i>&nbsp;   * @param recursive Enables or disables recursive file listing.
+<i>52</i>&nbsp;   */
+<b class="fc"><i>53</i>&nbsp;  public DirectorySampleStream(File[] dirs, FileFilter fileFilter, boolean recursive) {</b>
+<b class="fc"><i>54</i>&nbsp;    this.fileFilter = fileFilter;</b>
+<b class="fc"><i>55</i>&nbsp;    this.recursive = recursive;</b>
+<i>56</i>&nbsp;
+<b class="fc"><i>57</i>&nbsp;    List&lt;File&gt; inputDirectoryList = new ArrayList&lt;&gt;(dirs.length);</b>
+<i>58</i>&nbsp;
+<b class="fc"><i>59</i>&nbsp;    for (File dir : dirs) {</b>
+<b class="fc"><i>60</i>&nbsp;      if (!dir.isDirectory()) {</b>
+<b class="fc"><i>61</i>&nbsp;        throw new IllegalArgumentException(</b>
+<i>62</i>&nbsp;            &quot;All passed in directories must be directories, but \&quot;&quot;
+<b class="fc"><i>63</i>&nbsp;            + dir.toString() + &quot;\&quot; is not!&quot;);</b>
+<i>64</i>&nbsp;      }
+<i>65</i>&nbsp;
+<b class="fc"><i>66</i>&nbsp;      inputDirectoryList.add(dir);</b>
+<i>67</i>&nbsp;    }
+<i>68</i>&nbsp;
+<b class="fc"><i>69</i>&nbsp;    inputDirectories = Collections.unmodifiableList(inputDirectoryList);</b>
+<i>70</i>&nbsp;
+<b class="fc"><i>71</i>&nbsp;    directories.addAll(inputDirectories);</b>
+<b class="fc"><i>72</i>&nbsp;  }</b>
+<i>73</i>&nbsp;
+<i>74</i>&nbsp;  /**
+<i>75</i>&nbsp;   * Creates a new directory sample stream.
+<i>76</i>&nbsp;   * @param dir The {@link File directory}.
+<i>77</i>&nbsp;   * @param fileFilter The {@link FileFilter filter} to apply while enumerating files.
+<i>78</i>&nbsp;   * @param recursive Enables or disables recursive file listing.
+<i>79</i>&nbsp;   */
+<i>80</i>&nbsp;  public DirectorySampleStream(File dir, FileFilter fileFilter, boolean recursive) {
+<b class="fc"><i>81</i>&nbsp;    this(new File[]{dir}, fileFilter, recursive);</b>
+<b class="fc"><i>82</i>&nbsp;  }</b>
+<i>83</i>&nbsp;
+<i>84</i>&nbsp;  @Override
+<i>85</i>&nbsp;  public File read() throws IOException {
+<i>86</i>&nbsp;
+<b class="fc"><i>87</i>&nbsp;    while (textFiles.isEmpty() &amp;&amp; !directories.isEmpty()) {</b>
+<b class="fc"><i>88</i>&nbsp;      File dir = directories.pop();</b>
+<i>89</i>&nbsp;
+<i>90</i>&nbsp;      File[] files;
+<i>91</i>&nbsp;
+<b class="fc"><i>92</i>&nbsp;      if (fileFilter != null) {</b>
+<b class="fc"><i>93</i>&nbsp;        files = dir.listFiles(fileFilter);</b>
+<i>94</i>&nbsp;      }
+<i>95</i>&nbsp;      else {
+<b class="fc"><i>96</i>&nbsp;        files = dir.listFiles();</b>
+<i>97</i>&nbsp;      }
+<i>98</i>&nbsp;
+<b class="fc"><i>99</i>&nbsp;      Arrays.sort(files);</b>
+<i>100</i>&nbsp;
+<b class="fc"><i>101</i>&nbsp;      for (File file : files) {</b>
+<b class="fc"><i>102</i>&nbsp;        if (file.isFile()) {</b>
+<b class="fc"><i>103</i>&nbsp;          textFiles.push(file);</b>
+<i>104</i>&nbsp;        }
+<b class="fc"><i>105</i>&nbsp;        else if (recursive &amp;&amp; file.isDirectory()) {</b>
+<b class="fc"><i>106</i>&nbsp;          directories.push(file);</b>
+<i>107</i>&nbsp;        }
+<i>108</i>&nbsp;      }
+<b class="fc"><i>109</i>&nbsp;    }</b>
+<i>110</i>&nbsp;
+<b class="fc"><i>111</i>&nbsp;    if (!textFiles.isEmpty()) {</b>
+<b class="fc"><i>112</i>&nbsp;      return textFiles.pop();</b>
+<i>113</i>&nbsp;    }
+<i>114</i>&nbsp;    else {
+<b class="fc"><i>115</i>&nbsp;      return null;</b>
+<i>116</i>&nbsp;    }
+<i>117</i>&nbsp;  }
+<i>118</i>&nbsp;
+<i>119</i>&nbsp;  @Override
+<i>120</i>&nbsp;  public void reset() {
+<b class="fc"><i>121</i>&nbsp;    directories.clear();</b>
+<b class="fc"><i>122</i>&nbsp;    textFiles.clear();</b>
+<i>123</i>&nbsp;
+<b class="fc"><i>124</i>&nbsp;    directories.addAll(inputDirectories);</b>
+<b class="fc"><i>125</i>&nbsp;  }</b>
+<i>126</i>&nbsp;
+<i>127</i>&nbsp;  /**
+<i>128</i>&nbsp;   * {@inheritDoc}
+<i>129</i>&nbsp;   * Calling this function has no effect on
+<i>130</i>&nbsp;   * the stream.
+<i>131</i>&nbsp;   */
+<i>132</i>&nbsp;  @Override
+<i>133</i>&nbsp;  public void close() throws IOException {
+<b class="fc"><i>134</i>&nbsp;  }</b>
+<i>135</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-09 15:05</div>
+</div>
+</body>
+</html>

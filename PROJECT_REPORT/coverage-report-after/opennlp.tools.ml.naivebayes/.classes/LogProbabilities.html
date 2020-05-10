@@ -1,0 +1,290 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: LogProbabilities</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">opennlp.tools.ml.naivebayes</a> ]
+</div>
+
+<h1>Coverage Summary for Class: LogProbabilities (opennlp.tools.ml.naivebayes)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">LogProbabilities</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    38.5%
+  </span>
+  <span class="absValue">
+    (5/ 13)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    48.8%
+  </span>
+  <span class="absValue">
+    (41/ 84)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/*
+<i>2</i>&nbsp; * Licensed to the Apache Software Foundation (ASF) under one or more
+<i>3</i>&nbsp; * contributor license agreements.  See the NOTICE file distributed with
+<i>4</i>&nbsp; * this work for additional information regarding copyright ownership.
+<i>5</i>&nbsp; * The ASF licenses this file to You under the Apache License, Version 2.0
+<i>6</i>&nbsp; * (the &quot;License&quot;); you may not use this file except in compliance with
+<i>7</i>&nbsp; * the License. You may obtain a copy of the License at
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; *     http://www.apache.org/licenses/LICENSE-2.0
+<i>10</i>&nbsp; *
+<i>11</i>&nbsp; * Unless required by applicable law or agreed to in writing, software
+<i>12</i>&nbsp; * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<i>13</i>&nbsp; * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<i>14</i>&nbsp; * See the License for the specific language governing permissions and
+<i>15</i>&nbsp; * limitations under the License.
+<i>16</i>&nbsp; */
+<i>17</i>&nbsp;
+<i>18</i>&nbsp;package opennlp.tools.ml.naivebayes;
+<i>19</i>&nbsp;
+<i>20</i>&nbsp;import java.util.ArrayList;
+<i>21</i>&nbsp;import java.util.Map;
+<i>22</i>&nbsp;import java.util.Map.Entry;
+<i>23</i>&nbsp;
+<i>24</i>&nbsp;/**
+<i>25</i>&nbsp; * Class implementing the probability distribution over labels returned by
+<i>26</i>&nbsp; * a classifier as a log of probabilities.
+<i>27</i>&nbsp; * This is necessary because floating point precision in Java does not allow for high-accuracy
+<i>28</i>&nbsp; * representation of very low probabilities such as would occur in a text categorizer.
+<i>29</i>&nbsp; *
+<i>30</i>&nbsp; * @param &lt;T&gt; the label (category) class
+<i>31</i>&nbsp; *
+<i>32</i>&nbsp; */
+<b class="fc"><i>33</i>&nbsp;public class LogProbabilities&lt;T&gt; extends Probabilities&lt;T&gt; {</b>
+<i>34</i>&nbsp;
+<i>35</i>&nbsp;  /**
+<i>36</i>&nbsp;   * Assigns a probability to a label, discarding any previously assigned probability.
+<i>37</i>&nbsp;   *
+<i>38</i>&nbsp;   * @param t           the label to which the probability is being assigned
+<i>39</i>&nbsp;   * @param probability the probability to assign
+<i>40</i>&nbsp;   */
+<i>41</i>&nbsp;  public void set(T t, double probability) {
+<b class="nc"><i>42</i>&nbsp;    isNormalised = false;</b>
+<b class="nc"><i>43</i>&nbsp;    map.put(t, log(probability));</b>
+<b class="nc"><i>44</i>&nbsp;  }</b>
+<i>45</i>&nbsp;
+<i>46</i>&nbsp;  /**
+<i>47</i>&nbsp;   * Assigns a probability to a label, discarding any previously assigned probability.
+<i>48</i>&nbsp;   *
+<i>49</i>&nbsp;   * @param t           the label to which the probability is being assigned
+<i>50</i>&nbsp;   * @param probability the probability to assign
+<i>51</i>&nbsp;   */
+<i>52</i>&nbsp;  public void set(T t, Probability&lt;T&gt; probability) {
+<b class="nc"><i>53</i>&nbsp;    isNormalised = false;</b>
+<b class="nc"><i>54</i>&nbsp;    map.put(t, probability.getLog());</b>
+<b class="nc"><i>55</i>&nbsp;  }</b>
+<i>56</i>&nbsp;
+<i>57</i>&nbsp;  /**
+<i>58</i>&nbsp;   * Assigns a probability to a label, discarding any previously assigned probability,
+<i>59</i>&nbsp;   * if the new probability is greater than the old one.
+<i>60</i>&nbsp;   *
+<i>61</i>&nbsp;   * @param t           the label to which the probability is being assigned
+<i>62</i>&nbsp;   * @param probability the probability to assign
+<i>63</i>&nbsp;   */
+<i>64</i>&nbsp;  public void setIfLarger(T t, double probability) {
+<b class="nc"><i>65</i>&nbsp;    double logProbability = log(probability);</b>
+<b class="nc"><i>66</i>&nbsp;    Double p = map.get(t);</b>
+<b class="nc"><i>67</i>&nbsp;    if (p == null || logProbability &gt; p) {</b>
+<b class="nc"><i>68</i>&nbsp;      isNormalised = false;</b>
+<b class="nc"><i>69</i>&nbsp;      map.put(t, logProbability);</b>
+<i>70</i>&nbsp;    }
+<b class="nc"><i>71</i>&nbsp;  }</b>
+<i>72</i>&nbsp;
+<i>73</i>&nbsp;  /**
+<i>74</i>&nbsp;   * Assigns a log probability to a label, discarding any previously assigned probability.
+<i>75</i>&nbsp;   *
+<i>76</i>&nbsp;   * @param t           the label to which the log probability is being assigned
+<i>77</i>&nbsp;   * @param probability the log probability to assign
+<i>78</i>&nbsp;   */
+<i>79</i>&nbsp;  public void setLog(T t, double probability) {
+<b class="nc"><i>80</i>&nbsp;    isNormalised = false;</b>
+<b class="nc"><i>81</i>&nbsp;    map.put(t, probability);</b>
+<b class="nc"><i>82</i>&nbsp;  }</b>
+<i>83</i>&nbsp;
+<i>84</i>&nbsp;  /**
+<i>85</i>&nbsp;   * Compounds the existing probability mass on the label with the new probability passed in to the method.
+<i>86</i>&nbsp;   *
+<i>87</i>&nbsp;   * @param t           the label whose probability mass is being updated
+<i>88</i>&nbsp;   * @param probability the probability weight to add
+<i>89</i>&nbsp;   * @param count       the amplifying factor for the probability compounding
+<i>90</i>&nbsp;   */
+<i>91</i>&nbsp;  public void addIn(T t, double probability, int count) {
+<b class="fc"><i>92</i>&nbsp;    isNormalised = false;</b>
+<b class="fc"><i>93</i>&nbsp;    Double p = map.get(t);</b>
+<b class="fc"><i>94</i>&nbsp;    if (p == null)</b>
+<b class="fc"><i>95</i>&nbsp;      p = 0.0;</b>
+<b class="fc"><i>96</i>&nbsp;    probability = log(probability) * count;</b>
+<b class="fc"><i>97</i>&nbsp;    map.put(t, p + probability);</b>
+<b class="fc"><i>98</i>&nbsp;  }</b>
+<i>99</i>&nbsp;
+<i>100</i>&nbsp;  private Map&lt;T, Double&gt; normalize() {
+<b class="fc"><i>101</i>&nbsp;    if (isNormalised)</b>
+<b class="fc"><i>102</i>&nbsp;      return normalised;</b>
+<b class="fc"><i>103</i>&nbsp;    Map&lt;T, Double&gt; temp = createMapDataStructure();</b>
+<b class="fc"><i>104</i>&nbsp;    double highestLogProbability = Double.NEGATIVE_INFINITY;</b>
+<b class="fc"><i>105</i>&nbsp;    for (Entry&lt;T, Double&gt; entry : map.entrySet()) {</b>
+<b class="fc"><i>106</i>&nbsp;      final Double p = entry.getValue();</b>
+<b class="fc"><i>107</i>&nbsp;      if (p != null &amp;&amp; p &gt; highestLogProbability) {</b>
+<b class="fc"><i>108</i>&nbsp;        highestLogProbability = p;</b>
+<i>109</i>&nbsp;      }
+<b class="fc"><i>110</i>&nbsp;    }</b>
+<b class="fc"><i>111</i>&nbsp;    double sum = 0;</b>
+<b class="fc"><i>112</i>&nbsp;    for (Entry&lt;T, Double&gt; entry : map.entrySet()) {</b>
+<b class="fc"><i>113</i>&nbsp;      T t = entry.getKey();</b>
+<b class="fc"><i>114</i>&nbsp;      Double p = entry.getValue();</b>
+<b class="fc"><i>115</i>&nbsp;      if (p != null) {</b>
+<b class="fc"><i>116</i>&nbsp;        double temp_p = Math.exp(p - highestLogProbability);</b>
+<b class="fc"><i>117</i>&nbsp;        if (!Double.isNaN(temp_p)) {</b>
+<b class="fc"><i>118</i>&nbsp;          sum += temp_p;</b>
+<b class="fc"><i>119</i>&nbsp;          temp.put(t, temp_p);</b>
+<i>120</i>&nbsp;        }
+<i>121</i>&nbsp;      }
+<b class="fc"><i>122</i>&nbsp;    }</b>
+<b class="fc"><i>123</i>&nbsp;    for (Entry&lt;T, Double&gt; entry : temp.entrySet()) {</b>
+<b class="fc"><i>124</i>&nbsp;      final T t = entry.getKey();</b>
+<b class="fc"><i>125</i>&nbsp;      final Double p = entry.getValue();</b>
+<b class="fc"><i>126</i>&nbsp;      if (p != null &amp;&amp; sum &gt; Double.MIN_VALUE) {</b>
+<b class="fc"><i>127</i>&nbsp;        temp.put(t, p / sum);</b>
+<i>128</i>&nbsp;      }
+<b class="fc"><i>129</i>&nbsp;    }</b>
+<b class="fc"><i>130</i>&nbsp;    normalised = temp;</b>
+<b class="fc"><i>131</i>&nbsp;    isNormalised = true;</b>
+<b class="fc"><i>132</i>&nbsp;    return temp;</b>
+<i>133</i>&nbsp;  }
+<i>134</i>&nbsp;
+<i>135</i>&nbsp;  private double log(double prob) {
+<b class="fc"><i>136</i>&nbsp;    return Math.log(prob);</b>
+<i>137</i>&nbsp;  }
+<i>138</i>&nbsp;
+<i>139</i>&nbsp;  /**
+<i>140</i>&nbsp;   * Returns the probability associated with a label
+<i>141</i>&nbsp;   *
+<i>142</i>&nbsp;   * @param t the label whose probability needs to be returned
+<i>143</i>&nbsp;   * @return the probability associated with the label
+<i>144</i>&nbsp;   */
+<i>145</i>&nbsp;  public Double get(T t) {
+<b class="fc"><i>146</i>&nbsp;    Double d = normalize().get(t);</b>
+<b class="fc"><i>147</i>&nbsp;    if (d == null)</b>
+<b class="fc"><i>148</i>&nbsp;      return 0.0;</b>
+<b class="fc"><i>149</i>&nbsp;    return d;</b>
+<i>150</i>&nbsp;  }
+<i>151</i>&nbsp;
+<i>152</i>&nbsp;  /**
+<i>153</i>&nbsp;   * Returns the log probability associated with a label
+<i>154</i>&nbsp;   *
+<i>155</i>&nbsp;   * @param t the label whose log probability needs to be returned
+<i>156</i>&nbsp;   * @return the log probability associated with the label
+<i>157</i>&nbsp;   */
+<i>158</i>&nbsp;  public Double getLog(T t) {
+<b class="nc"><i>159</i>&nbsp;    Double d = map.get(t);</b>
+<b class="nc"><i>160</i>&nbsp;    if (d == null)</b>
+<b class="nc"><i>161</i>&nbsp;      return Double.NEGATIVE_INFINITY;</b>
+<b class="nc"><i>162</i>&nbsp;    return d;</b>
+<i>163</i>&nbsp;  }
+<i>164</i>&nbsp;
+<i>165</i>&nbsp;  public void discardCountsBelow(double i) {
+<b class="nc"><i>166</i>&nbsp;    i = Math.log(i);</b>
+<b class="nc"><i>167</i>&nbsp;    ArrayList&lt;T&gt; labelsToRemove = new ArrayList&lt;&gt;();</b>
+<b class="nc"><i>168</i>&nbsp;    for (Entry&lt;T, Double&gt; entry : map.entrySet()) {</b>
+<b class="nc"><i>169</i>&nbsp;      final T label = entry.getKey();</b>
+<b class="nc"><i>170</i>&nbsp;      Double sum = entry.getValue();</b>
+<b class="nc"><i>171</i>&nbsp;      if (sum == null) sum = Double.NEGATIVE_INFINITY;</b>
+<b class="nc"><i>172</i>&nbsp;      if (sum &lt; i)</b>
+<b class="nc"><i>173</i>&nbsp;        labelsToRemove.add(label);</b>
+<b class="nc"><i>174</i>&nbsp;    }</b>
+<b class="nc"><i>175</i>&nbsp;    for (T label : labelsToRemove) {</b>
+<b class="nc"><i>176</i>&nbsp;      map.remove(label);</b>
+<b class="nc"><i>177</i>&nbsp;    }</b>
+<b class="nc"><i>178</i>&nbsp;  }</b>
+<i>179</i>&nbsp;
+<i>180</i>&nbsp;  /**
+<i>181</i>&nbsp;   * Returns the probabilities associated with all labels
+<i>182</i>&nbsp;   *
+<i>183</i>&nbsp;   * @return the HashMap of labels and their probabilities
+<i>184</i>&nbsp;   */
+<i>185</i>&nbsp;  public Map&lt;T, Double&gt; getAll() {
+<b class="nc"><i>186</i>&nbsp;    return normalize();</b>
+<i>187</i>&nbsp;  }
+<i>188</i>&nbsp;
+<i>189</i>&nbsp;  /**
+<i>190</i>&nbsp;   * Returns the most likely label
+<i>191</i>&nbsp;   *
+<i>192</i>&nbsp;   * @return the label that has the highest associated probability
+<i>193</i>&nbsp;   */
+<i>194</i>&nbsp;  public T getMax() {
+<b class="nc"><i>195</i>&nbsp;    double max = Double.NEGATIVE_INFINITY;</b>
+<b class="nc"><i>196</i>&nbsp;    T maxT = null;</b>
+<b class="nc"><i>197</i>&nbsp;    for (Entry&lt;T, Double&gt; entry : map.entrySet()) {</b>
+<b class="nc"><i>198</i>&nbsp;      final T t = entry.getKey();</b>
+<b class="nc"><i>199</i>&nbsp;      final Double temp = entry.getValue();</b>
+<b class="nc"><i>200</i>&nbsp;      if (temp &gt;= max) {</b>
+<b class="nc"><i>201</i>&nbsp;        max = temp;</b>
+<b class="nc"><i>202</i>&nbsp;        maxT = t;</b>
+<i>203</i>&nbsp;      }
+<b class="nc"><i>204</i>&nbsp;    }</b>
+<b class="nc"><i>205</i>&nbsp;    return maxT;</b>
+<i>206</i>&nbsp;  }
+<i>207</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-09 18:47</div>
+</div>
+</body>
+</html>

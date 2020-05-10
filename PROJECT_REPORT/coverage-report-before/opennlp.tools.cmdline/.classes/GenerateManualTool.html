@@ -1,0 +1,358 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: GenerateManualTool</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">opennlp.tools.cmdline</a> ]
+</div>
+
+<h1>Coverage Summary for Class: GenerateManualTool (opennlp.tools.cmdline)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">GenerateManualTool</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 13)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 104)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/*
+<i>2</i>&nbsp; * Licensed to the Apache Software Foundation (ASF) under one or more
+<i>3</i>&nbsp; * contributor license agreements.  See the NOTICE file distributed with
+<i>4</i>&nbsp; * this work for additional information regarding copyright ownership.
+<i>5</i>&nbsp; * The ASF licenses this file to You under the Apache License, Version 2.0
+<i>6</i>&nbsp; * (the &quot;License&quot;); you may not use this file except in compliance with
+<i>7</i>&nbsp; * the License. You may obtain a copy of the License at
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; *     http://www.apache.org/licenses/LICENSE-2.0
+<i>10</i>&nbsp; *
+<i>11</i>&nbsp; * Unless required by applicable law or agreed to in writing, software
+<i>12</i>&nbsp; * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<i>13</i>&nbsp; * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<i>14</i>&nbsp; * See the License for the specific language governing permissions and
+<i>15</i>&nbsp; * limitations under the License.
+<i>16</i>&nbsp; */
+<i>17</i>&nbsp;
+<i>18</i>&nbsp;package opennlp.tools.cmdline;
+<i>19</i>&nbsp;
+<i>20</i>&nbsp;import java.io.BufferedReader;
+<i>21</i>&nbsp;import java.io.FileNotFoundException;
+<i>22</i>&nbsp;import java.io.PrintWriter;
+<i>23</i>&nbsp;import java.io.StringReader;
+<i>24</i>&nbsp;import java.util.LinkedHashMap;
+<i>25</i>&nbsp;import java.util.List;
+<i>26</i>&nbsp;import java.util.Map;
+<i>27</i>&nbsp;import java.util.Map.Entry;
+<i>28</i>&nbsp;import java.util.Set;
+<i>29</i>&nbsp;import java.util.StringTokenizer;
+<i>30</i>&nbsp;
+<i>31</i>&nbsp;import opennlp.tools.cmdline.ArgumentParser.Argument;
+<i>32</i>&nbsp;
+<b class="nc"><i>33</i>&nbsp;public class GenerateManualTool {</b>
+<i>34</i>&nbsp;
+<i>35</i>&nbsp;  private static final int MAX_LINE_LENGTH = 110; // optimized for printing
+<i>36</i>&nbsp;
+<i>37</i>&nbsp;  public static void main(String[] args) throws FileNotFoundException {
+<i>38</i>&nbsp;
+<b class="nc"><i>39</i>&nbsp;    if (args.length != 1) {</b>
+<b class="nc"><i>40</i>&nbsp;      System.out.print(getUsage());</b>
+<b class="nc"><i>41</i>&nbsp;      System.exit(0);</b>
+<i>42</i>&nbsp;    }
+<i>43</i>&nbsp;
+<b class="nc"><i>44</i>&nbsp;    StringBuilder sb = new StringBuilder();</b>
+<i>45</i>&nbsp;
+<b class="nc"><i>46</i>&nbsp;    appendHeader(sb);</b>
+<i>47</i>&nbsp;
+<i>48</i>&nbsp;    // organize by package name
+<b class="nc"><i>49</i>&nbsp;    LinkedHashMap&lt;String, Map&lt;String, CmdLineTool&gt;&gt; packageNameToolMap = new LinkedHashMap&lt;&gt;();</b>
+<b class="nc"><i>50</i>&nbsp;    for (Entry&lt;String, CmdLineTool&gt; entry : CLI.getToolLookupMap().entrySet()) {</b>
+<b class="nc"><i>51</i>&nbsp;      final String toolName = entry.getKey();</b>
+<b class="nc"><i>52</i>&nbsp;      final CmdLineTool tool = entry.getValue();</b>
+<b class="nc"><i>53</i>&nbsp;      String packageName = tool.getClass().getPackage().getName();</b>
+<b class="nc"><i>54</i>&nbsp;      packageName = packageName.substring(packageName.lastIndexOf(&quot;.&quot;) + 1);</b>
+<i>55</i>&nbsp;
+<b class="nc"><i>56</i>&nbsp;      if (!packageNameToolMap.containsKey(packageName)) {</b>
+<b class="nc"><i>57</i>&nbsp;        packageNameToolMap.put(packageName,</b>
+<i>58</i>&nbsp;            new LinkedHashMap&lt;String, CmdLineTool&gt;());
+<i>59</i>&nbsp;      }
+<b class="nc"><i>60</i>&nbsp;      packageNameToolMap.get(packageName).put(toolName, tool);</b>
+<b class="nc"><i>61</i>&nbsp;    }</b>
+<i>62</i>&nbsp;
+<i>63</i>&nbsp;    // add tools grouped by package
+<b class="nc"><i>64</i>&nbsp;    for (Entry&lt;String, Map&lt;String, CmdLineTool&gt;&gt; entry : packageNameToolMap.entrySet()) {</b>
+<b class="nc"><i>65</i>&nbsp;      appendToolGroup(entry.getKey(), entry.getValue(), sb);</b>
+<b class="nc"><i>66</i>&nbsp;    }</b>
+<i>67</i>&nbsp;
+<i>68</i>&nbsp;    // footer
+<b class="nc"><i>69</i>&nbsp;    appendFooter(sb);</b>
+<i>70</i>&nbsp;
+<i>71</i>&nbsp;    // output to file
+<b class="nc"><i>72</i>&nbsp;    try (PrintWriter out = new PrintWriter(args[0])) {</b>
+<b class="nc"><i>73</i>&nbsp;      out.println(sb);</b>
+<b class="nc"><i>74</i>&nbsp;    }</b>
+<i>75</i>&nbsp;  }
+<i>76</i>&nbsp;
+<i>77</i>&nbsp;  /**
+<i>78</i>&nbsp;   * @return this tool usage
+<i>79</i>&nbsp;   */
+<i>80</i>&nbsp;  private static String getUsage() {
+<b class="nc"><i>81</i>&nbsp;    return &quot;Requires one argument: \n&quot; +</b>
+<i>82</i>&nbsp;            &quot;  Path to the output XML file \n&quot;;
+<i>83</i>&nbsp;  }
+<i>84</i>&nbsp;
+<i>85</i>&nbsp;  /**
+<i>86</i>&nbsp;   * Appends a group of tools, based on the tool package name
+<i>87</i>&nbsp;   *
+<i>88</i>&nbsp;   * @param groupName
+<i>89</i>&nbsp;   * @param toolsMap
+<i>90</i>&nbsp;   * @param sb
+<i>91</i>&nbsp;   */
+<i>92</i>&nbsp;  private static void appendToolGroup(String groupName,
+<i>93</i>&nbsp;      Map&lt;String, CmdLineTool&gt; toolsMap, StringBuilder sb) {
+<b class="nc"><i>94</i>&nbsp;    sb.append(&quot;&lt;section id=&#39;tools.cli.&quot;).append(groupName).append(&quot;&#39;&gt;\n\n&quot;);</b>
+<b class="nc"><i>95</i>&nbsp;    sb.append(&quot;&lt;title&gt;&quot;).append(firstCaps(groupName)).append(&quot;&lt;/title&gt;\n\n&quot;);</b>
+<i>96</i>&nbsp;
+<b class="nc"><i>97</i>&nbsp;    for (Entry&lt;String, CmdLineTool&gt; entry : toolsMap.entrySet()) {</b>
+<b class="nc"><i>98</i>&nbsp;      appendTool(groupName, entry.getKey(), entry.getValue(), sb);</b>
+<b class="nc"><i>99</i>&nbsp;    }</b>
+<i>100</i>&nbsp;
+<b class="nc"><i>101</i>&nbsp;    sb.append(&quot;&lt;/section&gt;\n\n&quot;);</b>
+<i>102</i>&nbsp;
+<i>103</i>&nbsp;  }
+<i>104</i>&nbsp;
+<i>105</i>&nbsp;  /**
+<i>106</i>&nbsp;   * Appends a tool
+<i>107</i>&nbsp;   *
+<i>108</i>&nbsp;   * @param groupName
+<i>109</i>&nbsp;   * @param toolName
+<i>110</i>&nbsp;   * @param tool
+<i>111</i>&nbsp;   * @param sb
+<i>112</i>&nbsp;   */
+<i>113</i>&nbsp;  private static void appendTool(String groupName, String toolName,
+<i>114</i>&nbsp;      CmdLineTool tool, StringBuilder sb) {
+<b class="nc"><i>115</i>&nbsp;    sb.append(&quot;&lt;section id=&#39;tools.cli.&quot;).append(groupName).append(&quot;.&quot;)</b>
+<b class="nc"><i>116</i>&nbsp;        .append(toolName).append(&quot;&#39;&gt;\n\n&quot;);</b>
+<b class="nc"><i>117</i>&nbsp;    sb.append(&quot;&lt;title&gt;&quot;).append(toolName).append(&quot;&lt;/title&gt;\n\n&quot;);</b>
+<b class="nc"><i>118</i>&nbsp;    sb.append(&quot;&lt;para&gt;&quot;).append(firstCaps(tool.getShortDescription()))</b>
+<b class="nc"><i>119</i>&nbsp;        .append(&quot;&lt;/para&gt;\n\n&quot;);</b>
+<i>120</i>&nbsp;
+<b class="nc"><i>121</i>&nbsp;    appendCode(tool.getHelp(), sb);</b>
+<b class="nc"><i>122</i>&nbsp;    if (TypedCmdLineTool.class.isAssignableFrom(tool.getClass())) {</b>
+<b class="nc"><i>123</i>&nbsp;      appendHelpForTool((TypedCmdLineTool&lt;?&gt;) tool, sb);</b>
+<i>124</i>&nbsp;    }
+<i>125</i>&nbsp;
+<b class="nc"><i>126</i>&nbsp;    sb.append(&quot;&lt;/section&gt;\n\n&quot;);</b>
+<i>127</i>&nbsp;  }
+<i>128</i>&nbsp;
+<i>129</i>&nbsp;  private static void appendHelpForTool(TypedCmdLineTool&lt;?&gt; tool,
+<i>130</i>&nbsp;      StringBuilder sb) {
+<b class="nc"><i>131</i>&nbsp;    Class&lt;?&gt; type = tool.type;</b>
+<i>132</i>&nbsp;
+<b class="nc"><i>133</i>&nbsp;    Set&lt;String&gt; formats = StreamFactoryRegistry.getFactories(type).keySet();</b>
+<b class="nc"><i>134</i>&nbsp;    sb.append(&quot;&lt;para&gt;The supported formats and arguments are:&lt;/para&gt;\n\n&quot;);</b>
+<b class="nc"><i>135</i>&nbsp;    Map&lt;String, List&lt;Argument&gt;&gt; formatArguments = new LinkedHashMap&lt;&gt;();</b>
+<b class="nc"><i>136</i>&nbsp;    for (String formatName : formats) {</b>
+<b class="nc"><i>137</i>&nbsp;      if (!StreamFactoryRegistry.DEFAULT_FORMAT.equals(formatName)) {</b>
+<b class="nc"><i>138</i>&nbsp;        ObjectStreamFactory&lt;?&gt; format = tool.getStreamFactory(formatName);</b>
+<b class="nc"><i>139</i>&nbsp;        formatArguments.put(formatName,</b>
+<b class="nc"><i>140</i>&nbsp;            ArgumentParser.createArguments(format.getParameters()));</b>
+<i>141</i>&nbsp;
+<i>142</i>&nbsp;      }
+<b class="nc"><i>143</i>&nbsp;    }</b>
+<b class="nc"><i>144</i>&nbsp;    appendArgumentTable(formatArguments, sb);</b>
+<i>145</i>&nbsp;  }
+<i>146</i>&nbsp;
+<i>147</i>&nbsp;  private static void appendArgumentTable(
+<i>148</i>&nbsp;      Map&lt;String, List&lt;Argument&gt;&gt; formatArguments, StringBuilder sb) {
+<b class="nc"><i>149</i>&nbsp;    sb.append(</b>
+<i>150</i>&nbsp;        &quot;&lt;informaltable frame=&#39;all&#39;&gt;&lt;tgroup cols=&#39;4&#39; align=&#39;left&#39; colsep=&#39;1&#39; rowsep=&#39;1&#39;&gt;\n&quot;);
+<i>151</i>&nbsp;
+<b class="nc"><i>152</i>&nbsp;    sb.append(</b>
+<i>153</i>&nbsp;        &quot;&lt;thead&gt;&lt;row&gt;&lt;entry&gt;Format&lt;/entry&gt;&lt;entry&gt;Argument&lt;/entry&gt;&lt;entry&gt;Value&lt;/entry&gt;&quot; +
+<i>154</i>&nbsp;            &quot;&lt;entry&gt;Optional&lt;/entry&gt;&lt;entry&gt;Description&lt;/entry&gt;&lt;/row&gt;&lt;/thead&gt;\n&quot;);
+<b class="nc"><i>155</i>&nbsp;    sb.append(&quot;&lt;tbody&gt;\n&quot;);</b>
+<i>156</i>&nbsp;
+<b class="nc"><i>157</i>&nbsp;    for (Entry&lt;String, List&lt;Argument&gt;&gt; entry : formatArguments.entrySet()) {</b>
+<b class="nc"><i>158</i>&nbsp;      final String format = entry.getKey();</b>
+<b class="nc"><i>159</i>&nbsp;      final List&lt;Argument&gt; arguments = entry.getValue();</b>
+<b class="nc"><i>160</i>&nbsp;      int i = 0;</b>
+<b class="nc"><i>161</i>&nbsp;      for (Argument argument : arguments) {</b>
+<b class="nc"><i>162</i>&nbsp;        sb.append(&quot;&lt;row&gt;\n&quot;);</b>
+<b class="nc"><i>163</i>&nbsp;        if (i == 0) {</b>
+<b class="nc"><i>164</i>&nbsp;          sb.append(&quot;&lt;entry morerows=&#39;&quot;).append(arguments.size() - 1)</b>
+<b class="nc"><i>165</i>&nbsp;              .append(&quot;&#39; valign=&#39;middle&#39;&gt;&quot;).append(format).append(&quot;&lt;/entry&gt;\n&quot;);</b>
+<i>166</i>&nbsp;        }
+<b class="nc"><i>167</i>&nbsp;        sb.append(&quot;&lt;entry&gt;&quot;).append(argument.getArgument())</b>
+<b class="nc"><i>168</i>&nbsp;            .append(&quot;&lt;/entry&gt;\n&quot;);</b>
+<b class="nc"><i>169</i>&nbsp;        sb.append(&quot;&lt;entry&gt;&quot;).append(argument.getValue()).append(&quot;&lt;/entry&gt;\n&quot;);</b>
+<b class="nc"><i>170</i>&nbsp;        sb.append(&quot;&lt;entry&gt;&quot;).append(yes(argument.getOptional()))</b>
+<b class="nc"><i>171</i>&nbsp;            .append(&quot;&lt;/entry&gt;\n&quot;);</b>
+<b class="nc"><i>172</i>&nbsp;        sb.append(&quot;&lt;entry&gt;&quot;).append(firstCaps(argument.getDescription()))</b>
+<b class="nc"><i>173</i>&nbsp;            .append(&quot;&lt;/entry&gt;\n&quot;);</b>
+<b class="nc"><i>174</i>&nbsp;        sb.append(&quot;&lt;/row&gt;\n&quot;);</b>
+<b class="nc"><i>175</i>&nbsp;        i++;</b>
+<b class="nc"><i>176</i>&nbsp;      }</b>
+<i>177</i>&nbsp;
+<b class="nc"><i>178</i>&nbsp;    }</b>
+<i>179</i>&nbsp;
+<b class="nc"><i>180</i>&nbsp;    sb.append(&quot;&lt;/tbody&gt;\n&quot;);</b>
+<b class="nc"><i>181</i>&nbsp;    sb.append(&quot;&lt;/tgroup&gt;&lt;/informaltable&gt;\n\n&quot;);</b>
+<i>182</i>&nbsp;
+<i>183</i>&nbsp;  }
+<i>184</i>&nbsp;
+<i>185</i>&nbsp;  private static void appendHeader(StringBuilder sb) {
+<b class="nc"><i>186</i>&nbsp;    sb.append(&quot;&lt;?xml version=\&quot;1.0\&quot; encoding=\&quot;UTF-8\&quot;?&gt;\n&quot;</b>
+<i>187</i>&nbsp;        + &quot;&lt;!DOCTYPE chapter PUBLIC \&quot;-//OASIS//DTD DocBook XML V4.4//EN\&quot;\n&quot;
+<i>188</i>&nbsp;        + &quot;\&quot;http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd\&quot;[\n&quot;
+<i>189</i>&nbsp;        + &quot;]&gt;\n&quot; + &quot;&lt;!--\n&quot;
+<i>190</i>&nbsp;        + &quot;Licensed to the Apache Software Foundation (ASF) under one\n&quot;
+<i>191</i>&nbsp;        + &quot;or more contributor license agreements.  See the NOTICE file\n&quot;
+<i>192</i>&nbsp;        + &quot;distributed with this work for additional information\n&quot;
+<i>193</i>&nbsp;        + &quot;regarding copyright ownership.  The ASF licenses this file\n&quot;
+<i>194</i>&nbsp;        + &quot;to you under the Apache License, Version 2.0 (the\n&quot;
+<i>195</i>&nbsp;        + &quot;\&quot;License\&quot;); you may not use this file except in compliance\n&quot;
+<i>196</i>&nbsp;        + &quot;with the License.  You may obtain a copy of the License at\n&quot; + &quot;\n&quot;
+<i>197</i>&nbsp;        + &quot;   http://www.apache.org/licenses/LICENSE-2.0\n&quot; + &quot;\n&quot;
+<i>198</i>&nbsp;        + &quot;Unless required by applicable law or agreed to in writing,\n&quot;
+<i>199</i>&nbsp;        + &quot;software distributed under the License is distributed on an\n&quot;
+<i>200</i>&nbsp;        + &quot;\&quot;AS IS\&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY\n&quot;
+<i>201</i>&nbsp;        + &quot;KIND, either express or implied.  See the License for the\n&quot;
+<i>202</i>&nbsp;        + &quot;specific language governing permissions and limitations\n&quot;
+<i>203</i>&nbsp;        + &quot;under the License.\n&quot; + &quot;--&gt;\n&quot; + &quot;\n\n&quot;
+<i>204</i>&nbsp;        + &quot;&lt;!-- ## Warning ## this content is autogenerated! Please fix issues in to &quot; +
+<i>205</i>&nbsp;        &quot;opennlp-tools/src/main/java/opennlp/tools/cmdline/GenerateManualTool.java \n&quot;
+<i>206</i>&nbsp;        + &quot;   and execute the following command in opennlp-tool folder to update this file: \n\n&quot;
+<i>207</i>&nbsp;        + &quot;      mvn -e -q exec:java \&quot;-Dexec.mainClass=opennlp.tools.cmdline.GenerateManualTool\&quot; &quot;
+<i>208</i>&nbsp;        + &quot;\&quot;-Dexec.args=../opennlp-docs/src/docbkx/cli.xml\&quot;\n&quot;
+<i>209</i>&nbsp;        + &quot;--&gt;\n\n&quot; + &quot;&lt;chapter id=&#39;tools.cli&#39;&gt;\n\n&quot;
+<i>210</i>&nbsp;        + &quot;&lt;title&gt;The Command Line Interface&lt;/title&gt;\n\n&quot; + &quot;&lt;para&gt;&quot;
+<i>211</i>&nbsp;        + &quot;This section details the available tools and parameters of the Command Line Interface. &quot;
+<i>212</i>&nbsp;        + &quot;For a introduction in its usage please refer to &lt;xref linkend=&#39;intro.cli&#39;/&gt;.  &quot;
+<i>213</i>&nbsp;        + &quot;&lt;/para&gt;\n\n&quot;);
+<i>214</i>&nbsp;  }
+<i>215</i>&nbsp;
+<i>216</i>&nbsp;  private static void appendFooter(StringBuilder sb) {
+<b class="nc"><i>217</i>&nbsp;    sb.append(&quot;\n\n&lt;/chapter&gt;&quot;);</b>
+<i>218</i>&nbsp;  }
+<i>219</i>&nbsp;
+<i>220</i>&nbsp;  private static String firstCaps(String str) {
+<b class="nc"><i>221</i>&nbsp;    if (str.length() &gt; 1) {</b>
+<b class="nc"><i>222</i>&nbsp;      return str.substring(0, 1).toUpperCase() + str.substring(1);</b>
+<i>223</i>&nbsp;    } else {
+<b class="nc"><i>224</i>&nbsp;      return str;</b>
+<i>225</i>&nbsp;    }
+<i>226</i>&nbsp;  }
+<i>227</i>&nbsp;
+<i>228</i>&nbsp;  private static String yes(boolean optional) {
+<b class="nc"><i>229</i>&nbsp;    if (optional) {</b>
+<b class="nc"><i>230</i>&nbsp;      return &quot;Yes&quot;;</b>
+<i>231</i>&nbsp;    }
+<b class="nc"><i>232</i>&nbsp;    return &quot;No&quot;;</b>
+<i>233</i>&nbsp;  }
+<i>234</i>&nbsp;
+<i>235</i>&nbsp;  private static void appendCode(String help, StringBuilder sb) {
+<b class="nc"><i>236</i>&nbsp;    sb.append(&quot;&lt;screen&gt;\n&quot; + &quot;&lt;![CDATA[\n&quot;).append(splitLongLines(help))</b>
+<b class="nc"><i>237</i>&nbsp;        .append(&quot;\n&quot;).append(&quot;]]&gt;\n&quot;).append(&quot;&lt;/screen&gt; \n&quot;);</b>
+<i>238</i>&nbsp;  }
+<i>239</i>&nbsp;
+<i>240</i>&nbsp;  /**
+<i>241</i>&nbsp;   * Prevents long lines. Lines are optimized for printing.
+<i>242</i>&nbsp;   *
+<i>243</i>&nbsp;   * @param stringBlock
+<i>244</i>&nbsp;   * @return
+<i>245</i>&nbsp;   */
+<i>246</i>&nbsp;  private static String splitLongLines(String stringBlock) {
+<b class="nc"><i>247</i>&nbsp;    StringBuilder sb = new StringBuilder();</b>
+<i>248</i>&nbsp;    String line;
+<i>249</i>&nbsp;    try {
+<b class="nc"><i>250</i>&nbsp;      BufferedReader reader = new BufferedReader(new StringReader(stringBlock));</b>
+<b class="nc"><i>251</i>&nbsp;      while ((line = reader.readLine()) != null) {</b>
+<b class="nc"><i>252</i>&nbsp;        if (line.length() &lt;= MAX_LINE_LENGTH) {</b>
+<b class="nc"><i>253</i>&nbsp;          sb.append(line).append(&quot;\n&quot;);</b>
+<i>254</i>&nbsp;        } else {
+<b class="nc"><i>255</i>&nbsp;          StringTokenizer tok = new StringTokenizer(line, &quot; &quot;);</b>
+<b class="nc"><i>256</i>&nbsp;          int lineLen = 0;</b>
+<b class="nc"><i>257</i>&nbsp;          while (tok.hasMoreTokens()) {</b>
+<b class="nc"><i>258</i>&nbsp;            String word = tok.nextToken() + &quot; &quot;;</b>
+<i>259</i>&nbsp;
+<b class="nc"><i>260</i>&nbsp;            if (lineLen + word.length() &gt; MAX_LINE_LENGTH) {</b>
+<b class="nc"><i>261</i>&nbsp;              sb.append(&quot;\n        &quot;);</b>
+<b class="nc"><i>262</i>&nbsp;              lineLen = 8;</b>
+<i>263</i>&nbsp;            }
+<b class="nc"><i>264</i>&nbsp;            sb.append(word);</b>
+<b class="nc"><i>265</i>&nbsp;            lineLen += word.length();</b>
+<b class="nc"><i>266</i>&nbsp;          }</b>
+<b class="nc"><i>267</i>&nbsp;        }</b>
+<i>268</i>&nbsp;      }
+<b class="nc"><i>269</i>&nbsp;    } catch (Exception e) {</b>
+<i>270</i>&nbsp;      // nothing to do
+<b class="nc"><i>271</i>&nbsp;    }</b>
+<i>272</i>&nbsp;
+<b class="nc"><i>273</i>&nbsp;    return sb.toString();</b>
+<i>274</i>&nbsp;  }
+<i>275</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-09 15:05</div>
+</div>
+</body>
+</html>

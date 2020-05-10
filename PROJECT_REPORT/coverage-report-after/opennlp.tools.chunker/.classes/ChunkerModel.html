@@ -1,0 +1,239 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: ChunkerModel</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">opennlp.tools.chunker</a> ]
+</div>
+
+<h1>Coverage Summary for Class: ChunkerModel (opennlp.tools.chunker)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">ChunkerModel</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    38.5%
+  </span>
+  <span class="absValue">
+    (5/ 13)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    52.2%
+  </span>
+  <span class="absValue">
+    (24/ 46)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/*
+<i>2</i>&nbsp; * Licensed to the Apache Software Foundation (ASF) under one or more
+<i>3</i>&nbsp; * contributor license agreements.  See the NOTICE file distributed with
+<i>4</i>&nbsp; * this work for additional information regarding copyright ownership.
+<i>5</i>&nbsp; * The ASF licenses this file to You under the Apache License, Version 2.0
+<i>6</i>&nbsp; * (the &quot;License&quot;); you may not use this file except in compliance with
+<i>7</i>&nbsp; * the License. You may obtain a copy of the License at
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; *     http://www.apache.org/licenses/LICENSE-2.0
+<i>10</i>&nbsp; *
+<i>11</i>&nbsp; * Unless required by applicable law or agreed to in writing, software
+<i>12</i>&nbsp; * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<i>13</i>&nbsp; * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<i>14</i>&nbsp; * See the License for the specific language governing permissions and
+<i>15</i>&nbsp; * limitations under the License.
+<i>16</i>&nbsp; */
+<i>17</i>&nbsp;
+<i>18</i>&nbsp;
+<i>19</i>&nbsp;package opennlp.tools.chunker;
+<i>20</i>&nbsp;
+<i>21</i>&nbsp;import java.io.File;
+<i>22</i>&nbsp;import java.io.IOException;
+<i>23</i>&nbsp;import java.io.InputStream;
+<i>24</i>&nbsp;import java.net.URL;
+<i>25</i>&nbsp;import java.nio.file.Path;
+<i>26</i>&nbsp;import java.util.Map;
+<i>27</i>&nbsp;import java.util.Properties;
+<i>28</i>&nbsp;
+<i>29</i>&nbsp;import opennlp.tools.ml.BeamSearch;
+<i>30</i>&nbsp;import opennlp.tools.ml.model.AbstractModel;
+<i>31</i>&nbsp;import opennlp.tools.ml.model.MaxentModel;
+<i>32</i>&nbsp;import opennlp.tools.ml.model.SequenceClassificationModel;
+<i>33</i>&nbsp;import opennlp.tools.util.BaseToolFactory;
+<i>34</i>&nbsp;import opennlp.tools.util.InvalidFormatException;
+<i>35</i>&nbsp;import opennlp.tools.util.TokenTag;
+<i>36</i>&nbsp;import opennlp.tools.util.model.BaseModel;
+<i>37</i>&nbsp;
+<i>38</i>&nbsp;/**
+<i>39</i>&nbsp; * The {@link ChunkerModel} is the model used
+<i>40</i>&nbsp; * by a learnable {@link Chunker}.
+<i>41</i>&nbsp; *
+<i>42</i>&nbsp; * @see ChunkerME
+<i>43</i>&nbsp; */
+<i>44</i>&nbsp;public class ChunkerModel extends BaseModel {
+<i>45</i>&nbsp;
+<i>46</i>&nbsp;  private static final String COMPONENT_NAME = &quot;ChunkerME&quot;;
+<i>47</i>&nbsp;  private static final String CHUNKER_MODEL_ENTRY_NAME = &quot;chunker.model&quot;;
+<i>48</i>&nbsp;
+<i>49</i>&nbsp;  public ChunkerModel(String languageCode, SequenceClassificationModel&lt;String&gt; chunkerModel,
+<i>50</i>&nbsp;      Map&lt;String, String&gt; manifestInfoEntries, ChunkerFactory factory) {
+<b class="nc"><i>51</i>&nbsp;    super(COMPONENT_NAME, languageCode, manifestInfoEntries, factory);</b>
+<b class="nc"><i>52</i>&nbsp;    artifactMap.put(CHUNKER_MODEL_ENTRY_NAME, chunkerModel);</b>
+<b class="nc"><i>53</i>&nbsp;    checkArtifactMap();</b>
+<b class="nc"><i>54</i>&nbsp;  }</b>
+<i>55</i>&nbsp;
+<i>56</i>&nbsp;  public ChunkerModel(String languageCode, MaxentModel chunkerModel,
+<i>57</i>&nbsp;      Map&lt;String, String&gt; manifestInfoEntries, ChunkerFactory factory) {
+<b class="nc"><i>58</i>&nbsp;    this(languageCode, chunkerModel, ChunkerME.DEFAULT_BEAM_SIZE, manifestInfoEntries, factory);</b>
+<b class="nc"><i>59</i>&nbsp;  }</b>
+<i>60</i>&nbsp;
+<i>61</i>&nbsp;  public ChunkerModel(String languageCode, MaxentModel chunkerModel, int beamSize,
+<i>62</i>&nbsp;      Map&lt;String, String&gt; manifestInfoEntries, ChunkerFactory factory) {
+<b class="fc"><i>63</i>&nbsp;    super(COMPONENT_NAME, languageCode, manifestInfoEntries, factory);</b>
+<b class="fc"><i>64</i>&nbsp;    artifactMap.put(CHUNKER_MODEL_ENTRY_NAME, chunkerModel);</b>
+<i>65</i>&nbsp;
+<b class="fc"><i>66</i>&nbsp;    Properties manifest = (Properties) artifactMap.get(MANIFEST_ENTRY);</b>
+<b class="fc"><i>67</i>&nbsp;    manifest.put(BeamSearch.BEAM_SIZE_PARAMETER, Integer.toString(beamSize));</b>
+<i>68</i>&nbsp;
+<b class="fc"><i>69</i>&nbsp;    checkArtifactMap();</b>
+<b class="fc"><i>70</i>&nbsp;  }</b>
+<i>71</i>&nbsp;
+<i>72</i>&nbsp;  public ChunkerModel(String languageCode, MaxentModel chunkerModel, ChunkerFactory factory) {
+<b class="nc"><i>73</i>&nbsp;    this(languageCode, chunkerModel, null, factory);</b>
+<b class="nc"><i>74</i>&nbsp;  }</b>
+<i>75</i>&nbsp;
+<i>76</i>&nbsp;  public ChunkerModel(InputStream in) throws IOException, InvalidFormatException {
+<b class="fc"><i>77</i>&nbsp;    super(COMPONENT_NAME, in);</b>
+<b class="fc"><i>78</i>&nbsp;  }</b>
+<i>79</i>&nbsp;
+<i>80</i>&nbsp;  public ChunkerModel(File modelFile) throws IOException, InvalidFormatException {
+<b class="nc"><i>81</i>&nbsp;    super(COMPONENT_NAME, modelFile);</b>
+<b class="nc"><i>82</i>&nbsp;  }</b>
+<i>83</i>&nbsp;
+<i>84</i>&nbsp;  public ChunkerModel(Path modelPath) throws IOException, InvalidFormatException {
+<b class="nc"><i>85</i>&nbsp;    this(modelPath.toFile());</b>
+<b class="nc"><i>86</i>&nbsp;  }</b>
+<i>87</i>&nbsp;
+<i>88</i>&nbsp;  public ChunkerModel(URL modelURL) throws IOException, InvalidFormatException {
+<b class="nc"><i>89</i>&nbsp;    super(COMPONENT_NAME, modelURL);</b>
+<b class="nc"><i>90</i>&nbsp;  }</b>
+<i>91</i>&nbsp;
+<i>92</i>&nbsp;  @Override
+<i>93</i>&nbsp;  protected void validateArtifactMap() throws InvalidFormatException {
+<b class="fc"><i>94</i>&nbsp;    super.validateArtifactMap();</b>
+<i>95</i>&nbsp;
+<b class="fc"><i>96</i>&nbsp;    if (!(artifactMap.get(CHUNKER_MODEL_ENTRY_NAME) instanceof AbstractModel)) {</b>
+<b class="nc"><i>97</i>&nbsp;      throw new InvalidFormatException(&quot;Chunker model is incomplete!&quot;);</b>
+<i>98</i>&nbsp;    }
+<i>99</i>&nbsp;
+<i>100</i>&nbsp;    // Since 1.8.0 we changed the ChunkerFactory signature. This will check the if the model
+<i>101</i>&nbsp;    // declares a not default factory, and if yes, check if it was created before 1.8
+<b class="fc"><i>102</i>&nbsp;    if ( (getManifestProperty(FACTORY_NAME) != null</b>
+<b class="fc"><i>103</i>&nbsp;            &amp;&amp; !getManifestProperty(FACTORY_NAME).equals(&quot;opennlp.tools.chunker.ChunkerFactory&quot;) )</b>
+<b class="fc"><i>104</i>&nbsp;        &amp;&amp; this.getVersion().getMajor() &lt;= 1</b>
+<b class="fc"><i>105</i>&nbsp;        &amp;&amp; this.getVersion().getMinor() &lt; 8) {</b>
+<b class="fc"><i>106</i>&nbsp;      throw new InvalidFormatException(&quot;The Chunker factory &#39;&quot; + getManifestProperty(FACTORY_NAME) +</b>
+<i>107</i>&nbsp;      &quot;&#39; is no longer compatible. Please update it to match the latest ChunkerFactory.&quot;);
+<i>108</i>&nbsp;    }
+<i>109</i>&nbsp;
+<b class="fc"><i>110</i>&nbsp;  }</b>
+<i>111</i>&nbsp;
+<i>112</i>&nbsp;  /**
+<i>113</i>&nbsp;   * @deprecated use getChunkerSequenceModel instead. This method will be removed soon.
+<i>114</i>&nbsp;   */
+<i>115</i>&nbsp;  @Deprecated
+<i>116</i>&nbsp;  public MaxentModel getChunkerModel() {
+<b class="nc"><i>117</i>&nbsp;    if (artifactMap.get(CHUNKER_MODEL_ENTRY_NAME) instanceof MaxentModel) {</b>
+<b class="nc"><i>118</i>&nbsp;      return (MaxentModel) artifactMap.get(CHUNKER_MODEL_ENTRY_NAME);</b>
+<i>119</i>&nbsp;    }
+<i>120</i>&nbsp;    else {
+<b class="nc"><i>121</i>&nbsp;      return null;</b>
+<i>122</i>&nbsp;    }
+<i>123</i>&nbsp;  }
+<i>124</i>&nbsp;
+<i>125</i>&nbsp;  public SequenceClassificationModel&lt;TokenTag&gt; getChunkerSequenceModel() {
+<i>126</i>&nbsp;
+<b class="fc"><i>127</i>&nbsp;    Properties manifest = (Properties) artifactMap.get(MANIFEST_ENTRY);</b>
+<i>128</i>&nbsp;
+<b class="fc"><i>129</i>&nbsp;    if (artifactMap.get(CHUNKER_MODEL_ENTRY_NAME) instanceof MaxentModel) {</b>
+<b class="fc"><i>130</i>&nbsp;      String beamSizeString = manifest.getProperty(BeamSearch.BEAM_SIZE_PARAMETER);</b>
+<i>131</i>&nbsp;
+<b class="fc"><i>132</i>&nbsp;      int beamSize = ChunkerME.DEFAULT_BEAM_SIZE;</b>
+<b class="fc"><i>133</i>&nbsp;      if (beamSizeString != null) {</b>
+<b class="fc"><i>134</i>&nbsp;        beamSize = Integer.parseInt(beamSizeString);</b>
+<i>135</i>&nbsp;      }
+<i>136</i>&nbsp;
+<b class="fc"><i>137</i>&nbsp;      return new BeamSearch&lt;&gt;(beamSize, (MaxentModel) artifactMap.get(CHUNKER_MODEL_ENTRY_NAME));</b>
+<i>138</i>&nbsp;    }
+<b class="nc"><i>139</i>&nbsp;    else if (artifactMap.get(CHUNKER_MODEL_ENTRY_NAME) instanceof SequenceClassificationModel) {</b>
+<b class="nc"><i>140</i>&nbsp;      return (SequenceClassificationModel) artifactMap.get(CHUNKER_MODEL_ENTRY_NAME);</b>
+<i>141</i>&nbsp;    }
+<i>142</i>&nbsp;    else {
+<b class="nc"><i>143</i>&nbsp;      return null;</b>
+<i>144</i>&nbsp;    }
+<i>145</i>&nbsp;  }
+<i>146</i>&nbsp;
+<i>147</i>&nbsp;  @Override
+<i>148</i>&nbsp;  protected Class&lt;? extends BaseToolFactory&gt; getDefaultFactory() {
+<b class="nc"><i>149</i>&nbsp;    return ChunkerFactory.class;</b>
+<i>150</i>&nbsp;  }
+<i>151</i>&nbsp;
+<i>152</i>&nbsp;
+<i>153</i>&nbsp;  public ChunkerFactory getFactory() {
+<b class="fc"><i>154</i>&nbsp;    return (ChunkerFactory) this.toolFactory;</b>
+<i>155</i>&nbsp;  }
+<i>156</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-09 18:47</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,162 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: DetokenizerEvaluator</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">opennlp.tools.tokenize</a> ]
+</div>
+
+<h1>Coverage Summary for Class: DetokenizerEvaluator (opennlp.tools.tokenize)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">DetokenizerEvaluator</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (3/ 3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (15/ 15)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/*
+<i>2</i>&nbsp; * Licensed to the Apache Software Foundation (ASF) under one or more
+<i>3</i>&nbsp; * contributor license agreements.  See the NOTICE file distributed with
+<i>4</i>&nbsp; * this work for additional information regarding copyright ownership.
+<i>5</i>&nbsp; * The ASF licenses this file to You under the Apache License, Version 2.0
+<i>6</i>&nbsp; * (the &quot;License&quot;); you may not use this file except in compliance with
+<i>7</i>&nbsp; * the License. You may obtain a copy of the License at
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; *     http://www.apache.org/licenses/LICENSE-2.0
+<i>10</i>&nbsp; *
+<i>11</i>&nbsp; * Unless required by applicable law or agreed to in writing, software
+<i>12</i>&nbsp; * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<i>13</i>&nbsp; * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<i>14</i>&nbsp; * See the License for the specific language governing permissions and
+<i>15</i>&nbsp; * limitations under the License.
+<i>16</i>&nbsp; */
+<i>17</i>&nbsp;package opennlp.tools.tokenize;
+<i>18</i>&nbsp;
+<i>19</i>&nbsp;
+<i>20</i>&nbsp;import java.util.ArrayList;
+<i>21</i>&nbsp;
+<i>22</i>&nbsp;import opennlp.tools.cmdline.tokenizer.DetokenEvaluationErrorListener;
+<i>23</i>&nbsp;import opennlp.tools.util.Span;
+<i>24</i>&nbsp;import opennlp.tools.util.eval.Evaluator;
+<i>25</i>&nbsp;import opennlp.tools.util.eval.FMeasure;
+<i>26</i>&nbsp;
+<i>27</i>&nbsp;/**
+<i>28</i>&nbsp; * The {@link DetokenizerEvaluator} measures the performance of
+<i>29</i>&nbsp; * the given {@link Detokenizer} with the provided reference
+<i>30</i>&nbsp; * {@link TokenSample}s.
+<i>31</i>&nbsp; *
+<i>32</i>&nbsp; * @see DetokenizerEvaluator
+<i>33</i>&nbsp; * @see Detokenizer
+<i>34</i>&nbsp; * @see TokenSample
+<i>35</i>&nbsp; */
+<i>36</i>&nbsp;
+<i>37</i>&nbsp;public class DetokenizerEvaluator extends Evaluator&lt;TokenSample&gt; {
+<b class="fc"><i>38</i>&nbsp;  private FMeasure fmeasure = new FMeasure();</b>
+<i>39</i>&nbsp;
+<i>40</i>&nbsp;  /**
+<i>41</i>&nbsp;   * The {@link Detokenizer} used to create the
+<i>42</i>&nbsp;   * predicted tokens.
+<i>43</i>&nbsp;   */
+<i>44</i>&nbsp;  private Detokenizer detokenizer;
+<i>45</i>&nbsp;
+<i>46</i>&nbsp;  /**
+<i>47</i>&nbsp;   * Initializes the current instance with the
+<i>48</i>&nbsp;   * given {@link Detokenizer}.
+<i>49</i>&nbsp;   *
+<i>50</i>&nbsp;   * @param detokenizer the {@link Detokenizer} to evaluate.
+<i>51</i>&nbsp;   * @param listeners   evaluation sample listeners
+<i>52</i>&nbsp;   */
+<i>53</i>&nbsp;  public DetokenizerEvaluator(Detokenizer detokenizer, DetokenEvaluationErrorListener... listeners) {
+<b class="fc"><i>54</i>&nbsp;    super(listeners);</b>
+<b class="fc"><i>55</i>&nbsp;    this.detokenizer = detokenizer;</b>
+<b class="fc"><i>56</i>&nbsp;  }</b>
+<i>57</i>&nbsp;
+<i>58</i>&nbsp;  @Override
+<i>59</i>&nbsp;  protected TokenSample processSample(TokenSample reference) {
+<b class="fc"><i>60</i>&nbsp;    String[] tokens = Span.spansToStrings(reference.getTokenSpans(), reference.getText());</b>
+<b class="fc"><i>61</i>&nbsp;    String tokensstring = detokenizer.detokenize(tokens, null);</b>
+<i>62</i>&nbsp;
+<b class="fc"><i>63</i>&nbsp;    ArrayList&lt;String&gt; predictionsArray = new ArrayList&lt;&gt;();</b>
+<b class="fc"><i>64</i>&nbsp;    ArrayList&lt;String&gt; referencesArray = new ArrayList&lt;&gt;();</b>
+<i>65</i>&nbsp;
+<b class="fc"><i>66</i>&nbsp;    predictionsArray.add(tokensstring);</b>
+<b class="fc"><i>67</i>&nbsp;    referencesArray.add(reference.getText());</b>
+<i>68</i>&nbsp;
+<b class="fc"><i>69</i>&nbsp;    Object[] references = referencesArray.toArray();</b>
+<b class="fc"><i>70</i>&nbsp;    Object[] predictions = predictionsArray.toArray();</b>
+<b class="fc"><i>71</i>&nbsp;    fmeasure.updateScores(references, predictions);</b>
+<i>72</i>&nbsp;
+<b class="fc"><i>73</i>&nbsp;    return new TokenSample(tokensstring, reference.getTokenSpans());</b>
+<i>74</i>&nbsp;  }
+<i>75</i>&nbsp;
+<i>76</i>&nbsp;  public FMeasure getFMeasure() {
+<b class="fc"><i>77</i>&nbsp;    return fmeasure;</b>
+<i>78</i>&nbsp;  }
+<i>79</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-09 18:47</div>
+</div>
+</body>
+</html>

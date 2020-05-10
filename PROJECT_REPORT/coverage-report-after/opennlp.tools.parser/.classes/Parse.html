@@ -1,0 +1,1210 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: Parse</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">opennlp.tools.parser</a> ]
+</div>
+
+<h1>Coverage Summary for Class: Parse (opennlp.tools.parser)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Parse</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    62.1%
+  </span>
+  <span class="absValue">
+    (41/ 66)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    57.2%
+  </span>
+  <span class="absValue">
+    (230/ 402)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/*
+<i>2</i>&nbsp; * Licensed to the Apache Software Foundation (ASF) under one or more
+<i>3</i>&nbsp; * contributor license agreements.  See the NOTICE file distributed with
+<i>4</i>&nbsp; * this work for additional information regarding copyright ownership.
+<i>5</i>&nbsp; * The ASF licenses this file to You under the Apache License, Version 2.0
+<i>6</i>&nbsp; * (the &quot;License&quot;); you may not use this file except in compliance with
+<i>7</i>&nbsp; * the License. You may obtain a copy of the License at
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; *     http://www.apache.org/licenses/LICENSE-2.0
+<i>10</i>&nbsp; *
+<i>11</i>&nbsp; * Unless required by applicable law or agreed to in writing, software
+<i>12</i>&nbsp; * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<i>13</i>&nbsp; * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<i>14</i>&nbsp; * See the License for the specific language governing permissions and
+<i>15</i>&nbsp; * limitations under the License.
+<i>16</i>&nbsp; */
+<i>17</i>&nbsp;
+<i>18</i>&nbsp;
+<i>19</i>&nbsp;package opennlp.tools.parser;
+<i>20</i>&nbsp;
+<i>21</i>&nbsp;import java.util.Arrays;
+<i>22</i>&nbsp;import java.util.Collection;
+<i>23</i>&nbsp;import java.util.HashSet;
+<i>24</i>&nbsp;import java.util.Iterator;
+<i>25</i>&nbsp;import java.util.LinkedList;
+<i>26</i>&nbsp;import java.util.List;
+<i>27</i>&nbsp;import java.util.Objects;
+<i>28</i>&nbsp;import java.util.Set;
+<i>29</i>&nbsp;import java.util.Stack;
+<i>30</i>&nbsp;import java.util.TreeSet;
+<i>31</i>&nbsp;import java.util.regex.Matcher;
+<i>32</i>&nbsp;import java.util.regex.Pattern;
+<i>33</i>&nbsp;
+<i>34</i>&nbsp;import opennlp.tools.util.Span;
+<i>35</i>&nbsp;
+<i>36</i>&nbsp;/**
+<i>37</i>&nbsp; * Data structure for holding parse constituents.
+<i>38</i>&nbsp; */
+<i>39</i>&nbsp;public class Parse implements Cloneable, Comparable&lt;Parse&gt; {
+<i>40</i>&nbsp;
+<i>41</i>&nbsp;  public static final String BRACKET_LRB = &quot;(&quot;;
+<i>42</i>&nbsp;  public static final String BRACKET_RRB = &quot;)&quot;;
+<i>43</i>&nbsp;  public static final String BRACKET_LCB = &quot;{&quot;;
+<i>44</i>&nbsp;  public static final String BRACKET_RCB = &quot;}&quot;;
+<i>45</i>&nbsp;  public static final String BRACKET_LSB = &quot;[&quot;;
+<i>46</i>&nbsp;  public static final String BRACKET_RSB = &quot;]&quot;;
+<i>47</i>&nbsp;
+<i>48</i>&nbsp;  /**
+<i>49</i>&nbsp;   * The text string on which this parse is based.
+<i>50</i>&nbsp;   * This object is shared among all parses for the same sentence.
+<i>51</i>&nbsp;   */
+<i>52</i>&nbsp;  private String text;
+<i>53</i>&nbsp;
+<i>54</i>&nbsp;  /**
+<i>55</i>&nbsp;   * The character offsets into the text for this constituent.
+<i>56</i>&nbsp;   */
+<i>57</i>&nbsp;  private Span span;
+<i>58</i>&nbsp;
+<i>59</i>&nbsp;  /**
+<i>60</i>&nbsp;   * The syntactic type of this parse.
+<i>61</i>&nbsp;   */
+<i>62</i>&nbsp;  private String type;
+<i>63</i>&nbsp;
+<i>64</i>&nbsp;  /**
+<i>65</i>&nbsp;   * The sub-constituents of this parse.
+<i>66</i>&nbsp;   */
+<i>67</i>&nbsp;  private List&lt;Parse&gt; parts;
+<i>68</i>&nbsp;
+<i>69</i>&nbsp;  /**
+<i>70</i>&nbsp;   * The head parse of this parse. A parse can be its own head.
+<i>71</i>&nbsp;   */
+<i>72</i>&nbsp;  private Parse head;
+<i>73</i>&nbsp;
+<i>74</i>&nbsp;  /**
+<i>75</i>&nbsp;   * A string used during parse construction to specify which
+<i>76</i>&nbsp;   * stage of parsing has been performed on this node.
+<i>77</i>&nbsp;   */
+<i>78</i>&nbsp;  private String label;
+<i>79</i>&nbsp;
+<i>80</i>&nbsp;  /**
+<i>81</i>&nbsp;   * Index in the sentence of the head of this constituent.
+<i>82</i>&nbsp;   */
+<i>83</i>&nbsp;  private int headIndex;
+<i>84</i>&nbsp;
+<i>85</i>&nbsp;  /**
+<i>86</i>&nbsp;   * The parent parse of this parse.
+<i>87</i>&nbsp;   */
+<i>88</i>&nbsp;  private Parse parent;
+<i>89</i>&nbsp;
+<i>90</i>&nbsp;  /**
+<i>91</i>&nbsp;   * The probability associated with the syntactic type
+<i>92</i>&nbsp;   * assigned to this parse.
+<i>93</i>&nbsp;   */
+<i>94</i>&nbsp;  private double prob;
+<i>95</i>&nbsp;
+<i>96</i>&nbsp;  /**
+<i>97</i>&nbsp;   * The string buffer used to track the derivation of this parse.
+<i>98</i>&nbsp;   */
+<i>99</i>&nbsp;  private StringBuffer derivation;
+<i>100</i>&nbsp;
+<i>101</i>&nbsp;  /**
+<i>102</i>&nbsp;   * Specifies whether this constituent was built during the chunking phase.
+<i>103</i>&nbsp;   */
+<i>104</i>&nbsp;  private boolean isChunk;
+<i>105</i>&nbsp;
+<i>106</i>&nbsp;  /**
+<i>107</i>&nbsp;   * The pattern used to find the base constituent label of a
+<i>108</i>&nbsp;   * Penn Treebank labeled constituent.
+<i>109</i>&nbsp;   */
+<b class="fc"><i>110</i>&nbsp;  private static Pattern typePattern = Pattern.compile(&quot;^([^ =-]+)&quot;);</b>
+<i>111</i>&nbsp;
+<i>112</i>&nbsp;  /**
+<i>113</i>&nbsp;   * The pattern used to find the function tags.
+<i>114</i>&nbsp;   */
+<b class="fc"><i>115</i>&nbsp;  private static Pattern funTypePattern = Pattern.compile(&quot;^[^ =-]+-([^ =-]+)&quot;);</b>
+<i>116</i>&nbsp;
+<i>117</i>&nbsp;  /**
+<i>118</i>&nbsp;   * The patter used to identify tokens in Penn Treebank labeled constituents.
+<i>119</i>&nbsp;   */
+<b class="fc"><i>120</i>&nbsp;  private static Pattern tokenPattern = Pattern.compile(&quot;^[^ ()]+ ([^ ()]+)\\s*\\)&quot;);</b>
+<i>121</i>&nbsp;
+<i>122</i>&nbsp;  /**
+<i>123</i>&nbsp;   * The set of punctuation parses which are between this parse and the previous parse.
+<i>124</i>&nbsp;   */
+<i>125</i>&nbsp;  private Collection&lt;Parse&gt; prevPunctSet;
+<i>126</i>&nbsp;
+<i>127</i>&nbsp;  /**
+<i>128</i>&nbsp;   * The set of punctuation parses which are between this parse and
+<i>129</i>&nbsp;   * the subsequent parse.
+<i>130</i>&nbsp;   */
+<i>131</i>&nbsp;  private Collection&lt;Parse&gt; nextPunctSet;
+<i>132</i>&nbsp;
+<i>133</i>&nbsp;  /**
+<i>134</i>&nbsp;   * Specifies whether constituent labels should include parts specified
+<i>135</i>&nbsp;   * after minus character.
+<i>136</i>&nbsp;   */
+<i>137</i>&nbsp;  private static boolean useFunctionTags;
+<i>138</i>&nbsp;
+<i>139</i>&nbsp;  /**
+<i>140</i>&nbsp;   * Creates a new parse node for this specified text and span of the specified type
+<i>141</i>&nbsp;   * with the specified probability and the specified head index.
+<i>142</i>&nbsp;   *
+<i>143</i>&nbsp;   * @param text The text of the sentence for which this node is a part of.
+<i>144</i>&nbsp;   * @param span The character offsets for this node within the specified text.
+<i>145</i>&nbsp;   * @param type The constituent label of this node.
+<i>146</i>&nbsp;   * @param p The probability of this parse.
+<i>147</i>&nbsp;   * @param index The token index of the head of this parse.
+<i>148</i>&nbsp;   */
+<b class="fc"><i>149</i>&nbsp;  public Parse(String text, Span span, String type, double p, int index) {</b>
+<b class="fc"><i>150</i>&nbsp;    this.text = text;</b>
+<b class="fc"><i>151</i>&nbsp;    this.span = span;</b>
+<b class="fc"><i>152</i>&nbsp;    this.type = type;</b>
+<b class="fc"><i>153</i>&nbsp;    this.prob = p;</b>
+<b class="fc"><i>154</i>&nbsp;    this.head = this;</b>
+<b class="fc"><i>155</i>&nbsp;    this.headIndex = index;</b>
+<b class="fc"><i>156</i>&nbsp;    this.parts = new LinkedList&lt;&gt;();</b>
+<b class="fc"><i>157</i>&nbsp;    this.label = null;</b>
+<b class="fc"><i>158</i>&nbsp;    this.parent = null;</b>
+<b class="fc"><i>159</i>&nbsp;  }</b>
+<i>160</i>&nbsp;
+<i>161</i>&nbsp;  /**
+<i>162</i>&nbsp;   * Creates a new parse node for this specified text and span of the specified type with
+<i>163</i>&nbsp;   * the specified probability and the specified head and head index.
+<i>164</i>&nbsp;   *
+<i>165</i>&nbsp;   * @param text The text of the sentence for which this node is a part of.
+<i>166</i>&nbsp;   * @param span The character offsets for this node within the specified text.
+<i>167</i>&nbsp;   * @param type The constituent label of this node.
+<i>168</i>&nbsp;   * @param p The probability of this parse.
+<i>169</i>&nbsp;   * @param h The head token of this parse.
+<i>170</i>&nbsp;   */
+<i>171</i>&nbsp;  public Parse(String text, Span span, String type, double p, Parse h) {
+<b class="fc"><i>172</i>&nbsp;    this(text, span, type, p, 0);</b>
+<b class="fc"><i>173</i>&nbsp;    if (h != null) {</b>
+<b class="fc"><i>174</i>&nbsp;      this.head = h;</b>
+<b class="fc"><i>175</i>&nbsp;      this.headIndex = h.headIndex;</b>
+<i>176</i>&nbsp;    }
+<b class="fc"><i>177</i>&nbsp;  }</b>
+<i>178</i>&nbsp;
+<i>179</i>&nbsp;  @Override
+<i>180</i>&nbsp;  public Object clone() {
+<b class="fc"><i>181</i>&nbsp;    Parse p = new Parse(this.text, this.span, this.type, this.prob, this.head);</b>
+<b class="fc"><i>182</i>&nbsp;    p.parts = new LinkedList&lt;&gt;();</b>
+<b class="fc"><i>183</i>&nbsp;    p.parts.addAll(this.parts);</b>
+<i>184</i>&nbsp;
+<b class="fc"><i>185</i>&nbsp;    if (derivation != null) {</b>
+<b class="nc"><i>186</i>&nbsp;      p.derivation = new StringBuffer(100);</b>
+<b class="nc"><i>187</i>&nbsp;      p.derivation.append(this.derivation.toString());</b>
+<i>188</i>&nbsp;    }
+<b class="fc"><i>189</i>&nbsp;    p.label = this.label;</b>
+<b class="fc"><i>190</i>&nbsp;    return (p);</b>
+<i>191</i>&nbsp;  }
+<i>192</i>&nbsp;
+<i>193</i>&nbsp;  /**
+<i>194</i>&nbsp;   * Clones the right frontier of parse up to the specified node.
+<i>195</i>&nbsp;   *
+<i>196</i>&nbsp;   * @param node The last node in the right frontier of the parse tree which should be cloned.
+<i>197</i>&nbsp;   * @return A clone of this parse and its right frontier up to and including the specified node.
+<i>198</i>&nbsp;   */
+<i>199</i>&nbsp;  public Parse clone(Parse node) {
+<b class="nc"><i>200</i>&nbsp;    if (this == node) {</b>
+<b class="nc"><i>201</i>&nbsp;      return (Parse) this.clone();</b>
+<i>202</i>&nbsp;    }
+<i>203</i>&nbsp;    else {
+<b class="nc"><i>204</i>&nbsp;      Parse c = (Parse) this.clone();</b>
+<b class="nc"><i>205</i>&nbsp;      Parse lc = c.parts.get(parts.size() - 1);</b>
+<b class="nc"><i>206</i>&nbsp;      c.parts.set(parts.size() - 1,lc.clone(node));</b>
+<b class="nc"><i>207</i>&nbsp;      return c;</b>
+<i>208</i>&nbsp;    }
+<i>209</i>&nbsp;  }
+<i>210</i>&nbsp;
+<i>211</i>&nbsp;  /**
+<i>212</i>&nbsp;   * Clones the right frontier of this root parse up to and including the specified node.
+<i>213</i>&nbsp;   *
+<i>214</i>&nbsp;   * @param node The last node in the right frontier of the parse tree which should be cloned.
+<i>215</i>&nbsp;   * @param parseIndex The child index of the parse for this root node.
+<i>216</i>&nbsp;   * @return A clone of this root parse and its right frontier up to and including the specified node.
+<i>217</i>&nbsp;   */
+<i>218</i>&nbsp;  public Parse cloneRoot(Parse node, int parseIndex) {
+<b class="nc"><i>219</i>&nbsp;    Parse c = (Parse) this.clone();</b>
+<b class="nc"><i>220</i>&nbsp;    Parse fc = c.parts.get(parseIndex);</b>
+<b class="nc"><i>221</i>&nbsp;    c.parts.set(parseIndex,fc.clone(node));</b>
+<b class="nc"><i>222</i>&nbsp;    return c;</b>
+<i>223</i>&nbsp;  }
+<i>224</i>&nbsp;
+<i>225</i>&nbsp;  /**
+<i>226</i>&nbsp;   * Specifies whether function tags should be included as part of the constituent type.
+<i>227</i>&nbsp;   *
+<i>228</i>&nbsp;   * @param uft true is they should be included; false otherwise.
+<i>229</i>&nbsp;   */
+<i>230</i>&nbsp;  public static void useFunctionTags(boolean uft) {
+<b class="nc"><i>231</i>&nbsp;    useFunctionTags = uft;</b>
+<b class="nc"><i>232</i>&nbsp;  }</b>
+<i>233</i>&nbsp;
+<i>234</i>&nbsp;
+<i>235</i>&nbsp;  /**
+<i>236</i>&nbsp;   * Set the type of this constituent to the specified type.
+<i>237</i>&nbsp;   *
+<i>238</i>&nbsp;   * @param type The type of this constituent.
+<i>239</i>&nbsp;   */
+<i>240</i>&nbsp;  public void setType(String type) {
+<b class="nc"><i>241</i>&nbsp;    this.type = type;</b>
+<b class="nc"><i>242</i>&nbsp;  }</b>
+<i>243</i>&nbsp;
+<i>244</i>&nbsp;  /**
+<i>245</i>&nbsp;   * Returns the constituent label for this node of the parse.
+<i>246</i>&nbsp;   *
+<i>247</i>&nbsp;   * @return The constituent label for this node of the parse.
+<i>248</i>&nbsp;   */
+<i>249</i>&nbsp;  public String getType() {
+<b class="fc"><i>250</i>&nbsp;    return type;</b>
+<i>251</i>&nbsp;  }
+<i>252</i>&nbsp;
+<i>253</i>&nbsp;  /**
+<i>254</i>&nbsp;   * Returns the set of punctuation parses that occur immediately before this parse.
+<i>255</i>&nbsp;   *
+<i>256</i>&nbsp;   * @return the set of punctuation parses that occur immediately before this parse.
+<i>257</i>&nbsp;   */
+<i>258</i>&nbsp;  public Collection&lt;Parse&gt; getPreviousPunctuationSet() {
+<b class="fc"><i>259</i>&nbsp;    return prevPunctSet;</b>
+<i>260</i>&nbsp;  }
+<i>261</i>&nbsp;
+<i>262</i>&nbsp;  /**
+<i>263</i>&nbsp;   * Designates that the specified punctuation should is prior to this parse.
+<i>264</i>&nbsp;   *
+<i>265</i>&nbsp;   * @param punct The punctuation.
+<i>266</i>&nbsp;   */
+<i>267</i>&nbsp;  public void addPreviousPunctuation(Parse punct) {
+<b class="fc"><i>268</i>&nbsp;    if (this.prevPunctSet == null) {</b>
+<b class="fc"><i>269</i>&nbsp;      this.prevPunctSet = new TreeSet&lt;&gt;();</b>
+<i>270</i>&nbsp;    }
+<b class="fc"><i>271</i>&nbsp;    prevPunctSet.add(punct);</b>
+<b class="fc"><i>272</i>&nbsp;  }</b>
+<i>273</i>&nbsp;
+<i>274</i>&nbsp;  /**
+<i>275</i>&nbsp;   * Returns the set of punctuation parses that occur immediately after this parse.
+<i>276</i>&nbsp;   *
+<i>277</i>&nbsp;   * @return the set of punctuation parses that occur immediately after this parse.
+<i>278</i>&nbsp;   */
+<i>279</i>&nbsp;  public Collection&lt;Parse&gt; getNextPunctuationSet() {
+<b class="fc"><i>280</i>&nbsp;    return nextPunctSet;</b>
+<i>281</i>&nbsp;  }
+<i>282</i>&nbsp;
+<i>283</i>&nbsp;  /**
+<i>284</i>&nbsp;   * Designates that the specified punctuation follows this parse.
+<i>285</i>&nbsp;   *
+<i>286</i>&nbsp;   * @param punct The punctuation set.
+<i>287</i>&nbsp;   */
+<i>288</i>&nbsp;  public void addNextPunctuation(Parse punct) {
+<b class="fc"><i>289</i>&nbsp;    if (this.nextPunctSet == null) {</b>
+<b class="fc"><i>290</i>&nbsp;      this.nextPunctSet = new TreeSet&lt;&gt;();</b>
+<i>291</i>&nbsp;    }
+<b class="fc"><i>292</i>&nbsp;    nextPunctSet.add(punct);</b>
+<b class="fc"><i>293</i>&nbsp;  }</b>
+<i>294</i>&nbsp;
+<i>295</i>&nbsp;  /**
+<i>296</i>&nbsp;   * Sets the set of punctuation tags which follow this parse.
+<i>297</i>&nbsp;   *
+<i>298</i>&nbsp;   * @param punctSet The set of punctuation tags which follow this parse.
+<i>299</i>&nbsp;   */
+<i>300</i>&nbsp;  public void setNextPunctuation(Collection&lt;Parse&gt; punctSet) {
+<b class="fc"><i>301</i>&nbsp;    this.nextPunctSet = punctSet;</b>
+<b class="fc"><i>302</i>&nbsp;  }</b>
+<i>303</i>&nbsp;
+<i>304</i>&nbsp;  /**
+<i>305</i>&nbsp;   * Sets the set of punctuation tags which preceed this parse.
+<i>306</i>&nbsp;   *
+<i>307</i>&nbsp;   * @param punctSet The set of punctuation tags which preceed this parse.
+<i>308</i>&nbsp;   */
+<i>309</i>&nbsp;  public void setPrevPunctuation(Collection&lt;Parse&gt; punctSet) {
+<b class="fc"><i>310</i>&nbsp;    this.prevPunctSet = punctSet;</b>
+<b class="fc"><i>311</i>&nbsp;  }</b>
+<i>312</i>&nbsp;
+<i>313</i>&nbsp;  /**
+<i>314</i>&nbsp;   * Inserts the specified constituent into this parse based on its text span.This
+<i>315</i>&nbsp;   * method assumes that the specified constituent can be inserted into this parse.
+<i>316</i>&nbsp;   *
+<i>317</i>&nbsp;   * @param constituent The constituent to be inserted.
+<i>318</i>&nbsp;   */
+<i>319</i>&nbsp;  public void insert(final Parse constituent) {
+<b class="fc"><i>320</i>&nbsp;    Span ic = constituent.span;</b>
+<b class="fc"><i>321</i>&nbsp;    if (span.contains(ic)) {</b>
+<i>322</i>&nbsp;      //double oprob=c.prob;
+<b class="fc"><i>323</i>&nbsp;      int pi = 0;</b>
+<b class="fc"><i>324</i>&nbsp;      int pn = parts.size();</b>
+<b class="fc"><i>325</i>&nbsp;      for (; pi &lt; pn; pi++) {</b>
+<b class="fc"><i>326</i>&nbsp;        Parse subPart = parts.get(pi);</b>
+<i>327</i>&nbsp;        //System.err.println(&quot;Parse.insert:con=&quot;+constituent+&quot; sp[&quot;+pi+&quot;] &quot;+subPart+&quot; &quot;+subPart.getType());
+<b class="fc"><i>328</i>&nbsp;        Span sp = subPart.span;</b>
+<b class="fc"><i>329</i>&nbsp;        if (sp.getStart() &gt;= ic.getEnd()) {</b>
+<b class="nc"><i>330</i>&nbsp;          break;</b>
+<i>331</i>&nbsp;        }
+<i>332</i>&nbsp;        // constituent contains subPart
+<b class="fc"><i>333</i>&nbsp;        else if (ic.contains(sp)) {</b>
+<i>334</i>&nbsp;          //System.err.println(&quot;Parse.insert:con contains subPart&quot;);
+<b class="fc"><i>335</i>&nbsp;          parts.remove(pi);</b>
+<b class="fc"><i>336</i>&nbsp;          pi--;</b>
+<b class="fc"><i>337</i>&nbsp;          constituent.parts.add(subPart);</b>
+<b class="fc"><i>338</i>&nbsp;          subPart.setParent(constituent);</b>
+<i>339</i>&nbsp;          //System.err.println(&quot;Parse.insert: &quot;+subPart.hashCode()+&quot; -&gt; &quot;+subPart.getParent().hashCode());
+<b class="fc"><i>340</i>&nbsp;          pn = parts.size();</b>
+<i>341</i>&nbsp;        }
+<b class="fc"><i>342</i>&nbsp;        else if (sp.contains(ic)) {</b>
+<i>343</i>&nbsp;          //System.err.println(&quot;Parse.insert:subPart contains con&quot;);
+<b class="nc"><i>344</i>&nbsp;          subPart.insert(constituent);</b>
+<b class="nc"><i>345</i>&nbsp;          return;</b>
+<i>346</i>&nbsp;        }
+<i>347</i>&nbsp;      }
+<i>348</i>&nbsp;      //System.err.println(&quot;Parse.insert:adding con=&quot;+constituent+&quot; to &quot;+this);
+<b class="fc"><i>349</i>&nbsp;      parts.add(pi, constituent);</b>
+<b class="fc"><i>350</i>&nbsp;      constituent.setParent(this);</b>
+<i>351</i>&nbsp;      // System.err.println(&quot;Parse.insert: &quot;+constituent.hashCode()+&quot; -&gt; &quot;
+<i>352</i>&nbsp;      // +constituent.getParent().hashCode());
+<b class="fc"><i>353</i>&nbsp;    }</b>
+<i>354</i>&nbsp;    else {
+<b class="nc"><i>355</i>&nbsp;      throw new IllegalArgumentException(&quot;Inserting constituent not contained in the sentence!&quot;);</b>
+<i>356</i>&nbsp;    }
+<b class="fc"><i>357</i>&nbsp;  }</b>
+<i>358</i>&nbsp;
+<i>359</i>&nbsp;  /**
+<i>360</i>&nbsp;   * Appends the specified string buffer with a string representation of this parse.
+<i>361</i>&nbsp;   *
+<i>362</i>&nbsp;   * @param sb A string buffer into which the parse string can be appended.
+<i>363</i>&nbsp;   */
+<i>364</i>&nbsp;  public void show(StringBuffer sb) {
+<i>365</i>&nbsp;    int start;
+<b class="fc"><i>366</i>&nbsp;    start = span.getStart();</b>
+<b class="fc"><i>367</i>&nbsp;    if (!type.equals(AbstractBottomUpParser.TOK_NODE)) {</b>
+<b class="fc"><i>368</i>&nbsp;      sb.append(&quot;(&quot;);</b>
+<b class="fc"><i>369</i>&nbsp;      sb.append(type).append(&quot; &quot;);</b>
+<i>370</i>&nbsp;      //System.out.print(label+&quot; &quot;);
+<i>371</i>&nbsp;      //System.out.print(head+&quot; &quot;);
+<i>372</i>&nbsp;      //System.out.print(df.format(prob)+&quot; &quot;);
+<i>373</i>&nbsp;    }
+<b class="fc"><i>374</i>&nbsp;    for (Iterator&lt;Parse&gt; i = parts.iterator(); i.hasNext();) {</b>
+<b class="fc"><i>375</i>&nbsp;      Parse c = i.next();</b>
+<b class="fc"><i>376</i>&nbsp;      Span s = c.span;</b>
+<b class="fc"><i>377</i>&nbsp;      if (start &lt; s.getStart()) {</b>
+<i>378</i>&nbsp;        //System.out.println(&quot;pre &quot;+start+&quot; &quot;+s.getStart());
+<b class="fc"><i>379</i>&nbsp;        sb.append(encodeToken(text.substring(start, s.getStart())));</b>
+<i>380</i>&nbsp;      }
+<b class="fc"><i>381</i>&nbsp;      c.show(sb);</b>
+<b class="fc"><i>382</i>&nbsp;      start = s.getEnd();</b>
+<b class="fc"><i>383</i>&nbsp;    }</b>
+<b class="fc"><i>384</i>&nbsp;    if (start &lt; span.getEnd()) {</b>
+<b class="fc"><i>385</i>&nbsp;      sb.append(encodeToken(text.substring(start, span.getEnd())));</b>
+<i>386</i>&nbsp;    }
+<b class="fc"><i>387</i>&nbsp;    if (!type.equals(AbstractBottomUpParser.TOK_NODE)) {</b>
+<b class="fc"><i>388</i>&nbsp;      sb.append(&quot;)&quot;);</b>
+<i>389</i>&nbsp;    }
+<b class="fc"><i>390</i>&nbsp;  }</b>
+<i>391</i>&nbsp;
+<i>392</i>&nbsp;  /**
+<i>393</i>&nbsp;   * Displays this parse using Penn Treebank-style formatting.
+<i>394</i>&nbsp;   */
+<i>395</i>&nbsp;  public void show() {
+<b class="nc"><i>396</i>&nbsp;    StringBuffer sb = new StringBuffer(text.length() * 4);</b>
+<b class="nc"><i>397</i>&nbsp;    show(sb);</b>
+<b class="nc"><i>398</i>&nbsp;    System.out.println(sb);</b>
+<b class="nc"><i>399</i>&nbsp;  }</b>
+<i>400</i>&nbsp;
+<i>401</i>&nbsp;
+<i>402</i>&nbsp;  /**
+<i>403</i>&nbsp;   * Returns the probability associated with the pos-tag sequence assigned to this parse.
+<i>404</i>&nbsp;   *
+<i>405</i>&nbsp;   * @return The probability associated with the pos-tag sequence assigned to this parse.
+<i>406</i>&nbsp;   */
+<i>407</i>&nbsp;  public double getTagSequenceProb() {
+<i>408</i>&nbsp;    //System.err.println(&quot;Parse.getTagSequenceProb: &quot;+type+&quot; &quot;+this);
+<b class="nc"><i>409</i>&nbsp;    if (parts.size() == 1 &amp;&amp; (parts.get(0)).type.equals(AbstractBottomUpParser.TOK_NODE)) {</b>
+<i>410</i>&nbsp;      //System.err.println(this+&quot; &quot;+prob);
+<b class="nc"><i>411</i>&nbsp;      return (Math.log(prob));</b>
+<i>412</i>&nbsp;    }
+<b class="nc"><i>413</i>&nbsp;    else if (parts.size() == 0) {</b>
+<b class="nc"><i>414</i>&nbsp;      System.err.println(&quot;Parse.getTagSequenceProb: Wrong base case!&quot;);</b>
+<b class="nc"><i>415</i>&nbsp;      return (0.0);</b>
+<i>416</i>&nbsp;    }
+<i>417</i>&nbsp;    else {
+<b class="nc"><i>418</i>&nbsp;      double sum = 0.0;</b>
+<b class="nc"><i>419</i>&nbsp;      for (Iterator&lt;Parse&gt; pi = parts.iterator(); pi.hasNext();) {</b>
+<b class="nc"><i>420</i>&nbsp;        sum += pi.next().getTagSequenceProb();</b>
+<i>421</i>&nbsp;      }
+<b class="nc"><i>422</i>&nbsp;      return sum;</b>
+<i>423</i>&nbsp;    }
+<i>424</i>&nbsp;  }
+<i>425</i>&nbsp;
+<i>426</i>&nbsp;  /**
+<i>427</i>&nbsp;   * Returns whether this parse is complete.
+<i>428</i>&nbsp;   *
+<i>429</i>&nbsp;   * @return Returns true if the parse contains a single top-most node.
+<i>430</i>&nbsp;   */
+<i>431</i>&nbsp;  public boolean complete() {
+<b class="nc"><i>432</i>&nbsp;    return (parts.size() == 1);</b>
+<i>433</i>&nbsp;  }
+<i>434</i>&nbsp;
+<i>435</i>&nbsp;  public String getCoveredText() {
+<b class="fc"><i>436</i>&nbsp;    return text.substring(span.getStart(), span.getEnd());</b>
+<i>437</i>&nbsp;  }
+<i>438</i>&nbsp;
+<i>439</i>&nbsp;  /**
+<i>440</i>&nbsp;   * Represents this parse in a human readable way.
+<i>441</i>&nbsp;   */
+<i>442</i>&nbsp;  @Override
+<i>443</i>&nbsp;  public String toString() {
+<i>444</i>&nbsp;    // TODO: Use the commented code in next bigger release,
+<i>445</i>&nbsp;    // change probably breaks backward compatibility in some
+<i>446</i>&nbsp;    // applications
+<i>447</i>&nbsp;    //StringBuffer buffer = new StringBuffer();
+<i>448</i>&nbsp;    //show(buffer);
+<i>449</i>&nbsp;    //return buffer.toString();
+<b class="fc"><i>450</i>&nbsp;    return getCoveredText();</b>
+<i>451</i>&nbsp;  }
+<i>452</i>&nbsp;
+<i>453</i>&nbsp;  /**
+<i>454</i>&nbsp;   * Returns the text of the sentence over which this parse was formed.
+<i>455</i>&nbsp;   *
+<i>456</i>&nbsp;   * @return The text of the sentence over which this parse was formed.
+<i>457</i>&nbsp;   */
+<i>458</i>&nbsp;  public String getText() {
+<b class="fc"><i>459</i>&nbsp;    return text;</b>
+<i>460</i>&nbsp;  }
+<i>461</i>&nbsp;
+<i>462</i>&nbsp;  /**
+<i>463</i>&nbsp;   * Returns the character offsets for this constituent.
+<i>464</i>&nbsp;   *
+<i>465</i>&nbsp;   * @return The character offsets for this constituent.
+<i>466</i>&nbsp;   */
+<i>467</i>&nbsp;  public Span getSpan() {
+<b class="fc"><i>468</i>&nbsp;    return span;</b>
+<i>469</i>&nbsp;  }
+<i>470</i>&nbsp;
+<i>471</i>&nbsp;  /**
+<i>472</i>&nbsp;   * Returns the log of the product of the probability associated with all the
+<i>473</i>&nbsp;   * decisions which formed this constituent.
+<i>474</i>&nbsp;   *
+<i>475</i>&nbsp;   * @return The log of the product of the probability associated with all the
+<i>476</i>&nbsp;   * decisions which formed this constituent.
+<i>477</i>&nbsp;   */
+<i>478</i>&nbsp;  public double getProb() {
+<b class="fc"><i>479</i>&nbsp;    return prob;</b>
+<i>480</i>&nbsp;  }
+<i>481</i>&nbsp;
+<i>482</i>&nbsp;  /**
+<i>483</i>&nbsp;   * Adds the specified probability log to this current log for this parse.
+<i>484</i>&nbsp;   *
+<i>485</i>&nbsp;   * @param logProb The probability of an action performed on this parse.
+<i>486</i>&nbsp;   */
+<i>487</i>&nbsp;  public void addProb(double logProb) {
+<b class="nc"><i>488</i>&nbsp;    this.prob += logProb;</b>
+<b class="nc"><i>489</i>&nbsp;  }</b>
+<i>490</i>&nbsp;
+<i>491</i>&nbsp;  /**
+<i>492</i>&nbsp;   * Returns the child constituents of this constituent
+<i>493</i>&nbsp;   * .
+<i>494</i>&nbsp;   * @return The child constituents of this constituent.
+<i>495</i>&nbsp;   */
+<i>496</i>&nbsp;  public Parse[] getChildren() {
+<b class="fc"><i>497</i>&nbsp;    return parts.toArray(new Parse[parts.size()]);</b>
+<i>498</i>&nbsp;  }
+<i>499</i>&nbsp;
+<i>500</i>&nbsp;  /**
+<i>501</i>&nbsp;   * Replaces the child at the specified index with a new child with the specified label.
+<i>502</i>&nbsp;   *
+<i>503</i>&nbsp;   * @param index The index of the child to be replaced.
+<i>504</i>&nbsp;   * @param label The label to be assigned to the new child.
+<i>505</i>&nbsp;   */
+<i>506</i>&nbsp;  public void setChild(int index, String label) {
+<b class="nc"><i>507</i>&nbsp;    Parse newChild = (Parse) (parts.get(index)).clone();</b>
+<b class="nc"><i>508</i>&nbsp;    newChild.setLabel(label);</b>
+<b class="nc"><i>509</i>&nbsp;    parts.set(index,newChild);</b>
+<b class="nc"><i>510</i>&nbsp;  }</b>
+<i>511</i>&nbsp;
+<i>512</i>&nbsp;  public void add(Parse daughter, HeadRules rules) {
+<b class="fc"><i>513</i>&nbsp;    if (daughter.prevPunctSet != null) {</b>
+<b class="fc"><i>514</i>&nbsp;      parts.addAll(daughter.prevPunctSet);</b>
+<i>515</i>&nbsp;    }
+<b class="fc"><i>516</i>&nbsp;    parts.add(daughter);</b>
+<b class="fc"><i>517</i>&nbsp;    this.span = new Span(span.getStart(),daughter.getSpan().getEnd());</b>
+<b class="fc"><i>518</i>&nbsp;    this.head = rules.getHead(getChildren(),type);</b>
+<b class="fc"><i>519</i>&nbsp;    this.headIndex = head.headIndex;</b>
+<b class="fc"><i>520</i>&nbsp;  }</b>
+<i>521</i>&nbsp;
+<i>522</i>&nbsp;  public void remove(int index) {
+<b class="nc"><i>523</i>&nbsp;    parts.remove(index);</b>
+<b class="nc"><i>524</i>&nbsp;    if (! parts.isEmpty()) {</b>
+<b class="nc"><i>525</i>&nbsp;      if (index == 0 || index == parts.size()) { //size is orig last element</b>
+<b class="nc"><i>526</i>&nbsp;        span = new Span((parts.get(0)).span.getStart(),(parts.get(parts.size() - 1)).span.getEnd());</b>
+<i>527</i>&nbsp;      }
+<i>528</i>&nbsp;    }
+<b class="nc"><i>529</i>&nbsp;  }</b>
+<i>530</i>&nbsp;
+<i>531</i>&nbsp;  public Parse adjoinRoot(Parse node, HeadRules rules, int parseIndex) {
+<b class="nc"><i>532</i>&nbsp;    Parse lastChild = parts.get(parseIndex);</b>
+<b class="nc"><i>533</i>&nbsp;    Parse adjNode = new Parse(this.text,new Span(lastChild.getSpan().getStart(),</b>
+<b class="nc"><i>534</i>&nbsp;        node.getSpan().getEnd()),lastChild.getType(),1,</b>
+<b class="nc"><i>535</i>&nbsp;        rules.getHead(new Parse[]{lastChild,node},lastChild.getType()));</b>
+<b class="nc"><i>536</i>&nbsp;    adjNode.parts.add(lastChild);</b>
+<b class="nc"><i>537</i>&nbsp;    if (node.prevPunctSet != null) {</b>
+<b class="nc"><i>538</i>&nbsp;      adjNode.parts.addAll(node.prevPunctSet);</b>
+<i>539</i>&nbsp;    }
+<b class="nc"><i>540</i>&nbsp;    adjNode.parts.add(node);</b>
+<b class="nc"><i>541</i>&nbsp;    parts.set(parseIndex,adjNode);</b>
+<b class="nc"><i>542</i>&nbsp;    return adjNode;</b>
+<i>543</i>&nbsp;  }
+<i>544</i>&nbsp;
+<i>545</i>&nbsp;  /**
+<i>546</i>&nbsp;   * Sister adjoins this node&#39;s last child and the specified sister node and returns their
+<i>547</i>&nbsp;   * new parent node.  The new parent node replace this nodes last child.
+<i>548</i>&nbsp;   *
+<i>549</i>&nbsp;   * @param sister The node to be adjoined.
+<i>550</i>&nbsp;   * @param rules The head rules for the parser.
+<i>551</i>&nbsp;   * @return The new parent node of this node and the specified sister node.
+<i>552</i>&nbsp;   */
+<i>553</i>&nbsp;  public Parse adjoin(Parse sister, HeadRules rules) {
+<b class="fc"><i>554</i>&nbsp;    Parse lastChild = parts.get(parts.size() - 1);</b>
+<b class="fc"><i>555</i>&nbsp;    Parse adjNode = new Parse(this.text,new Span(lastChild.getSpan().getStart(),sister.getSpan().getEnd()),</b>
+<b class="fc"><i>556</i>&nbsp;        lastChild.getType(),1,rules.getHead(new Parse[]{lastChild,sister},lastChild.getType()));</b>
+<b class="fc"><i>557</i>&nbsp;    adjNode.parts.add(lastChild);</b>
+<b class="fc"><i>558</i>&nbsp;    if (sister.prevPunctSet != null) {</b>
+<b class="fc"><i>559</i>&nbsp;      adjNode.parts.addAll(sister.prevPunctSet);</b>
+<i>560</i>&nbsp;    }
+<b class="fc"><i>561</i>&nbsp;    adjNode.parts.add(sister);</b>
+<b class="fc"><i>562</i>&nbsp;    parts.set(parts.size() - 1, adjNode);</b>
+<b class="fc"><i>563</i>&nbsp;    this.span = new Span(span.getStart(),sister.getSpan().getEnd());</b>
+<b class="fc"><i>564</i>&nbsp;    this.head = rules.getHead(getChildren(),type);</b>
+<b class="fc"><i>565</i>&nbsp;    this.headIndex = head.headIndex;</b>
+<b class="fc"><i>566</i>&nbsp;    return adjNode;</b>
+<i>567</i>&nbsp;  }
+<i>568</i>&nbsp;
+<i>569</i>&nbsp;  public void expandTopNode(Parse root) {
+<b class="nc"><i>570</i>&nbsp;    boolean beforeRoot = true;</b>
+<i>571</i>&nbsp;    //System.err.println(&quot;expandTopNode: parts=&quot;+parts);
+<b class="nc"><i>572</i>&nbsp;    for (int pi = 0, ai = 0; pi &lt; parts.size(); pi++,ai++) {</b>
+<b class="nc"><i>573</i>&nbsp;      Parse node = parts.get(pi);</b>
+<b class="nc"><i>574</i>&nbsp;      if (node == root) {</b>
+<b class="nc"><i>575</i>&nbsp;        beforeRoot = false;</b>
+<i>576</i>&nbsp;      }
+<b class="nc"><i>577</i>&nbsp;      else if (beforeRoot) {</b>
+<b class="nc"><i>578</i>&nbsp;        root.parts.add(ai,node);</b>
+<b class="nc"><i>579</i>&nbsp;        parts.remove(pi);</b>
+<b class="nc"><i>580</i>&nbsp;        pi--;</b>
+<i>581</i>&nbsp;      }
+<i>582</i>&nbsp;      else {
+<b class="nc"><i>583</i>&nbsp;        root.parts.add(node);</b>
+<b class="nc"><i>584</i>&nbsp;        parts.remove(pi);</b>
+<b class="nc"><i>585</i>&nbsp;        pi--;</b>
+<i>586</i>&nbsp;      }
+<i>587</i>&nbsp;    }
+<b class="nc"><i>588</i>&nbsp;    root.updateSpan();</b>
+<b class="nc"><i>589</i>&nbsp;  }</b>
+<i>590</i>&nbsp;
+<i>591</i>&nbsp;  /**
+<i>592</i>&nbsp;   * Returns the number of children for this parse node.
+<i>593</i>&nbsp;   *
+<i>594</i>&nbsp;   * @return the number of children for this parse node.
+<i>595</i>&nbsp;   */
+<i>596</i>&nbsp;  public int getChildCount() {
+<b class="fc"><i>597</i>&nbsp;    return parts.size();</b>
+<i>598</i>&nbsp;  }
+<i>599</i>&nbsp;
+<i>600</i>&nbsp;  /**
+<i>601</i>&nbsp;   * Returns the index of this specified child.
+<i>602</i>&nbsp;   *
+<i>603</i>&nbsp;   * @param child A child of this parse.
+<i>604</i>&nbsp;   *
+<i>605</i>&nbsp;   * @return the index of this specified child or -1 if the specified child is not a child of this parse.
+<i>606</i>&nbsp;   */
+<i>607</i>&nbsp;  public int indexOf(Parse child) {
+<b class="nc"><i>608</i>&nbsp;    return parts.indexOf(child);</b>
+<i>609</i>&nbsp;  }
+<i>610</i>&nbsp;
+<i>611</i>&nbsp;  /**
+<i>612</i>&nbsp;   * Returns the head constituent associated with this constituent.
+<i>613</i>&nbsp;   *
+<i>614</i>&nbsp;   * @return The head constituent associated with this constituent.
+<i>615</i>&nbsp;   */
+<i>616</i>&nbsp;  public Parse getHead() {
+<b class="fc"><i>617</i>&nbsp;    return head;</b>
+<i>618</i>&nbsp;  }
+<i>619</i>&nbsp;
+<i>620</i>&nbsp;  /**
+<i>621</i>&nbsp;   * Returns the index within a sentence of the head token for this parse.
+<i>622</i>&nbsp;   *
+<i>623</i>&nbsp;   * @return The index within a sentence of the head token for this parse.
+<i>624</i>&nbsp;   */
+<i>625</i>&nbsp;  public int getHeadIndex() {
+<b class="fc"><i>626</i>&nbsp;    return headIndex;</b>
+<i>627</i>&nbsp;  }
+<i>628</i>&nbsp;
+<i>629</i>&nbsp;  /**
+<i>630</i>&nbsp;   * Returns the label assigned to this parse node during parsing
+<i>631</i>&nbsp;   * which specifies how this node will be formed into a constituent.
+<i>632</i>&nbsp;   *
+<i>633</i>&nbsp;   * @return The outcome label assigned to this node during parsing.
+<i>634</i>&nbsp;   */
+<i>635</i>&nbsp;  public String getLabel() {
+<b class="fc"><i>636</i>&nbsp;    return label;</b>
+<i>637</i>&nbsp;  }
+<i>638</i>&nbsp;
+<i>639</i>&nbsp;  /**
+<i>640</i>&nbsp;   * Assigns this parse the specified label.  This is used by parsing schemes to
+<i>641</i>&nbsp;   * tag parsing nodes while building.
+<i>642</i>&nbsp;   *
+<i>643</i>&nbsp;   * @param label A label indicating something about the stage of building for this parse node.
+<i>644</i>&nbsp;   */
+<i>645</i>&nbsp;  public void setLabel(String label) {
+<b class="fc"><i>646</i>&nbsp;    this.label = label;</b>
+<b class="fc"><i>647</i>&nbsp;  }</b>
+<i>648</i>&nbsp;
+<i>649</i>&nbsp;  private static String getType(String rest) {
+<b class="fc"><i>650</i>&nbsp;    if (rest.startsWith(&quot;-LCB-&quot;)) {</b>
+<b class="nc"><i>651</i>&nbsp;      return &quot;-LCB-&quot;;</b>
+<i>652</i>&nbsp;    }
+<b class="fc"><i>653</i>&nbsp;    else if (rest.startsWith(&quot;-RCB-&quot;)) {</b>
+<b class="nc"><i>654</i>&nbsp;      return &quot;-RCB-&quot;;</b>
+<i>655</i>&nbsp;    }
+<b class="fc"><i>656</i>&nbsp;    else if (rest.startsWith(&quot;-LRB-&quot;)) {</b>
+<b class="fc"><i>657</i>&nbsp;      return &quot;-LRB-&quot;;</b>
+<i>658</i>&nbsp;    }
+<b class="fc"><i>659</i>&nbsp;    else if (rest.startsWith(&quot;-RRB-&quot;)) {</b>
+<b class="fc"><i>660</i>&nbsp;      return &quot;-RRB-&quot;;</b>
+<i>661</i>&nbsp;    }
+<b class="fc"><i>662</i>&nbsp;    else if (rest.startsWith(&quot;-RSB-&quot;)) {</b>
+<b class="nc"><i>663</i>&nbsp;      return &quot;-RSB-&quot;;</b>
+<i>664</i>&nbsp;    }
+<b class="fc"><i>665</i>&nbsp;    else if (rest.startsWith(&quot;-LSB-&quot;)) {</b>
+<b class="nc"><i>666</i>&nbsp;      return &quot;-LSB-&quot;;</b>
+<i>667</i>&nbsp;    }
+<i>668</i>&nbsp;
+<b class="fc"><i>669</i>&nbsp;    else if (rest.startsWith(&quot;-NONE-&quot;)) {</b>
+<b class="fc"><i>670</i>&nbsp;      return &quot;-NONE-&quot;;</b>
+<i>671</i>&nbsp;    }
+<i>672</i>&nbsp;    else {
+<b class="fc"><i>673</i>&nbsp;      Matcher typeMatcher = typePattern.matcher(rest);</b>
+<b class="fc"><i>674</i>&nbsp;      if (typeMatcher.find()) {</b>
+<b class="fc"><i>675</i>&nbsp;        String type = typeMatcher.group(1);</b>
+<b class="fc"><i>676</i>&nbsp;        if (useFunctionTags) {</b>
+<b class="nc"><i>677</i>&nbsp;          Matcher funMatcher = funTypePattern.matcher(rest);</b>
+<b class="nc"><i>678</i>&nbsp;          if (funMatcher.find()) {</b>
+<b class="nc"><i>679</i>&nbsp;            String ftag = funMatcher.group(1);</b>
+<b class="nc"><i>680</i>&nbsp;            type = type + &quot;-&quot; + ftag;</b>
+<i>681</i>&nbsp;          }
+<i>682</i>&nbsp;        }
+<b class="fc"><i>683</i>&nbsp;        return type;</b>
+<i>684</i>&nbsp;      }
+<i>685</i>&nbsp;    }
+<b class="nc"><i>686</i>&nbsp;    return null;</b>
+<i>687</i>&nbsp;  }
+<i>688</i>&nbsp;
+<i>689</i>&nbsp;  private static String encodeToken(String token) {
+<b class="fc"><i>690</i>&nbsp;    if (BRACKET_LRB.equals(token)) {</b>
+<b class="fc"><i>691</i>&nbsp;      return &quot;-LRB-&quot;;</b>
+<i>692</i>&nbsp;    }
+<b class="fc"><i>693</i>&nbsp;    else if (BRACKET_RRB.equals(token)) {</b>
+<b class="fc"><i>694</i>&nbsp;      return &quot;-RRB-&quot;;</b>
+<i>695</i>&nbsp;    }
+<b class="fc"><i>696</i>&nbsp;    else if (BRACKET_LCB.equals(token)) {</b>
+<b class="nc"><i>697</i>&nbsp;      return &quot;-LCB-&quot;;</b>
+<i>698</i>&nbsp;    }
+<b class="fc"><i>699</i>&nbsp;    else if (BRACKET_RCB.equals(token)) {</b>
+<b class="nc"><i>700</i>&nbsp;      return &quot;-RCB-&quot;;</b>
+<i>701</i>&nbsp;    }
+<b class="fc"><i>702</i>&nbsp;    else if (BRACKET_LSB.equals(token)) {</b>
+<b class="nc"><i>703</i>&nbsp;      return &quot;-LSB-&quot;;</b>
+<i>704</i>&nbsp;    }
+<b class="fc"><i>705</i>&nbsp;    else if (BRACKET_RSB.equals(token)) {</b>
+<b class="nc"><i>706</i>&nbsp;      return &quot;-RSB-&quot;;</b>
+<i>707</i>&nbsp;    }
+<i>708</i>&nbsp;
+<b class="fc"><i>709</i>&nbsp;    return token;</b>
+<i>710</i>&nbsp;  }
+<i>711</i>&nbsp;
+<i>712</i>&nbsp;  private static String decodeToken(String token) {
+<b class="fc"><i>713</i>&nbsp;    if (&quot;-LRB-&quot;.equals(token)) {</b>
+<b class="fc"><i>714</i>&nbsp;      return BRACKET_LRB;</b>
+<i>715</i>&nbsp;    }
+<b class="fc"><i>716</i>&nbsp;    else if (&quot;-RRB-&quot;.equals(token)) {</b>
+<b class="fc"><i>717</i>&nbsp;      return BRACKET_RRB;</b>
+<i>718</i>&nbsp;    }
+<b class="fc"><i>719</i>&nbsp;    else if (&quot;-LCB-&quot;.equals(token)) {</b>
+<b class="fc"><i>720</i>&nbsp;      return BRACKET_LCB;</b>
+<i>721</i>&nbsp;    }
+<b class="fc"><i>722</i>&nbsp;    else if (&quot;-RCB-&quot;.equals(token)) {</b>
+<b class="fc"><i>723</i>&nbsp;      return BRACKET_RCB;</b>
+<i>724</i>&nbsp;    }
+<b class="fc"><i>725</i>&nbsp;    else if (&quot;-LSB-&quot;.equals(token)) {</b>
+<b class="nc"><i>726</i>&nbsp;      return BRACKET_LSB;</b>
+<i>727</i>&nbsp;    }
+<b class="fc"><i>728</i>&nbsp;    else if (&quot;-RSB-&quot;.equals(token)) {</b>
+<b class="nc"><i>729</i>&nbsp;      return BRACKET_RSB;</b>
+<i>730</i>&nbsp;    }
+<i>731</i>&nbsp;
+<b class="fc"><i>732</i>&nbsp;    return token;</b>
+<i>733</i>&nbsp;  }
+<i>734</i>&nbsp;
+<i>735</i>&nbsp;  /**
+<i>736</i>&nbsp;   * Returns the string containing the token for the specified portion of the parse string or
+<i>737</i>&nbsp;   * null if the portion of the parse string does not represent a token.
+<i>738</i>&nbsp;   *
+<i>739</i>&nbsp;   * @param rest The portion of the parse string remaining to be processed.
+<i>740</i>&nbsp;   *
+<i>741</i>&nbsp;   * @return The string containing the token for the specified portion of the parse string or
+<i>742</i>&nbsp;   *     null if the portion of the parse string does not represent a token.
+<i>743</i>&nbsp;   */
+<i>744</i>&nbsp;  private static String getToken(String rest) {
+<b class="fc"><i>745</i>&nbsp;    Matcher tokenMatcher = tokenPattern.matcher(rest);</b>
+<b class="fc"><i>746</i>&nbsp;    if (tokenMatcher.find()) {</b>
+<b class="fc"><i>747</i>&nbsp;      return decodeToken(tokenMatcher.group(1));</b>
+<i>748</i>&nbsp;    }
+<b class="fc"><i>749</i>&nbsp;    return null;</b>
+<i>750</i>&nbsp;  }
+<i>751</i>&nbsp;
+<i>752</i>&nbsp;  /**
+<i>753</i>&nbsp;   * Computes the head parses for this parse and its sub-parses and stores this information
+<i>754</i>&nbsp;   * in the parse data structure.
+<i>755</i>&nbsp;   *
+<i>756</i>&nbsp;   * @param rules The head rules which determine how the head of the parse is computed.
+<i>757</i>&nbsp;   */
+<i>758</i>&nbsp;  public void updateHeads(HeadRules rules) {
+<b class="fc"><i>759</i>&nbsp;    if (parts != null &amp;&amp; parts.size() != 0) {</b>
+<b class="fc"><i>760</i>&nbsp;      for (int pi = 0, pn = parts.size(); pi &lt; pn; pi++) {</b>
+<b class="fc"><i>761</i>&nbsp;        Parse c = parts.get(pi);</b>
+<b class="fc"><i>762</i>&nbsp;        c.updateHeads(rules);</b>
+<i>763</i>&nbsp;      }
+<b class="fc"><i>764</i>&nbsp;      this.head = rules.getHead(parts.toArray(new Parse[parts.size()]), type);</b>
+<b class="fc"><i>765</i>&nbsp;      if (head == null) {</b>
+<b class="fc"><i>766</i>&nbsp;        head = this;</b>
+<i>767</i>&nbsp;      }
+<i>768</i>&nbsp;      else {
+<b class="fc"><i>769</i>&nbsp;        this.headIndex = head.headIndex;</b>
+<i>770</i>&nbsp;      }
+<i>771</i>&nbsp;    }
+<i>772</i>&nbsp;    else {
+<b class="fc"><i>773</i>&nbsp;      this.head = this;</b>
+<i>774</i>&nbsp;    }
+<b class="fc"><i>775</i>&nbsp;  }</b>
+<i>776</i>&nbsp;
+<i>777</i>&nbsp;  public void updateSpan() {
+<b class="nc"><i>778</i>&nbsp;    span = new Span((parts.get(0)).span.getStart(),(parts.get(parts.size() - 1)).span.getEnd());</b>
+<b class="nc"><i>779</i>&nbsp;  }</b>
+<i>780</i>&nbsp;
+<i>781</i>&nbsp;  /**
+<i>782</i>&nbsp;   * Prune the specified sentence parse of vacuous productions.
+<i>783</i>&nbsp;   *
+<i>784</i>&nbsp;   * @param parse
+<i>785</i>&nbsp;   */
+<i>786</i>&nbsp;  public static void pruneParse(Parse parse) {
+<b class="fc"><i>787</i>&nbsp;    List&lt;Parse&gt; nodes = new LinkedList&lt;&gt;();</b>
+<b class="fc"><i>788</i>&nbsp;    nodes.add(parse);</b>
+<b class="fc"><i>789</i>&nbsp;    while (nodes.size() != 0) {</b>
+<b class="fc"><i>790</i>&nbsp;      Parse node = nodes.remove(0);</b>
+<b class="fc"><i>791</i>&nbsp;      Parse[] children = node.getChildren();</b>
+<b class="fc"><i>792</i>&nbsp;      if (children.length == 1 &amp;&amp; node.getType().equals(children[0].getType())) {</b>
+<b class="fc"><i>793</i>&nbsp;        int index = node.getParent().parts.indexOf(node);</b>
+<b class="fc"><i>794</i>&nbsp;        children[0].setParent(node.getParent());</b>
+<b class="fc"><i>795</i>&nbsp;        node.getParent().parts.set(index,children[0]);</b>
+<b class="fc"><i>796</i>&nbsp;        node.parent = null;</b>
+<b class="fc"><i>797</i>&nbsp;        node.parts = null;</b>
+<i>798</i>&nbsp;      }
+<b class="fc"><i>799</i>&nbsp;      nodes.addAll(Arrays.asList(children));</b>
+<b class="fc"><i>800</i>&nbsp;    }</b>
+<b class="fc"><i>801</i>&nbsp;  }</b>
+<i>802</i>&nbsp;
+<i>803</i>&nbsp;  public static void fixPossesives(Parse parse) {
+<b class="nc"><i>804</i>&nbsp;    Parse[] tags = parse.getTagNodes();</b>
+<b class="nc"><i>805</i>&nbsp;    for (int ti = 0; ti &lt; tags.length; ti++) {</b>
+<b class="nc"><i>806</i>&nbsp;      if (tags[ti].getType().equals(&quot;POS&quot;)) {</b>
+<b class="nc"><i>807</i>&nbsp;        if (ti + 1 &lt; tags.length &amp;&amp; tags[ti + 1].getParent() == tags[ti].getParent().getParent()) {</b>
+<b class="nc"><i>808</i>&nbsp;          int start = tags[ti + 1].getSpan().getStart();</b>
+<b class="nc"><i>809</i>&nbsp;          int end = tags[ti + 1].getSpan().getEnd();</b>
+<b class="nc"><i>810</i>&nbsp;          for (int npi = ti + 2; npi &lt; tags.length; npi++) {</b>
+<b class="nc"><i>811</i>&nbsp;            if (tags[npi].getParent() == tags[npi - 1].getParent()) {</b>
+<b class="nc"><i>812</i>&nbsp;              end = tags[npi].getSpan().getEnd();</b>
+<i>813</i>&nbsp;            }
+<i>814</i>&nbsp;            else {
+<i>815</i>&nbsp;              break;
+<i>816</i>&nbsp;            }
+<i>817</i>&nbsp;          }
+<b class="nc"><i>818</i>&nbsp;          Parse npPos = new Parse(parse.getText(), new Span(start,end), &quot;NP&quot;, 1 , tags[ti + 1]);</b>
+<b class="nc"><i>819</i>&nbsp;          parse.insert(npPos);</b>
+<i>820</i>&nbsp;        }
+<i>821</i>&nbsp;      }
+<i>822</i>&nbsp;    }
+<b class="nc"><i>823</i>&nbsp;  }</b>
+<i>824</i>&nbsp;
+<i>825</i>&nbsp;
+<i>826</i>&nbsp;
+<i>827</i>&nbsp;  /**
+<i>828</i>&nbsp;   * Parses the specified tree-bank style parse string and return a Parse structure for that string.
+<i>829</i>&nbsp;   *
+<i>830</i>&nbsp;   * @param parse A tree-bank style parse string.
+<i>831</i>&nbsp;   *
+<i>832</i>&nbsp;   * @return a Parse structure for the specified tree-bank style parse string.
+<i>833</i>&nbsp;   */
+<i>834</i>&nbsp;  public static Parse parseParse(String parse) {
+<b class="fc"><i>835</i>&nbsp;    return parseParse(parse,null);</b>
+<i>836</i>&nbsp;  }
+<i>837</i>&nbsp;
+<i>838</i>&nbsp;  /**
+<i>839</i>&nbsp;   * Parses the specified tree-bank style parse string and return a Parse structure
+<i>840</i>&nbsp;   * for that string.
+<i>841</i>&nbsp;   *
+<i>842</i>&nbsp;   * @param parse A tree-bank style parse string.
+<i>843</i>&nbsp;   * @param gl The gap labeler.
+<i>844</i>&nbsp;   *
+<i>845</i>&nbsp;   * @return a Parse structure for the specified tree-bank style parse string.
+<i>846</i>&nbsp;   */
+<i>847</i>&nbsp;  public static Parse parseParse(String parse, GapLabeler gl) {
+<b class="fc"><i>848</i>&nbsp;    StringBuilder text = new StringBuilder();</b>
+<b class="fc"><i>849</i>&nbsp;    int offset = 0;</b>
+<b class="fc"><i>850</i>&nbsp;    Stack&lt;Constituent&gt; stack = new Stack&lt;&gt;();</b>
+<b class="fc"><i>851</i>&nbsp;    List&lt;Constituent&gt; cons = new LinkedList&lt;&gt;();</b>
+<b class="fc"><i>852</i>&nbsp;    for (int ci = 0, cl = parse.length(); ci &lt; cl; ci++) {</b>
+<b class="fc"><i>853</i>&nbsp;      char c = parse.charAt(ci);</b>
+<b class="fc"><i>854</i>&nbsp;      if (c == &#39;(&#39;) {</b>
+<b class="fc"><i>855</i>&nbsp;        String rest = parse.substring(ci + 1);</b>
+<b class="fc"><i>856</i>&nbsp;        String type = getType(rest);</b>
+<b class="fc"><i>857</i>&nbsp;        if (type == null) {</b>
+<b class="nc"><i>858</i>&nbsp;          System.err.println(&quot;null type for: &quot; + rest);</b>
+<i>859</i>&nbsp;        }
+<b class="fc"><i>860</i>&nbsp;        String token = getToken(rest);</b>
+<b class="fc"><i>861</i>&nbsp;        stack.push(new Constituent(type, new Span(offset,offset)));</b>
+<b class="fc"><i>862</i>&nbsp;        if (token != null) {</b>
+<b class="fc"><i>863</i>&nbsp;          if (Objects.equals(type, &quot;-NONE-&quot;) &amp;&amp; gl != null) {</b>
+<i>864</i>&nbsp;            //System.err.println(&quot;stack.size=&quot;+stack.size());
+<b class="nc"><i>865</i>&nbsp;            gl.labelGaps(stack);</b>
+<i>866</i>&nbsp;          }
+<i>867</i>&nbsp;          else {
+<b class="fc"><i>868</i>&nbsp;            cons.add(new Constituent(AbstractBottomUpParser.TOK_NODE,</b>
+<b class="fc"><i>869</i>&nbsp;                new Span(offset, offset + token.length())));</b>
+<b class="fc"><i>870</i>&nbsp;            text.append(token).append(&quot; &quot;);</b>
+<b class="fc"><i>871</i>&nbsp;            offset += token.length() + 1;</b>
+<i>872</i>&nbsp;          }
+<i>873</i>&nbsp;        }
+<b class="fc"><i>874</i>&nbsp;      }</b>
+<b class="fc"><i>875</i>&nbsp;      else if (c == &#39;)&#39;) {</b>
+<b class="fc"><i>876</i>&nbsp;        Constituent con = stack.pop();</b>
+<b class="fc"><i>877</i>&nbsp;        int start = con.getSpan().getStart();</b>
+<b class="fc"><i>878</i>&nbsp;        if (start &lt; offset) {</b>
+<b class="fc"><i>879</i>&nbsp;          cons.add(new Constituent(con.getLabel(), new Span(start, offset - 1)));</b>
+<i>880</i>&nbsp;        }
+<i>881</i>&nbsp;      }
+<i>882</i>&nbsp;    }
+<b class="fc"><i>883</i>&nbsp;    String txt = text.toString();</b>
+<b class="fc"><i>884</i>&nbsp;    int tokenIndex = -1;</b>
+<b class="fc"><i>885</i>&nbsp;    Parse p = new Parse(txt, new Span(0, txt.length()), AbstractBottomUpParser.TOP_NODE, 1,0);</b>
+<b class="fc"><i>886</i>&nbsp;    for (int ci = 0; ci &lt; cons.size(); ci++) {</b>
+<b class="fc"><i>887</i>&nbsp;      Constituent con = cons.get(ci);</b>
+<b class="fc"><i>888</i>&nbsp;      String type = con.getLabel();</b>
+<b class="fc"><i>889</i>&nbsp;      if (!type.equals(AbstractBottomUpParser.TOP_NODE)) {</b>
+<b class="fc"><i>890</i>&nbsp;        if (AbstractBottomUpParser.TOK_NODE.equals(type)) {</b>
+<b class="fc"><i>891</i>&nbsp;          tokenIndex++;</b>
+<i>892</i>&nbsp;        }
+<b class="fc"><i>893</i>&nbsp;        Parse c = new Parse(txt, con.getSpan(), type, 1,tokenIndex);</b>
+<i>894</i>&nbsp;        //System.err.println(&quot;insert[&quot;+ci+&quot;] &quot;+type+&quot; &quot;+c.toString()+&quot; &quot;+c.hashCode());
+<b class="fc"><i>895</i>&nbsp;        p.insert(c);</b>
+<i>896</i>&nbsp;        //codeTree(p);
+<i>897</i>&nbsp;      }
+<i>898</i>&nbsp;    }
+<b class="fc"><i>899</i>&nbsp;    return p;</b>
+<i>900</i>&nbsp;  }
+<i>901</i>&nbsp;
+<i>902</i>&nbsp;  /**
+<i>903</i>&nbsp;   * Returns the parent parse node of this constituent.
+<i>904</i>&nbsp;   *
+<i>905</i>&nbsp;   * @return The parent parse node of this constituent.
+<i>906</i>&nbsp;   */
+<i>907</i>&nbsp;  public Parse getParent() {
+<b class="fc"><i>908</i>&nbsp;    return parent;</b>
+<i>909</i>&nbsp;  }
+<i>910</i>&nbsp;
+<i>911</i>&nbsp;  /**
+<i>912</i>&nbsp;   * Specifies the parent parse node for this constituent.
+<i>913</i>&nbsp;   *
+<i>914</i>&nbsp;   * @param parent The parent parse node for this constituent.
+<i>915</i>&nbsp;   */
+<i>916</i>&nbsp;  public void setParent(Parse parent) {
+<b class="fc"><i>917</i>&nbsp;    this.parent = parent;</b>
+<b class="fc"><i>918</i>&nbsp;  }</b>
+<i>919</i>&nbsp;
+<i>920</i>&nbsp;  /**
+<i>921</i>&nbsp;   * Indicates whether this parse node is a pos-tag.
+<i>922</i>&nbsp;   *
+<i>923</i>&nbsp;   * @return true if this node is a pos-tag, false otherwise.
+<i>924</i>&nbsp;   */
+<i>925</i>&nbsp;  public boolean isPosTag() {
+<b class="fc"><i>926</i>&nbsp;    return (parts.size() == 1 &amp;&amp;</b>
+<b class="fc"><i>927</i>&nbsp;        (parts.get(0)).getType().equals(AbstractBottomUpParser.TOK_NODE));</b>
+<i>928</i>&nbsp;  }
+<i>929</i>&nbsp;
+<i>930</i>&nbsp;  /**
+<i>931</i>&nbsp;   * Returns true if this constituent contains no sub-constituents.
+<i>932</i>&nbsp;   *
+<i>933</i>&nbsp;   * @return true if this constituent contains no sub-constituents; false otherwise.
+<i>934</i>&nbsp;   */
+<i>935</i>&nbsp;  public boolean isFlat() {
+<b class="nc"><i>936</i>&nbsp;    boolean flat = true;</b>
+<b class="nc"><i>937</i>&nbsp;    for (int ci = 0; ci &lt; parts.size(); ci++) {</b>
+<b class="nc"><i>938</i>&nbsp;      flat &amp;= (parts.get(ci)).isPosTag();</b>
+<i>939</i>&nbsp;    }
+<b class="nc"><i>940</i>&nbsp;    return flat;</b>
+<i>941</i>&nbsp;  }
+<i>942</i>&nbsp;
+<i>943</i>&nbsp;  public void isChunk(boolean ic) {
+<b class="nc"><i>944</i>&nbsp;    this.isChunk = ic;</b>
+<b class="nc"><i>945</i>&nbsp;  }</b>
+<i>946</i>&nbsp;
+<i>947</i>&nbsp;  public boolean isChunk() {
+<b class="nc"><i>948</i>&nbsp;    return isChunk;</b>
+<i>949</i>&nbsp;  }
+<i>950</i>&nbsp;
+<i>951</i>&nbsp;  /**
+<i>952</i>&nbsp;   * Returns the parse nodes which are children of this node and which are pos tags.
+<i>953</i>&nbsp;   *
+<i>954</i>&nbsp;   * @return the parse nodes which are children of this node and which are pos tags.
+<i>955</i>&nbsp;   */
+<i>956</i>&nbsp;  public Parse[] getTagNodes() {
+<b class="fc"><i>957</i>&nbsp;    List&lt;Parse&gt; tags = new LinkedList&lt;&gt;();</b>
+<b class="fc"><i>958</i>&nbsp;    List&lt;Parse&gt; nodes = new LinkedList&lt;&gt;();</b>
+<b class="fc"><i>959</i>&nbsp;    nodes.addAll(this.parts);</b>
+<b class="fc"><i>960</i>&nbsp;    while (nodes.size() != 0) {</b>
+<b class="fc"><i>961</i>&nbsp;      Parse p = nodes.remove(0);</b>
+<b class="fc"><i>962</i>&nbsp;      if (p.isPosTag()) {</b>
+<b class="fc"><i>963</i>&nbsp;        tags.add(p);</b>
+<i>964</i>&nbsp;      }
+<i>965</i>&nbsp;      else {
+<b class="fc"><i>966</i>&nbsp;        nodes.addAll(0,p.parts);</b>
+<i>967</i>&nbsp;      }
+<b class="fc"><i>968</i>&nbsp;    }</b>
+<b class="fc"><i>969</i>&nbsp;    return tags.toArray(new Parse[tags.size()]);</b>
+<i>970</i>&nbsp;  }
+<i>971</i>&nbsp;
+<i>972</i>&nbsp;  public Parse[] getTokenNodes() {
+<b class="nc"><i>973</i>&nbsp;    List&lt;Parse&gt; tokens = new LinkedList&lt;&gt;();</b>
+<b class="nc"><i>974</i>&nbsp;    List&lt;Parse&gt; nodes = new LinkedList&lt;&gt;();</b>
+<b class="nc"><i>975</i>&nbsp;    nodes.addAll(this.parts);</b>
+<b class="nc"><i>976</i>&nbsp;    while (nodes.size() != 0) {</b>
+<b class="nc"><i>977</i>&nbsp;      Parse p = nodes.remove(0);</b>
+<b class="nc"><i>978</i>&nbsp;      if (p.getType().equals(AbstractBottomUpParser.TOK_NODE)) {</b>
+<b class="nc"><i>979</i>&nbsp;        tokens.add(p);</b>
+<i>980</i>&nbsp;      }
+<i>981</i>&nbsp;      else {
+<b class="nc"><i>982</i>&nbsp;        nodes.addAll(0, p.parts);</b>
+<i>983</i>&nbsp;      }
+<b class="nc"><i>984</i>&nbsp;    }</b>
+<b class="nc"><i>985</i>&nbsp;    return tokens.toArray(new Parse[tokens.size()]);</b>
+<i>986</i>&nbsp;  }
+<i>987</i>&nbsp;
+<i>988</i>&nbsp;  /**
+<i>989</i>&nbsp;   * Returns the deepest shared parent of this node and the specified node.
+<i>990</i>&nbsp;   * If the nodes are identical then their parent is returned.
+<i>991</i>&nbsp;   * If one node is the parent of the other then the parent node is returned.
+<i>992</i>&nbsp;   *
+<i>993</i>&nbsp;   * @param node The node from which parents are compared to this node&#39;s parents.
+<i>994</i>&nbsp;   *
+<i>995</i>&nbsp;   * @return the deepest shared parent of this node and the specified node.
+<i>996</i>&nbsp;   */
+<i>997</i>&nbsp;  public Parse getCommonParent(Parse node) {
+<b class="nc"><i>998</i>&nbsp;    if (this == node) {</b>
+<b class="nc"><i>999</i>&nbsp;      return parent;</b>
+<i>1000</i>&nbsp;    }
+<b class="nc"><i>1001</i>&nbsp;    Set&lt;Parse&gt; parents = new HashSet&lt;&gt;();</b>
+<b class="nc"><i>1002</i>&nbsp;    Parse cparent = this;</b>
+<b class="nc"><i>1003</i>&nbsp;    while (cparent != null) {</b>
+<b class="nc"><i>1004</i>&nbsp;      parents.add(cparent);</b>
+<b class="nc"><i>1005</i>&nbsp;      cparent = cparent.getParent();</b>
+<i>1006</i>&nbsp;    }
+<b class="nc"><i>1007</i>&nbsp;    while (node != null) {</b>
+<b class="nc"><i>1008</i>&nbsp;      if (parents.contains(node)) {</b>
+<b class="nc"><i>1009</i>&nbsp;        return node;</b>
+<i>1010</i>&nbsp;      }
+<b class="nc"><i>1011</i>&nbsp;      node = node.getParent();</b>
+<i>1012</i>&nbsp;    }
+<b class="nc"><i>1013</i>&nbsp;    return null;</b>
+<i>1014</i>&nbsp;  }
+<i>1015</i>&nbsp;
+<i>1016</i>&nbsp;  @Override
+<i>1017</i>&nbsp;  public boolean equals(Object obj) {
+<b class="fc"><i>1018</i>&nbsp;    if (obj == this) {</b>
+<b class="fc"><i>1019</i>&nbsp;      return true;</b>
+<i>1020</i>&nbsp;    }
+<i>1021</i>&nbsp;
+<b class="fc"><i>1022</i>&nbsp;    if (obj instanceof Parse) {</b>
+<b class="fc"><i>1023</i>&nbsp;      Parse p = (Parse) obj;</b>
+<i>1024</i>&nbsp;
+<b class="fc"><i>1025</i>&nbsp;      return Objects.equals(label, p.label) &amp;&amp; span.equals(p.span)</b>
+<b class="fc"><i>1026</i>&nbsp;          &amp;&amp; text.equals(p.text) &amp;&amp; parts.equals(p.parts);</b>
+<i>1027</i>&nbsp;    }
+<i>1028</i>&nbsp;
+<b class="nc"><i>1029</i>&nbsp;    return false;</b>
+<i>1030</i>&nbsp;  }
+<i>1031</i>&nbsp;
+<i>1032</i>&nbsp;  @Override
+<i>1033</i>&nbsp;  public int hashCode() {
+<i>1034</i>&nbsp;    // Note: label is missing here!
+<b class="fc"><i>1035</i>&nbsp;    return Objects.hash(span, text);</b>
+<i>1036</i>&nbsp;  }
+<i>1037</i>&nbsp;
+<i>1038</i>&nbsp;  public int compareTo(Parse p) {
+<b class="fc"><i>1039</i>&nbsp;    return Double.compare(p.getProb(), this.getProb());</b>
+<i>1040</i>&nbsp;  }
+<i>1041</i>&nbsp;
+<i>1042</i>&nbsp;  /**
+<i>1043</i>&nbsp;   * Returns the derivation string for this parse if one has been created.
+<i>1044</i>&nbsp;   *
+<i>1045</i>&nbsp;   * @return the derivation string for this parse or null if no derivation string has been created.
+<i>1046</i>&nbsp;   */
+<i>1047</i>&nbsp;  public StringBuffer getDerivation() {
+<b class="nc"><i>1048</i>&nbsp;    return derivation;</b>
+<i>1049</i>&nbsp;  }
+<i>1050</i>&nbsp;
+<i>1051</i>&nbsp;  /**
+<i>1052</i>&nbsp;   * Specifies the derivation string to be associated with this parse.
+<i>1053</i>&nbsp;   *
+<i>1054</i>&nbsp;   * @param derivation The derivation string to be associated with this parse.
+<i>1055</i>&nbsp;   */
+<i>1056</i>&nbsp;  public void setDerivation(StringBuffer derivation) {
+<b class="nc"><i>1057</i>&nbsp;    this.derivation = derivation;</b>
+<b class="nc"><i>1058</i>&nbsp;  }</b>
+<i>1059</i>&nbsp;
+<i>1060</i>&nbsp;  private void codeTree(Parse p,int[] levels) {
+<b class="nc"><i>1061</i>&nbsp;    Parse[] kids = p.getChildren();</b>
+<b class="nc"><i>1062</i>&nbsp;    StringBuilder levelsBuff = new StringBuilder();</b>
+<b class="nc"><i>1063</i>&nbsp;    levelsBuff.append(&quot;[&quot;);</b>
+<b class="nc"><i>1064</i>&nbsp;    int[] nlevels = new int[levels.length + 1];</b>
+<b class="nc"><i>1065</i>&nbsp;    for (int li = 0; li &lt; levels.length; li++) {</b>
+<b class="nc"><i>1066</i>&nbsp;      nlevels[li] = levels[li];</b>
+<b class="nc"><i>1067</i>&nbsp;      levelsBuff.append(levels[li]).append(&quot;.&quot;);</b>
+<i>1068</i>&nbsp;    }
+<b class="nc"><i>1069</i>&nbsp;    for (int ki = 0; ki &lt; kids.length; ki++) {</b>
+<b class="nc"><i>1070</i>&nbsp;      nlevels[levels.length] = ki;</b>
+<b class="nc"><i>1071</i>&nbsp;      System.out.println(levelsBuff.toString() + ki + &quot;] &quot; + kids[ki].getType() +</b>
+<b class="nc"><i>1072</i>&nbsp;          &quot; &quot; + kids[ki].hashCode() + &quot; -&gt; &quot; + kids[ki].getParent().hashCode() +</b>
+<b class="nc"><i>1073</i>&nbsp;          &quot; &quot; + kids[ki].getParent().getType() + &quot; &quot; + kids[ki].getCoveredText());</b>
+<b class="nc"><i>1074</i>&nbsp;      codeTree(kids[ki],nlevels);</b>
+<i>1075</i>&nbsp;    }
+<b class="nc"><i>1076</i>&nbsp;  }</b>
+<i>1077</i>&nbsp;
+<i>1078</i>&nbsp;  /**
+<i>1079</i>&nbsp;   * Prints to standard out a representation of the specified parse which
+<i>1080</i>&nbsp;   * contains hash codes so that parent/child relationships can be explicitly seen.
+<i>1081</i>&nbsp;   */
+<i>1082</i>&nbsp;  public void showCodeTree() {
+<b class="nc"><i>1083</i>&nbsp;    codeTree(this,new int[0]);</b>
+<b class="nc"><i>1084</i>&nbsp;  }</b>
+<i>1085</i>&nbsp;
+<i>1086</i>&nbsp;  /**
+<i>1087</i>&nbsp;   * Utility method to inserts named entities.
+<i>1088</i>&nbsp;   *
+<i>1089</i>&nbsp;   * @param tag
+<i>1090</i>&nbsp;   * @param names
+<i>1091</i>&nbsp;   * @param tokens
+<i>1092</i>&nbsp;   */
+<i>1093</i>&nbsp;  public static void addNames(String tag, Span[] names, Parse[] tokens) {
+<b class="nc"><i>1094</i>&nbsp;    for (Span nameTokenSpan : names) {</b>
+<b class="nc"><i>1095</i>&nbsp;      Parse startToken = tokens[nameTokenSpan.getStart()];</b>
+<b class="nc"><i>1096</i>&nbsp;      Parse endToken = tokens[nameTokenSpan.getEnd() - 1];</b>
+<b class="nc"><i>1097</i>&nbsp;      Parse commonParent = startToken.getCommonParent(endToken);</b>
+<i>1098</i>&nbsp;      //System.err.println(&quot;addNames: &quot;+startToken+&quot; .. &quot;+endToken+&quot; commonParent = &quot;+commonParent);
+<b class="nc"><i>1099</i>&nbsp;      if (commonParent != null) {</b>
+<b class="nc"><i>1100</i>&nbsp;        Span nameSpan = new Span(startToken.getSpan().getStart(), endToken.getSpan().getEnd());</b>
+<b class="nc"><i>1101</i>&nbsp;        if (nameSpan.equals(commonParent.getSpan())) {</b>
+<b class="nc"><i>1102</i>&nbsp;          commonParent.insert(new Parse(commonParent.getText(), nameSpan, tag, 1.0, endToken.getHeadIndex()));</b>
+<i>1103</i>&nbsp;        } else {
+<b class="nc"><i>1104</i>&nbsp;          Parse[] kids = commonParent.getChildren();</b>
+<b class="nc"><i>1105</i>&nbsp;          boolean crossingKids = false;</b>
+<b class="nc"><i>1106</i>&nbsp;          for (Parse kid : kids) {</b>
+<b class="nc"><i>1107</i>&nbsp;            if (nameSpan.crosses(kid.getSpan())) {</b>
+<b class="nc"><i>1108</i>&nbsp;              crossingKids = true;</b>
+<i>1109</i>&nbsp;            }
+<i>1110</i>&nbsp;          }
+<b class="nc"><i>1111</i>&nbsp;          if (!crossingKids) {</b>
+<b class="nc"><i>1112</i>&nbsp;            commonParent.insert(new Parse(commonParent.getText(), nameSpan,</b>
+<b class="nc"><i>1113</i>&nbsp;                tag, 1.0, endToken.getHeadIndex()));</b>
+<i>1114</i>&nbsp;          } else {
+<b class="nc"><i>1115</i>&nbsp;            if (commonParent.getType().equals(&quot;NP&quot;)) {</b>
+<b class="nc"><i>1116</i>&nbsp;              Parse[] grandKids = kids[0].getChildren();</b>
+<b class="nc"><i>1117</i>&nbsp;              if (grandKids.length &gt; 1 &amp;&amp; nameSpan.contains(grandKids[grandKids.length - 1].getSpan())) {</b>
+<b class="nc"><i>1118</i>&nbsp;                commonParent.insert(new Parse(commonParent.getText(), commonParent.getSpan(),</b>
+<b class="nc"><i>1119</i>&nbsp;                    tag, 1.0, commonParent.getHeadIndex()));</b>
+<i>1120</i>&nbsp;              }
+<i>1121</i>&nbsp;            }
+<i>1122</i>&nbsp;          }
+<i>1123</i>&nbsp;        }
+<i>1124</i>&nbsp;      }
+<i>1125</i>&nbsp;    }
+<b class="nc"><i>1126</i>&nbsp;  }</b>
+<i>1127</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-09 18:47</div>
+</div>
+</body>
+</html>

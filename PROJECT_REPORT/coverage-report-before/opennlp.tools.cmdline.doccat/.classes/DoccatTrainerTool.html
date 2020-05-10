@@ -1,0 +1,191 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: DoccatTrainerTool</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">opennlp.tools.cmdline.doccat</a> ]
+</div>
+
+<h1>Coverage Summary for Class: DoccatTrainerTool (opennlp.tools.cmdline.doccat)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">DoccatTrainerTool</td>
+<td class="coverageStat">
+  <span class="percent">
+    75%
+  </span>
+  <span class="absValue">
+    (3/ 4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    13.8%
+  </span>
+  <span class="absValue">
+    (4/ 29)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">DoccatTrainerTool$TrainerToolParams</td>
+  </tr>
+<tr>
+  <td class="name"><strong>total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    75%
+  </span>
+  <span class="absValue">
+    (3/ 4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    13.8%
+  </span>
+  <span class="absValue">
+    (4/ 29)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/*
+<i>2</i>&nbsp; * Licensed to the Apache Software Foundation (ASF) under one or more
+<i>3</i>&nbsp; * contributor license agreements.  See the NOTICE file distributed with
+<i>4</i>&nbsp; * this work for additional information regarding copyright ownership.
+<i>5</i>&nbsp; * The ASF licenses this file to You under the Apache License, Version 2.0
+<i>6</i>&nbsp; * (the &quot;License&quot;); you may not use this file except in compliance with
+<i>7</i>&nbsp; * the License. You may obtain a copy of the License at
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; *     http://www.apache.org/licenses/LICENSE-2.0
+<i>10</i>&nbsp; *
+<i>11</i>&nbsp; * Unless required by applicable law or agreed to in writing, software
+<i>12</i>&nbsp; * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<i>13</i>&nbsp; * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<i>14</i>&nbsp; * See the License for the specific language governing permissions and
+<i>15</i>&nbsp; * limitations under the License.
+<i>16</i>&nbsp; */
+<i>17</i>&nbsp;
+<i>18</i>&nbsp;package opennlp.tools.cmdline.doccat;
+<i>19</i>&nbsp;
+<i>20</i>&nbsp;import java.io.File;
+<i>21</i>&nbsp;import java.io.IOException;
+<i>22</i>&nbsp;
+<i>23</i>&nbsp;import opennlp.tools.cmdline.AbstractTrainerTool;
+<i>24</i>&nbsp;import opennlp.tools.cmdline.CmdLineUtil;
+<i>25</i>&nbsp;import opennlp.tools.cmdline.doccat.DoccatTrainerTool.TrainerToolParams;
+<i>26</i>&nbsp;import opennlp.tools.cmdline.params.TrainingToolParams;
+<i>27</i>&nbsp;import opennlp.tools.doccat.BagOfWordsFeatureGenerator;
+<i>28</i>&nbsp;import opennlp.tools.doccat.DoccatFactory;
+<i>29</i>&nbsp;import opennlp.tools.doccat.DoccatModel;
+<i>30</i>&nbsp;import opennlp.tools.doccat.DocumentCategorizerME;
+<i>31</i>&nbsp;import opennlp.tools.doccat.DocumentSample;
+<i>32</i>&nbsp;import opennlp.tools.doccat.FeatureGenerator;
+<i>33</i>&nbsp;import opennlp.tools.util.ext.ExtensionLoader;
+<i>34</i>&nbsp;import opennlp.tools.util.model.ModelUtil;
+<i>35</i>&nbsp;
+<i>36</i>&nbsp;public class DoccatTrainerTool
+<i>37</i>&nbsp;    extends AbstractTrainerTool&lt;DocumentSample, TrainerToolParams&gt; {
+<i>38</i>&nbsp;
+<i>39</i>&nbsp;  interface TrainerToolParams extends TrainingParams, TrainingToolParams {
+<i>40</i>&nbsp;  }
+<i>41</i>&nbsp;
+<i>42</i>&nbsp;  public DoccatTrainerTool() {
+<b class="fc"><i>43</i>&nbsp;    super(DocumentSample.class, TrainerToolParams.class);</b>
+<b class="fc"><i>44</i>&nbsp;  }</b>
+<i>45</i>&nbsp;
+<i>46</i>&nbsp;  @Override
+<i>47</i>&nbsp;  public String getShortDescription() {
+<b class="fc"><i>48</i>&nbsp;    return &quot;trainer for the learnable document categorizer&quot;;</b>
+<i>49</i>&nbsp;  }
+<i>50</i>&nbsp;
+<i>51</i>&nbsp;  @Override
+<i>52</i>&nbsp;  public void run(String format, String[] args) {
+<b class="fc"><i>53</i>&nbsp;    super.run(format, args);</b>
+<i>54</i>&nbsp;
+<b class="nc"><i>55</i>&nbsp;    mlParams = CmdLineUtil.loadTrainingParameters(params.getParams(), false);</b>
+<b class="nc"><i>56</i>&nbsp;    if (mlParams == null) {</b>
+<b class="nc"><i>57</i>&nbsp;      mlParams = ModelUtil.createDefaultTrainingParameters();</b>
+<i>58</i>&nbsp;    }
+<i>59</i>&nbsp;
+<b class="nc"><i>60</i>&nbsp;    File modelOutFile = params.getModel();</b>
+<i>61</i>&nbsp;
+<b class="nc"><i>62</i>&nbsp;    CmdLineUtil.checkOutputFile(&quot;document categorizer model&quot;, modelOutFile);</b>
+<i>63</i>&nbsp;
+<b class="nc"><i>64</i>&nbsp;    FeatureGenerator[] featureGenerators = createFeatureGenerators(params</b>
+<b class="nc"><i>65</i>&nbsp;        .getFeatureGenerators());</b>
+<i>66</i>&nbsp;
+<i>67</i>&nbsp;    DoccatModel model;
+<i>68</i>&nbsp;    try {
+<b class="nc"><i>69</i>&nbsp;      DoccatFactory factory = DoccatFactory.create(params.getFactory(), featureGenerators);</b>
+<b class="nc"><i>70</i>&nbsp;      model = DocumentCategorizerME.train(params.getLang(), sampleStream,</b>
+<i>71</i>&nbsp;          mlParams, factory);
+<b class="nc"><i>72</i>&nbsp;    } catch (IOException e) {</b>
+<b class="nc"><i>73</i>&nbsp;      throw createTerminationIOException(e);</b>
+<i>74</i>&nbsp;    }
+<i>75</i>&nbsp;    finally {
+<b class="nc"><i>76</i>&nbsp;      try {</b>
+<b class="nc"><i>77</i>&nbsp;        sampleStream.close();</b>
+<b class="nc"><i>78</i>&nbsp;      } catch (IOException e) {</b>
+<i>79</i>&nbsp;        // sorry that this can fail
+<b class="nc"><i>80</i>&nbsp;      }</b>
+<b class="nc"><i>81</i>&nbsp;    }</b>
+<i>82</i>&nbsp;
+<b class="nc"><i>83</i>&nbsp;    CmdLineUtil.writeModel(&quot;document categorizer&quot;, modelOutFile, model);</b>
+<b class="nc"><i>84</i>&nbsp;  }</b>
+<i>85</i>&nbsp;
+<i>86</i>&nbsp;  static FeatureGenerator[] createFeatureGenerators(String featureGeneratorsNames) {
+<b class="nc"><i>87</i>&nbsp;    if (featureGeneratorsNames == null) {</b>
+<b class="nc"><i>88</i>&nbsp;      return new FeatureGenerator[]{new BagOfWordsFeatureGenerator()};</b>
+<i>89</i>&nbsp;    }
+<b class="nc"><i>90</i>&nbsp;    String[] classes = featureGeneratorsNames.split(&quot;,&quot;);</b>
+<b class="nc"><i>91</i>&nbsp;    FeatureGenerator[] featureGenerators = new FeatureGenerator[classes.length];</b>
+<b class="nc"><i>92</i>&nbsp;    for (int i = 0; i &lt; featureGenerators.length; i++) {</b>
+<b class="nc"><i>93</i>&nbsp;      featureGenerators[i] = ExtensionLoader.instantiateExtension(</b>
+<i>94</i>&nbsp;          FeatureGenerator.class, classes[i]);
+<i>95</i>&nbsp;    }
+<b class="nc"><i>96</i>&nbsp;    return featureGenerators;</b>
+<i>97</i>&nbsp;  }
+<i>98</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-09 15:05</div>
+</div>
+</body>
+</html>

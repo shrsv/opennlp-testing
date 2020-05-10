@@ -1,0 +1,578 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: PorterStemmer</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">opennlp.tools.stemmer</a> ]
+</div>
+
+<h1>Coverage Summary for Class: PorterStemmer (opennlp.tools.stemmer)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">PorterStemmer</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    66.7%
+  </span>
+  <span class="absValue">
+    (18/ 27)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    57.8%
+  </span>
+  <span class="absValue">
+    (108/ 187)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/*
+<i>2</i>&nbsp; * Licensed to the Apache Software Foundation (ASF) under one or more
+<i>3</i>&nbsp; * contributor license agreements.  See the NOTICE file distributed with
+<i>4</i>&nbsp; * this work for additional information regarding copyright ownership.
+<i>5</i>&nbsp; * The ASF licenses this file to You under the Apache License, Version 2.0
+<i>6</i>&nbsp; * (the &quot;License&quot;); you may not use this file except in compliance with
+<i>7</i>&nbsp; * the License. You may obtain a copy of the License at
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; *     http://www.apache.org/licenses/LICENSE-2.0
+<i>10</i>&nbsp; *
+<i>11</i>&nbsp; * Unless required by applicable law or agreed to in writing, software
+<i>12</i>&nbsp; * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<i>13</i>&nbsp; * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<i>14</i>&nbsp; * See the License for the specific language governing permissions and
+<i>15</i>&nbsp; * limitations under the License.
+<i>16</i>&nbsp; */
+<i>17</i>&nbsp;
+<i>18</i>&nbsp;/*
+<i>19</i>&nbsp;
+<i>20</i>&nbsp;   Porter stemmer in Java. The original paper is in
+<i>21</i>&nbsp;
+<i>22</i>&nbsp;       Porter, 1980, An algorithm for suffix stripping, Program, Vol. 14,
+<i>23</i>&nbsp;       no. 3, pp 130-137,
+<i>24</i>&nbsp;
+<i>25</i>&nbsp;   See also http://www.tartarus.org/~martin/PorterStemmer/index.html
+<i>26</i>&nbsp;
+<i>27</i>&nbsp;   Bug 1 (reported by Gonzalo Parra 16/10/99) fixed as marked below.
+<i>28</i>&nbsp;   Tthe words &#39;aed&#39;, &#39;eed&#39;, &#39;oed&#39; leave k at &#39;a&#39; for step 3, and b[k-1]
+<i>29</i>&nbsp;   is then out outside the bounds of b.
+<i>30</i>&nbsp;
+<i>31</i>&nbsp;   Similarly,
+<i>32</i>&nbsp;
+<i>33</i>&nbsp;   Bug 2 (reported by Steve Dyrdahl 22/2/00) fixed as marked below.
+<i>34</i>&nbsp;   &#39;ion&#39; by itself leaves j = -1 in the test for &#39;ion&#39; in step 5, and
+<i>35</i>&nbsp;   b[j] is then outside the bounds of b.
+<i>36</i>&nbsp;
+<i>37</i>&nbsp;   Release 3.
+<i>38</i>&nbsp;
+<i>39</i>&nbsp;   [ This version is derived from Release 3, modified by Brian Goetz to
+<i>40</i>&nbsp;     optimize for fewer object creations.  ]
+<i>41</i>&nbsp;
+<i>42</i>&nbsp;*/
+<i>43</i>&nbsp;
+<i>44</i>&nbsp;package opennlp.tools.stemmer;
+<i>45</i>&nbsp;
+<i>46</i>&nbsp;/**
+<i>47</i>&nbsp; *
+<i>48</i>&nbsp; * Stemmer, implementing the Porter Stemming Algorithm
+<i>49</i>&nbsp; *
+<i>50</i>&nbsp; * The Stemmer class transforms a word into its root form.  The input
+<i>51</i>&nbsp; * word can be provided a character at time (by calling add()), or at once
+<i>52</i>&nbsp; * by calling one of the various stem(something) methods.
+<i>53</i>&nbsp; */
+<i>54</i>&nbsp;// CHECKSTYLE:OFF
+<i>55</i>&nbsp;public class PorterStemmer implements Stemmer {
+<i>56</i>&nbsp;  private char[] b;
+<i>57</i>&nbsp;  private int i,    /* offset into b */
+<i>58</i>&nbsp;    j, k, k0;
+<b class="fc"><i>59</i>&nbsp;  private boolean dirty = false;</b>
+<i>60</i>&nbsp;  private static final int INC = 50;
+<i>61</i>&nbsp;
+<b class="fc"><i>62</i>&nbsp;  public PorterStemmer() {</b>
+<b class="fc"><i>63</i>&nbsp;    b = new char[INC];</b>
+<b class="fc"><i>64</i>&nbsp;    i = 0;</b>
+<b class="fc"><i>65</i>&nbsp;  }</b>
+<i>66</i>&nbsp;
+<i>67</i>&nbsp;  /**
+<i>68</i>&nbsp;   * reset() resets the stemmer so it can stem another word.  If you invoke
+<i>69</i>&nbsp;   * the stemmer by calling add(char) and then stem(), you must call reset()
+<i>70</i>&nbsp;   * before starting another word.
+<i>71</i>&nbsp;   */
+<b class="fc"><i>72</i>&nbsp;  public void reset() { i = 0; dirty = false; }</b>
+<i>73</i>&nbsp;
+<i>74</i>&nbsp;  /**
+<i>75</i>&nbsp;   * Add a character to the word being stemmed.  When you are finished
+<i>76</i>&nbsp;   * adding characters, you can call stem(void) to process the word.
+<i>77</i>&nbsp;   */
+<i>78</i>&nbsp;  public void add(char ch) {
+<b class="nc"><i>79</i>&nbsp;    if (b.length == i) {</b>
+<i>80</i>&nbsp;
+<b class="nc"><i>81</i>&nbsp;      char[] new_b = new char[i+INC];</b>
+<b class="nc"><i>82</i>&nbsp;      System.arraycopy(b, 0, new_b, 0, i);</b>
+<i>83</i>&nbsp;      {
+<b class="nc"><i>84</i>&nbsp;        b = new_b;</b>
+<i>85</i>&nbsp;      }
+<i>86</i>&nbsp;    }
+<b class="nc"><i>87</i>&nbsp;    b[i++] = ch;</b>
+<b class="nc"><i>88</i>&nbsp;  }</b>
+<i>89</i>&nbsp;
+<i>90</i>&nbsp;  /**
+<i>91</i>&nbsp;   * After a word has been stemmed, it can be retrieved by toString(),
+<i>92</i>&nbsp;   * or a reference to the internal buffer can be retrieved by getResultBuffer
+<i>93</i>&nbsp;   * and getResultLength (which is generally more efficient.)
+<i>94</i>&nbsp;   */
+<i>95</i>&nbsp;  @Override
+<b class="fc"><i>96</i>&nbsp;  public String toString() { return new String(b,0,i); }</b>
+<i>97</i>&nbsp;
+<i>98</i>&nbsp;  /**
+<i>99</i>&nbsp;   * Returns the length of the word resulting from the stemming process.
+<i>100</i>&nbsp;   */
+<b class="nc"><i>101</i>&nbsp;  public int getResultLength() { return i; }</b>
+<i>102</i>&nbsp;
+<i>103</i>&nbsp;  /**
+<i>104</i>&nbsp;   * Returns a reference to a character buffer containing the results of
+<i>105</i>&nbsp;   * the stemming process.  You also need to consult getResultLength()
+<i>106</i>&nbsp;   * to determine the length of the result.
+<i>107</i>&nbsp;   */
+<b class="nc"><i>108</i>&nbsp;  public char[] getResultBuffer() { return b; }</b>
+<i>109</i>&nbsp;
+<i>110</i>&nbsp;  /* cons(i) is true &lt;=&gt; b[i] is a consonant. */
+<i>111</i>&nbsp;
+<i>112</i>&nbsp;  private boolean cons(int i) {
+<b class="fc"><i>113</i>&nbsp;    switch (b[i]) {</b>
+<i>114</i>&nbsp;    case &#39;a&#39;: case &#39;e&#39;: case &#39;i&#39;: case &#39;o&#39;: case &#39;u&#39;:
+<b class="fc"><i>115</i>&nbsp;      return false;</b>
+<i>116</i>&nbsp;    case &#39;y&#39;:
+<b class="nc"><i>117</i>&nbsp;      return (i == k0) || !cons(i - 1);</b>
+<i>118</i>&nbsp;    default:
+<b class="fc"><i>119</i>&nbsp;      return true;</b>
+<i>120</i>&nbsp;    }
+<i>121</i>&nbsp;  }
+<i>122</i>&nbsp;
+<i>123</i>&nbsp;  /* m() measures the number of consonant sequences between k0 and j. if c is
+<i>124</i>&nbsp;     a consonant sequence and v a vowel sequence, and &lt;..&gt; indicates arbitrary
+<i>125</i>&nbsp;     presence,
+<i>126</i>&nbsp;
+<i>127</i>&nbsp;          &lt;c&gt;&lt;v&gt;       gives 0
+<i>128</i>&nbsp;          &lt;c&gt;vc&lt;v&gt;     gives 1
+<i>129</i>&nbsp;          &lt;c&gt;vcvc&lt;v&gt;   gives 2
+<i>130</i>&nbsp;          &lt;c&gt;vcvcvc&lt;v&gt; gives 3
+<i>131</i>&nbsp;          ....
+<i>132</i>&nbsp;  */
+<i>133</i>&nbsp;
+<i>134</i>&nbsp;  private int m() {
+<b class="fc"><i>135</i>&nbsp;    int n = 0;</b>
+<b class="fc"><i>136</i>&nbsp;    int i = k0;</b>
+<i>137</i>&nbsp;    while(true) {
+<b class="fc"><i>138</i>&nbsp;      if (i &gt; j)</b>
+<b class="nc"><i>139</i>&nbsp;        return n;</b>
+<b class="fc"><i>140</i>&nbsp;      if (! cons(i))</b>
+<b class="fc"><i>141</i>&nbsp;        break;</b>
+<b class="fc"><i>142</i>&nbsp;      i++;</b>
+<i>143</i>&nbsp;    }
+<b class="fc"><i>144</i>&nbsp;    i++;</b>
+<i>145</i>&nbsp;    while(true) {
+<i>146</i>&nbsp;      while(true) {
+<b class="fc"><i>147</i>&nbsp;        if (i &gt; j)</b>
+<b class="nc"><i>148</i>&nbsp;          return n;</b>
+<b class="fc"><i>149</i>&nbsp;        if (cons(i))</b>
+<b class="fc"><i>150</i>&nbsp;          break;</b>
+<b class="nc"><i>151</i>&nbsp;        i++;</b>
+<i>152</i>&nbsp;      }
+<b class="fc"><i>153</i>&nbsp;      i++;</b>
+<b class="fc"><i>154</i>&nbsp;      n++;</b>
+<i>155</i>&nbsp;      while(true) {
+<b class="fc"><i>156</i>&nbsp;        if (i &gt; j)</b>
+<b class="fc"><i>157</i>&nbsp;          return n;</b>
+<b class="fc"><i>158</i>&nbsp;        if (! cons(i))</b>
+<b class="fc"><i>159</i>&nbsp;          break;</b>
+<b class="fc"><i>160</i>&nbsp;        i++;</b>
+<i>161</i>&nbsp;      }
+<b class="fc"><i>162</i>&nbsp;      i++;</b>
+<i>163</i>&nbsp;    }
+<i>164</i>&nbsp;  }
+<i>165</i>&nbsp;
+<i>166</i>&nbsp;  /* vowelinstem() is true &lt;=&gt; k0,...j contains a vowel */
+<i>167</i>&nbsp;
+<i>168</i>&nbsp;  private boolean vowelinstem() {
+<i>169</i>&nbsp;    int i;
+<b class="fc"><i>170</i>&nbsp;    for (i = k0; i &lt;= j; i++)</b>
+<b class="fc"><i>171</i>&nbsp;      if (! cons(i))</b>
+<b class="fc"><i>172</i>&nbsp;        return true;</b>
+<b class="nc"><i>173</i>&nbsp;    return false;</b>
+<i>174</i>&nbsp;  }
+<i>175</i>&nbsp;
+<i>176</i>&nbsp;  /* doublec(j) is true &lt;=&gt; j,(j-1) contain a double consonant. */
+<i>177</i>&nbsp;
+<i>178</i>&nbsp;  private boolean doublec(int j) {
+<b class="fc"><i>179</i>&nbsp;    return j &gt;= k0 + 1 &amp;&amp; b[j] == b[j - 1] &amp;&amp; cons(j);</b>
+<i>180</i>&nbsp;  }
+<i>181</i>&nbsp;
+<i>182</i>&nbsp;  /* cvc(i) is true &lt;=&gt; i-2,i-1,i has the form consonant - vowel - consonant
+<i>183</i>&nbsp;     and also if the second c is not w,x or y. this is used when trying to
+<i>184</i>&nbsp;     restore an e at the end of a short word. e.g.
+<i>185</i>&nbsp;
+<i>186</i>&nbsp;          cav(e), lov(e), hop(e), crim(e), but
+<i>187</i>&nbsp;          snow, box, tray.
+<i>188</i>&nbsp;
+<i>189</i>&nbsp;  */
+<i>190</i>&nbsp;
+<i>191</i>&nbsp;  private boolean cvc(int i) {
+<b class="nc"><i>192</i>&nbsp;    if (i &lt; k0+2 || !cons(i) || cons(i-1) || !cons(i-2))</b>
+<b class="nc"><i>193</i>&nbsp;      return false;</b>
+<i>194</i>&nbsp;    else {
+<b class="nc"><i>195</i>&nbsp;      int ch = b[i];</b>
+<b class="nc"><i>196</i>&nbsp;      if (ch == &#39;w&#39; || ch == &#39;x&#39; || ch == &#39;y&#39;) return false;</b>
+<i>197</i>&nbsp;    }
+<b class="nc"><i>198</i>&nbsp;    return true;</b>
+<i>199</i>&nbsp;  }
+<i>200</i>&nbsp;
+<i>201</i>&nbsp;  private boolean ends(String s) {
+<b class="fc"><i>202</i>&nbsp;    int l = s.length();</b>
+<b class="fc"><i>203</i>&nbsp;    int o = k-l+1;</b>
+<b class="fc"><i>204</i>&nbsp;    if (o &lt; k0)</b>
+<b class="fc"><i>205</i>&nbsp;      return false;</b>
+<b class="fc"><i>206</i>&nbsp;    for (int i = 0; i &lt; l; i++)</b>
+<b class="fc"><i>207</i>&nbsp;      if (b[o+i] != s.charAt(i))</b>
+<b class="fc"><i>208</i>&nbsp;        return false;</b>
+<b class="fc"><i>209</i>&nbsp;    j = k-l;</b>
+<b class="fc"><i>210</i>&nbsp;    return true;</b>
+<i>211</i>&nbsp;  }
+<i>212</i>&nbsp;
+<i>213</i>&nbsp;  /* setto(s) sets (j+1),...k to the characters in the string s, readjusting
+<i>214</i>&nbsp;     k. */
+<i>215</i>&nbsp;
+<i>216</i>&nbsp;  void setto(String s) {
+<b class="nc"><i>217</i>&nbsp;    int l = s.length();</b>
+<b class="nc"><i>218</i>&nbsp;    int o = j+1;</b>
+<b class="nc"><i>219</i>&nbsp;    for (int i = 0; i &lt; l; i++)</b>
+<b class="nc"><i>220</i>&nbsp;      b[o+i] = s.charAt(i);</b>
+<b class="nc"><i>221</i>&nbsp;    k = j+l;</b>
+<b class="nc"><i>222</i>&nbsp;    dirty = true;</b>
+<b class="nc"><i>223</i>&nbsp;  }</b>
+<i>224</i>&nbsp;
+<i>225</i>&nbsp;  /* r(s) is used further down. */
+<i>226</i>&nbsp;
+<b class="nc"><i>227</i>&nbsp;  void r(String s) { if (m() &gt; 0) setto(s); }</b>
+<i>228</i>&nbsp;
+<i>229</i>&nbsp;  /* step1() gets rid of plurals and -ed or -ing. e.g.
+<i>230</i>&nbsp;
+<i>231</i>&nbsp;           caresses  -&gt;  caress
+<i>232</i>&nbsp;           ponies    -&gt;  poni
+<i>233</i>&nbsp;           ties      -&gt;  ti
+<i>234</i>&nbsp;           caress    -&gt;  caress
+<i>235</i>&nbsp;           cats      -&gt;  cat
+<i>236</i>&nbsp;
+<i>237</i>&nbsp;           feed      -&gt;  feed
+<i>238</i>&nbsp;           agreed    -&gt;  agree
+<i>239</i>&nbsp;           disabled  -&gt;  disable
+<i>240</i>&nbsp;
+<i>241</i>&nbsp;           matting   -&gt;  mat
+<i>242</i>&nbsp;           mating    -&gt;  mate
+<i>243</i>&nbsp;           meeting   -&gt;  meet
+<i>244</i>&nbsp;           milling   -&gt;  mill
+<i>245</i>&nbsp;           messing   -&gt;  mess
+<i>246</i>&nbsp;
+<i>247</i>&nbsp;           meetings  -&gt;  meet
+<i>248</i>&nbsp;
+<i>249</i>&nbsp;  */
+<i>250</i>&nbsp;
+<i>251</i>&nbsp;  private void step1() {
+<b class="fc"><i>252</i>&nbsp;    if (b[k] == &#39;s&#39;) {</b>
+<b class="fc"><i>253</i>&nbsp;      if (ends(&quot;sses&quot;)) k -= 2;</b>
+<b class="fc"><i>254</i>&nbsp;      else if (ends(&quot;ies&quot;)) setto(&quot;i&quot;);</b>
+<b class="fc"><i>255</i>&nbsp;      else if (b[k-1] != &#39;s&#39;) k--;</b>
+<i>256</i>&nbsp;    }
+<b class="fc"><i>257</i>&nbsp;    if (ends(&quot;eed&quot;)) {</b>
+<b class="nc"><i>258</i>&nbsp;      if (m() &gt; 0)</b>
+<b class="nc"><i>259</i>&nbsp;        k--;</b>
+<i>260</i>&nbsp;    }
+<b class="fc"><i>261</i>&nbsp;    else if ((ends(&quot;ed&quot;) || ends(&quot;ing&quot;)) &amp;&amp; vowelinstem()) {</b>
+<b class="fc"><i>262</i>&nbsp;      k = j;</b>
+<b class="fc"><i>263</i>&nbsp;      if (ends(&quot;at&quot;)) setto(&quot;ate&quot;);</b>
+<b class="fc"><i>264</i>&nbsp;      else if (ends(&quot;bl&quot;)) setto(&quot;ble&quot;);</b>
+<b class="fc"><i>265</i>&nbsp;      else if (ends(&quot;iz&quot;)) setto(&quot;ize&quot;);</b>
+<b class="fc"><i>266</i>&nbsp;      else if (doublec(k)) {</b>
+<b class="nc"><i>267</i>&nbsp;        int ch = b[k--];</b>
+<b class="nc"><i>268</i>&nbsp;        if (ch == &#39;l&#39; || ch == &#39;s&#39; || ch == &#39;z&#39;)</b>
+<b class="nc"><i>269</i>&nbsp;          k++;</b>
+<b class="nc"><i>270</i>&nbsp;      }</b>
+<b class="fc"><i>271</i>&nbsp;      else if (m() == 1 &amp;&amp; cvc(k))</b>
+<b class="nc"><i>272</i>&nbsp;        setto(&quot;e&quot;);</b>
+<i>273</i>&nbsp;    }
+<b class="fc"><i>274</i>&nbsp;  }</b>
+<i>275</i>&nbsp;
+<i>276</i>&nbsp;  /* step2() turns terminal y to i when there is another vowel in the stem. */
+<i>277</i>&nbsp;
+<i>278</i>&nbsp;  private void step2() {
+<b class="fc"><i>279</i>&nbsp;    if (ends(&quot;y&quot;) &amp;&amp; vowelinstem()) {</b>
+<b class="fc"><i>280</i>&nbsp;      b[k] = &#39;i&#39;;</b>
+<b class="fc"><i>281</i>&nbsp;      dirty = true;</b>
+<i>282</i>&nbsp;    }
+<b class="fc"><i>283</i>&nbsp;  }</b>
+<i>284</i>&nbsp;
+<i>285</i>&nbsp;  /* step3() maps double suffices to single ones. so -ization ( = -ize plus
+<i>286</i>&nbsp;     -ation) maps to -ize etc. note that the string before the suffix must give
+<i>287</i>&nbsp;     m() &gt; 0. */
+<i>288</i>&nbsp;
+<i>289</i>&nbsp;  private void step3() {
+<b class="fc"><i>290</i>&nbsp;    if (k == k0) return; /* For Bug 1 */</b>
+<b class="fc"><i>291</i>&nbsp;    switch (b[k-1]) {</b>
+<i>292</i>&nbsp;    case &#39;a&#39;:
+<b class="fc"><i>293</i>&nbsp;      if (ends(&quot;ational&quot;)) { r(&quot;ate&quot;); break; }</b>
+<b class="fc"><i>294</i>&nbsp;      if (ends(&quot;tional&quot;)) { r(&quot;tion&quot;); break; }</b>
+<i>295</i>&nbsp;      break;
+<i>296</i>&nbsp;    case &#39;c&#39;:
+<b class="nc"><i>297</i>&nbsp;      if (ends(&quot;enci&quot;)) { r(&quot;ence&quot;); break; }</b>
+<b class="nc"><i>298</i>&nbsp;      if (ends(&quot;anci&quot;)) { r(&quot;ance&quot;); break; }</b>
+<i>299</i>&nbsp;      break;
+<i>300</i>&nbsp;    case &#39;e&#39;:
+<b class="fc"><i>301</i>&nbsp;      if (ends(&quot;izer&quot;)) { r(&quot;ize&quot;); break; }</b>
+<i>302</i>&nbsp;      break;
+<i>303</i>&nbsp;    case &#39;l&#39;:
+<b class="nc"><i>304</i>&nbsp;      if (ends(&quot;bli&quot;)) { r(&quot;ble&quot;); break; }</b>
+<b class="nc"><i>305</i>&nbsp;      if (ends(&quot;alli&quot;)) { r(&quot;al&quot;); break; }</b>
+<b class="nc"><i>306</i>&nbsp;      if (ends(&quot;entli&quot;)) { r(&quot;ent&quot;); break; }</b>
+<b class="nc"><i>307</i>&nbsp;      if (ends(&quot;eli&quot;)) { r(&quot;e&quot;); break; }</b>
+<b class="nc"><i>308</i>&nbsp;      if (ends(&quot;ousli&quot;)) { r(&quot;ous&quot;); break; }</b>
+<i>309</i>&nbsp;      break;
+<i>310</i>&nbsp;    case &#39;o&#39;:
+<b class="nc"><i>311</i>&nbsp;      if (ends(&quot;ization&quot;)) { r(&quot;ize&quot;); break; }</b>
+<b class="nc"><i>312</i>&nbsp;      if (ends(&quot;ation&quot;)) { r(&quot;ate&quot;); break; }</b>
+<b class="nc"><i>313</i>&nbsp;      if (ends(&quot;ator&quot;)) { r(&quot;ate&quot;); break; }</b>
+<i>314</i>&nbsp;      break;
+<i>315</i>&nbsp;    case &#39;s&#39;:
+<b class="nc"><i>316</i>&nbsp;      if (ends(&quot;alism&quot;)) { r(&quot;al&quot;); break; }</b>
+<b class="nc"><i>317</i>&nbsp;      if (ends(&quot;iveness&quot;)) { r(&quot;ive&quot;); break; }</b>
+<b class="nc"><i>318</i>&nbsp;      if (ends(&quot;fulness&quot;)) { r(&quot;ful&quot;); break; }</b>
+<b class="nc"><i>319</i>&nbsp;      if (ends(&quot;ousness&quot;)) { r(&quot;ous&quot;); break; }</b>
+<i>320</i>&nbsp;      break;
+<i>321</i>&nbsp;    case &#39;t&#39;:
+<b class="fc"><i>322</i>&nbsp;      if (ends(&quot;aliti&quot;)) { r(&quot;al&quot;); break; }</b>
+<b class="fc"><i>323</i>&nbsp;      if (ends(&quot;iviti&quot;)) { r(&quot;ive&quot;); break; }</b>
+<b class="fc"><i>324</i>&nbsp;      if (ends(&quot;biliti&quot;)) { r(&quot;ble&quot;); break; }</b>
+<i>325</i>&nbsp;      break;
+<i>326</i>&nbsp;    case &#39;g&#39;:
+<b class="nc"><i>327</i>&nbsp;      if (ends(&quot;logi&quot;)) { r(&quot;log&quot;); break; }</b>
+<i>328</i>&nbsp;    }
+<b class="fc"><i>329</i>&nbsp;  }</b>
+<i>330</i>&nbsp;
+<i>331</i>&nbsp;  /* step4() deals with -ic-, -full, -ness etc. similar strategy to step3. */
+<i>332</i>&nbsp;
+<i>333</i>&nbsp;  private void step4() {
+<b class="fc"><i>334</i>&nbsp;    switch (b[k]) {</b>
+<i>335</i>&nbsp;    case &#39;e&#39;:
+<b class="nc"><i>336</i>&nbsp;      if (ends(&quot;icate&quot;)) { r(&quot;ic&quot;); break; }</b>
+<b class="nc"><i>337</i>&nbsp;      if (ends(&quot;ative&quot;)) { r(&quot;&quot;); break; }</b>
+<b class="nc"><i>338</i>&nbsp;      if (ends(&quot;alize&quot;)) { r(&quot;al&quot;); break; }</b>
+<i>339</i>&nbsp;      break;
+<i>340</i>&nbsp;    case &#39;i&#39;:
+<b class="fc"><i>341</i>&nbsp;      if (ends(&quot;iciti&quot;)) { r(&quot;ic&quot;); break; }</b>
+<i>342</i>&nbsp;      break;
+<i>343</i>&nbsp;    case &#39;l&#39;:
+<b class="fc"><i>344</i>&nbsp;      if (ends(&quot;ical&quot;)) { r(&quot;ic&quot;); break; }</b>
+<b class="fc"><i>345</i>&nbsp;      if (ends(&quot;ful&quot;)) { r(&quot;&quot;); break; }</b>
+<i>346</i>&nbsp;      break;
+<i>347</i>&nbsp;    case &#39;s&#39;:
+<b class="nc"><i>348</i>&nbsp;      if (ends(&quot;ness&quot;)) { r(&quot;&quot;); break; }</b>
+<i>349</i>&nbsp;      break;
+<i>350</i>&nbsp;    }
+<b class="fc"><i>351</i>&nbsp;  }</b>
+<i>352</i>&nbsp;
+<i>353</i>&nbsp;  /* step5() takes off -ant, -ence etc., in context &lt;c&gt;vcvc&lt;v&gt;. */
+<i>354</i>&nbsp;
+<i>355</i>&nbsp;  private void step5() {
+<b class="fc"><i>356</i>&nbsp;    if (k == k0) return; /* for Bug 1 */</b>
+<b class="fc"><i>357</i>&nbsp;    switch (b[k-1]) {</b>
+<i>358</i>&nbsp;    case &#39;a&#39;:
+<b class="fc"><i>359</i>&nbsp;      if (ends(&quot;al&quot;)) break;</b>
+<b class="nc"><i>360</i>&nbsp;      return;</b>
+<i>361</i>&nbsp;    case &#39;c&#39;:
+<b class="nc"><i>362</i>&nbsp;      if (ends(&quot;ance&quot;)) break;</b>
+<b class="nc"><i>363</i>&nbsp;      if (ends(&quot;ence&quot;)) break;</b>
+<b class="nc"><i>364</i>&nbsp;      return;</b>
+<i>365</i>&nbsp;    case &#39;e&#39;:
+<b class="fc"><i>366</i>&nbsp;      if (ends(&quot;er&quot;)) break; return;</b>
+<i>367</i>&nbsp;    case &#39;i&#39;:
+<b class="fc"><i>368</i>&nbsp;      if (ends(&quot;ic&quot;)) break; return;</b>
+<i>369</i>&nbsp;    case &#39;l&#39;:
+<b class="nc"><i>370</i>&nbsp;      if (ends(&quot;able&quot;)) break;</b>
+<b class="nc"><i>371</i>&nbsp;      if (ends(&quot;ible&quot;)) break; return;</b>
+<i>372</i>&nbsp;    case &#39;n&#39;:
+<b class="fc"><i>373</i>&nbsp;      if (ends(&quot;ant&quot;)) break;</b>
+<b class="fc"><i>374</i>&nbsp;      if (ends(&quot;ement&quot;)) break;</b>
+<b class="fc"><i>375</i>&nbsp;      if (ends(&quot;ment&quot;)) break;</b>
+<i>376</i>&nbsp;      /* element etc. not stripped before the m */
+<b class="fc"><i>377</i>&nbsp;      if (ends(&quot;ent&quot;)) break;</b>
+<b class="fc"><i>378</i>&nbsp;      return;</b>
+<i>379</i>&nbsp;    case &#39;o&#39;:
+<b class="nc"><i>380</i>&nbsp;      if (ends(&quot;ion&quot;) &amp;&amp; j &gt;= 0 &amp;&amp; (b[j] == &#39;s&#39; || b[j] == &#39;t&#39;)) break;</b>
+<i>381</i>&nbsp;      /* j &gt;= 0 fixes Bug 2 */
+<b class="nc"><i>382</i>&nbsp;      if (ends(&quot;ou&quot;)) break;</b>
+<b class="nc"><i>383</i>&nbsp;      return;</b>
+<i>384</i>&nbsp;      /* takes care of -ous */
+<i>385</i>&nbsp;    case &#39;s&#39;:
+<b class="nc"><i>386</i>&nbsp;      if (ends(&quot;ism&quot;)) break;</b>
+<b class="nc"><i>387</i>&nbsp;      return;</b>
+<i>388</i>&nbsp;    case &#39;t&#39;:
+<b class="fc"><i>389</i>&nbsp;      if (ends(&quot;ate&quot;)) break;</b>
+<b class="fc"><i>390</i>&nbsp;      if (ends(&quot;iti&quot;)) break;</b>
+<b class="nc"><i>391</i>&nbsp;      return;</b>
+<i>392</i>&nbsp;    case &#39;u&#39;:
+<b class="nc"><i>393</i>&nbsp;      if (ends(&quot;ous&quot;)) break;</b>
+<b class="nc"><i>394</i>&nbsp;      return;</b>
+<i>395</i>&nbsp;    case &#39;v&#39;:
+<b class="nc"><i>396</i>&nbsp;      if (ends(&quot;ive&quot;)) break;</b>
+<b class="nc"><i>397</i>&nbsp;      return;</b>
+<i>398</i>&nbsp;    case &#39;z&#39;:
+<b class="nc"><i>399</i>&nbsp;      if (ends(&quot;ize&quot;)) break;</b>
+<b class="nc"><i>400</i>&nbsp;      return;</b>
+<i>401</i>&nbsp;    default:
+<b class="nc"><i>402</i>&nbsp;      return;</b>
+<i>403</i>&nbsp;    }
+<b class="fc"><i>404</i>&nbsp;    if (m() &gt; 1)</b>
+<b class="fc"><i>405</i>&nbsp;      k = j;</b>
+<b class="fc"><i>406</i>&nbsp;  }</b>
+<i>407</i>&nbsp;
+<i>408</i>&nbsp;  /* step6() removes a final -e if m() &gt; 1. */
+<i>409</i>&nbsp;
+<i>410</i>&nbsp;  private void step6() {
+<b class="fc"><i>411</i>&nbsp;    j = k;</b>
+<b class="fc"><i>412</i>&nbsp;    if (b[k] == &#39;e&#39;) {</b>
+<b class="nc"><i>413</i>&nbsp;      int a = m();</b>
+<b class="nc"><i>414</i>&nbsp;      if (a &gt; 1 || a == 1 &amp;&amp; !cvc(k-1))</b>
+<b class="nc"><i>415</i>&nbsp;        k--;</b>
+<i>416</i>&nbsp;    }
+<b class="fc"><i>417</i>&nbsp;    if (b[k] == &#39;l&#39; &amp;&amp; doublec(k) &amp;&amp; m() &gt; 1)</b>
+<b class="nc"><i>418</i>&nbsp;      k--;</b>
+<b class="fc"><i>419</i>&nbsp;  }</b>
+<i>420</i>&nbsp;
+<i>421</i>&nbsp;
+<i>422</i>&nbsp;  /**
+<i>423</i>&nbsp;   * Stem a word provided as a String.  Returns the result as a String.
+<i>424</i>&nbsp;   */
+<i>425</i>&nbsp;  public String stem(String s) {
+<b class="fc"><i>426</i>&nbsp;    if (stem(s.toCharArray(), s.length()))</b>
+<b class="fc"><i>427</i>&nbsp;      return toString();</b>
+<i>428</i>&nbsp;    else
+<b class="fc"><i>429</i>&nbsp;      return s;</b>
+<i>430</i>&nbsp;  }
+<i>431</i>&nbsp;
+<i>432</i>&nbsp;  /**
+<i>433</i>&nbsp;   * Stem a word provided as a CharSequence.
+<i>434</i>&nbsp;   * Returns the result as a CharSequence.
+<i>435</i>&nbsp;   */
+<i>436</i>&nbsp;  public CharSequence stem(CharSequence word) {
+<b class="nc"><i>437</i>&nbsp;    return stem(word.toString());</b>
+<i>438</i>&nbsp;  }
+<i>439</i>&nbsp;
+<i>440</i>&nbsp;  /** Stem a word contained in a char[].  Returns true if the stemming process
+<i>441</i>&nbsp;   * resulted in a word different from the input.  You can retrieve the
+<i>442</i>&nbsp;   * result with getResultLength()/getResultBuffer() or toString().
+<i>443</i>&nbsp;   */
+<i>444</i>&nbsp;  public boolean stem(char[] word) {
+<b class="nc"><i>445</i>&nbsp;    return stem(word, word.length);</b>
+<i>446</i>&nbsp;  }
+<i>447</i>&nbsp;
+<i>448</i>&nbsp;  /** Stem a word contained in a portion of a char[] array.  Returns
+<i>449</i>&nbsp;   * true if the stemming process resulted in a word different from
+<i>450</i>&nbsp;   * the input.  You can retrieve the result with
+<i>451</i>&nbsp;   * getResultLength()/getResultBuffer() or toString().
+<i>452</i>&nbsp;   */
+<i>453</i>&nbsp;  public boolean stem(char[] wordBuffer, int offset, int wordLen) {
+<b class="fc"><i>454</i>&nbsp;    reset();</b>
+<b class="fc"><i>455</i>&nbsp;    if (b.length &lt; wordLen) {</b>
+<b class="nc"><i>456</i>&nbsp;      b = new char[wordLen - offset];</b>
+<i>457</i>&nbsp;    }
+<b class="fc"><i>458</i>&nbsp;    System.arraycopy(wordBuffer, offset, b, 0, wordLen);</b>
+<b class="fc"><i>459</i>&nbsp;    i = wordLen;</b>
+<b class="fc"><i>460</i>&nbsp;    return stem(0);</b>
+<i>461</i>&nbsp;  }
+<i>462</i>&nbsp;
+<i>463</i>&nbsp;  /** Stem a word contained in a leading portion of a char[] array.
+<i>464</i>&nbsp;   * Returns true if the stemming process resulted in a word different
+<i>465</i>&nbsp;   * from the input.  You can retrieve the result with
+<i>466</i>&nbsp;   * getResultLength()/getResultBuffer() or toString().
+<i>467</i>&nbsp;   */
+<i>468</i>&nbsp;  public boolean stem(char[] word, int wordLen) {
+<b class="fc"><i>469</i>&nbsp;    return stem(word, 0, wordLen);</b>
+<i>470</i>&nbsp;  }
+<i>471</i>&nbsp;
+<i>472</i>&nbsp;  /** Stem the word placed into the Stemmer buffer through calls to add().
+<i>473</i>&nbsp;   * Returns true if the stemming process resulted in a word different
+<i>474</i>&nbsp;   * from the input.  You can retrieve the result with
+<i>475</i>&nbsp;   * getResultLength()/getResultBuffer() or toString().
+<i>476</i>&nbsp;   */
+<i>477</i>&nbsp;  public boolean stem() {
+<b class="nc"><i>478</i>&nbsp;    return stem(0);</b>
+<i>479</i>&nbsp;  }
+<i>480</i>&nbsp;
+<i>481</i>&nbsp;  public boolean stem(int i0) {
+<b class="fc"><i>482</i>&nbsp;    k = i - 1;</b>
+<b class="fc"><i>483</i>&nbsp;    k0 = i0;</b>
+<b class="fc"><i>484</i>&nbsp;    if (k &gt; k0+1) {</b>
+<b class="fc"><i>485</i>&nbsp;      step1(); step2(); step3(); step4(); step5(); step6();</b>
+<i>486</i>&nbsp;    }
+<i>487</i>&nbsp;    // Also, a word is considered dirty if we lopped off letters
+<i>488</i>&nbsp;    // Thanks to Ifigenia Vairelles for pointing this out.
+<b class="fc"><i>489</i>&nbsp;    if (i != k+1)</b>
+<b class="fc"><i>490</i>&nbsp;      dirty = true;</b>
+<b class="fc"><i>491</i>&nbsp;    i = k+1;</b>
+<b class="fc"><i>492</i>&nbsp;    return dirty;</b>
+<i>493</i>&nbsp;  }
+<i>494</i>&nbsp;}
+<i>495</i>&nbsp;
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-09 18:47</div>
+</div>
+</body>
+</html>

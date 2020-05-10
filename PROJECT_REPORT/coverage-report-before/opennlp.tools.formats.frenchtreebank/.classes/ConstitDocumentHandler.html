@@ -1,0 +1,272 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: ConstitDocumentHandler</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">opennlp.tools.formats.frenchtreebank</a> ]
+</div>
+
+<h1>Coverage Summary for Class: ConstitDocumentHandler (opennlp.tools.formats.frenchtreebank)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">ConstitDocumentHandler</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (4/ 4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    93.8%
+  </span>
+  <span class="absValue">
+    (60/ 64)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/*
+<i>2</i>&nbsp; * Licensed to the Apache Software Foundation (ASF) under one or more
+<i>3</i>&nbsp; * contributor license agreements.  See the NOTICE file distributed with
+<i>4</i>&nbsp; * this work for additional information regarding copyright ownership.
+<i>5</i>&nbsp; * The ASF licenses this file to You under the Apache License, Version 2.0
+<i>6</i>&nbsp; * (the &quot;License&quot;); you may not use this file except in compliance with
+<i>7</i>&nbsp; * the License. You may obtain a copy of the License at
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; *     http://www.apache.org/licenses/LICENSE-2.0
+<i>10</i>&nbsp; *
+<i>11</i>&nbsp; * Unless required by applicable law or agreed to in writing, software
+<i>12</i>&nbsp; * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<i>13</i>&nbsp; * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<i>14</i>&nbsp; * See the License for the specific language governing permissions and
+<i>15</i>&nbsp; * limitations under the License.
+<i>16</i>&nbsp; */
+<i>17</i>&nbsp;
+<i>18</i>&nbsp;package opennlp.tools.formats.frenchtreebank;
+<i>19</i>&nbsp;
+<i>20</i>&nbsp;import java.util.LinkedList;
+<i>21</i>&nbsp;import java.util.List;
+<i>22</i>&nbsp;import java.util.Stack;
+<i>23</i>&nbsp;
+<i>24</i>&nbsp;import org.xml.sax.Attributes;
+<i>25</i>&nbsp;import org.xml.sax.SAXException;
+<i>26</i>&nbsp;import org.xml.sax.helpers.DefaultHandler;
+<i>27</i>&nbsp;
+<i>28</i>&nbsp;import opennlp.tools.parser.AbstractBottomUpParser;
+<i>29</i>&nbsp;import opennlp.tools.parser.Constituent;
+<i>30</i>&nbsp;import opennlp.tools.parser.Parse;
+<i>31</i>&nbsp;import opennlp.tools.util.Span;
+<i>32</i>&nbsp;
+<i>33</i>&nbsp;class ConstitDocumentHandler extends DefaultHandler {
+<i>34</i>&nbsp;
+<i>35</i>&nbsp;  private static final String SENT_ELEMENT_NAME = &quot;SENT&quot;;
+<i>36</i>&nbsp;  private static final String WORD_ELEMENT_NAME = &quot;w&quot;;
+<i>37</i>&nbsp;
+<i>38</i>&nbsp;  private static final String SENT_TYPE_NAME = &quot;S&quot;;
+<i>39</i>&nbsp;
+<i>40</i>&nbsp;  private final List&lt;Parse&gt; parses;
+<i>41</i>&nbsp;
+<i>42</i>&nbsp;  private boolean insideSentenceElement;
+<i>43</i>&nbsp;
+<i>44</i>&nbsp;  /**
+<i>45</i>&nbsp;   * A token buffer, a token might be build up by multiple
+<i>46</i>&nbsp;   * {@link #characters(char[], int, int)} calls.
+<i>47</i>&nbsp;   */
+<b class="fc"><i>48</i>&nbsp;  private final StringBuilder tokenBuffer = new StringBuilder();</b>
+<i>49</i>&nbsp;
+<b class="fc"><i>50</i>&nbsp;  private final StringBuilder text = new StringBuilder();</b>
+<i>51</i>&nbsp;
+<i>52</i>&nbsp;  private int offset;
+<b class="fc"><i>53</i>&nbsp;  private final Stack&lt;Constituent&gt; stack = new Stack&lt;&gt;();</b>
+<b class="fc"><i>54</i>&nbsp;  private final List&lt;Constituent&gt; cons = new LinkedList&lt;&gt;();</b>
+<i>55</i>&nbsp;
+<b class="fc"><i>56</i>&nbsp;  ConstitDocumentHandler(List&lt;Parse&gt; parses) {</b>
+<b class="fc"><i>57</i>&nbsp;    this.parses = parses;</b>
+<b class="fc"><i>58</i>&nbsp;  }</b>
+<i>59</i>&nbsp;
+<i>60</i>&nbsp;  private String cat;
+<i>61</i>&nbsp;  private String subcat;
+<i>62</i>&nbsp;
+<i>63</i>&nbsp;  @Override
+<i>64</i>&nbsp;  public void startElement(String uri, String localName, String qName,
+<i>65</i>&nbsp;      Attributes attributes) throws SAXException {
+<i>66</i>&nbsp;
+<b class="fc"><i>67</i>&nbsp;    String type = qName;</b>
+<i>68</i>&nbsp;
+<b class="fc"><i>69</i>&nbsp;    if (SENT_ELEMENT_NAME.equals(qName)) {</b>
+<i>70</i>&nbsp;      // Clear everything to be ready for the next sentence
+<b class="fc"><i>71</i>&nbsp;      text.setLength(0);</b>
+<b class="fc"><i>72</i>&nbsp;      offset = 0;</b>
+<b class="fc"><i>73</i>&nbsp;      stack.clear();</b>
+<b class="fc"><i>74</i>&nbsp;      cons.clear();</b>
+<i>75</i>&nbsp;
+<b class="fc"><i>76</i>&nbsp;      type = SENT_TYPE_NAME;</b>
+<i>77</i>&nbsp;
+<b class="fc"><i>78</i>&nbsp;      insideSentenceElement = true;</b>
+<i>79</i>&nbsp;    }
+<b class="fc"><i>80</i>&nbsp;    else if (WORD_ELEMENT_NAME.equals(qName)) {</b>
+<i>81</i>&nbsp;
+<i>82</i>&nbsp;      // Note:
+<i>83</i>&nbsp;      // If there are compound words they are represented in a couple
+<i>84</i>&nbsp;      // of ways in the training data.
+<i>85</i>&nbsp;      // Many of them are marked with the compound attribute, but not
+<i>86</i>&nbsp;      // all of them. Thats why it is not used in the code to detect
+<i>87</i>&nbsp;      // a compound word.
+<i>88</i>&nbsp;      // Compounds are detected by the fact that a w tag is appearing
+<i>89</i>&nbsp;      // inside a w tag.
+<i>90</i>&nbsp;      //
+<i>91</i>&nbsp;      // The type of a compound word can be encoded either cat of the compound
+<i>92</i>&nbsp;      // plus the catint of each word of the compound.
+<i>93</i>&nbsp;      // Or all compound words have the cat plus subcat of the compound, in this
+<i>94</i>&nbsp;      // case they have an empty cat attribute.
+<i>95</i>&nbsp;      //
+<i>96</i>&nbsp;      // This implementation hopefully decodes these cases correctly!
+<i>97</i>&nbsp;
+<b class="fc"><i>98</i>&nbsp;      String newCat = attributes.getValue(&quot;cat&quot;);</b>
+<b class="fc"><i>99</i>&nbsp;      if (newCat != null &amp;&amp; newCat.length() &gt; 0) {</b>
+<b class="fc"><i>100</i>&nbsp;        cat = newCat;</b>
+<i>101</i>&nbsp;      }
+<i>102</i>&nbsp;
+<b class="fc"><i>103</i>&nbsp;      String newSubcat = attributes.getValue(&quot;subcat&quot;);</b>
+<b class="fc"><i>104</i>&nbsp;      if (newSubcat != null &amp;&amp; newSubcat.length() &gt; 0) {</b>
+<b class="fc"><i>105</i>&nbsp;        subcat = newSubcat;</b>
+<i>106</i>&nbsp;      }
+<i>107</i>&nbsp;
+<b class="fc"><i>108</i>&nbsp;      if (cat != null) {</b>
+<b class="fc"><i>109</i>&nbsp;        type = cat + (subcat != null ? subcat : &quot;&quot;);</b>
+<i>110</i>&nbsp;      }
+<i>111</i>&nbsp;      else {
+<b class="nc"><i>112</i>&nbsp;        String catint = attributes.getValue(&quot;catint&quot;);</b>
+<b class="nc"><i>113</i>&nbsp;        if (catint != null) {</b>
+<b class="nc"><i>114</i>&nbsp;          type = cat + catint;</b>
+<i>115</i>&nbsp;        }
+<i>116</i>&nbsp;        else {
+<b class="nc"><i>117</i>&nbsp;          type = cat + subcat;</b>
+<i>118</i>&nbsp;        }
+<i>119</i>&nbsp;      }
+<i>120</i>&nbsp;    }
+<i>121</i>&nbsp;
+<b class="fc"><i>122</i>&nbsp;    stack.push(new Constituent(type, new Span(offset, offset)));</b>
+<i>123</i>&nbsp;
+<b class="fc"><i>124</i>&nbsp;    tokenBuffer.setLength(0);</b>
+<b class="fc"><i>125</i>&nbsp;  }</b>
+<i>126</i>&nbsp;
+<i>127</i>&nbsp;  @Override
+<i>128</i>&nbsp;  public void characters(char[] ch, int start, int length) throws SAXException {
+<b class="fc"><i>129</i>&nbsp;    tokenBuffer.append(ch, start, length);</b>
+<b class="fc"><i>130</i>&nbsp;  }</b>
+<i>131</i>&nbsp;
+<i>132</i>&nbsp;  @Override
+<i>133</i>&nbsp;  public void endElement(String uri, String localName, String qName)
+<i>134</i>&nbsp;      throws SAXException {
+<i>135</i>&nbsp;
+<b class="fc"><i>136</i>&nbsp;    boolean isCreateConstituent = true;</b>
+<i>137</i>&nbsp;
+<b class="fc"><i>138</i>&nbsp;    if (insideSentenceElement) {</b>
+<b class="fc"><i>139</i>&nbsp;      if (WORD_ELEMENT_NAME.equals(qName)) {</b>
+<b class="fc"><i>140</i>&nbsp;        String token = tokenBuffer.toString().trim();</b>
+<i>141</i>&nbsp;
+<b class="fc"><i>142</i>&nbsp;        if (token.length() &gt; 0) {</b>
+<b class="fc"><i>143</i>&nbsp;          cons.add(new Constituent(AbstractBottomUpParser.TOK_NODE,</b>
+<b class="fc"><i>144</i>&nbsp;              new Span(offset, offset + token.length())));</b>
+<i>145</i>&nbsp;
+<b class="fc"><i>146</i>&nbsp;          text.append(token).append(&quot; &quot;);</b>
+<b class="fc"><i>147</i>&nbsp;          offset += token.length() + 1;</b>
+<i>148</i>&nbsp;        }
+<i>149</i>&nbsp;        else {
+<b class="fc"><i>150</i>&nbsp;          isCreateConstituent = false;</b>
+<i>151</i>&nbsp;        }
+<i>152</i>&nbsp;      }
+<i>153</i>&nbsp;
+<b class="fc"><i>154</i>&nbsp;      Constituent unfinishedCon = stack.pop();</b>
+<i>155</i>&nbsp;
+<b class="fc"><i>156</i>&nbsp;      if (isCreateConstituent) {</b>
+<b class="fc"><i>157</i>&nbsp;        int start = unfinishedCon.getSpan().getStart();</b>
+<b class="fc"><i>158</i>&nbsp;        if (start &lt; offset) {</b>
+<b class="fc"><i>159</i>&nbsp;          cons.add(new Constituent(unfinishedCon.getLabel(), new Span(start, offset - 1)));</b>
+<i>160</i>&nbsp;        }
+<i>161</i>&nbsp;      }
+<i>162</i>&nbsp;
+<b class="fc"><i>163</i>&nbsp;      if (SENT_ELEMENT_NAME.equals(qName)) {</b>
+<i>164</i>&nbsp;        // Finished parsing sentence, now put everything together and create
+<i>165</i>&nbsp;        // a Parse object
+<i>166</i>&nbsp;
+<b class="fc"><i>167</i>&nbsp;        String txt = text.toString();</b>
+<b class="fc"><i>168</i>&nbsp;        int tokenIndex = -1;</b>
+<b class="fc"><i>169</i>&nbsp;        Parse p = new Parse(txt, new Span(0, txt.length()), AbstractBottomUpParser.TOP_NODE, 1,0);</b>
+<b class="fc"><i>170</i>&nbsp;        for (int ci = 0; ci &lt; cons.size(); ci++) {</b>
+<b class="fc"><i>171</i>&nbsp;          Constituent con = cons.get(ci);</b>
+<b class="fc"><i>172</i>&nbsp;          String type = con.getLabel();</b>
+<b class="fc"><i>173</i>&nbsp;          if (!type.equals(AbstractBottomUpParser.TOP_NODE)) {</b>
+<b class="fc"><i>174</i>&nbsp;            if (AbstractBottomUpParser.TOK_NODE.equals(type)) {</b>
+<b class="fc"><i>175</i>&nbsp;              tokenIndex++;</b>
+<i>176</i>&nbsp;            }
+<b class="fc"><i>177</i>&nbsp;            Parse c = new Parse(txt, con.getSpan(), type, 1,tokenIndex);</b>
+<b class="fc"><i>178</i>&nbsp;            p.insert(c);</b>
+<i>179</i>&nbsp;          }
+<i>180</i>&nbsp;        }
+<b class="fc"><i>181</i>&nbsp;        parses.add(p);</b>
+<i>182</i>&nbsp;
+<b class="fc"><i>183</i>&nbsp;        insideSentenceElement = false;</b>
+<i>184</i>&nbsp;      }
+<i>185</i>&nbsp;
+<b class="fc"><i>186</i>&nbsp;      tokenBuffer.setLength(0);</b>
+<i>187</i>&nbsp;    }
+<b class="fc"><i>188</i>&nbsp;  }</b>
+<i>189</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-09 15:05</div>
+</div>
+</body>
+</html>

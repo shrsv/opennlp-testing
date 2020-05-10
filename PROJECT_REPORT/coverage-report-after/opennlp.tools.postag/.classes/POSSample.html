@@ -1,0 +1,246 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: POSSample</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">opennlp.tools.postag</a> ]
+</div>
+
+<h1>Coverage Summary for Class: POSSample (opennlp.tools.postag)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">POSSample</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    91.7%
+  </span>
+  <span class="absValue">
+    (11/ 12)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    80.7%
+  </span>
+  <span class="absValue">
+    (46/ 57)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/*
+<i>2</i>&nbsp; * Licensed to the Apache Software Foundation (ASF) under one or more
+<i>3</i>&nbsp; * contributor license agreements.  See the NOTICE file distributed with
+<i>4</i>&nbsp; * this work for additional information regarding copyright ownership.
+<i>5</i>&nbsp; * The ASF licenses this file to You under the Apache License, Version 2.0
+<i>6</i>&nbsp; * (the &quot;License&quot;); you may not use this file except in compliance with
+<i>7</i>&nbsp; * the License. You may obtain a copy of the License at
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; *     http://www.apache.org/licenses/LICENSE-2.0
+<i>10</i>&nbsp; *
+<i>11</i>&nbsp; * Unless required by applicable law or agreed to in writing, software
+<i>12</i>&nbsp; * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<i>13</i>&nbsp; * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<i>14</i>&nbsp; * See the License for the specific language governing permissions and
+<i>15</i>&nbsp; * limitations under the License.
+<i>16</i>&nbsp; */
+<i>17</i>&nbsp;
+<i>18</i>&nbsp;
+<i>19</i>&nbsp;package opennlp.tools.postag;
+<i>20</i>&nbsp;
+<i>21</i>&nbsp;import java.io.Serializable;
+<i>22</i>&nbsp;import java.util.Arrays;
+<i>23</i>&nbsp;import java.util.Collections;
+<i>24</i>&nbsp;import java.util.List;
+<i>25</i>&nbsp;import java.util.Objects;
+<i>26</i>&nbsp;
+<i>27</i>&nbsp;import opennlp.tools.tokenize.WhitespaceTokenizer;
+<i>28</i>&nbsp;import opennlp.tools.util.InvalidFormatException;
+<i>29</i>&nbsp;
+<i>30</i>&nbsp;/**
+<i>31</i>&nbsp; * Represents an pos-tagged sentence.
+<i>32</i>&nbsp; */
+<i>33</i>&nbsp;public class POSSample implements Serializable {
+<i>34</i>&nbsp;
+<i>35</i>&nbsp;  private List&lt;String&gt; sentence;
+<i>36</i>&nbsp;
+<i>37</i>&nbsp;  private List&lt;String&gt; tags;
+<i>38</i>&nbsp;
+<i>39</i>&nbsp;  private final String[][] additionalContext;
+<i>40</i>&nbsp;
+<i>41</i>&nbsp;  public POSSample(String[] sentence, String[] tags) {
+<b class="fc"><i>42</i>&nbsp;    this(sentence, tags, null);</b>
+<b class="fc"><i>43</i>&nbsp;  }</b>
+<i>44</i>&nbsp;
+<i>45</i>&nbsp;  public POSSample(List&lt;String&gt; sentence, List&lt;String&gt; tags) {
+<b class="fc"><i>46</i>&nbsp;    this(sentence, tags, null);</b>
+<b class="fc"><i>47</i>&nbsp;  }</b>
+<i>48</i>&nbsp;
+<i>49</i>&nbsp;  public POSSample(List&lt;String&gt; sentence, List&lt;String&gt; tags,
+<b class="fc"><i>50</i>&nbsp;      String[][] additionalContext) {</b>
+<b class="fc"><i>51</i>&nbsp;    this.sentence = Collections.unmodifiableList(sentence);</b>
+<b class="fc"><i>52</i>&nbsp;    this.tags = Collections.unmodifiableList(tags);</b>
+<i>53</i>&nbsp;
+<b class="fc"><i>54</i>&nbsp;    checkArguments();</b>
+<i>55</i>&nbsp;    String[][] ac;
+<b class="fc"><i>56</i>&nbsp;    if (additionalContext != null) {</b>
+<b class="nc"><i>57</i>&nbsp;      ac = new String[additionalContext.length][];</b>
+<i>58</i>&nbsp;
+<b class="nc"><i>59</i>&nbsp;      for (int i = 0; i &lt; additionalContext.length; i++) {</b>
+<b class="nc"><i>60</i>&nbsp;        ac[i] = new String[additionalContext[i].length];</b>
+<b class="nc"><i>61</i>&nbsp;        System.arraycopy(additionalContext[i], 0, ac[i], 0,</b>
+<i>62</i>&nbsp;            additionalContext[i].length);
+<i>63</i>&nbsp;      }
+<i>64</i>&nbsp;    } else {
+<b class="fc"><i>65</i>&nbsp;      ac = null;</b>
+<i>66</i>&nbsp;    }
+<b class="fc"><i>67</i>&nbsp;    this.additionalContext = ac;</b>
+<b class="fc"><i>68</i>&nbsp;  }</b>
+<i>69</i>&nbsp;
+<i>70</i>&nbsp;  public POSSample(String[] sentence, String[] tags,
+<i>71</i>&nbsp;      String[][] additionalContext) {
+<b class="fc"><i>72</i>&nbsp;    this(Arrays.asList(sentence), Arrays.asList(tags), additionalContext);</b>
+<b class="fc"><i>73</i>&nbsp;  }</b>
+<i>74</i>&nbsp;
+<i>75</i>&nbsp;  private void checkArguments() {
+<b class="fc"><i>76</i>&nbsp;    if (sentence.size() != tags.size()) {</b>
+<b class="nc"><i>77</i>&nbsp;      throw new IllegalArgumentException(</b>
+<b class="nc"><i>78</i>&nbsp;        &quot;There must be exactly one tag for each token. tokens: &quot; + sentence.size() +</b>
+<b class="nc"><i>79</i>&nbsp;            &quot;, tags: &quot; + tags.size());</b>
+<i>80</i>&nbsp;    }
+<i>81</i>&nbsp;
+<b class="fc"><i>82</i>&nbsp;    if (sentence.contains(null)) {</b>
+<b class="nc"><i>83</i>&nbsp;      throw new IllegalArgumentException(&quot;null elements are not allowed in sentence tokens!&quot;);</b>
+<i>84</i>&nbsp;    }
+<b class="fc"><i>85</i>&nbsp;    if (tags.contains(null)) {</b>
+<b class="nc"><i>86</i>&nbsp;      throw new IllegalArgumentException(&quot;null elements are not allowed in tags!&quot;);</b>
+<i>87</i>&nbsp;    }
+<b class="fc"><i>88</i>&nbsp;  }</b>
+<i>89</i>&nbsp;
+<i>90</i>&nbsp;  public String[] getSentence() {
+<b class="fc"><i>91</i>&nbsp;    return sentence.toArray(new String[sentence.size()]);</b>
+<i>92</i>&nbsp;  }
+<i>93</i>&nbsp;
+<i>94</i>&nbsp;  public String[] getTags() {
+<b class="fc"><i>95</i>&nbsp;    return tags.toArray(new String[tags.size()]);</b>
+<i>96</i>&nbsp;  }
+<i>97</i>&nbsp;
+<i>98</i>&nbsp;  public String[][] getAddictionalContext() {
+<b class="fc"><i>99</i>&nbsp;    return this.additionalContext;</b>
+<i>100</i>&nbsp;  }
+<i>101</i>&nbsp;
+<i>102</i>&nbsp;  @Override
+<i>103</i>&nbsp;  public String toString() {
+<i>104</i>&nbsp;
+<b class="fc"><i>105</i>&nbsp;    StringBuilder result = new StringBuilder();</b>
+<i>106</i>&nbsp;
+<b class="fc"><i>107</i>&nbsp;    for (int i = 0; i &lt; getSentence().length; i++) {</b>
+<b class="fc"><i>108</i>&nbsp;      result.append(getSentence()[i]);</b>
+<b class="fc"><i>109</i>&nbsp;      result.append(&#39;_&#39;);</b>
+<b class="fc"><i>110</i>&nbsp;      result.append(getTags()[i]);</b>
+<b class="fc"><i>111</i>&nbsp;      result.append(&#39; &#39;);</b>
+<i>112</i>&nbsp;    }
+<i>113</i>&nbsp;
+<b class="fc"><i>114</i>&nbsp;    if (result.length() &gt; 0) {</b>
+<i>115</i>&nbsp;      // get rid of last space
+<b class="fc"><i>116</i>&nbsp;      result.setLength(result.length() - 1);</b>
+<i>117</i>&nbsp;    }
+<i>118</i>&nbsp;
+<b class="fc"><i>119</i>&nbsp;    return result.toString();</b>
+<i>120</i>&nbsp;  }
+<i>121</i>&nbsp;
+<i>122</i>&nbsp;  public static POSSample parse(String sentenceString) throws InvalidFormatException {
+<i>123</i>&nbsp;
+<b class="fc"><i>124</i>&nbsp;    String[] tokenTags = WhitespaceTokenizer.INSTANCE.tokenize(sentenceString);</b>
+<i>125</i>&nbsp;
+<b class="fc"><i>126</i>&nbsp;    String[] sentence = new String[tokenTags.length];</b>
+<b class="fc"><i>127</i>&nbsp;    String[] tags = new String[tokenTags.length];</b>
+<i>128</i>&nbsp;
+<b class="fc"><i>129</i>&nbsp;    for (int i = 0; i &lt; tokenTags.length; i++) {</b>
+<b class="fc"><i>130</i>&nbsp;      int split = tokenTags[i].lastIndexOf(&quot;_&quot;);</b>
+<i>131</i>&nbsp;
+<b class="fc"><i>132</i>&nbsp;      if (split == -1) {</b>
+<b class="fc"><i>133</i>&nbsp;        throw new InvalidFormatException(&quot;Cannot find \&quot;_\&quot; inside token &#39;&quot; + tokenTags[i] + &quot;&#39;!&quot;);</b>
+<i>134</i>&nbsp;      }
+<i>135</i>&nbsp;
+<b class="fc"><i>136</i>&nbsp;      sentence[i] = tokenTags[i].substring(0, split);</b>
+<b class="fc"><i>137</i>&nbsp;      tags[i] = tokenTags[i].substring(split + 1);</b>
+<i>138</i>&nbsp;    }
+<i>139</i>&nbsp;
+<b class="fc"><i>140</i>&nbsp;    return new POSSample(sentence, tags);</b>
+<i>141</i>&nbsp;  }
+<i>142</i>&nbsp;
+<i>143</i>&nbsp;  @Override
+<i>144</i>&nbsp;  public int hashCode() {
+<b class="nc"><i>145</i>&nbsp;    return Objects.hash(Arrays.hashCode(getSentence()), Arrays.hashCode(getTags()));</b>
+<i>146</i>&nbsp;  }
+<i>147</i>&nbsp;
+<i>148</i>&nbsp;  @Override
+<i>149</i>&nbsp;  public boolean equals(Object obj) {
+<b class="fc"><i>150</i>&nbsp;    if (obj == this) {</b>
+<b class="nc"><i>151</i>&nbsp;      return true;</b>
+<i>152</i>&nbsp;    }
+<i>153</i>&nbsp;
+<b class="fc"><i>154</i>&nbsp;    if (obj instanceof POSSample) {</b>
+<b class="fc"><i>155</i>&nbsp;      POSSample a = (POSSample) obj;</b>
+<i>156</i>&nbsp;
+<b class="fc"><i>157</i>&nbsp;      return Arrays.equals(getSentence(), a.getSentence())</b>
+<b class="fc"><i>158</i>&nbsp;          &amp;&amp; Arrays.equals(getTags(), a.getTags());</b>
+<i>159</i>&nbsp;    }
+<i>160</i>&nbsp;
+<b class="fc"><i>161</i>&nbsp;    return this == obj;</b>
+<i>162</i>&nbsp;  }
+<i>163</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-09 18:47</div>
+</div>
+</body>
+</html>

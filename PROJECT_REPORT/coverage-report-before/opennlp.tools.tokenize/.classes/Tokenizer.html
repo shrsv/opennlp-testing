@@ -1,0 +1,112 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: Tokenizer</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">opennlp.tools.tokenize</a> ]
+</div>
+
+<h1>Coverage Summary for Class: Tokenizer (opennlp.tools.tokenize)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+</tr>
+<tr>
+  <td class="name">Tokenizer</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/*
+<i>2</i>&nbsp; * Licensed to the Apache Software Foundation (ASF) under one or more
+<i>3</i>&nbsp; * contributor license agreements.  See the NOTICE file distributed with
+<i>4</i>&nbsp; * this work for additional information regarding copyright ownership.
+<i>5</i>&nbsp; * The ASF licenses this file to You under the Apache License, Version 2.0
+<i>6</i>&nbsp; * (the &quot;License&quot;); you may not use this file except in compliance with
+<i>7</i>&nbsp; * the License. You may obtain a copy of the License at
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; *     http://www.apache.org/licenses/LICENSE-2.0
+<i>10</i>&nbsp; *
+<i>11</i>&nbsp; * Unless required by applicable law or agreed to in writing, software
+<i>12</i>&nbsp; * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<i>13</i>&nbsp; * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<i>14</i>&nbsp; * See the License for the specific language governing permissions and
+<i>15</i>&nbsp; * limitations under the License.
+<i>16</i>&nbsp; */
+<i>17</i>&nbsp;
+<i>18</i>&nbsp;
+<i>19</i>&nbsp;package opennlp.tools.tokenize;
+<i>20</i>&nbsp;
+<i>21</i>&nbsp;import opennlp.tools.util.Span;
+<i>22</i>&nbsp;
+<i>23</i>&nbsp;/**
+<i>24</i>&nbsp; * The interface for tokenizers, which segment a string into its tokens.
+<i>25</i>&nbsp; * &lt;p&gt;
+<i>26</i>&nbsp; * Tokenization is a necessary step before more complex NLP tasks can be applied,
+<i>27</i>&nbsp; * these usually process text on a token level. The quality of tokenization is
+<i>28</i>&nbsp; * important because it influences the performance of high-level task applied to it.
+<i>29</i>&nbsp; * &lt;p&gt;
+<i>30</i>&nbsp; * In segmented languages like English most words are segmented by white spaces
+<i>31</i>&nbsp; * expect for punctuations, etc. which is directly attached to the word without a white space
+<i>32</i>&nbsp; * in between, it is not possible to just split at all punctuations because in abbreviations dots
+<i>33</i>&nbsp; * are a part of the token itself. A tokenizer is now responsible to split these tokens
+<i>34</i>&nbsp; * correctly.
+<i>35</i>&nbsp; * &lt;p&gt;
+<i>36</i>&nbsp; * In non-segmented languages like Chinese tokenization is more difficult since words
+<i>37</i>&nbsp; * are not segmented by a whitespace.
+<i>38</i>&nbsp; * &lt;p&gt;
+<i>39</i>&nbsp; * Tokenizers can also be used to segment already identified tokens further into more
+<i>40</i>&nbsp; * atomic parts to get a deeper understanding. This approach helps more complex task
+<i>41</i>&nbsp; * to gain insight into tokens which do not represent words like numbers, units or tokens
+<i>42</i>&nbsp; * which are part of a special notation.
+<i>43</i>&nbsp; * &lt;p&gt;
+<i>44</i>&nbsp; * For most further task it is desirable to over tokenize rather than under tokenize.
+<i>45</i>&nbsp; */
+<i>46</i>&nbsp;public interface Tokenizer {
+<i>47</i>&nbsp;
+<i>48</i>&nbsp;  /**
+<i>49</i>&nbsp;   * Splits a string into its atomic parts
+<i>50</i>&nbsp;   *
+<i>51</i>&nbsp;   * @param s The string to be tokenized.
+<i>52</i>&nbsp;   * @return  The String[] with the individual tokens as the array
+<i>53</i>&nbsp;   *          elements.
+<i>54</i>&nbsp;   */
+<i>55</i>&nbsp;  String[] tokenize(String s);
+<i>56</i>&nbsp;
+<i>57</i>&nbsp;  /**
+<i>58</i>&nbsp;   * Finds the boundaries of atomic parts in a string.
+<i>59</i>&nbsp;   *
+<i>60</i>&nbsp;   * @param s The string to be tokenized.
+<i>61</i>&nbsp;   * @return The Span[] with the spans (offsets into s) for each
+<i>62</i>&nbsp;   * token as the individuals array elements.
+<i>63</i>&nbsp;   */
+<i>64</i>&nbsp;  Span[] tokenizePos(String s);
+<i>65</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-09 15:05</div>
+</div>
+</body>
+</html>

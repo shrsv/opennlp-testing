@@ -1,0 +1,199 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: DefaultLemmatizerContextGenerator</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">opennlp.tools.lemmatizer</a> ]
+</div>
+
+<h1>Coverage Summary for Class: DefaultLemmatizerContextGenerator (opennlp.tools.lemmatizer)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">DefaultLemmatizerContextGenerator</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (6/ 6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (38/ 38)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/*
+<i>2</i>&nbsp; * Licensed to the Apache Software Foundation (ASF) under one or more
+<i>3</i>&nbsp; * contributor license agreements.  See the NOTICE file distributed with
+<i>4</i>&nbsp; * this work for additional information regarding copyright ownership.
+<i>5</i>&nbsp; * The ASF licenses this file to You under the Apache License, Version 2.0
+<i>6</i>&nbsp; * (the &quot;License&quot;); you may not use this file except in compliance with
+<i>7</i>&nbsp; * the License. You may obtain a copy of the License at
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; *     http://www.apache.org/licenses/LICENSE-2.0
+<i>10</i>&nbsp; *
+<i>11</i>&nbsp; * Unless required by applicable law or agreed to in writing, software
+<i>12</i>&nbsp; * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<i>13</i>&nbsp; * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<i>14</i>&nbsp; * See the License for the specific language governing permissions and
+<i>15</i>&nbsp; * limitations under the License.
+<i>16</i>&nbsp; */
+<i>17</i>&nbsp;
+<i>18</i>&nbsp;package opennlp.tools.lemmatizer;
+<i>19</i>&nbsp;
+<i>20</i>&nbsp;import java.util.ArrayList;
+<i>21</i>&nbsp;import java.util.List;
+<i>22</i>&nbsp;import java.util.regex.Pattern;
+<i>23</i>&nbsp;
+<i>24</i>&nbsp;/**
+<i>25</i>&nbsp; * Simple feature generator for learning statistical lemmatizers.
+<i>26</i>&nbsp; * Features based on Grzegorz Chrupała. 2008. Towards a Machine-Learning
+<i>27</i>&nbsp; * Architecture for Lexical Functional Grammar Parsing. PhD dissertation,
+<i>28</i>&nbsp; * Dublin City University
+<i>29</i>&nbsp; * @version 2016-02-15
+<i>30</i>&nbsp; */
+<i>31</i>&nbsp;public class DefaultLemmatizerContextGenerator implements LemmatizerContextGenerator {
+<i>32</i>&nbsp;
+<i>33</i>&nbsp;  private static final int PREFIX_LENGTH = 5;
+<i>34</i>&nbsp;  private static final int SUFFIX_LENGTH = 7;
+<i>35</i>&nbsp;
+<b class="fc"><i>36</i>&nbsp;  private static Pattern hasCap = Pattern.compile(&quot;[A-Z]&quot;);</b>
+<b class="fc"><i>37</i>&nbsp;  private static Pattern hasNum = Pattern.compile(&quot;[0-9]&quot;);</b>
+<i>38</i>&nbsp;
+<b class="fc"><i>39</i>&nbsp;  public DefaultLemmatizerContextGenerator() {</b>
+<b class="fc"><i>40</i>&nbsp;  }</b>
+<i>41</i>&nbsp;
+<i>42</i>&nbsp;  protected static String[] getPrefixes(String lex) {
+<b class="fc"><i>43</i>&nbsp;    String[] prefs = new String[PREFIX_LENGTH];</b>
+<b class="fc"><i>44</i>&nbsp;    for (int li = 1; li &lt; PREFIX_LENGTH; li++) {</b>
+<b class="fc"><i>45</i>&nbsp;      prefs[li] = lex.substring(0, Math.min(li + 1, lex.length()));</b>
+<i>46</i>&nbsp;    }
+<b class="fc"><i>47</i>&nbsp;    return prefs;</b>
+<i>48</i>&nbsp;  }
+<i>49</i>&nbsp;
+<i>50</i>&nbsp;  protected static String[] getSuffixes(String lex) {
+<b class="fc"><i>51</i>&nbsp;    String[] suffs = new String[SUFFIX_LENGTH];</b>
+<b class="fc"><i>52</i>&nbsp;    for (int li = 1; li &lt; SUFFIX_LENGTH; li++) {</b>
+<b class="fc"><i>53</i>&nbsp;      suffs[li] = lex.substring(Math.max(lex.length() - li - 1, 0));</b>
+<i>54</i>&nbsp;    }
+<b class="fc"><i>55</i>&nbsp;    return suffs;</b>
+<i>56</i>&nbsp;  }
+<i>57</i>&nbsp;
+<i>58</i>&nbsp;  public String[] getContext(int index, String[] sequence, String[] priorDecisions,
+<i>59</i>&nbsp;      Object[] additionalContext) {
+<b class="fc"><i>60</i>&nbsp;    return getContext(index, sequence, (String[]) additionalContext[0], priorDecisions);</b>
+<i>61</i>&nbsp;  }
+<i>62</i>&nbsp;
+<i>63</i>&nbsp;  public String[] getContext(int index, String[] toks, String[] tags, String[] preds) {
+<i>64</i>&nbsp;    // Word
+<i>65</i>&nbsp;    String w0;
+<i>66</i>&nbsp;    // Tag
+<i>67</i>&nbsp;    String t0;
+<i>68</i>&nbsp;    // Previous prediction
+<i>69</i>&nbsp;    String p_1;
+<i>70</i>&nbsp;
+<b class="fc"><i>71</i>&nbsp;    String lex = toks[index];</b>
+<b class="fc"><i>72</i>&nbsp;    if (index &lt; 1) {</b>
+<b class="fc"><i>73</i>&nbsp;      p_1 = &quot;p_1=bos&quot;;</b>
+<i>74</i>&nbsp;    }
+<i>75</i>&nbsp;    else {
+<b class="fc"><i>76</i>&nbsp;      p_1 = &quot;p_1=&quot; + preds[index - 1];</b>
+<i>77</i>&nbsp;    }
+<i>78</i>&nbsp;
+<b class="fc"><i>79</i>&nbsp;    w0 = &quot;w0=&quot; + toks[index];</b>
+<b class="fc"><i>80</i>&nbsp;    t0 = &quot;t0=&quot; + tags[index];</b>
+<i>81</i>&nbsp;
+<b class="fc"><i>82</i>&nbsp;    List&lt;String&gt; features = new ArrayList&lt;&gt;();</b>
+<i>83</i>&nbsp;
+<b class="fc"><i>84</i>&nbsp;    features.add(w0);</b>
+<b class="fc"><i>85</i>&nbsp;    features.add(t0);</b>
+<b class="fc"><i>86</i>&nbsp;    features.add(p_1);</b>
+<b class="fc"><i>87</i>&nbsp;    features.add(p_1 + t0);</b>
+<b class="fc"><i>88</i>&nbsp;    features.add(p_1 + w0);</b>
+<i>89</i>&nbsp;
+<i>90</i>&nbsp;    // do some basic suffix analysis
+<b class="fc"><i>91</i>&nbsp;    String[] suffs = getSuffixes(lex);</b>
+<b class="fc"><i>92</i>&nbsp;    for (int i = 0; i &lt; suffs.length; i++) {</b>
+<b class="fc"><i>93</i>&nbsp;      features.add(&quot;suf=&quot; + suffs[i]);</b>
+<i>94</i>&nbsp;    }
+<i>95</i>&nbsp;
+<b class="fc"><i>96</i>&nbsp;    String[] prefs = getPrefixes(lex);</b>
+<b class="fc"><i>97</i>&nbsp;    for (int i = 0; i &lt; prefs.length; i++) {</b>
+<b class="fc"><i>98</i>&nbsp;      features.add(&quot;pre=&quot; + prefs[i]);</b>
+<i>99</i>&nbsp;    }
+<i>100</i>&nbsp;    // see if the word has any special characters
+<b class="fc"><i>101</i>&nbsp;    if (lex.indexOf(&#39;-&#39;) != -1) {</b>
+<b class="fc"><i>102</i>&nbsp;      features.add(&quot;h&quot;);</b>
+<i>103</i>&nbsp;    }
+<i>104</i>&nbsp;
+<b class="fc"><i>105</i>&nbsp;    if (hasCap.matcher(lex).find()) {</b>
+<b class="fc"><i>106</i>&nbsp;      features.add(&quot;c&quot;);</b>
+<i>107</i>&nbsp;    }
+<i>108</i>&nbsp;
+<b class="fc"><i>109</i>&nbsp;    if (hasNum.matcher(lex).find()) {</b>
+<b class="fc"><i>110</i>&nbsp;      features.add(&quot;d&quot;);</b>
+<i>111</i>&nbsp;    }
+<i>112</i>&nbsp;
+<b class="fc"><i>113</i>&nbsp;    return features.toArray(new String[features.size()]);</b>
+<i>114</i>&nbsp;  }
+<i>115</i>&nbsp;}
+<i>116</i>&nbsp;
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-09 18:47</div>
+</div>
+</body>
+</html>

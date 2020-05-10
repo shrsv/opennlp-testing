@@ -1,0 +1,199 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: FeatureGeneratorUtil</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">opennlp.tools.util.featuregen</a> ]
+</div>
+
+<h1>Coverage Summary for Class: FeatureGeneratorUtil (opennlp.tools.util.featuregen)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">FeatureGeneratorUtil</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    66.7%
+  </span>
+  <span class="absValue">
+    (2/ 3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    97.1%
+  </span>
+  <span class="absValue">
+    (34/ 35)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/*
+<i>2</i>&nbsp; * Licensed to the Apache Software Foundation (ASF) under one or more
+<i>3</i>&nbsp; * contributor license agreements.  See the NOTICE file distributed with
+<i>4</i>&nbsp; * this work for additional information regarding copyright ownership.
+<i>5</i>&nbsp; * The ASF licenses this file to You under the Apache License, Version 2.0
+<i>6</i>&nbsp; * (the &quot;License&quot;); you may not use this file except in compliance with
+<i>7</i>&nbsp; * the License. You may obtain a copy of the License at
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; *     http://www.apache.org/licenses/LICENSE-2.0
+<i>10</i>&nbsp; *
+<i>11</i>&nbsp; * Unless required by applicable law or agreed to in writing, software
+<i>12</i>&nbsp; * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<i>13</i>&nbsp; * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<i>14</i>&nbsp; * See the License for the specific language governing permissions and
+<i>15</i>&nbsp; * limitations under the License.
+<i>16</i>&nbsp; */
+<i>17</i>&nbsp;
+<i>18</i>&nbsp;
+<i>19</i>&nbsp;package opennlp.tools.util.featuregen;
+<i>20</i>&nbsp;
+<i>21</i>&nbsp;import java.util.regex.Pattern;
+<i>22</i>&nbsp;
+<i>23</i>&nbsp;/**
+<i>24</i>&nbsp; * This class provide common utilities for feature generation.
+<i>25</i>&nbsp; */
+<b class="nc"><i>26</i>&nbsp;public class FeatureGeneratorUtil {</b>
+<i>27</i>&nbsp;
+<i>28</i>&nbsp;  private static final String TOKEN_CLASS_PREFIX = &quot;wc&quot;;
+<i>29</i>&nbsp;  private static final String TOKEN_AND_CLASS_PREFIX = &quot;w&amp;c&quot;;
+<i>30</i>&nbsp;
+<b class="fc"><i>31</i>&nbsp;  private static final Pattern capPeriod = Pattern.compile(&quot;^[A-Z]\\.$&quot;);</b>
+<i>32</i>&nbsp;
+<i>33</i>&nbsp;  /**
+<i>34</i>&nbsp;   * Generates a class name for the specified token.
+<i>35</i>&nbsp;   * The classes are as follows where the first matching class is used:
+<i>36</i>&nbsp;   * &lt;ul&gt;
+<i>37</i>&nbsp;   * &lt;li&gt;jah - Japanese Hiragana&lt;/li&gt;
+<i>38</i>&nbsp;   * &lt;li&gt;jak - Japanese Katakana&lt;/li&gt;
+<i>39</i>&nbsp;   * &lt;li&gt;lc - lowercase alphabetic&lt;/li&gt;
+<i>40</i>&nbsp;   * &lt;li&gt;2d - two digits &lt;/li&gt;
+<i>41</i>&nbsp;   * &lt;li&gt;4d - four digits &lt;/li&gt;
+<i>42</i>&nbsp;   * &lt;li&gt;an - alpha-numeric &lt;/li&gt;
+<i>43</i>&nbsp;   * &lt;li&gt;dd - digits and dashes &lt;/li&gt;
+<i>44</i>&nbsp;   * &lt;li&gt;ds - digits and slashes &lt;/li&gt;
+<i>45</i>&nbsp;   * &lt;li&gt;dc - digits and commas &lt;/li&gt;
+<i>46</i>&nbsp;   * &lt;li&gt;dp - digits and periods &lt;/li&gt;
+<i>47</i>&nbsp;   * &lt;li&gt;num - digits &lt;/li&gt;
+<i>48</i>&nbsp;   * &lt;li&gt;sc - single capital letter &lt;/li&gt;
+<i>49</i>&nbsp;   * &lt;li&gt;ac - all capital letters &lt;/li&gt;
+<i>50</i>&nbsp;   * &lt;li&gt;ic - initial capital letter &lt;/li&gt;
+<i>51</i>&nbsp;   * &lt;li&gt;other - other &lt;/li&gt;
+<i>52</i>&nbsp;   * &lt;/ul&gt;
+<i>53</i>&nbsp;   * @param token A token or word.
+<i>54</i>&nbsp;   * @return The class name that the specified token belongs in.
+<i>55</i>&nbsp;   */
+<i>56</i>&nbsp;  public static String tokenFeature(String token) {
+<i>57</i>&nbsp;
+<b class="fc"><i>58</i>&nbsp;    StringPattern pattern = StringPattern.recognize(token);</b>
+<i>59</i>&nbsp;
+<i>60</i>&nbsp;    String feat;
+<b class="fc"><i>61</i>&nbsp;    if (pattern.isAllHiragana()) {</b>
+<b class="fc"><i>62</i>&nbsp;      feat = &quot;jah&quot;;</b>
+<i>63</i>&nbsp;    }
+<b class="fc"><i>64</i>&nbsp;    else if (pattern.isAllKatakana()) {</b>
+<b class="fc"><i>65</i>&nbsp;      feat = &quot;jak&quot;;</b>
+<i>66</i>&nbsp;    }
+<b class="fc"><i>67</i>&nbsp;    else if (pattern.isAllLowerCaseLetter()) {</b>
+<b class="fc"><i>68</i>&nbsp;      feat = &quot;lc&quot;;</b>
+<i>69</i>&nbsp;    }
+<b class="fc"><i>70</i>&nbsp;    else if (pattern.digits() == 2) {</b>
+<b class="fc"><i>71</i>&nbsp;      feat = &quot;2d&quot;;</b>
+<i>72</i>&nbsp;    }
+<b class="fc"><i>73</i>&nbsp;    else if (pattern.digits() == 4) {</b>
+<b class="fc"><i>74</i>&nbsp;      feat = &quot;4d&quot;;</b>
+<i>75</i>&nbsp;    }
+<b class="fc"><i>76</i>&nbsp;    else if (pattern.containsDigit()) {</b>
+<b class="fc"><i>77</i>&nbsp;      if (pattern.containsLetters()) {</b>
+<b class="fc"><i>78</i>&nbsp;        feat = &quot;an&quot;;</b>
+<i>79</i>&nbsp;      }
+<b class="fc"><i>80</i>&nbsp;      else if (pattern.containsHyphen()) {</b>
+<b class="fc"><i>81</i>&nbsp;        feat = &quot;dd&quot;;</b>
+<i>82</i>&nbsp;      }
+<b class="fc"><i>83</i>&nbsp;      else if (pattern.containsSlash()) {</b>
+<b class="fc"><i>84</i>&nbsp;        feat = &quot;ds&quot;;</b>
+<i>85</i>&nbsp;      }
+<b class="fc"><i>86</i>&nbsp;      else if (pattern.containsComma()) {</b>
+<b class="fc"><i>87</i>&nbsp;        feat = &quot;dc&quot;;</b>
+<i>88</i>&nbsp;      }
+<b class="fc"><i>89</i>&nbsp;      else if (pattern.containsPeriod()) {</b>
+<b class="fc"><i>90</i>&nbsp;        feat = &quot;dp&quot;;</b>
+<i>91</i>&nbsp;      }
+<i>92</i>&nbsp;      else {
+<b class="fc"><i>93</i>&nbsp;        feat = &quot;num&quot;;</b>
+<i>94</i>&nbsp;      }
+<i>95</i>&nbsp;    }
+<b class="fc"><i>96</i>&nbsp;    else if (pattern.isAllCapitalLetter()) {</b>
+<b class="fc"><i>97</i>&nbsp;      if (token.length() == 1) {</b>
+<b class="fc"><i>98</i>&nbsp;        feat = &quot;sc&quot;;</b>
+<i>99</i>&nbsp;      }
+<i>100</i>&nbsp;      else {
+<b class="fc"><i>101</i>&nbsp;        feat = &quot;ac&quot;;</b>
+<i>102</i>&nbsp;      }
+<i>103</i>&nbsp;    }
+<b class="fc"><i>104</i>&nbsp;    else if (capPeriod.matcher(token).find()) {</b>
+<b class="fc"><i>105</i>&nbsp;      feat = &quot;cp&quot;;</b>
+<i>106</i>&nbsp;    }
+<b class="fc"><i>107</i>&nbsp;    else if (pattern.isInitialCapitalLetter()) {</b>
+<b class="fc"><i>108</i>&nbsp;      feat = &quot;ic&quot;;</b>
+<i>109</i>&nbsp;    }
+<i>110</i>&nbsp;    else {
+<b class="fc"><i>111</i>&nbsp;      feat = &quot;other&quot;;</b>
+<i>112</i>&nbsp;    }
+<i>113</i>&nbsp;
+<b class="fc"><i>114</i>&nbsp;    return (feat);</b>
+<i>115</i>&nbsp;  }
+<i>116</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-09 15:05</div>
+</div>
+</body>
+</html>

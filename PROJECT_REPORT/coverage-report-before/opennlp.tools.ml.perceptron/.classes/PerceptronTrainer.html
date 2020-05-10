@@ -1,0 +1,504 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: PerceptronTrainer</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">opennlp.tools.ml.perceptron</a> ]
+</div>
+
+<h1>Coverage Summary for Class: PerceptronTrainer (opennlp.tools.ml.perceptron)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">PerceptronTrainer</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    86.7%
+  </span>
+  <span class="absValue">
+    (13/ 15)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    89.5%
+  </span>
+  <span class="absValue">
+    (137/ 153)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/*
+<i>2</i>&nbsp; * Licensed to the Apache Software Foundation (ASF) under one or more
+<i>3</i>&nbsp; * contributor license agreements.  See the NOTICE file distributed with
+<i>4</i>&nbsp; * this work for additional information regarding copyright ownership.
+<i>5</i>&nbsp; * The ASF licenses this file to You under the Apache License, Version 2.0
+<i>6</i>&nbsp; * (the &quot;License&quot;); you may not use this file except in compliance with
+<i>7</i>&nbsp; * the License. You may obtain a copy of the License at
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; *     http://www.apache.org/licenses/LICENSE-2.0
+<i>10</i>&nbsp; *
+<i>11</i>&nbsp; * Unless required by applicable law or agreed to in writing, software
+<i>12</i>&nbsp; * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<i>13</i>&nbsp; * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<i>14</i>&nbsp; * See the License for the specific language governing permissions and
+<i>15</i>&nbsp; * limitations under the License.
+<i>16</i>&nbsp; */
+<i>17</i>&nbsp;
+<i>18</i>&nbsp;package opennlp.tools.ml.perceptron;
+<i>19</i>&nbsp;
+<i>20</i>&nbsp;import java.io.IOException;
+<i>21</i>&nbsp;
+<i>22</i>&nbsp;import opennlp.tools.ml.AbstractEventTrainer;
+<i>23</i>&nbsp;import opennlp.tools.ml.ArrayMath;
+<i>24</i>&nbsp;import opennlp.tools.ml.model.AbstractModel;
+<i>25</i>&nbsp;import opennlp.tools.ml.model.DataIndexer;
+<i>26</i>&nbsp;import opennlp.tools.ml.model.EvalParameters;
+<i>27</i>&nbsp;import opennlp.tools.ml.model.MutableContext;
+<i>28</i>&nbsp;import opennlp.tools.util.TrainingParameters;
+<i>29</i>&nbsp;
+<i>30</i>&nbsp;/**
+<i>31</i>&nbsp; * Trains models using the perceptron algorithm.  Each outcome is represented as
+<i>32</i>&nbsp; * a binary perceptron classifier.  This supports standard (integer) weighting as well
+<i>33</i>&nbsp; * average weighting as described in:
+<i>34</i>&nbsp; * Discriminative Training Methods for Hidden Markov Models: Theory and Experiments
+<i>35</i>&nbsp; * with the Perceptron Algorithm. Michael Collins, EMNLP 2002.
+<i>36</i>&nbsp; *
+<i>37</i>&nbsp; */
+<i>38</i>&nbsp;public class PerceptronTrainer extends AbstractEventTrainer {
+<i>39</i>&nbsp;
+<i>40</i>&nbsp;  public static final String PERCEPTRON_VALUE = &quot;PERCEPTRON&quot;;
+<i>41</i>&nbsp;  public static final double TOLERANCE_DEFAULT = .00001;
+<i>42</i>&nbsp;
+<i>43</i>&nbsp;  /** Number of unique events which occurred in the event set. */
+<i>44</i>&nbsp;  private int numUniqueEvents;
+<i>45</i>&nbsp;  /** Number of events in the event set. */
+<i>46</i>&nbsp;  private int numEvents;
+<i>47</i>&nbsp;
+<i>48</i>&nbsp;  /** Number of predicates. */
+<i>49</i>&nbsp;  private int numPreds;
+<i>50</i>&nbsp;  /** Number of outcomes. */
+<i>51</i>&nbsp;  private int numOutcomes;
+<i>52</i>&nbsp;  /** Records the array of predicates seen in each event. */
+<i>53</i>&nbsp;  private int[][] contexts;
+<i>54</i>&nbsp;
+<i>55</i>&nbsp;  /** The value associates with each context. If null then context values are assumes to be 1. */
+<i>56</i>&nbsp;  private float[][] values;
+<i>57</i>&nbsp;
+<i>58</i>&nbsp;  /** List of outcomes for each event i, in context[i]. */
+<i>59</i>&nbsp;  private int[] outcomeList;
+<i>60</i>&nbsp;
+<i>61</i>&nbsp;  /** Records the num of times an event has been seen for each event i, in context[i]. */
+<i>62</i>&nbsp;  private int[] numTimesEventsSeen;
+<i>63</i>&nbsp;
+<i>64</i>&nbsp;  /** Stores the String names of the outcomes.  The GIS only tracks outcomes
+<i>65</i>&nbsp;  as ints, and so this array is needed to save the model to disk and
+<i>66</i>&nbsp;  thereby allow users to know what the outcome was in human
+<i>67</i>&nbsp;  understandable terms. */
+<i>68</i>&nbsp;  private String[] outcomeLabels;
+<i>69</i>&nbsp;
+<i>70</i>&nbsp;  /** Stores the String names of the predicates. The GIS only tracks
+<i>71</i>&nbsp;  predicates as ints, and so this array is needed to save the model to
+<i>72</i>&nbsp;  disk and thereby allow users to know what the outcome was in human
+<i>73</i>&nbsp;  understandable terms. */
+<i>74</i>&nbsp;  private String[] predLabels;
+<i>75</i>&nbsp;
+<b class="fc"><i>76</i>&nbsp;  private double tolerance = TOLERANCE_DEFAULT;</b>
+<i>77</i>&nbsp;
+<i>78</i>&nbsp;  private Double stepSizeDecrease;
+<i>79</i>&nbsp;
+<i>80</i>&nbsp;  private boolean useSkippedlAveraging;
+<i>81</i>&nbsp;
+<b class="fc"><i>82</i>&nbsp;  public PerceptronTrainer() {</b>
+<b class="fc"><i>83</i>&nbsp;  }</b>
+<i>84</i>&nbsp;
+<i>85</i>&nbsp;  public PerceptronTrainer(TrainingParameters parameters) {
+<b class="nc"><i>86</i>&nbsp;    super(parameters);</b>
+<b class="nc"><i>87</i>&nbsp;  }</b>
+<i>88</i>&nbsp;
+<i>89</i>&nbsp;  @Override
+<i>90</i>&nbsp;  public void validate() {
+<b class="fc"><i>91</i>&nbsp;    super.validate();</b>
+<i>92</i>&nbsp;
+<b class="fc"><i>93</i>&nbsp;    String algorithmName = getAlgorithm();</b>
+<b class="fc"><i>94</i>&nbsp;    if (algorithmName != null) {</b>
+<b class="fc"><i>95</i>&nbsp;      if (!PERCEPTRON_VALUE.equals(algorithmName)) {</b>
+<b class="nc"><i>96</i>&nbsp;        throw new IllegalArgumentException(&quot;algorithmName must be PERCEPTRON&quot;);</b>
+<i>97</i>&nbsp;      }
+<i>98</i>&nbsp;    }
+<b class="fc"><i>99</i>&nbsp;  }</b>
+<i>100</i>&nbsp;
+<i>101</i>&nbsp;  @Deprecated
+<i>102</i>&nbsp;  @Override
+<i>103</i>&nbsp;  public boolean isValid() {
+<b class="nc"><i>104</i>&nbsp;    if (!super.isValid()) {</b>
+<b class="nc"><i>105</i>&nbsp;      return false;</b>
+<i>106</i>&nbsp;    }
+<i>107</i>&nbsp;
+<b class="nc"><i>108</i>&nbsp;    String algorithmName = getAlgorithm();</b>
+<b class="nc"><i>109</i>&nbsp;    if (algorithmName != null) {</b>
+<b class="nc"><i>110</i>&nbsp;      return PERCEPTRON_VALUE.equals(algorithmName);</b>
+<i>111</i>&nbsp;    }
+<i>112</i>&nbsp;    else {
+<b class="nc"><i>113</i>&nbsp;      return true;</b>
+<i>114</i>&nbsp;    }
+<i>115</i>&nbsp;  }
+<i>116</i>&nbsp;
+<i>117</i>&nbsp;  public boolean isSortAndMerge() {
+<b class="fc"><i>118</i>&nbsp;    return false;</b>
+<i>119</i>&nbsp;  }
+<i>120</i>&nbsp;
+<i>121</i>&nbsp;  public AbstractModel doTrain(DataIndexer indexer) throws IOException {
+<b class="fc"><i>122</i>&nbsp;    int iterations = getIterations();</b>
+<b class="fc"><i>123</i>&nbsp;    int cutoff = getCutoff();</b>
+<i>124</i>&nbsp;
+<i>125</i>&nbsp;    AbstractModel model;
+<i>126</i>&nbsp;
+<b class="fc"><i>127</i>&nbsp;    boolean useAverage = trainingParameters.getBooleanParameter(&quot;UseAverage&quot;, true);</b>
+<i>128</i>&nbsp;
+<b class="fc"><i>129</i>&nbsp;    boolean useSkippedAveraging = trainingParameters.getBooleanParameter(&quot;UseSkippedAveraging&quot;, false);</b>
+<i>130</i>&nbsp;
+<i>131</i>&nbsp;    // overwrite otherwise it might not work
+<b class="fc"><i>132</i>&nbsp;    if (useSkippedAveraging)</b>
+<b class="fc"><i>133</i>&nbsp;      useAverage = true;</b>
+<i>134</i>&nbsp;
+<b class="fc"><i>135</i>&nbsp;    double stepSizeDecrease = trainingParameters.getDoubleParameter(&quot;StepSizeDecrease&quot;, 0);</b>
+<i>136</i>&nbsp;
+<b class="fc"><i>137</i>&nbsp;    double tolerance = trainingParameters.getDoubleParameter(&quot;Tolerance&quot;,</b>
+<i>138</i>&nbsp;        PerceptronTrainer.TOLERANCE_DEFAULT);
+<i>139</i>&nbsp;
+<b class="fc"><i>140</i>&nbsp;    this.setSkippedAveraging(useSkippedAveraging);</b>
+<i>141</i>&nbsp;
+<b class="fc"><i>142</i>&nbsp;    if (stepSizeDecrease &gt; 0)</b>
+<b class="fc"><i>143</i>&nbsp;      this.setStepSizeDecrease(stepSizeDecrease);</b>
+<i>144</i>&nbsp;
+<b class="fc"><i>145</i>&nbsp;    this.setTolerance(tolerance);</b>
+<i>146</i>&nbsp;
+<b class="fc"><i>147</i>&nbsp;    model = this.trainModel(iterations, indexer, cutoff, useAverage);</b>
+<i>148</i>&nbsp;
+<b class="fc"><i>149</i>&nbsp;    return model;</b>
+<i>150</i>&nbsp;  }
+<i>151</i>&nbsp;
+<i>152</i>&nbsp;  // &lt;&lt; members related to AbstractSequenceTrainer
+<i>153</i>&nbsp;
+<i>154</i>&nbsp;  /**
+<i>155</i>&nbsp;   * Specifies the tolerance. If the change in training set accuracy
+<i>156</i>&nbsp;   * is less than this, stop iterating.
+<i>157</i>&nbsp;   *
+<i>158</i>&nbsp;   * @param tolerance
+<i>159</i>&nbsp;   */
+<i>160</i>&nbsp;  public void setTolerance(double tolerance) {
+<i>161</i>&nbsp;
+<b class="fc"><i>162</i>&nbsp;    if (tolerance &lt; 0) {</b>
+<b class="nc"><i>163</i>&nbsp;      throw new</b>
+<i>164</i>&nbsp;          IllegalArgumentException(&quot;tolerance must be a positive number but is &quot; + tolerance + &quot;!&quot;);
+<i>165</i>&nbsp;    }
+<i>166</i>&nbsp;
+<b class="fc"><i>167</i>&nbsp;    this.tolerance = tolerance;</b>
+<b class="fc"><i>168</i>&nbsp;  }</b>
+<i>169</i>&nbsp;
+<i>170</i>&nbsp;  /**
+<i>171</i>&nbsp;   * Enables and sets step size decrease. The step size is
+<i>172</i>&nbsp;   * decreased every iteration by the specified value.
+<i>173</i>&nbsp;   *
+<i>174</i>&nbsp;   * @param decrease - step size decrease in percent
+<i>175</i>&nbsp;   */
+<i>176</i>&nbsp;  public void setStepSizeDecrease(double decrease) {
+<i>177</i>&nbsp;
+<b class="fc"><i>178</i>&nbsp;    if (decrease &lt; 0 || decrease &gt; 100) {</b>
+<b class="nc"><i>179</i>&nbsp;      throw new</b>
+<i>180</i>&nbsp;          IllegalArgumentException(&quot;decrease must be between 0 and 100 but is &quot; + decrease + &quot;!&quot;);
+<i>181</i>&nbsp;    }
+<i>182</i>&nbsp;
+<b class="fc"><i>183</i>&nbsp;    stepSizeDecrease = decrease;</b>
+<b class="fc"><i>184</i>&nbsp;  }</b>
+<i>185</i>&nbsp;
+<i>186</i>&nbsp;  /**
+<i>187</i>&nbsp;   * Enables skipped averaging, this flag changes the standard
+<i>188</i>&nbsp;   * averaging to special averaging instead.
+<i>189</i>&nbsp;   * &lt;p&gt;
+<i>190</i>&nbsp;   * If we are doing averaging, and the current iteration is one
+<i>191</i>&nbsp;   * of the first 20 or it is a perfect square, then updated the
+<i>192</i>&nbsp;   * summed parameters.
+<i>193</i>&nbsp;   * &lt;p&gt;
+<i>194</i>&nbsp;   * The reason we don&#39;t take all of them is that the parameters change
+<i>195</i>&nbsp;   * less toward the end of training, so they drown out the contributions
+<i>196</i>&nbsp;   * of the more volatile early iterations. The use of perfect
+<i>197</i>&nbsp;   * squares allows us to sample from successively farther apart iterations.
+<i>198</i>&nbsp;   *
+<i>199</i>&nbsp;   * @param averaging averaging flag
+<i>200</i>&nbsp;   */
+<i>201</i>&nbsp;  public void setSkippedAveraging(boolean averaging) {
+<b class="fc"><i>202</i>&nbsp;    useSkippedlAveraging = averaging;</b>
+<b class="fc"><i>203</i>&nbsp;  }</b>
+<i>204</i>&nbsp;
+<i>205</i>&nbsp;  public AbstractModel trainModel(int iterations, DataIndexer di, int cutoff) {
+<b class="fc"><i>206</i>&nbsp;    return trainModel(iterations,di,cutoff,true);</b>
+<i>207</i>&nbsp;  }
+<i>208</i>&nbsp;
+<i>209</i>&nbsp;  public AbstractModel trainModel(int iterations, DataIndexer di, int cutoff, boolean useAverage) {
+<b class="fc"><i>210</i>&nbsp;    display(&quot;Incorporating indexed data for training...  \n&quot;);</b>
+<b class="fc"><i>211</i>&nbsp;    contexts = di.getContexts();</b>
+<b class="fc"><i>212</i>&nbsp;    values = di.getValues();</b>
+<b class="fc"><i>213</i>&nbsp;    numTimesEventsSeen = di.getNumTimesEventsSeen();</b>
+<b class="fc"><i>214</i>&nbsp;    numEvents = di.getNumEvents();</b>
+<b class="fc"><i>215</i>&nbsp;    numUniqueEvents = contexts.length;</b>
+<i>216</i>&nbsp;
+<b class="fc"><i>217</i>&nbsp;    outcomeLabels = di.getOutcomeLabels();</b>
+<b class="fc"><i>218</i>&nbsp;    outcomeList = di.getOutcomeList();</b>
+<i>219</i>&nbsp;
+<b class="fc"><i>220</i>&nbsp;    predLabels = di.getPredLabels();</b>
+<b class="fc"><i>221</i>&nbsp;    numPreds = predLabels.length;</b>
+<b class="fc"><i>222</i>&nbsp;    numOutcomes = outcomeLabels.length;</b>
+<i>223</i>&nbsp;
+<b class="fc"><i>224</i>&nbsp;    display(&quot;done.\n&quot;);</b>
+<i>225</i>&nbsp;
+<b class="fc"><i>226</i>&nbsp;    display(&quot;\tNumber of Event Tokens: &quot; + numUniqueEvents + &quot;\n&quot;);</b>
+<b class="fc"><i>227</i>&nbsp;    display(&quot;\t    Number of Outcomes: &quot; + numOutcomes + &quot;\n&quot;);</b>
+<b class="fc"><i>228</i>&nbsp;    display(&quot;\t  Number of Predicates: &quot; + numPreds + &quot;\n&quot;);</b>
+<i>229</i>&nbsp;
+<b class="fc"><i>230</i>&nbsp;    display(&quot;Computing model parameters...\n&quot;);</b>
+<i>231</i>&nbsp;
+<b class="fc"><i>232</i>&nbsp;    MutableContext[] finalParameters = findParameters(iterations, useAverage);</b>
+<i>233</i>&nbsp;
+<b class="fc"><i>234</i>&nbsp;    display(&quot;...done.\n&quot;);</b>
+<i>235</i>&nbsp;
+<i>236</i>&nbsp;    /* Create and return the model *************/
+<b class="fc"><i>237</i>&nbsp;    return new PerceptronModel(finalParameters, predLabels, outcomeLabels);</b>
+<i>238</i>&nbsp;  }
+<i>239</i>&nbsp;
+<i>240</i>&nbsp;  private MutableContext[] findParameters(int iterations, boolean useAverage) {
+<i>241</i>&nbsp;
+<b class="fc"><i>242</i>&nbsp;    display(&quot;Performing &quot; + iterations + &quot; iterations.\n&quot;);</b>
+<i>243</i>&nbsp;
+<b class="fc"><i>244</i>&nbsp;    int[] allOutcomesPattern = new int[numOutcomes];</b>
+<b class="fc"><i>245</i>&nbsp;    for (int oi = 0; oi &lt; numOutcomes; oi++)</b>
+<b class="fc"><i>246</i>&nbsp;      allOutcomesPattern[oi] = oi;</b>
+<i>247</i>&nbsp;
+<i>248</i>&nbsp;    /* Stores the estimated parameter value of each predicate during iteration. */
+<b class="fc"><i>249</i>&nbsp;    MutableContext[] params = new MutableContext[numPreds];</b>
+<b class="fc"><i>250</i>&nbsp;    for (int pi = 0; pi &lt; numPreds; pi++) {</b>
+<b class="fc"><i>251</i>&nbsp;      params[pi] = new MutableContext(allOutcomesPattern,new double[numOutcomes]);</b>
+<b class="fc"><i>252</i>&nbsp;      for (int aoi = 0; aoi &lt; numOutcomes; aoi++)</b>
+<b class="fc"><i>253</i>&nbsp;        params[pi].setParameter(aoi, 0.0);</b>
+<i>254</i>&nbsp;    }
+<i>255</i>&nbsp;
+<b class="fc"><i>256</i>&nbsp;    EvalParameters evalParams = new EvalParameters(params, numOutcomes);</b>
+<i>257</i>&nbsp;
+<i>258</i>&nbsp;    /* Stores the sum of parameter values of each predicate over many iterations. */
+<b class="fc"><i>259</i>&nbsp;    MutableContext[] summedParams = new MutableContext[numPreds];</b>
+<b class="fc"><i>260</i>&nbsp;    if (useAverage) {</b>
+<b class="fc"><i>261</i>&nbsp;      for (int pi = 0; pi &lt; numPreds; pi++) {</b>
+<b class="fc"><i>262</i>&nbsp;        summedParams[pi] = new MutableContext(allOutcomesPattern,new double[numOutcomes]);</b>
+<b class="fc"><i>263</i>&nbsp;        for (int aoi = 0; aoi &lt; numOutcomes; aoi++)</b>
+<b class="fc"><i>264</i>&nbsp;          summedParams[pi].setParameter(aoi, 0.0);</b>
+<i>265</i>&nbsp;      }
+<i>266</i>&nbsp;    }
+<i>267</i>&nbsp;
+<i>268</i>&nbsp;    // Keep track of the previous three accuracies. The difference of
+<i>269</i>&nbsp;    // the mean of these and the current training set accuracy is used
+<i>270</i>&nbsp;    // with tolerance to decide whether to stop.
+<b class="fc"><i>271</i>&nbsp;    double prevAccuracy1 = 0.0;</b>
+<b class="fc"><i>272</i>&nbsp;    double prevAccuracy2 = 0.0;</b>
+<b class="fc"><i>273</i>&nbsp;    double prevAccuracy3 = 0.0;</b>
+<i>274</i>&nbsp;
+<i>275</i>&nbsp;    // A counter for the denominator for averaging.
+<b class="fc"><i>276</i>&nbsp;    int numTimesSummed = 0;</b>
+<i>277</i>&nbsp;
+<b class="fc"><i>278</i>&nbsp;    double stepsize = 1;</b>
+<b class="fc"><i>279</i>&nbsp;    for (int i = 1; i &lt;= iterations; i++) {</b>
+<i>280</i>&nbsp;
+<i>281</i>&nbsp;      // Decrease the stepsize by a small amount.
+<b class="fc"><i>282</i>&nbsp;      if (stepSizeDecrease != null)</b>
+<b class="fc"><i>283</i>&nbsp;        stepsize *= 1 - stepSizeDecrease;</b>
+<i>284</i>&nbsp;
+<b class="fc"><i>285</i>&nbsp;      displayIteration(i);</b>
+<i>286</i>&nbsp;
+<b class="fc"><i>287</i>&nbsp;      int numCorrect = 0;</b>
+<i>288</i>&nbsp;
+<b class="fc"><i>289</i>&nbsp;      for (int ei = 0; ei &lt; numUniqueEvents; ei++) {</b>
+<b class="fc"><i>290</i>&nbsp;        int targetOutcome = outcomeList[ei];</b>
+<i>291</i>&nbsp;
+<b class="fc"><i>292</i>&nbsp;        for (int ni = 0; ni &lt; this.numTimesEventsSeen[ei]; ni++) {</b>
+<i>293</i>&nbsp;
+<i>294</i>&nbsp;          // Compute the model&#39;s prediction according to the current parameters.
+<b class="fc"><i>295</i>&nbsp;          double[] modelDistribution = new double[numOutcomes];</b>
+<b class="fc"><i>296</i>&nbsp;          if (values != null)</b>
+<b class="nc"><i>297</i>&nbsp;            PerceptronModel.eval(contexts[ei], values[ei], modelDistribution, evalParams, false);</b>
+<i>298</i>&nbsp;          else
+<b class="fc"><i>299</i>&nbsp;            PerceptronModel.eval(contexts[ei], null, modelDistribution, evalParams, false);</b>
+<i>300</i>&nbsp;
+<b class="fc"><i>301</i>&nbsp;          int maxOutcome = ArrayMath.argmax(modelDistribution);</b>
+<i>302</i>&nbsp;
+<i>303</i>&nbsp;          // If the predicted outcome is different from the target
+<i>304</i>&nbsp;          // outcome, do the standard update: boost the parameters
+<i>305</i>&nbsp;          // associated with the target and reduce those associated
+<i>306</i>&nbsp;          // with the incorrect predicted outcome.
+<b class="fc"><i>307</i>&nbsp;          if (maxOutcome != targetOutcome) {</b>
+<b class="fc"><i>308</i>&nbsp;            for (int ci = 0; ci &lt; contexts[ei].length; ci++) {</b>
+<b class="fc"><i>309</i>&nbsp;              int pi = contexts[ei][ci];</b>
+<b class="fc"><i>310</i>&nbsp;              if (values == null) {</b>
+<b class="fc"><i>311</i>&nbsp;                params[pi].updateParameter(targetOutcome, stepsize);</b>
+<b class="fc"><i>312</i>&nbsp;                params[pi].updateParameter(maxOutcome, -stepsize);</b>
+<i>313</i>&nbsp;              } else {
+<b class="nc"><i>314</i>&nbsp;                params[pi].updateParameter(targetOutcome, stepsize * values[ei][ci]);</b>
+<b class="nc"><i>315</i>&nbsp;                params[pi].updateParameter(maxOutcome, -stepsize * values[ei][ci]);</b>
+<i>316</i>&nbsp;              }
+<i>317</i>&nbsp;            }
+<i>318</i>&nbsp;          }
+<i>319</i>&nbsp;
+<i>320</i>&nbsp;          // Update the counts for accuracy.
+<b class="fc"><i>321</i>&nbsp;          if (maxOutcome == targetOutcome)</b>
+<b class="fc"><i>322</i>&nbsp;            numCorrect++;</b>
+<i>323</i>&nbsp;        }
+<i>324</i>&nbsp;      }
+<i>325</i>&nbsp;
+<i>326</i>&nbsp;      // Calculate the training accuracy and display.
+<b class="fc"><i>327</i>&nbsp;      double trainingAccuracy = (double) numCorrect / numEvents;</b>
+<b class="fc"><i>328</i>&nbsp;      if (i &lt; 10 || (i % 10) == 0)</b>
+<b class="fc"><i>329</i>&nbsp;        display(&quot;. (&quot; + numCorrect + &quot;/&quot; + numEvents + &quot;) &quot; + trainingAccuracy + &quot;\n&quot;);</b>
+<i>330</i>&nbsp;
+<i>331</i>&nbsp;      // TODO: Make averaging configurable !!!
+<i>332</i>&nbsp;
+<i>333</i>&nbsp;      boolean doAveraging;
+<i>334</i>&nbsp;
+<b class="fc"><i>335</i>&nbsp;      doAveraging = useAverage &amp;&amp; useSkippedlAveraging &amp;&amp; (i &lt; 20 || isPerfectSquare(i)) || useAverage;</b>
+<i>336</i>&nbsp;
+<b class="fc"><i>337</i>&nbsp;      if (doAveraging) {</b>
+<b class="fc"><i>338</i>&nbsp;        numTimesSummed++;</b>
+<b class="fc"><i>339</i>&nbsp;        for (int pi = 0; pi &lt; numPreds; pi++)</b>
+<b class="fc"><i>340</i>&nbsp;          for (int aoi = 0; aoi &lt; numOutcomes; aoi++)</b>
+<b class="fc"><i>341</i>&nbsp;            summedParams[pi].updateParameter(aoi, params[pi].getParameters()[aoi]);</b>
+<i>342</i>&nbsp;      }
+<i>343</i>&nbsp;
+<i>344</i>&nbsp;      // If the tolerance is greater than the difference between the
+<i>345</i>&nbsp;      // current training accuracy and all of the previous three
+<i>346</i>&nbsp;      // training accuracies, stop training.
+<b class="fc"><i>347</i>&nbsp;      if (Math.abs(prevAccuracy1 - trainingAccuracy) &lt; tolerance</b>
+<b class="fc"><i>348</i>&nbsp;          &amp;&amp; Math.abs(prevAccuracy2 - trainingAccuracy) &lt; tolerance</b>
+<b class="fc"><i>349</i>&nbsp;          &amp;&amp; Math.abs(prevAccuracy3 - trainingAccuracy) &lt; tolerance) {</b>
+<b class="fc"><i>350</i>&nbsp;        display(&quot;Stopping: change in training set accuracy less than &quot; + tolerance + &quot;\n&quot;);</b>
+<b class="fc"><i>351</i>&nbsp;        break;</b>
+<i>352</i>&nbsp;      }
+<i>353</i>&nbsp;
+<i>354</i>&nbsp;      // Update the previous training accuracies.
+<b class="fc"><i>355</i>&nbsp;      prevAccuracy1 = prevAccuracy2;</b>
+<b class="fc"><i>356</i>&nbsp;      prevAccuracy2 = prevAccuracy3;</b>
+<b class="fc"><i>357</i>&nbsp;      prevAccuracy3 = trainingAccuracy;</b>
+<i>358</i>&nbsp;    }
+<i>359</i>&nbsp;
+<i>360</i>&nbsp;    // Output the final training stats.
+<b class="fc"><i>361</i>&nbsp;    trainingStats(evalParams);</b>
+<i>362</i>&nbsp;
+<i>363</i>&nbsp;    // Create averaged parameters
+<b class="fc"><i>364</i>&nbsp;    if (useAverage) {</b>
+<b class="fc"><i>365</i>&nbsp;      for (int pi = 0; pi &lt; numPreds; pi++)</b>
+<b class="fc"><i>366</i>&nbsp;        for (int aoi = 0; aoi &lt; numOutcomes; aoi++)</b>
+<b class="fc"><i>367</i>&nbsp;          summedParams[pi].setParameter(aoi, summedParams[pi].getParameters()[aoi] / numTimesSummed);</b>
+<i>368</i>&nbsp;
+<b class="fc"><i>369</i>&nbsp;      return summedParams;</b>
+<i>370</i>&nbsp;
+<i>371</i>&nbsp;    } else {
+<i>372</i>&nbsp;
+<b class="nc"><i>373</i>&nbsp;      return params;</b>
+<i>374</i>&nbsp;
+<i>375</i>&nbsp;    }
+<i>376</i>&nbsp;
+<i>377</i>&nbsp;  }
+<i>378</i>&nbsp;
+<i>379</i>&nbsp;  private double trainingStats(EvalParameters evalParams) {
+<b class="fc"><i>380</i>&nbsp;    int numCorrect = 0;</b>
+<i>381</i>&nbsp;
+<b class="fc"><i>382</i>&nbsp;    for (int ei = 0; ei &lt; numUniqueEvents; ei++) {</b>
+<b class="fc"><i>383</i>&nbsp;      for (int ni = 0; ni &lt; this.numTimesEventsSeen[ei]; ni++) {</b>
+<i>384</i>&nbsp;
+<b class="fc"><i>385</i>&nbsp;        double[] modelDistribution = new double[numOutcomes];</b>
+<i>386</i>&nbsp;
+<b class="fc"><i>387</i>&nbsp;        if (values != null)</b>
+<b class="nc"><i>388</i>&nbsp;          PerceptronModel.eval(contexts[ei], values[ei], modelDistribution, evalParams,false);</b>
+<i>389</i>&nbsp;        else
+<b class="fc"><i>390</i>&nbsp;          PerceptronModel.eval(contexts[ei], null, modelDistribution, evalParams, false);</b>
+<i>391</i>&nbsp;
+<b class="fc"><i>392</i>&nbsp;        int max = ArrayMath.argmax(modelDistribution);</b>
+<b class="fc"><i>393</i>&nbsp;        if (max == outcomeList[ei])</b>
+<b class="fc"><i>394</i>&nbsp;          numCorrect++;</b>
+<i>395</i>&nbsp;      }
+<i>396</i>&nbsp;    }
+<b class="fc"><i>397</i>&nbsp;    double trainingAccuracy = (double) numCorrect / numEvents;</b>
+<b class="fc"><i>398</i>&nbsp;    display(&quot;Stats: (&quot; + numCorrect + &quot;/&quot; + numEvents + &quot;) &quot; + trainingAccuracy + &quot;\n&quot;);</b>
+<b class="fc"><i>399</i>&nbsp;    return trainingAccuracy;</b>
+<i>400</i>&nbsp;  }
+<i>401</i>&nbsp;
+<i>402</i>&nbsp;  private void displayIteration(int i) {
+<b class="fc"><i>403</i>&nbsp;    if (i &gt; 10 &amp;&amp; (i % 10) != 0)</b>
+<b class="fc"><i>404</i>&nbsp;      return;</b>
+<i>405</i>&nbsp;
+<b class="fc"><i>406</i>&nbsp;    if (i &lt; 10)</b>
+<b class="fc"><i>407</i>&nbsp;      display(&quot;  &quot; + i + &quot;:  &quot;);</b>
+<b class="fc"><i>408</i>&nbsp;    else if (i &lt; 100)</b>
+<b class="fc"><i>409</i>&nbsp;      display(&quot; &quot; + i + &quot;:  &quot;);</b>
+<i>410</i>&nbsp;    else
+<b class="fc"><i>411</i>&nbsp;      display(i + &quot;:  &quot;);</b>
+<b class="fc"><i>412</i>&nbsp;  }</b>
+<i>413</i>&nbsp;
+<i>414</i>&nbsp;  // See whether a number is a perfect square. Inefficient, but fine
+<i>415</i>&nbsp;  // for our purposes.
+<i>416</i>&nbsp;  private static boolean isPerfectSquare(int n) {
+<b class="fc"><i>417</i>&nbsp;    int root = (int) Math.sqrt(n);</b>
+<b class="fc"><i>418</i>&nbsp;    return root * root == n;</b>
+<i>419</i>&nbsp;  }
+<i>420</i>&nbsp;
+<i>421</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-09 15:05</div>
+</div>
+</body>
+</html>

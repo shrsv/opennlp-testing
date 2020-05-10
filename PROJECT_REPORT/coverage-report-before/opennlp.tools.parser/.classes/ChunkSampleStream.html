@@ -1,0 +1,191 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: ChunkSampleStream</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">opennlp.tools.parser</a> ]
+</div>
+
+<h1>Coverage Summary for Class: ChunkSampleStream (opennlp.tools.parser)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">ChunkSampleStream</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (4/ 4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (45/ 45)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/*
+<i>2</i>&nbsp; * Licensed to the Apache Software Foundation (ASF) under one or more
+<i>3</i>&nbsp; * contributor license agreements.  See the NOTICE file distributed with
+<i>4</i>&nbsp; * this work for additional information regarding copyright ownership.
+<i>5</i>&nbsp; * The ASF licenses this file to You under the Apache License, Version 2.0
+<i>6</i>&nbsp; * (the &quot;License&quot;); you may not use this file except in compliance with
+<i>7</i>&nbsp; * the License. You may obtain a copy of the License at
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; *     http://www.apache.org/licenses/LICENSE-2.0
+<i>10</i>&nbsp; *
+<i>11</i>&nbsp; * Unless required by applicable law or agreed to in writing, software
+<i>12</i>&nbsp; * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<i>13</i>&nbsp; * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<i>14</i>&nbsp; * See the License for the specific language governing permissions and
+<i>15</i>&nbsp; * limitations under the License.
+<i>16</i>&nbsp; */
+<i>17</i>&nbsp;
+<i>18</i>&nbsp;package opennlp.tools.parser;
+<i>19</i>&nbsp;
+<i>20</i>&nbsp;import java.io.IOException;
+<i>21</i>&nbsp;import java.util.ArrayList;
+<i>22</i>&nbsp;import java.util.List;
+<i>23</i>&nbsp;
+<i>24</i>&nbsp;import opennlp.tools.chunker.ChunkSample;
+<i>25</i>&nbsp;import opennlp.tools.parser.chunking.Parser;
+<i>26</i>&nbsp;import opennlp.tools.util.FilterObjectStream;
+<i>27</i>&nbsp;import opennlp.tools.util.ObjectStream;
+<i>28</i>&nbsp;
+<i>29</i>&nbsp;public class ChunkSampleStream extends FilterObjectStream&lt;Parse, ChunkSample&gt; {
+<i>30</i>&nbsp;
+<i>31</i>&nbsp;  public ChunkSampleStream(ObjectStream&lt;Parse&gt; in) {
+<b class="fc"><i>32</i>&nbsp;    super(in);</b>
+<b class="fc"><i>33</i>&nbsp;  }</b>
+<i>34</i>&nbsp;
+<i>35</i>&nbsp;  private static void getInitialChunks(Parse p, List&lt;Parse&gt; ichunks) {
+<b class="fc"><i>36</i>&nbsp;    if (p.isPosTag()) {</b>
+<b class="fc"><i>37</i>&nbsp;      ichunks.add(p);</b>
+<i>38</i>&nbsp;    }
+<i>39</i>&nbsp;    else {
+<b class="fc"><i>40</i>&nbsp;      Parse[] kids = p.getChildren();</b>
+<b class="fc"><i>41</i>&nbsp;      boolean allKidsAreTags = true;</b>
+<b class="fc"><i>42</i>&nbsp;      for (int ci = 0, cl = kids.length; ci &lt; cl; ci++) {</b>
+<b class="fc"><i>43</i>&nbsp;        if (!kids[ci].isPosTag()) {</b>
+<b class="fc"><i>44</i>&nbsp;          allKidsAreTags = false;</b>
+<b class="fc"><i>45</i>&nbsp;          break;</b>
+<i>46</i>&nbsp;        }
+<i>47</i>&nbsp;      }
+<b class="fc"><i>48</i>&nbsp;      if (allKidsAreTags) {</b>
+<b class="fc"><i>49</i>&nbsp;        ichunks.add(p);</b>
+<i>50</i>&nbsp;      }
+<i>51</i>&nbsp;      else {
+<b class="fc"><i>52</i>&nbsp;        for (int ci = 0, cl = kids.length; ci &lt; cl; ci++) {</b>
+<b class="fc"><i>53</i>&nbsp;          getInitialChunks(kids[ci], ichunks);</b>
+<i>54</i>&nbsp;        }
+<i>55</i>&nbsp;      }
+<i>56</i>&nbsp;    }
+<b class="fc"><i>57</i>&nbsp;  }</b>
+<i>58</i>&nbsp;
+<i>59</i>&nbsp;  public static Parse[] getInitialChunks(Parse p) {
+<b class="fc"><i>60</i>&nbsp;    List&lt;Parse&gt; chunks = new ArrayList&lt;&gt;();</b>
+<b class="fc"><i>61</i>&nbsp;    getInitialChunks(p, chunks);</b>
+<b class="fc"><i>62</i>&nbsp;    return chunks.toArray(new Parse[chunks.size()]);</b>
+<i>63</i>&nbsp;  }
+<i>64</i>&nbsp;
+<i>65</i>&nbsp;  public ChunkSample read() throws IOException {
+<i>66</i>&nbsp;
+<b class="fc"><i>67</i>&nbsp;    Parse parse = samples.read();</b>
+<i>68</i>&nbsp;
+<b class="fc"><i>69</i>&nbsp;    if (parse != null) {</b>
+<b class="fc"><i>70</i>&nbsp;      Parse[] chunks = getInitialChunks(parse);</b>
+<b class="fc"><i>71</i>&nbsp;      List&lt;String&gt; toks = new ArrayList&lt;&gt;();</b>
+<b class="fc"><i>72</i>&nbsp;      List&lt;String&gt; tags = new ArrayList&lt;&gt;();</b>
+<b class="fc"><i>73</i>&nbsp;      List&lt;String&gt; preds = new ArrayList&lt;&gt;();</b>
+<b class="fc"><i>74</i>&nbsp;      for (int ci = 0, cl = chunks.length; ci &lt; cl; ci++) {</b>
+<b class="fc"><i>75</i>&nbsp;        Parse c = chunks[ci];</b>
+<b class="fc"><i>76</i>&nbsp;        if (c.isPosTag()) {</b>
+<b class="fc"><i>77</i>&nbsp;          toks.add(c.getCoveredText());</b>
+<b class="fc"><i>78</i>&nbsp;          tags.add(c.getType());</b>
+<b class="fc"><i>79</i>&nbsp;          preds.add(Parser.OTHER);</b>
+<i>80</i>&nbsp;        }
+<i>81</i>&nbsp;        else {
+<b class="fc"><i>82</i>&nbsp;          boolean start = true;</b>
+<b class="fc"><i>83</i>&nbsp;          String ctype = c.getType();</b>
+<b class="fc"><i>84</i>&nbsp;          Parse[] kids = c.getChildren();</b>
+<b class="fc"><i>85</i>&nbsp;          for (int ti = 0, tl = kids.length; ti &lt; tl; ti++) {</b>
+<b class="fc"><i>86</i>&nbsp;            Parse tok = kids[ti];</b>
+<b class="fc"><i>87</i>&nbsp;            toks.add(tok.getCoveredText());</b>
+<b class="fc"><i>88</i>&nbsp;            tags.add(tok.getType());</b>
+<b class="fc"><i>89</i>&nbsp;            if (start) {</b>
+<b class="fc"><i>90</i>&nbsp;              preds.add(Parser.START + ctype);</b>
+<b class="fc"><i>91</i>&nbsp;              start = false;</b>
+<i>92</i>&nbsp;            }
+<i>93</i>&nbsp;            else {
+<b class="fc"><i>94</i>&nbsp;              preds.add(Parser.CONT + ctype);</b>
+<i>95</i>&nbsp;            }
+<i>96</i>&nbsp;          }
+<i>97</i>&nbsp;        }
+<i>98</i>&nbsp;      }
+<i>99</i>&nbsp;
+<b class="fc"><i>100</i>&nbsp;      return new ChunkSample(toks.toArray(new String[toks.size()]),</b>
+<b class="fc"><i>101</i>&nbsp;          tags.toArray(new String[tags.size()]),</b>
+<b class="fc"><i>102</i>&nbsp;          preds.toArray(new String[preds.size()]));</b>
+<i>103</i>&nbsp;    }
+<i>104</i>&nbsp;    else {
+<b class="fc"><i>105</i>&nbsp;      return null;</b>
+<i>106</i>&nbsp;    }
+<i>107</i>&nbsp;  }
+<i>108</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-09 15:05</div>
+</div>
+</body>
+</html>
