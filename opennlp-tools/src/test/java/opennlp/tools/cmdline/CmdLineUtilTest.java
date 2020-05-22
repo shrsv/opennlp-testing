@@ -9,6 +9,7 @@ import opennlp.tools.util.TrainingParameters;
 import opennlp.tools.util.model.ModelUtil;
 import org.junit.Assert;
 import org.junit.Test;
+import org.mockito.Mockito;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -159,4 +160,6 @@ public class CmdLineUtilTest {
         c.run(null, new String[]{"ParserTrainer", "-headRules", "headRulesFile", "-parserType",
                 "TREEINSERT", "-lang", "English", "-model", "", "-data", "sampledata"});
     }
+
+
 }

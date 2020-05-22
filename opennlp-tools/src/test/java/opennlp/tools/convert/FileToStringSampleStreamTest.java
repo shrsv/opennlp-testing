@@ -31,6 +31,7 @@ import org.junit.rules.TemporaryFolder;
 
 import opennlp.tools.formats.DirectorySampleStream;
 import opennlp.tools.formats.convert.FileToStringSampleStream;
+import org.mockito.Mockito;
 
 public class FileToStringSampleStreamTest {
 
@@ -64,5 +65,7 @@ public class FileToStringSampleStreamTest {
       Assert.assertTrue(sentences.contains(read));
     }
   }
+
+
 
 }

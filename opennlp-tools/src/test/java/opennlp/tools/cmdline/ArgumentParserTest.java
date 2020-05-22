@@ -17,12 +17,14 @@
 
 package opennlp.tools.cmdline;
 
+import java.lang.reflect.Method;
 import java.nio.charset.Charset;
 import java.util.Collection;
 import java.lang.IllegalArgumentException;
 
 import org.junit.Assert;
 import org.junit.Test;
+// import static org.mockito.Mockito.*;
 
 import opennlp.tools.cmdline.ArgumentParser.OptionalParameter;
 import opennlp.tools.cmdline.ArgumentParser.ParameterDescription;
@@ -246,5 +248,17 @@ public class ArgumentParserTest {
     SimpleArguments args = ArgumentParser.parse(argsString.split(" "), SimpleArguments.class);
     ArgumentParser.validateArguments(argsString.split(" "), SimpleArguments.class);
   }
+
+  @Test
+  public void testIntegerArgumentFactory() {
+    Class aParser = ArgumentParser.class;
+    Method[] mlist = aParser.getMethods();
+    ArgumentParser ap = new ArgumentParser();
+    ArgumentParser.IntegerArgumentFactoryRedefined iaf = ap.new IntegerArgumentFactoryRedefined();
+    Integer i = (Integer) iaf.parseArgument(mlist[0], "hello", "3");
+    Assert.assertTrue(i==3);
+  }
+
+
 }
 

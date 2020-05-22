@@ -86,6 +86,25 @@ public class ArgumentParser {
     }
   }
 
+  public class IntegerArgumentFactoryRedefined  implements ArgumentFactory {
+
+    public Object parseArgument(Method method, String argName, String argValue) {
+
+      Object value;
+
+      try {
+        value = Integer.parseInt(argValue);
+      }
+      catch (NumberFormatException e) {
+        throw new TerminateToolException(1, String.format(INVALID_ARG, argName, argValue) +
+                "Value must be an integer!", e);
+      }
+
+      return value;
+    }
+  }
+
+
   private static class BooleanArgumentFactory implements ArgumentFactory {
 
     public Object parseArgument(Method method, String argName, String argValue) {
@@ -158,7 +177,7 @@ public class ArgumentParser {
     argumentFactories = Collections.unmodifiableMap(factories);
   }
 
-  private ArgumentParser() {
+  public ArgumentParser() {
   }
 
   private static void checkProxyInterfaces(Class<?>... proxyInterfaces) {
