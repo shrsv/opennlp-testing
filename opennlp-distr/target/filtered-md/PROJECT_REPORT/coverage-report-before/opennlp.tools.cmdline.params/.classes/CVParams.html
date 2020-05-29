@@ -1,0 +1,86 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: CVParams</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">opennlp.tools.cmdline.params</a> ]
+</div>
+
+<h1>Coverage Summary for Class: CVParams (opennlp.tools.cmdline.params)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+</tr>
+<tr>
+  <td class="name">CVParams</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/*
+<i>2</i>&nbsp; * Licensed to the Apache Software Foundation (ASF) under one or more
+<i>3</i>&nbsp; * contributor license agreements.  See the NOTICE file distributed with
+<i>4</i>&nbsp; * this work for additional information regarding copyright ownership.
+<i>5</i>&nbsp; * The ASF licenses this file to You under the Apache License, Version 2.0
+<i>6</i>&nbsp; * (the &quot;License&quot;); you may not use this file except in compliance with
+<i>7</i>&nbsp; * the License. You may obtain a copy of the License at
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; *     http://www.apache.org/licenses/LICENSE-2.0
+<i>10</i>&nbsp; *
+<i>11</i>&nbsp; * Unless required by applicable law or agreed to in writing, software
+<i>12</i>&nbsp; * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<i>13</i>&nbsp; * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<i>14</i>&nbsp; * See the License for the specific language governing permissions and
+<i>15</i>&nbsp; * limitations under the License.
+<i>16</i>&nbsp; */
+<i>17</i>&nbsp;
+<i>18</i>&nbsp;package opennlp.tools.cmdline.params;
+<i>19</i>&nbsp;
+<i>20</i>&nbsp;import opennlp.tools.cmdline.ArgumentParser.OptionalParameter;
+<i>21</i>&nbsp;import opennlp.tools.cmdline.ArgumentParser.ParameterDescription;
+<i>22</i>&nbsp;
+<i>23</i>&nbsp;/**
+<i>24</i>&nbsp; * Common cross validator parameters.
+<i>25</i>&nbsp; *
+<i>26</i>&nbsp; * Note: Do not use this class, internal use only!
+<i>27</i>&nbsp; */
+<i>28</i>&nbsp;public interface CVParams {
+<i>29</i>&nbsp;
+<i>30</i>&nbsp;  @ParameterDescription(valueName = &quot;true|false&quot;,
+<i>31</i>&nbsp;      description = &quot;if true will print false negatives and false positives.&quot;)
+<i>32</i>&nbsp;  @OptionalParameter(defaultValue = &quot;false&quot;)
+<i>33</i>&nbsp;  Boolean getMisclassified();
+<i>34</i>&nbsp;
+<i>35</i>&nbsp;  @ParameterDescription(valueName = &quot;num&quot;, description = &quot;number of folds, default is 10.&quot;)
+<i>36</i>&nbsp;  @OptionalParameter(defaultValue = &quot;10&quot;)
+<i>37</i>&nbsp;  Integer getFolds();
+<i>38</i>&nbsp;
+<i>39</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-09 15:05</div>
+</div>
+</body>
+</html>

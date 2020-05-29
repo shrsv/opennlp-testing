@@ -1,0 +1,664 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: QNMinimizer</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">opennlp.tools.ml.maxent.quasinewton</a> ]
+</div>
+
+<h1>Coverage Summary for Class: QNMinimizer (opennlp.tools.ml.maxent.quasinewton)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">QNMinimizer</td>
+<td class="coverageStat">
+  <span class="percent">
+    92.3%
+  </span>
+  <span class="absValue">
+    (12/ 13)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    91.5%
+  </span>
+  <span class="absValue">
+    (130/ 142)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">QNMinimizer$Evaluator</td>
+  </tr>
+  <tr>
+    <td class="name">QNMinimizer$L2RegFunction</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (5/ 5)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    94.7%
+  </span>
+  <span class="absValue">
+    (18/ 19)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">QNMinimizer$UpdateInfo</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (3/ 3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (32/ 32)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    95.2%
+  </span>
+  <span class="absValue">
+    (20/ 21)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    93.3%
+  </span>
+  <span class="absValue">
+    (180/ 193)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/*
+<i>2</i>&nbsp; * Licensed to the Apache Software Foundation (ASF) under one or more
+<i>3</i>&nbsp; * contributor license agreements.  See the NOTICE file distributed with
+<i>4</i>&nbsp; * this work for additional information regarding copyright ownership.
+<i>5</i>&nbsp; * The ASF licenses this file to You under the Apache License, Version 2.0
+<i>6</i>&nbsp; * (the &quot;License&quot;); you may not use this file except in compliance with
+<i>7</i>&nbsp; * the License. You may obtain a copy of the License at
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; *     http://www.apache.org/licenses/LICENSE-2.0
+<i>10</i>&nbsp; *
+<i>11</i>&nbsp; * Unless required by applicable law or agreed to in writing, software
+<i>12</i>&nbsp; * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<i>13</i>&nbsp; * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<i>14</i>&nbsp; * See the License for the specific language governing permissions and
+<i>15</i>&nbsp; * limitations under the License.
+<i>16</i>&nbsp; */
+<i>17</i>&nbsp;
+<i>18</i>&nbsp;package opennlp.tools.ml.maxent.quasinewton;
+<i>19</i>&nbsp;
+<i>20</i>&nbsp;import opennlp.tools.ml.ArrayMath;
+<i>21</i>&nbsp;import opennlp.tools.ml.maxent.quasinewton.LineSearch.LineSearchResult;
+<i>22</i>&nbsp;
+<i>23</i>&nbsp;/**
+<i>24</i>&nbsp; * Implementation of L-BFGS which supports L1-, L2-regularization
+<i>25</i>&nbsp; * and Elastic Net for solving convex optimization problems. &lt;p&gt;
+<i>26</i>&nbsp; * Usage example:
+<i>27</i>&nbsp; * &lt;blockquote&gt;&lt;pre&gt;
+<i>28</i>&nbsp; *  // Quadratic function f(x) = (x-1)^2 + 10
+<i>29</i>&nbsp; *  // f obtains its minimum value 10 at x = 1
+<i>30</i>&nbsp; *  Function f = new Function() {
+<i>31</i>&nbsp; *
+<i>32</i>&nbsp; *    {@literal @}Override
+<i>33</i>&nbsp; *    public int getDimension() {
+<i>34</i>&nbsp; *      return 1;
+<i>35</i>&nbsp; *    }
+<i>36</i>&nbsp; *
+<i>37</i>&nbsp; *    {@literal @}Override
+<i>38</i>&nbsp; *    public double valueAt(double[] x) {
+<i>39</i>&nbsp; *      return Math.pow(x[0]-1, 2) + 10;
+<i>40</i>&nbsp; *    }
+<i>41</i>&nbsp; *
+<i>42</i>&nbsp; *    {@literal @}Override
+<i>43</i>&nbsp; *    public double[] gradientAt(double[] x) {
+<i>44</i>&nbsp; *      return new double[] { 2*(x[0]-1) };
+<i>45</i>&nbsp; *    }
+<i>46</i>&nbsp; *
+<i>47</i>&nbsp; *  };
+<i>48</i>&nbsp; *
+<i>49</i>&nbsp; *  QNMinimizer minimizer = new QNMinimizer();
+<i>50</i>&nbsp; *  double[] x = minimizer.minimize(f);
+<i>51</i>&nbsp; *  double min = f.valueAt(x);
+<i>52</i>&nbsp; * &lt;/pre&gt;&lt;/blockquote&gt;
+<i>53</i>&nbsp; */
+<b class="fc"><i>54</i>&nbsp;public class QNMinimizer {</b>
+<i>55</i>&nbsp;
+<i>56</i>&nbsp;  // Function change rate tolerance
+<i>57</i>&nbsp;  public static final double CONVERGE_TOLERANCE = 1e-4;
+<i>58</i>&nbsp;
+<i>59</i>&nbsp;  // Relative gradient norm tolerance
+<i>60</i>&nbsp;  public static final double REL_GRAD_NORM_TOL = 1e-4;
+<i>61</i>&nbsp;
+<i>62</i>&nbsp;  // Initial step size
+<i>63</i>&nbsp;  public static final double INITIAL_STEP_SIZE = 1.0;
+<i>64</i>&nbsp;
+<i>65</i>&nbsp;  // Minimum step size
+<i>66</i>&nbsp;  public static final double MIN_STEP_SIZE = 1e-10;
+<i>67</i>&nbsp;
+<i>68</i>&nbsp;  // Default L1-cost
+<i>69</i>&nbsp;  public static final double L1COST_DEFAULT = 0;
+<i>70</i>&nbsp;
+<i>71</i>&nbsp;  // Default L2-cost
+<i>72</i>&nbsp;  public static final double L2COST_DEFAULT = 0;
+<i>73</i>&nbsp;
+<i>74</i>&nbsp;  // Default number of iterations
+<i>75</i>&nbsp;  public static final int NUM_ITERATIONS_DEFAULT = 100;
+<i>76</i>&nbsp;
+<i>77</i>&nbsp;  // Default number of Hessian updates to store
+<i>78</i>&nbsp;  public static final int M_DEFAULT = 15;
+<i>79</i>&nbsp;
+<i>80</i>&nbsp;  // Default maximum number of function evaluations
+<i>81</i>&nbsp;  public static final int MAX_FCT_EVAL_DEFAULT = 30000;
+<i>82</i>&nbsp;
+<i>83</i>&nbsp;  // L1-regularization cost
+<i>84</i>&nbsp;  private double l1Cost;
+<i>85</i>&nbsp;
+<i>86</i>&nbsp;  // L2-regularization cost
+<i>87</i>&nbsp;  private double l2Cost;
+<i>88</i>&nbsp;
+<i>89</i>&nbsp;  // Maximum number of iterations
+<i>90</i>&nbsp;  private int iterations;
+<i>91</i>&nbsp;
+<i>92</i>&nbsp;  // Number of Hessian updates to store
+<i>93</i>&nbsp;  private int m;
+<i>94</i>&nbsp;
+<i>95</i>&nbsp;  // Maximum number of function evaluations
+<i>96</i>&nbsp;  private int maxFctEval;
+<i>97</i>&nbsp;
+<i>98</i>&nbsp;  // Verbose output
+<i>99</i>&nbsp;  private boolean verbose;
+<i>100</i>&nbsp;
+<i>101</i>&nbsp;  // Objective function&#39;s dimension
+<i>102</i>&nbsp;  private int dimension;
+<i>103</i>&nbsp;
+<i>104</i>&nbsp;  // Hessian updates
+<i>105</i>&nbsp;  private UpdateInfo updateInfo;
+<i>106</i>&nbsp;
+<i>107</i>&nbsp;  // For evaluating quality of training parameters.
+<i>108</i>&nbsp;  // This is optional and can be omitted.
+<i>109</i>&nbsp;  private Evaluator evaluator;
+<i>110</i>&nbsp;
+<i>111</i>&nbsp;  public QNMinimizer() {
+<b class="fc"><i>112</i>&nbsp;    this(L1COST_DEFAULT, L2COST_DEFAULT);</b>
+<b class="fc"><i>113</i>&nbsp;  }</b>
+<i>114</i>&nbsp;
+<i>115</i>&nbsp;  public QNMinimizer(double l1Cost, double l2Cost) {
+<b class="fc"><i>116</i>&nbsp;    this(l1Cost, l2Cost, NUM_ITERATIONS_DEFAULT);</b>
+<b class="fc"><i>117</i>&nbsp;  }</b>
+<i>118</i>&nbsp;
+<i>119</i>&nbsp;  public QNMinimizer(double l1Cost, double l2Cost, int iterations) {
+<b class="fc"><i>120</i>&nbsp;    this(l1Cost, l2Cost, iterations, M_DEFAULT, MAX_FCT_EVAL_DEFAULT);</b>
+<b class="fc"><i>121</i>&nbsp;  }</b>
+<i>122</i>&nbsp;
+<i>123</i>&nbsp;  public QNMinimizer(double l1Cost, double l2Cost,
+<i>124</i>&nbsp;      int iterations, int m, int maxFctEval) {
+<b class="fc"><i>125</i>&nbsp;    this(l1Cost, l2Cost, iterations, m, maxFctEval, true);</b>
+<b class="fc"><i>126</i>&nbsp;  }</b>
+<i>127</i>&nbsp;
+<i>128</i>&nbsp;  /**
+<i>129</i>&nbsp;   * Constructor
+<i>130</i>&nbsp;   * @param l1Cost L1-regularization cost
+<i>131</i>&nbsp;   * @param l2Cost L2-regularization cost
+<i>132</i>&nbsp;   * @param iterations maximum number of iterations
+<i>133</i>&nbsp;   * @param m number of Hessian updates to store
+<i>134</i>&nbsp;   * @param maxFctEval maximum number of function evaluations
+<i>135</i>&nbsp;   * @param verbose verbose output
+<i>136</i>&nbsp;   */
+<i>137</i>&nbsp;  public QNMinimizer(double l1Cost, double l2Cost, int iterations,
+<i>138</i>&nbsp;      int m, int maxFctEval, boolean verbose)
+<b class="fc"><i>139</i>&nbsp;  {</b>
+<i>140</i>&nbsp;    // Check arguments
+<b class="fc"><i>141</i>&nbsp;    if (l1Cost &lt; 0 || l2Cost &lt; 0)</b>
+<b class="nc"><i>142</i>&nbsp;      throw new IllegalArgumentException(</b>
+<i>143</i>&nbsp;          &quot;L1-cost and L2-cost must not be less than zero&quot;);
+<i>144</i>&nbsp;
+<b class="fc"><i>145</i>&nbsp;    if (iterations &lt;= 0)</b>
+<b class="nc"><i>146</i>&nbsp;      throw new IllegalArgumentException(</b>
+<i>147</i>&nbsp;          &quot;Number of iterations must be larger than zero&quot;);
+<i>148</i>&nbsp;
+<b class="fc"><i>149</i>&nbsp;    if (m &lt;= 0)</b>
+<b class="nc"><i>150</i>&nbsp;      throw new IllegalArgumentException(</b>
+<i>151</i>&nbsp;          &quot;Number of Hessian updates must be larger than zero&quot;);
+<i>152</i>&nbsp;
+<b class="fc"><i>153</i>&nbsp;    if (maxFctEval &lt;= 0)</b>
+<b class="nc"><i>154</i>&nbsp;      throw new IllegalArgumentException(</b>
+<i>155</i>&nbsp;          &quot;Maximum number of function evaluations must be larger than zero&quot;);
+<i>156</i>&nbsp;
+<b class="fc"><i>157</i>&nbsp;    this.l1Cost     = l1Cost;</b>
+<b class="fc"><i>158</i>&nbsp;    this.l2Cost     = l2Cost;</b>
+<b class="fc"><i>159</i>&nbsp;    this.iterations = iterations;</b>
+<b class="fc"><i>160</i>&nbsp;    this.m          = m;</b>
+<b class="fc"><i>161</i>&nbsp;    this.maxFctEval = maxFctEval;</b>
+<b class="fc"><i>162</i>&nbsp;    this.verbose    = verbose;</b>
+<b class="fc"><i>163</i>&nbsp;  }</b>
+<i>164</i>&nbsp;
+<i>165</i>&nbsp;  public Evaluator getEvaluator() {
+<b class="nc"><i>166</i>&nbsp;    return evaluator;</b>
+<i>167</i>&nbsp;  }
+<i>168</i>&nbsp;
+<i>169</i>&nbsp;  public void setEvaluator(Evaluator evaluator) {
+<b class="fc"><i>170</i>&nbsp;    this.evaluator = evaluator;</b>
+<b class="fc"><i>171</i>&nbsp;  }</b>
+<i>172</i>&nbsp;
+<i>173</i>&nbsp;  /**
+<i>174</i>&nbsp;   * Find the parameters that minimize the objective function
+<i>175</i>&nbsp;   * @param function objective function
+<i>176</i>&nbsp;   * @return minimizing parameters
+<i>177</i>&nbsp;   */
+<i>178</i>&nbsp;  public double[] minimize(Function function) {
+<i>179</i>&nbsp;
+<b class="fc"><i>180</i>&nbsp;    Function l2RegFunction = new L2RegFunction(function, l2Cost);</b>
+<b class="fc"><i>181</i>&nbsp;    this.dimension  = l2RegFunction.getDimension();</b>
+<b class="fc"><i>182</i>&nbsp;    this.updateInfo = new UpdateInfo(this.m, this.dimension);</b>
+<i>183</i>&nbsp;
+<i>184</i>&nbsp;    // Current point is at the origin
+<b class="fc"><i>185</i>&nbsp;    double[] currPoint = new double[dimension];</b>
+<i>186</i>&nbsp;
+<b class="fc"><i>187</i>&nbsp;    double currValue = l2RegFunction.valueAt(currPoint);</b>
+<i>188</i>&nbsp;
+<i>189</i>&nbsp;    // Gradient at the current point
+<b class="fc"><i>190</i>&nbsp;    double[] currGrad = new double[dimension];</b>
+<b class="fc"><i>191</i>&nbsp;    System.arraycopy(l2RegFunction.gradientAt(currPoint), 0,</b>
+<i>192</i>&nbsp;        currGrad, 0, dimension);
+<i>193</i>&nbsp;
+<i>194</i>&nbsp;    // Pseudo-gradient - only use when L1-regularization is enabled
+<b class="fc"><i>195</i>&nbsp;    double[] pseudoGrad = null;</b>
+<b class="fc"><i>196</i>&nbsp;    if (l1Cost &gt; 0) {</b>
+<b class="fc"><i>197</i>&nbsp;      currValue += l1Cost * ArrayMath.l1norm(currPoint);</b>
+<b class="fc"><i>198</i>&nbsp;      pseudoGrad = new double[dimension];</b>
+<b class="fc"><i>199</i>&nbsp;      computePseudoGrad(currPoint, currGrad, pseudoGrad);</b>
+<i>200</i>&nbsp;    }
+<i>201</i>&nbsp;
+<i>202</i>&nbsp;    LineSearchResult lsr;
+<b class="fc"><i>203</i>&nbsp;    if (l1Cost &gt; 0) {</b>
+<b class="fc"><i>204</i>&nbsp;      lsr = LineSearchResult.getInitialObjectForL1(</b>
+<i>205</i>&nbsp;          currValue, currGrad, pseudoGrad, currPoint);
+<i>206</i>&nbsp;    } else {
+<b class="fc"><i>207</i>&nbsp;      lsr = LineSearchResult.getInitialObject(</b>
+<i>208</i>&nbsp;          currValue, currGrad, currPoint);
+<i>209</i>&nbsp;    }
+<i>210</i>&nbsp;
+<b class="fc"><i>211</i>&nbsp;    if (verbose) {</b>
+<b class="fc"><i>212</i>&nbsp;      display(&quot;\nSolving convex optimization problem.&quot;);</b>
+<b class="fc"><i>213</i>&nbsp;      display(&quot;\nObjective function has &quot; + dimension + &quot; variable(s).&quot;);</b>
+<b class="fc"><i>214</i>&nbsp;      display(&quot;\n\nPerforming &quot; + iterations + &quot; iterations with &quot; +</b>
+<i>215</i>&nbsp;          &quot;L1Cost=&quot; + l1Cost + &quot; and L2Cost=&quot; + l2Cost + &quot;\n&quot;);
+<i>216</i>&nbsp;    }
+<i>217</i>&nbsp;
+<b class="fc"><i>218</i>&nbsp;    double[] direction = new double[dimension];</b>
+<b class="fc"><i>219</i>&nbsp;    long startTime = System.currentTimeMillis();</b>
+<i>220</i>&nbsp;
+<i>221</i>&nbsp;    // Initial step size for the 1st iteration
+<b class="fc"><i>222</i>&nbsp;    double initialStepSize = l1Cost &gt; 0 ?</b>
+<b class="fc"><i>223</i>&nbsp;        ArrayMath.invL2norm(lsr.getPseudoGradAtNext()) :</b>
+<b class="fc"><i>224</i>&nbsp;          ArrayMath.invL2norm(lsr.getGradAtNext());</b>
+<i>225</i>&nbsp;
+<b class="fc"><i>226</i>&nbsp;    for (int iter = 1; iter &lt;= iterations; iter++) {</b>
+<i>227</i>&nbsp;      // Find direction
+<b class="fc"><i>228</i>&nbsp;      if (l1Cost &gt; 0) {</b>
+<b class="fc"><i>229</i>&nbsp;        System.arraycopy(lsr.getPseudoGradAtNext(), 0, direction, 0, direction.length);</b>
+<i>230</i>&nbsp;      } else {
+<b class="fc"><i>231</i>&nbsp;        System.arraycopy(lsr.getGradAtNext(), 0, direction, 0, direction.length);</b>
+<i>232</i>&nbsp;      }
+<b class="fc"><i>233</i>&nbsp;      computeDirection(direction);</b>
+<i>234</i>&nbsp;
+<i>235</i>&nbsp;      // Line search
+<b class="fc"><i>236</i>&nbsp;      if (l1Cost &gt; 0) {</b>
+<i>237</i>&nbsp;        // Constrain the search direction
+<b class="fc"><i>238</i>&nbsp;        pseudoGrad = lsr.getPseudoGradAtNext();</b>
+<b class="fc"><i>239</i>&nbsp;        for (int i = 0; i &lt; dimension; i++) {</b>
+<b class="fc"><i>240</i>&nbsp;          if (direction[i] * pseudoGrad[i] &gt;= 0) {</b>
+<b class="fc"><i>241</i>&nbsp;            direction[i] = 0;</b>
+<i>242</i>&nbsp;          }
+<i>243</i>&nbsp;        }
+<b class="fc"><i>244</i>&nbsp;        LineSearch.doConstrainedLineSearch(l2RegFunction, direction, lsr, l1Cost, initialStepSize);</b>
+<b class="fc"><i>245</i>&nbsp;        computePseudoGrad(lsr.getNextPoint(), lsr.getGradAtNext(), pseudoGrad);</b>
+<b class="fc"><i>246</i>&nbsp;        lsr.setPseudoGradAtNext(pseudoGrad);</b>
+<i>247</i>&nbsp;      }
+<i>248</i>&nbsp;      else {
+<b class="fc"><i>249</i>&nbsp;        LineSearch.doLineSearch(l2RegFunction, direction, lsr, initialStepSize);</b>
+<i>250</i>&nbsp;      }
+<i>251</i>&nbsp;
+<i>252</i>&nbsp;      // Save Hessian updates
+<b class="fc"><i>253</i>&nbsp;      updateInfo.update(lsr);</b>
+<i>254</i>&nbsp;
+<b class="fc"><i>255</i>&nbsp;      if (verbose) {</b>
+<b class="fc"><i>256</i>&nbsp;        if (iter &lt; 10)</b>
+<b class="fc"><i>257</i>&nbsp;          display(&quot;  &quot; + iter + &quot;:  &quot;);</b>
+<b class="fc"><i>258</i>&nbsp;        else if (iter &lt; 100)</b>
+<b class="fc"><i>259</i>&nbsp;          display(&quot; &quot; + iter + &quot;:  &quot;);</b>
+<i>260</i>&nbsp;        else
+<b class="nc"><i>261</i>&nbsp;          display(iter + &quot;:  &quot;);</b>
+<i>262</i>&nbsp;
+<b class="fc"><i>263</i>&nbsp;        if (evaluator != null) {</b>
+<b class="fc"><i>264</i>&nbsp;          display(&quot;\t&quot; + lsr.getValueAtNext() + &quot;\t&quot; + lsr.getFuncChangeRate()</b>
+<b class="fc"><i>265</i>&nbsp;              + &quot;\t&quot; + evaluator.evaluate(lsr.getNextPoint()) + &quot;\n&quot;);</b>
+<i>266</i>&nbsp;        } else {
+<b class="fc"><i>267</i>&nbsp;          display(&quot;\t &quot; + lsr.getValueAtNext() +</b>
+<b class="fc"><i>268</i>&nbsp;              &quot;\t&quot; + lsr.getFuncChangeRate() + &quot;\n&quot;);</b>
+<i>269</i>&nbsp;        }
+<i>270</i>&nbsp;      }
+<b class="fc"><i>271</i>&nbsp;      if (isConverged(lsr))</b>
+<b class="fc"><i>272</i>&nbsp;        break;</b>
+<i>273</i>&nbsp;
+<b class="fc"><i>274</i>&nbsp;      initialStepSize = INITIAL_STEP_SIZE;</b>
+<i>275</i>&nbsp;    }
+<i>276</i>&nbsp;
+<i>277</i>&nbsp;    // Undo L2-shrinkage if Elastic Net is used (since
+<i>278</i>&nbsp;    // in that case, the shrinkage is done twice)
+<b class="fc"><i>279</i>&nbsp;    if (l1Cost &gt; 0 &amp;&amp; l2Cost &gt; 0) {</b>
+<b class="fc"><i>280</i>&nbsp;      double[] x = lsr.getNextPoint();</b>
+<b class="fc"><i>281</i>&nbsp;      for (int i = 0; i &lt; dimension; i++) {</b>
+<b class="fc"><i>282</i>&nbsp;        x[i] = Math.sqrt(1 + l2Cost) * x[i];</b>
+<i>283</i>&nbsp;      }
+<i>284</i>&nbsp;    }
+<i>285</i>&nbsp;
+<b class="fc"><i>286</i>&nbsp;    long endTime = System.currentTimeMillis();</b>
+<b class="fc"><i>287</i>&nbsp;    long duration = endTime - startTime;</b>
+<b class="fc"><i>288</i>&nbsp;    display(&quot;Running time: &quot; + (duration / 1000.) + &quot;s\n&quot;);</b>
+<i>289</i>&nbsp;
+<i>290</i>&nbsp;    // Release memory
+<b class="fc"><i>291</i>&nbsp;    this.updateInfo = null;</b>
+<b class="fc"><i>292</i>&nbsp;    System.gc();</b>
+<i>293</i>&nbsp;
+<i>294</i>&nbsp;    // Avoid returning the reference to LineSearchResult&#39;s member so that GC can
+<i>295</i>&nbsp;    // collect memory occupied by lsr after this function completes (is it necessary?)
+<b class="fc"><i>296</i>&nbsp;    double[] parameters = new double[dimension];</b>
+<b class="fc"><i>297</i>&nbsp;    System.arraycopy(lsr.getNextPoint(), 0, parameters, 0, dimension);</b>
+<i>298</i>&nbsp;
+<b class="fc"><i>299</i>&nbsp;    return parameters;</b>
+<i>300</i>&nbsp;  }
+<i>301</i>&nbsp;
+<i>302</i>&nbsp;  /**
+<i>303</i>&nbsp;   * Pseudo-gradient for L1-regularization (see equation 4 in the paper
+<i>304</i>&nbsp;   * &quot;Scalable Training of L1-Regularized Log-Linear Models&quot;, Andrew et al. 2007)
+<i>305</i>&nbsp;   *
+<i>306</i>&nbsp;   * @param x current point
+<i>307</i>&nbsp;   * @param g gradient at x
+<i>308</i>&nbsp;   * @param pg pseudo-gradient at x which is to be computed
+<i>309</i>&nbsp;   */
+<i>310</i>&nbsp;  private void computePseudoGrad(double[] x, double[] g, double[] pg) {
+<b class="fc"><i>311</i>&nbsp;    for (int i = 0; i &lt; dimension; i++) {</b>
+<b class="fc"><i>312</i>&nbsp;      if (x[i] &lt; 0) {</b>
+<b class="fc"><i>313</i>&nbsp;        pg[i] = g[i] - l1Cost;</b>
+<i>314</i>&nbsp;      }
+<b class="fc"><i>315</i>&nbsp;      else if (x[i] &gt; 0) {</b>
+<b class="fc"><i>316</i>&nbsp;        pg[i] = g[i] + l1Cost;</b>
+<i>317</i>&nbsp;      }
+<i>318</i>&nbsp;      else {
+<b class="fc"><i>319</i>&nbsp;        if (g[i] &lt; -l1Cost) {</b>
+<i>320</i>&nbsp;          // right partial derivative
+<b class="fc"><i>321</i>&nbsp;          pg[i] = g[i] + l1Cost;</b>
+<i>322</i>&nbsp;        }
+<b class="fc"><i>323</i>&nbsp;        else if (g[i] &gt; l1Cost) {</b>
+<i>324</i>&nbsp;          // left partial derivative
+<b class="fc"><i>325</i>&nbsp;          pg[i] = g[i] - l1Cost;</b>
+<i>326</i>&nbsp;        }
+<i>327</i>&nbsp;        else {
+<b class="fc"><i>328</i>&nbsp;          pg[i] = 0;</b>
+<i>329</i>&nbsp;        }
+<i>330</i>&nbsp;      }
+<i>331</i>&nbsp;    }
+<b class="fc"><i>332</i>&nbsp;  }</b>
+<i>333</i>&nbsp;
+<i>334</i>&nbsp;  /**
+<i>335</i>&nbsp;   * L-BFGS two-loop recursion (see Nocedal &amp; Wright 2006, Numerical Optimization, p. 178)
+<i>336</i>&nbsp;   */
+<i>337</i>&nbsp;  private void computeDirection(double[] direction) {
+<i>338</i>&nbsp;
+<i>339</i>&nbsp;    // Implemented two-loop Hessian update method.
+<b class="fc"><i>340</i>&nbsp;    int k = updateInfo.kCounter;</b>
+<b class="fc"><i>341</i>&nbsp;    double[] rho    = updateInfo.rho;</b>
+<b class="fc"><i>342</i>&nbsp;    double[] alpha  = updateInfo.alpha; // just to avoid recreating alpha</b>
+<b class="fc"><i>343</i>&nbsp;    double[][] S    = updateInfo.S;</b>
+<b class="fc"><i>344</i>&nbsp;    double[][] Y    = updateInfo.Y;</b>
+<i>345</i>&nbsp;
+<i>346</i>&nbsp;    // First loop
+<b class="fc"><i>347</i>&nbsp;    for (int i = k - 1; i &gt;= 0; i--) {</b>
+<b class="fc"><i>348</i>&nbsp;      alpha[i] = rho[i] * ArrayMath.innerProduct(S[i], direction);</b>
+<b class="fc"><i>349</i>&nbsp;      for (int j = 0; j &lt; dimension; j++) {</b>
+<b class="fc"><i>350</i>&nbsp;        direction[j] = direction[j] - alpha[i] * Y[i][j];</b>
+<i>351</i>&nbsp;      }
+<i>352</i>&nbsp;    }
+<i>353</i>&nbsp;
+<i>354</i>&nbsp;    // Second loop
+<b class="fc"><i>355</i>&nbsp;    for (int i = 0; i &lt; k; i++) {</b>
+<b class="fc"><i>356</i>&nbsp;      double beta = rho[i] * ArrayMath.innerProduct(Y[i], direction);</b>
+<b class="fc"><i>357</i>&nbsp;      for (int j = 0; j &lt; dimension; j++) {</b>
+<b class="fc"><i>358</i>&nbsp;        direction[j] = direction[j] + S[i][j] * (alpha[i] - beta);</b>
+<i>359</i>&nbsp;      }
+<i>360</i>&nbsp;    }
+<i>361</i>&nbsp;
+<b class="fc"><i>362</i>&nbsp;    for (int i = 0; i &lt; dimension; i++) {</b>
+<b class="fc"><i>363</i>&nbsp;      direction[i] = -direction[i];</b>
+<i>364</i>&nbsp;    }
+<b class="fc"><i>365</i>&nbsp;  }</b>
+<i>366</i>&nbsp;
+<i>367</i>&nbsp;  private boolean isConverged(LineSearchResult lsr) {
+<i>368</i>&nbsp;
+<i>369</i>&nbsp;    // Check function&#39;s change rate
+<b class="fc"><i>370</i>&nbsp;    if (lsr.getFuncChangeRate() &lt; CONVERGE_TOLERANCE) {</b>
+<b class="fc"><i>371</i>&nbsp;      if (verbose)</b>
+<b class="fc"><i>372</i>&nbsp;        display(&quot;Function change rate is smaller than the threshold &quot;</b>
+<i>373</i>&nbsp;            + CONVERGE_TOLERANCE + &quot;.\nTraining will stop.\n\n&quot;);
+<b class="fc"><i>374</i>&nbsp;      return true;</b>
+<i>375</i>&nbsp;    }
+<i>376</i>&nbsp;
+<i>377</i>&nbsp;    // Check gradient&#39;s norm using the criteria: ||g(x)|| / max(1, ||x||) &lt; threshold
+<b class="fc"><i>378</i>&nbsp;    double xNorm = Math.max(1, ArrayMath.l2norm(lsr.getNextPoint()));</b>
+<b class="fc"><i>379</i>&nbsp;    double gradNorm = l1Cost &gt; 0 ?</b>
+<b class="fc"><i>380</i>&nbsp;        ArrayMath.l2norm(lsr.getPseudoGradAtNext()) : ArrayMath.l2norm(lsr.getGradAtNext());</b>
+<b class="fc"><i>381</i>&nbsp;    if (gradNorm / xNorm &lt; REL_GRAD_NORM_TOL) {</b>
+<b class="fc"><i>382</i>&nbsp;      if (verbose)</b>
+<b class="fc"><i>383</i>&nbsp;        display(&quot;Relative L2-norm of the gradient is smaller than the threshold &quot;</b>
+<i>384</i>&nbsp;            + REL_GRAD_NORM_TOL + &quot;.\nTraining will stop.\n\n&quot;);
+<b class="fc"><i>385</i>&nbsp;      return true;</b>
+<i>386</i>&nbsp;    }
+<i>387</i>&nbsp;
+<i>388</i>&nbsp;    // Check step size
+<b class="fc"><i>389</i>&nbsp;    if (lsr.getStepSize() &lt; MIN_STEP_SIZE) {</b>
+<b class="nc"><i>390</i>&nbsp;      if (verbose)</b>
+<b class="nc"><i>391</i>&nbsp;        display(&quot;Step size is smaller than the minimum step size &quot;</b>
+<i>392</i>&nbsp;            + MIN_STEP_SIZE + &quot;.\nTraining will stop.\n\n&quot;);
+<b class="nc"><i>393</i>&nbsp;      return true;</b>
+<i>394</i>&nbsp;    }
+<i>395</i>&nbsp;
+<i>396</i>&nbsp;    // Check number of function evaluations
+<b class="fc"><i>397</i>&nbsp;    if (lsr.getFctEvalCount() &gt; this.maxFctEval) {</b>
+<b class="nc"><i>398</i>&nbsp;      if (verbose)</b>
+<b class="nc"><i>399</i>&nbsp;        display(&quot;Maximum number of function evaluations has exceeded the threshold &quot;</b>
+<i>400</i>&nbsp;            + this.maxFctEval + &quot;.\nTraining will stop.\n\n&quot;);
+<b class="nc"><i>401</i>&nbsp;      return true;</b>
+<i>402</i>&nbsp;    }
+<i>403</i>&nbsp;
+<b class="fc"><i>404</i>&nbsp;    return false;</b>
+<i>405</i>&nbsp;  }
+<i>406</i>&nbsp;
+<i>407</i>&nbsp;  /**
+<i>408</i>&nbsp;   * Shorthand for System.out.print
+<i>409</i>&nbsp;   */
+<i>410</i>&nbsp;  private void display(String s) {
+<b class="fc"><i>411</i>&nbsp;    System.out.print(s);</b>
+<b class="fc"><i>412</i>&nbsp;  }</b>
+<i>413</i>&nbsp;
+<i>414</i>&nbsp;  /**
+<i>415</i>&nbsp;   * Class to store vectors for Hessian approximation update.
+<i>416</i>&nbsp;   */
+<b class="fc"><i>417</i>&nbsp;  private class UpdateInfo {</b>
+<i>418</i>&nbsp;    private double[][] S;
+<i>419</i>&nbsp;    private double[][] Y;
+<i>420</i>&nbsp;    private double[] rho;
+<i>421</i>&nbsp;    private double[] alpha;
+<i>422</i>&nbsp;    private int m;
+<i>423</i>&nbsp;
+<i>424</i>&nbsp;    private int kCounter;
+<i>425</i>&nbsp;
+<i>426</i>&nbsp;    // Constructor
+<b class="fc"><i>427</i>&nbsp;    UpdateInfo(int numCorrection, int dimension) {</b>
+<b class="fc"><i>428</i>&nbsp;      this.m = numCorrection;</b>
+<b class="fc"><i>429</i>&nbsp;      this.kCounter = 0;</b>
+<b class="fc"><i>430</i>&nbsp;      S     = new double[this.m][dimension];</b>
+<b class="fc"><i>431</i>&nbsp;      Y     = new double[this.m][dimension];</b>
+<b class="fc"><i>432</i>&nbsp;      rho   = new double[this.m];</b>
+<b class="fc"><i>433</i>&nbsp;      alpha = new double[this.m];</b>
+<b class="fc"><i>434</i>&nbsp;    }</b>
+<i>435</i>&nbsp;
+<i>436</i>&nbsp;    public void update(LineSearchResult lsr) {
+<b class="fc"><i>437</i>&nbsp;      double[] currPoint  = lsr.getCurrPoint();</b>
+<b class="fc"><i>438</i>&nbsp;      double[] gradAtCurr = lsr.getGradAtCurr();</b>
+<b class="fc"><i>439</i>&nbsp;      double[] nextPoint  = lsr.getNextPoint();</b>
+<b class="fc"><i>440</i>&nbsp;      double[] gradAtNext = lsr.getGradAtNext();</b>
+<i>441</i>&nbsp;
+<i>442</i>&nbsp;      // Inner product of S_k and Y_k
+<b class="fc"><i>443</i>&nbsp;      double SYk = 0.0;</b>
+<i>444</i>&nbsp;
+<i>445</i>&nbsp;      // Add new ones.
+<b class="fc"><i>446</i>&nbsp;      if (kCounter &lt; m) {</b>
+<b class="fc"><i>447</i>&nbsp;        for (int j = 0; j &lt; dimension; j++) {</b>
+<b class="fc"><i>448</i>&nbsp;          S[kCounter][j] = nextPoint[j] - currPoint[j];</b>
+<b class="fc"><i>449</i>&nbsp;          Y[kCounter][j] = gradAtNext[j] - gradAtCurr[j];</b>
+<b class="fc"><i>450</i>&nbsp;          SYk += S[kCounter][j] * Y[kCounter][j];</b>
+<i>451</i>&nbsp;        }
+<b class="fc"><i>452</i>&nbsp;        rho[kCounter] = 1.0 / SYk;</b>
+<i>453</i>&nbsp;      }
+<i>454</i>&nbsp;      else {
+<i>455</i>&nbsp;        // Discard oldest vectors and add new ones.
+<b class="fc"><i>456</i>&nbsp;        for (int i = 0; i &lt; m - 1; i++) {</b>
+<b class="fc"><i>457</i>&nbsp;          S[i] = S[i + 1];</b>
+<b class="fc"><i>458</i>&nbsp;          Y[i] = Y[i + 1];</b>
+<b class="fc"><i>459</i>&nbsp;          rho[i] = rho[i + 1];</b>
+<i>460</i>&nbsp;        }
+<b class="fc"><i>461</i>&nbsp;        for (int j = 0; j &lt; dimension; j++) {</b>
+<b class="fc"><i>462</i>&nbsp;          S[m - 1][j] = nextPoint[j] - currPoint[j];</b>
+<b class="fc"><i>463</i>&nbsp;          Y[m - 1][j] = gradAtNext[j] - gradAtCurr[j];</b>
+<b class="fc"><i>464</i>&nbsp;          SYk += S[m - 1][j] * Y[m - 1][j];</b>
+<i>465</i>&nbsp;        }
+<b class="fc"><i>466</i>&nbsp;        rho[m - 1] = 1.0 / SYk;</b>
+<i>467</i>&nbsp;      }
+<i>468</i>&nbsp;
+<b class="fc"><i>469</i>&nbsp;      if (kCounter &lt; m)</b>
+<b class="fc"><i>470</i>&nbsp;        kCounter++;</b>
+<b class="fc"><i>471</i>&nbsp;    }</b>
+<i>472</i>&nbsp;  }
+<i>473</i>&nbsp;
+<i>474</i>&nbsp;  /**
+<i>475</i>&nbsp;   * L2-regularized objective function
+<i>476</i>&nbsp;   */
+<i>477</i>&nbsp;  public static class L2RegFunction implements Function {
+<i>478</i>&nbsp;    private Function f;
+<i>479</i>&nbsp;    private double l2Cost;
+<i>480</i>&nbsp;
+<b class="fc"><i>481</i>&nbsp;    public L2RegFunction(Function f, double l2Cost) {</b>
+<b class="fc"><i>482</i>&nbsp;      this.f = f;</b>
+<b class="fc"><i>483</i>&nbsp;      this.l2Cost = l2Cost;</b>
+<b class="fc"><i>484</i>&nbsp;    }</b>
+<i>485</i>&nbsp;
+<i>486</i>&nbsp;    @Override
+<i>487</i>&nbsp;    public int getDimension() {
+<b class="fc"><i>488</i>&nbsp;      return f.getDimension();</b>
+<i>489</i>&nbsp;    }
+<i>490</i>&nbsp;
+<i>491</i>&nbsp;    @Override
+<i>492</i>&nbsp;    public double valueAt(double[] x) {
+<b class="fc"><i>493</i>&nbsp;      checkDimension(x);</b>
+<b class="fc"><i>494</i>&nbsp;      double value = f.valueAt(x);</b>
+<b class="fc"><i>495</i>&nbsp;      if (l2Cost &gt; 0) {</b>
+<b class="fc"><i>496</i>&nbsp;        value += l2Cost * ArrayMath.innerProduct(x, x);</b>
+<i>497</i>&nbsp;      }
+<b class="fc"><i>498</i>&nbsp;      return value;</b>
+<i>499</i>&nbsp;    }
+<i>500</i>&nbsp;
+<i>501</i>&nbsp;    @Override
+<i>502</i>&nbsp;    public double[] gradientAt(double[] x) {
+<b class="fc"><i>503</i>&nbsp;      checkDimension(x);</b>
+<b class="fc"><i>504</i>&nbsp;      double[] gradient = f.gradientAt(x);</b>
+<b class="fc"><i>505</i>&nbsp;      if (l2Cost &gt; 0) {</b>
+<b class="fc"><i>506</i>&nbsp;        for (int i = 0; i &lt; x.length; i++) {</b>
+<b class="fc"><i>507</i>&nbsp;          gradient[i] += 2 * l2Cost * x[i];</b>
+<i>508</i>&nbsp;        }
+<i>509</i>&nbsp;      }
+<b class="fc"><i>510</i>&nbsp;      return gradient;</b>
+<i>511</i>&nbsp;    }
+<i>512</i>&nbsp;
+<i>513</i>&nbsp;    private void checkDimension(double[] x) {
+<b class="fc"><i>514</i>&nbsp;      if (x.length != getDimension())</b>
+<b class="nc"><i>515</i>&nbsp;        throw new IllegalArgumentException(</b>
+<i>516</i>&nbsp;            &quot;x&#39;s dimension is not the same as function&#39;s dimension&quot;);
+<b class="fc"><i>517</i>&nbsp;    }</b>
+<i>518</i>&nbsp;  }
+<i>519</i>&nbsp;
+<i>520</i>&nbsp;  /**
+<i>521</i>&nbsp;   * Evaluate quality of training parameters. For example,
+<i>522</i>&nbsp;   * it can be used to report model&#39;s training accuracy when
+<i>523</i>&nbsp;   * we train a Maximum Entropy classifier.
+<i>524</i>&nbsp;   */
+<i>525</i>&nbsp;  public interface Evaluator {
+<i>526</i>&nbsp;    /**
+<i>527</i>&nbsp;     * Measure quality of the training parameters
+<i>528</i>&nbsp;     * @param parameters
+<i>529</i>&nbsp;     * @return evaluated result
+<i>530</i>&nbsp;     */
+<i>531</i>&nbsp;    double evaluate(double[] parameters);
+<i>532</i>&nbsp;  }
+<i>533</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-09 18:47</div>
+</div>
+</body>
+</html>

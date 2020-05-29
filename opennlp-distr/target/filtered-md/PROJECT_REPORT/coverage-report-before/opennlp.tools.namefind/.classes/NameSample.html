@@ -1,0 +1,362 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: NameSample</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">opennlp.tools.namefind</a> ]
+</div>
+
+<h1>Coverage Summary for Class: NameSample (opennlp.tools.namefind)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">NameSample</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    93.3%
+  </span>
+  <span class="absValue">
+    (14/ 15)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    92.6%
+  </span>
+  <span class="absValue">
+    (100/ 108)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/*
+<i>2</i>&nbsp; * Licensed to the Apache Software Foundation (ASF) under one or more
+<i>3</i>&nbsp; * contributor license agreements.  See the NOTICE file distributed with
+<i>4</i>&nbsp; * this work for additional information regarding copyright ownership.
+<i>5</i>&nbsp; * The ASF licenses this file to You under the Apache License, Version 2.0
+<i>6</i>&nbsp; * (the &quot;License&quot;); you may not use this file except in compliance with
+<i>7</i>&nbsp; * the License. You may obtain a copy of the License at
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; *     http://www.apache.org/licenses/LICENSE-2.0
+<i>10</i>&nbsp; *
+<i>11</i>&nbsp; * Unless required by applicable law or agreed to in writing, software
+<i>12</i>&nbsp; * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<i>13</i>&nbsp; * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<i>14</i>&nbsp; * See the License for the specific language governing permissions and
+<i>15</i>&nbsp; * limitations under the License.
+<i>16</i>&nbsp; */
+<i>17</i>&nbsp;
+<i>18</i>&nbsp;package opennlp.tools.namefind;
+<i>19</i>&nbsp;
+<i>20</i>&nbsp;import java.io.IOException;
+<i>21</i>&nbsp;import java.io.Serializable;
+<i>22</i>&nbsp;import java.util.ArrayList;
+<i>23</i>&nbsp;import java.util.Arrays;
+<i>24</i>&nbsp;import java.util.Collections;
+<i>25</i>&nbsp;import java.util.List;
+<i>26</i>&nbsp;import java.util.Objects;
+<i>27</i>&nbsp;import java.util.regex.Matcher;
+<i>28</i>&nbsp;import java.util.regex.Pattern;
+<i>29</i>&nbsp;
+<i>30</i>&nbsp;import opennlp.tools.tokenize.WhitespaceTokenizer;
+<i>31</i>&nbsp;import opennlp.tools.util.Span;
+<i>32</i>&nbsp;
+<i>33</i>&nbsp;/**
+<i>34</i>&nbsp; * Class for holding names for a single unit of text.
+<i>35</i>&nbsp; */
+<i>36</i>&nbsp;public class NameSample implements Serializable {
+<i>37</i>&nbsp;
+<i>38</i>&nbsp;  private final String id;
+<i>39</i>&nbsp;  private final List&lt;String&gt; sentence;
+<i>40</i>&nbsp;  private final List&lt;Span&gt; names;
+<i>41</i>&nbsp;  private final String[][] additionalContext;
+<i>42</i>&nbsp;  private final boolean isClearAdaptiveData;
+<i>43</i>&nbsp;
+<i>44</i>&nbsp;  /** The a default type value when there is no type in training data. */
+<i>45</i>&nbsp;  public static final String DEFAULT_TYPE = &quot;default&quot;;
+<i>46</i>&nbsp;
+<i>47</i>&nbsp;  public NameSample(String id, String[] sentence, Span[] names,
+<b class="fc"><i>48</i>&nbsp;      String[][] additionalContext, boolean clearAdaptiveData) {</b>
+<b class="fc"><i>49</i>&nbsp;    this.id = id;</b>
+<i>50</i>&nbsp;
+<b class="fc"><i>51</i>&nbsp;    Objects.requireNonNull(sentence, &quot;sentence must not be null&quot;);</b>
+<i>52</i>&nbsp;
+<b class="fc"><i>53</i>&nbsp;    if (names == null) {</b>
+<b class="nc"><i>54</i>&nbsp;      names = new Span[0];</b>
+<i>55</i>&nbsp;    }
+<i>56</i>&nbsp;
+<b class="fc"><i>57</i>&nbsp;    this.sentence = Collections.unmodifiableList(new ArrayList&lt;&gt;(Arrays.asList(sentence)));</b>
+<b class="fc"><i>58</i>&nbsp;    List&lt;Span&gt; namesList = Arrays.asList(names);</b>
+<b class="fc"><i>59</i>&nbsp;    Collections.sort(namesList);</b>
+<b class="fc"><i>60</i>&nbsp;    this.names = Collections.unmodifiableList(namesList);</b>
+<i>61</i>&nbsp;
+<b class="fc"><i>62</i>&nbsp;    if (additionalContext != null) {</b>
+<b class="nc"><i>63</i>&nbsp;      this.additionalContext = new String[additionalContext.length][];</b>
+<i>64</i>&nbsp;
+<b class="nc"><i>65</i>&nbsp;      for (int i = 0; i &lt; additionalContext.length; i++) {</b>
+<b class="nc"><i>66</i>&nbsp;        this.additionalContext[i] = new String[additionalContext[i].length];</b>
+<b class="nc"><i>67</i>&nbsp;        System.arraycopy(additionalContext[i], 0, this.additionalContext[i], 0, additionalContext[i].length);</b>
+<i>68</i>&nbsp;      }
+<i>69</i>&nbsp;    }
+<i>70</i>&nbsp;    else {
+<b class="fc"><i>71</i>&nbsp;      this.additionalContext = null;</b>
+<i>72</i>&nbsp;    }
+<b class="fc"><i>73</i>&nbsp;    isClearAdaptiveData = clearAdaptiveData;</b>
+<i>74</i>&nbsp;
+<i>75</i>&nbsp;    // Check that name spans are not overlapping, otherwise throw exception
+<b class="fc"><i>76</i>&nbsp;    if (this.names.size() &gt; 1) {</b>
+<b class="fc"><i>77</i>&nbsp;      for (int i = 1; i &lt; this.names.size(); i++) {</b>
+<b class="fc"><i>78</i>&nbsp;        if (this.names.get(i).getStart() &lt; this.names.get(i - 1).getEnd()) {</b>
+<b class="fc"><i>79</i>&nbsp;          throw new RuntimeException(String.format(&quot;name spans %s and %s are overlapped in file: %s&quot;,</b>
+<b class="fc"><i>80</i>&nbsp;              this.names.get(i - 1), this.names.get(i), id));</b>
+<i>81</i>&nbsp;        }
+<i>82</i>&nbsp;      }
+<i>83</i>&nbsp;    }
+<b class="fc"><i>84</i>&nbsp;  }</b>
+<i>85</i>&nbsp;
+<i>86</i>&nbsp;  /**
+<i>87</i>&nbsp;   * Initializes the current instance.
+<i>88</i>&nbsp;   *
+<i>89</i>&nbsp;   * @param sentence training sentence
+<i>90</i>&nbsp;   * @param names
+<i>91</i>&nbsp;   * @param additionalContext
+<i>92</i>&nbsp;   * @param clearAdaptiveData if true the adaptive data of the
+<i>93</i>&nbsp;   *     feature generators is cleared
+<i>94</i>&nbsp;   */
+<i>95</i>&nbsp;  public NameSample(String[] sentence, Span[] names,
+<i>96</i>&nbsp;      String[][] additionalContext, boolean clearAdaptiveData) {
+<b class="fc"><i>97</i>&nbsp;    this(null, sentence, names, additionalContext, clearAdaptiveData);</b>
+<b class="fc"><i>98</i>&nbsp;  }</b>
+<i>99</i>&nbsp;
+<i>100</i>&nbsp;  public NameSample(String[] sentence, Span[] names, boolean clearAdaptiveData) {
+<b class="fc"><i>101</i>&nbsp;    this(sentence, names, null, clearAdaptiveData);</b>
+<b class="fc"><i>102</i>&nbsp;  }</b>
+<i>103</i>&nbsp;
+<i>104</i>&nbsp;  public String getId() {
+<b class="fc"><i>105</i>&nbsp;    return id;</b>
+<i>106</i>&nbsp;  }
+<i>107</i>&nbsp;
+<i>108</i>&nbsp;  public String[] getSentence() {
+<b class="fc"><i>109</i>&nbsp;    return sentence.toArray(new String[sentence.size()]);</b>
+<i>110</i>&nbsp;  }
+<i>111</i>&nbsp;
+<i>112</i>&nbsp;  public Span[] getNames() {
+<b class="fc"><i>113</i>&nbsp;    return names.toArray(new Span[names.size()]);</b>
+<i>114</i>&nbsp;  }
+<i>115</i>&nbsp;
+<i>116</i>&nbsp;  public String[][] getAdditionalContext() {
+<b class="fc"><i>117</i>&nbsp;    return additionalContext;</b>
+<i>118</i>&nbsp;  }
+<i>119</i>&nbsp;
+<i>120</i>&nbsp;  public boolean isClearAdaptiveDataSet() {
+<b class="fc"><i>121</i>&nbsp;    return isClearAdaptiveData;</b>
+<i>122</i>&nbsp;  }
+<i>123</i>&nbsp;
+<i>124</i>&nbsp;  @Override
+<i>125</i>&nbsp;  public int hashCode() {
+<b class="nc"><i>126</i>&nbsp;    return Objects.hash(Arrays.hashCode(getSentence()), Arrays.hashCode(getNames()),</b>
+<b class="nc"><i>127</i>&nbsp;        Arrays.hashCode(getAdditionalContext()), isClearAdaptiveDataSet());</b>
+<i>128</i>&nbsp;  }
+<i>129</i>&nbsp;
+<i>130</i>&nbsp;  @Override
+<i>131</i>&nbsp;  public boolean equals(Object obj) {
+<i>132</i>&nbsp;
+<b class="fc"><i>133</i>&nbsp;    if (this == obj) {</b>
+<b class="nc"><i>134</i>&nbsp;      return true;</b>
+<i>135</i>&nbsp;    }
+<i>136</i>&nbsp;
+<b class="fc"><i>137</i>&nbsp;    if (obj instanceof NameSample) {</b>
+<b class="fc"><i>138</i>&nbsp;      NameSample a = (NameSample) obj;</b>
+<i>139</i>&nbsp;
+<b class="fc"><i>140</i>&nbsp;      return Arrays.equals(getSentence(), a.getSentence()) &amp;&amp;</b>
+<b class="fc"><i>141</i>&nbsp;          Arrays.equals(getNames(), a.getNames()) &amp;&amp;</b>
+<b class="fc"><i>142</i>&nbsp;          Arrays.equals(getAdditionalContext(), a.getAdditionalContext()) &amp;&amp;</b>
+<b class="fc"><i>143</i>&nbsp;          isClearAdaptiveDataSet() == a.isClearAdaptiveDataSet();</b>
+<i>144</i>&nbsp;    }
+<i>145</i>&nbsp;
+<b class="fc"><i>146</i>&nbsp;    return false;</b>
+<i>147</i>&nbsp;  }
+<i>148</i>&nbsp;
+<i>149</i>&nbsp;  @Override
+<i>150</i>&nbsp;  public String toString() {
+<b class="fc"><i>151</i>&nbsp;    StringBuilder result = new StringBuilder();</b>
+<i>152</i>&nbsp;
+<i>153</i>&nbsp;    // If adaptive data must be cleared insert an empty line
+<i>154</i>&nbsp;    // before the sample sentence line
+<b class="fc"><i>155</i>&nbsp;    if (isClearAdaptiveDataSet())</b>
+<b class="fc"><i>156</i>&nbsp;      result.append(&quot;\n&quot;);</b>
+<i>157</i>&nbsp;
+<b class="fc"><i>158</i>&nbsp;    for (int tokenIndex = 0; tokenIndex &lt; sentence.size(); tokenIndex++) {</b>
+<i>159</i>&nbsp;      // token
+<i>160</i>&nbsp;
+<b class="fc"><i>161</i>&nbsp;      for (Span name : names) {</b>
+<b class="fc"><i>162</i>&nbsp;        if (name.getStart() == tokenIndex) {</b>
+<i>163</i>&nbsp;          // check if nameTypes is null, or if the nameType for this specific
+<i>164</i>&nbsp;          // entity is empty. If it is, we leave the nameType blank.
+<b class="fc"><i>165</i>&nbsp;          if (name.getType() == null) {</b>
+<b class="fc"><i>166</i>&nbsp;            result.append(NameSampleDataStream.START_TAG).append(&#39; &#39;);</b>
+<i>167</i>&nbsp;          }
+<i>168</i>&nbsp;          else {
+<b class="fc"><i>169</i>&nbsp;            result.append(NameSampleDataStream.START_TAG_PREFIX).append(name.getType()).append(&quot;&gt; &quot;);</b>
+<i>170</i>&nbsp;          }
+<i>171</i>&nbsp;        }
+<b class="fc"><i>172</i>&nbsp;        if (name.getEnd() == tokenIndex) {</b>
+<b class="fc"><i>173</i>&nbsp;          result.append(NameSampleDataStream.END_TAG).append(&#39; &#39;);</b>
+<i>174</i>&nbsp;        }
+<b class="fc"><i>175</i>&nbsp;      }</b>
+<i>176</i>&nbsp;
+<b class="fc"><i>177</i>&nbsp;      result.append(sentence.get(tokenIndex)).append(&#39; &#39;);</b>
+<i>178</i>&nbsp;    }
+<i>179</i>&nbsp;
+<b class="fc"><i>180</i>&nbsp;    if (sentence.size() &gt; 1)</b>
+<b class="fc"><i>181</i>&nbsp;      result.setLength(result.length() - 1);</b>
+<i>182</i>&nbsp;
+<b class="fc"><i>183</i>&nbsp;    for (Span name : names) {</b>
+<b class="fc"><i>184</i>&nbsp;      if (name.getEnd() == sentence.size()) {</b>
+<b class="fc"><i>185</i>&nbsp;        result.append(&#39; &#39;).append(NameSampleDataStream.END_TAG);</b>
+<i>186</i>&nbsp;      }
+<b class="fc"><i>187</i>&nbsp;    }</b>
+<i>188</i>&nbsp;
+<b class="fc"><i>189</i>&nbsp;    return result.toString();</b>
+<i>190</i>&nbsp;  }
+<i>191</i>&nbsp;
+<i>192</i>&nbsp;  private static String errorTokenWithContext(String[] sentence, int index) {
+<i>193</i>&nbsp;
+<b class="fc"><i>194</i>&nbsp;    StringBuilder errorString = new StringBuilder();</b>
+<i>195</i>&nbsp;
+<i>196</i>&nbsp;    // two token before
+<b class="fc"><i>197</i>&nbsp;    if (index &gt; 1)</b>
+<b class="fc"><i>198</i>&nbsp;      errorString.append(sentence[index - 2]).append(&quot; &quot;);</b>
+<i>199</i>&nbsp;
+<b class="fc"><i>200</i>&nbsp;    if (index &gt; 0)</b>
+<b class="fc"><i>201</i>&nbsp;      errorString.append(sentence[index - 1]).append(&quot; &quot;);</b>
+<i>202</i>&nbsp;
+<i>203</i>&nbsp;    // token itself
+<b class="fc"><i>204</i>&nbsp;    errorString.append(&quot;###&quot;);</b>
+<b class="fc"><i>205</i>&nbsp;    errorString.append(sentence[index]);</b>
+<b class="fc"><i>206</i>&nbsp;    errorString.append(&quot;###&quot;).append(&quot; &quot;);</b>
+<i>207</i>&nbsp;
+<i>208</i>&nbsp;    // two token after
+<b class="fc"><i>209</i>&nbsp;    if (index + 1 &lt; sentence.length)</b>
+<b class="fc"><i>210</i>&nbsp;      errorString.append(sentence[index + 1]).append(&quot; &quot;);</b>
+<i>211</i>&nbsp;
+<b class="fc"><i>212</i>&nbsp;    if (index + 2 &lt; sentence.length)</b>
+<b class="fc"><i>213</i>&nbsp;      errorString.append(sentence[index + 2]);</b>
+<i>214</i>&nbsp;
+<b class="fc"><i>215</i>&nbsp;    return errorString.toString();</b>
+<i>216</i>&nbsp;  }
+<i>217</i>&nbsp;
+<b class="fc"><i>218</i>&nbsp;  private static final Pattern START_TAG_PATTERN = Pattern.compile(&quot;&lt;START(:([^:&gt;\\s]*))?&gt;&quot;);</b>
+<i>219</i>&nbsp;
+<i>220</i>&nbsp;  public static NameSample parse(String taggedTokens,
+<i>221</i>&nbsp;      boolean isClearAdaptiveData) throws IOException {
+<b class="fc"><i>222</i>&nbsp;    return parse(taggedTokens, DEFAULT_TYPE, isClearAdaptiveData);</b>
+<i>223</i>&nbsp;  }
+<i>224</i>&nbsp;
+<i>225</i>&nbsp;  public static NameSample parse(String taggedTokens, String defaultType,
+<i>226</i>&nbsp;      boolean isClearAdaptiveData) throws IOException {
+<i>227</i>&nbsp;    // TODO: Should throw another exception, and then convert it into an IOException in the stream
+<i>228</i>&nbsp;
+<b class="fc"><i>229</i>&nbsp;    String[] parts = WhitespaceTokenizer.INSTANCE.tokenize(taggedTokens);</b>
+<i>230</i>&nbsp;
+<b class="fc"><i>231</i>&nbsp;    List&lt;String&gt; tokenList = new ArrayList&lt;&gt;(parts.length);</b>
+<b class="fc"><i>232</i>&nbsp;    List&lt;Span&gt; nameList = new ArrayList&lt;&gt;();</b>
+<i>233</i>&nbsp;
+<b class="fc"><i>234</i>&nbsp;    String nameType = defaultType;</b>
+<b class="fc"><i>235</i>&nbsp;    int startIndex = -1;</b>
+<b class="fc"><i>236</i>&nbsp;    int wordIndex = 0;</b>
+<i>237</i>&nbsp;
+<i>238</i>&nbsp;    // we check if at least one name has the a type. If no one has, we will
+<i>239</i>&nbsp;    // leave the NameType property of NameSample null.
+<b class="fc"><i>240</i>&nbsp;    boolean catchingName = false;</b>
+<i>241</i>&nbsp;
+<b class="fc"><i>242</i>&nbsp;    for (int pi = 0; pi &lt; parts.length; pi++) {</b>
+<b class="fc"><i>243</i>&nbsp;      Matcher startMatcher = START_TAG_PATTERN.matcher(parts[pi]);</b>
+<b class="fc"><i>244</i>&nbsp;      if (startMatcher.matches()) {</b>
+<b class="fc"><i>245</i>&nbsp;        if (catchingName) {</b>
+<b class="fc"><i>246</i>&nbsp;          throw new IOException(&quot;Found unexpected annotation&quot; +</b>
+<b class="fc"><i>247</i>&nbsp;              &quot; while handling a name sequence: &quot; + errorTokenWithContext(parts, pi));</b>
+<i>248</i>&nbsp;        }
+<b class="fc"><i>249</i>&nbsp;        catchingName = true;</b>
+<b class="fc"><i>250</i>&nbsp;        startIndex = wordIndex;</b>
+<b class="fc"><i>251</i>&nbsp;        String nameTypeFromSample = startMatcher.group(2);</b>
+<b class="fc"><i>252</i>&nbsp;        if (nameTypeFromSample != null) {</b>
+<b class="fc"><i>253</i>&nbsp;          if (nameTypeFromSample.length() == 0) {</b>
+<b class="fc"><i>254</i>&nbsp;            throw new IOException(&quot;Missing a name type: &quot; + errorTokenWithContext(parts, pi));</b>
+<i>255</i>&nbsp;          }
+<b class="fc"><i>256</i>&nbsp;          nameType = nameTypeFromSample;</b>
+<i>257</i>&nbsp;        }
+<i>258</i>&nbsp;
+<b class="fc"><i>259</i>&nbsp;      }</b>
+<b class="fc"><i>260</i>&nbsp;      else if (parts[pi].equals(NameSampleDataStream.END_TAG)) {</b>
+<b class="fc"><i>261</i>&nbsp;        if (!catchingName) {</b>
+<b class="fc"><i>262</i>&nbsp;          throw new IOException(&quot;Found unexpected annotation: &quot; + errorTokenWithContext(parts, pi));</b>
+<i>263</i>&nbsp;        }
+<b class="fc"><i>264</i>&nbsp;        catchingName = false;</b>
+<i>265</i>&nbsp;        // create name
+<b class="fc"><i>266</i>&nbsp;        nameList.add(new Span(startIndex, wordIndex, nameType));</b>
+<i>267</i>&nbsp;
+<i>268</i>&nbsp;      }
+<i>269</i>&nbsp;      else {
+<b class="fc"><i>270</i>&nbsp;        tokenList.add(parts[pi]);</b>
+<b class="fc"><i>271</i>&nbsp;        wordIndex++;</b>
+<i>272</i>&nbsp;      }
+<i>273</i>&nbsp;    }
+<b class="fc"><i>274</i>&nbsp;    String[] sentence = tokenList.toArray(new String[tokenList.size()]);</b>
+<b class="fc"><i>275</i>&nbsp;    Span[] names = nameList.toArray(new Span[nameList.size()]);</b>
+<i>276</i>&nbsp;
+<b class="fc"><i>277</i>&nbsp;    return new NameSample(sentence, names, isClearAdaptiveData);</b>
+<i>278</i>&nbsp;  }
+<i>279</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-09 15:05</div>
+</div>
+</body>
+</html>

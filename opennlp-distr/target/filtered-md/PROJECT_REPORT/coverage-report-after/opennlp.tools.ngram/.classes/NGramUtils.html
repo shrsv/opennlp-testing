@@ -1,0 +1,362 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: NGramUtils</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">opennlp.tools.ngram</a> ]
+</div>
+
+<h1>Coverage Summary for Class: NGramUtils (opennlp.tools.ngram)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">NGramUtils</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    70.6%
+  </span>
+  <span class="absValue">
+    (12/ 17)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    72.8%
+  </span>
+  <span class="absValue">
+    (59/ 81)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/*
+<i>2</i>&nbsp; * Licensed to the Apache Software Foundation (ASF) under one or more
+<i>3</i>&nbsp; * contributor license agreements.  See the NOTICE file distributed with
+<i>4</i>&nbsp; * this work for additional information regarding copyright ownership.
+<i>5</i>&nbsp; * The ASF licenses this file to You under the Apache License, Version 2.0
+<i>6</i>&nbsp; * (the &quot;License&quot;); you may not use this file except in compliance with
+<i>7</i>&nbsp; * the License. You may obtain a copy of the License at
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; *     http://www.apache.org/licenses/LICENSE-2.0
+<i>10</i>&nbsp; *
+<i>11</i>&nbsp; * Unless required by applicable law or agreed to in writing, software
+<i>12</i>&nbsp; * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<i>13</i>&nbsp; * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<i>14</i>&nbsp; * See the License for the specific language governing permissions and
+<i>15</i>&nbsp; * limitations under the License.
+<i>16</i>&nbsp; */
+<i>17</i>&nbsp;
+<i>18</i>&nbsp;package opennlp.tools.ngram;
+<i>19</i>&nbsp;
+<i>20</i>&nbsp;import java.util.Collection;
+<i>21</i>&nbsp;import java.util.HashSet;
+<i>22</i>&nbsp;import java.util.LinkedList;
+<i>23</i>&nbsp;
+<i>24</i>&nbsp;import opennlp.tools.util.StringList;
+<i>25</i>&nbsp;
+<i>26</i>&nbsp;/**
+<i>27</i>&nbsp; * Utility class for ngrams.
+<i>28</i>&nbsp; * Some methods apply specifically to certain &#39;n&#39; values, for e.g. tri/bi/uni-grams.
+<i>29</i>&nbsp; */
+<b class="fc"><i>30</i>&nbsp;public class NGramUtils {</b>
+<i>31</i>&nbsp;
+<i>32</i>&nbsp;  /**
+<i>33</i>&nbsp;   * calculate the probability of a ngram in a vocabulary using Laplace smoothing algorithm
+<i>34</i>&nbsp;   *
+<i>35</i>&nbsp;   * @param ngram the ngram to get the probability for
+<i>36</i>&nbsp;   * @param set   the vocabulary
+<i>37</i>&nbsp;   * @param k     the smoothing factor
+<i>38</i>&nbsp;   * @return the Laplace smoothing probability
+<i>39</i>&nbsp;   * @see &lt;a href=&quot;https://en.wikipedia.org/wiki/Additive_smoothing&quot;&gt;Additive Smoothing&lt;/a&gt;
+<i>40</i>&nbsp;   */
+<i>41</i>&nbsp;  public static double calculateLaplaceSmoothingProbability(StringList ngram,
+<i>42</i>&nbsp;      Iterable&lt;StringList&gt; set, Double k) {
+<b class="nc"><i>43</i>&nbsp;    return (count(ngram, set) + k) / (count(getNMinusOneTokenFirst(ngram), set) + k * 1);</b>
+<i>44</i>&nbsp;  }
+<i>45</i>&nbsp;
+<i>46</i>&nbsp;  /**
+<i>47</i>&nbsp;   * calculate the probability of a unigram in a vocabulary using maximum likelihood estimation
+<i>48</i>&nbsp;   *
+<i>49</i>&nbsp;   * @param word the only word in the unigram
+<i>50</i>&nbsp;   * @param set  the vocabulary
+<i>51</i>&nbsp;   * @return the maximum likelihood probability
+<i>52</i>&nbsp;   */
+<i>53</i>&nbsp;  public static double calculateUnigramMLProbability(String word, Collection&lt;StringList&gt; set) {
+<b class="fc"><i>54</i>&nbsp;    double vocSize = 0d;</b>
+<b class="fc"><i>55</i>&nbsp;    for (StringList s : set) {</b>
+<b class="fc"><i>56</i>&nbsp;      vocSize += s.size();</b>
+<b class="fc"><i>57</i>&nbsp;    }</b>
+<b class="fc"><i>58</i>&nbsp;    return count(new StringList(word), set) / vocSize;</b>
+<i>59</i>&nbsp;  }
+<i>60</i>&nbsp;
+<i>61</i>&nbsp;  /**
+<i>62</i>&nbsp;   * calculate the probability of a bigram in a vocabulary using maximum likelihood estimation
+<i>63</i>&nbsp;   *
+<i>64</i>&nbsp;   * @param x0  first word in the bigram
+<i>65</i>&nbsp;   * @param x1  second word in the bigram
+<i>66</i>&nbsp;   * @param set the vocabulary
+<i>67</i>&nbsp;   * @return the maximum likelihood probability
+<i>68</i>&nbsp;   */
+<i>69</i>&nbsp;  public static double calculateBigramMLProbability(String x0, String x1, Collection&lt;StringList&gt; set) {
+<b class="fc"><i>70</i>&nbsp;    return calculateNgramMLProbability(new StringList(x0, x1), set);</b>
+<i>71</i>&nbsp;  }
+<i>72</i>&nbsp;
+<i>73</i>&nbsp;  /**
+<i>74</i>&nbsp;   * calculate the probability of a trigram in a vocabulary using maximum likelihood estimation
+<i>75</i>&nbsp;   *
+<i>76</i>&nbsp;   * @param x0  first word in the trigram
+<i>77</i>&nbsp;   * @param x1  second word in the trigram
+<i>78</i>&nbsp;   * @param x2  third word in the trigram
+<i>79</i>&nbsp;   * @param set the vocabulary
+<i>80</i>&nbsp;   * @return the maximum likelihood probability
+<i>81</i>&nbsp;   */
+<i>82</i>&nbsp;  public static double calculateTrigramMLProbability(String x0, String x1, String x2,
+<i>83</i>&nbsp;                                                     Iterable&lt;StringList&gt; set) {
+<b class="fc"><i>84</i>&nbsp;    return calculateNgramMLProbability(new StringList(x0, x1, x2), set);</b>
+<i>85</i>&nbsp;  }
+<i>86</i>&nbsp;
+<i>87</i>&nbsp;  /**
+<i>88</i>&nbsp;   * calculate the probability of a ngram in a vocabulary using maximum likelihood estimation
+<i>89</i>&nbsp;   *
+<i>90</i>&nbsp;   * @param ngram a ngram
+<i>91</i>&nbsp;   * @param set   the vocabulary
+<i>92</i>&nbsp;   * @return the maximum likelihood probability
+<i>93</i>&nbsp;   */
+<i>94</i>&nbsp;  public static double calculateNgramMLProbability(StringList ngram, Iterable&lt;StringList&gt; set) {
+<b class="fc"><i>95</i>&nbsp;    StringList ngramMinusOne = getNMinusOneTokenFirst(ngram);</b>
+<b class="fc"><i>96</i>&nbsp;    return count(ngram, set) / count(ngramMinusOne, set);</b>
+<i>97</i>&nbsp;  }
+<i>98</i>&nbsp;
+<i>99</i>&nbsp;  /**
+<i>100</i>&nbsp;   * calculate the probability of a bigram in a vocabulary using prior Laplace smoothing algorithm
+<i>101</i>&nbsp;   *
+<i>102</i>&nbsp;   * @param x0  the first word in the bigram
+<i>103</i>&nbsp;   * @param x1  the second word in the bigram
+<i>104</i>&nbsp;   * @param set the vocabulary
+<i>105</i>&nbsp;   * @param k   the smoothing factor
+<i>106</i>&nbsp;   * @return the prior Laplace smoothiing probability
+<i>107</i>&nbsp;   */
+<i>108</i>&nbsp;  public static double calculateBigramPriorSmoothingProbability(String x0, String x1,
+<i>109</i>&nbsp;                                                                Collection&lt;StringList&gt; set, Double k) {
+<b class="nc"><i>110</i>&nbsp;    return (count(new StringList(x0, x1), set) + k * calculateUnigramMLProbability(x1, set)) /</b>
+<b class="nc"><i>111</i>&nbsp;        (count(new StringList(x0), set) + k * set.size());</b>
+<i>112</i>&nbsp;  }
+<i>113</i>&nbsp;
+<i>114</i>&nbsp;  /**
+<i>115</i>&nbsp;   * calculate the probability of a trigram in a vocabulary using a linear interpolation algorithm
+<i>116</i>&nbsp;   *
+<i>117</i>&nbsp;   * @param x0      the first word in the trigram
+<i>118</i>&nbsp;   * @param x1      the second word in the trigram
+<i>119</i>&nbsp;   * @param x2      the third word in the trigram
+<i>120</i>&nbsp;   * @param set     the vocabulary
+<i>121</i>&nbsp;   * @param lambda1 trigram interpolation factor
+<i>122</i>&nbsp;   * @param lambda2 bigram interpolation factor
+<i>123</i>&nbsp;   * @param lambda3 unigram interpolation factor
+<i>124</i>&nbsp;   * @return the linear interpolation probability
+<i>125</i>&nbsp;   */
+<i>126</i>&nbsp;  public static double calculateTrigramLinearInterpolationProbability(String x0, String x1,
+<i>127</i>&nbsp;                                                                      String x2, Collection&lt;StringList&gt; set,
+<i>128</i>&nbsp;      Double lambda1, Double lambda2, Double lambda3) {
+<b class="fc"><i>129</i>&nbsp;    assert lambda1 + lambda2 + lambda3 == 1 : &quot;lambdas sum should be equals to 1&quot;;</b>
+<b class="fc"><i>130</i>&nbsp;    assert lambda1 &gt; 0 &amp;&amp; lambda2 &gt; 0 &amp;&amp; lambda3 &gt; 0 : &quot;lambdas should all be greater than 0&quot;;</b>
+<i>131</i>&nbsp;
+<b class="fc"><i>132</i>&nbsp;    return lambda1 * calculateTrigramMLProbability(x0, x1, x2, set) +</b>
+<b class="fc"><i>133</i>&nbsp;        lambda2 * calculateBigramMLProbability(x1, x2, set) +</b>
+<b class="fc"><i>134</i>&nbsp;        lambda3 * calculateUnigramMLProbability(x2, set);</b>
+<i>135</i>&nbsp;
+<i>136</i>&nbsp;  }
+<i>137</i>&nbsp;
+<i>138</i>&nbsp;  /**
+<i>139</i>&nbsp;   * calculate the probability of a ngram in a vocabulary using the missing probability mass algorithm
+<i>140</i>&nbsp;   *
+<i>141</i>&nbsp;   * @param ngram    the ngram
+<i>142</i>&nbsp;   * @param discount discount factor
+<i>143</i>&nbsp;   * @param set      the vocabulary
+<i>144</i>&nbsp;   * @return the probability
+<i>145</i>&nbsp;   */
+<i>146</i>&nbsp;  public static double calculateMissingNgramProbabilityMass(StringList ngram, Double discount,
+<i>147</i>&nbsp;                                                            Iterable&lt;StringList&gt; set) {
+<b class="nc"><i>148</i>&nbsp;    Double missingMass = 0d;</b>
+<b class="nc"><i>149</i>&nbsp;    Double countWord = count(ngram, set);</b>
+<b class="nc"><i>150</i>&nbsp;    for (String word : flatSet(set)) {</b>
+<b class="nc"><i>151</i>&nbsp;      missingMass += (count(getNPlusOneNgram(ngram, word), set) - discount) / countWord;</b>
+<b class="nc"><i>152</i>&nbsp;    }</b>
+<b class="nc"><i>153</i>&nbsp;    return 1 - missingMass;</b>
+<i>154</i>&nbsp;  }
+<i>155</i>&nbsp;
+<i>156</i>&nbsp;  /**
+<i>157</i>&nbsp;   * get the (n-1)th ngram of a given ngram, that is the same ngram except the last word in the ngram
+<i>158</i>&nbsp;   *
+<i>159</i>&nbsp;   * @param ngram a ngram
+<i>160</i>&nbsp;   * @return a ngram
+<i>161</i>&nbsp;   */
+<i>162</i>&nbsp;  public static StringList getNMinusOneTokenFirst(StringList ngram) {
+<b class="fc"><i>163</i>&nbsp;    String[] tokens = new String[ngram.size() - 1];</b>
+<b class="fc"><i>164</i>&nbsp;    for (int i = 0; i &lt; ngram.size() - 1; i++) {</b>
+<b class="fc"><i>165</i>&nbsp;      tokens[i] = ngram.getToken(i);</b>
+<i>166</i>&nbsp;    }
+<b class="fc"><i>167</i>&nbsp;    return tokens.length &gt; 0 ? new StringList(tokens) : null;</b>
+<i>168</i>&nbsp;  }
+<i>169</i>&nbsp;
+<i>170</i>&nbsp;  /**
+<i>171</i>&nbsp;   * get the (n-1)th ngram of a given ngram, that is the same ngram except the first word in the ngram
+<i>172</i>&nbsp;   *
+<i>173</i>&nbsp;   * @param ngram a ngram
+<i>174</i>&nbsp;   * @return a ngram
+<i>175</i>&nbsp;   */
+<i>176</i>&nbsp;  public static StringList getNMinusOneTokenLast(StringList ngram) {
+<b class="fc"><i>177</i>&nbsp;    String[] tokens = new String[ngram.size() - 1];</b>
+<b class="fc"><i>178</i>&nbsp;    for (int i = 1; i &lt; ngram.size(); i++) {</b>
+<b class="fc"><i>179</i>&nbsp;      tokens[i - 1] = ngram.getToken(i);</b>
+<i>180</i>&nbsp;    }
+<b class="fc"><i>181</i>&nbsp;    return tokens.length &gt; 0 ? new StringList(tokens) : null;</b>
+<i>182</i>&nbsp;  }
+<i>183</i>&nbsp;
+<i>184</i>&nbsp;  private static StringList getNPlusOneNgram(StringList ngram, String word) {
+<b class="nc"><i>185</i>&nbsp;    String[] tokens = new String[ngram.size() + 1];</b>
+<b class="nc"><i>186</i>&nbsp;    for (int i = 0; i &lt; ngram.size(); i++) {</b>
+<b class="nc"><i>187</i>&nbsp;      tokens[i] = ngram.getToken(i);</b>
+<i>188</i>&nbsp;    }
+<b class="nc"><i>189</i>&nbsp;    tokens[tokens.length - 1] = word;</b>
+<b class="nc"><i>190</i>&nbsp;    return new StringList(tokens);</b>
+<i>191</i>&nbsp;  }
+<i>192</i>&nbsp;
+<i>193</i>&nbsp;  private static Double count(StringList ngram, Iterable&lt;StringList&gt; sentences) {
+<b class="fc"><i>194</i>&nbsp;    Double count = 0d;</b>
+<b class="fc"><i>195</i>&nbsp;    for (StringList sentence : sentences) {</b>
+<b class="fc"><i>196</i>&nbsp;      int idx0 = indexOf(sentence, ngram.getToken(0));</b>
+<b class="fc"><i>197</i>&nbsp;      if (idx0 &gt;= 0 &amp;&amp; sentence.size() &gt;= idx0 + ngram.size()) {</b>
+<b class="fc"><i>198</i>&nbsp;        boolean match = true;</b>
+<b class="fc"><i>199</i>&nbsp;        for (int i = 1; i &lt; ngram.size(); i++) {</b>
+<b class="fc"><i>200</i>&nbsp;          String sentenceToken = sentence.getToken(idx0 + i);</b>
+<b class="fc"><i>201</i>&nbsp;          String ngramToken = ngram.getToken(i);</b>
+<b class="fc"><i>202</i>&nbsp;          match &amp;= sentenceToken.equals(ngramToken);</b>
+<i>203</i>&nbsp;        }
+<b class="fc"><i>204</i>&nbsp;        if (match) {</b>
+<b class="fc"><i>205</i>&nbsp;          count++;</b>
+<i>206</i>&nbsp;        }
+<i>207</i>&nbsp;      }
+<b class="fc"><i>208</i>&nbsp;    }</b>
+<b class="fc"><i>209</i>&nbsp;    return count;</b>
+<i>210</i>&nbsp;  }
+<i>211</i>&nbsp;
+<i>212</i>&nbsp;  private static int indexOf(StringList sentence, String token) {
+<b class="fc"><i>213</i>&nbsp;    for (int i = 0; i &lt; sentence.size(); i++) {</b>
+<b class="fc"><i>214</i>&nbsp;      if (token.equals(sentence.getToken(i))) {</b>
+<b class="fc"><i>215</i>&nbsp;        return i;</b>
+<i>216</i>&nbsp;      }
+<i>217</i>&nbsp;    }
+<b class="fc"><i>218</i>&nbsp;    return -1;</b>
+<i>219</i>&nbsp;  }
+<i>220</i>&nbsp;
+<i>221</i>&nbsp;  private static Collection&lt;String&gt; flatSet(Iterable&lt;StringList&gt; set) {
+<b class="nc"><i>222</i>&nbsp;    Collection&lt;String&gt; flatSet = new HashSet&lt;&gt;();</b>
+<b class="nc"><i>223</i>&nbsp;    for (StringList sentence : set) {</b>
+<b class="nc"><i>224</i>&nbsp;      for (String word : sentence) {</b>
+<b class="nc"><i>225</i>&nbsp;        flatSet.add(word);</b>
+<b class="nc"><i>226</i>&nbsp;      }</b>
+<b class="nc"><i>227</i>&nbsp;    }</b>
+<b class="nc"><i>228</i>&nbsp;    return flatSet;</b>
+<i>229</i>&nbsp;  }
+<i>230</i>&nbsp;
+<i>231</i>&nbsp;  /**
+<i>232</i>&nbsp;   * Get the ngrams of dimension n of a certain input sequence of tokens.
+<i>233</i>&nbsp;   *
+<i>234</i>&nbsp;   * @param sequence a sequence of tokens
+<i>235</i>&nbsp;   * @param size     the size of the resulting ngrmams
+<i>236</i>&nbsp;   * @return all the possible ngrams of the given size derivable from the input sequence
+<i>237</i>&nbsp;   */
+<i>238</i>&nbsp;  public static Collection&lt;StringList&gt; getNGrams(StringList sequence, int size) {
+<b class="fc"><i>239</i>&nbsp;    Collection&lt;StringList&gt; ngrams = new LinkedList&lt;&gt;();</b>
+<b class="fc"><i>240</i>&nbsp;    if (size == -1 || size &gt;= sequence.size()) {</b>
+<b class="nc"><i>241</i>&nbsp;      ngrams.add(sequence);</b>
+<i>242</i>&nbsp;    } else {
+<b class="fc"><i>243</i>&nbsp;      String[] ngram = new String[size];</b>
+<b class="fc"><i>244</i>&nbsp;      for (int i = 0; i &lt; sequence.size() - size + 1; i++) {</b>
+<b class="fc"><i>245</i>&nbsp;        ngram[0] = sequence.getToken(i);</b>
+<b class="fc"><i>246</i>&nbsp;        for (int j = 1; j &lt; size; j++) {</b>
+<b class="fc"><i>247</i>&nbsp;          ngram[j] = sequence.getToken(i + j);</b>
+<i>248</i>&nbsp;        }
+<b class="fc"><i>249</i>&nbsp;        ngrams.add(new StringList(ngram));</b>
+<i>250</i>&nbsp;      }
+<i>251</i>&nbsp;    }
+<b class="fc"><i>252</i>&nbsp;    return ngrams;</b>
+<i>253</i>&nbsp;  }
+<i>254</i>&nbsp;
+<i>255</i>&nbsp;  /**
+<i>256</i>&nbsp;   * Get the ngrams of dimension n of a certain input sequence of tokens.
+<i>257</i>&nbsp;   *
+<i>258</i>&nbsp;   * @param sequence a sequence of tokens
+<i>259</i>&nbsp;   * @param size     the size of the resulting ngrmams
+<i>260</i>&nbsp;   * @return all the possible ngrams of the given size derivable from the input sequence
+<i>261</i>&nbsp;   */
+<i>262</i>&nbsp;  public static Collection&lt;String[]&gt; getNGrams(String[] sequence, int size) {
+<b class="fc"><i>263</i>&nbsp;    Collection&lt;String[]&gt; ngrams = new LinkedList&lt;&gt;();</b>
+<b class="fc"><i>264</i>&nbsp;    if (size == -1 || size &gt;= sequence.length) {</b>
+<b class="fc"><i>265</i>&nbsp;      ngrams.add(sequence);</b>
+<i>266</i>&nbsp;    } else {
+<b class="fc"><i>267</i>&nbsp;      for (int i = 0; i &lt; sequence.length - size + 1; i++) {</b>
+<b class="fc"><i>268</i>&nbsp;        String[] ngram = new String[size];</b>
+<b class="fc"><i>269</i>&nbsp;        ngram[0] = sequence[i];</b>
+<b class="fc"><i>270</i>&nbsp;        for (int j = 1; j &lt; size; j++) {</b>
+<b class="fc"><i>271</i>&nbsp;          ngram[j] = sequence[i + j];</b>
+<i>272</i>&nbsp;        }
+<b class="fc"><i>273</i>&nbsp;        ngrams.add(ngram);</b>
+<i>274</i>&nbsp;      }
+<i>275</i>&nbsp;    }
+<i>276</i>&nbsp;
+<b class="fc"><i>277</i>&nbsp;    return ngrams;</b>
+<i>278</i>&nbsp;  }
+<i>279</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-09 18:47</div>
+</div>
+</body>
+</html>

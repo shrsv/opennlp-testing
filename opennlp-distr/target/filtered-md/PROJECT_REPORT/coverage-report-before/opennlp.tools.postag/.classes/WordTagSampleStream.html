@@ -1,0 +1,156 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: WordTagSampleStream</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">opennlp.tools.postag</a> ]
+</div>
+
+<h1>Coverage Summary for Class: WordTagSampleStream (opennlp.tools.postag)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">WordTagSampleStream</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (2/ 2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    72.7%
+  </span>
+  <span class="absValue">
+    (8/ 11)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/*
+<i>2</i>&nbsp; * Licensed to the Apache Software Foundation (ASF) under one or more
+<i>3</i>&nbsp; * contributor license agreements.  See the NOTICE file distributed with
+<i>4</i>&nbsp; * this work for additional information regarding copyright ownership.
+<i>5</i>&nbsp; * The ASF licenses this file to You under the Apache License, Version 2.0
+<i>6</i>&nbsp; * (the &quot;License&quot;); you may not use this file except in compliance with
+<i>7</i>&nbsp; * the License. You may obtain a copy of the License at
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; *     http://www.apache.org/licenses/LICENSE-2.0
+<i>10</i>&nbsp; *
+<i>11</i>&nbsp; * Unless required by applicable law or agreed to in writing, software
+<i>12</i>&nbsp; * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<i>13</i>&nbsp; * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<i>14</i>&nbsp; * See the License for the specific language governing permissions and
+<i>15</i>&nbsp; * limitations under the License.
+<i>16</i>&nbsp; */
+<i>17</i>&nbsp;
+<i>18</i>&nbsp;
+<i>19</i>&nbsp;package opennlp.tools.postag;
+<i>20</i>&nbsp;
+<i>21</i>&nbsp;import java.io.IOException;
+<i>22</i>&nbsp;
+<i>23</i>&nbsp;import opennlp.tools.util.FilterObjectStream;
+<i>24</i>&nbsp;import opennlp.tools.util.InvalidFormatException;
+<i>25</i>&nbsp;import opennlp.tools.util.ObjectStream;
+<i>26</i>&nbsp;
+<i>27</i>&nbsp;/**
+<i>28</i>&nbsp; * A stream filter which reads a sentence per line which contains
+<i>29</i>&nbsp; * words and tags in word_tag format and outputs a {@link POSSample} objects.
+<i>30</i>&nbsp; */
+<i>31</i>&nbsp;public class WordTagSampleStream extends FilterObjectStream&lt;String, POSSample&gt; {
+<i>32</i>&nbsp;
+<i>33</i>&nbsp;  /**
+<i>34</i>&nbsp;   * Initializes the current instance.
+<i>35</i>&nbsp;   *
+<i>36</i>&nbsp;   * @param sentences the sentences
+<i>37</i>&nbsp;   */
+<i>38</i>&nbsp;  public WordTagSampleStream(ObjectStream&lt;String&gt; sentences) {
+<b class="fc"><i>39</i>&nbsp;    super(sentences);</b>
+<b class="fc"><i>40</i>&nbsp;  }</b>
+<i>41</i>&nbsp;
+<i>42</i>&nbsp;  /**
+<i>43</i>&nbsp;   * Parses the next sentence and return the next
+<i>44</i>&nbsp;   * {@link POSSample} object.
+<i>45</i>&nbsp;   *
+<i>46</i>&nbsp;   * If an error occurs an empty {@link POSSample} object is returned
+<i>47</i>&nbsp;   * and an warning message is logged. Usually it does not matter if one
+<i>48</i>&nbsp;   * of many sentences is ignored.
+<i>49</i>&nbsp;   *
+<i>50</i>&nbsp;   * TODO: An exception in error case should be thrown.
+<i>51</i>&nbsp;   */
+<i>52</i>&nbsp;  public POSSample read() throws IOException {
+<i>53</i>&nbsp;
+<b class="fc"><i>54</i>&nbsp;    String sentence = samples.read();</b>
+<i>55</i>&nbsp;
+<b class="fc"><i>56</i>&nbsp;    if (sentence != null) {</b>
+<i>57</i>&nbsp;      POSSample sample;
+<i>58</i>&nbsp;      try {
+<b class="fc"><i>59</i>&nbsp;        sample = POSSample.parse(sentence);</b>
+<b class="nc"><i>60</i>&nbsp;      } catch (InvalidFormatException e) {</b>
+<b class="nc"><i>61</i>&nbsp;        System.out.println(&quot;Error during parsing, ignoring sentence: &quot; + sentence);</b>
+<i>62</i>&nbsp;
+<b class="nc"><i>63</i>&nbsp;        sample = new POSSample(new String[]{}, new String[]{});</b>
+<b class="fc"><i>64</i>&nbsp;      }</b>
+<i>65</i>&nbsp;
+<b class="fc"><i>66</i>&nbsp;      return sample;</b>
+<i>67</i>&nbsp;    }
+<i>68</i>&nbsp;    else {
+<i>69</i>&nbsp;      // sentences stream is exhausted
+<b class="fc"><i>70</i>&nbsp;      return null;</b>
+<i>71</i>&nbsp;    }
+<i>72</i>&nbsp;  }
+<i>73</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-09 15:05</div>
+</div>
+</body>
+</html>

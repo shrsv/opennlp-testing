@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: opennlp.morfologik.tagdict.POSTaggerFactoryTest
+-------------------------------------------------------------------------------
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.81 s - in opennlp.morfologik.tagdict.POSTaggerFactoryTest

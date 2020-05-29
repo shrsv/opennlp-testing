@@ -1,0 +1,457 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: Span</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">opennlp.tools.util</a> ]
+</div>
+
+<h1>Coverage Summary for Class: Span (opennlp.tools.util)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Span</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    91.7%
+  </span>
+  <span class="absValue">
+    (22/ 24)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    92.9%
+  </span>
+  <span class="absValue">
+    (91/ 98)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/*
+<i>2</i>&nbsp; * Licensed to the Apache Software Foundation (ASF) under one or more
+<i>3</i>&nbsp; * contributor license agreements.  See the NOTICE file distributed with
+<i>4</i>&nbsp; * this work for additional information regarding copyright ownership.
+<i>5</i>&nbsp; * The ASF licenses this file to You under the Apache License, Version 2.0
+<i>6</i>&nbsp; * (the &quot;License&quot;); you may not use this file except in compliance with
+<i>7</i>&nbsp; * the License. You may obtain a copy of the License at
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; *     http://www.apache.org/licenses/LICENSE-2.0
+<i>10</i>&nbsp; *
+<i>11</i>&nbsp; * Unless required by applicable law or agreed to in writing, software
+<i>12</i>&nbsp; * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<i>13</i>&nbsp; * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<i>14</i>&nbsp; * See the License for the specific language governing permissions and
+<i>15</i>&nbsp; * limitations under the License.
+<i>16</i>&nbsp; */
+<i>17</i>&nbsp;
+<i>18</i>&nbsp;package opennlp.tools.util;
+<i>19</i>&nbsp;
+<i>20</i>&nbsp;import java.io.Serializable;
+<i>21</i>&nbsp;import java.util.Objects;
+<i>22</i>&nbsp;
+<i>23</i>&nbsp;/**
+<i>24</i>&nbsp; * Class for storing start and end integer offsets.
+<i>25</i>&nbsp; *
+<i>26</i>&nbsp; */
+<i>27</i>&nbsp;public class Span implements Comparable&lt;Span&gt;, Serializable {
+<i>28</i>&nbsp;
+<i>29</i>&nbsp;  private final int start;
+<i>30</i>&nbsp;  private final int end;
+<i>31</i>&nbsp;  private final double prob;//default is 0
+<i>32</i>&nbsp;  private final String type;
+<i>33</i>&nbsp;
+<i>34</i>&nbsp;  /**
+<i>35</i>&nbsp;   * Initializes a new Span Object. Sets the prob to 0 as default.
+<i>36</i>&nbsp;   *
+<i>37</i>&nbsp;   * @param s start of span.
+<i>38</i>&nbsp;   * @param e end of span, which is +1 more than the last element in the span.
+<i>39</i>&nbsp;   * @param type the type of the span
+<i>40</i>&nbsp;   */
+<i>41</i>&nbsp;  public Span(int s, int e, String type) {
+<b class="fc"><i>42</i>&nbsp;    this(s, e, type, 0d);</b>
+<b class="fc"><i>43</i>&nbsp;  }</b>
+<i>44</i>&nbsp;
+<i>45</i>&nbsp;  /**
+<i>46</i>&nbsp;   * Initializes a new Span Object.
+<i>47</i>&nbsp;   *
+<i>48</i>&nbsp;   * @param s start of span.
+<i>49</i>&nbsp;   * @param e end of span, which is +1 more than the last element in the span.
+<i>50</i>&nbsp;   * @param type the type of the span
+<i>51</i>&nbsp;   * @param prob probability of span.
+<i>52</i>&nbsp;   */
+<b class="fc"><i>53</i>&nbsp;  public Span(int s, int e, String type, double prob) {</b>
+<i>54</i>&nbsp;
+<b class="fc"><i>55</i>&nbsp;    if (s &lt; 0) {</b>
+<b class="fc"><i>56</i>&nbsp;      throw new IllegalArgumentException(&quot;start index must be zero or greater: &quot; + s);</b>
+<i>57</i>&nbsp;    }
+<b class="fc"><i>58</i>&nbsp;    if (e &lt; 0) {</b>
+<b class="fc"><i>59</i>&nbsp;      throw new IllegalArgumentException(&quot;end index must be zero or greater: &quot; + e);</b>
+<i>60</i>&nbsp;    }
+<b class="fc"><i>61</i>&nbsp;    if (s &gt; e) {</b>
+<b class="fc"><i>62</i>&nbsp;      throw new IllegalArgumentException(&quot;start index must not be larger than end index: &quot;</b>
+<i>63</i>&nbsp;              + &quot;start=&quot; + s + &quot;, end=&quot; + e);
+<i>64</i>&nbsp;    }
+<i>65</i>&nbsp;
+<b class="fc"><i>66</i>&nbsp;    start = s;</b>
+<b class="fc"><i>67</i>&nbsp;    end = e;</b>
+<b class="fc"><i>68</i>&nbsp;    this.prob = prob;</b>
+<b class="fc"><i>69</i>&nbsp;    this.type = type;</b>
+<b class="fc"><i>70</i>&nbsp;  }</b>
+<i>71</i>&nbsp;
+<i>72</i>&nbsp;  /**
+<i>73</i>&nbsp;   * Initializes a new Span Object. Sets the prob to 0 as default
+<i>74</i>&nbsp;   *
+<i>75</i>&nbsp;   * @param s start of span.
+<i>76</i>&nbsp;   * @param e end of span.
+<i>77</i>&nbsp;   */
+<i>78</i>&nbsp;  public Span(int s, int e) {
+<b class="fc"><i>79</i>&nbsp;    this(s, e, null, 0d);</b>
+<b class="fc"><i>80</i>&nbsp;  }</b>
+<i>81</i>&nbsp;
+<i>82</i>&nbsp;  /**
+<i>83</i>&nbsp;   *
+<i>84</i>&nbsp;   * @param s the start of the span (the token index, not the char index)
+<i>85</i>&nbsp;   * @param e the end of the span (the token index, not the char index)
+<i>86</i>&nbsp;   * @param prob
+<i>87</i>&nbsp;   */
+<i>88</i>&nbsp;  public Span(int s, int e, double prob) {
+<b class="nc"><i>89</i>&nbsp;    this(s, e, null, prob);</b>
+<b class="nc"><i>90</i>&nbsp;  }</b>
+<i>91</i>&nbsp;
+<i>92</i>&nbsp;  /**
+<i>93</i>&nbsp;   * Initializes a new Span object with an existing Span which is shifted by an
+<i>94</i>&nbsp;   * offset.
+<i>95</i>&nbsp;   *
+<i>96</i>&nbsp;   * @param span
+<i>97</i>&nbsp;   * @param offset
+<i>98</i>&nbsp;   */
+<i>99</i>&nbsp;  public Span(Span span, int offset) {
+<b class="nc"><i>100</i>&nbsp;    this(span.start + offset, span.end + offset, span.getType(), span.getProb());</b>
+<b class="nc"><i>101</i>&nbsp;  }</b>
+<i>102</i>&nbsp;
+<i>103</i>&nbsp;  /**
+<i>104</i>&nbsp;   * Creates a new immutable span based on an existing span, where the existing span did not include the prob
+<i>105</i>&nbsp;   * @param span the span that has no prob or the prob is incorrect and a new Span must be generated
+<i>106</i>&nbsp;   * @param prob the probability of the span
+<i>107</i>&nbsp;   */
+<i>108</i>&nbsp;  public Span(Span span, double prob) {
+<b class="fc"><i>109</i>&nbsp;    this(span.start, span.end, span.getType(), prob);</b>
+<b class="fc"><i>110</i>&nbsp;  }</b>
+<i>111</i>&nbsp;
+<i>112</i>&nbsp;  /**
+<i>113</i>&nbsp;   * Return the start of a span.
+<i>114</i>&nbsp;   *
+<i>115</i>&nbsp;   * @return the start of a span.
+<i>116</i>&nbsp;   *
+<i>117</i>&nbsp;   */
+<i>118</i>&nbsp;  public int getStart() {
+<b class="fc"><i>119</i>&nbsp;    return start;</b>
+<i>120</i>&nbsp;  }
+<i>121</i>&nbsp;
+<i>122</i>&nbsp;  /**
+<i>123</i>&nbsp;   * Return the end of a span.
+<i>124</i>&nbsp;   *
+<i>125</i>&nbsp;   * Note: that the returned index is one past the actual end of the span in the
+<i>126</i>&nbsp;   * text, or the first element past the end of the span.
+<i>127</i>&nbsp;   *
+<i>128</i>&nbsp;   * @return the end of a span.
+<i>129</i>&nbsp;   *
+<i>130</i>&nbsp;   */
+<i>131</i>&nbsp;  public int getEnd() {
+<b class="fc"><i>132</i>&nbsp;    return end;</b>
+<i>133</i>&nbsp;  }
+<i>134</i>&nbsp;
+<i>135</i>&nbsp;  /**
+<i>136</i>&nbsp;   * Retrieves the type of the span.
+<i>137</i>&nbsp;   *
+<i>138</i>&nbsp;   * @return the type or null if not set
+<i>139</i>&nbsp;   */
+<i>140</i>&nbsp;  public String getType() {
+<b class="fc"><i>141</i>&nbsp;    return type;</b>
+<i>142</i>&nbsp;  }
+<i>143</i>&nbsp;
+<i>144</i>&nbsp;  /**
+<i>145</i>&nbsp;   * Returns the length of this span.
+<i>146</i>&nbsp;   *
+<i>147</i>&nbsp;   * @return the length of the span.
+<i>148</i>&nbsp;   */
+<i>149</i>&nbsp;  public int length() {
+<b class="fc"><i>150</i>&nbsp;    return end - start;</b>
+<i>151</i>&nbsp;  }
+<i>152</i>&nbsp;
+<i>153</i>&nbsp;  /**
+<i>154</i>&nbsp;   * Returns true if the specified span is contained by this span. Identical
+<i>155</i>&nbsp;   * spans are considered to contain each other.
+<i>156</i>&nbsp;   *
+<i>157</i>&nbsp;   * @param s The span to compare with this span.
+<i>158</i>&nbsp;   *
+<i>159</i>&nbsp;   * @return true is the specified span is contained by this span; false otherwise.
+<i>160</i>&nbsp;   */
+<i>161</i>&nbsp;  public boolean contains(Span s) {
+<b class="fc"><i>162</i>&nbsp;    return start &lt;= s.getStart() &amp;&amp; s.getEnd() &lt;= end;</b>
+<i>163</i>&nbsp;  }
+<i>164</i>&nbsp;
+<i>165</i>&nbsp;  /**
+<i>166</i>&nbsp;   * Returns true if the specified index is contained inside this span. An index
+<i>167</i>&nbsp;   * with the value of end is considered outside the span.
+<i>168</i>&nbsp;   *
+<i>169</i>&nbsp;   * @param index the index to test with this span.
+<i>170</i>&nbsp;   *
+<i>171</i>&nbsp;   * @return true if the span contains this specified index; false otherwise.
+<i>172</i>&nbsp;   */
+<i>173</i>&nbsp;  public boolean contains(int index) {
+<b class="fc"><i>174</i>&nbsp;    return start &lt;= index &amp;&amp; index &lt; end;</b>
+<i>175</i>&nbsp;  }
+<i>176</i>&nbsp;
+<i>177</i>&nbsp;  /**
+<i>178</i>&nbsp;   * Returns true if the specified span is the begin of this span and the
+<i>179</i>&nbsp;   * specified span is contained in this span.
+<i>180</i>&nbsp;   *
+<i>181</i>&nbsp;   * @param s The span to compare with this span.
+<i>182</i>&nbsp;   *
+<i>183</i>&nbsp;   * @return true if the specified span starts with this span and is contained
+<i>184</i>&nbsp;   *     in this span; false otherwise
+<i>185</i>&nbsp;   */
+<i>186</i>&nbsp;  public boolean startsWith(Span s) {
+<b class="fc"><i>187</i>&nbsp;    return getStart() == s.getStart() &amp;&amp; contains(s);</b>
+<i>188</i>&nbsp;  }
+<i>189</i>&nbsp;
+<i>190</i>&nbsp;  /**
+<i>191</i>&nbsp;   * Returns true if the specified span intersects with this span.
+<i>192</i>&nbsp;   *
+<i>193</i>&nbsp;   * @param s The span to compare with this span.
+<i>194</i>&nbsp;   *
+<i>195</i>&nbsp;   * @return true is the spans overlap; false otherwise.
+<i>196</i>&nbsp;   */
+<i>197</i>&nbsp;  public boolean intersects(Span s) {
+<b class="fc"><i>198</i>&nbsp;    int sstart = s.getStart();</b>
+<i>199</i>&nbsp;    //either s&#39;s start is in this or this&#39; start is in s
+<b class="fc"><i>200</i>&nbsp;    return this.contains(s) || s.contains(this)</b>
+<b class="fc"><i>201</i>&nbsp;            || getStart() &lt;= sstart &amp;&amp; sstart &lt; getEnd()</b>
+<b class="fc"><i>202</i>&nbsp;            || sstart &lt;= getStart() &amp;&amp; getStart() &lt; s.getEnd();</b>
+<i>203</i>&nbsp;  }
+<i>204</i>&nbsp;
+<i>205</i>&nbsp;  /**
+<i>206</i>&nbsp;   * Returns true is the specified span crosses this span.
+<i>207</i>&nbsp;   *
+<i>208</i>&nbsp;   * @param s The span to compare with this span.
+<i>209</i>&nbsp;   *
+<i>210</i>&nbsp;   * @return true is the specified span overlaps this span and contains a
+<i>211</i>&nbsp;   *     non-overlapping section; false otherwise.
+<i>212</i>&nbsp;   */
+<i>213</i>&nbsp;  public boolean crosses(Span s) {
+<b class="fc"><i>214</i>&nbsp;    int sstart = s.getStart();</b>
+<i>215</i>&nbsp;    //either s&#39;s start is in this or this&#39; start is in s
+<b class="fc"><i>216</i>&nbsp;    return !this.contains(s) &amp;&amp; !s.contains(this)</b>
+<b class="fc"><i>217</i>&nbsp;            &amp;&amp; (getStart() &lt;= sstart &amp;&amp; sstart &lt; getEnd()</b>
+<b class="fc"><i>218</i>&nbsp;            || sstart &lt;= getStart() &amp;&amp; getStart() &lt; s.getEnd());</b>
+<i>219</i>&nbsp;  }
+<i>220</i>&nbsp;
+<i>221</i>&nbsp;  /**
+<i>222</i>&nbsp;   * Retrieves the string covered by the current span of the specified text.
+<i>223</i>&nbsp;   *
+<i>224</i>&nbsp;   * @param text
+<i>225</i>&nbsp;   *
+<i>226</i>&nbsp;   * @return the substring covered by the current span
+<i>227</i>&nbsp;   */
+<i>228</i>&nbsp;  public CharSequence getCoveredText(CharSequence text) {
+<b class="fc"><i>229</i>&nbsp;    if (getEnd() &gt; text.length()) {</b>
+<b class="nc"><i>230</i>&nbsp;      throw new IllegalArgumentException(&quot;The span &quot; + toString()</b>
+<b class="nc"><i>231</i>&nbsp;              + &quot; is outside the given text which has length &quot; + text.length() + &quot;!&quot;);</b>
+<i>232</i>&nbsp;    }
+<i>233</i>&nbsp;
+<b class="fc"><i>234</i>&nbsp;    return text.subSequence(getStart(), getEnd());</b>
+<i>235</i>&nbsp;  }
+<i>236</i>&nbsp;
+<i>237</i>&nbsp;  /**
+<i>238</i>&nbsp;   * Return a copy of this span with leading and trailing white spaces removed.
+<i>239</i>&nbsp;   *
+<i>240</i>&nbsp;   * @param text
+<i>241</i>&nbsp;   *
+<i>242</i>&nbsp;   * @return the trimmed span or the same object if already trimmed
+<i>243</i>&nbsp;   */
+<i>244</i>&nbsp;  public Span trim(CharSequence text) {
+<i>245</i>&nbsp;
+<b class="fc"><i>246</i>&nbsp;    int newStartOffset = getStart();</b>
+<i>247</i>&nbsp;
+<b class="fc"><i>248</i>&nbsp;    for (int i = getStart(); i &lt; getEnd() &amp;&amp; StringUtil.isWhitespace(text.charAt(i)); i++) {</b>
+<b class="fc"><i>249</i>&nbsp;      newStartOffset++;</b>
+<i>250</i>&nbsp;    }
+<i>251</i>&nbsp;
+<b class="fc"><i>252</i>&nbsp;    int newEndOffset = getEnd();</b>
+<b class="fc"><i>253</i>&nbsp;    for (int i = getEnd(); i &gt; getStart() &amp;&amp; StringUtil.isWhitespace(text.charAt(i - 1)); i--) {</b>
+<b class="fc"><i>254</i>&nbsp;      newEndOffset--;</b>
+<i>255</i>&nbsp;    }
+<i>256</i>&nbsp;
+<b class="fc"><i>257</i>&nbsp;    if (newStartOffset == getStart() &amp;&amp; newEndOffset == getEnd()) {</b>
+<b class="fc"><i>258</i>&nbsp;      return this;</b>
+<b class="fc"><i>259</i>&nbsp;    } else if (newStartOffset &gt; newEndOffset) {</b>
+<b class="fc"><i>260</i>&nbsp;      return new Span(getStart(), getStart(), getType());</b>
+<i>261</i>&nbsp;    } else {
+<b class="fc"><i>262</i>&nbsp;      return new Span(newStartOffset, newEndOffset, getType());</b>
+<i>263</i>&nbsp;    }
+<i>264</i>&nbsp;  }
+<i>265</i>&nbsp;
+<i>266</i>&nbsp;  /**
+<i>267</i>&nbsp;   * Compares the specified span to the current span.
+<i>268</i>&nbsp;   */
+<i>269</i>&nbsp;  public int compareTo(Span s) {
+<b class="fc"><i>270</i>&nbsp;    if (getStart() &lt; s.getStart()) {</b>
+<b class="fc"><i>271</i>&nbsp;      return -1;</b>
+<b class="fc"><i>272</i>&nbsp;    } else if (getStart() == s.getStart()) {</b>
+<b class="fc"><i>273</i>&nbsp;      if (getEnd() &gt; s.getEnd()) {</b>
+<b class="fc"><i>274</i>&nbsp;        return -1;</b>
+<b class="fc"><i>275</i>&nbsp;      } else if (getEnd() &lt; s.getEnd()) {</b>
+<b class="nc"><i>276</i>&nbsp;        return 1;</b>
+<i>277</i>&nbsp;      } else {
+<i>278</i>&nbsp;        // compare the type
+<b class="fc"><i>279</i>&nbsp;        if (getType() == null &amp;&amp; s.getType() == null) {</b>
+<b class="fc"><i>280</i>&nbsp;          return 0;</b>
+<b class="fc"><i>281</i>&nbsp;        } else if (getType() != null &amp;&amp; s.getType() != null) {</b>
+<i>282</i>&nbsp;          // use type lexicography order
+<b class="fc"><i>283</i>&nbsp;          return getType().compareTo(s.getType());</b>
+<b class="fc"><i>284</i>&nbsp;        } else if (getType() != null) {</b>
+<b class="fc"><i>285</i>&nbsp;          return -1;</b>
+<i>286</i>&nbsp;        }
+<b class="fc"><i>287</i>&nbsp;        return 1;</b>
+<i>288</i>&nbsp;      }
+<i>289</i>&nbsp;    } else {
+<b class="fc"><i>290</i>&nbsp;      return 1;</b>
+<i>291</i>&nbsp;    }
+<i>292</i>&nbsp;  }
+<i>293</i>&nbsp;
+<i>294</i>&nbsp;  /**
+<i>295</i>&nbsp;   * Generates a hash code of the current span.
+<i>296</i>&nbsp;   */
+<i>297</i>&nbsp;  @Override
+<i>298</i>&nbsp;  public int hashCode() {
+<b class="fc"><i>299</i>&nbsp;    return Objects.hash(getStart(), getEnd(), getType());</b>
+<i>300</i>&nbsp;  }
+<i>301</i>&nbsp;
+<i>302</i>&nbsp;  /**
+<i>303</i>&nbsp;   * Checks if the specified span is equal to the current span.
+<i>304</i>&nbsp;   */
+<i>305</i>&nbsp;  @Override
+<i>306</i>&nbsp;  public boolean equals(Object o) {
+<b class="fc"><i>307</i>&nbsp;    if (o == this) {</b>
+<b class="fc"><i>308</i>&nbsp;      return true;</b>
+<i>309</i>&nbsp;    }
+<i>310</i>&nbsp;
+<b class="fc"><i>311</i>&nbsp;    if (o instanceof Span) {</b>
+<b class="fc"><i>312</i>&nbsp;      Span s = (Span) o;</b>
+<i>313</i>&nbsp;
+<b class="fc"><i>314</i>&nbsp;      return getStart() == s.getStart() &amp;&amp; getEnd() == s.getEnd()</b>
+<b class="fc"><i>315</i>&nbsp;          &amp;&amp; Objects.equals(getType(), s.getType());</b>
+<i>316</i>&nbsp;    }
+<i>317</i>&nbsp;
+<b class="fc"><i>318</i>&nbsp;    return false;</b>
+<i>319</i>&nbsp;  }
+<i>320</i>&nbsp;
+<i>321</i>&nbsp;  /**
+<i>322</i>&nbsp;   * Generates a human readable string.
+<i>323</i>&nbsp;   */
+<i>324</i>&nbsp;  @Override
+<i>325</i>&nbsp;  public String toString() {
+<b class="fc"><i>326</i>&nbsp;    StringBuilder toStringBuffer = new StringBuilder(15);</b>
+<b class="fc"><i>327</i>&nbsp;    toStringBuffer.append(&quot;[&quot;);</b>
+<b class="fc"><i>328</i>&nbsp;    toStringBuffer.append(getStart());</b>
+<b class="fc"><i>329</i>&nbsp;    toStringBuffer.append(&quot;..&quot;);</b>
+<b class="fc"><i>330</i>&nbsp;    toStringBuffer.append(getEnd());</b>
+<b class="fc"><i>331</i>&nbsp;    toStringBuffer.append(&quot;)&quot;);</b>
+<b class="fc"><i>332</i>&nbsp;    if (getType() != null) {</b>
+<b class="fc"><i>333</i>&nbsp;      toStringBuffer.append(&quot; &quot;);</b>
+<b class="fc"><i>334</i>&nbsp;      toStringBuffer.append(getType());</b>
+<i>335</i>&nbsp;    }
+<i>336</i>&nbsp;
+<b class="fc"><i>337</i>&nbsp;    return toStringBuffer.toString();</b>
+<i>338</i>&nbsp;  }
+<i>339</i>&nbsp;
+<i>340</i>&nbsp;  /**
+<i>341</i>&nbsp;   * Converts an array of {@link Span}s to an array of {@link String}s.
+<i>342</i>&nbsp;   *
+<i>343</i>&nbsp;   * @param spans
+<i>344</i>&nbsp;   * @param s
+<i>345</i>&nbsp;   * @return the strings
+<i>346</i>&nbsp;   */
+<i>347</i>&nbsp;  public static String[] spansToStrings(Span[] spans, CharSequence s) {
+<b class="fc"><i>348</i>&nbsp;    String[] tokens = new String[spans.length];</b>
+<i>349</i>&nbsp;
+<b class="fc"><i>350</i>&nbsp;    for (int si = 0, sl = spans.length; si &lt; sl; si++) {</b>
+<b class="fc"><i>351</i>&nbsp;      tokens[si] = spans[si].getCoveredText(s).toString();</b>
+<i>352</i>&nbsp;    }
+<i>353</i>&nbsp;
+<b class="fc"><i>354</i>&nbsp;    return tokens;</b>
+<i>355</i>&nbsp;  }
+<i>356</i>&nbsp;
+<i>357</i>&nbsp;  public static String[] spansToStrings(Span[] spans, String[] tokens) {
+<b class="fc"><i>358</i>&nbsp;    String[] chunks = new String[spans.length];</b>
+<b class="fc"><i>359</i>&nbsp;    StringBuilder cb = new StringBuilder();</b>
+<b class="fc"><i>360</i>&nbsp;    for (int si = 0, sl = spans.length; si &lt; sl; si++) {</b>
+<b class="fc"><i>361</i>&nbsp;      cb.setLength(0);</b>
+<b class="fc"><i>362</i>&nbsp;      for (int ti = spans[si].getStart(); ti &lt; spans[si].getEnd(); ti++) {</b>
+<b class="fc"><i>363</i>&nbsp;        cb.append(tokens[ti]).append(&quot; &quot;);</b>
+<i>364</i>&nbsp;      }
+<b class="fc"><i>365</i>&nbsp;      chunks[si] = cb.substring(0, cb.length() - 1);</b>
+<i>366</i>&nbsp;    }
+<b class="fc"><i>367</i>&nbsp;    return chunks;</b>
+<i>368</i>&nbsp;  }
+<i>369</i>&nbsp;
+<i>370</i>&nbsp;  public double getProb() {
+<b class="fc"><i>371</i>&nbsp;    return prob;</b>
+<i>372</i>&nbsp;  }
+<i>373</i>&nbsp;
+<i>374</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-09 18:47</div>
+</div>
+</body>
+</html>

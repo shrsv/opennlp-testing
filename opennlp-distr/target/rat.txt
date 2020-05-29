@@ -1,0 +1,65 @@
+
+*****************************************************
+Summary
+-------
+Generated at: 2020-05-29T13:42:08-07:00
+Notes: 2
+Binaries: 0
+Archives: 0
+Standards: 7
+
+Apache Licensed: 6
+Generated Documents: 0
+
+JavaDocs are generated and so license header is optional
+Generated files do not required license headers
+
+1 Unknown Licenses
+
+*******************************
+
+Unapproved licenses:
+
+  /home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-distr/README_FOOTER.html
+
+*******************************
+
+Archives:
+
+*****************************************************
+  Files with Apache License headers will be marked AL
+  Binary files (which do not require AL headers) will be marked B
+  Compressed archives will be marked A
+  Notices, licenses etc will be marked N
+  AL    /home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-distr/pom.xml
+ !????? /home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-distr/README_FOOTER.html
+  AL    /home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-distr/src/main/bin/opennlp
+  AL    /home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-distr/src/main/bin/opennlp.bat
+  N     /home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-distr/src/main/readme/LICENSE
+  N     /home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-distr/src/main/readme/NOTICE
+  AL    /home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-distr/src/main/assembly/bin.xml
+  AL    /home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-distr/src/main/assembly/src.xml
+  AL    /home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-distr/README_HEADER.html
+ 
+*****************************************************
+ Printing headers for files without AL header...
+ 
+ 
+=======================================================================
+==/home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-distr/README_FOOTER.html
+=======================================================================
+<h2><a name="report.issues">How to Report Issues</a></h2>
+<p>
+    The Apache OpenNLP project uses JIRA for issue tracking.  Please report any
+    issues you find at
+    <a href="http://issues.apache.org/jira/browse/opennlp">http://issues.apache.org/jira/browse/opennlp</a>
+</p>
+
+<h2><a name="list.issues">List of JIRA Issues Fixed in this Release</a></h2>
+<p>
+    Click <a href="issuesFixed/jira-report.html">issuesFixed/jira-report.html</a> for the list of
+    issues fixed in this release.
+</p>
+
+</body>
+</html>

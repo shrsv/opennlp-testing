@@ -1,0 +1,126 @@
+
+*****************************************************
+Summary
+-------
+Generated at: 2020-05-29T13:41:20-07:00
+Notes: 0
+Binaries: 0
+Archives: 0
+Standards: 89
+
+Apache Licensed: 89
+Generated Documents: 0
+
+JavaDocs are generated and so license header is optional
+Generated files do not required license headers
+
+0 Unknown Licenses
+
+*******************************
+
+Unapproved licenses:
+
+
+*******************************
+
+Archives:
+
+*****************************************************
+  Files with Apache License headers will be marked AL
+  Binary files (which do not require AL headers) will be marked B
+  Compressed archives will be marked A
+  Notices, licenses etc will be marked N
+  AL    /home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-uima/pom.xml
+  AL    /home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-uima/src/test/java/opennlp/uima/util/CasUtil.java
+  AL    /home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-uima/src/test/java/opennlp/uima/util/AnnotationComboIteratorTest.java
+  AL    /home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-uima/src/test/java/opennlp/uima/dictionary/DictionaryResourceTest.java
+  AL    /home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-uima/src/test/java/opennlp/uima/AnnotatorsInitializationTest.java
+  AL    /home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-uima/src/test/resources/dictionary.dic
+  AL    /home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-uima/src/test/resources/test-descriptors/DictionaryNameFinder.xml
+  AL    /home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-uima/src/test/resources/test-descriptors/Tokenizer.xml
+  AL    /home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-uima/src/test/resources/test-descriptors/PersonNameFinder.xml
+  AL    /home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-uima/src/test/resources/test-descriptors/Chunker.xml
+  AL    /home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-uima/src/test/resources/test-descriptors/LocationNameFinder.xml
+  AL    /home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-uima/src/test/resources/test-descriptors/MoneyNameFinder.xml
+  AL    /home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-uima/src/test/resources/test-descriptors/SentenceDetector.xml
+  AL    /home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-uima/src/test/resources/test-descriptors/TimeNameFinder.xml
+  AL    /home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-uima/src/test/resources/test-descriptors/DateNameFinder.xml
+  AL    /home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-uima/src/test/resources/test-descriptors/PosTagger.xml
+  AL    /home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-uima/src/test/resources/test-descriptors/PercentageNameFinder.xml
+  AL    /home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-uima/src/test/resources/test-descriptors/OrganizationNameFinder.xml
+  AL    /home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-uima/src/test/resources/test-descriptors/TypeSystem.xml
+  AL    /home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-uima/src/test/resources/cas/OPENNLP-676.xmi
+  AL    /home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-uima/src/test/resources/cas/dictionary-test.xmi
+  AL    /home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-uima/src/main/java/opennlp/uima/util/AnnotatorUtil.java
+  AL    /home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-uima/src/main/java/opennlp/uima/util/UimaUtil.java
+  AL    /home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-uima/src/main/java/opennlp/uima/util/OpenNlpAnnotatorProcessException.java
+  AL    /home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-uima/src/main/java/opennlp/uima/util/AnnotationComparator.java
+  AL    /home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-uima/src/main/java/opennlp/uima/util/AnnotationComboIterator.java
+  AL    /home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-uima/src/main/java/opennlp/uima/util/AnnotationIteratorPair.java
+  AL    /home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-uima/src/main/java/opennlp/uima/util/OpennlpUtil.java
+  AL    /home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-uima/src/main/java/opennlp/uima/util/ExceptionMessages.java
+  AL    /home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-uima/src/main/java/opennlp/uima/util/ContainingConstraint.java
+  AL    /home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-uima/src/main/java/opennlp/uima/util/AbstractModelResource.java
+  AL    /home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-uima/src/main/java/opennlp/uima/dictionary/DictionaryResource.java
+  AL    /home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-uima/src/main/java/opennlp/uima/dictionary/DictionaryResourceImpl.java
+  AL    /home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-uima/src/main/java/opennlp/uima/normalizer/Normalizer.java
+  AL    /home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-uima/src/main/java/opennlp/uima/normalizer/StringDictionary.java
+  AL    /home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-uima/src/main/java/opennlp/uima/normalizer/NumberUtil.java
+  AL    /home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-uima/src/main/java/opennlp/uima/namefind/TokenNameFinderModelResourceImpl.java
+  AL    /home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-uima/src/main/java/opennlp/uima/namefind/TokenNameFinderModelResource.java
+  AL    /home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-uima/src/main/java/opennlp/uima/namefind/DictionaryNameFinder.java
+  AL    /home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-uima/src/main/java/opennlp/uima/namefind/package.html
+  AL    /home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-uima/src/main/java/opennlp/uima/namefind/NameFinder.java
+  AL    /home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-uima/src/main/java/opennlp/uima/namefind/AbstractNameFinder.java
+  AL    /home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-uima/src/main/java/opennlp/uima/sentdetect/SentenceModelResource.java
+  AL    /home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-uima/src/main/java/opennlp/uima/sentdetect/package.html
+  AL    /home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-uima/src/main/java/opennlp/uima/sentdetect/AbstractSentenceDetector.java
+  AL    /home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-uima/src/main/java/opennlp/uima/sentdetect/SentenceDetector.java
+  AL    /home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-uima/src/main/java/opennlp/uima/sentdetect/SentenceModelResourceImpl.java
+  AL    /home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-uima/src/main/java/opennlp/uima/doccat/LanguageDetector.java
+  AL    /home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-uima/src/main/java/opennlp/uima/doccat/DoccatModelResourceImpl.java
+  AL    /home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-uima/src/main/java/opennlp/uima/doccat/AbstractDocumentCategorizer.java
+  AL    /home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-uima/src/main/java/opennlp/uima/doccat/DoccatModelResource.java
+  AL    /home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-uima/src/main/java/opennlp/uima/doccat/DocumentCategorizer.java
+  AL    /home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-uima/src/main/java/opennlp/uima/postag/POSModelResourceImpl.java
+  AL    /home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-uima/src/main/java/opennlp/uima/postag/package.html
+  AL    /home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-uima/src/main/java/opennlp/uima/postag/POSTagger.java
+  AL    /home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-uima/src/main/java/opennlp/uima/postag/POSModelResource.java
+  AL    /home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-uima/src/main/java/opennlp/uima/chunker/ChunkerModelResource.java
+  AL    /home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-uima/src/main/java/opennlp/uima/chunker/Chunker.java
+  AL    /home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-uima/src/main/java/opennlp/uima/chunker/package.html
+  AL    /home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-uima/src/main/java/opennlp/uima/chunker/ChunkerModelResourceImpl.java
+  AL    /home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-uima/src/main/java/opennlp/uima/parser/ParserModelResource.java
+  AL    /home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-uima/src/main/java/opennlp/uima/parser/Parser.java
+  AL    /home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-uima/src/main/java/opennlp/uima/parser/ParserModelResourceImpl.java
+  AL    /home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-uima/src/main/java/opennlp/uima/tokenize/Tokenizer.java
+  AL    /home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-uima/src/main/java/opennlp/uima/tokenize/WhitespaceTokenizer.java
+  AL    /home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-uima/src/main/java/opennlp/uima/tokenize/package.html
+  AL    /home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-uima/src/main/java/opennlp/uima/tokenize/SimpleTokenizer.java
+  AL    /home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-uima/src/main/java/opennlp/uima/tokenize/TokenizerModelResourceImpl.java
+  AL    /home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-uima/src/main/java/opennlp/uima/tokenize/AbstractTokenizer.java
+  AL    /home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-uima/src/main/java/opennlp/uima/tokenize/TokenizerModelResource.java
+  AL    /home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-uima/src/main/resources/opennlp/uima/util/ExceptionMessages_en.properties
+  AL    /home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-uima/descriptors/LanguageDetector.xml
+  AL    /home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-uima/descriptors/Tokenizer.xml
+  AL    /home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-uima/descriptors/SimpleTokenizer.xml
+  AL    /home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-uima/descriptors/PersonNameFinder.xml
+  AL    /home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-uima/descriptors/Chunker.xml
+  AL    /home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-uima/descriptors/LocationNameFinder.xml
+  AL    /home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-uima/descriptors/MoneyNameFinder.xml
+  AL    /home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-uima/descriptors/SentenceDetector.xml
+  AL    /home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-uima/descriptors/TimeNameFinder.xml
+  AL    /home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-uima/descriptors/DateNameFinder.xml
+  AL    /home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-uima/descriptors/PosTagger.xml
+  AL    /home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-uima/descriptors/PercentageNameFinder.xml
+  AL    /home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-uima/descriptors/OrganizationNameFinder.xml
+  AL    /home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-uima/descriptors/TypeSystem.xml
+  AL    /home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-uima/descriptors/OpenNlpTextAnalyzer.xml
+  AL    /home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-uima/descriptors/Parser.xml
+  AL    /home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-uima/createPear.xml
+  AL    /home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-uima/metadata/install.xml
+ 
+*****************************************************
+ Printing headers for files without AL header...
+ 
+ 

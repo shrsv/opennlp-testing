@@ -1,0 +1,198 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: UimaUtil</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">opennlp.uima.util</a> ]
+</div>
+
+<h1>Coverage Summary for Class: UimaUtil (opennlp.uima.util)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">UimaUtil</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 13)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/*
+<i>2</i>&nbsp; * Licensed to the Apache Software Foundation (ASF) under one or more
+<i>3</i>&nbsp; * contributor license agreements.  See the NOTICE file distributed with
+<i>4</i>&nbsp; * this work for additional information regarding copyright ownership.
+<i>5</i>&nbsp; * The ASF licenses this file to You under the Apache License, Version 2.0
+<i>6</i>&nbsp; * (the &quot;License&quot;); you may not use this file except in compliance with
+<i>7</i>&nbsp; * the License. You may obtain a copy of the License at
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; *     http://www.apache.org/licenses/LICENSE-2.0
+<i>10</i>&nbsp; *
+<i>11</i>&nbsp; * Unless required by applicable law or agreed to in writing, software
+<i>12</i>&nbsp; * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<i>13</i>&nbsp; * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<i>14</i>&nbsp; * See the License for the specific language governing permissions and
+<i>15</i>&nbsp; * limitations under the License.
+<i>16</i>&nbsp; */
+<i>17</i>&nbsp;
+<i>18</i>&nbsp;package opennlp.uima.util;
+<i>19</i>&nbsp;
+<i>20</i>&nbsp;import java.util.Collection;
+<i>21</i>&nbsp;import java.util.Iterator;
+<i>22</i>&nbsp;import java.util.LinkedList;
+<i>23</i>&nbsp;
+<i>24</i>&nbsp;import org.apache.uima.cas.CAS;
+<i>25</i>&nbsp;import org.apache.uima.cas.FSIndex;
+<i>26</i>&nbsp;import org.apache.uima.cas.Type;
+<i>27</i>&nbsp;import org.apache.uima.cas.text.AnnotationFS;
+<i>28</i>&nbsp;
+<i>29</i>&nbsp;/**
+<i>30</i>&nbsp; * This is a util class for uima operations.
+<i>31</i>&nbsp; */
+<i>32</i>&nbsp;public final class UimaUtil {
+<i>33</i>&nbsp;
+<b class="nc"><i>34</i>&nbsp;  private UimaUtil(){</b>
+<i>35</i>&nbsp;    // this is util class must not be instantiated
+<i>36</i>&nbsp;  }
+<i>37</i>&nbsp;
+<i>38</i>&nbsp;  /**
+<i>39</i>&nbsp;   * The token type parameter.
+<i>40</i>&nbsp;   */
+<i>41</i>&nbsp;  public static final String TOKEN_TYPE_PARAMETER = &quot;opennlp.uima.TokenType&quot;;
+<i>42</i>&nbsp;
+<i>43</i>&nbsp;  /**
+<i>44</i>&nbsp;   * The pos feature parameter.
+<i>45</i>&nbsp;   */
+<i>46</i>&nbsp;  public static final String POS_FEATURE_PARAMETER = &quot;opennlp.uima.POSFeature&quot;;
+<i>47</i>&nbsp;
+<i>48</i>&nbsp;  /**
+<i>49</i>&nbsp;   * The model parameter.
+<i>50</i>&nbsp;   */
+<b class="nc"><i>51</i>&nbsp;  public static String MODEL_PARAMETER = &quot;opennlp.uima.ModelName&quot;;</b>
+<i>52</i>&nbsp;
+<i>53</i>&nbsp;  /**
+<i>54</i>&nbsp;   * The sentence type parameter.
+<i>55</i>&nbsp;   */
+<b class="nc"><i>56</i>&nbsp;  public static String SENTENCE_TYPE_PARAMETER = &quot;opennlp.uima.SentenceType&quot;;</b>
+<i>57</i>&nbsp;
+<i>58</i>&nbsp;  /**
+<i>59</i>&nbsp;   * The beam size parameter.
+<i>60</i>&nbsp;   */
+<i>61</i>&nbsp;  public static final String BEAM_SIZE_PARAMETER = &quot;opennlp.uima.BeamSize&quot;;
+<i>62</i>&nbsp;
+<i>63</i>&nbsp;  public static final String LANGUAGE_PARAMETER = &quot;opennlp.uima.Language&quot;;
+<i>64</i>&nbsp;
+<i>65</i>&nbsp;  public static final String DICTIONARY_PARAMETER = &quot;opennlp.uima.Dictionary&quot;;
+<i>66</i>&nbsp;
+<i>67</i>&nbsp;  public static final String TRAINING_PARAMS_FILE_PARAMETER = &quot;opennlp.uima.TrainingParamsFile&quot;;
+<i>68</i>&nbsp;
+<i>69</i>&nbsp;  public static final String CUTOFF_PARAMETER = &quot;opennlp.uima.Cutoff&quot;;
+<i>70</i>&nbsp;
+<i>71</i>&nbsp;  public static final String ITERATIONS_PARAMETER = &quot;opennlp.uima.Iterations&quot;;
+<i>72</i>&nbsp;
+<i>73</i>&nbsp;  public static final String PROBABILITY_FEATURE_PARAMETER =
+<i>74</i>&nbsp;      &quot;opennlp.uima.ProbabilityFeature&quot;;
+<i>75</i>&nbsp;
+<i>76</i>&nbsp;  public static final String IS_REMOVE_EXISTINGS_ANNOTAIONS =
+<i>77</i>&nbsp;      &quot;opennlp.uima.IsRemoveExistingAnnotations&quot;;
+<i>78</i>&nbsp;
+<i>79</i>&nbsp;  public static final String ADDITIONAL_TRAINING_DATA_FILE =
+<i>80</i>&nbsp;      &quot;opennlp.uima.AdditionalTrainingDataFile&quot;;
+<i>81</i>&nbsp;
+<i>82</i>&nbsp;  public static final String ADDITIONAL_TRAINING_DATA_ENCODING =
+<i>83</i>&nbsp;      &quot;opennlp.uima.AdditionalTrainingDataEncoding&quot;;
+<i>84</i>&nbsp;
+<i>85</i>&nbsp;  /**
+<i>86</i>&nbsp;   * Removes all annotations of type removeAnnotationType which are contained
+<i>87</i>&nbsp;   * by annotations of type containerAnnotationType.
+<i>88</i>&nbsp;   *
+<i>89</i>&nbsp;   * @param cas
+<i>90</i>&nbsp;   * @param containerAnnotation
+<i>91</i>&nbsp;   * @param removeAnnotationType
+<i>92</i>&nbsp;   */
+<i>93</i>&nbsp;  public static void removeAnnotations(CAS cas,
+<i>94</i>&nbsp;      AnnotationFS containerAnnotation, Type removeAnnotationType) {
+<i>95</i>&nbsp;
+<b class="nc"><i>96</i>&nbsp;    FSIndex&lt;AnnotationFS&gt; allRemoveAnnotations = cas</b>
+<b class="nc"><i>97</i>&nbsp;        .getAnnotationIndex(removeAnnotationType);</b>
+<i>98</i>&nbsp;
+<b class="nc"><i>99</i>&nbsp;    ContainingConstraint containingConstraint = new ContainingConstraint(</b>
+<i>100</i>&nbsp;        containerAnnotation);
+<i>101</i>&nbsp;
+<b class="nc"><i>102</i>&nbsp;    Iterator&lt;AnnotationFS&gt; containingTokens = cas.createFilteredIterator(</b>
+<b class="nc"><i>103</i>&nbsp;        allRemoveAnnotations.iterator(), containingConstraint);</b>
+<i>104</i>&nbsp;
+<b class="nc"><i>105</i>&nbsp;    Collection&lt;AnnotationFS&gt; removeAnnotations = new LinkedList&lt;&gt;();</b>
+<i>106</i>&nbsp;
+<b class="nc"><i>107</i>&nbsp;    while (containingTokens.hasNext()) {</b>
+<b class="nc"><i>108</i>&nbsp;      removeAnnotations.add(containingTokens.next());</b>
+<i>109</i>&nbsp;    }
+<i>110</i>&nbsp;
+<b class="nc"><i>111</i>&nbsp;    for (Iterator&lt;AnnotationFS&gt; it = removeAnnotations.iterator(); it.hasNext();) {</b>
+<b class="nc"><i>112</i>&nbsp;      cas.removeFsFromIndexes(it.next());</b>
+<i>113</i>&nbsp;    }
+<i>114</i>&nbsp;  }
+<i>115</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-09 15:05</div>
+</div>
+</body>
+</html>

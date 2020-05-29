@@ -1,0 +1,383 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: POSDictionary</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">opennlp.tools.postag</a> ]
+</div>
+
+<h1>Coverage Summary for Class: POSDictionary (opennlp.tools.postag)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">POSDictionary</td>
+<td class="coverageStat">
+  <span class="percent">
+    87.5%
+  </span>
+  <span class="absValue">
+    (14/ 16)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    88.4%
+  </span>
+  <span class="absValue">
+    (61/ 69)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">POSDictionary$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    75%
+  </span>
+  <span class="absValue">
+    (3/ 4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    87.5%
+  </span>
+  <span class="absValue">
+    (7/ 8)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    85%
+  </span>
+  <span class="absValue">
+    (17/ 20)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    88.3%
+  </span>
+  <span class="absValue">
+    (68/ 77)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/*
+<i>2</i>&nbsp; * Licensed to the Apache Software Foundation (ASF) under one or more
+<i>3</i>&nbsp; * contributor license agreements.  See the NOTICE file distributed with
+<i>4</i>&nbsp; * this work for additional information regarding copyright ownership.
+<i>5</i>&nbsp; * The ASF licenses this file to You under the Apache License, Version 2.0
+<i>6</i>&nbsp; * (the &quot;License&quot;); you may not use this file except in compliance with
+<i>7</i>&nbsp; * the License. You may obtain a copy of the License at
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; *     http://www.apache.org/licenses/LICENSE-2.0
+<i>10</i>&nbsp; *
+<i>11</i>&nbsp; * Unless required by applicable law or agreed to in writing, software
+<i>12</i>&nbsp; * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<i>13</i>&nbsp; * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<i>14</i>&nbsp; * See the License for the specific language governing permissions and
+<i>15</i>&nbsp; * limitations under the License.
+<i>16</i>&nbsp; */
+<i>17</i>&nbsp;
+<i>18</i>&nbsp;package opennlp.tools.postag;
+<i>19</i>&nbsp;
+<i>20</i>&nbsp;import java.io.IOException;
+<i>21</i>&nbsp;import java.io.InputStream;
+<i>22</i>&nbsp;import java.io.OutputStream;
+<i>23</i>&nbsp;import java.util.Arrays;
+<i>24</i>&nbsp;import java.util.HashMap;
+<i>25</i>&nbsp;import java.util.Iterator;
+<i>26</i>&nbsp;import java.util.Map;
+<i>27</i>&nbsp;import java.util.Objects;
+<i>28</i>&nbsp;
+<i>29</i>&nbsp;import opennlp.tools.dictionary.serializer.Attributes;
+<i>30</i>&nbsp;import opennlp.tools.dictionary.serializer.DictionaryEntryPersistor;
+<i>31</i>&nbsp;import opennlp.tools.dictionary.serializer.Entry;
+<i>32</i>&nbsp;import opennlp.tools.util.InvalidFormatException;
+<i>33</i>&nbsp;import opennlp.tools.util.StringList;
+<i>34</i>&nbsp;import opennlp.tools.util.StringUtil;
+<i>35</i>&nbsp;import opennlp.tools.util.model.SerializableArtifact;
+<i>36</i>&nbsp;
+<i>37</i>&nbsp;/**
+<i>38</i>&nbsp; * Provides a means of determining which tags are valid for a particular word
+<i>39</i>&nbsp; * based on a tag dictionary read from a file.
+<i>40</i>&nbsp; */
+<b class="fc"><i>41</i>&nbsp;public class POSDictionary implements Iterable&lt;String&gt;, MutableTagDictionary, SerializableArtifact {</b>
+<i>42</i>&nbsp;
+<i>43</i>&nbsp;  private Map&lt;String, String[]&gt; dictionary;
+<i>44</i>&nbsp;
+<b class="fc"><i>45</i>&nbsp;  private boolean caseSensitive = true;</b>
+<i>46</i>&nbsp;
+<i>47</i>&nbsp;  /**
+<i>48</i>&nbsp;   * Initializes an empty case sensitive {@link POSDictionary}.
+<i>49</i>&nbsp;   */
+<i>50</i>&nbsp;  public POSDictionary() {
+<b class="fc"><i>51</i>&nbsp;    this(true);</b>
+<b class="fc"><i>52</i>&nbsp;  }</b>
+<i>53</i>&nbsp;
+<i>54</i>&nbsp;  /**
+<i>55</i>&nbsp;   * Initializes an empty {@link POSDictionary}.
+<i>56</i>&nbsp;   * @param caseSensitive the {@link POSDictionary} case sensitivity
+<i>57</i>&nbsp;   */
+<b class="fc"><i>58</i>&nbsp;  public POSDictionary(boolean caseSensitive) {</b>
+<b class="fc"><i>59</i>&nbsp;    dictionary = new HashMap&lt;&gt;();</b>
+<b class="fc"><i>60</i>&nbsp;    this.caseSensitive = caseSensitive;</b>
+<b class="fc"><i>61</i>&nbsp;  }</b>
+<i>62</i>&nbsp;
+<i>63</i>&nbsp;  /**
+<i>64</i>&nbsp;   * Returns a list of valid tags for the specified word.
+<i>65</i>&nbsp;   *
+<i>66</i>&nbsp;   * @param word The word.
+<i>67</i>&nbsp;   *
+<i>68</i>&nbsp;   * @return A list of valid tags for the specified word or
+<i>69</i>&nbsp;   *     null if no information is available for that word.
+<i>70</i>&nbsp;   */
+<i>71</i>&nbsp;  public String[] getTags(String word) {
+<b class="fc"><i>72</i>&nbsp;    if (caseSensitive) {</b>
+<b class="fc"><i>73</i>&nbsp;      return dictionary.get(word);</b>
+<i>74</i>&nbsp;    }
+<i>75</i>&nbsp;    else {
+<b class="fc"><i>76</i>&nbsp;      return dictionary.get(StringUtil.toLowerCase(word));</b>
+<i>77</i>&nbsp;    }
+<i>78</i>&nbsp;  }
+<i>79</i>&nbsp;
+<i>80</i>&nbsp;  /**
+<i>81</i>&nbsp;   * Associates the specified tags with the specified word. If the dictionary
+<i>82</i>&nbsp;   * previously contained the word, the old tags are replaced by the specified
+<i>83</i>&nbsp;   * ones.
+<i>84</i>&nbsp;   *
+<i>85</i>&nbsp;   * @param word
+<i>86</i>&nbsp;   *          The word to be added to the dictionary.
+<i>87</i>&nbsp;   * @param tags
+<i>88</i>&nbsp;   *          The set of tags associated with the specified word.
+<i>89</i>&nbsp;   *
+<i>90</i>&nbsp;   * @deprecated Use {@link #put(String, String[])} instead
+<i>91</i>&nbsp;   */
+<i>92</i>&nbsp;  void addTags(String word, String... tags) {
+<b class="nc"><i>93</i>&nbsp;    put(word, tags);</b>
+<b class="nc"><i>94</i>&nbsp;  }</b>
+<i>95</i>&nbsp;
+<i>96</i>&nbsp;  /**
+<i>97</i>&nbsp;   * Retrieves an iterator over all words in the dictionary.
+<i>98</i>&nbsp;   */
+<i>99</i>&nbsp;  public Iterator&lt;String&gt; iterator() {
+<b class="fc"><i>100</i>&nbsp;    return dictionary.keySet().iterator();</b>
+<i>101</i>&nbsp;  }
+<i>102</i>&nbsp;
+<i>103</i>&nbsp;  private static String tagsToString(String[] tags) {
+<i>104</i>&nbsp;
+<b class="fc"><i>105</i>&nbsp;    StringBuilder tagString = new StringBuilder();</b>
+<i>106</i>&nbsp;
+<b class="fc"><i>107</i>&nbsp;    for (String tag : tags) {</b>
+<b class="fc"><i>108</i>&nbsp;      tagString.append(tag);</b>
+<b class="fc"><i>109</i>&nbsp;      tagString.append(&#39; &#39;);</b>
+<i>110</i>&nbsp;    }
+<i>111</i>&nbsp;
+<i>112</i>&nbsp;    // remove last space
+<b class="fc"><i>113</i>&nbsp;    if (tagString.length() &gt; 0) {</b>
+<b class="fc"><i>114</i>&nbsp;      tagString.setLength(tagString.length() - 1);</b>
+<i>115</i>&nbsp;    }
+<i>116</i>&nbsp;
+<b class="fc"><i>117</i>&nbsp;    return tagString.toString();</b>
+<i>118</i>&nbsp;  }
+<i>119</i>&nbsp;
+<i>120</i>&nbsp;  /**
+<i>121</i>&nbsp;   * Writes the {@link POSDictionary} to the given {@link OutputStream};
+<i>122</i>&nbsp;   *
+<i>123</i>&nbsp;   * After the serialization is finished the provided
+<i>124</i>&nbsp;   * {@link OutputStream} remains open.
+<i>125</i>&nbsp;   *
+<i>126</i>&nbsp;   * @param out
+<i>127</i>&nbsp;   *            the {@link OutputStream} to write the dictionary into.
+<i>128</i>&nbsp;   *
+<i>129</i>&nbsp;   * @throws IOException
+<i>130</i>&nbsp;   *             if writing to the {@link OutputStream} fails
+<i>131</i>&nbsp;   */
+<i>132</i>&nbsp;  public void serialize(OutputStream out) throws IOException {
+<b class="fc"><i>133</i>&nbsp;    Iterator&lt;Entry&gt; entries = new Iterator&lt;Entry&gt;() {</b>
+<i>134</i>&nbsp;
+<b class="fc"><i>135</i>&nbsp;      Iterator&lt;String&gt; iterator = dictionary.keySet().iterator();</b>
+<i>136</i>&nbsp;
+<i>137</i>&nbsp;      public boolean hasNext() {
+<b class="fc"><i>138</i>&nbsp;        return iterator.hasNext();</b>
+<i>139</i>&nbsp;      }
+<i>140</i>&nbsp;
+<i>141</i>&nbsp;      public Entry next() {
+<i>142</i>&nbsp;
+<b class="fc"><i>143</i>&nbsp;        String word = iterator.next();</b>
+<i>144</i>&nbsp;
+<b class="fc"><i>145</i>&nbsp;        Attributes tagAttribute = new Attributes();</b>
+<b class="fc"><i>146</i>&nbsp;        tagAttribute.setValue(&quot;tags&quot;, tagsToString(getTags(word)));</b>
+<i>147</i>&nbsp;
+<b class="fc"><i>148</i>&nbsp;        return new Entry(new StringList(word), tagAttribute);</b>
+<i>149</i>&nbsp;      }
+<i>150</i>&nbsp;
+<i>151</i>&nbsp;      public void remove() {
+<b class="nc"><i>152</i>&nbsp;        throw new UnsupportedOperationException();</b>
+<i>153</i>&nbsp;      }
+<i>154</i>&nbsp;    };
+<i>155</i>&nbsp;
+<b class="fc"><i>156</i>&nbsp;    DictionaryEntryPersistor.serialize(out, entries, caseSensitive);</b>
+<b class="fc"><i>157</i>&nbsp;  }</b>
+<i>158</i>&nbsp;
+<i>159</i>&nbsp;  @Override
+<i>160</i>&nbsp;  public int hashCode() {
+<i>161</i>&nbsp;
+<b class="fc"><i>162</i>&nbsp;    int[] keyHashes = new int[dictionary.size()];</b>
+<b class="fc"><i>163</i>&nbsp;    int[] valueHashes = new int[dictionary.size()];</b>
+<i>164</i>&nbsp;
+<b class="fc"><i>165</i>&nbsp;    int i = 0;</b>
+<i>166</i>&nbsp;
+<b class="fc"><i>167</i>&nbsp;    for (String word : this) {</b>
+<b class="fc"><i>168</i>&nbsp;      keyHashes[i] = word.hashCode();</b>
+<b class="fc"><i>169</i>&nbsp;      valueHashes[i] = Arrays.hashCode(getTags(word));</b>
+<b class="fc"><i>170</i>&nbsp;      i++;</b>
+<b class="fc"><i>171</i>&nbsp;    }</b>
+<i>172</i>&nbsp;
+<b class="fc"><i>173</i>&nbsp;    Arrays.sort(keyHashes);</b>
+<b class="fc"><i>174</i>&nbsp;    Arrays.sort(valueHashes);</b>
+<i>175</i>&nbsp;
+<b class="fc"><i>176</i>&nbsp;    return Objects.hash(Arrays.hashCode(keyHashes), Arrays.hashCode(valueHashes));</b>
+<i>177</i>&nbsp;  }
+<i>178</i>&nbsp;
+<i>179</i>&nbsp;  @Override
+<i>180</i>&nbsp;  public boolean equals(Object obj) {
+<b class="fc"><i>181</i>&nbsp;    if (obj == this) {</b>
+<b class="nc"><i>182</i>&nbsp;      return true;</b>
+<i>183</i>&nbsp;    }
+<i>184</i>&nbsp;
+<b class="fc"><i>185</i>&nbsp;    if (obj instanceof POSDictionary) {</b>
+<b class="fc"><i>186</i>&nbsp;      POSDictionary posDictionary = (POSDictionary) obj;</b>
+<i>187</i>&nbsp;
+<b class="fc"><i>188</i>&nbsp;      if (this.dictionary.size() == posDictionary.dictionary.size()) {</b>
+<b class="fc"><i>189</i>&nbsp;        for (String word : this) {</b>
+<b class="fc"><i>190</i>&nbsp;          if (!Arrays.equals(getTags(word), posDictionary.getTags(word))) {</b>
+<b class="nc"><i>191</i>&nbsp;            return false;</b>
+<i>192</i>&nbsp;          }
+<b class="fc"><i>193</i>&nbsp;        }</b>
+<i>194</i>&nbsp;
+<b class="fc"><i>195</i>&nbsp;        return true;</b>
+<i>196</i>&nbsp;      }
+<i>197</i>&nbsp;    }
+<i>198</i>&nbsp;
+<b class="nc"><i>199</i>&nbsp;    return false;</b>
+<i>200</i>&nbsp;  }
+<i>201</i>&nbsp;
+<i>202</i>&nbsp;  @Override
+<i>203</i>&nbsp;  public String toString() {
+<i>204</i>&nbsp;    // it is time consuming to output the dictionary entries.
+<i>205</i>&nbsp;    // will output something meaningful for debugging, like
+<i>206</i>&nbsp;    // POSDictionary{size=100, caseSensitive=true}
+<i>207</i>&nbsp;
+<b class="fc"><i>208</i>&nbsp;    return &quot;POSDictionary{size=&quot; + dictionary.size() + &quot;, caseSensitive=&quot;</b>
+<i>209</i>&nbsp;        + this.caseSensitive + &quot;}&quot;;
+<i>210</i>&nbsp;  }
+<i>211</i>&nbsp;
+<i>212</i>&nbsp;  /**
+<i>213</i>&nbsp;   * Creates a new {@link POSDictionary} from a provided {@link InputStream}.
+<i>214</i>&nbsp;   *
+<i>215</i>&nbsp;   * After creation is finished the provided {@link InputStream} is closed.
+<i>216</i>&nbsp;   *
+<i>217</i>&nbsp;   * @param in
+<i>218</i>&nbsp;   *
+<i>219</i>&nbsp;   * @return the pos dictionary
+<i>220</i>&nbsp;   *
+<i>221</i>&nbsp;   * @throws IOException
+<i>222</i>&nbsp;   * @throws InvalidFormatException
+<i>223</i>&nbsp;   */
+<i>224</i>&nbsp;  public static POSDictionary create(InputStream in) throws IOException {
+<i>225</i>&nbsp;
+<b class="fc"><i>226</i>&nbsp;    final POSDictionary newPosDict = new POSDictionary();</b>
+<i>227</i>&nbsp;
+<b class="fc"><i>228</i>&nbsp;    boolean isCaseSensitive = DictionaryEntryPersistor.create(in, entry -&gt; {</b>
+<i>229</i>&nbsp;
+<b class="fc"><i>230</i>&nbsp;      String tagString = entry.getAttributes().getValue(&quot;tags&quot;);</b>
+<i>231</i>&nbsp;
+<b class="fc"><i>232</i>&nbsp;      String[] tags = tagString.split(&quot; &quot;);</b>
+<i>233</i>&nbsp;
+<b class="fc"><i>234</i>&nbsp;      StringList word = entry.getTokens();</b>
+<i>235</i>&nbsp;
+<b class="fc"><i>236</i>&nbsp;      if (word.size() != 1)</b>
+<b class="nc"><i>237</i>&nbsp;        throw new InvalidFormatException(&quot;Each entry must have exactly one token! &quot; + word);</b>
+<i>238</i>&nbsp;
+<b class="fc"><i>239</i>&nbsp;      newPosDict.dictionary.put(word.getToken(0), tags);</b>
+<b class="fc"><i>240</i>&nbsp;    });</b>
+<i>241</i>&nbsp;
+<b class="fc"><i>242</i>&nbsp;    newPosDict.caseSensitive = isCaseSensitive;</b>
+<i>243</i>&nbsp;
+<i>244</i>&nbsp;    // TODO: The dictionary API needs to be improved to do this better!
+<b class="fc"><i>245</i>&nbsp;    if (!isCaseSensitive) {</b>
+<b class="fc"><i>246</i>&nbsp;      Map&lt;String, String[]&gt; lowerCasedDictionary = new HashMap&lt;&gt;();</b>
+<i>247</i>&nbsp;
+<b class="fc"><i>248</i>&nbsp;      for (Map.Entry&lt;String, String[]&gt; entry : newPosDict.dictionary.entrySet()) {</b>
+<b class="fc"><i>249</i>&nbsp;        lowerCasedDictionary.put(StringUtil.toLowerCase(entry.getKey()), entry.getValue());</b>
+<b class="fc"><i>250</i>&nbsp;      }</b>
+<i>251</i>&nbsp;
+<b class="fc"><i>252</i>&nbsp;      newPosDict.dictionary = lowerCasedDictionary;</b>
+<i>253</i>&nbsp;    }
+<i>254</i>&nbsp;
+<b class="fc"><i>255</i>&nbsp;    return newPosDict;</b>
+<i>256</i>&nbsp;  }
+<i>257</i>&nbsp;
+<i>258</i>&nbsp;  public String[] put(String word, String... tags) {
+<b class="fc"><i>259</i>&nbsp;    if (this.caseSensitive) {</b>
+<b class="fc"><i>260</i>&nbsp;      return dictionary.put(word, tags);</b>
+<i>261</i>&nbsp;    } else {
+<b class="nc"><i>262</i>&nbsp;      return dictionary.put(StringUtil.toLowerCase(word), tags);</b>
+<i>263</i>&nbsp;    }
+<i>264</i>&nbsp;  }
+<i>265</i>&nbsp;
+<i>266</i>&nbsp;  public boolean isCaseSensitive() {
+<b class="nc"><i>267</i>&nbsp;    return this.caseSensitive;</b>
+<i>268</i>&nbsp;  }
+<i>269</i>&nbsp;
+<i>270</i>&nbsp;  @Override
+<i>271</i>&nbsp;  public Class&lt;?&gt; getArtifactSerializerClass() {
+<b class="fc"><i>272</i>&nbsp;    return POSTaggerFactory.POSDictionarySerializer.class;</b>
+<i>273</i>&nbsp;  }
+<i>274</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-09 18:47</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,154 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: DetokenizeSentenceSampleStream</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">opennlp.tools.formats.letsmt</a> ]
+</div>
+
+<h1>Coverage Summary for Class: DetokenizeSentenceSampleStream (opennlp.tools.formats.letsmt)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">DetokenizeSentenceSampleStream</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 18)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/*
+<i>2</i>&nbsp; * Licensed to the Apache Software Foundation (ASF) under one or more
+<i>3</i>&nbsp; * contributor license agreements.  See the NOTICE file distributed with
+<i>4</i>&nbsp; * this work for additional information regarding copyright ownership.
+<i>5</i>&nbsp; * The ASF licenses this file to You under the Apache License, Version 2.0
+<i>6</i>&nbsp; * (the &quot;License&quot;); you may not use this file except in compliance with
+<i>7</i>&nbsp; * the License. You may obtain a copy of the License at
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; *     http://www.apache.org/licenses/LICENSE-2.0
+<i>10</i>&nbsp; *
+<i>11</i>&nbsp; * Unless required by applicable law or agreed to in writing, software
+<i>12</i>&nbsp; * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<i>13</i>&nbsp; * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<i>14</i>&nbsp; * See the License for the specific language governing permissions and
+<i>15</i>&nbsp; * limitations under the License.
+<i>16</i>&nbsp; */
+<i>17</i>&nbsp;
+<i>18</i>&nbsp;package opennlp.tools.formats.letsmt;
+<i>19</i>&nbsp;
+<i>20</i>&nbsp;import java.io.IOException;
+<i>21</i>&nbsp;import java.util.ArrayList;
+<i>22</i>&nbsp;import java.util.List;
+<i>23</i>&nbsp;import java.util.Objects;
+<i>24</i>&nbsp;
+<i>25</i>&nbsp;import opennlp.tools.sentdetect.SentenceSample;
+<i>26</i>&nbsp;import opennlp.tools.tokenize.Detokenizer;
+<i>27</i>&nbsp;import opennlp.tools.tokenize.WhitespaceTokenizer;
+<i>28</i>&nbsp;import opennlp.tools.util.FilterObjectStream;
+<i>29</i>&nbsp;import opennlp.tools.util.ObjectStream;
+<i>30</i>&nbsp;import opennlp.tools.util.Span;
+<i>31</i>&nbsp;
+<i>32</i>&nbsp;public class DetokenizeSentenceSampleStream
+<i>33</i>&nbsp;    extends FilterObjectStream&lt;SentenceSample, SentenceSample&gt; {
+<i>34</i>&nbsp;
+<i>35</i>&nbsp;  private final Detokenizer detokenizer;
+<i>36</i>&nbsp;
+<i>37</i>&nbsp;  public DetokenizeSentenceSampleStream(Detokenizer detokenizer, ObjectStream&lt;SentenceSample&gt; samples) {
+<b class="nc"><i>38</i>&nbsp;    super(samples);</b>
+<b class="nc"><i>39</i>&nbsp;    this.detokenizer = Objects.requireNonNull(detokenizer);</b>
+<i>40</i>&nbsp;  }
+<i>41</i>&nbsp;
+<i>42</i>&nbsp;  @Override
+<i>43</i>&nbsp;  public SentenceSample read() throws IOException {
+<i>44</i>&nbsp;
+<b class="nc"><i>45</i>&nbsp;    SentenceSample sample = samples.read();</b>
+<i>46</i>&nbsp;
+<b class="nc"><i>47</i>&nbsp;    if (sample != null) {</b>
+<b class="nc"><i>48</i>&nbsp;      List&lt;String&gt; sentenceTexts = new ArrayList&lt;&gt;();</b>
+<i>49</i>&nbsp;
+<b class="nc"><i>50</i>&nbsp;      for (Span sentenceSpan : sample.getSentences()) {</b>
+<b class="nc"><i>51</i>&nbsp;        sentenceTexts.add(sample.getDocument().substring(sentenceSpan.getStart(), sentenceSpan.getEnd()));</b>
+<i>52</i>&nbsp;      }
+<i>53</i>&nbsp;
+<b class="nc"><i>54</i>&nbsp;      StringBuilder documentText = new StringBuilder();</b>
+<b class="nc"><i>55</i>&nbsp;      List&lt;Span&gt; newSentenceSpans = new ArrayList&lt;&gt;();</b>
+<b class="nc"><i>56</i>&nbsp;      for (String sentenceText : sentenceTexts) {</b>
+<b class="nc"><i>57</i>&nbsp;        String[] tokens = WhitespaceTokenizer.INSTANCE.tokenize(sentenceText);</b>
+<i>58</i>&nbsp;
+<b class="nc"><i>59</i>&nbsp;        int begin = documentText.length();</b>
+<i>60</i>&nbsp;
+<b class="nc"><i>61</i>&nbsp;        documentText.append(detokenizer.detokenize(tokens, null));</b>
+<b class="nc"><i>62</i>&nbsp;        newSentenceSpans.add(new Span(begin, documentText.length()));</b>
+<b class="nc"><i>63</i>&nbsp;        documentText.append(&#39; &#39;);</b>
+<b class="nc"><i>64</i>&nbsp;      }</b>
+<i>65</i>&nbsp;
+<b class="nc"><i>66</i>&nbsp;      return new SentenceSample(documentText, newSentenceSpans.toArray(new Span[newSentenceSpans.size()]));</b>
+<i>67</i>&nbsp;    }
+<i>68</i>&nbsp;
+<b class="nc"><i>69</i>&nbsp;    return null;</b>
+<i>70</i>&nbsp;  }
+<i>71</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-09 15:05</div>
+</div>
+</body>
+</html>

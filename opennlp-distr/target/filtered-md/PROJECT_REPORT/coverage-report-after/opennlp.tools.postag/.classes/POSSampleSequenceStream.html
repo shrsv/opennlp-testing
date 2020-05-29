@@ -1,0 +1,174 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: POSSampleSequenceStream</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">opennlp.tools.postag</a> ]
+</div>
+
+<h1>Coverage Summary for Class: POSSampleSequenceStream (opennlp.tools.postag)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">POSSampleSequenceStream</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 26)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/*
+<i>2</i>&nbsp; * Licensed to the Apache Software Foundation (ASF) under one or more
+<i>3</i>&nbsp; * contributor license agreements.  See the NOTICE file distributed with
+<i>4</i>&nbsp; * this work for additional information regarding copyright ownership.
+<i>5</i>&nbsp; * The ASF licenses this file to You under the Apache License, Version 2.0
+<i>6</i>&nbsp; * (the &quot;License&quot;); you may not use this file except in compliance with
+<i>7</i>&nbsp; * the License. You may obtain a copy of the License at
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; *     http://www.apache.org/licenses/LICENSE-2.0
+<i>10</i>&nbsp; *
+<i>11</i>&nbsp; * Unless required by applicable law or agreed to in writing, software
+<i>12</i>&nbsp; * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<i>13</i>&nbsp; * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<i>14</i>&nbsp; * See the License for the specific language governing permissions and
+<i>15</i>&nbsp; * limitations under the License.
+<i>16</i>&nbsp; */
+<i>17</i>&nbsp;
+<i>18</i>&nbsp;package opennlp.tools.postag;
+<i>19</i>&nbsp;
+<i>20</i>&nbsp;import java.io.IOException;
+<i>21</i>&nbsp;
+<i>22</i>&nbsp;import opennlp.tools.ml.model.AbstractModel;
+<i>23</i>&nbsp;import opennlp.tools.ml.model.Event;
+<i>24</i>&nbsp;import opennlp.tools.ml.model.Sequence;
+<i>25</i>&nbsp;import opennlp.tools.ml.model.SequenceStream;
+<i>26</i>&nbsp;import opennlp.tools.util.ObjectStream;
+<i>27</i>&nbsp;
+<i>28</i>&nbsp;public class POSSampleSequenceStream implements SequenceStream {
+<i>29</i>&nbsp;
+<i>30</i>&nbsp;  private POSContextGenerator pcg;
+<i>31</i>&nbsp;  private ObjectStream&lt;POSSample&gt; psi;
+<i>32</i>&nbsp;
+<i>33</i>&nbsp;  public POSSampleSequenceStream(ObjectStream&lt;POSSample&gt; psi) throws IOException {
+<b class="nc"><i>34</i>&nbsp;    this(psi, new DefaultPOSContextGenerator(null));</b>
+<i>35</i>&nbsp;  }
+<i>36</i>&nbsp;
+<i>37</i>&nbsp;  public POSSampleSequenceStream(ObjectStream&lt;POSSample&gt; psi, POSContextGenerator pcg)
+<b class="nc"><i>38</i>&nbsp;      throws IOException {</b>
+<b class="nc"><i>39</i>&nbsp;    this.psi = psi;</b>
+<b class="nc"><i>40</i>&nbsp;    this.pcg = pcg;</b>
+<i>41</i>&nbsp;  }
+<i>42</i>&nbsp;
+<i>43</i>&nbsp;  @SuppressWarnings(&quot;unchecked&quot;)
+<i>44</i>&nbsp;  public Event[] updateContext(Sequence sequence, AbstractModel model) {
+<b class="nc"><i>45</i>&nbsp;    Sequence&lt;POSSample&gt; pss = sequence;</b>
+<b class="nc"><i>46</i>&nbsp;    POSTagger tagger = new POSTaggerME(new POSModel(&quot;x-unspecified&quot;, model, null, new POSTaggerFactory()));</b>
+<b class="nc"><i>47</i>&nbsp;    String[] sentence = pss.getSource().getSentence();</b>
+<b class="nc"><i>48</i>&nbsp;    Object[] ac = pss.getSource().getAddictionalContext();</b>
+<b class="nc"><i>49</i>&nbsp;    String[] tags = tagger.tag(pss.getSource().getSentence());</b>
+<b class="nc"><i>50</i>&nbsp;    Event[] events = new Event[sentence.length];</b>
+<b class="nc"><i>51</i>&nbsp;    POSSampleEventStream.generateEvents(sentence, tags, ac, pcg)</b>
+<b class="nc"><i>52</i>&nbsp;        .toArray(events);</b>
+<b class="nc"><i>53</i>&nbsp;    return events;</b>
+<i>54</i>&nbsp;  }
+<i>55</i>&nbsp;
+<i>56</i>&nbsp;  @Override
+<i>57</i>&nbsp;  public Sequence read() throws IOException {
+<i>58</i>&nbsp;
+<b class="nc"><i>59</i>&nbsp;    POSSample sample = psi.read();</b>
+<i>60</i>&nbsp;
+<b class="nc"><i>61</i>&nbsp;    if (sample != null) {</b>
+<b class="nc"><i>62</i>&nbsp;      String[] sentence = sample.getSentence();</b>
+<b class="nc"><i>63</i>&nbsp;      String[] tags = sample.getTags();</b>
+<b class="nc"><i>64</i>&nbsp;      Event[] events = new Event[sentence.length];</b>
+<i>65</i>&nbsp;
+<b class="nc"><i>66</i>&nbsp;      for (int i = 0; i &lt; sentence.length; i++) {</b>
+<i>67</i>&nbsp;
+<i>68</i>&nbsp;        // it is safe to pass the tags as previous tags because
+<i>69</i>&nbsp;        // the context generator does not look for non predicted tags
+<b class="nc"><i>70</i>&nbsp;        String[] context = pcg.getContext(i, sentence, tags, null);</b>
+<i>71</i>&nbsp;
+<b class="nc"><i>72</i>&nbsp;        events[i] = new Event(tags[i], context);</b>
+<i>73</i>&nbsp;      }
+<b class="nc"><i>74</i>&nbsp;      Sequence&lt;POSSample&gt; sequence = new Sequence&lt;POSSample&gt;(events,sample);</b>
+<b class="nc"><i>75</i>&nbsp;      return sequence;</b>
+<i>76</i>&nbsp;    }
+<i>77</i>&nbsp;
+<b class="nc"><i>78</i>&nbsp;    return null;</b>
+<i>79</i>&nbsp;  }
+<i>80</i>&nbsp;
+<i>81</i>&nbsp;  @Override
+<i>82</i>&nbsp;  public void reset() throws IOException, UnsupportedOperationException {
+<b class="nc"><i>83</i>&nbsp;    psi.reset();</b>
+<i>84</i>&nbsp;  }
+<i>85</i>&nbsp;
+<i>86</i>&nbsp;  @Override
+<i>87</i>&nbsp;  public void close() throws IOException {
+<b class="nc"><i>88</i>&nbsp;    psi.close();</b>
+<i>89</i>&nbsp;  }
+<i>90</i>&nbsp;}
+<i>91</i>&nbsp;
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-09 18:47</div>
+</div>
+</body>
+</html>

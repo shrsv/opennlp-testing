@@ -1,0 +1,595 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: AnnotatorUtil</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">opennlp.uima.util</a> ]
+</div>
+
+<h1>Coverage Summary for Class: AnnotatorUtil (opennlp.uima.util)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">AnnotatorUtil</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 25)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 126)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/*
+<i>2</i>&nbsp; * Licensed to the Apache Software Foundation (ASF) under one or more
+<i>3</i>&nbsp; * contributor license agreements.  See the NOTICE file distributed with
+<i>4</i>&nbsp; * this work for additional information regarding copyright ownership.
+<i>5</i>&nbsp; * The ASF licenses this file to You under the Apache License, Version 2.0
+<i>6</i>&nbsp; * (the &quot;License&quot;); you may not use this file except in compliance with
+<i>7</i>&nbsp; * the License. You may obtain a copy of the License at
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; *     http://www.apache.org/licenses/LICENSE-2.0
+<i>10</i>&nbsp; *
+<i>11</i>&nbsp; * Unless required by applicable law or agreed to in writing, software
+<i>12</i>&nbsp; * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<i>13</i>&nbsp; * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<i>14</i>&nbsp; * See the License for the specific language governing permissions and
+<i>15</i>&nbsp; * limitations under the License.
+<i>16</i>&nbsp; */
+<i>17</i>&nbsp;
+<i>18</i>&nbsp;package opennlp.uima.util;
+<i>19</i>&nbsp;
+<i>20</i>&nbsp;import java.io.IOException;
+<i>21</i>&nbsp;import java.io.InputStream;
+<i>22</i>&nbsp;
+<i>23</i>&nbsp;import org.apache.uima.UimaContext;
+<i>24</i>&nbsp;import org.apache.uima.analysis_engine.AnalysisEngineProcessException;
+<i>25</i>&nbsp;import org.apache.uima.cas.Feature;
+<i>26</i>&nbsp;import org.apache.uima.cas.Type;
+<i>27</i>&nbsp;import org.apache.uima.cas.TypeSystem;
+<i>28</i>&nbsp;import org.apache.uima.resource.ResourceAccessException;
+<i>29</i>&nbsp;import org.apache.uima.resource.ResourceInitializationException;
+<i>30</i>&nbsp;import org.apache.uima.util.Level;
+<i>31</i>&nbsp;import org.apache.uima.util.Logger;
+<i>32</i>&nbsp;
+<i>33</i>&nbsp;import opennlp.tools.dictionary.Dictionary;
+<i>34</i>&nbsp;
+<i>35</i>&nbsp;/**
+<i>36</i>&nbsp; * This is a utility class for Annotators.
+<i>37</i>&nbsp; */
+<i>38</i>&nbsp;public final class AnnotatorUtil {
+<i>39</i>&nbsp;
+<b class="nc"><i>40</i>&nbsp;  private AnnotatorUtil() {</b>
+<i>41</i>&nbsp;    // util class not must not instantiated
+<i>42</i>&nbsp;  }
+<i>43</i>&nbsp;
+<i>44</i>&nbsp;  /**
+<i>45</i>&nbsp;   * Retrieves a type of the given name from the given type system.
+<i>46</i>&nbsp;   *
+<i>47</i>&nbsp;   * @param typeSystem
+<i>48</i>&nbsp;   * @param name
+<i>49</i>&nbsp;   * @return the type
+<i>50</i>&nbsp;   * @throws AnalysisEngineProcessException
+<i>51</i>&nbsp;   */
+<i>52</i>&nbsp;  public static Type getType(TypeSystem typeSystem, String name)
+<i>53</i>&nbsp;      throws AnalysisEngineProcessException {
+<b class="nc"><i>54</i>&nbsp;    Type type = typeSystem.getType(name);</b>
+<i>55</i>&nbsp;
+<b class="nc"><i>56</i>&nbsp;    if (type == null) {</b>
+<b class="nc"><i>57</i>&nbsp;      throw new OpenNlpAnnotatorProcessException(</b>
+<i>58</i>&nbsp;          ExceptionMessages.TYPE_NOT_FOUND,
+<i>59</i>&nbsp;          new Object[] {name});
+<i>60</i>&nbsp;    }
+<i>61</i>&nbsp;
+<b class="nc"><i>62</i>&nbsp;    return type;</b>
+<i>63</i>&nbsp;  }
+<i>64</i>&nbsp;
+<i>65</i>&nbsp;  /**
+<i>66</i>&nbsp;   * Checks if the given feature has the expected type otherwise
+<i>67</i>&nbsp;   * an exception is thrown.
+<i>68</i>&nbsp;   *
+<i>69</i>&nbsp;   * @param feature
+<i>70</i>&nbsp;   * @param expectedType
+<i>71</i>&nbsp;   * @throws AnalysisEngineProcessException - if type does not match
+<i>72</i>&nbsp;   */
+<i>73</i>&nbsp;  private static void checkFeatureType(Feature feature, String expectedType)
+<i>74</i>&nbsp;      throws AnalysisEngineProcessException {
+<b class="nc"><i>75</i>&nbsp;    if (!feature.getRange().getName().equals(expectedType)) {</b>
+<b class="nc"><i>76</i>&nbsp;      throw new OpenNlpAnnotatorProcessException(</b>
+<i>77</i>&nbsp;          ExceptionMessages.WRONG_FEATURE_TYPE,
+<b class="nc"><i>78</i>&nbsp;          new Object[] {feature.getName(), expectedType</b>
+<i>79</i>&nbsp;          });
+<i>80</i>&nbsp;    }
+<i>81</i>&nbsp;  }
+<i>82</i>&nbsp;
+<i>83</i>&nbsp;  public static Feature getRequiredFeature(Type type, String featureName)
+<i>84</i>&nbsp;      throws AnalysisEngineProcessException {
+<i>85</i>&nbsp;
+<b class="nc"><i>86</i>&nbsp;    Feature feature = type.getFeatureByBaseName(featureName);</b>
+<i>87</i>&nbsp;
+<b class="nc"><i>88</i>&nbsp;    if (feature == null) {</b>
+<b class="nc"><i>89</i>&nbsp;      throw new OpenNlpAnnotatorProcessException(</b>
+<b class="nc"><i>90</i>&nbsp;          ExceptionMessages.FEATURE_NOT_FOUND, new Object[] {type.getName(), featureName});</b>
+<i>91</i>&nbsp;    }
+<i>92</i>&nbsp;
+<b class="nc"><i>93</i>&nbsp;    return feature;</b>
+<i>94</i>&nbsp;  }
+<i>95</i>&nbsp;
+<i>96</i>&nbsp;  /**
+<i>97</i>&nbsp;   * Retrieves a required feature from the given type.
+<i>98</i>&nbsp;   *
+<i>99</i>&nbsp;   * @param type        the type
+<i>100</i>&nbsp;   * @param featureName the name of the feature
+<i>101</i>&nbsp;   * @param rangeType   the expected range type
+<i>102</i>&nbsp;   * @return the requested parameter
+<i>103</i>&nbsp;   * @throws AnalysisEngineProcessException
+<i>104</i>&nbsp;   */
+<i>105</i>&nbsp;  public static Feature getRequiredFeature(Type type, String featureName,
+<i>106</i>&nbsp;                                           String rangeType)
+<i>107</i>&nbsp;      throws AnalysisEngineProcessException {
+<i>108</i>&nbsp;
+<b class="nc"><i>109</i>&nbsp;    Feature feature = getRequiredFeature(type, featureName);</b>
+<i>110</i>&nbsp;
+<b class="nc"><i>111</i>&nbsp;    checkFeatureType(feature, rangeType);</b>
+<i>112</i>&nbsp;
+<b class="nc"><i>113</i>&nbsp;    return feature;</b>
+<i>114</i>&nbsp;  }
+<i>115</i>&nbsp;
+<i>116</i>&nbsp;  public static Feature getRequiredFeatureParameter(UimaContext context, Type type,
+<i>117</i>&nbsp;                                                    String featureNameParameter)
+<i>118</i>&nbsp;      throws AnalysisEngineProcessException {
+<i>119</i>&nbsp;
+<i>120</i>&nbsp;    String featureName;
+<i>121</i>&nbsp;
+<i>122</i>&nbsp;    try {
+<b class="nc"><i>123</i>&nbsp;      featureName = getRequiredStringParameter(context, featureNameParameter);</b>
+<b class="nc"><i>124</i>&nbsp;    } catch (ResourceInitializationException e) {</b>
+<b class="nc"><i>125</i>&nbsp;      throw new OpenNlpAnnotatorProcessException(e);</b>
+<b class="nc"><i>126</i>&nbsp;    }</b>
+<i>127</i>&nbsp;
+<b class="nc"><i>128</i>&nbsp;    return getRequiredFeature(type, featureName);</b>
+<i>129</i>&nbsp;  }
+<i>130</i>&nbsp;
+<i>131</i>&nbsp;  public static Feature getRequiredFeatureParameter(UimaContext context,
+<i>132</i>&nbsp;                                                    Type type, String featureNameParameter,
+<i>133</i>&nbsp;                                                    String rangeTypeName)
+<i>134</i>&nbsp;      throws AnalysisEngineProcessException {
+<i>135</i>&nbsp;
+<i>136</i>&nbsp;    String featureName;
+<i>137</i>&nbsp;    try {
+<b class="nc"><i>138</i>&nbsp;      featureName = getRequiredStringParameter(context, featureNameParameter);</b>
+<b class="nc"><i>139</i>&nbsp;    } catch (ResourceInitializationException e) {</b>
+<b class="nc"><i>140</i>&nbsp;      throw new OpenNlpAnnotatorProcessException(e);</b>
+<b class="nc"><i>141</i>&nbsp;    }</b>
+<i>142</i>&nbsp;
+<b class="nc"><i>143</i>&nbsp;    return getRequiredFeature(type, featureName, rangeTypeName);</b>
+<i>144</i>&nbsp;  }
+<i>145</i>&nbsp;
+<i>146</i>&nbsp;  public static Type getRequiredTypeParameter(UimaContext context,
+<i>147</i>&nbsp;                                              TypeSystem typeSystem, String parameter)
+<i>148</i>&nbsp;      throws AnalysisEngineProcessException {
+<i>149</i>&nbsp;
+<i>150</i>&nbsp;    String typeName;
+<i>151</i>&nbsp;
+<i>152</i>&nbsp;    try {
+<b class="nc"><i>153</i>&nbsp;      typeName = getRequiredStringParameter(context, parameter);</b>
+<b class="nc"><i>154</i>&nbsp;    } catch (ResourceInitializationException e) {</b>
+<b class="nc"><i>155</i>&nbsp;      throw new OpenNlpAnnotatorProcessException(e);</b>
+<b class="nc"><i>156</i>&nbsp;    }</b>
+<i>157</i>&nbsp;
+<b class="nc"><i>158</i>&nbsp;    return getType(typeSystem, typeName);</b>
+<i>159</i>&nbsp;  }
+<i>160</i>&nbsp;
+<i>161</i>&nbsp;  /**
+<i>162</i>&nbsp;   * Retrieves a required parameter from the given context.
+<i>163</i>&nbsp;   *
+<i>164</i>&nbsp;   * @param context
+<i>165</i>&nbsp;   * @param parameter
+<i>166</i>&nbsp;   * @return the requested parameter
+<i>167</i>&nbsp;   * @throws ResourceInitializationException
+<i>168</i>&nbsp;   */
+<i>169</i>&nbsp;  public static String getRequiredStringParameter(UimaContext context,
+<i>170</i>&nbsp;                                                  String parameter)
+<i>171</i>&nbsp;      throws ResourceInitializationException {
+<i>172</i>&nbsp;
+<b class="nc"><i>173</i>&nbsp;    String value = getOptionalStringParameter(context, parameter);</b>
+<i>174</i>&nbsp;
+<b class="nc"><i>175</i>&nbsp;    checkForNull(value, parameter);</b>
+<i>176</i>&nbsp;
+<b class="nc"><i>177</i>&nbsp;    return value;</b>
+<i>178</i>&nbsp;  }
+<i>179</i>&nbsp;
+<i>180</i>&nbsp;  /**
+<i>181</i>&nbsp;   * Retrieves a required parameter from the given context.
+<i>182</i>&nbsp;   *
+<i>183</i>&nbsp;   * @param context
+<i>184</i>&nbsp;   * @param parameter
+<i>185</i>&nbsp;   * @return the requested parameter
+<i>186</i>&nbsp;   * @throws ResourceInitializationException
+<i>187</i>&nbsp;   */
+<i>188</i>&nbsp;  public static Integer getRequiredIntegerParameter(UimaContext context,
+<i>189</i>&nbsp;                                                    String parameter)
+<i>190</i>&nbsp;      throws ResourceInitializationException {
+<i>191</i>&nbsp;
+<b class="nc"><i>192</i>&nbsp;    Integer value = getOptionalIntegerParameter(context, parameter);</b>
+<i>193</i>&nbsp;
+<b class="nc"><i>194</i>&nbsp;    checkForNull(value, parameter);</b>
+<i>195</i>&nbsp;
+<b class="nc"><i>196</i>&nbsp;    return value;</b>
+<i>197</i>&nbsp;  }
+<i>198</i>&nbsp;
+<i>199</i>&nbsp;  /**
+<i>200</i>&nbsp;   * Retrieves a required parameter from the given context.
+<i>201</i>&nbsp;   *
+<i>202</i>&nbsp;   * @param context
+<i>203</i>&nbsp;   * @param parameter
+<i>204</i>&nbsp;   * @return the requested parameter
+<i>205</i>&nbsp;   * @throws ResourceInitializationException
+<i>206</i>&nbsp;   */
+<i>207</i>&nbsp;  public static Float getRequiredFloatParameter(UimaContext context,
+<i>208</i>&nbsp;                                                String parameter)
+<i>209</i>&nbsp;      throws ResourceInitializationException {
+<i>210</i>&nbsp;
+<b class="nc"><i>211</i>&nbsp;    Float value = getOptionalFloatParameter(context, parameter);</b>
+<i>212</i>&nbsp;
+<b class="nc"><i>213</i>&nbsp;    checkForNull(value, parameter);</b>
+<i>214</i>&nbsp;
+<b class="nc"><i>215</i>&nbsp;    return value;</b>
+<i>216</i>&nbsp;  }
+<i>217</i>&nbsp;
+<i>218</i>&nbsp;  /**
+<i>219</i>&nbsp;   * Retrieves a required parameter from the given context.
+<i>220</i>&nbsp;   *
+<i>221</i>&nbsp;   * @param context
+<i>222</i>&nbsp;   * @param parameter
+<i>223</i>&nbsp;   * @return the requested parameter
+<i>224</i>&nbsp;   * @throws ResourceInitializationException
+<i>225</i>&nbsp;   */
+<i>226</i>&nbsp;  public static Boolean getRequiredBooleanParameter(UimaContext context,
+<i>227</i>&nbsp;                                                    String parameter)
+<i>228</i>&nbsp;      throws ResourceInitializationException {
+<i>229</i>&nbsp;
+<b class="nc"><i>230</i>&nbsp;    Boolean value = getOptionalBooleanParameter(context, parameter);</b>
+<i>231</i>&nbsp;
+<b class="nc"><i>232</i>&nbsp;    checkForNull(value, parameter);</b>
+<i>233</i>&nbsp;
+<b class="nc"><i>234</i>&nbsp;    return value;</b>
+<i>235</i>&nbsp;  }
+<i>236</i>&nbsp;
+<i>237</i>&nbsp;  private static void checkForNull(Object value, String parameterName)
+<i>238</i>&nbsp;      throws ResourceInitializationException {
+<b class="nc"><i>239</i>&nbsp;    if (value == null) {</b>
+<b class="nc"><i>240</i>&nbsp;      throw new ResourceInitializationException(</b>
+<i>241</i>&nbsp;          ExceptionMessages.MESSAGE_CATALOG,
+<i>242</i>&nbsp;          ExceptionMessages.PARAMETER_NOT_FOUND,
+<i>243</i>&nbsp;          new Object[] {parameterName});
+<i>244</i>&nbsp;    }
+<i>245</i>&nbsp;  }
+<i>246</i>&nbsp;
+<i>247</i>&nbsp;
+<i>248</i>&nbsp;  public static Feature getOptionalFeatureParameter(UimaContext context,
+<i>249</i>&nbsp;                                                    Type nameType, String featureNameParameter,
+<i>250</i>&nbsp;                                                    String rangeTypeName)
+<i>251</i>&nbsp;      throws AnalysisEngineProcessException {
+<i>252</i>&nbsp;
+<i>253</i>&nbsp;    String featureName;
+<i>254</i>&nbsp;    try {
+<b class="nc"><i>255</i>&nbsp;      featureName = getOptionalStringParameter(context, featureNameParameter);</b>
+<b class="nc"><i>256</i>&nbsp;    } catch (ResourceInitializationException e) {</b>
+<b class="nc"><i>257</i>&nbsp;      throw new OpenNlpAnnotatorProcessException(e);</b>
+<b class="nc"><i>258</i>&nbsp;    }</b>
+<i>259</i>&nbsp;
+<b class="nc"><i>260</i>&nbsp;    if (featureName != null) {</b>
+<b class="nc"><i>261</i>&nbsp;      return getOptionalFeature(nameType, featureName, rangeTypeName);</b>
+<i>262</i>&nbsp;    } else {
+<b class="nc"><i>263</i>&nbsp;      return null;</b>
+<i>264</i>&nbsp;    }
+<i>265</i>&nbsp;  }
+<i>266</i>&nbsp;
+<i>267</i>&nbsp;  public static Feature getOptionalFeature(Type type, String featureName, String rangeType)
+<i>268</i>&nbsp;      throws AnalysisEngineProcessException {
+<i>269</i>&nbsp;
+<b class="nc"><i>270</i>&nbsp;    Feature feature = type.getFeatureByBaseName(featureName);</b>
+<i>271</i>&nbsp;
+<b class="nc"><i>272</i>&nbsp;    checkFeatureType(feature, rangeType);</b>
+<i>273</i>&nbsp;
+<b class="nc"><i>274</i>&nbsp;    return feature;</b>
+<i>275</i>&nbsp;  }
+<i>276</i>&nbsp;
+<i>277</i>&nbsp;  public static Type getOptionalTypeParameter(UimaContext context,
+<i>278</i>&nbsp;                                              TypeSystem typeSystem, String parameter)
+<i>279</i>&nbsp;      throws AnalysisEngineProcessException {
+<i>280</i>&nbsp;    String typeName;
+<i>281</i>&nbsp;
+<i>282</i>&nbsp;    try {
+<b class="nc"><i>283</i>&nbsp;      typeName = getOptionalStringParameter(context, parameter);</b>
+<b class="nc"><i>284</i>&nbsp;    } catch (ResourceInitializationException e) {</b>
+<b class="nc"><i>285</i>&nbsp;      throw new OpenNlpAnnotatorProcessException(e);</b>
+<b class="nc"><i>286</i>&nbsp;    }</b>
+<i>287</i>&nbsp;
+<b class="nc"><i>288</i>&nbsp;    if (typeName != null) {</b>
+<b class="nc"><i>289</i>&nbsp;      return getType(typeSystem, typeName);</b>
+<i>290</i>&nbsp;    } else {
+<b class="nc"><i>291</i>&nbsp;      return null;</b>
+<i>292</i>&nbsp;    }
+<i>293</i>&nbsp;  }
+<i>294</i>&nbsp;
+<i>295</i>&nbsp;  /**
+<i>296</i>&nbsp;   * Retrieves an optional parameter from the given context.
+<i>297</i>&nbsp;   *
+<i>298</i>&nbsp;   * @param context
+<i>299</i>&nbsp;   * @param parameter
+<i>300</i>&nbsp;   * @return the parameter or null if not set
+<i>301</i>&nbsp;   * @throws ResourceInitializationException
+<i>302</i>&nbsp;   */
+<i>303</i>&nbsp;  public static String getOptionalStringParameter(UimaContext context,
+<i>304</i>&nbsp;                                                  String parameter)
+<i>305</i>&nbsp;      throws ResourceInitializationException {
+<b class="nc"><i>306</i>&nbsp;    Object value = getOptionalParameter(context, parameter);</b>
+<i>307</i>&nbsp;
+<b class="nc"><i>308</i>&nbsp;    if (value instanceof String) {</b>
+<b class="nc"><i>309</i>&nbsp;      return (String) value;</b>
+<b class="nc"><i>310</i>&nbsp;    } else if (value == null) {</b>
+<b class="nc"><i>311</i>&nbsp;      return null;</b>
+<i>312</i>&nbsp;    } else {
+<b class="nc"><i>313</i>&nbsp;      throw new ResourceInitializationException(</b>
+<i>314</i>&nbsp;          ExceptionMessages.MESSAGE_CATALOG,
+<i>315</i>&nbsp;          ExceptionMessages.WRONG_PARAMETER_TYPE,
+<i>316</i>&nbsp;          new Object[] {parameter, &quot;String&quot;});
+<i>317</i>&nbsp;    }
+<i>318</i>&nbsp;  }
+<i>319</i>&nbsp;
+<i>320</i>&nbsp;  public static String[] getOptionalStringArrayParameter(UimaContext context,
+<i>321</i>&nbsp;                                                         String parameter)
+<i>322</i>&nbsp;      throws ResourceInitializationException {
+<b class="nc"><i>323</i>&nbsp;    Object value = getOptionalParameter(context, parameter);</b>
+<i>324</i>&nbsp;
+<b class="nc"><i>325</i>&nbsp;    if (value instanceof String[]) {</b>
+<b class="nc"><i>326</i>&nbsp;      return (String[]) value;</b>
+<b class="nc"><i>327</i>&nbsp;    } else if (value == null) {</b>
+<b class="nc"><i>328</i>&nbsp;      return new String[0];</b>
+<i>329</i>&nbsp;    } else {
+<b class="nc"><i>330</i>&nbsp;      throw new ResourceInitializationException(</b>
+<i>331</i>&nbsp;          ExceptionMessages.MESSAGE_CATALOG,
+<i>332</i>&nbsp;          ExceptionMessages.WRONG_PARAMETER_TYPE, new Object[] {parameter, &quot;String array&quot;});
+<i>333</i>&nbsp;    }
+<i>334</i>&nbsp;  }
+<i>335</i>&nbsp;
+<i>336</i>&nbsp;  /**
+<i>337</i>&nbsp;   * Retrieves an optional parameter from the given context.
+<i>338</i>&nbsp;   *
+<i>339</i>&nbsp;   * @param context
+<i>340</i>&nbsp;   * @param parameter
+<i>341</i>&nbsp;   * @return the parameter or null if not set
+<i>342</i>&nbsp;   * @throws ResourceInitializationException
+<i>343</i>&nbsp;   */
+<i>344</i>&nbsp;  public static Integer getOptionalIntegerParameter(UimaContext context,
+<i>345</i>&nbsp;                                                    String parameter)
+<i>346</i>&nbsp;      throws ResourceInitializationException {
+<i>347</i>&nbsp;
+<b class="nc"><i>348</i>&nbsp;    Object value = getOptionalParameter(context, parameter);</b>
+<i>349</i>&nbsp;
+<b class="nc"><i>350</i>&nbsp;    if (value instanceof Integer) {</b>
+<b class="nc"><i>351</i>&nbsp;      return (Integer) value;</b>
+<b class="nc"><i>352</i>&nbsp;    } else if (value == null) {</b>
+<b class="nc"><i>353</i>&nbsp;      return null;</b>
+<i>354</i>&nbsp;    } else {
+<b class="nc"><i>355</i>&nbsp;      throw new ResourceInitializationException(</b>
+<i>356</i>&nbsp;          ExceptionMessages.MESSAGE_CATALOG,
+<i>357</i>&nbsp;          ExceptionMessages.WRONG_PARAMETER_TYPE,
+<i>358</i>&nbsp;          new Object[] {parameter, &quot;Integer&quot;});
+<i>359</i>&nbsp;    }
+<i>360</i>&nbsp;  }
+<i>361</i>&nbsp;
+<i>362</i>&nbsp;  /**
+<i>363</i>&nbsp;   * Retrieves an optional parameter from the given context.
+<i>364</i>&nbsp;   *
+<i>365</i>&nbsp;   * @param context
+<i>366</i>&nbsp;   * @param parameter
+<i>367</i>&nbsp;   * @return the parameter or null if not set
+<i>368</i>&nbsp;   * @throws ResourceInitializationException
+<i>369</i>&nbsp;   */
+<i>370</i>&nbsp;  public static Float getOptionalFloatParameter(UimaContext context,
+<i>371</i>&nbsp;                                                String parameter)
+<i>372</i>&nbsp;      throws ResourceInitializationException {
+<i>373</i>&nbsp;
+<b class="nc"><i>374</i>&nbsp;    Object value = getOptionalParameter(context, parameter);</b>
+<i>375</i>&nbsp;
+<b class="nc"><i>376</i>&nbsp;    if (value instanceof Float) {</b>
+<b class="nc"><i>377</i>&nbsp;      return (Float) value;</b>
+<b class="nc"><i>378</i>&nbsp;    } else if (value == null) {</b>
+<b class="nc"><i>379</i>&nbsp;      return null;</b>
+<i>380</i>&nbsp;    } else {
+<b class="nc"><i>381</i>&nbsp;      throw new ResourceInitializationException(</b>
+<i>382</i>&nbsp;          ExceptionMessages.MESSAGE_CATALOG,
+<i>383</i>&nbsp;          ExceptionMessages.WRONG_PARAMETER_TYPE,
+<i>384</i>&nbsp;          new Object[] {parameter, &quot;Float&quot;});
+<i>385</i>&nbsp;    }
+<i>386</i>&nbsp;  }
+<i>387</i>&nbsp;
+<i>388</i>&nbsp;  /**
+<i>389</i>&nbsp;   * Retrieves an optional parameter from the given context.
+<i>390</i>&nbsp;   *
+<i>391</i>&nbsp;   * @param context
+<i>392</i>&nbsp;   * @param parameter
+<i>393</i>&nbsp;   * @return the parameter or null if not set
+<i>394</i>&nbsp;   * @throws ResourceInitializationException
+<i>395</i>&nbsp;   */
+<i>396</i>&nbsp;  public static Boolean getOptionalBooleanParameter(UimaContext context,
+<i>397</i>&nbsp;                                                    String parameter)
+<i>398</i>&nbsp;      throws ResourceInitializationException {
+<b class="nc"><i>399</i>&nbsp;    Object value = getOptionalParameter(context, parameter);</b>
+<i>400</i>&nbsp;
+<b class="nc"><i>401</i>&nbsp;    if (value instanceof Boolean) {</b>
+<b class="nc"><i>402</i>&nbsp;      return (Boolean) value;</b>
+<b class="nc"><i>403</i>&nbsp;    } else if (value == null) {</b>
+<b class="nc"><i>404</i>&nbsp;      return null;</b>
+<i>405</i>&nbsp;    } else {
+<b class="nc"><i>406</i>&nbsp;      throw new ResourceInitializationException(</b>
+<i>407</i>&nbsp;          ExceptionMessages.MESSAGE_CATALOG,
+<i>408</i>&nbsp;          ExceptionMessages.WRONG_PARAMETER_TYPE,
+<i>409</i>&nbsp;          new Object[] {parameter, &quot;Boolean&quot;});
+<i>410</i>&nbsp;    }
+<i>411</i>&nbsp;  }
+<i>412</i>&nbsp;
+<i>413</i>&nbsp;  private static Object getOptionalParameter(UimaContext context,
+<i>414</i>&nbsp;                                             String parameter)
+<i>415</i>&nbsp;      throws ResourceInitializationException {
+<i>416</i>&nbsp;
+<b class="nc"><i>417</i>&nbsp;    Object value = context.getConfigParameterValue(parameter);</b>
+<i>418</i>&nbsp;
+<b class="nc"><i>419</i>&nbsp;    Logger logger = context.getLogger();</b>
+<i>420</i>&nbsp;
+<b class="nc"><i>421</i>&nbsp;    if (logger.isLoggable(Level.INFO)) {</b>
+<b class="nc"><i>422</i>&nbsp;      logger.log(Level.INFO, parameter + &quot; = &quot; +</b>
+<b class="nc"><i>423</i>&nbsp;          (value != null ? value.toString() : &quot;not set&quot;));</b>
+<i>424</i>&nbsp;    }
+<i>425</i>&nbsp;
+<b class="nc"><i>426</i>&nbsp;    return value;</b>
+<i>427</i>&nbsp;  }
+<i>428</i>&nbsp;
+<i>429</i>&nbsp;  /**
+<i>430</i>&nbsp;   * Retrieves a resource as stream from the given context.
+<i>431</i>&nbsp;   *
+<i>432</i>&nbsp;   * @param context
+<i>433</i>&nbsp;   * @param name
+<i>434</i>&nbsp;   * @return the stream
+<i>435</i>&nbsp;   * @throws ResourceInitializationException
+<i>436</i>&nbsp;   */
+<i>437</i>&nbsp;  public static InputStream getResourceAsStream(UimaContext context, String name)
+<i>438</i>&nbsp;      throws ResourceInitializationException {
+<i>439</i>&nbsp;
+<b class="nc"><i>440</i>&nbsp;    InputStream inResource = getOptionalResourceAsStream(context, name);</b>
+<i>441</i>&nbsp;
+<b class="nc"><i>442</i>&nbsp;    if (inResource == null) {</b>
+<b class="nc"><i>443</i>&nbsp;      throw new ResourceInitializationException(</b>
+<i>444</i>&nbsp;          ExceptionMessages.MESSAGE_CATALOG,
+<i>445</i>&nbsp;          ExceptionMessages.IO_ERROR_MODEL_READING, new Object[] {name + &quot; could not be found!&quot;});
+<i>446</i>&nbsp;    }
+<i>447</i>&nbsp;
+<b class="nc"><i>448</i>&nbsp;    return inResource;</b>
+<i>449</i>&nbsp;  }
+<i>450</i>&nbsp;
+<i>451</i>&nbsp;  public static InputStream getOptionalResourceAsStream(UimaContext context,
+<i>452</i>&nbsp;                                                        String name)
+<i>453</i>&nbsp;      throws ResourceInitializationException {
+<i>454</i>&nbsp;
+<i>455</i>&nbsp;    InputStream inResource;
+<i>456</i>&nbsp;
+<i>457</i>&nbsp;    try {
+<b class="nc"><i>458</i>&nbsp;      inResource = context.getResourceAsStream(name);</b>
+<b class="nc"><i>459</i>&nbsp;    } catch (ResourceAccessException e) {</b>
+<b class="nc"><i>460</i>&nbsp;      throw new ResourceInitializationException(e);</b>
+<b class="nc"><i>461</i>&nbsp;    }</b>
+<i>462</i>&nbsp;
+<b class="nc"><i>463</i>&nbsp;    return inResource;</b>
+<i>464</i>&nbsp;  }
+<i>465</i>&nbsp;
+<i>466</i>&nbsp;  public static Dictionary createOptionalDictionary(UimaContext context,
+<i>467</i>&nbsp;                                                    String dictionaryParameter)
+<i>468</i>&nbsp;      throws ResourceInitializationException {
+<i>469</i>&nbsp;
+<b class="nc"><i>470</i>&nbsp;    String dictionaryName = AnnotatorUtil.getOptionalStringParameter(context,</b>
+<i>471</i>&nbsp;        dictionaryParameter);
+<i>472</i>&nbsp;
+<b class="nc"><i>473</i>&nbsp;    Dictionary dictionary = null;</b>
+<i>474</i>&nbsp;
+<b class="nc"><i>475</i>&nbsp;    if (dictionaryName != null) {</b>
+<i>476</i>&nbsp;
+<b class="nc"><i>477</i>&nbsp;      Logger logger = context.getLogger();</b>
+<i>478</i>&nbsp;
+<i>479</i>&nbsp;      try {
+<i>480</i>&nbsp;
+<b class="nc"><i>481</i>&nbsp;        InputStream dictIn = AnnotatorUtil.getOptionalResourceAsStream(context,</b>
+<i>482</i>&nbsp;            dictionaryName);
+<i>483</i>&nbsp;
+<b class="nc"><i>484</i>&nbsp;        if (dictIn == null) {</b>
+<b class="nc"><i>485</i>&nbsp;          String message = &quot;The dictionary file &quot; + dictionaryName</b>
+<i>486</i>&nbsp;              + &quot; does not exist!&quot;;
+<i>487</i>&nbsp;
+<b class="nc"><i>488</i>&nbsp;          if (logger.isLoggable(Level.WARNING)) {</b>
+<b class="nc"><i>489</i>&nbsp;            logger.log(Level.WARNING, message);</b>
+<i>490</i>&nbsp;          }
+<i>491</i>&nbsp;
+<b class="nc"><i>492</i>&nbsp;          return null;</b>
+<i>493</i>&nbsp;        }
+<i>494</i>&nbsp;
+<b class="nc"><i>495</i>&nbsp;        dictionary = new Dictionary(dictIn);</b>
+<i>496</i>&nbsp;
+<b class="nc"><i>497</i>&nbsp;      } catch (IOException e) {</b>
+<i>498</i>&nbsp;        // if this fails just print error message and continue
+<b class="nc"><i>499</i>&nbsp;        String message = &quot;IOException during dictionary reading, &quot;</b>
+<b class="nc"><i>500</i>&nbsp;            + &quot;running without dictionary: &quot; + e.getMessage();</b>
+<i>501</i>&nbsp;
+<b class="nc"><i>502</i>&nbsp;        if (logger.isLoggable(Level.WARNING)) {</b>
+<b class="nc"><i>503</i>&nbsp;          logger.log(Level.WARNING, message);</b>
+<i>504</i>&nbsp;        }
+<b class="nc"><i>505</i>&nbsp;      }</b>
+<i>506</i>&nbsp;
+<b class="nc"><i>507</i>&nbsp;      return dictionary;</b>
+<i>508</i>&nbsp;    } else {
+<b class="nc"><i>509</i>&nbsp;      return null;</b>
+<i>510</i>&nbsp;    }
+<i>511</i>&nbsp;  }
+<i>512</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-09 15:05</div>
+</div>
+</body>
+</html>

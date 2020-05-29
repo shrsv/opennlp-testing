@@ -1,0 +1,439 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: Parser</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">opennlp.uima.parser</a> ]
+</div>
+
+<h1>Coverage Summary for Class: Parser (opennlp.uima.parser)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Parser</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 7)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 59)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">Parser$ParseConverter</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 38)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 11)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 97)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/*
+<i>2</i>&nbsp; * Licensed to the Apache Software Foundation (ASF) under one or more
+<i>3</i>&nbsp; * contributor license agreements.  See the NOTICE file distributed with
+<i>4</i>&nbsp; * this work for additional information regarding copyright ownership.
+<i>5</i>&nbsp; * The ASF licenses this file to You under the Apache License, Version 2.0
+<i>6</i>&nbsp; * (the &quot;License&quot;); you may not use this file except in compliance with
+<i>7</i>&nbsp; * the License. You may obtain a copy of the License at
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; *     http://www.apache.org/licenses/LICENSE-2.0
+<i>10</i>&nbsp; *
+<i>11</i>&nbsp; * Unless required by applicable law or agreed to in writing, software
+<i>12</i>&nbsp; * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<i>13</i>&nbsp; * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<i>14</i>&nbsp; * See the License for the specific language governing permissions and
+<i>15</i>&nbsp; * limitations under the License.
+<i>16</i>&nbsp; */
+<i>17</i>&nbsp;
+<i>18</i>&nbsp;package opennlp.uima.parser;
+<i>19</i>&nbsp;
+<i>20</i>&nbsp;import java.util.HashMap;
+<i>21</i>&nbsp;import java.util.Iterator;
+<i>22</i>&nbsp;import java.util.LinkedList;
+<i>23</i>&nbsp;import java.util.List;
+<i>24</i>&nbsp;import java.util.Map;
+<i>25</i>&nbsp;
+<i>26</i>&nbsp;import org.apache.uima.UimaContext;
+<i>27</i>&nbsp;import org.apache.uima.analysis_component.CasAnnotator_ImplBase;
+<i>28</i>&nbsp;import org.apache.uima.analysis_engine.AnalysisEngineProcessException;
+<i>29</i>&nbsp;import org.apache.uima.cas.ArrayFS;
+<i>30</i>&nbsp;import org.apache.uima.cas.CAS;
+<i>31</i>&nbsp;import org.apache.uima.cas.FSIndex;
+<i>32</i>&nbsp;import org.apache.uima.cas.Feature;
+<i>33</i>&nbsp;import org.apache.uima.cas.Type;
+<i>34</i>&nbsp;import org.apache.uima.cas.TypeSystem;
+<i>35</i>&nbsp;import org.apache.uima.cas.text.AnnotationFS;
+<i>36</i>&nbsp;import org.apache.uima.resource.ResourceAccessException;
+<i>37</i>&nbsp;import org.apache.uima.resource.ResourceInitializationException;
+<i>38</i>&nbsp;import org.apache.uima.util.Level;
+<i>39</i>&nbsp;import org.apache.uima.util.Logger;
+<i>40</i>&nbsp;
+<i>41</i>&nbsp;import opennlp.tools.parser.Parse;
+<i>42</i>&nbsp;import opennlp.tools.parser.ParserFactory;
+<i>43</i>&nbsp;import opennlp.tools.parser.ParserModel;
+<i>44</i>&nbsp;import opennlp.tools.util.Span;
+<i>45</i>&nbsp;import opennlp.uima.util.AnnotatorUtil;
+<i>46</i>&nbsp;import opennlp.uima.util.ContainingConstraint;
+<i>47</i>&nbsp;import opennlp.uima.util.UimaUtil;
+<i>48</i>&nbsp;
+<i>49</i>&nbsp;/**
+<i>50</i>&nbsp; * Abstract base class for OpenNLP Parser annotators.
+<i>51</i>&nbsp; * &lt;p&gt;
+<i>52</i>&nbsp; * Mandatory parameters
+<i>53</i>&nbsp; * &lt;table border=1&gt;
+<i>54</i>&nbsp; * &lt;caption&gt;&lt;/caption&gt;
+<i>55</i>&nbsp; * &lt;tr&gt;&lt;th&gt;Type&lt;/th&gt; &lt;th&gt;Name&lt;/th&gt; &lt;th&gt;Description&lt;/th&gt;&lt;/tr&gt;
+<i>56</i>&nbsp; * &lt;tr&gt;&lt;td&gt;String&lt;/td&gt; &lt;td&gt;opennlp.uima.ModelName&lt;/td&gt; &lt;td&gt;The name of the model file&lt;/td&gt;&lt;/tr&gt;
+<i>57</i>&nbsp; * &lt;tr&gt;&lt;td&gt;String&lt;/td&gt; &lt;td&gt;opennlp.uima.SentenceType&lt;/td&gt; &lt;td&gt;The full name of the sentence type&lt;/td&gt;&lt;/tr&gt;
+<i>58</i>&nbsp; * &lt;tr&gt;&lt;td&gt;String&lt;/td&gt; &lt;td&gt;opennlp.uima.TokenType&lt;/td&gt; &lt;td&gt;The full name of the token type&lt;/td&gt;&lt;/tr&gt;
+<i>59</i>&nbsp; * &lt;tr&gt;&lt;td&gt;String&lt;/td&gt; &lt;td&gt;opennlp.uima.ParseType&lt;/td&gt; &lt;td&gt;The full name of the parse type&lt;/td&gt;&lt;/tr&gt;
+<i>60</i>&nbsp; * &lt;tr&gt;&lt;td&gt;String&lt;/td&gt; &lt;td&gt;opennlp.uima.TypeFeature&lt;/td&gt; &lt;td&gt;The name of the type feature&lt;/td&gt;&lt;/tr&gt;
+<i>61</i>&nbsp; * &lt;/table&gt;
+<i>62</i>&nbsp; * &lt;p&gt;
+<i>63</i>&nbsp; * Optional parameters
+<i>64</i>&nbsp; * &lt;table border=1&gt;
+<i>65</i>&nbsp; * &lt;caption&gt;&lt;/caption&gt;
+<i>66</i>&nbsp; * &lt;tr&gt;&lt;th&gt;Type&lt;/th&gt; &lt;th&gt;Name&lt;/th&gt; &lt;th&gt;Description&lt;/th&gt;&lt;/tr&gt;
+<i>67</i>&nbsp; * &lt;tr&gt;&lt;td&gt;Integer&lt;/td&gt; &lt;td&gt;opennlp.uima.BeamSize&lt;/td&gt;&lt;/tr&gt;
+<i>68</i>&nbsp; * &lt;/table&gt;
+<i>69</i>&nbsp; */
+<b class="nc"><i>70</i>&nbsp;public class Parser extends CasAnnotator_ImplBase {</b>
+<i>71</i>&nbsp;
+<i>72</i>&nbsp;  public static final String PARSE_TYPE_PARAMETER = &quot;opennlp.uima.ParseType&quot;;
+<i>73</i>&nbsp;  public static final String TYPE_FEATURE_PARAMETER =
+<i>74</i>&nbsp;      &quot;opennlp.uima.TypeFeature&quot;;
+<i>75</i>&nbsp;  public static final String CHILDREN_FEATURE_PARAMETER =
+<i>76</i>&nbsp;      &quot;opennlp.uima.ChildrenFeature&quot;;
+<i>77</i>&nbsp;  public static final String PROBABILITY_FEATURE_PARAMETER =
+<i>78</i>&nbsp;      &quot;opennlp.uima.ProbabilityFeature&quot;;
+<i>79</i>&nbsp;  protected UimaContext context;
+<i>80</i>&nbsp;  protected Logger mLogger;
+<i>81</i>&nbsp;  protected opennlp.tools.parser.Parser mParser;
+<i>82</i>&nbsp;  private Type mSentenceType;
+<i>83</i>&nbsp;
+<i>84</i>&nbsp;  private Type mTokenType;
+<i>85</i>&nbsp;  private Type mParseType;
+<i>86</i>&nbsp;  private Feature mTypeFeature;
+<i>87</i>&nbsp;  private Feature childrenFeature;
+<i>88</i>&nbsp;  private Feature probabilityFeature;
+<i>89</i>&nbsp;
+<i>90</i>&nbsp;  /**
+<i>91</i>&nbsp;   * Initializes the current instance with the given context.
+<i>92</i>&nbsp;   */
+<i>93</i>&nbsp;  public void initialize(UimaContext context)
+<i>94</i>&nbsp;      throws ResourceInitializationException {
+<i>95</i>&nbsp;
+<b class="nc"><i>96</i>&nbsp;    super.initialize(context);</b>
+<i>97</i>&nbsp;
+<b class="nc"><i>98</i>&nbsp;    this.context = context;</b>
+<i>99</i>&nbsp;
+<b class="nc"><i>100</i>&nbsp;    mLogger = context.getLogger();</b>
+<i>101</i>&nbsp;
+<b class="nc"><i>102</i>&nbsp;    if (mLogger.isLoggable(Level.INFO)) {</b>
+<b class="nc"><i>103</i>&nbsp;      mLogger.log(Level.INFO, &quot;Initializing the OpenNLP Parser.&quot;);</b>
+<i>104</i>&nbsp;    }
+<i>105</i>&nbsp;
+<i>106</i>&nbsp;    ParserModel model;
+<i>107</i>&nbsp;
+<i>108</i>&nbsp;    try {
+<b class="nc"><i>109</i>&nbsp;      ParserModelResource modelResource = (ParserModelResource) context</b>
+<b class="nc"><i>110</i>&nbsp;          .getResourceObject(UimaUtil.MODEL_PARAMETER);</b>
+<i>111</i>&nbsp;
+<b class="nc"><i>112</i>&nbsp;      model = modelResource.getModel();</b>
+<b class="nc"><i>113</i>&nbsp;    } catch (ResourceAccessException e) {</b>
+<b class="nc"><i>114</i>&nbsp;      throw new ResourceInitializationException(e);</b>
+<b class="nc"><i>115</i>&nbsp;    }</b>
+<i>116</i>&nbsp;
+<b class="nc"><i>117</i>&nbsp;    mParser = ParserFactory.create(model);</b>
+<i>118</i>&nbsp;  }
+<i>119</i>&nbsp;
+<i>120</i>&nbsp;  /**
+<i>121</i>&nbsp;   * Initializes the type system.
+<i>122</i>&nbsp;   */
+<i>123</i>&nbsp;  public void typeSystemInit(TypeSystem typeSystem)
+<i>124</i>&nbsp;      throws AnalysisEngineProcessException {
+<i>125</i>&nbsp;
+<b class="nc"><i>126</i>&nbsp;    mSentenceType = AnnotatorUtil.getRequiredTypeParameter(context, typeSystem,</b>
+<i>127</i>&nbsp;        UimaUtil.SENTENCE_TYPE_PARAMETER);
+<i>128</i>&nbsp;
+<b class="nc"><i>129</i>&nbsp;    mTokenType = AnnotatorUtil.getRequiredTypeParameter(context, typeSystem,</b>
+<i>130</i>&nbsp;        UimaUtil.TOKEN_TYPE_PARAMETER);
+<i>131</i>&nbsp;
+<b class="nc"><i>132</i>&nbsp;    mParseType = AnnotatorUtil.getRequiredTypeParameter(context, typeSystem,</b>
+<i>133</i>&nbsp;        PARSE_TYPE_PARAMETER);
+<i>134</i>&nbsp;
+<b class="nc"><i>135</i>&nbsp;    mTypeFeature = AnnotatorUtil.getRequiredFeatureParameter(context,</b>
+<i>136</i>&nbsp;        mParseType, TYPE_FEATURE_PARAMETER, CAS.TYPE_NAME_STRING);
+<i>137</i>&nbsp;
+<b class="nc"><i>138</i>&nbsp;    childrenFeature = AnnotatorUtil.getRequiredFeatureParameter(context,</b>
+<i>139</i>&nbsp;        mParseType, CHILDREN_FEATURE_PARAMETER, CAS.TYPE_NAME_FS_ARRAY);
+<i>140</i>&nbsp;
+<b class="nc"><i>141</i>&nbsp;    probabilityFeature = AnnotatorUtil.getOptionalFeatureParameter(context,</b>
+<i>142</i>&nbsp;        mParseType, PROBABILITY_FEATURE_PARAMETER, CAS.TYPE_NAME_DOUBLE);
+<i>143</i>&nbsp;  }
+<i>144</i>&nbsp;
+<i>145</i>&nbsp;  /**
+<i>146</i>&nbsp;   * Performs parsing on the given {@link CAS} object.
+<i>147</i>&nbsp;   */
+<i>148</i>&nbsp;  public void process(CAS cas) {
+<b class="nc"><i>149</i>&nbsp;    FSIndex&lt;AnnotationFS&gt; sentences = cas.getAnnotationIndex(mSentenceType);</b>
+<i>150</i>&nbsp;
+<b class="nc"><i>151</i>&nbsp;    for (AnnotationFS sentence : sentences) {</b>
+<b class="nc"><i>152</i>&nbsp;      process(cas, sentence);</b>
+<b class="nc"><i>153</i>&nbsp;    }</b>
+<i>154</i>&nbsp;  }
+<i>155</i>&nbsp;
+<i>156</i>&nbsp;  protected void process(CAS cas, AnnotationFS sentenceAnnotation) {
+<b class="nc"><i>157</i>&nbsp;    FSIndex&lt;AnnotationFS&gt; allTokens = cas.getAnnotationIndex(mTokenType);</b>
+<i>158</i>&nbsp;
+<b class="nc"><i>159</i>&nbsp;    ContainingConstraint containingConstraint =</b>
+<i>160</i>&nbsp;        new ContainingConstraint(sentenceAnnotation);
+<i>161</i>&nbsp;
+<b class="nc"><i>162</i>&nbsp;    String sentence = sentenceAnnotation.getCoveredText();</b>
+<i>163</i>&nbsp;
+<b class="nc"><i>164</i>&nbsp;    Iterator&lt;AnnotationFS&gt; containingTokens = cas.createFilteredIterator(</b>
+<b class="nc"><i>165</i>&nbsp;        allTokens.iterator(), containingConstraint);</b>
+<i>166</i>&nbsp;
+<b class="nc"><i>167</i>&nbsp;    List&lt;Span&gt; tokenSpans = new LinkedList&lt;&gt;();</b>
+<i>168</i>&nbsp;
+<b class="nc"><i>169</i>&nbsp;    while (containingTokens.hasNext()) {</b>
+<b class="nc"><i>170</i>&nbsp;      AnnotationFS token = containingTokens.next();</b>
+<i>171</i>&nbsp;
+<b class="nc"><i>172</i>&nbsp;      tokenSpans.add(new Span(token.getBegin() - sentenceAnnotation.getBegin(),</b>
+<b class="nc"><i>173</i>&nbsp;          token.getEnd() - sentenceAnnotation.getBegin()));</b>
+<b class="nc"><i>174</i>&nbsp;    }</b>
+<i>175</i>&nbsp;
+<b class="nc"><i>176</i>&nbsp;    ParseConverter converter = new ParseConverter(sentence, tokenSpans.toArray(new Span[tokenSpans.size()]));</b>
+<i>177</i>&nbsp;
+<b class="nc"><i>178</i>&nbsp;    Parse unparsedTree = converter.getParseForTagger();</b>
+<i>179</i>&nbsp;
+<b class="nc"><i>180</i>&nbsp;    if (unparsedTree.getChildCount() &gt; 0) {</b>
+<i>181</i>&nbsp;
+<b class="nc"><i>182</i>&nbsp;      Parse parse = mParser.parse(unparsedTree);</b>
+<i>183</i>&nbsp;
+<i>184</i>&nbsp;      // TODO: We need a strategy to handle the case that a full
+<i>185</i>&nbsp;      //       parse could not be found. What to do in this case?
+<i>186</i>&nbsp;
+<b class="nc"><i>187</i>&nbsp;      parse = converter.transformParseFromTagger(parse);</b>
+<i>188</i>&nbsp;
+<b class="nc"><i>189</i>&nbsp;      if (mLogger.isLoggable(Level.INFO)) {</b>
+<b class="nc"><i>190</i>&nbsp;        StringBuffer parseString = new StringBuffer();</b>
+<b class="nc"><i>191</i>&nbsp;        parse.show(parseString);</b>
+<i>192</i>&nbsp;
+<b class="nc"><i>193</i>&nbsp;        mLogger.log(Level.INFO, parseString.toString());</b>
+<i>194</i>&nbsp;      }
+<i>195</i>&nbsp;
+<b class="nc"><i>196</i>&nbsp;      createAnnotation(cas, sentenceAnnotation.getBegin(), parse);</b>
+<i>197</i>&nbsp;    }
+<i>198</i>&nbsp;  }
+<i>199</i>&nbsp;
+<i>200</i>&nbsp;  protected AnnotationFS createAnnotation(CAS cas, int offset, Parse parse) {
+<i>201</i>&nbsp;
+<b class="nc"><i>202</i>&nbsp;    Parse[] parseChildren = parse.getChildren();</b>
+<b class="nc"><i>203</i>&nbsp;    AnnotationFS[] parseChildAnnotations = new AnnotationFS[parseChildren.length];</b>
+<i>204</i>&nbsp;
+<i>205</i>&nbsp;    // do this for all children
+<b class="nc"><i>206</i>&nbsp;    for (int i = 0; i &lt; parseChildren.length; i++) {</b>
+<b class="nc"><i>207</i>&nbsp;      parseChildAnnotations[i] = createAnnotation(cas, offset, parseChildren[i]);</b>
+<i>208</i>&nbsp;    }
+<i>209</i>&nbsp;
+<b class="nc"><i>210</i>&nbsp;    AnnotationFS parseAnnotation = cas.createAnnotation(mParseType, offset +</b>
+<b class="nc"><i>211</i>&nbsp;        parse.getSpan().getStart(), offset + parse.getSpan().getEnd());</b>
+<i>212</i>&nbsp;
+<b class="nc"><i>213</i>&nbsp;    parseAnnotation.setStringValue(mTypeFeature, parse.getType());</b>
+<i>214</i>&nbsp;
+<b class="nc"><i>215</i>&nbsp;    if (probabilityFeature != null) {</b>
+<b class="nc"><i>216</i>&nbsp;      parseAnnotation.setDoubleValue(probabilityFeature, parse.getProb());</b>
+<i>217</i>&nbsp;    }
+<i>218</i>&nbsp;
+<b class="nc"><i>219</i>&nbsp;    ArrayFS childrenArray = cas.createArrayFS(parseChildAnnotations.length);</b>
+<b class="nc"><i>220</i>&nbsp;    childrenArray.copyFromArray(parseChildAnnotations, 0, 0, parseChildAnnotations.length);</b>
+<b class="nc"><i>221</i>&nbsp;    parseAnnotation.setFeatureValue(childrenFeature, childrenArray);</b>
+<i>222</i>&nbsp;
+<b class="nc"><i>223</i>&nbsp;    cas.getIndexRepository().addFS(parseAnnotation);</b>
+<i>224</i>&nbsp;
+<b class="nc"><i>225</i>&nbsp;    return parseAnnotation;</b>
+<i>226</i>&nbsp;  }
+<i>227</i>&nbsp;
+<i>228</i>&nbsp;  /**
+<i>229</i>&nbsp;   * Releases allocated resources.
+<i>230</i>&nbsp;   */
+<i>231</i>&nbsp;
+<i>232</i>&nbsp;  public void destroy() {
+<b class="nc"><i>233</i>&nbsp;    mParser = null;</b>
+<i>234</i>&nbsp;  }
+<i>235</i>&nbsp;
+<i>236</i>&nbsp;  private static class ParseConverter {
+<i>237</i>&nbsp;    private final String mSentence;
+<b class="nc"><i>238</i>&nbsp;    private Map&lt;Integer, Integer&gt; mIndexMap = new HashMap&lt;&gt;();</b>
+<i>239</i>&nbsp;    private Parse mParseForTagger;
+<i>240</i>&nbsp;
+<i>241</i>&nbsp;    /**
+<i>242</i>&nbsp;     * Initializes a new instance.
+<i>243</i>&nbsp;     *
+<i>244</i>&nbsp;     * @param sentence
+<i>245</i>&nbsp;     * @param tokens
+<i>246</i>&nbsp;     */
+<b class="nc"><i>247</i>&nbsp;    public ParseConverter(String sentence, Span[] tokens) {</b>
+<i>248</i>&nbsp;
+<b class="nc"><i>249</i>&nbsp;      mSentence = sentence;</b>
+<i>250</i>&nbsp;
+<b class="nc"><i>251</i>&nbsp;      StringBuilder sentenceStringBuilder = new StringBuilder();</b>
+<i>252</i>&nbsp;
+<b class="nc"><i>253</i>&nbsp;      String[] tokenList = new String[tokens.length];</b>
+<i>254</i>&nbsp;
+<b class="nc"><i>255</i>&nbsp;      for (int i = 0; i &lt; tokens.length; i++) {</b>
+<b class="nc"><i>256</i>&nbsp;        String tokenString = tokens[i].getCoveredText(sentence).toString();</b>
+<b class="nc"><i>257</i>&nbsp;        String escapedToken = escape(tokenString);</b>
+<b class="nc"><i>258</i>&nbsp;        tokenList[i] = escapedToken;</b>
+<i>259</i>&nbsp;
+<b class="nc"><i>260</i>&nbsp;        int escapedStart = sentenceStringBuilder.length();</b>
+<b class="nc"><i>261</i>&nbsp;        int start = tokens[i].getStart();</b>
+<b class="nc"><i>262</i>&nbsp;        mIndexMap.put(escapedStart, start);</b>
+<i>263</i>&nbsp;
+<b class="nc"><i>264</i>&nbsp;        int escapedEnd = escapedStart + escapedToken.length();</b>
+<b class="nc"><i>265</i>&nbsp;        int end = tokens[i].getEnd();</b>
+<b class="nc"><i>266</i>&nbsp;        mIndexMap.put(escapedEnd, end);</b>
+<i>267</i>&nbsp;
+<b class="nc"><i>268</i>&nbsp;        sentenceStringBuilder.append(tokenList[i]);</b>
+<i>269</i>&nbsp;
+<b class="nc"><i>270</i>&nbsp;        sentenceStringBuilder.append(&#39; &#39;);</b>
+<i>271</i>&nbsp;      }
+<i>272</i>&nbsp;
+<i>273</i>&nbsp;      // remove last space
+<b class="nc"><i>274</i>&nbsp;      if (sentenceStringBuilder.length() &gt; 0) {</b>
+<b class="nc"><i>275</i>&nbsp;        sentenceStringBuilder.setLength(sentenceStringBuilder.length() - 1);</b>
+<i>276</i>&nbsp;      }
+<i>277</i>&nbsp;
+<b class="nc"><i>278</i>&nbsp;      String tokenizedSentence = sentenceStringBuilder.toString();</b>
+<i>279</i>&nbsp;
+<b class="nc"><i>280</i>&nbsp;      mParseForTagger = new Parse(tokenizedSentence,</b>
+<b class="nc"><i>281</i>&nbsp;          new Span(0, tokenizedSentence.length()), &quot;INC&quot;, 1, null);</b>
+<i>282</i>&nbsp;
+<b class="nc"><i>283</i>&nbsp;      int start = 0;</b>
+<i>284</i>&nbsp;
+<b class="nc"><i>285</i>&nbsp;      for (String token : tokenList) {</b>
+<b class="nc"><i>286</i>&nbsp;        mParseForTagger.insert(new Parse(tokenizedSentence, new Span(start,</b>
+<b class="nc"><i>287</i>&nbsp;            start + token.length()),</b>
+<i>288</i>&nbsp;            opennlp.tools.parser.chunking.Parser.TOK_NODE, 0f, 0));
+<i>289</i>&nbsp;
+<b class="nc"><i>290</i>&nbsp;        start += token.length() + 1;</b>
+<i>291</i>&nbsp;      }
+<i>292</i>&nbsp;    }
+<i>293</i>&nbsp;
+<i>294</i>&nbsp;    private static String escape(String text) {
+<b class="nc"><i>295</i>&nbsp;      return text;</b>
+<i>296</i>&nbsp;    }
+<i>297</i>&nbsp;
+<i>298</i>&nbsp;    /**
+<i>299</i>&nbsp;     * Creates the parse for the tagger.
+<i>300</i>&nbsp;     *
+<i>301</i>&nbsp;     * @return the parse which can be passed to the tagger
+<i>302</i>&nbsp;     */
+<i>303</i>&nbsp;    Parse getParseForTagger() {
+<b class="nc"><i>304</i>&nbsp;      return mParseForTagger;</b>
+<i>305</i>&nbsp;    }
+<i>306</i>&nbsp;
+<i>307</i>&nbsp;    /**
+<i>308</i>&nbsp;     * Converts the parse from the tagger back.
+<i>309</i>&nbsp;     *
+<i>310</i>&nbsp;     * @param parseFromTagger
+<i>311</i>&nbsp;     * @return the final parse
+<i>312</i>&nbsp;     */
+<i>313</i>&nbsp;    Parse transformParseFromTagger(Parse parseFromTagger) {
+<b class="nc"><i>314</i>&nbsp;      int start = parseFromTagger.getSpan().getStart();</b>
+<b class="nc"><i>315</i>&nbsp;      int end = parseFromTagger.getSpan().getEnd();</b>
+<i>316</i>&nbsp;
+<b class="nc"><i>317</i>&nbsp;      Parse transformedParse = new Parse(mSentence, new Span(</b>
+<b class="nc"><i>318</i>&nbsp;          mIndexMap.get(start), mIndexMap.get(end)), parseFromTagger.getType(),</b>
+<b class="nc"><i>319</i>&nbsp;          parseFromTagger.getProb(), parseFromTagger.getHeadIndex());</b>
+<i>320</i>&nbsp;
+<b class="nc"><i>321</i>&nbsp;      Parse[] parseFromTaggerChildrens = parseFromTagger.getChildren();</b>
+<i>322</i>&nbsp;
+<b class="nc"><i>323</i>&nbsp;      for (Parse child : parseFromTaggerChildrens) {</b>
+<b class="nc"><i>324</i>&nbsp;        transformedParse.insert(transformParseFromTagger(child));</b>
+<i>325</i>&nbsp;      }
+<i>326</i>&nbsp;
+<b class="nc"><i>327</i>&nbsp;      return transformedParse;</b>
+<i>328</i>&nbsp;    }
+<i>329</i>&nbsp;  }
+<i>330</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-09 15:05</div>
+</div>
+</body>
+</html>

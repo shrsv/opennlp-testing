@@ -1,0 +1,205 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: ExtensionLoader</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">opennlp.tools.util.ext</a> ]
+</div>
+
+<h1>Coverage Summary for Class: ExtensionLoader (opennlp.tools.util.ext)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">ExtensionLoader</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    60%
+  </span>
+  <span class="absValue">
+    (3/ 5)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    37.9%
+  </span>
+  <span class="absValue">
+    (11/ 29)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/*
+<i>2</i>&nbsp; * Licensed to the Apache Software Foundation (ASF) under one or more
+<i>3</i>&nbsp; * contributor license agreements.  See the NOTICE file distributed with
+<i>4</i>&nbsp; * this work for additional information regarding copyright ownership.
+<i>5</i>&nbsp; * The ASF licenses this file to You under the Apache License, Version 2.0
+<i>6</i>&nbsp; * (the &quot;License&quot;); you may not use this file except in compliance with
+<i>7</i>&nbsp; * the License. You may obtain a copy of the License at
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; *     http://www.apache.org/licenses/LICENSE-2.0
+<i>10</i>&nbsp; *
+<i>11</i>&nbsp; * Unless required by applicable law or agreed to in writing, software
+<i>12</i>&nbsp; * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<i>13</i>&nbsp; * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<i>14</i>&nbsp; * See the License for the specific language governing permissions and
+<i>15</i>&nbsp; * limitations under the License.
+<i>16</i>&nbsp; */
+<i>17</i>&nbsp;
+<i>18</i>&nbsp;package opennlp.tools.util.ext;
+<i>19</i>&nbsp;
+<i>20</i>&nbsp;import java.lang.reflect.Field;
+<i>21</i>&nbsp;
+<i>22</i>&nbsp;/**
+<i>23</i>&nbsp; * The {@link ExtensionLoader} is responsible to load extensions to the OpenNLP library.
+<i>24</i>&nbsp; * &lt;p&gt;
+<i>25</i>&nbsp; * &lt;b&gt;Note:&lt;/b&gt; Do not use this class, internal use only!
+<i>26</i>&nbsp; */
+<i>27</i>&nbsp;public class ExtensionLoader {
+<i>28</i>&nbsp;
+<b class="fc"><i>29</i>&nbsp;  private static boolean isOsgiAvailable = false;</b>
+<i>30</i>&nbsp;
+<b class="nc"><i>31</i>&nbsp;  private ExtensionLoader() {</b>
+<b class="nc"><i>32</i>&nbsp;  }</b>
+<i>33</i>&nbsp;
+<i>34</i>&nbsp;  static boolean isOSGiAvailable() {
+<b class="fc"><i>35</i>&nbsp;    return isOsgiAvailable;</b>
+<i>36</i>&nbsp;  }
+<i>37</i>&nbsp;
+<i>38</i>&nbsp;  static void setOSGiAvailable() {
+<b class="nc"><i>39</i>&nbsp;    isOsgiAvailable = true;</b>
+<b class="nc"><i>40</i>&nbsp;  }</b>
+<i>41</i>&nbsp;
+<i>42</i>&nbsp;  // Pass in the type (interface) of the class to load
+<i>43</i>&nbsp;  /**
+<i>44</i>&nbsp;   * Instantiates an user provided extension to OpenNLP.
+<i>45</i>&nbsp;   * &lt;p&gt;
+<i>46</i>&nbsp;   * The extension is either loaded from the class path or if running
+<i>47</i>&nbsp;   * inside an OSGi environment via an OSGi service.
+<i>48</i>&nbsp;   * &lt;p&gt;
+<i>49</i>&nbsp;   * Initially it tries using the public default
+<i>50</i>&nbsp;   * constructor. If it is not found, it will check if the class follows the singleton
+<i>51</i>&nbsp;   * pattern: a static field named &lt;code&gt;INSTANCE&lt;/code&gt; that returns an object of the type
+<i>52</i>&nbsp;   * &lt;code&gt;T&lt;/code&gt;.
+<i>53</i>&nbsp;   *
+<i>54</i>&nbsp;   * @param clazz
+<i>55</i>&nbsp;   * @param extensionClassName
+<i>56</i>&nbsp;   *
+<i>57</i>&nbsp;   * @return the instance of the extension class
+<i>58</i>&nbsp;   */
+<i>59</i>&nbsp;  // TODO: Throw custom exception if loading fails ...
+<i>60</i>&nbsp;  @SuppressWarnings(&quot;unchecked&quot;)
+<i>61</i>&nbsp;  public static &lt;T&gt; T instantiateExtension(Class&lt;T&gt; clazz, String extensionClassName) {
+<i>62</i>&nbsp;
+<i>63</i>&nbsp;    // First try to load extension and instantiate extension from class path
+<i>64</i>&nbsp;    try {
+<b class="fc"><i>65</i>&nbsp;      Class&lt;?&gt; extClazz = Class.forName(extensionClassName);</b>
+<i>66</i>&nbsp;
+<b class="fc"><i>67</i>&nbsp;      if (clazz.isAssignableFrom(extClazz)) {</b>
+<i>68</i>&nbsp;
+<i>69</i>&nbsp;        try {
+<b class="fc"><i>70</i>&nbsp;          return (T) extClazz.newInstance();</b>
+<b class="nc"><i>71</i>&nbsp;        } catch (InstantiationException e) {</b>
+<b class="nc"><i>72</i>&nbsp;          throw new ExtensionNotLoadedException(e);</b>
+<b class="nc"><i>73</i>&nbsp;        } catch (IllegalAccessException e) {</b>
+<i>74</i>&nbsp;          // constructor is private. Try to load using INSTANCE
+<i>75</i>&nbsp;          Field instanceField;
+<i>76</i>&nbsp;          try {
+<b class="nc"><i>77</i>&nbsp;            instanceField = extClazz.getDeclaredField(&quot;INSTANCE&quot;);</b>
+<b class="nc"><i>78</i>&nbsp;          } catch (NoSuchFieldException | SecurityException e1) {</b>
+<b class="nc"><i>79</i>&nbsp;            throw new ExtensionNotLoadedException(e1);</b>
+<b class="nc"><i>80</i>&nbsp;          }</b>
+<b class="nc"><i>81</i>&nbsp;          if (instanceField != null) {</b>
+<i>82</i>&nbsp;            try {
+<b class="nc"><i>83</i>&nbsp;              return (T) instanceField.get(null);</b>
+<b class="nc"><i>84</i>&nbsp;            } catch (IllegalArgumentException | IllegalAccessException e1) {</b>
+<b class="nc"><i>85</i>&nbsp;              throw new ExtensionNotLoadedException(e1);</b>
+<i>86</i>&nbsp;            }
+<i>87</i>&nbsp;          }
+<b class="nc"><i>88</i>&nbsp;          throw new ExtensionNotLoadedException(e);</b>
+<i>89</i>&nbsp;        }
+<i>90</i>&nbsp;      }
+<i>91</i>&nbsp;      else {
+<b class="fc"><i>92</i>&nbsp;        throw new ExtensionNotLoadedException(&quot;Extension class &#39;&quot; + extClazz.getName() +</b>
+<b class="fc"><i>93</i>&nbsp;                &quot;&#39; needs to have type: &quot; + clazz.getName());</b>
+<i>94</i>&nbsp;      }
+<b class="fc"><i>95</i>&nbsp;    } catch (ClassNotFoundException e) {</b>
+<i>96</i>&nbsp;      // Class is not on classpath
+<i>97</i>&nbsp;    }
+<i>98</i>&nbsp;
+<i>99</i>&nbsp;    // Loading from class path failed
+<i>100</i>&nbsp;
+<i>101</i>&nbsp;    // Either something is wrong with the class name or OpenNLP is
+<i>102</i>&nbsp;    // running in an OSGi environment. The extension classes are not
+<i>103</i>&nbsp;    // on our classpath in this case.
+<i>104</i>&nbsp;    // In OSGi we need to use services to get access to extensions.
+<i>105</i>&nbsp;
+<i>106</i>&nbsp;    // Determine if OSGi class is on class path
+<i>107</i>&nbsp;
+<i>108</i>&nbsp;    // Now load class which depends on OSGi API
+<b class="fc"><i>109</i>&nbsp;    if (isOsgiAvailable) {</b>
+<i>110</i>&nbsp;
+<i>111</i>&nbsp;      // The OSGIExtensionLoader class will be loaded when the next line
+<i>112</i>&nbsp;      // is executed, but not prior, and that is why it is safe to directly
+<i>113</i>&nbsp;      // reference it here.
+<b class="nc"><i>114</i>&nbsp;      OSGiExtensionLoader extLoader = OSGiExtensionLoader.getInstance();</b>
+<b class="nc"><i>115</i>&nbsp;      return extLoader.getExtension(clazz, extensionClassName);</b>
+<i>116</i>&nbsp;    }
+<i>117</i>&nbsp;
+<b class="fc"><i>118</i>&nbsp;    throw new ExtensionNotLoadedException(&quot;Unable to find implementation for &quot; +</b>
+<b class="fc"><i>119</i>&nbsp;          clazz.getName() + &quot;, the class or service &quot; + extensionClassName +</b>
+<i>120</i>&nbsp;          &quot; could not be located!&quot;);
+<i>121</i>&nbsp;  }
+<i>122</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-09 18:47</div>
+</div>
+</body>
+</html>

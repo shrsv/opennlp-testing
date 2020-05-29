@@ -1,0 +1,225 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: ChunkerEvaluatorTool</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">opennlp.tools.cmdline.chunker</a> ]
+</div>
+
+<h1>Coverage Summary for Class: ChunkerEvaluatorTool (opennlp.tools.cmdline.chunker)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">ChunkerEvaluatorTool</td>
+<td class="coverageStat">
+  <span class="percent">
+    50%
+  </span>
+  <span class="absValue">
+    (2/ 4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    9.1%
+  </span>
+  <span class="absValue">
+    (3/ 33)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">ChunkerEvaluatorTool$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 5)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">ChunkerEvaluatorTool$EvalToolParams</td>
+  </tr>
+<tr>
+  <td class="name"><strong>total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    25%
+  </span>
+  <span class="absValue">
+    (2/ 8)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    7.9%
+  </span>
+  <span class="absValue">
+    (3/ 38)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/*
+<i>2</i>&nbsp; * Licensed to the Apache Software Foundation (ASF) under one or more
+<i>3</i>&nbsp; * contributor license agreements.  See the NOTICE file distributed with
+<i>4</i>&nbsp; * this work for additional information regarding copyright ownership.
+<i>5</i>&nbsp; * The ASF licenses this file to You under the Apache License, Version 2.0
+<i>6</i>&nbsp; * (the &quot;License&quot;); you may not use this file except in compliance with
+<i>7</i>&nbsp; * the License. You may obtain a copy of the License at
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; *     http://www.apache.org/licenses/LICENSE-2.0
+<i>10</i>&nbsp; *
+<i>11</i>&nbsp; * Unless required by applicable law or agreed to in writing, software
+<i>12</i>&nbsp; * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<i>13</i>&nbsp; * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<i>14</i>&nbsp; * See the License for the specific language governing permissions and
+<i>15</i>&nbsp; * limitations under the License.
+<i>16</i>&nbsp; */
+<i>17</i>&nbsp;
+<i>18</i>&nbsp;package opennlp.tools.cmdline.chunker;
+<i>19</i>&nbsp;
+<i>20</i>&nbsp;import java.io.IOException;
+<i>21</i>&nbsp;import java.util.LinkedList;
+<i>22</i>&nbsp;import java.util.List;
+<i>23</i>&nbsp;
+<i>24</i>&nbsp;import opennlp.tools.chunker.ChunkSample;
+<i>25</i>&nbsp;import opennlp.tools.chunker.ChunkerEvaluationMonitor;
+<i>26</i>&nbsp;import opennlp.tools.chunker.ChunkerEvaluator;
+<i>27</i>&nbsp;import opennlp.tools.chunker.ChunkerME;
+<i>28</i>&nbsp;import opennlp.tools.chunker.ChunkerModel;
+<i>29</i>&nbsp;import opennlp.tools.cmdline.AbstractEvaluatorTool;
+<i>30</i>&nbsp;import opennlp.tools.cmdline.PerformanceMonitor;
+<i>31</i>&nbsp;import opennlp.tools.cmdline.TerminateToolException;
+<i>32</i>&nbsp;import opennlp.tools.cmdline.chunker.ChunkerEvaluatorTool.EvalToolParams;
+<i>33</i>&nbsp;import opennlp.tools.cmdline.params.DetailedFMeasureEvaluatorParams;
+<i>34</i>&nbsp;import opennlp.tools.cmdline.params.EvaluatorParams;
+<i>35</i>&nbsp;import opennlp.tools.util.ObjectStream;
+<i>36</i>&nbsp;import opennlp.tools.util.eval.EvaluationMonitor;
+<i>37</i>&nbsp;
+<b class="nc"><i>38</i>&nbsp;public final class ChunkerEvaluatorTool</b>
+<i>39</i>&nbsp;    extends AbstractEvaluatorTool&lt;ChunkSample, EvalToolParams&gt; {
+<i>40</i>&nbsp;
+<i>41</i>&nbsp;  interface EvalToolParams extends EvaluatorParams, DetailedFMeasureEvaluatorParams {
+<i>42</i>&nbsp;  }
+<i>43</i>&nbsp;
+<i>44</i>&nbsp;  public ChunkerEvaluatorTool() {
+<b class="fc"><i>45</i>&nbsp;    super(ChunkSample.class, EvalToolParams.class);</b>
+<b class="fc"><i>46</i>&nbsp;  }</b>
+<i>47</i>&nbsp;
+<i>48</i>&nbsp;  public String getShortDescription() {
+<b class="fc"><i>49</i>&nbsp;    return &quot;Measures the performance of the Chunker model with the reference data&quot;;</b>
+<i>50</i>&nbsp;  }
+<i>51</i>&nbsp;
+<i>52</i>&nbsp;  public void run(String format, String[] args) {
+<b class="nc"><i>53</i>&nbsp;    super.run(format, args);</b>
+<i>54</i>&nbsp;
+<b class="nc"><i>55</i>&nbsp;    ChunkerModel model = new ChunkerModelLoader().load(params.getModel());</b>
+<i>56</i>&nbsp;
+<b class="nc"><i>57</i>&nbsp;    List&lt;EvaluationMonitor&lt;ChunkSample&gt;&gt; listeners = new LinkedList&lt;&gt;();</b>
+<b class="nc"><i>58</i>&nbsp;    ChunkerDetailedFMeasureListener detailedFMeasureListener = null;</b>
+<b class="nc"><i>59</i>&nbsp;    if (params.getMisclassified()) {</b>
+<b class="nc"><i>60</i>&nbsp;      listeners.add(new ChunkEvaluationErrorListener());</b>
+<i>61</i>&nbsp;    }
+<b class="nc"><i>62</i>&nbsp;    if (params.getDetailedF()) {</b>
+<b class="nc"><i>63</i>&nbsp;      detailedFMeasureListener = new ChunkerDetailedFMeasureListener();</b>
+<b class="nc"><i>64</i>&nbsp;      listeners.add(detailedFMeasureListener);</b>
+<i>65</i>&nbsp;    }
+<i>66</i>&nbsp;
+<b class="nc"><i>67</i>&nbsp;    ChunkerEvaluator evaluator = new ChunkerEvaluator(new ChunkerME(model),</b>
+<b class="nc"><i>68</i>&nbsp;        listeners.toArray(new ChunkerEvaluationMonitor[listeners.size()]));</b>
+<i>69</i>&nbsp;
+<b class="nc"><i>70</i>&nbsp;    final PerformanceMonitor monitor = new PerformanceMonitor(&quot;sent&quot;);</b>
+<i>71</i>&nbsp;
+<b class="nc"><i>72</i>&nbsp;    ObjectStream&lt;ChunkSample&gt; measuredSampleStream = new ObjectStream&lt;ChunkSample&gt;() {</b>
+<i>73</i>&nbsp;
+<i>74</i>&nbsp;      public ChunkSample read() throws IOException {
+<b class="nc"><i>75</i>&nbsp;        monitor.incrementCounter();</b>
+<b class="nc"><i>76</i>&nbsp;        return sampleStream.read();</b>
+<i>77</i>&nbsp;      }
+<i>78</i>&nbsp;
+<i>79</i>&nbsp;      public void reset() throws IOException {
+<b class="nc"><i>80</i>&nbsp;        sampleStream.reset();</b>
+<i>81</i>&nbsp;      }
+<i>82</i>&nbsp;
+<i>83</i>&nbsp;      public void close() throws IOException {
+<b class="nc"><i>84</i>&nbsp;        sampleStream.close();</b>
+<i>85</i>&nbsp;      }
+<i>86</i>&nbsp;    };
+<i>87</i>&nbsp;
+<b class="nc"><i>88</i>&nbsp;    monitor.startAndPrintThroughput();</b>
+<i>89</i>&nbsp;
+<i>90</i>&nbsp;    try {
+<b class="nc"><i>91</i>&nbsp;      evaluator.evaluate(measuredSampleStream);</b>
+<b class="nc"><i>92</i>&nbsp;    } catch (IOException e) {</b>
+<b class="nc"><i>93</i>&nbsp;      System.err.println(&quot;failed&quot;);</b>
+<b class="nc"><i>94</i>&nbsp;      throw new TerminateToolException(-1, &quot;IO error while reading test data: &quot; + e.getMessage(), e);</b>
+<i>95</i>&nbsp;    } finally {
+<b class="nc"><i>96</i>&nbsp;      try {</b>
+<b class="nc"><i>97</i>&nbsp;        measuredSampleStream.close();</b>
+<b class="nc"><i>98</i>&nbsp;      } catch (IOException e) {</b>
+<i>99</i>&nbsp;        // sorry that this can fail
+<b class="nc"><i>100</i>&nbsp;      }</b>
+<b class="nc"><i>101</i>&nbsp;    }</b>
+<i>102</i>&nbsp;
+<b class="nc"><i>103</i>&nbsp;    monitor.stopAndPrintFinalResult();</b>
+<i>104</i>&nbsp;
+<b class="nc"><i>105</i>&nbsp;    System.out.println();</b>
+<i>106</i>&nbsp;
+<b class="nc"><i>107</i>&nbsp;    if (detailedFMeasureListener == null) {</b>
+<b class="nc"><i>108</i>&nbsp;      System.out.println(evaluator.getFMeasure());</b>
+<i>109</i>&nbsp;    } else {
+<b class="nc"><i>110</i>&nbsp;      System.out.println(detailedFMeasureListener.toString());</b>
+<i>111</i>&nbsp;    }
+<b class="nc"><i>112</i>&nbsp;  }</b>
+<i>113</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-09 15:05</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,190 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: CheckContextGenerator</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">opennlp.tools.parser.treeinsert</a> ]
+</div>
+
+<h1>Coverage Summary for Class: CheckContextGenerator (opennlp.tools.parser.treeinsert)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">CheckContextGenerator</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    66.7%
+  </span>
+  <span class="absValue">
+    (2/ 3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    95.8%
+  </span>
+  <span class="absValue">
+    (46/ 48)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/*
+<i>2</i>&nbsp; * Licensed to the Apache Software Foundation (ASF) under one or more
+<i>3</i>&nbsp; * contributor license agreements.  See the NOTICE file distributed with
+<i>4</i>&nbsp; * this work for additional information regarding copyright ownership.
+<i>5</i>&nbsp; * The ASF licenses this file to You under the Apache License, Version 2.0
+<i>6</i>&nbsp; * (the &quot;License&quot;); you may not use this file except in compliance with
+<i>7</i>&nbsp; * the License. You may obtain a copy of the License at
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; *     http://www.apache.org/licenses/LICENSE-2.0
+<i>10</i>&nbsp; *
+<i>11</i>&nbsp; * Unless required by applicable law or agreed to in writing, software
+<i>12</i>&nbsp; * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<i>13</i>&nbsp; * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<i>14</i>&nbsp; * See the License for the specific language governing permissions and
+<i>15</i>&nbsp; * limitations under the License.
+<i>16</i>&nbsp; */
+<i>17</i>&nbsp;
+<i>18</i>&nbsp;
+<i>19</i>&nbsp;package opennlp.tools.parser.treeinsert;
+<i>20</i>&nbsp;
+<i>21</i>&nbsp;import java.util.ArrayList;
+<i>22</i>&nbsp;import java.util.Collection;
+<i>23</i>&nbsp;import java.util.Collections;
+<i>24</i>&nbsp;import java.util.List;
+<i>25</i>&nbsp;import java.util.Set;
+<i>26</i>&nbsp;
+<i>27</i>&nbsp;import opennlp.tools.parser.AbstractContextGenerator;
+<i>28</i>&nbsp;import opennlp.tools.parser.Parse;
+<i>29</i>&nbsp;
+<i>30</i>&nbsp;public class CheckContextGenerator extends AbstractContextGenerator {
+<i>31</i>&nbsp;
+<i>32</i>&nbsp;  private Parse[] leftNodes;
+<i>33</i>&nbsp;
+<b class="fc"><i>34</i>&nbsp;  public CheckContextGenerator(Set&lt;String&gt; punctSet) {</b>
+<b class="fc"><i>35</i>&nbsp;    this.punctSet = punctSet;</b>
+<b class="fc"><i>36</i>&nbsp;    leftNodes = new Parse[2];</b>
+<b class="fc"><i>37</i>&nbsp;  }</b>
+<i>38</i>&nbsp;
+<i>39</i>&nbsp;  public String[] getContext(Object arg0) {
+<i>40</i>&nbsp;    // TODO Auto-generated method stub
+<b class="nc"><i>41</i>&nbsp;    return null;</b>
+<i>42</i>&nbsp;  }
+<i>43</i>&nbsp;
+<i>44</i>&nbsp;  public String[] getContext(Parse parent, Parse[] constituents, int index, boolean trimFrontier) {
+<b class="fc"><i>45</i>&nbsp;    List&lt;String&gt; features = new ArrayList&lt;&gt;(100);</b>
+<i>46</i>&nbsp;    //default
+<b class="fc"><i>47</i>&nbsp;    features.add(&quot;default&quot;);</b>
+<b class="fc"><i>48</i>&nbsp;    Parse[] children = Parser.collapsePunctuation(parent.getChildren(),punctSet);</b>
+<b class="fc"><i>49</i>&nbsp;    Parse pstart = children[0];</b>
+<b class="fc"><i>50</i>&nbsp;    Parse pend = children[children.length - 1];</b>
+<b class="fc"><i>51</i>&nbsp;    String type = parent.getType();</b>
+<b class="fc"><i>52</i>&nbsp;    checkcons(pstart, &quot;begin&quot;, type, features);</b>
+<b class="fc"><i>53</i>&nbsp;    checkcons(pend, &quot;last&quot;, type, features);</b>
+<b class="fc"><i>54</i>&nbsp;    String production = &quot;p=&quot; + production(parent,false);</b>
+<b class="fc"><i>55</i>&nbsp;    String punctProduction = &quot;pp=&quot; + production(parent,true);</b>
+<b class="fc"><i>56</i>&nbsp;    features.add(production);</b>
+<b class="fc"><i>57</i>&nbsp;    features.add(punctProduction);</b>
+<i>58</i>&nbsp;
+<i>59</i>&nbsp;
+<b class="fc"><i>60</i>&nbsp;    Parse p1 = null;</b>
+<b class="fc"><i>61</i>&nbsp;    Parse p2 = null;</b>
+<b class="fc"><i>62</i>&nbsp;    Collection&lt;Parse&gt; p1s = constituents[index].getNextPunctuationSet();</b>
+<b class="fc"><i>63</i>&nbsp;    Collection&lt;Parse&gt; p2s = null;</b>
+<b class="fc"><i>64</i>&nbsp;    Collection&lt;Parse&gt; p_1s = constituents[index].getPreviousPunctuationSet();</b>
+<b class="fc"><i>65</i>&nbsp;    Collection&lt;Parse&gt; p_2s = null;</b>
+<i>66</i>&nbsp;    List&lt;Parse&gt; rf;
+<b class="fc"><i>67</i>&nbsp;    if (index == 0) {</b>
+<b class="fc"><i>68</i>&nbsp;      rf = Collections.emptyList();</b>
+<i>69</i>&nbsp;    }
+<i>70</i>&nbsp;    else {
+<b class="fc"><i>71</i>&nbsp;      rf = Parser.getRightFrontier(constituents[0], punctSet);</b>
+<b class="fc"><i>72</i>&nbsp;      if (trimFrontier) {</b>
+<b class="fc"><i>73</i>&nbsp;        int pi = rf.indexOf(parent);</b>
+<b class="fc"><i>74</i>&nbsp;        if (pi == -1) {</b>
+<b class="nc"><i>75</i>&nbsp;          throw new RuntimeException(&quot;Parent not found in right frontier:&quot; + parent + &quot; rf=&quot; + rf);</b>
+<i>76</i>&nbsp;        }
+<i>77</i>&nbsp;        else {
+<b class="fc"><i>78</i>&nbsp;          for (int ri = 0; ri &lt;= pi; ri++) {</b>
+<b class="fc"><i>79</i>&nbsp;            rf.remove(0);</b>
+<i>80</i>&nbsp;          }
+<i>81</i>&nbsp;        }
+<i>82</i>&nbsp;      }
+<i>83</i>&nbsp;    }
+<i>84</i>&nbsp;
+<b class="fc"><i>85</i>&nbsp;    getFrontierNodes(rf,leftNodes);</b>
+<b class="fc"><i>86</i>&nbsp;    Parse p_1 = leftNodes[0];</b>
+<b class="fc"><i>87</i>&nbsp;    Parse p_2 = leftNodes[1];</b>
+<b class="fc"><i>88</i>&nbsp;    int ps = constituents.length;</b>
+<b class="fc"><i>89</i>&nbsp;    if (p_1 != null) {</b>
+<b class="fc"><i>90</i>&nbsp;      p_2s = p_1.getPreviousPunctuationSet();</b>
+<i>91</i>&nbsp;    }
+<b class="fc"><i>92</i>&nbsp;    if (index + 1 &lt; ps) {</b>
+<b class="fc"><i>93</i>&nbsp;      p1 = constituents[index + 1];</b>
+<b class="fc"><i>94</i>&nbsp;      p2s = p1.getNextPunctuationSet();</b>
+<i>95</i>&nbsp;    }
+<b class="fc"><i>96</i>&nbsp;    if (index + 2 &lt; ps) {</b>
+<b class="fc"><i>97</i>&nbsp;      p2 = constituents[index + 2];</b>
+<i>98</i>&nbsp;    }
+<b class="fc"><i>99</i>&nbsp;    surround(p_1, -1, type, p_1s, features);</b>
+<b class="fc"><i>100</i>&nbsp;    surround(p_2, -2, type, p_2s, features);</b>
+<b class="fc"><i>101</i>&nbsp;    surround(p1, 1, type, p1s, features);</b>
+<b class="fc"><i>102</i>&nbsp;    surround(p2, 2, type, p2s, features);</b>
+<i>103</i>&nbsp;
+<b class="fc"><i>104</i>&nbsp;    return features.toArray(new String[features.size()]);</b>
+<i>105</i>&nbsp;  }
+<i>106</i>&nbsp;
+<i>107</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-09 15:05</div>
+</div>
+</body>
+</html>

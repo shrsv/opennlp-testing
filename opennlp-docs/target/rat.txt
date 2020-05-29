@@ -1,0 +1,60 @@
+
+*****************************************************
+Summary
+-------
+Generated at: 2020-05-29T13:41:48-07:00
+Notes: 0
+Binaries: 2
+Archives: 0
+Standards: 21
+
+Apache Licensed: 21
+Generated Documents: 0
+
+JavaDocs are generated and so license header is optional
+Generated files do not required license headers
+
+0 Unknown Licenses
+
+*******************************
+
+Unapproved licenses:
+
+
+*******************************
+
+Archives:
+
+*****************************************************
+  Files with Apache License headers will be marked AL
+  Binary files (which do not require AL headers) will be marked B
+  Compressed archives will be marked A
+  Notices, licenses etc will be marked N
+  AL    /home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-docs/pom.xml
+  AL    /home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-docs/src/docbkx/cli.xml
+  B     /home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-docs/src/docbkx/images/parsetree1.png
+  B     /home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-docs/src/docbkx/images/brat.png
+  AL    /home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-docs/src/docbkx/extension.xml
+  AL    /home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-docs/src/docbkx/css/opennlp-docs.css
+  AL    /home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-docs/src/docbkx/introduction.xml
+  AL    /home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-docs/src/docbkx/postagger.xml
+  AL    /home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-docs/src/docbkx/corpora.xml
+  AL    /home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-docs/src/docbkx/lemmatizer.xml
+  AL    /home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-docs/src/docbkx/namefinder.xml
+  AL    /home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-docs/src/docbkx/morfologik-addon.xml
+  AL    /home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-docs/src/docbkx/sentdetect.xml
+  AL    /home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-docs/src/docbkx/langdetect.xml
+  AL    /home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-docs/src/docbkx/machine-learning.xml
+  AL    /home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-docs/src/docbkx/coref.xml
+  AL    /home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-docs/src/docbkx/parser.xml
+  AL    /home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-docs/src/docbkx/uima-integration.xml
+  AL    /home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-docs/src/docbkx/doccat.xml
+  AL    /home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-docs/src/docbkx/tokenizer.xml
+  AL    /home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-docs/src/docbkx/opennlp.xml
+  AL    /home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-docs/src/docbkx/chunker.xml
+  AL    /home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-docs/src/main/resources/xsl/html.xsl
+ 
+*****************************************************
+ Printing headers for files without AL header...
+ 
+ 

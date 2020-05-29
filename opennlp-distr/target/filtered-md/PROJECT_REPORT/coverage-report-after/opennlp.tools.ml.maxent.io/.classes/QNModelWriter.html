@@ -1,0 +1,153 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: QNModelWriter</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">opennlp.tools.ml.maxent.io</a> ]
+</div>
+
+<h1>Coverage Summary for Class: QNModelWriter (opennlp.tools.ml.maxent.io)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">QNModelWriter</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (2/ 2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (20/ 20)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/*
+<i>2</i>&nbsp; * Licensed to the Apache Software Foundation (ASF) under one or more
+<i>3</i>&nbsp; * contributor license agreements.  See the NOTICE file distributed with
+<i>4</i>&nbsp; * this work for additional information regarding copyright ownership.
+<i>5</i>&nbsp; * The ASF licenses this file to You under the Apache License, Version 2.0
+<i>6</i>&nbsp; * (the &quot;License&quot;); you may not use this file except in compliance with
+<i>7</i>&nbsp; * the License. You may obtain a copy of the License at
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; *     http://www.apache.org/licenses/LICENSE-2.0
+<i>10</i>&nbsp; *
+<i>11</i>&nbsp; * Unless required by applicable law or agreed to in writing, software
+<i>12</i>&nbsp; * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<i>13</i>&nbsp; * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<i>14</i>&nbsp; * See the License for the specific language governing permissions and
+<i>15</i>&nbsp; * limitations under the License.
+<i>16</i>&nbsp; */
+<i>17</i>&nbsp;
+<i>18</i>&nbsp;package opennlp.tools.ml.maxent.io;
+<i>19</i>&nbsp;
+<i>20</i>&nbsp;import java.io.IOException;
+<i>21</i>&nbsp;import java.util.List;
+<i>22</i>&nbsp;
+<i>23</i>&nbsp;import opennlp.tools.ml.model.AbstractModel;
+<i>24</i>&nbsp;import opennlp.tools.ml.model.ComparablePredicate;
+<i>25</i>&nbsp;
+<i>26</i>&nbsp;public abstract class QNModelWriter extends GISModelWriter {
+<i>27</i>&nbsp;
+<i>28</i>&nbsp;  public QNModelWriter(AbstractModel model) {
+<b class="fc"><i>29</i>&nbsp;    super(model);</b>
+<b class="fc"><i>30</i>&nbsp;  }</b>
+<i>31</i>&nbsp;
+<i>32</i>&nbsp;  @Override
+<i>33</i>&nbsp;  public void persist() throws IOException {
+<i>34</i>&nbsp;    // the type of model (QN)
+<b class="fc"><i>35</i>&nbsp;    writeUTF(&quot;QN&quot;);</b>
+<i>36</i>&nbsp;
+<i>37</i>&nbsp;    // the mapping from outcomes to their integer indexes
+<b class="fc"><i>38</i>&nbsp;    writeInt(OUTCOME_LABELS.length);</b>
+<i>39</i>&nbsp;
+<b class="fc"><i>40</i>&nbsp;    for (int i = 0; i &lt; OUTCOME_LABELS.length; i++)</b>
+<b class="fc"><i>41</i>&nbsp;      writeUTF(OUTCOME_LABELS[i]);</b>
+<i>42</i>&nbsp;
+<i>43</i>&nbsp;    // the mapping from predicates to the outcomes they contributed to.
+<i>44</i>&nbsp;    // The sorting is done so that we actually can write this out more
+<i>45</i>&nbsp;    // compactly than as the entire list.
+<b class="fc"><i>46</i>&nbsp;    ComparablePredicate[] sorted = sortValues();</b>
+<b class="fc"><i>47</i>&nbsp;    List&lt;List&lt;ComparablePredicate&gt;&gt; compressed = compressOutcomes(sorted);</b>
+<i>48</i>&nbsp;
+<b class="fc"><i>49</i>&nbsp;    writeInt(compressed.size());</b>
+<i>50</i>&nbsp;
+<b class="fc"><i>51</i>&nbsp;    for (int i = 0; i &lt; compressed.size(); i++) {</b>
+<b class="fc"><i>52</i>&nbsp;      List&lt;ComparablePredicate&gt; a = compressed.get(i);</b>
+<b class="fc"><i>53</i>&nbsp;      writeUTF(a.size() + a.get(0).toString());</b>
+<i>54</i>&nbsp;    }
+<i>55</i>&nbsp;
+<i>56</i>&nbsp;    // the mapping from predicate names to their integer indexes
+<b class="fc"><i>57</i>&nbsp;    writeInt(PARAMS.length);</b>
+<i>58</i>&nbsp;
+<b class="fc"><i>59</i>&nbsp;    for (int i = 0; i &lt; sorted.length; i++)</b>
+<b class="fc"><i>60</i>&nbsp;      writeUTF(sorted[i].name);</b>
+<i>61</i>&nbsp;
+<i>62</i>&nbsp;    // write out the parameters
+<b class="fc"><i>63</i>&nbsp;    for (int i = 0; i &lt; sorted.length; i++)</b>
+<b class="fc"><i>64</i>&nbsp;      for (int j = 0; j &lt; sorted[i].params.length; j++)</b>
+<b class="fc"><i>65</i>&nbsp;        writeDouble(sorted[i].params[j]);</b>
+<i>66</i>&nbsp;
+<b class="fc"><i>67</i>&nbsp;    close();</b>
+<b class="fc"><i>68</i>&nbsp;  }</b>
+<i>69</i>&nbsp;}
+<i>70</i>&nbsp;
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-09 18:47</div>
+</div>
+</body>
+</html>

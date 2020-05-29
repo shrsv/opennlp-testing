@@ -1,0 +1,144 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: SentenceContextGenerator</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">opennlp.tools.sentdetect.lang.th</a> ]
+</div>
+
+<h1>Coverage Summary for Class: SentenceContextGenerator (opennlp.tools.sentdetect.lang.th)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">SentenceContextGenerator</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 24)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/*
+<i>2</i>&nbsp; * Licensed to the Apache Software Foundation (ASF) under one or more
+<i>3</i>&nbsp; * contributor license agreements.  See the NOTICE file distributed with
+<i>4</i>&nbsp; * this work for additional information regarding copyright ownership.
+<i>5</i>&nbsp; * The ASF licenses this file to You under the Apache License, Version 2.0
+<i>6</i>&nbsp; * (the &quot;License&quot;); you may not use this file except in compliance with
+<i>7</i>&nbsp; * the License. You may obtain a copy of the License at
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; *     http://www.apache.org/licenses/LICENSE-2.0
+<i>10</i>&nbsp; *
+<i>11</i>&nbsp; * Unless required by applicable law or agreed to in writing, software
+<i>12</i>&nbsp; * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<i>13</i>&nbsp; * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<i>14</i>&nbsp; * See the License for the specific language governing permissions and
+<i>15</i>&nbsp; * limitations under the License.
+<i>16</i>&nbsp; */
+<i>17</i>&nbsp;
+<i>18</i>&nbsp;package opennlp.tools.sentdetect.lang.th;
+<i>19</i>&nbsp;
+<i>20</i>&nbsp;import opennlp.tools.sentdetect.DefaultSDContextGenerator;
+<i>21</i>&nbsp;
+<i>22</i>&nbsp;/**
+<i>23</i>&nbsp; * Creates contexts/features for end-of-sentence detection in Thai text.
+<i>24</i>&nbsp; */
+<i>25</i>&nbsp;public class SentenceContextGenerator extends DefaultSDContextGenerator {
+<i>26</i>&nbsp;
+<b class="nc"><i>27</i>&nbsp;  public static final char[] eosCharacters =  {&#39; &#39;,&#39;\n&#39;};</b>
+<i>28</i>&nbsp;
+<i>29</i>&nbsp;  public SentenceContextGenerator() {
+<b class="nc"><i>30</i>&nbsp;    super(eosCharacters);</b>
+<i>31</i>&nbsp;  }
+<i>32</i>&nbsp;
+<i>33</i>&nbsp;  @Override
+<i>34</i>&nbsp;  protected void collectFeatures(String prefix, String suffix, String previous, String next) {
+<b class="nc"><i>35</i>&nbsp;    buf.append(&quot;p=&quot;);</b>
+<b class="nc"><i>36</i>&nbsp;    buf.append(prefix);</b>
+<b class="nc"><i>37</i>&nbsp;    collectFeats.add(buf.toString());</b>
+<b class="nc"><i>38</i>&nbsp;    buf.setLength(0);</b>
+<i>39</i>&nbsp;
+<b class="nc"><i>40</i>&nbsp;    buf.append(&quot;s=&quot;);</b>
+<b class="nc"><i>41</i>&nbsp;    buf.append(suffix);</b>
+<b class="nc"><i>42</i>&nbsp;    collectFeats.add(buf.toString());</b>
+<b class="nc"><i>43</i>&nbsp;    buf.setLength(0);</b>
+<i>44</i>&nbsp;
+<b class="nc"><i>45</i>&nbsp;    collectFeats.add(&quot;p1=&quot; + prefix.substring(Math.max(prefix.length() - 1,0)));</b>
+<b class="nc"><i>46</i>&nbsp;    collectFeats.add(&quot;p2=&quot; + prefix.substring(Math.max(prefix.length() - 2,0)));</b>
+<b class="nc"><i>47</i>&nbsp;    collectFeats.add(&quot;p3=&quot; + prefix.substring(Math.max(prefix.length() - 3,0)));</b>
+<b class="nc"><i>48</i>&nbsp;    collectFeats.add(&quot;p4=&quot; + prefix.substring(Math.max(prefix.length() - 4,0)));</b>
+<b class="nc"><i>49</i>&nbsp;    collectFeats.add(&quot;p5=&quot; + prefix.substring(Math.max(prefix.length() - 5,0)));</b>
+<b class="nc"><i>50</i>&nbsp;    collectFeats.add(&quot;p6=&quot; + prefix.substring(Math.max(prefix.length() - 6,0)));</b>
+<b class="nc"><i>51</i>&nbsp;    collectFeats.add(&quot;p7=&quot; + prefix.substring(Math.max(prefix.length() - 7,0)));</b>
+<i>52</i>&nbsp;
+<b class="nc"><i>53</i>&nbsp;    collectFeats.add(&quot;n1=&quot; + suffix.substring(0,Math.min(1, suffix.length())));</b>
+<b class="nc"><i>54</i>&nbsp;    collectFeats.add(&quot;n2=&quot; + suffix.substring(0,Math.min(2, suffix.length())));</b>
+<b class="nc"><i>55</i>&nbsp;    collectFeats.add(&quot;n3=&quot; + suffix.substring(0,Math.min(3, suffix.length())));</b>
+<b class="nc"><i>56</i>&nbsp;    collectFeats.add(&quot;n4=&quot; + suffix.substring(0,Math.min(4, suffix.length())));</b>
+<b class="nc"><i>57</i>&nbsp;    collectFeats.add(&quot;n5=&quot; + suffix.substring(0,Math.min(5, suffix.length())));</b>
+<b class="nc"><i>58</i>&nbsp;    collectFeats.add(&quot;n6=&quot; + suffix.substring(0,Math.min(6, suffix.length())));</b>
+<b class="nc"><i>59</i>&nbsp;    collectFeats.add(&quot;n7=&quot; + suffix.substring(0,Math.min(7, suffix.length())));</b>
+<i>60</i>&nbsp;  }
+<i>61</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-09 15:05</div>
+</div>
+</body>
+</html>

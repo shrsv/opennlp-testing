@@ -1,0 +1,834 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: GISTrainer</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">opennlp.tools.ml.maxent</a> ]
+</div>
+
+<h1>Coverage Summary for Class: GISTrainer (opennlp.tools.ml.maxent)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">GISTrainer</td>
+<td class="coverageStat">
+  <span class="percent">
+    89.5%
+  </span>
+  <span class="absValue">
+    (17/ 19)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    88.7%
+  </span>
+  <span class="absValue">
+    (196/ 221)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">GISTrainer$ModelExpectationComputeTask</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (5/ 5)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (35/ 35)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    91.7%
+  </span>
+  <span class="absValue">
+    (22/ 24)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    90.2%
+  </span>
+  <span class="absValue">
+    (231/ 256)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/*
+<i>2</i>&nbsp; * Licensed to the Apache Software Foundation (ASF) under one or more
+<i>3</i>&nbsp; * contributor license agreements.  See the NOTICE file distributed with
+<i>4</i>&nbsp; * this work for additional information regarding copyright ownership.
+<i>5</i>&nbsp; * The ASF licenses this file to You under the Apache License, Version 2.0
+<i>6</i>&nbsp; * (the &quot;License&quot;); you may not use this file except in compliance with
+<i>7</i>&nbsp; * the License. You may obtain a copy of the License at
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; *     http://www.apache.org/licenses/LICENSE-2.0
+<i>10</i>&nbsp; *
+<i>11</i>&nbsp; * Unless required by applicable law or agreed to in writing, software
+<i>12</i>&nbsp; * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<i>13</i>&nbsp; * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<i>14</i>&nbsp; * See the License for the specific language governing permissions and
+<i>15</i>&nbsp; * limitations under the License.
+<i>16</i>&nbsp; */
+<i>17</i>&nbsp;
+<i>18</i>&nbsp;package opennlp.tools.ml.maxent;
+<i>19</i>&nbsp;
+<i>20</i>&nbsp;import java.io.IOException;
+<i>21</i>&nbsp;import java.util.HashMap;
+<i>22</i>&nbsp;import java.util.Map;
+<i>23</i>&nbsp;import java.util.concurrent.Callable;
+<i>24</i>&nbsp;import java.util.concurrent.CompletionService;
+<i>25</i>&nbsp;import java.util.concurrent.ExecutionException;
+<i>26</i>&nbsp;import java.util.concurrent.ExecutorCompletionService;
+<i>27</i>&nbsp;import java.util.concurrent.ExecutorService;
+<i>28</i>&nbsp;import java.util.concurrent.Executors;
+<i>29</i>&nbsp;
+<i>30</i>&nbsp;import opennlp.tools.ml.AbstractEventTrainer;
+<i>31</i>&nbsp;import opennlp.tools.ml.ArrayMath;
+<i>32</i>&nbsp;import opennlp.tools.ml.model.AbstractModel;
+<i>33</i>&nbsp;import opennlp.tools.ml.model.DataIndexer;
+<i>34</i>&nbsp;import opennlp.tools.ml.model.EvalParameters;
+<i>35</i>&nbsp;import opennlp.tools.ml.model.Event;
+<i>36</i>&nbsp;import opennlp.tools.ml.model.MaxentModel;
+<i>37</i>&nbsp;import opennlp.tools.ml.model.MutableContext;
+<i>38</i>&nbsp;import opennlp.tools.ml.model.OnePassDataIndexer;
+<i>39</i>&nbsp;import opennlp.tools.ml.model.Prior;
+<i>40</i>&nbsp;import opennlp.tools.ml.model.UniformPrior;
+<i>41</i>&nbsp;import opennlp.tools.util.ObjectStream;
+<i>42</i>&nbsp;import opennlp.tools.util.TrainingParameters;
+<i>43</i>&nbsp;
+<i>44</i>&nbsp;
+<i>45</i>&nbsp;/**
+<i>46</i>&nbsp; * An implementation of Generalized Iterative Scaling.  The reference paper
+<i>47</i>&nbsp; * for this implementation was Adwait Ratnaparkhi&#39;s tech report at the
+<i>48</i>&nbsp; * University of Pennsylvania&#39;s Institute for Research in Cognitive Science,
+<i>49</i>&nbsp; * and is available at &lt;a href =&quot;ftp://ftp.cis.upenn.edu/pub/ircs/tr/97-08.ps.Z&quot;&gt;&lt;code&gt;ftp://ftp.cis.upenn.edu/pub/ircs/tr/97-08.ps.Z&lt;/code&gt;&lt;/a&gt;.
+<i>50</i>&nbsp; * &lt;p&gt;
+<i>51</i>&nbsp; * The slack parameter used in the above implementation has been removed by default
+<i>52</i>&nbsp; * from the computation and a method for updating with Gaussian smoothing has been
+<i>53</i>&nbsp; * added per Investigating GIS and Smoothing for Maximum Entropy Taggers, Clark and Curran (2002).
+<i>54</i>&nbsp; * &lt;a href=&quot;http://acl.ldc.upenn.edu/E/E03/E03-1071.pdf&quot;&gt;&lt;code&gt;http://acl.ldc.upenn.edu/E/E03/E03-1071.pdf&lt;/code&gt;&lt;/a&gt;
+<i>55</i>&nbsp; * The slack parameter can be used by setting &lt;code&gt;useSlackParameter&lt;/code&gt; to true.
+<i>56</i>&nbsp; * Gaussian smoothing can be used by setting &lt;code&gt;useGaussianSmoothing&lt;/code&gt; to true.
+<i>57</i>&nbsp; * &lt;p&gt;
+<i>58</i>&nbsp; * A prior can be used to train models which converge to the distribution which minimizes the
+<i>59</i>&nbsp; * relative entropy between the distribution specified by the empirical constraints of the training
+<i>60</i>&nbsp; * data and the specified prior.  By default, the uniform distribution is used as the prior.
+<i>61</i>&nbsp; */
+<b class="fc"><i>62</i>&nbsp;public class GISTrainer extends AbstractEventTrainer {</b>
+<i>63</i>&nbsp;
+<i>64</i>&nbsp;  @Deprecated
+<i>65</i>&nbsp;  public static final String OLD_LL_THRESHOLD_PARAM = &quot;llthreshold&quot;;
+<i>66</i>&nbsp;  
+<i>67</i>&nbsp;  public static final String LOG_LIKELIHOOD_THRESHOLD_PARAM = &quot;LLThreshold&quot;;
+<i>68</i>&nbsp;  public static final double LOG_LIKELIHOOD_THRESHOLD_DEFAULT = 0.0001;
+<b class="fc"><i>69</i>&nbsp;  private double llThreshold = 0.0001;</b>
+<i>70</i>&nbsp;  /**
+<i>71</i>&nbsp;   * Specifies whether unseen context/outcome pairs should be estimated as occur very infrequently.
+<i>72</i>&nbsp;   */
+<b class="fc"><i>73</i>&nbsp;  private boolean useSimpleSmoothing = false;</b>
+<i>74</i>&nbsp;  /**
+<i>75</i>&nbsp;   * Specified whether parameter updates should prefer a distribution of parameters which
+<i>76</i>&nbsp;   * is gaussian.
+<i>77</i>&nbsp;   */
+<b class="fc"><i>78</i>&nbsp;  private boolean useGaussianSmoothing = false;</b>
+<b class="fc"><i>79</i>&nbsp;  private double sigma = 2.0;</b>
+<i>80</i>&nbsp;  // If we are using smoothing, this is used as the &quot;number&quot; of
+<i>81</i>&nbsp;  // times we want the trainer to imagine that it saw a feature that it
+<i>82</i>&nbsp;  // actually didn&#39;t see.  Defaulted to 0.1.
+<b class="fc"><i>83</i>&nbsp;  private double _smoothingObservation = 0.1;</b>
+<i>84</i>&nbsp;  /**
+<i>85</i>&nbsp;   * Number of unique events which occured in the event set.
+<i>86</i>&nbsp;   */
+<i>87</i>&nbsp;  private int numUniqueEvents;
+<i>88</i>&nbsp;  /**
+<i>89</i>&nbsp;   * Number of predicates.
+<i>90</i>&nbsp;   */
+<i>91</i>&nbsp;  private int numPreds;
+<i>92</i>&nbsp;  /**
+<i>93</i>&nbsp;   * Number of outcomes.
+<i>94</i>&nbsp;   */
+<i>95</i>&nbsp;  private int numOutcomes;
+<i>96</i>&nbsp;  /**
+<i>97</i>&nbsp;   * Records the array of predicates seen in each event.
+<i>98</i>&nbsp;   */
+<i>99</i>&nbsp;  private int[][] contexts;
+<i>100</i>&nbsp;  /**
+<i>101</i>&nbsp;   * The value associated with each context. If null then context values are assumes to be 1.
+<i>102</i>&nbsp;   */
+<i>103</i>&nbsp;  private float[][] values;
+<i>104</i>&nbsp;  /**
+<i>105</i>&nbsp;   * List of outcomes for each event i, in context[i].
+<i>106</i>&nbsp;   */
+<i>107</i>&nbsp;  private int[] outcomeList;
+<i>108</i>&nbsp;  /**
+<i>109</i>&nbsp;   * Records the num of times an event has been seen for each event i, in context[i].
+<i>110</i>&nbsp;   */
+<i>111</i>&nbsp;  private int[] numTimesEventsSeen;
+<i>112</i>&nbsp;  /**
+<i>113</i>&nbsp;   * Stores the String names of the outcomes. The GIS only tracks outcomes as
+<i>114</i>&nbsp;   * ints, and so this array is needed to save the model to disk and thereby
+<i>115</i>&nbsp;   * allow users to know what the outcome was in human understandable terms.
+<i>116</i>&nbsp;   */
+<i>117</i>&nbsp;  private String[] outcomeLabels;
+<i>118</i>&nbsp;  /**
+<i>119</i>&nbsp;   * Stores the String names of the predicates. The GIS only tracks predicates
+<i>120</i>&nbsp;   * as ints, and so this array is needed to save the model to disk and thereby
+<i>121</i>&nbsp;   * allow users to know what the outcome was in human understandable terms.
+<i>122</i>&nbsp;   */
+<i>123</i>&nbsp;  private String[] predLabels;
+<i>124</i>&nbsp;  /**
+<i>125</i>&nbsp;   * Stores the observed expected values of the features based on training data.
+<i>126</i>&nbsp;   */
+<i>127</i>&nbsp;  private MutableContext[] observedExpects;
+<i>128</i>&nbsp;  /**
+<i>129</i>&nbsp;   * Stores the estimated parameter value of each predicate during iteration
+<i>130</i>&nbsp;   */
+<i>131</i>&nbsp;  private MutableContext[] params;
+<i>132</i>&nbsp;  /**
+<i>133</i>&nbsp;   * Stores the expected values of the features based on the current models
+<i>134</i>&nbsp;   */
+<i>135</i>&nbsp;  private MutableContext[][] modelExpects;
+<i>136</i>&nbsp;  /**
+<i>137</i>&nbsp;   * This is the prior distribution that the model uses for training.
+<i>138</i>&nbsp;   */
+<i>139</i>&nbsp;  private Prior prior;
+<i>140</i>&nbsp;  /**
+<i>141</i>&nbsp;   * Initial probability for all outcomes.
+<i>142</i>&nbsp;   */
+<i>143</i>&nbsp;  private EvalParameters evalParams;
+<i>144</i>&nbsp;
+<i>145</i>&nbsp;  public static final String MAXENT_VALUE = &quot;MAXENT&quot;;
+<i>146</i>&nbsp;
+<i>147</i>&nbsp;  /**
+<i>148</i>&nbsp;   * If we are using smoothing, this is used as the &quot;number&quot; of times we want
+<i>149</i>&nbsp;   * the trainer to imagine that it saw a feature that it actually didn&#39;t see.
+<i>150</i>&nbsp;   * Defaulted to 0.1.
+<i>151</i>&nbsp;   */
+<i>152</i>&nbsp;  private static final String SMOOTHING_PARAM = &quot;Smoothing&quot;;
+<i>153</i>&nbsp;  private static final boolean SMOOTHING_DEFAULT = false;
+<i>154</i>&nbsp;  private static final String SMOOTHING_OBSERVATION_PARAM = &quot;SmoothingObservation&quot;;
+<i>155</i>&nbsp;  private static final double SMOOTHING_OBSERVATION = 0.1;
+<i>156</i>&nbsp;
+<i>157</i>&nbsp;  private static final String GAUSSIAN_SMOOTHING_PARAM = &quot;GaussianSmoothing&quot;;
+<i>158</i>&nbsp;  private static final boolean GAUSSIAN_SMOOTHING_DEFAULT = false;
+<i>159</i>&nbsp;  private static final String GAUSSIAN_SMOOTHING_SIGMA_PARAM = &quot;GaussianSmoothingSigma&quot;;
+<i>160</i>&nbsp;  private static final double GAUSSIAN_SMOOTHING_SIGMA_DEFAULT = 2.0;
+<i>161</i>&nbsp;  
+<i>162</i>&nbsp;  /**
+<i>163</i>&nbsp;   * Creates a new &lt;code&gt;GISTrainer&lt;/code&gt; instance which does not print
+<i>164</i>&nbsp;   * progress messages about training to STDOUT.
+<i>165</i>&nbsp;   */
+<b class="fc"><i>166</i>&nbsp;  public GISTrainer() {</b>
+<b class="fc"><i>167</i>&nbsp;    printMessages = false;</b>
+<b class="fc"><i>168</i>&nbsp;  }</b>
+<i>169</i>&nbsp;
+<i>170</i>&nbsp;  @Override
+<i>171</i>&nbsp;  public boolean isSortAndMerge() {
+<b class="fc"><i>172</i>&nbsp;    return true;</b>
+<i>173</i>&nbsp;  }
+<i>174</i>&nbsp;
+<i>175</i>&nbsp;  @Override
+<i>176</i>&nbsp;  public void init(TrainingParameters trainingParameters, Map&lt;String, String&gt; reportMap) {
+<b class="fc"><i>177</i>&nbsp;    super.init(trainingParameters, reportMap);</b>
+<i>178</i>&nbsp;
+<i>179</i>&nbsp;    // Just in case someone is using &quot;llthreshold&quot; instead of LLThreshold...
+<i>180</i>&nbsp;    // this warning can be removed in a future version of OpenNLP.
+<b class="fc"><i>181</i>&nbsp;    if (trainingParameters.getDoubleParameter(OLD_LL_THRESHOLD_PARAM, -1.) &gt; 0. ) {</b>
+<b class="nc"><i>182</i>&nbsp;      display(&quot;WARNING: the training parameter: &quot; + OLD_LL_THRESHOLD_PARAM + </b>
+<i>183</i>&nbsp;          &quot; has been deprecated.  Please use &quot; +
+<i>184</i>&nbsp;          LOG_LIKELIHOOD_THRESHOLD_DEFAULT + &quot; instead&quot;);
+<i>185</i>&nbsp;      // if they didn&#39;t supply a value for both llthreshold AND LLThreshold  copy it over..
+<b class="nc"><i>186</i>&nbsp;      if (trainingParameters.getDoubleParameter(LOG_LIKELIHOOD_THRESHOLD_PARAM, -1.) &lt; 0. ) {</b>
+<b class="nc"><i>187</i>&nbsp;        trainingParameters.put(LOG_LIKELIHOOD_THRESHOLD_PARAM,</b>
+<b class="nc"><i>188</i>&nbsp;            trainingParameters.getDoubleParameter(OLD_LL_THRESHOLD_PARAM, LOG_LIKELIHOOD_THRESHOLD_DEFAULT));</b>
+<i>189</i>&nbsp;      }
+<i>190</i>&nbsp;    }
+<i>191</i>&nbsp;
+<b class="fc"><i>192</i>&nbsp;    llThreshold = trainingParameters.getDoubleParameter(LOG_LIKELIHOOD_THRESHOLD_PARAM, </b>
+<i>193</i>&nbsp;        LOG_LIKELIHOOD_THRESHOLD_DEFAULT);
+<i>194</i>&nbsp;
+<b class="fc"><i>195</i>&nbsp;    useSimpleSmoothing = trainingParameters.getBooleanParameter(SMOOTHING_PARAM, SMOOTHING_DEFAULT);</b>
+<b class="fc"><i>196</i>&nbsp;    if (useSimpleSmoothing) {</b>
+<b class="nc"><i>197</i>&nbsp;      _smoothingObservation = </b>
+<b class="nc"><i>198</i>&nbsp;          trainingParameters.getDoubleParameter(SMOOTHING_OBSERVATION_PARAM, SMOOTHING_OBSERVATION);</b>
+<i>199</i>&nbsp;    }
+<i>200</i>&nbsp;    
+<b class="fc"><i>201</i>&nbsp;    useGaussianSmoothing = </b>
+<b class="fc"><i>202</i>&nbsp;        trainingParameters.getBooleanParameter(GAUSSIAN_SMOOTHING_PARAM, GAUSSIAN_SMOOTHING_DEFAULT);</b>
+<b class="fc"><i>203</i>&nbsp;    if (useGaussianSmoothing) {</b>
+<b class="fc"><i>204</i>&nbsp;      sigma = trainingParameters.getDoubleParameter(</b>
+<i>205</i>&nbsp;          GAUSSIAN_SMOOTHING_SIGMA_PARAM, GAUSSIAN_SMOOTHING_SIGMA_DEFAULT);
+<i>206</i>&nbsp;    }
+<i>207</i>&nbsp;    
+<b class="fc"><i>208</i>&nbsp;    if (useSimpleSmoothing &amp;&amp; useGaussianSmoothing) </b>
+<b class="nc"><i>209</i>&nbsp;      throw new RuntimeException(&quot;Cannot set both Gaussian smoothing and Simple smoothing&quot;);</b>
+<b class="fc"><i>210</i>&nbsp;  }</b>
+<i>211</i>&nbsp;  
+<i>212</i>&nbsp;  @Override
+<i>213</i>&nbsp;  public MaxentModel doTrain(DataIndexer indexer) throws IOException {
+<b class="fc"><i>214</i>&nbsp;    int iterations = getIterations();</b>
+<i>215</i>&nbsp;
+<b class="fc"><i>216</i>&nbsp;    int threads = trainingParameters.getIntParameter(TrainingParameters.THREADS_PARAM, 1);</b>
+<b class="fc"><i>217</i>&nbsp;    AbstractModel model = trainModel(iterations, indexer, threads);</b>
+<i>218</i>&nbsp;
+<b class="fc"><i>219</i>&nbsp;    return model;</b>
+<i>220</i>&nbsp;  }
+<i>221</i>&nbsp;
+<i>222</i>&nbsp;  /**
+<i>223</i>&nbsp;   * Creates a new &lt;code&gt;GISTrainer&lt;/code&gt; instance.
+<i>224</i>&nbsp;   *
+<i>225</i>&nbsp;   * @param printMessages sends progress messages about training to
+<i>226</i>&nbsp;   *                      STDOUT when true; trains silently otherwise.
+<i>227</i>&nbsp;   */
+<b class="fc"><i>228</i>&nbsp;  GISTrainer(boolean printMessages) {</b>
+<b class="fc"><i>229</i>&nbsp;    this.printMessages = printMessages;</b>
+<b class="fc"><i>230</i>&nbsp;  }</b>
+<i>231</i>&nbsp;
+<i>232</i>&nbsp;  /**
+<i>233</i>&nbsp;   * Sets whether this trainer will use smoothing while training the model.
+<i>234</i>&nbsp;   * This can improve model accuracy, though training will potentially take
+<i>235</i>&nbsp;   * longer and use more memory.  Model size will also be larger.
+<i>236</i>&nbsp;   *
+<i>237</i>&nbsp;   * @param smooth true if smoothing is desired, false if not
+<i>238</i>&nbsp;   */
+<i>239</i>&nbsp;  public void setSmoothing(boolean smooth) {
+<b class="nc"><i>240</i>&nbsp;    useSimpleSmoothing = smooth;</b>
+<b class="nc"><i>241</i>&nbsp;  }</b>
+<i>242</i>&nbsp;
+<i>243</i>&nbsp;  /**
+<i>244</i>&nbsp;   * Sets whether this trainer will use smoothing while training the model.
+<i>245</i>&nbsp;   * This can improve model accuracy, though training will potentially take
+<i>246</i>&nbsp;   * longer and use more memory.  Model size will also be larger.
+<i>247</i>&nbsp;   *
+<i>248</i>&nbsp;   * @param timesSeen the &quot;number&quot; of times we want the trainer to imagine
+<i>249</i>&nbsp;   *                  it saw a feature that it actually didn&#39;t see
+<i>250</i>&nbsp;   */
+<i>251</i>&nbsp;  public void setSmoothingObservation(double timesSeen) {
+<b class="nc"><i>252</i>&nbsp;    _smoothingObservation = timesSeen;</b>
+<b class="nc"><i>253</i>&nbsp;  }</b>
+<i>254</i>&nbsp;
+<i>255</i>&nbsp;  /**
+<i>256</i>&nbsp;   * Sets whether this trainer will use smoothing while training the model.
+<i>257</i>&nbsp;   * This can improve model accuracy, though training will potentially take
+<i>258</i>&nbsp;   * longer and use more memory.  Model size will also be larger.
+<i>259</i>&nbsp;   */
+<i>260</i>&nbsp;  public void setGaussianSigma(double sigmaValue) {
+<b class="fc"><i>261</i>&nbsp;    useGaussianSmoothing = true;</b>
+<b class="fc"><i>262</i>&nbsp;    sigma = sigmaValue;</b>
+<b class="fc"><i>263</i>&nbsp;  }</b>
+<i>264</i>&nbsp;
+<i>265</i>&nbsp;  /**
+<i>266</i>&nbsp;   * Train a model using the GIS algorithm, assuming 100 iterations and no
+<i>267</i>&nbsp;   * cutoff.
+<i>268</i>&nbsp;   *
+<i>269</i>&nbsp;   * @param eventStream
+<i>270</i>&nbsp;   *          The EventStream holding the data on which this model will be
+<i>271</i>&nbsp;   *          trained.
+<i>272</i>&nbsp;   * @return The newly trained model, which can be used immediately or saved to
+<i>273</i>&nbsp;   *         disk using an opennlp.tools.ml.maxent.io.GISModelWriter object.
+<i>274</i>&nbsp;   */
+<i>275</i>&nbsp;  public GISModel trainModel(ObjectStream&lt;Event&gt; eventStream) throws IOException {
+<b class="fc"><i>276</i>&nbsp;    return trainModel(eventStream, 100, 0);</b>
+<i>277</i>&nbsp;  }
+<i>278</i>&nbsp;
+<i>279</i>&nbsp;  /**
+<i>280</i>&nbsp;   * Trains a GIS model on the event in the specified event stream, using the specified number
+<i>281</i>&nbsp;   * of iterations and the specified count cutoff.
+<i>282</i>&nbsp;   *
+<i>283</i>&nbsp;   * @param eventStream A stream of all events.
+<i>284</i>&nbsp;   * @param iterations  The number of iterations to use for GIS.
+<i>285</i>&nbsp;   * @param cutoff      The number of times a feature must occur to be included.
+<i>286</i>&nbsp;   * @return A GIS model trained with specified
+<i>287</i>&nbsp;   */
+<i>288</i>&nbsp;  public GISModel trainModel(ObjectStream&lt;Event&gt; eventStream, int iterations,
+<i>289</i>&nbsp;                             int cutoff) throws IOException {
+<b class="fc"><i>290</i>&nbsp;    DataIndexer indexer = new OnePassDataIndexer();</b>
+<b class="fc"><i>291</i>&nbsp;    TrainingParameters indexingParameters = new TrainingParameters();</b>
+<b class="fc"><i>292</i>&nbsp;    indexingParameters.put(GISTrainer.CUTOFF_PARAM, cutoff);</b>
+<b class="fc"><i>293</i>&nbsp;    indexingParameters.put(GISTrainer.ITERATIONS_PARAM, iterations);</b>
+<b class="fc"><i>294</i>&nbsp;    Map&lt;String, String&gt; reportMap = new HashMap&lt;&gt;();</b>
+<b class="fc"><i>295</i>&nbsp;    indexer.init(indexingParameters, reportMap);</b>
+<b class="fc"><i>296</i>&nbsp;    indexer.index(eventStream);</b>
+<b class="fc"><i>297</i>&nbsp;    return trainModel(iterations, indexer);</b>
+<i>298</i>&nbsp;  }
+<i>299</i>&nbsp;
+<i>300</i>&nbsp;  /**
+<i>301</i>&nbsp;   * Train a model using the GIS algorithm.
+<i>302</i>&nbsp;   *
+<i>303</i>&nbsp;   * @param iterations The number of GIS iterations to perform.
+<i>304</i>&nbsp;   * @param di         The data indexer used to compress events in memory.
+<i>305</i>&nbsp;   * @return The newly trained model, which can be used immediately or saved
+<i>306</i>&nbsp;   * to disk using an opennlp.tools.ml.maxent.io.GISModelWriter object.
+<i>307</i>&nbsp;   */
+<i>308</i>&nbsp;  public GISModel trainModel(int iterations, DataIndexer di) {
+<b class="fc"><i>309</i>&nbsp;    return trainModel(iterations, di, new UniformPrior(), 1);</b>
+<i>310</i>&nbsp;  }
+<i>311</i>&nbsp;
+<i>312</i>&nbsp;  /**
+<i>313</i>&nbsp;   * Train a model using the GIS algorithm.
+<i>314</i>&nbsp;   *
+<i>315</i>&nbsp;   * @param iterations The number of GIS iterations to perform.
+<i>316</i>&nbsp;   * @param di         The data indexer used to compress events in memory.
+<i>317</i>&nbsp;   * @param threads
+<i>318</i>&nbsp;   * @return The newly trained model, which can be used immediately or saved
+<i>319</i>&nbsp;   * to disk using an opennlp.tools.ml.maxent.io.GISModelWriter object.
+<i>320</i>&nbsp;   */
+<i>321</i>&nbsp;  public GISModel trainModel(int iterations, DataIndexer di, int threads) {
+<b class="fc"><i>322</i>&nbsp;    return trainModel(iterations, di, new UniformPrior(), threads);</b>
+<i>323</i>&nbsp;  }
+<i>324</i>&nbsp;
+<i>325</i>&nbsp;  /**
+<i>326</i>&nbsp;   * Train a model using the GIS algorithm.
+<i>327</i>&nbsp;   *
+<i>328</i>&nbsp;   * @param iterations The number of GIS iterations to perform.
+<i>329</i>&nbsp;   * @param di         The data indexer used to compress events in memory.
+<i>330</i>&nbsp;   * @param modelPrior The prior distribution used to train this model.
+<i>331</i>&nbsp;   * @return The newly trained model, which can be used immediately or saved
+<i>332</i>&nbsp;   * to disk using an opennlp.tools.ml.maxent.io.GISModelWriter object.
+<i>333</i>&nbsp;   */
+<i>334</i>&nbsp;  public GISModel trainModel(int iterations, DataIndexer di, Prior modelPrior, int threads) {
+<i>335</i>&nbsp;
+<b class="fc"><i>336</i>&nbsp;    if (threads &lt;= 0) {</b>
+<b class="nc"><i>337</i>&nbsp;      throw new IllegalArgumentException(&quot;threads must be at least one or greater but is &quot; + threads + &quot;!&quot;);</b>
+<i>338</i>&nbsp;    }
+<i>339</i>&nbsp;
+<b class="fc"><i>340</i>&nbsp;    modelExpects = new MutableContext[threads][];</b>
+<i>341</i>&nbsp;
+<i>342</i>&nbsp;    /* Incorporate all of the needed info *****/
+<b class="fc"><i>343</i>&nbsp;    display(&quot;Incorporating indexed data for training...  \n&quot;);</b>
+<b class="fc"><i>344</i>&nbsp;    contexts = di.getContexts();</b>
+<b class="fc"><i>345</i>&nbsp;    values = di.getValues();</b>
+<i>346</i>&nbsp;    /*
+<i>347</i>&nbsp;    The number of times a predicate occured in the training data.
+<i>348</i>&nbsp;   */
+<b class="fc"><i>349</i>&nbsp;    int[] predicateCounts = di.getPredCounts();</b>
+<b class="fc"><i>350</i>&nbsp;    numTimesEventsSeen = di.getNumTimesEventsSeen();</b>
+<b class="fc"><i>351</i>&nbsp;    numUniqueEvents = contexts.length;</b>
+<b class="fc"><i>352</i>&nbsp;    this.prior = modelPrior;</b>
+<i>353</i>&nbsp;    //printTable(contexts);
+<i>354</i>&nbsp;
+<i>355</i>&nbsp;    // determine the correction constant and its inverse
+<b class="fc"><i>356</i>&nbsp;    double correctionConstant = 0;</b>
+<b class="fc"><i>357</i>&nbsp;    for (int ci = 0; ci &lt; contexts.length; ci++) {</b>
+<b class="fc"><i>358</i>&nbsp;      if (values == null || values[ci] == null) {</b>
+<b class="fc"><i>359</i>&nbsp;        if (contexts[ci].length &gt; correctionConstant) {</b>
+<b class="fc"><i>360</i>&nbsp;          correctionConstant = contexts[ci].length;</b>
+<i>361</i>&nbsp;        }
+<i>362</i>&nbsp;      } else {
+<b class="fc"><i>363</i>&nbsp;        float cl = values[ci][0];</b>
+<b class="fc"><i>364</i>&nbsp;        for (int vi = 1; vi &lt; values[ci].length; vi++) {</b>
+<b class="fc"><i>365</i>&nbsp;          cl += values[ci][vi];</b>
+<i>366</i>&nbsp;        }
+<i>367</i>&nbsp;
+<b class="fc"><i>368</i>&nbsp;        if (cl &gt; correctionConstant) {</b>
+<b class="fc"><i>369</i>&nbsp;          correctionConstant = cl;</b>
+<i>370</i>&nbsp;        }
+<i>371</i>&nbsp;      }
+<i>372</i>&nbsp;    }
+<b class="fc"><i>373</i>&nbsp;    display(&quot;done.\n&quot;);</b>
+<i>374</i>&nbsp;
+<b class="fc"><i>375</i>&nbsp;    outcomeLabels = di.getOutcomeLabels();</b>
+<b class="fc"><i>376</i>&nbsp;    outcomeList = di.getOutcomeList();</b>
+<b class="fc"><i>377</i>&nbsp;    numOutcomes = outcomeLabels.length;</b>
+<i>378</i>&nbsp;
+<b class="fc"><i>379</i>&nbsp;    predLabels = di.getPredLabels();</b>
+<b class="fc"><i>380</i>&nbsp;    prior.setLabels(outcomeLabels, predLabels);</b>
+<b class="fc"><i>381</i>&nbsp;    numPreds = predLabels.length;</b>
+<i>382</i>&nbsp;
+<b class="fc"><i>383</i>&nbsp;    display(&quot;\tNumber of Event Tokens: &quot; + numUniqueEvents + &quot;\n&quot;);</b>
+<b class="fc"><i>384</i>&nbsp;    display(&quot;\t    Number of Outcomes: &quot; + numOutcomes + &quot;\n&quot;);</b>
+<b class="fc"><i>385</i>&nbsp;    display(&quot;\t  Number of Predicates: &quot; + numPreds + &quot;\n&quot;);</b>
+<i>386</i>&nbsp;
+<i>387</i>&nbsp;    // set up feature arrays
+<b class="fc"><i>388</i>&nbsp;    float[][] predCount = new float[numPreds][numOutcomes];</b>
+<b class="fc"><i>389</i>&nbsp;    for (int ti = 0; ti &lt; numUniqueEvents; ti++) {</b>
+<b class="fc"><i>390</i>&nbsp;      for (int j = 0; j &lt; contexts[ti].length; j++) {</b>
+<b class="fc"><i>391</i>&nbsp;        if (values != null &amp;&amp; values[ti] != null) {</b>
+<b class="fc"><i>392</i>&nbsp;          predCount[contexts[ti][j]][outcomeList[ti]] += numTimesEventsSeen[ti] * values[ti][j];</b>
+<i>393</i>&nbsp;        } else {
+<b class="fc"><i>394</i>&nbsp;          predCount[contexts[ti][j]][outcomeList[ti]] += numTimesEventsSeen[ti];</b>
+<i>395</i>&nbsp;        }
+<i>396</i>&nbsp;      }
+<i>397</i>&nbsp;    }
+<i>398</i>&nbsp;
+<i>399</i>&nbsp;    // A fake &quot;observation&quot; to cover features which are not detected in
+<i>400</i>&nbsp;    // the data.  The default is to assume that we observed &quot;1/10th&quot; of a
+<i>401</i>&nbsp;    // feature during training.
+<b class="fc"><i>402</i>&nbsp;    final double smoothingObservation = _smoothingObservation;</b>
+<i>403</i>&nbsp;
+<i>404</i>&nbsp;    // Get the observed expectations of the features. Strictly speaking,
+<i>405</i>&nbsp;    // we should divide the counts by the number of Tokens, but because of
+<i>406</i>&nbsp;    // the way the model&#39;s expectations are approximated in the
+<i>407</i>&nbsp;    // implementation, this is cancelled out when we compute the next
+<i>408</i>&nbsp;    // iteration of a parameter, making the extra divisions wasteful.
+<b class="fc"><i>409</i>&nbsp;    params = new MutableContext[numPreds];</b>
+<b class="fc"><i>410</i>&nbsp;    for (int i = 0; i &lt; modelExpects.length; i++) {</b>
+<b class="fc"><i>411</i>&nbsp;      modelExpects[i] = new MutableContext[numPreds];</b>
+<i>412</i>&nbsp;    }
+<b class="fc"><i>413</i>&nbsp;    observedExpects = new MutableContext[numPreds];</b>
+<i>414</i>&nbsp;
+<i>415</i>&nbsp;    // The model does need the correction constant and the correction feature. The correction constant
+<i>416</i>&nbsp;    // is only needed during training, and the correction feature is not necessary.
+<i>417</i>&nbsp;    // For compatibility reasons the model contains form now on a correction constant of 1,
+<i>418</i>&nbsp;    // and a correction param 0.
+<b class="fc"><i>419</i>&nbsp;    evalParams = new EvalParameters(params, numOutcomes);</b>
+<b class="fc"><i>420</i>&nbsp;    int[] activeOutcomes = new int[numOutcomes];</b>
+<i>421</i>&nbsp;    int[] outcomePattern;
+<b class="fc"><i>422</i>&nbsp;    int[] allOutcomesPattern = new int[numOutcomes];</b>
+<b class="fc"><i>423</i>&nbsp;    for (int oi = 0; oi &lt; numOutcomes; oi++) {</b>
+<b class="fc"><i>424</i>&nbsp;      allOutcomesPattern[oi] = oi;</b>
+<i>425</i>&nbsp;    }
+<i>426</i>&nbsp;    int numActiveOutcomes;
+<b class="fc"><i>427</i>&nbsp;    for (int pi = 0; pi &lt; numPreds; pi++) {</b>
+<b class="fc"><i>428</i>&nbsp;      numActiveOutcomes = 0;</b>
+<b class="fc"><i>429</i>&nbsp;      if (useSimpleSmoothing) {</b>
+<b class="nc"><i>430</i>&nbsp;        numActiveOutcomes = numOutcomes;</b>
+<b class="nc"><i>431</i>&nbsp;        outcomePattern = allOutcomesPattern;</b>
+<i>432</i>&nbsp;      } else { //determine active outcomes
+<b class="fc"><i>433</i>&nbsp;        for (int oi = 0; oi &lt; numOutcomes; oi++) {</b>
+<b class="fc"><i>434</i>&nbsp;          if (predCount[pi][oi] &gt; 0) {</b>
+<b class="fc"><i>435</i>&nbsp;            activeOutcomes[numActiveOutcomes] = oi;</b>
+<b class="fc"><i>436</i>&nbsp;            numActiveOutcomes++;</b>
+<i>437</i>&nbsp;          }
+<i>438</i>&nbsp;        }
+<b class="fc"><i>439</i>&nbsp;        if (numActiveOutcomes == numOutcomes) {</b>
+<b class="fc"><i>440</i>&nbsp;          outcomePattern = allOutcomesPattern;</b>
+<i>441</i>&nbsp;        } else {
+<b class="fc"><i>442</i>&nbsp;          outcomePattern = new int[numActiveOutcomes];</b>
+<b class="fc"><i>443</i>&nbsp;          System.arraycopy(activeOutcomes, 0, outcomePattern, 0, numActiveOutcomes);</b>
+<i>444</i>&nbsp;        }
+<i>445</i>&nbsp;      }
+<b class="fc"><i>446</i>&nbsp;      params[pi] = new MutableContext(outcomePattern, new double[numActiveOutcomes]);</b>
+<b class="fc"><i>447</i>&nbsp;      for (int i = 0; i &lt; modelExpects.length; i++) {</b>
+<b class="fc"><i>448</i>&nbsp;        modelExpects[i][pi] = new MutableContext(outcomePattern, new double[numActiveOutcomes]);</b>
+<i>449</i>&nbsp;      }
+<b class="fc"><i>450</i>&nbsp;      observedExpects[pi] = new MutableContext(outcomePattern, new double[numActiveOutcomes]);</b>
+<b class="fc"><i>451</i>&nbsp;      for (int aoi = 0; aoi &lt; numActiveOutcomes; aoi++) {</b>
+<b class="fc"><i>452</i>&nbsp;        int oi = outcomePattern[aoi];</b>
+<b class="fc"><i>453</i>&nbsp;        params[pi].setParameter(aoi, 0.0);</b>
+<b class="fc"><i>454</i>&nbsp;        for (MutableContext[] modelExpect : modelExpects) {</b>
+<b class="fc"><i>455</i>&nbsp;          modelExpect[pi].setParameter(aoi, 0.0);</b>
+<i>456</i>&nbsp;        }
+<b class="fc"><i>457</i>&nbsp;        if (predCount[pi][oi] &gt; 0) {</b>
+<b class="fc"><i>458</i>&nbsp;          observedExpects[pi].setParameter(aoi, predCount[pi][oi]);</b>
+<b class="nc"><i>459</i>&nbsp;        } else if (useSimpleSmoothing) {</b>
+<b class="nc"><i>460</i>&nbsp;          observedExpects[pi].setParameter(aoi, smoothingObservation);</b>
+<i>461</i>&nbsp;        }
+<i>462</i>&nbsp;      }
+<i>463</i>&nbsp;    }
+<i>464</i>&nbsp;
+<b class="fc"><i>465</i>&nbsp;    display(&quot;...done.\n&quot;);</b>
+<i>466</i>&nbsp;
+<i>467</i>&nbsp;    /* Find the parameters *****/
+<b class="fc"><i>468</i>&nbsp;    if (threads == 1) {</b>
+<b class="fc"><i>469</i>&nbsp;      display(&quot;Computing model parameters ...\n&quot;);</b>
+<i>470</i>&nbsp;    } else {
+<b class="fc"><i>471</i>&nbsp;      display(&quot;Computing model parameters in &quot; + threads + &quot; threads...\n&quot;);</b>
+<i>472</i>&nbsp;    }
+<i>473</i>&nbsp;
+<b class="fc"><i>474</i>&nbsp;    findParameters(iterations, correctionConstant);</b>
+<i>475</i>&nbsp;
+<i>476</i>&nbsp;    // Create and return the model
+<b class="fc"><i>477</i>&nbsp;    return new GISModel(params, predLabels, outcomeLabels);</b>
+<i>478</i>&nbsp;
+<i>479</i>&nbsp;  }
+<i>480</i>&nbsp;
+<i>481</i>&nbsp;  /* Estimate and return the model parameters. */
+<i>482</i>&nbsp;  private void findParameters(int iterations, double correctionConstant) {
+<b class="fc"><i>483</i>&nbsp;    int threads = modelExpects.length;</b>
+<i>484</i>&nbsp;
+<b class="fc"><i>485</i>&nbsp;    ExecutorService executor = Executors.newFixedThreadPool(threads, runnable -&gt; {</b>
+<b class="fc"><i>486</i>&nbsp;      Thread thread = new Thread(runnable);</b>
+<b class="fc"><i>487</i>&nbsp;      thread.setName(&quot;opennlp.tools.ml.maxent.ModelExpactationComputeTask.nextIteration()&quot;);</b>
+<b class="fc"><i>488</i>&nbsp;      thread.setDaemon(true);</b>
+<b class="fc"><i>489</i>&nbsp;      return thread;</b>
+<i>490</i>&nbsp;    });
+<i>491</i>&nbsp;
+<b class="fc"><i>492</i>&nbsp;    CompletionService&lt;ModelExpectationComputeTask&gt; completionService =</b>
+<i>493</i>&nbsp;        new ExecutorCompletionService&lt;&gt;(executor);
+<b class="fc"><i>494</i>&nbsp;    double prevLL = 0.0;</b>
+<i>495</i>&nbsp;    double currLL;
+<b class="fc"><i>496</i>&nbsp;    display(&quot;Performing &quot; + iterations + &quot; iterations.\n&quot;);</b>
+<b class="fc"><i>497</i>&nbsp;    for (int i = 1; i &lt;= iterations; i++) {</b>
+<b class="fc"><i>498</i>&nbsp;      if (i &lt; 10) {</b>
+<b class="fc"><i>499</i>&nbsp;        display(&quot;  &quot; + i + &quot;:  &quot;);</b>
+<b class="fc"><i>500</i>&nbsp;      } else if (i &lt; 100) {</b>
+<b class="fc"><i>501</i>&nbsp;        display(&quot; &quot; + i + &quot;:  &quot;);</b>
+<i>502</i>&nbsp;      } else {
+<b class="fc"><i>503</i>&nbsp;        display(i + &quot;:  &quot;);</b>
+<i>504</i>&nbsp;      }
+<b class="fc"><i>505</i>&nbsp;      currLL = nextIteration(correctionConstant, completionService);</b>
+<b class="fc"><i>506</i>&nbsp;      if (i &gt; 1) {</b>
+<b class="fc"><i>507</i>&nbsp;        if (prevLL &gt; currLL) {</b>
+<b class="nc"><i>508</i>&nbsp;          System.err.println(&quot;Model Diverging: loglikelihood decreased&quot;);</b>
+<b class="nc"><i>509</i>&nbsp;          break;</b>
+<i>510</i>&nbsp;        }
+<b class="fc"><i>511</i>&nbsp;        if (currLL - prevLL &lt; llThreshold) {</b>
+<b class="fc"><i>512</i>&nbsp;          break;</b>
+<i>513</i>&nbsp;        }
+<i>514</i>&nbsp;      }
+<b class="fc"><i>515</i>&nbsp;      prevLL = currLL;</b>
+<i>516</i>&nbsp;    }
+<i>517</i>&nbsp;
+<i>518</i>&nbsp;    // kill a bunch of these big objects now that we don&#39;t need them
+<b class="fc"><i>519</i>&nbsp;    observedExpects = null;</b>
+<b class="fc"><i>520</i>&nbsp;    modelExpects = null;</b>
+<b class="fc"><i>521</i>&nbsp;    numTimesEventsSeen = null;</b>
+<b class="fc"><i>522</i>&nbsp;    contexts = null;</b>
+<b class="fc"><i>523</i>&nbsp;    executor.shutdown();</b>
+<b class="fc"><i>524</i>&nbsp;  }</b>
+<i>525</i>&nbsp;
+<i>526</i>&nbsp;  //modeled on implementation in  Zhang Le&#39;s maxent kit
+<i>527</i>&nbsp;  private double gaussianUpdate(int predicate, int oid, double correctionConstant) {
+<b class="fc"><i>528</i>&nbsp;    double param = params[predicate].getParameters()[oid];</b>
+<b class="fc"><i>529</i>&nbsp;    double x0 = 0.0;</b>
+<b class="fc"><i>530</i>&nbsp;    double modelValue = modelExpects[0][predicate].getParameters()[oid];</b>
+<b class="fc"><i>531</i>&nbsp;    double observedValue = observedExpects[predicate].getParameters()[oid];</b>
+<b class="fc"><i>532</i>&nbsp;    for (int i = 0; i &lt; 50; i++) {</b>
+<b class="fc"><i>533</i>&nbsp;      double tmp = modelValue * Math.exp(correctionConstant * x0);</b>
+<b class="fc"><i>534</i>&nbsp;      double f = tmp + (param + x0) / sigma - observedValue;</b>
+<b class="fc"><i>535</i>&nbsp;      double fp = tmp * correctionConstant + 1 / sigma;</b>
+<b class="fc"><i>536</i>&nbsp;      if (fp == 0) {</b>
+<b class="nc"><i>537</i>&nbsp;        break;</b>
+<i>538</i>&nbsp;      }
+<b class="fc"><i>539</i>&nbsp;      double x = x0 - f / fp;</b>
+<b class="fc"><i>540</i>&nbsp;      if (Math.abs(x - x0) &lt; 0.000001) {</b>
+<b class="fc"><i>541</i>&nbsp;        x0 = x;</b>
+<b class="fc"><i>542</i>&nbsp;        break;</b>
+<i>543</i>&nbsp;      }
+<b class="fc"><i>544</i>&nbsp;      x0 = x;</b>
+<i>545</i>&nbsp;    }
+<b class="fc"><i>546</i>&nbsp;    return x0;</b>
+<i>547</i>&nbsp;  }
+<i>548</i>&nbsp;
+<i>549</i>&nbsp;  /* Compute one iteration of GIS and retutn log-likelihood.*/
+<i>550</i>&nbsp;  private double nextIteration(double correctionConstant,
+<i>551</i>&nbsp;                               CompletionService&lt;ModelExpectationComputeTask&gt; completionService) {
+<i>552</i>&nbsp;    // compute contribution of p(a|b_i) for each feature and the new
+<i>553</i>&nbsp;    // correction parameter
+<b class="fc"><i>554</i>&nbsp;    double loglikelihood = 0.0;</b>
+<b class="fc"><i>555</i>&nbsp;    int numEvents = 0;</b>
+<b class="fc"><i>556</i>&nbsp;    int numCorrect = 0;</b>
+<i>557</i>&nbsp;
+<i>558</i>&nbsp;    // Each thread gets equal number of tasks, if the number of tasks
+<i>559</i>&nbsp;    // is not divisible by the number of threads, the first &quot;leftOver&quot;
+<i>560</i>&nbsp;    // threads have one extra task.
+<b class="fc"><i>561</i>&nbsp;    int numberOfThreads = modelExpects.length;</b>
+<b class="fc"><i>562</i>&nbsp;    int taskSize = numUniqueEvents / numberOfThreads;</b>
+<b class="fc"><i>563</i>&nbsp;    int leftOver = numUniqueEvents % numberOfThreads;</b>
+<i>564</i>&nbsp;
+<i>565</i>&nbsp;    // submit all tasks to the completion service.
+<b class="fc"><i>566</i>&nbsp;    for (int i = 0; i &lt; numberOfThreads; i++) {</b>
+<b class="fc"><i>567</i>&nbsp;      if (i &lt; leftOver) {</b>
+<b class="fc"><i>568</i>&nbsp;        completionService.submit(new ModelExpectationComputeTask(i, i * taskSize + i,</b>
+<i>569</i>&nbsp;            taskSize + 1));
+<i>570</i>&nbsp;      } else {
+<b class="fc"><i>571</i>&nbsp;        completionService.submit(new ModelExpectationComputeTask(i,</b>
+<i>572</i>&nbsp;            i * taskSize + leftOver, taskSize));
+<i>573</i>&nbsp;      }
+<i>574</i>&nbsp;    }
+<i>575</i>&nbsp;
+<b class="fc"><i>576</i>&nbsp;    for (int i = 0; i &lt; numberOfThreads; i++) {</b>
+<i>577</i>&nbsp;      ModelExpectationComputeTask finishedTask;
+<i>578</i>&nbsp;      try {
+<b class="fc"><i>579</i>&nbsp;        finishedTask = completionService.take().get();</b>
+<b class="nc"><i>580</i>&nbsp;      } catch (InterruptedException e) {</b>
+<i>581</i>&nbsp;        // TODO: We got interrupted, but that is currently not really supported!
+<i>582</i>&nbsp;        // For now we just print the exception and fail hard. We hopefully soon
+<i>583</i>&nbsp;        // handle this case properly!
+<b class="nc"><i>584</i>&nbsp;        e.printStackTrace();</b>
+<b class="nc"><i>585</i>&nbsp;        throw new IllegalStateException(&quot;Interruption is not supported!&quot;, e);</b>
+<b class="nc"><i>586</i>&nbsp;      } catch (ExecutionException e) {</b>
+<i>587</i>&nbsp;        // Only runtime exception can be thrown during training, if one was thrown
+<i>588</i>&nbsp;        // it should be re-thrown. That could for example be a NullPointerException
+<i>589</i>&nbsp;        // which is caused through a bug in our implementation.
+<b class="nc"><i>590</i>&nbsp;        throw new RuntimeException(&quot;Exception during training: &quot; + e.getMessage(), e);</b>
+<b class="fc"><i>591</i>&nbsp;      }</b>
+<i>592</i>&nbsp;
+<i>593</i>&nbsp;      // When they are done, retrieve the results ...
+<b class="fc"><i>594</i>&nbsp;      numEvents += finishedTask.getNumEvents();</b>
+<b class="fc"><i>595</i>&nbsp;      numCorrect += finishedTask.getNumCorrect();</b>
+<b class="fc"><i>596</i>&nbsp;      loglikelihood += finishedTask.getLoglikelihood();</b>
+<i>597</i>&nbsp;    }
+<i>598</i>&nbsp;
+<b class="fc"><i>599</i>&nbsp;    display(&quot;.&quot;);</b>
+<i>600</i>&nbsp;
+<i>601</i>&nbsp;    // merge the results of the two computations
+<b class="fc"><i>602</i>&nbsp;    for (int pi = 0; pi &lt; numPreds; pi++) {</b>
+<b class="fc"><i>603</i>&nbsp;      int[] activeOutcomes = params[pi].getOutcomes();</b>
+<i>604</i>&nbsp;
+<b class="fc"><i>605</i>&nbsp;      for (int aoi = 0; aoi &lt; activeOutcomes.length; aoi++) {</b>
+<b class="fc"><i>606</i>&nbsp;        for (int i = 1; i &lt; modelExpects.length; i++) {</b>
+<b class="fc"><i>607</i>&nbsp;          modelExpects[0][pi].updateParameter(aoi, modelExpects[i][pi].getParameters()[aoi]);</b>
+<i>608</i>&nbsp;        }
+<i>609</i>&nbsp;      }
+<i>610</i>&nbsp;    }
+<i>611</i>&nbsp;
+<b class="fc"><i>612</i>&nbsp;    display(&quot;.&quot;);</b>
+<i>613</i>&nbsp;
+<i>614</i>&nbsp;    // compute the new parameter values
+<b class="fc"><i>615</i>&nbsp;    for (int pi = 0; pi &lt; numPreds; pi++) {</b>
+<b class="fc"><i>616</i>&nbsp;      double[] observed = observedExpects[pi].getParameters();</b>
+<b class="fc"><i>617</i>&nbsp;      double[] model = modelExpects[0][pi].getParameters();</b>
+<b class="fc"><i>618</i>&nbsp;      int[] activeOutcomes = params[pi].getOutcomes();</b>
+<b class="fc"><i>619</i>&nbsp;      for (int aoi = 0; aoi &lt; activeOutcomes.length; aoi++) {</b>
+<b class="fc"><i>620</i>&nbsp;        if (useGaussianSmoothing) {</b>
+<b class="fc"><i>621</i>&nbsp;          params[pi].updateParameter(aoi, gaussianUpdate(pi, aoi, correctionConstant));</b>
+<i>622</i>&nbsp;        } else {
+<b class="fc"><i>623</i>&nbsp;          if (model[aoi] == 0) {</b>
+<b class="nc"><i>624</i>&nbsp;            System.err.println(&quot;Model expects == 0 for &quot; + predLabels[pi] + &quot; &quot; + outcomeLabels[aoi]);</b>
+<i>625</i>&nbsp;          }
+<i>626</i>&nbsp;          //params[pi].updateParameter(aoi,(Math.log(observed[aoi]) - Math.log(model[aoi])));
+<b class="fc"><i>627</i>&nbsp;          params[pi].updateParameter(aoi, ((Math.log(observed[aoi]) - Math.log(model[aoi]))</b>
+<i>628</i>&nbsp;              / correctionConstant));
+<i>629</i>&nbsp;        }
+<i>630</i>&nbsp;
+<b class="fc"><i>631</i>&nbsp;        for (MutableContext[] modelExpect : modelExpects) {</b>
+<b class="fc"><i>632</i>&nbsp;          modelExpect[pi].setParameter(aoi, 0.0); // re-initialize to 0.0&#39;s</b>
+<i>633</i>&nbsp;        }
+<i>634</i>&nbsp;
+<i>635</i>&nbsp;      }
+<i>636</i>&nbsp;    }
+<i>637</i>&nbsp;
+<b class="fc"><i>638</i>&nbsp;    display(&quot;. loglikelihood=&quot; + loglikelihood + &quot;\t&quot; + ((double) numCorrect / numEvents) + &quot;\n&quot;);</b>
+<i>639</i>&nbsp;
+<b class="fc"><i>640</i>&nbsp;    return loglikelihood;</b>
+<i>641</i>&nbsp;  }
+<i>642</i>&nbsp;
+<i>643</i>&nbsp;  protected void display(String s) {
+<b class="fc"><i>644</i>&nbsp;    if (printMessages) {</b>
+<b class="fc"><i>645</i>&nbsp;      System.out.print(s);</b>
+<i>646</i>&nbsp;    }
+<b class="fc"><i>647</i>&nbsp;  }</b>
+<i>648</i>&nbsp;
+<i>649</i>&nbsp;  private class ModelExpectationComputeTask implements Callable&lt;ModelExpectationComputeTask&gt; {
+<i>650</i>&nbsp;
+<i>651</i>&nbsp;    private final int startIndex;
+<i>652</i>&nbsp;    private final int length;
+<i>653</i>&nbsp;    final private int threadIndex;
+<b class="fc"><i>654</i>&nbsp;    private double loglikelihood = 0;</b>
+<b class="fc"><i>655</i>&nbsp;    private int numEvents = 0;</b>
+<b class="fc"><i>656</i>&nbsp;    private int numCorrect = 0;</b>
+<i>657</i>&nbsp;
+<i>658</i>&nbsp;    // startIndex to compute, number of events to compute
+<b class="fc"><i>659</i>&nbsp;    ModelExpectationComputeTask(int threadIndex, int startIndex, int length) {</b>
+<b class="fc"><i>660</i>&nbsp;      this.startIndex = startIndex;</b>
+<b class="fc"><i>661</i>&nbsp;      this.length = length;</b>
+<b class="fc"><i>662</i>&nbsp;      this.threadIndex = threadIndex;</b>
+<b class="fc"><i>663</i>&nbsp;    }</b>
+<i>664</i>&nbsp;
+<i>665</i>&nbsp;    public ModelExpectationComputeTask call() {
+<i>666</i>&nbsp;
+<b class="fc"><i>667</i>&nbsp;      final double[] modelDistribution = new double[numOutcomes];</b>
+<i>668</i>&nbsp;
+<i>669</i>&nbsp;
+<b class="fc"><i>670</i>&nbsp;      for (int ei = startIndex; ei &lt; startIndex + length; ei++) {</b>
+<i>671</i>&nbsp;
+<i>672</i>&nbsp;        // TODO: check interruption status here, if interrupted set a poisoned flag and return
+<i>673</i>&nbsp;
+<b class="fc"><i>674</i>&nbsp;        if (values != null) {</b>
+<b class="fc"><i>675</i>&nbsp;          prior.logPrior(modelDistribution, contexts[ei], values[ei]);</b>
+<b class="fc"><i>676</i>&nbsp;          GISModel.eval(contexts[ei], values[ei], modelDistribution, evalParams);</b>
+<i>677</i>&nbsp;        } else {
+<b class="fc"><i>678</i>&nbsp;          prior.logPrior(modelDistribution, contexts[ei]);</b>
+<b class="fc"><i>679</i>&nbsp;          GISModel.eval(contexts[ei], modelDistribution, evalParams);</b>
+<i>680</i>&nbsp;        }
+<b class="fc"><i>681</i>&nbsp;        for (int j = 0; j &lt; contexts[ei].length; j++) {</b>
+<b class="fc"><i>682</i>&nbsp;          int pi = contexts[ei][j];</b>
+<b class="fc"><i>683</i>&nbsp;          int[] activeOutcomes = modelExpects[threadIndex][pi].getOutcomes();</b>
+<b class="fc"><i>684</i>&nbsp;          for (int aoi = 0; aoi &lt; activeOutcomes.length; aoi++) {</b>
+<b class="fc"><i>685</i>&nbsp;            int oi = activeOutcomes[aoi];</b>
+<i>686</i>&nbsp;
+<i>687</i>&nbsp;            // numTimesEventsSeen must also be thread safe
+<b class="fc"><i>688</i>&nbsp;            if (values != null &amp;&amp; values[ei] != null) {</b>
+<b class="fc"><i>689</i>&nbsp;              modelExpects[threadIndex][pi].updateParameter(aoi, modelDistribution[oi]</b>
+<b class="fc"><i>690</i>&nbsp;                  * values[ei][j] * numTimesEventsSeen[ei]);</b>
+<i>691</i>&nbsp;            } else {
+<b class="fc"><i>692</i>&nbsp;              modelExpects[threadIndex][pi].updateParameter(aoi, modelDistribution[oi]</b>
+<b class="fc"><i>693</i>&nbsp;                  * numTimesEventsSeen[ei]);</b>
+<i>694</i>&nbsp;            }
+<i>695</i>&nbsp;          }
+<i>696</i>&nbsp;        }
+<i>697</i>&nbsp;
+<b class="fc"><i>698</i>&nbsp;        loglikelihood += Math.log(modelDistribution[outcomeList[ei]]) * numTimesEventsSeen[ei];</b>
+<i>699</i>&nbsp;
+<b class="fc"><i>700</i>&nbsp;        numEvents += numTimesEventsSeen[ei];</b>
+<b class="fc"><i>701</i>&nbsp;        if (printMessages) {</b>
+<b class="fc"><i>702</i>&nbsp;          int max = ArrayMath.argmax(modelDistribution);</b>
+<b class="fc"><i>703</i>&nbsp;          if (max == outcomeList[ei]) {</b>
+<b class="fc"><i>704</i>&nbsp;            numCorrect += numTimesEventsSeen[ei];</b>
+<i>705</i>&nbsp;          }
+<i>706</i>&nbsp;        }
+<i>707</i>&nbsp;
+<i>708</i>&nbsp;      }
+<i>709</i>&nbsp;
+<b class="fc"><i>710</i>&nbsp;      return this;</b>
+<i>711</i>&nbsp;    }
+<i>712</i>&nbsp;
+<i>713</i>&nbsp;    synchronized int getNumEvents() {
+<b class="fc"><i>714</i>&nbsp;      return numEvents;</b>
+<i>715</i>&nbsp;    }
+<i>716</i>&nbsp;
+<i>717</i>&nbsp;    synchronized int getNumCorrect() {
+<b class="fc"><i>718</i>&nbsp;      return numCorrect;</b>
+<i>719</i>&nbsp;    }
+<i>720</i>&nbsp;
+<i>721</i>&nbsp;    synchronized double getLoglikelihood() {
+<b class="fc"><i>722</i>&nbsp;      return loglikelihood;</b>
+<i>723</i>&nbsp;    }
+<i>724</i>&nbsp;  }
+<i>725</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-09 15:05</div>
+</div>
+</body>
+</html>

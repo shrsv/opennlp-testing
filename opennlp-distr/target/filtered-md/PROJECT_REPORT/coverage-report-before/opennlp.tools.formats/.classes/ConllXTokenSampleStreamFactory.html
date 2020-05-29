@@ -1,0 +1,146 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: ConllXTokenSampleStreamFactory</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">opennlp.tools.formats</a> ]
+</div>
+
+<h1>Coverage Summary for Class: ConllXTokenSampleStreamFactory (opennlp.tools.formats)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">ConllXTokenSampleStreamFactory</td>
+<td class="coverageStat">
+  <span class="percent">
+    66.7%
+  </span>
+  <span class="absValue">
+    (2/ 3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    44.4%
+  </span>
+  <span class="absValue">
+    (4/ 9)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">ConllXTokenSampleStreamFactory$Parameters</td>
+  </tr>
+<tr>
+  <td class="name"><strong>total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    66.7%
+  </span>
+  <span class="absValue">
+    (2/ 3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    44.4%
+  </span>
+  <span class="absValue">
+    (4/ 9)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/*
+<i>2</i>&nbsp; * Licensed to the Apache Software Foundation (ASF) under one or more
+<i>3</i>&nbsp; * contributor license agreements.  See the NOTICE file distributed with
+<i>4</i>&nbsp; * this work for additional information regarding copyright ownership.
+<i>5</i>&nbsp; * The ASF licenses this file to You under the Apache License, Version 2.0
+<i>6</i>&nbsp; * (the &quot;License&quot;); you may not use this file except in compliance with
+<i>7</i>&nbsp; * the License. You may obtain a copy of the License at
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; *     http://www.apache.org/licenses/LICENSE-2.0
+<i>10</i>&nbsp; *
+<i>11</i>&nbsp; * Unless required by applicable law or agreed to in writing, software
+<i>12</i>&nbsp; * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<i>13</i>&nbsp; * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<i>14</i>&nbsp; * See the License for the specific language governing permissions and
+<i>15</i>&nbsp; * limitations under the License.
+<i>16</i>&nbsp; */
+<i>17</i>&nbsp;
+<i>18</i>&nbsp;package opennlp.tools.formats;
+<i>19</i>&nbsp;
+<i>20</i>&nbsp;import opennlp.tools.cmdline.ArgumentParser;
+<i>21</i>&nbsp;import opennlp.tools.cmdline.StreamFactoryRegistry;
+<i>22</i>&nbsp;import opennlp.tools.cmdline.params.DetokenizerParameter;
+<i>23</i>&nbsp;import opennlp.tools.formats.convert.POSToTokenSampleStream;
+<i>24</i>&nbsp;import opennlp.tools.postag.POSSample;
+<i>25</i>&nbsp;import opennlp.tools.tokenize.TokenSample;
+<i>26</i>&nbsp;import opennlp.tools.util.ObjectStream;
+<i>27</i>&nbsp;
+<i>28</i>&nbsp;/**
+<i>29</i>&nbsp; * &lt;b&gt;Note:&lt;/b&gt; Do not use this class, internal use only!
+<i>30</i>&nbsp; */
+<i>31</i>&nbsp;public class ConllXTokenSampleStreamFactory extends DetokenizerSampleStreamFactory&lt;TokenSample&gt; {
+<i>32</i>&nbsp;
+<i>33</i>&nbsp;  interface Parameters extends ConllXPOSSampleStreamFactory.Parameters, DetokenizerParameter {
+<i>34</i>&nbsp;  }
+<i>35</i>&nbsp;
+<i>36</i>&nbsp;  public static void registerFactory() {
+<b class="fc"><i>37</i>&nbsp;    StreamFactoryRegistry.registerFactory(TokenSample.class,</b>
+<i>38</i>&nbsp;        ConllXPOSSampleStreamFactory.CONLLX_FORMAT, new ConllXTokenSampleStreamFactory(Parameters.class));
+<b class="fc"><i>39</i>&nbsp;  }</b>
+<i>40</i>&nbsp;
+<i>41</i>&nbsp;  protected &lt;P&gt; ConllXTokenSampleStreamFactory(Class&lt;P&gt; params) {
+<b class="fc"><i>42</i>&nbsp;    super(params);</b>
+<b class="fc"><i>43</i>&nbsp;  }</b>
+<i>44</i>&nbsp;
+<i>45</i>&nbsp;  public ObjectStream&lt;TokenSample&gt; create(String[] args) {
+<b class="nc"><i>46</i>&nbsp;    Parameters params = ArgumentParser.parse(args, Parameters.class);</b>
+<i>47</i>&nbsp;
+<b class="nc"><i>48</i>&nbsp;    ObjectStream&lt;POSSample&gt; samples = StreamFactoryRegistry.getFactory(POSSample.class,</b>
+<b class="nc"><i>49</i>&nbsp;        ConllXPOSSampleStreamFactory.CONLLX_FORMAT).create(</b>
+<b class="nc"><i>50</i>&nbsp;        ArgumentParser.filter(args, ConllXPOSSampleStreamFactory.Parameters.class));</b>
+<b class="nc"><i>51</i>&nbsp;    return new POSToTokenSampleStream(createDetokenizer(params), samples);</b>
+<i>52</i>&nbsp;  }
+<i>53</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-09 15:05</div>
+</div>
+</body>
+</html>

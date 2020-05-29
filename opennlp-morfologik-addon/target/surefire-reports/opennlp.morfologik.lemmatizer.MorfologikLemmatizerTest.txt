@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: opennlp.morfologik.lemmatizer.MorfologikLemmatizerTest
+-------------------------------------------------------------------------------
+Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.023 s - in opennlp.morfologik.lemmatizer.MorfologikLemmatizerTest

@@ -1,0 +1,12 @@
+opennlp/morfologik/tagdict/MorfologikTagDictionary.class
+opennlp/morfologik/cmdline/builder/MorfologikDictionaryBuilderTool.class
+opennlp/morfologik/util/MorfologikUtil.class
+opennlp/morfologik/cmdline/builder/MorfologikDictionaryBuilderParams.class
+opennlp/morfologik/cmdline/builder/XMLDictionaryToTableTool$Params.class
+opennlp/morfologik/lemmatizer/MorfologikLemmatizer.class
+opennlp/morfologik/cmdline/builder/XMLDictionaryToTableTool.class
+opennlp/morfologik/cmdline/builder/MorfologikDictionaryBuilderTool$Params.class
+opennlp/morfologik/cmdline/CLI.class
+opennlp/morfologik/builder/MorfologikDictionayBuilder.class
+opennlp/morfologik/tagdict/MorfologikPOSTaggerFactory.class
+opennlp/morfologik/cmdline/builder/XMLDictionaryToTableParams.class

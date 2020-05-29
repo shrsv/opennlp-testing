@@ -1,0 +1,227 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: DefaultTokenContextGenerator</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">opennlp.tools.tokenize</a> ]
+</div>
+
+<h1>Coverage Summary for Class: DefaultTokenContextGenerator (opennlp.tools.tokenize)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">DefaultTokenContextGenerator</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (5/ 5)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    88%
+  </span>
+  <span class="absValue">
+    (44/ 50)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/*
+<i>2</i>&nbsp; * Licensed to the Apache Software Foundation (ASF) under one or more
+<i>3</i>&nbsp; * contributor license agreements.  See the NOTICE file distributed with
+<i>4</i>&nbsp; * this work for additional information regarding copyright ownership.
+<i>5</i>&nbsp; * The ASF licenses this file to You under the Apache License, Version 2.0
+<i>6</i>&nbsp; * (the &quot;License&quot;); you may not use this file except in compliance with
+<i>7</i>&nbsp; * the License. You may obtain a copy of the License at
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; *     http://www.apache.org/licenses/LICENSE-2.0
+<i>10</i>&nbsp; *
+<i>11</i>&nbsp; * Unless required by applicable law or agreed to in writing, software
+<i>12</i>&nbsp; * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<i>13</i>&nbsp; * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<i>14</i>&nbsp; * See the License for the specific language governing permissions and
+<i>15</i>&nbsp; * limitations under the License.
+<i>16</i>&nbsp; */
+<i>17</i>&nbsp;
+<i>18</i>&nbsp;package opennlp.tools.tokenize;
+<i>19</i>&nbsp;
+<i>20</i>&nbsp;import java.util.ArrayList;
+<i>21</i>&nbsp;import java.util.Collections;
+<i>22</i>&nbsp;import java.util.List;
+<i>23</i>&nbsp;import java.util.Set;
+<i>24</i>&nbsp;
+<i>25</i>&nbsp;import opennlp.tools.util.StringUtil;
+<i>26</i>&nbsp;
+<i>27</i>&nbsp;/**
+<i>28</i>&nbsp; * Generate events for maxent decisions for tokenization.
+<i>29</i>&nbsp; */
+<i>30</i>&nbsp;public class DefaultTokenContextGenerator implements TokenContextGenerator {
+<i>31</i>&nbsp;
+<i>32</i>&nbsp;  protected final Set&lt;String&gt; inducedAbbreviations;
+<i>33</i>&nbsp;
+<i>34</i>&nbsp;  /**
+<i>35</i>&nbsp;   * Creates a default context generator for tokenizer.
+<i>36</i>&nbsp;   */
+<i>37</i>&nbsp;  public DefaultTokenContextGenerator() {
+<b class="fc"><i>38</i>&nbsp;    this(Collections.emptySet());</b>
+<b class="fc"><i>39</i>&nbsp;  }</b>
+<i>40</i>&nbsp;
+<i>41</i>&nbsp;  /**
+<i>42</i>&nbsp;   * Creates a default context generator for tokenizer.
+<i>43</i>&nbsp;   *
+<i>44</i>&nbsp;   * @param inducedAbbreviations the induced abbreviations
+<i>45</i>&nbsp;   */
+<b class="fc"><i>46</i>&nbsp;  public DefaultTokenContextGenerator(Set&lt;String&gt; inducedAbbreviations) {</b>
+<b class="fc"><i>47</i>&nbsp;    this.inducedAbbreviations = inducedAbbreviations;</b>
+<b class="fc"><i>48</i>&nbsp;  }</b>
+<i>49</i>&nbsp;
+<i>50</i>&nbsp;  /* (non-Javadoc)
+<i>51</i>&nbsp;   * @see opennlp.tools.tokenize.TokenContextGenerator#getContext(java.lang.String, int)
+<i>52</i>&nbsp;   */
+<i>53</i>&nbsp;  public String[] getContext(String sentence, int index) {
+<b class="fc"><i>54</i>&nbsp;    List&lt;String&gt; preds = createContext(sentence, index);</b>
+<b class="fc"><i>55</i>&nbsp;    String[] context = new String[preds.size()];</b>
+<b class="fc"><i>56</i>&nbsp;    preds.toArray(context);</b>
+<b class="fc"><i>57</i>&nbsp;    return context;</b>
+<i>58</i>&nbsp;  }
+<i>59</i>&nbsp;
+<i>60</i>&nbsp;  /**
+<i>61</i>&nbsp;   * Returns an {@link ArrayList} of features for the specified sentence string
+<i>62</i>&nbsp;   * at the specified index. Extensions of this class can override this method
+<i>63</i>&nbsp;   * to create a customized {@link TokenContextGenerator}
+<i>64</i>&nbsp;   *
+<i>65</i>&nbsp;   * @param sentence
+<i>66</i>&nbsp;   *          the token been analyzed
+<i>67</i>&nbsp;   * @param index
+<i>68</i>&nbsp;   *          the index of the character been analyzed
+<i>69</i>&nbsp;   * @return an {@link ArrayList} of features for the specified sentence string
+<i>70</i>&nbsp;   *         at the specified index.
+<i>71</i>&nbsp;   */
+<i>72</i>&nbsp;  protected List&lt;String&gt; createContext(String sentence, int index) {
+<b class="fc"><i>73</i>&nbsp;    List&lt;String&gt; preds = new ArrayList&lt;&gt;();</b>
+<b class="fc"><i>74</i>&nbsp;    String prefix = sentence.substring(0, index);</b>
+<b class="fc"><i>75</i>&nbsp;    String suffix = sentence.substring(index);</b>
+<b class="fc"><i>76</i>&nbsp;    preds.add(&quot;p=&quot; + prefix);</b>
+<b class="fc"><i>77</i>&nbsp;    preds.add(&quot;s=&quot; + suffix);</b>
+<b class="fc"><i>78</i>&nbsp;    if (index &gt; 0) {</b>
+<b class="fc"><i>79</i>&nbsp;      addCharPreds(&quot;p1&quot;, sentence.charAt(index - 1), preds);</b>
+<b class="fc"><i>80</i>&nbsp;      if (index &gt; 1) {</b>
+<b class="fc"><i>81</i>&nbsp;        addCharPreds(&quot;p2&quot;, sentence.charAt(index - 2), preds);</b>
+<b class="fc"><i>82</i>&nbsp;        preds.add(&quot;p21=&quot; + sentence.charAt(index - 2) + sentence.charAt(index - 1));</b>
+<i>83</i>&nbsp;      }
+<i>84</i>&nbsp;      else {
+<b class="fc"><i>85</i>&nbsp;        preds.add(&quot;p2=bok&quot;);</b>
+<i>86</i>&nbsp;      }
+<b class="fc"><i>87</i>&nbsp;      preds.add(&quot;p1f1=&quot; + sentence.charAt(index - 1) + sentence.charAt(index));</b>
+<i>88</i>&nbsp;    }
+<i>89</i>&nbsp;    else {
+<b class="nc"><i>90</i>&nbsp;      preds.add(&quot;p1=bok&quot;);</b>
+<i>91</i>&nbsp;    }
+<b class="fc"><i>92</i>&nbsp;    addCharPreds(&quot;f1&quot;, sentence.charAt(index), preds);</b>
+<b class="fc"><i>93</i>&nbsp;    if (index + 1 &lt; sentence.length()) {</b>
+<b class="fc"><i>94</i>&nbsp;      addCharPreds(&quot;f2&quot;, sentence.charAt(index + 1), preds);</b>
+<b class="fc"><i>95</i>&nbsp;      preds.add(&quot;f12=&quot; + sentence.charAt(index) + sentence.charAt(index + 1));</b>
+<i>96</i>&nbsp;    }
+<i>97</i>&nbsp;    else {
+<b class="fc"><i>98</i>&nbsp;      preds.add(&quot;f2=bok&quot;);</b>
+<i>99</i>&nbsp;    }
+<b class="fc"><i>100</i>&nbsp;    if (sentence.charAt(0) == &#39;&amp;&#39; &amp;&amp; sentence.charAt(sentence.length() - 1) == &#39;;&#39;) {</b>
+<b class="nc"><i>101</i>&nbsp;      preds.add(&quot;cc&quot;);//character code</b>
+<i>102</i>&nbsp;    }
+<i>103</i>&nbsp;
+<b class="fc"><i>104</i>&nbsp;    if (index == sentence.length() - 1 &amp;&amp; inducedAbbreviations.contains(sentence)) {</b>
+<b class="nc"><i>105</i>&nbsp;      preds.add(&quot;pabb&quot;);</b>
+<i>106</i>&nbsp;    }
+<i>107</i>&nbsp;
+<b class="fc"><i>108</i>&nbsp;    return preds;</b>
+<i>109</i>&nbsp;  }
+<i>110</i>&nbsp;
+<i>111</i>&nbsp;
+<i>112</i>&nbsp;  /**
+<i>113</i>&nbsp;   * Helper function for getContext.
+<i>114</i>&nbsp;   */
+<i>115</i>&nbsp;  protected void addCharPreds(String key, char c, List&lt;String&gt; preds) {
+<b class="fc"><i>116</i>&nbsp;    preds.add(key + &quot;=&quot; + c);</b>
+<b class="fc"><i>117</i>&nbsp;    if (Character.isLetter(c)) {</b>
+<b class="fc"><i>118</i>&nbsp;      preds.add(key + &quot;_alpha&quot;);</b>
+<b class="fc"><i>119</i>&nbsp;      if (Character.isUpperCase(c)) {</b>
+<b class="fc"><i>120</i>&nbsp;        preds.add(key + &quot;_caps&quot;);</b>
+<i>121</i>&nbsp;      }
+<i>122</i>&nbsp;    }
+<b class="fc"><i>123</i>&nbsp;    else if (Character.isDigit(c)) {</b>
+<b class="fc"><i>124</i>&nbsp;      preds.add(key + &quot;_num&quot;);</b>
+<i>125</i>&nbsp;    }
+<b class="fc"><i>126</i>&nbsp;    else if (StringUtil.isWhitespace(c)) {</b>
+<b class="nc"><i>127</i>&nbsp;      preds.add(key + &quot;_ws&quot;);</b>
+<i>128</i>&nbsp;    }
+<i>129</i>&nbsp;    else {
+<b class="fc"><i>130</i>&nbsp;      if (c == &#39;.&#39; || c == &#39;?&#39; || c == &#39;!&#39;) {</b>
+<b class="fc"><i>131</i>&nbsp;        preds.add(key + &quot;_eos&quot;);</b>
+<i>132</i>&nbsp;      }
+<b class="fc"><i>133</i>&nbsp;      else if (c == &#39;`&#39; || c == &#39;&quot;&#39; || c == &#39;\&#39;&#39;) {</b>
+<b class="fc"><i>134</i>&nbsp;        preds.add(key + &quot;_quote&quot;);</b>
+<i>135</i>&nbsp;      }
+<b class="fc"><i>136</i>&nbsp;      else if (c == &#39;[&#39; || c == &#39;{&#39; || c == &#39;(&#39;) {</b>
+<b class="nc"><i>137</i>&nbsp;        preds.add(key + &quot;_lp&quot;);</b>
+<i>138</i>&nbsp;      }
+<b class="fc"><i>139</i>&nbsp;      else if (c == &#39;]&#39; || c == &#39;}&#39; || c == &#39;)&#39;) {</b>
+<b class="nc"><i>140</i>&nbsp;        preds.add(key + &quot;_rp&quot;);</b>
+<i>141</i>&nbsp;      }
+<i>142</i>&nbsp;    }
+<b class="fc"><i>143</i>&nbsp;  }</b>
+<i>144</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-09 15:05</div>
+</div>
+</body>
+</html>

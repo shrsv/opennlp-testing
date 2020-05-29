@@ -1,0 +1,295 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: AbstractModel</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">opennlp.tools.ml.model</a> ]
+</div>
+
+<h1>Coverage Summary for Class: AbstractModel (opennlp.tools.ml.model)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">AbstractModel</td>
+<td class="coverageStat">
+  <span class="percent">
+    91.7%
+  </span>
+  <span class="absValue">
+    (11/ 12)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    81.4%
+  </span>
+  <span class="absValue">
+    (35/ 43)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">AbstractModel$ModelType</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    92.3%
+  </span>
+  <span class="absValue">
+    (12/ 13)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    81.8%
+  </span>
+  <span class="absValue">
+    (36/ 44)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/*
+<i>2</i>&nbsp; * Licensed to the Apache Software Foundation (ASF) under one or more
+<i>3</i>&nbsp; * contributor license agreements.  See the NOTICE file distributed with
+<i>4</i>&nbsp; * this work for additional information regarding copyright ownership.
+<i>5</i>&nbsp; * The ASF licenses this file to You under the Apache License, Version 2.0
+<i>6</i>&nbsp; * (the &quot;License&quot;); you may not use this file except in compliance with
+<i>7</i>&nbsp; * the License. You may obtain a copy of the License at
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; *     http://www.apache.org/licenses/LICENSE-2.0
+<i>10</i>&nbsp; *
+<i>11</i>&nbsp; * Unless required by applicable law or agreed to in writing, software
+<i>12</i>&nbsp; * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<i>13</i>&nbsp; * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<i>14</i>&nbsp; * See the License for the specific language governing permissions and
+<i>15</i>&nbsp; * limitations under the License.
+<i>16</i>&nbsp; */
+<i>17</i>&nbsp;
+<i>18</i>&nbsp;package opennlp.tools.ml.model;
+<i>19</i>&nbsp;
+<i>20</i>&nbsp;import java.text.DecimalFormat;
+<i>21</i>&nbsp;import java.util.Arrays;
+<i>22</i>&nbsp;import java.util.HashMap;
+<i>23</i>&nbsp;import java.util.Map;
+<i>24</i>&nbsp;import java.util.Objects;
+<i>25</i>&nbsp;
+<i>26</i>&nbsp;import opennlp.tools.ml.ArrayMath;
+<i>27</i>&nbsp;
+<i>28</i>&nbsp;public abstract class AbstractModel implements MaxentModel {
+<i>29</i>&nbsp;
+<i>30</i>&nbsp;  /** Mapping between predicates/contexts and an integer representing them. */
+<i>31</i>&nbsp;  protected Map&lt;String, Context&gt; pmap;
+<i>32</i>&nbsp;  /** The names of the outcomes. */
+<i>33</i>&nbsp;  protected String[] outcomeNames;
+<i>34</i>&nbsp;  /** Parameters for the model. */
+<i>35</i>&nbsp;  protected EvalParameters evalParams;
+<i>36</i>&nbsp;  /** Prior distribution for this model. */
+<i>37</i>&nbsp;  protected Prior prior;
+<i>38</i>&nbsp;
+<b class="fc"><i>39</i>&nbsp;  public enum ModelType { Maxent,Perceptron,MaxentQn,NaiveBayes }</b>
+<i>40</i>&nbsp;
+<i>41</i>&nbsp;  /** The type of the model. */
+<i>42</i>&nbsp;  protected ModelType modelType;
+<i>43</i>&nbsp;
+<i>44</i>&nbsp;  protected AbstractModel(Context[] params, String[] predLabels,
+<b class="nc"><i>45</i>&nbsp;      Map&lt;String, Context&gt; pmap, String[] outcomeNames) {</b>
+<b class="nc"><i>46</i>&nbsp;    this.pmap = pmap;</b>
+<b class="nc"><i>47</i>&nbsp;    this.outcomeNames =  outcomeNames;</b>
+<b class="nc"><i>48</i>&nbsp;    this.evalParams = new EvalParameters(params,outcomeNames.length);</b>
+<b class="nc"><i>49</i>&nbsp;  }</b>
+<i>50</i>&nbsp;
+<b class="fc"><i>51</i>&nbsp;  public AbstractModel(Context[] params, String[] predLabels, String[] outcomeNames) {</b>
+<b class="fc"><i>52</i>&nbsp;    init(predLabels, params, outcomeNames);</b>
+<b class="fc"><i>53</i>&nbsp;    this.evalParams = new EvalParameters(params, outcomeNames.length);</b>
+<b class="fc"><i>54</i>&nbsp;  }</b>
+<i>55</i>&nbsp;
+<i>56</i>&nbsp;  private void init(String[] predLabels, Context[] params, String[] outcomeNames) {
+<b class="fc"><i>57</i>&nbsp;    this.pmap = new HashMap&lt;&gt;(predLabels.length);</b>
+<i>58</i>&nbsp;
+<b class="fc"><i>59</i>&nbsp;    for (int i = 0; i &lt; predLabels.length; i++) {</b>
+<b class="fc"><i>60</i>&nbsp;      pmap.put(predLabels[i], params[i]);</b>
+<i>61</i>&nbsp;    }
+<i>62</i>&nbsp;
+<b class="fc"><i>63</i>&nbsp;    this.outcomeNames =  outcomeNames;</b>
+<b class="fc"><i>64</i>&nbsp;  }</b>
+<i>65</i>&nbsp;
+<i>66</i>&nbsp;
+<i>67</i>&nbsp;  /**
+<i>68</i>&nbsp;   * Return the name of the outcome corresponding to the highest likelihood
+<i>69</i>&nbsp;   * in the parameter ocs.
+<i>70</i>&nbsp;   *
+<i>71</i>&nbsp;   * @param ocs A double[] as returned by the eval(String[] context)
+<i>72</i>&nbsp;   *            method.
+<i>73</i>&nbsp;   * @return    The name of the most likely outcome.
+<i>74</i>&nbsp;   */
+<i>75</i>&nbsp;  public final String getBestOutcome(double[] ocs) {
+<b class="fc"><i>76</i>&nbsp;    return outcomeNames[ArrayMath.argmax(ocs)];</b>
+<i>77</i>&nbsp;  }
+<i>78</i>&nbsp;
+<i>79</i>&nbsp;  public ModelType getModelType() {
+<b class="fc"><i>80</i>&nbsp;    return modelType;</b>
+<i>81</i>&nbsp;  }
+<i>82</i>&nbsp;
+<i>83</i>&nbsp;  /**
+<i>84</i>&nbsp;   * Return a string matching all the outcome names with all the
+<i>85</i>&nbsp;   * probabilities produced by the &lt;code&gt;eval(String[] context)&lt;/code&gt;
+<i>86</i>&nbsp;   * method.
+<i>87</i>&nbsp;   *
+<i>88</i>&nbsp;   * @param ocs A &lt;code&gt;double[]&lt;/code&gt; as returned by the
+<i>89</i>&nbsp;   *            &lt;code&gt;eval(String[] context)&lt;/code&gt;
+<i>90</i>&nbsp;   *            method.
+<i>91</i>&nbsp;   * @return    String containing outcome names paired with the normalized
+<i>92</i>&nbsp;   *            probability (contained in the &lt;code&gt;double[] ocs&lt;/code&gt;)
+<i>93</i>&nbsp;   *            for each one.
+<i>94</i>&nbsp;   */
+<i>95</i>&nbsp;  public final String getAllOutcomes(double[] ocs) {
+<b class="fc"><i>96</i>&nbsp;    if (ocs.length != outcomeNames.length) {</b>
+<b class="nc"><i>97</i>&nbsp;      return &quot;The double array sent as a parameter to GISModel.getAllOutcomes() &quot; +</b>
+<i>98</i>&nbsp;          &quot;must not have been produced by this model.&quot;;
+<i>99</i>&nbsp;    }
+<i>100</i>&nbsp;    else {
+<b class="fc"><i>101</i>&nbsp;      DecimalFormat df =  new DecimalFormat(&quot;0.0000&quot;);</b>
+<b class="fc"><i>102</i>&nbsp;      StringBuilder sb = new StringBuilder(ocs.length * 2);</b>
+<b class="fc"><i>103</i>&nbsp;      sb.append(outcomeNames[0]).append(&quot;[&quot;).append(df.format(ocs[0])).append(&quot;]&quot;);</b>
+<b class="fc"><i>104</i>&nbsp;      for (int i = 1; i &lt; ocs.length; i++) {</b>
+<b class="fc"><i>105</i>&nbsp;        sb.append(&quot;  &quot;).append(outcomeNames[i]).append(&quot;[&quot;).append(df.format(ocs[i])).append(&quot;]&quot;);</b>
+<i>106</i>&nbsp;      }
+<b class="fc"><i>107</i>&nbsp;      return sb.toString();</b>
+<i>108</i>&nbsp;    }
+<i>109</i>&nbsp;  }
+<i>110</i>&nbsp;
+<i>111</i>&nbsp;  /**
+<i>112</i>&nbsp;   * Return the name of an outcome corresponding to an int id.
+<i>113</i>&nbsp;   *
+<i>114</i>&nbsp;   * @param i An outcome id.
+<i>115</i>&nbsp;   * @return  The name of the outcome associated with that id.
+<i>116</i>&nbsp;   */
+<i>117</i>&nbsp;  public final String getOutcome(int i) {
+<b class="fc"><i>118</i>&nbsp;    return outcomeNames[i];</b>
+<i>119</i>&nbsp;  }
+<i>120</i>&nbsp;
+<i>121</i>&nbsp;  /**
+<i>122</i>&nbsp;   * Gets the index associated with the String name of the given outcome.
+<i>123</i>&nbsp;   *
+<i>124</i>&nbsp;   * @param outcome the String name of the outcome for which the
+<i>125</i>&nbsp;   *          index is desired
+<i>126</i>&nbsp;   * @return the index if the given outcome label exists for this
+<i>127</i>&nbsp;   *     model, -1 if it does not.
+<i>128</i>&nbsp;   **/
+<i>129</i>&nbsp;  public int getIndex(String outcome) {
+<b class="fc"><i>130</i>&nbsp;    for (int i = 0; i &lt; outcomeNames.length; i++) {</b>
+<b class="fc"><i>131</i>&nbsp;      if (outcomeNames[i].equals(outcome))</b>
+<b class="fc"><i>132</i>&nbsp;        return i;</b>
+<i>133</i>&nbsp;    }
+<b class="nc"><i>134</i>&nbsp;    return -1;</b>
+<i>135</i>&nbsp;  }
+<i>136</i>&nbsp;
+<i>137</i>&nbsp;  public int getNumOutcomes() {
+<b class="fc"><i>138</i>&nbsp;    return evalParams.getNumOutcomes();</b>
+<i>139</i>&nbsp;  }
+<i>140</i>&nbsp;
+<i>141</i>&nbsp;  /**
+<i>142</i>&nbsp;   * Provides the fundamental data structures which encode the maxent model
+<i>143</i>&nbsp;   * information.  This method will usually only be needed by
+<i>144</i>&nbsp;   * GISModelWriters.  The following values are held in the Object array
+<i>145</i>&nbsp;   * which is returned by this method:
+<i>146</i>&nbsp;   * &lt;ul&gt;
+<i>147</i>&nbsp;   * &lt;li&gt;index 0: opennlp.tools.ml.maxent.Context[] containing the model
+<i>148</i>&nbsp;   *            parameters
+<i>149</i>&nbsp;   * &lt;li&gt;index 1: java.util.Map containing the mapping of model predicates
+<i>150</i>&nbsp;   *            to unique integers
+<i>151</i>&nbsp;   * &lt;li&gt;index 2: java.lang.String[] containing the names of the outcomes,
+<i>152</i>&nbsp;   *            stored in the index of the array which represents their
+<i>153</i>&nbsp;   *            unique ids in the model.
+<i>154</i>&nbsp;   * &lt;/ul&gt;
+<i>155</i>&nbsp;   *
+<i>156</i>&nbsp;   * @return An Object[] with the values as described above.
+<i>157</i>&nbsp;   */
+<i>158</i>&nbsp;  public final Object[] getDataStructures() {
+<b class="fc"><i>159</i>&nbsp;    Object[] data = new Object[3];</b>
+<b class="fc"><i>160</i>&nbsp;    data[0] = evalParams.getParams();</b>
+<b class="fc"><i>161</i>&nbsp;    data[1] = pmap;</b>
+<b class="fc"><i>162</i>&nbsp;    data[2] = outcomeNames;</b>
+<b class="fc"><i>163</i>&nbsp;    return data;</b>
+<i>164</i>&nbsp;  }
+<i>165</i>&nbsp;
+<i>166</i>&nbsp;  @Override
+<i>167</i>&nbsp;  public int hashCode() {
+<b class="fc"><i>168</i>&nbsp;    return Objects.hash(pmap, Arrays.hashCode(outcomeNames), evalParams, prior);</b>
+<i>169</i>&nbsp;  }
+<i>170</i>&nbsp;
+<i>171</i>&nbsp;  @Override
+<i>172</i>&nbsp;  public boolean equals(Object obj) {
+<b class="fc"><i>173</i>&nbsp;    if (obj == this) {</b>
+<b class="nc"><i>174</i>&nbsp;      return true;</b>
+<i>175</i>&nbsp;    }
+<i>176</i>&nbsp;
+<b class="fc"><i>177</i>&nbsp;    if (obj instanceof AbstractModel) {</b>
+<b class="fc"><i>178</i>&nbsp;      AbstractModel model = (AbstractModel) obj;</b>
+<i>179</i>&nbsp;
+<b class="fc"><i>180</i>&nbsp;      return pmap.equals(model.pmap) &amp;&amp; Objects.deepEquals(outcomeNames, model.outcomeNames)</b>
+<b class="fc"><i>181</i>&nbsp;          &amp;&amp; Objects.equals(prior, model.prior);</b>
+<i>182</i>&nbsp;    }
+<i>183</i>&nbsp;
+<b class="fc"><i>184</i>&nbsp;    return false;</b>
+<i>185</i>&nbsp;  }
+<i>186</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-09 18:47</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,233 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: BuildContextGenerator</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">opennlp.tools.parser.treeinsert</a> ]
+</div>
+
+<h1>Coverage Summary for Class: BuildContextGenerator (opennlp.tools.parser.treeinsert)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">BuildContextGenerator</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    66.7%
+  </span>
+  <span class="absValue">
+    (2/ 3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    96.9%
+  </span>
+  <span class="absValue">
+    (62/ 64)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/*
+<i>2</i>&nbsp; * Licensed to the Apache Software Foundation (ASF) under one or more
+<i>3</i>&nbsp; * contributor license agreements.  See the NOTICE file distributed with
+<i>4</i>&nbsp; * this work for additional information regarding copyright ownership.
+<i>5</i>&nbsp; * The ASF licenses this file to You under the Apache License, Version 2.0
+<i>6</i>&nbsp; * (the &quot;License&quot;); you may not use this file except in compliance with
+<i>7</i>&nbsp; * the License. You may obtain a copy of the License at
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; *     http://www.apache.org/licenses/LICENSE-2.0
+<i>10</i>&nbsp; *
+<i>11</i>&nbsp; * Unless required by applicable law or agreed to in writing, software
+<i>12</i>&nbsp; * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<i>13</i>&nbsp; * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<i>14</i>&nbsp; * See the License for the specific language governing permissions and
+<i>15</i>&nbsp; * limitations under the License.
+<i>16</i>&nbsp; */
+<i>17</i>&nbsp;
+<i>18</i>&nbsp;
+<i>19</i>&nbsp;package opennlp.tools.parser.treeinsert;
+<i>20</i>&nbsp;
+<i>21</i>&nbsp;import java.util.ArrayList;
+<i>22</i>&nbsp;import java.util.Collection;
+<i>23</i>&nbsp;import java.util.Collections;
+<i>24</i>&nbsp;import java.util.List;
+<i>25</i>&nbsp;import java.util.Set;
+<i>26</i>&nbsp;
+<i>27</i>&nbsp;import opennlp.tools.parser.AbstractContextGenerator;
+<i>28</i>&nbsp;import opennlp.tools.parser.Cons;
+<i>29</i>&nbsp;import opennlp.tools.parser.Parse;
+<i>30</i>&nbsp;
+<i>31</i>&nbsp;/**
+<i>32</i>&nbsp; * Creates the features or contexts for the building phase of parsing.
+<i>33</i>&nbsp; * This phase builds constituents from the left-most node of these
+<i>34</i>&nbsp; * constituents.
+<i>35</i>&nbsp; */
+<i>36</i>&nbsp;public class BuildContextGenerator extends AbstractContextGenerator {
+<i>37</i>&nbsp;
+<i>38</i>&nbsp;  private Parse[] leftNodes;
+<i>39</i>&nbsp;
+<i>40</i>&nbsp;  public BuildContextGenerator() {
+<b class="fc"><i>41</i>&nbsp;    super();</b>
+<b class="fc"><i>42</i>&nbsp;    leftNodes = new Parse[2];</b>
+<b class="fc"><i>43</i>&nbsp;  }</b>
+<i>44</i>&nbsp;
+<i>45</i>&nbsp;  public String[] getContext(Object o) {
+<b class="nc"><i>46</i>&nbsp;    Object[] parts = (Object[]) o;</b>
+<b class="nc"><i>47</i>&nbsp;    return getContext((Parse[]) parts[0], (Integer) parts[1]);</b>
+<i>48</i>&nbsp;  }
+<i>49</i>&nbsp;
+<i>50</i>&nbsp;  /**
+<i>51</i>&nbsp;   * Returns the contexts/features for the decision to build a new constituent for the specified parse
+<i>52</i>&nbsp;   * at the specified index.
+<i>53</i>&nbsp;   * @param constituents The constituents of the parse so far.
+<i>54</i>&nbsp;   * @param index The index of the constituent where a build decision is being made.
+<i>55</i>&nbsp;   * @return the contexts/features for the decision to build a new constituent.
+<i>56</i>&nbsp;   */
+<i>57</i>&nbsp;  public String[] getContext(Parse[] constituents, int index) {
+<b class="fc"><i>58</i>&nbsp;    int ps = constituents.length;</b>
+<i>59</i>&nbsp;
+<b class="fc"><i>60</i>&nbsp;    Parse p0 = constituents[index];</b>
+<i>61</i>&nbsp;
+<b class="fc"><i>62</i>&nbsp;    Parse p1 = null;</b>
+<b class="fc"><i>63</i>&nbsp;    if (index + 1 &lt; ps) {</b>
+<b class="fc"><i>64</i>&nbsp;      p1 = constituents[index + 1];</b>
+<i>65</i>&nbsp;    }
+<i>66</i>&nbsp;
+<b class="fc"><i>67</i>&nbsp;    Parse p2 = null;</b>
+<b class="fc"><i>68</i>&nbsp;    if (index  + 2 &lt; ps) {</b>
+<b class="fc"><i>69</i>&nbsp;      p2 = constituents[index + 2];</b>
+<i>70</i>&nbsp;    }
+<i>71</i>&nbsp;
+<i>72</i>&nbsp;
+<b class="fc"><i>73</i>&nbsp;    Collection&lt;Parse&gt; punct_1s = p0.getPreviousPunctuationSet();</b>
+<b class="fc"><i>74</i>&nbsp;    Collection&lt;Parse&gt; punct1s = p0.getNextPunctuationSet();</b>
+<i>75</i>&nbsp;
+<b class="fc"><i>76</i>&nbsp;    Collection&lt;Parse&gt; punct2s = null;</b>
+<b class="fc"><i>77</i>&nbsp;    if (p1 != null) {</b>
+<b class="fc"><i>78</i>&nbsp;      punct2s = p1.getNextPunctuationSet();</b>
+<i>79</i>&nbsp;    }
+<i>80</i>&nbsp;
+<i>81</i>&nbsp;
+<i>82</i>&nbsp;    List&lt;Parse&gt; rf;
+<b class="fc"><i>83</i>&nbsp;    if (index == 0) {</b>
+<b class="fc"><i>84</i>&nbsp;      rf = Collections.emptyList();</b>
+<i>85</i>&nbsp;    }
+<i>86</i>&nbsp;    else {
+<i>87</i>&nbsp;      //this isn&#39;t a root node so, punctSet won&#39;t be used and can be passed as empty.
+<b class="fc"><i>88</i>&nbsp;      Set&lt;String&gt; emptyPunctSet = Collections.emptySet();</b>
+<b class="fc"><i>89</i>&nbsp;      rf = Parser.getRightFrontier(constituents[0], emptyPunctSet);</b>
+<i>90</i>&nbsp;    }
+<b class="fc"><i>91</i>&nbsp;    getFrontierNodes(rf,leftNodes);</b>
+<b class="fc"><i>92</i>&nbsp;    Parse p_1 = leftNodes[0];</b>
+<b class="fc"><i>93</i>&nbsp;    Parse p_2 = leftNodes[1];</b>
+<i>94</i>&nbsp;
+<b class="fc"><i>95</i>&nbsp;    Collection&lt;Parse&gt; punct_2s = null;</b>
+<b class="fc"><i>96</i>&nbsp;    if (p_1 != null) {</b>
+<b class="fc"><i>97</i>&nbsp;      punct_2s = p_1.getPreviousPunctuationSet();</b>
+<i>98</i>&nbsp;    }
+<i>99</i>&nbsp;
+<b class="fc"><i>100</i>&nbsp;    String consp_2 = cons(p_2, -2);</b>
+<b class="fc"><i>101</i>&nbsp;    String consp_1 = cons(p_1, -1);</b>
+<b class="fc"><i>102</i>&nbsp;    String consp0 = cons(p0, 0);</b>
+<b class="fc"><i>103</i>&nbsp;    String consp1 = cons(p1, 1);</b>
+<b class="fc"><i>104</i>&nbsp;    String consp2 = cons(p2, 2);</b>
+<i>105</i>&nbsp;
+<b class="fc"><i>106</i>&nbsp;    String consbop_2 = consbo(p_2, -2);</b>
+<b class="fc"><i>107</i>&nbsp;    String consbop_1 = consbo(p_1, -1);</b>
+<b class="fc"><i>108</i>&nbsp;    String consbop0 = consbo(p0, 0);</b>
+<b class="fc"><i>109</i>&nbsp;    String consbop1 = consbo(p1, 1);</b>
+<b class="fc"><i>110</i>&nbsp;    String consbop2 = consbo(p2, 2);</b>
+<i>111</i>&nbsp;
+<b class="fc"><i>112</i>&nbsp;    Cons c_2 = new Cons(consp_2,consbop_2,-2,true);</b>
+<b class="fc"><i>113</i>&nbsp;    Cons c_1 = new Cons(consp_1,consbop_1,-1,true);</b>
+<b class="fc"><i>114</i>&nbsp;    Cons c0 = new Cons(consp0,consbop0,0,true);</b>
+<b class="fc"><i>115</i>&nbsp;    Cons c1 = new Cons(consp1,consbop1,1,true);</b>
+<b class="fc"><i>116</i>&nbsp;    Cons c2 = new Cons(consp2,consbop2,2,true);</b>
+<i>117</i>&nbsp;
+<b class="fc"><i>118</i>&nbsp;    List&lt;String&gt; features = new ArrayList&lt;&gt;();</b>
+<b class="fc"><i>119</i>&nbsp;    features.add(&quot;default&quot;);</b>
+<i>120</i>&nbsp;
+<i>121</i>&nbsp;    //unigrams
+<b class="fc"><i>122</i>&nbsp;    features.add(consp_2);</b>
+<b class="fc"><i>123</i>&nbsp;    features.add(consbop_2);</b>
+<b class="fc"><i>124</i>&nbsp;    features.add(consp_1);</b>
+<b class="fc"><i>125</i>&nbsp;    features.add(consbop_1);</b>
+<b class="fc"><i>126</i>&nbsp;    features.add(consp0);</b>
+<b class="fc"><i>127</i>&nbsp;    features.add(consbop0);</b>
+<b class="fc"><i>128</i>&nbsp;    features.add(consp1);</b>
+<b class="fc"><i>129</i>&nbsp;    features.add(consbop1);</b>
+<b class="fc"><i>130</i>&nbsp;    features.add(consp2);</b>
+<b class="fc"><i>131</i>&nbsp;    features.add(consbop2);</b>
+<i>132</i>&nbsp;
+<i>133</i>&nbsp;    //cons(0),cons(1)
+<b class="fc"><i>134</i>&nbsp;    cons2(features,c0,c1,punct1s,true);</b>
+<i>135</i>&nbsp;    //cons(-1),cons(0)
+<b class="fc"><i>136</i>&nbsp;    cons2(features,c_1,c0,punct_1s,true);</b>
+<i>137</i>&nbsp;    //features.add(&quot;stage=cons(0),cons(1),cons(2)&quot;);
+<b class="fc"><i>138</i>&nbsp;    cons3(features,c0,c1,c2,punct1s,punct2s,true,true,true);</b>
+<b class="fc"><i>139</i>&nbsp;    cons3(features,c_2,c_1,c0,punct_2s,punct_1s,true,true,true);</b>
+<b class="fc"><i>140</i>&nbsp;    cons3(features,c_1,c0,c1,punct_1s,punct_1s,true,true,true);</b>
+<i>141</i>&nbsp;
+<b class="fc"><i>142</i>&nbsp;    if (rf.isEmpty()) {</b>
+<b class="fc"><i>143</i>&nbsp;      features.add(EOS + &quot;,&quot; + consp0);</b>
+<b class="fc"><i>144</i>&nbsp;      features.add(EOS + &quot;,&quot; + consbop0);</b>
+<i>145</i>&nbsp;    }
+<i>146</i>&nbsp;
+<b class="fc"><i>147</i>&nbsp;    return features.toArray(new String[features.size()]);</b>
+<i>148</i>&nbsp;  }
+<i>149</i>&nbsp;
+<i>150</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-09 18:47</div>
+</div>
+</body>
+</html>

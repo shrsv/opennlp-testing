@@ -1,0 +1,42 @@
+
+*****************************************************
+Summary
+-------
+Generated at: 2020-05-29T13:41:38-07:00
+Notes: 0
+Binaries: 0
+Archives: 0
+Standards: 5
+
+Apache Licensed: 5
+Generated Documents: 0
+
+JavaDocs are generated and so license header is optional
+Generated files do not required license headers
+
+0 Unknown Licenses
+
+*******************************
+
+Unapproved licenses:
+
+
+*******************************
+
+Archives:
+
+*****************************************************
+  Files with Apache License headers will be marked AL
+  Binary files (which do not require AL headers) will be marked B
+  Compressed archives will be marked A
+  Notices, licenses etc will be marked N
+  AL    /home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-brat-annotator/pom.xml
+  AL    /home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-brat-annotator/src/main/bin/brat-annotation-service
+  AL    /home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-brat-annotator/src/main/bin/brat-annotation-service.bat
+  AL    /home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-brat-annotator/src/main/java/opennlp/bratann/NameFinderAnnService.java
+  AL    /home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-brat-annotator/src/main/java/opennlp/bratann/NameFinderResource.java
+ 
+*****************************************************
+ Printing headers for files without AL header...
+ 
+ 

@@ -1,0 +1,154 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: DefaultLanguageDetectorContextGenerator</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">opennlp.tools.langdetect</a> ]
+</div>
+
+<h1>Coverage Summary for Class: DefaultLanguageDetectorContextGenerator (opennlp.tools.langdetect)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">DefaultLanguageDetectorContextGenerator</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (2/ 2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (13/ 13)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/*
+<i>2</i>&nbsp; * Licensed to the Apache Software Foundation (ASF) under one or more
+<i>3</i>&nbsp; * contributor license agreements.  See the NOTICE file distributed with
+<i>4</i>&nbsp; * this work for additional information regarding copyright ownership.
+<i>5</i>&nbsp; * The ASF licenses this file to You under the Apache License, Version 2.0
+<i>6</i>&nbsp; * (the &quot;License&quot;); you may not use this file except in compliance with
+<i>7</i>&nbsp; * the License. You may obtain a copy of the License at
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; *     http://www.apache.org/licenses/LICENSE-2.0
+<i>10</i>&nbsp; *
+<i>11</i>&nbsp; * Unless required by applicable law or agreed to in writing, software
+<i>12</i>&nbsp; * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<i>13</i>&nbsp; * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<i>14</i>&nbsp; * See the License for the specific language governing permissions and
+<i>15</i>&nbsp; * limitations under the License.
+<i>16</i>&nbsp; */
+<i>17</i>&nbsp;
+<i>18</i>&nbsp;package opennlp.tools.langdetect;
+<i>19</i>&nbsp;
+<i>20</i>&nbsp;import java.util.ArrayList;
+<i>21</i>&nbsp;import java.util.Collection;
+<i>22</i>&nbsp;
+<i>23</i>&nbsp;import opennlp.tools.ngram.NGramModel;
+<i>24</i>&nbsp;import opennlp.tools.util.StringList;
+<i>25</i>&nbsp;import opennlp.tools.util.normalizer.AggregateCharSequenceNormalizer;
+<i>26</i>&nbsp;import opennlp.tools.util.normalizer.CharSequenceNormalizer;
+<i>27</i>&nbsp;
+<i>28</i>&nbsp;/**
+<i>29</i>&nbsp; * A context generator for language detector.
+<i>30</i>&nbsp; */
+<i>31</i>&nbsp;public class DefaultLanguageDetectorContextGenerator implements LanguageDetectorContextGenerator {
+<i>32</i>&nbsp;
+<i>33</i>&nbsp;  protected final int minLength;
+<i>34</i>&nbsp;  protected final int maxLength;
+<i>35</i>&nbsp;  protected final CharSequenceNormalizer normalizer;
+<i>36</i>&nbsp;
+<i>37</i>&nbsp;  /**
+<i>38</i>&nbsp;   * Creates a customizable @{@link DefaultLanguageDetectorContextGenerator} that computes ngrams from text
+<i>39</i>&nbsp;   * @param minLength min ngrams chars
+<i>40</i>&nbsp;   * @param maxLength max ngrams chars
+<i>41</i>&nbsp;   * @param normalizers zero or more normalizers to
+<i>42</i>&nbsp;   *                    be applied in to the text before extracting ngrams
+<i>43</i>&nbsp;   */
+<i>44</i>&nbsp;  public DefaultLanguageDetectorContextGenerator(int minLength, int maxLength,
+<b class="fc"><i>45</i>&nbsp;                                                 CharSequenceNormalizer... normalizers) {</b>
+<b class="fc"><i>46</i>&nbsp;    this.minLength = minLength;</b>
+<b class="fc"><i>47</i>&nbsp;    this.maxLength = maxLength;</b>
+<i>48</i>&nbsp;
+<b class="fc"><i>49</i>&nbsp;    this.normalizer = new AggregateCharSequenceNormalizer(normalizers);</b>
+<b class="fc"><i>50</i>&nbsp;  }</b>
+<i>51</i>&nbsp;
+<i>52</i>&nbsp;  /**
+<i>53</i>&nbsp;   * Generates the context for a document using character ngrams.
+<i>54</i>&nbsp;   * @param document document to extract context from
+<i>55</i>&nbsp;   * @return the generated context
+<i>56</i>&nbsp;   */
+<i>57</i>&nbsp;  @Override
+<i>58</i>&nbsp;  public String[] getContext(CharSequence document) {
+<b class="fc"><i>59</i>&nbsp;    Collection&lt;String&gt; context = new ArrayList&lt;&gt;();</b>
+<i>60</i>&nbsp;
+<b class="fc"><i>61</i>&nbsp;    NGramModel model = new NGramModel();</b>
+<b class="fc"><i>62</i>&nbsp;    model.add(normalizer.normalize(document), minLength, maxLength);</b>
+<i>63</i>&nbsp;
+<b class="fc"><i>64</i>&nbsp;    for (StringList tokenList : model) {</b>
+<b class="fc"><i>65</i>&nbsp;      if (tokenList.size() &gt; 0) {</b>
+<b class="fc"><i>66</i>&nbsp;        context.add(tokenList.getToken(0));</b>
+<i>67</i>&nbsp;      }
+<b class="fc"><i>68</i>&nbsp;    }</b>
+<b class="fc"><i>69</i>&nbsp;    return context.toArray(new String[context.size()]);</b>
+<i>70</i>&nbsp;  }
+<i>71</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-09 15:05</div>
+</div>
+</body>
+</html>

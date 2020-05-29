@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/opennlp.iml" filepath="$PROJECT_DIR$/opennlp.iml" />
+      <module fileurl="file://$PROJECT_DIR$/opennlp-brat-annotator/opennlp-brat-annotator.iml" filepath="$PROJECT_DIR$/opennlp-brat-annotator/opennlp-brat-annotator.iml" />
+      <module fileurl="file://$PROJECT_DIR$/opennlp-distr/opennlp-distr.iml" filepath="$PROJECT_DIR$/opennlp-distr/opennlp-distr.iml" />
+      <module fileurl="file://$PROJECT_DIR$/opennlp-docs/opennlp-docs.iml" filepath="$PROJECT_DIR$/opennlp-docs/opennlp-docs.iml" />
+      <module fileurl="file://$PROJECT_DIR$/opennlp-morfologik-addon/opennlp-morfologik-addon.iml" filepath="$PROJECT_DIR$/opennlp-morfologik-addon/opennlp-morfologik-addon.iml" />
+      <module fileurl="file://$PROJECT_DIR$/opennlp-tools/opennlp-tools.iml" filepath="$PROJECT_DIR$/opennlp-tools/opennlp-tools.iml" />
+      <module fileurl="file://$PROJECT_DIR$/opennlp-uima/opennlp-uima.iml" filepath="$PROJECT_DIR$/opennlp-uima/opennlp-uima.iml" />
+    </modules>
+  </component>
+</project>

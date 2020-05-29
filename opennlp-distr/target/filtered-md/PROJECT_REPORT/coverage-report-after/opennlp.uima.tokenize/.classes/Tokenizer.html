@@ -1,0 +1,225 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: Tokenizer</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">opennlp.uima.tokenize</a> ]
+</div>
+
+<h1>Coverage Summary for Class: Tokenizer (opennlp.uima.tokenize)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Tokenizer</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 18)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/*
+<i>2</i>&nbsp; * Licensed to the Apache Software Foundation (ASF) under one or more
+<i>3</i>&nbsp; * contributor license agreements.  See the NOTICE file distributed with
+<i>4</i>&nbsp; * this work for additional information regarding copyright ownership.
+<i>5</i>&nbsp; * The ASF licenses this file to You under the Apache License, Version 2.0
+<i>6</i>&nbsp; * (the &quot;License&quot;); you may not use this file except in compliance with
+<i>7</i>&nbsp; * the License. You may obtain a copy of the License at
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; *     http://www.apache.org/licenses/LICENSE-2.0
+<i>10</i>&nbsp; *
+<i>11</i>&nbsp; * Unless required by applicable law or agreed to in writing, software
+<i>12</i>&nbsp; * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<i>13</i>&nbsp; * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<i>14</i>&nbsp; * See the License for the specific language governing permissions and
+<i>15</i>&nbsp; * limitations under the License.
+<i>16</i>&nbsp; */
+<i>17</i>&nbsp;
+<i>18</i>&nbsp;package opennlp.uima.tokenize;
+<i>19</i>&nbsp;
+<i>20</i>&nbsp;import org.apache.uima.UimaContext;
+<i>21</i>&nbsp;import org.apache.uima.analysis_engine.AnalysisEngineProcessException;
+<i>22</i>&nbsp;import org.apache.uima.cas.CAS;
+<i>23</i>&nbsp;import org.apache.uima.cas.Feature;
+<i>24</i>&nbsp;import org.apache.uima.cas.TypeSystem;
+<i>25</i>&nbsp;import org.apache.uima.cas.text.AnnotationFS;
+<i>26</i>&nbsp;import org.apache.uima.resource.ResourceAccessException;
+<i>27</i>&nbsp;import org.apache.uima.resource.ResourceInitializationException;
+<i>28</i>&nbsp;
+<i>29</i>&nbsp;import opennlp.tools.tokenize.TokenizerME;
+<i>30</i>&nbsp;import opennlp.tools.tokenize.TokenizerModel;
+<i>31</i>&nbsp;import opennlp.tools.util.Span;
+<i>32</i>&nbsp;import opennlp.uima.util.AnnotatorUtil;
+<i>33</i>&nbsp;import opennlp.uima.util.UimaUtil;
+<i>34</i>&nbsp;
+<i>35</i>&nbsp;/**
+<i>36</i>&nbsp; * OpenNLP Tokenizer annotator.
+<i>37</i>&nbsp; * &lt;p&gt;
+<i>38</i>&nbsp; * Mandatory parameters
+<i>39</i>&nbsp; * &lt;table border=1&gt;
+<i>40</i>&nbsp; * &lt;caption&gt;&lt;/caption&gt;
+<i>41</i>&nbsp; * &lt;tr&gt;&lt;th&gt;Type&lt;/th&gt; &lt;th&gt;Name&lt;/th&gt; &lt;th&gt;Description&lt;/th&gt;&lt;/tr&gt;
+<i>42</i>&nbsp; * &lt;tr&gt;&lt;td&gt;String&lt;/td&gt; &lt;td&gt;opennlp.uima.ModelName&lt;/td&gt; &lt;td&gt;The name of the model file&lt;/td&gt;&lt;/tr&gt;
+<i>43</i>&nbsp; * &lt;tr&gt;&lt;td&gt;String&lt;/td&gt; &lt;td&gt;opennlp.uima.SentenceType&lt;/td&gt; &lt;td&gt;The full name of the sentence type&lt;/td&gt;&lt;/tr&gt;
+<i>44</i>&nbsp; * &lt;tr&gt;&lt;td&gt;String&lt;/td&gt; &lt;td&gt;opennlp.uima.TokenType&lt;/td&gt; &lt;td&gt;The full name of the token type&lt;/td&gt;&lt;/tr&gt;
+<i>45</i>&nbsp; * &lt;/table&gt;
+<i>46</i>&nbsp; * &lt;p&gt;
+<i>47</i>&nbsp; * Optional parameters
+<i>48</i>&nbsp; * &lt;table border=1&gt;
+<i>49</i>&nbsp; * &lt;caption&gt;&lt;/caption&gt;
+<i>50</i>&nbsp; * &lt;tr&gt;&lt;th&gt;Type&lt;/th&gt; &lt;th&gt;Name&lt;/th&gt; &lt;th&gt;Description&lt;/th&gt;&lt;/tr&gt;
+<i>51</i>&nbsp; * &lt;tr&gt;&lt;td&gt;String&lt;/td&gt; &lt;td&gt;opennlp.uima.ProbabilityFeature&lt;/td&gt; &lt;td&gt;The name of the double
+<i>52</i>&nbsp; * probability feature (not set by default)&lt;/td&gt;&lt;/tr&gt;
+<i>53</i>&nbsp; * &lt;/table&gt;
+<i>54</i>&nbsp; *
+<i>55</i>&nbsp; * @see TokenizerME
+<i>56</i>&nbsp; */
+<i>57</i>&nbsp;public final class Tokenizer extends AbstractTokenizer {
+<i>58</i>&nbsp;
+<i>59</i>&nbsp;  /**
+<i>60</i>&nbsp;   * The OpenNLP tokenizer.
+<i>61</i>&nbsp;   */
+<i>62</i>&nbsp;  private TokenizerME tokenizer;
+<i>63</i>&nbsp;
+<i>64</i>&nbsp;  private Feature probabilityFeature;
+<i>65</i>&nbsp;
+<i>66</i>&nbsp;  /**
+<i>67</i>&nbsp;   * Initializes a new instance.
+<i>68</i>&nbsp;   * &lt;p&gt;
+<i>69</i>&nbsp;   * Note: Use {@link #initialize(UimaContext) } to initialize
+<i>70</i>&nbsp;   * this instance. Not use the constructor.
+<i>71</i>&nbsp;   */
+<i>72</i>&nbsp;  public Tokenizer() {
+<b class="nc"><i>73</i>&nbsp;    super(&quot;OpenNLP Tokenizer&quot;);</b>
+<i>74</i>&nbsp;
+<i>75</i>&nbsp;    // must not be implemented !
+<i>76</i>&nbsp;  }
+<i>77</i>&nbsp;
+<i>78</i>&nbsp;  /**
+<i>79</i>&nbsp;   * Initializes the current instance with the given context.
+<i>80</i>&nbsp;   * &lt;p&gt;
+<i>81</i>&nbsp;   * Note: Do all initialization in this method, do not use the constructor.
+<i>82</i>&nbsp;   */
+<i>83</i>&nbsp;  public void initialize(UimaContext context)
+<i>84</i>&nbsp;      throws ResourceInitializationException {
+<i>85</i>&nbsp;
+<b class="nc"><i>86</i>&nbsp;    super.initialize(context);</b>
+<i>87</i>&nbsp;
+<i>88</i>&nbsp;    TokenizerModel model;
+<i>89</i>&nbsp;
+<i>90</i>&nbsp;    try {
+<b class="nc"><i>91</i>&nbsp;      TokenizerModelResource modelResource = (TokenizerModelResource) context</b>
+<b class="nc"><i>92</i>&nbsp;          .getResourceObject(UimaUtil.MODEL_PARAMETER);</b>
+<i>93</i>&nbsp;
+<b class="nc"><i>94</i>&nbsp;      model = modelResource.getModel();</b>
+<b class="nc"><i>95</i>&nbsp;    } catch (ResourceAccessException e) {</b>
+<b class="nc"><i>96</i>&nbsp;      throw new ResourceInitializationException(e);</b>
+<b class="nc"><i>97</i>&nbsp;    }</b>
+<i>98</i>&nbsp;
+<b class="nc"><i>99</i>&nbsp;    tokenizer = new TokenizerME(model);</b>
+<i>100</i>&nbsp;  }
+<i>101</i>&nbsp;
+<i>102</i>&nbsp;  /**
+<i>103</i>&nbsp;   * Initializes the type system.
+<i>104</i>&nbsp;   */
+<i>105</i>&nbsp;  public void typeSystemInit(TypeSystem typeSystem)
+<i>106</i>&nbsp;      throws AnalysisEngineProcessException {
+<i>107</i>&nbsp;
+<b class="nc"><i>108</i>&nbsp;    super.typeSystemInit(typeSystem);</b>
+<i>109</i>&nbsp;
+<b class="nc"><i>110</i>&nbsp;    probabilityFeature = AnnotatorUtil</b>
+<b class="nc"><i>111</i>&nbsp;        .getOptionalFeatureParameter(context, tokenType,</b>
+<i>112</i>&nbsp;            UimaUtil.PROBABILITY_FEATURE_PARAMETER, CAS.TYPE_NAME_DOUBLE);
+<i>113</i>&nbsp;  }
+<i>114</i>&nbsp;
+<i>115</i>&nbsp;
+<i>116</i>&nbsp;  @Override
+<i>117</i>&nbsp;  protected Span[] tokenize(CAS cas, AnnotationFS sentence) {
+<b class="nc"><i>118</i>&nbsp;    return tokenizer.tokenizePos(sentence.getCoveredText());</b>
+<i>119</i>&nbsp;  }
+<i>120</i>&nbsp;
+<i>121</i>&nbsp;  @Override
+<i>122</i>&nbsp;  protected void postProcessAnnotations(Span[] tokens,
+<i>123</i>&nbsp;                                        AnnotationFS[] tokenAnnotations) {
+<i>124</i>&nbsp;    // if interest
+<b class="nc"><i>125</i>&nbsp;    if (probabilityFeature != null) {</b>
+<b class="nc"><i>126</i>&nbsp;      double[] tokenProbabilties = tokenizer.getTokenProbabilities();</b>
+<i>127</i>&nbsp;
+<b class="nc"><i>128</i>&nbsp;      for (int i = 0; i &lt; tokenAnnotations.length; i++) {</b>
+<b class="nc"><i>129</i>&nbsp;        tokenAnnotations[i].setDoubleValue(probabilityFeature,</b>
+<i>130</i>&nbsp;            tokenProbabilties[i]);
+<i>131</i>&nbsp;      }
+<i>132</i>&nbsp;    }
+<i>133</i>&nbsp;  }
+<i>134</i>&nbsp;
+<i>135</i>&nbsp;  /**
+<i>136</i>&nbsp;   * Releases allocated resources.
+<i>137</i>&nbsp;   */
+<i>138</i>&nbsp;  public void destroy() {
+<i>139</i>&nbsp;    // dereference model to allow garbage collection
+<b class="nc"><i>140</i>&nbsp;    tokenizer = null;</b>
+<i>141</i>&nbsp;  }
+<i>142</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-09 18:47</div>
+</div>
+</body>
+</html>

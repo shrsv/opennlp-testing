@@ -1,0 +1,732 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: BaseModel</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">opennlp.tools.util.model</a> ]
+</div>
+
+<h1>Coverage Summary for Class: BaseModel (opennlp.tools.util.model)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">BaseModel</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    83.3%
+  </span>
+  <span class="absValue">
+    (25/ 30)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    78.7%
+  </span>
+  <span class="absValue">
+    (177/ 225)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/*
+<i>2</i>&nbsp; * Licensed to the Apache Software Foundation (ASF) under one or more
+<i>3</i>&nbsp; * contributor license agreements.  See the NOTICE file distributed with
+<i>4</i>&nbsp; * this work for additional information regarding copyright ownership.
+<i>5</i>&nbsp; * The ASF licenses this file to You under the Apache License, Version 2.0
+<i>6</i>&nbsp; * (the &quot;License&quot;); you may not use this file except in compliance with
+<i>7</i>&nbsp; * the License. You may obtain a copy of the License at
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; *     http://www.apache.org/licenses/LICENSE-2.0
+<i>10</i>&nbsp; *
+<i>11</i>&nbsp; * Unless required by applicable law or agreed to in writing, software
+<i>12</i>&nbsp; * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<i>13</i>&nbsp; * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<i>14</i>&nbsp; * See the License for the specific language governing permissions and
+<i>15</i>&nbsp; * limitations under the License.
+<i>16</i>&nbsp; */
+<i>17</i>&nbsp;
+<i>18</i>&nbsp;package opennlp.tools.util.model;
+<i>19</i>&nbsp;
+<i>20</i>&nbsp;import java.io.BufferedInputStream;
+<i>21</i>&nbsp;import java.io.BufferedOutputStream;
+<i>22</i>&nbsp;import java.io.File;
+<i>23</i>&nbsp;import java.io.FileInputStream;
+<i>24</i>&nbsp;import java.io.FileOutputStream;
+<i>25</i>&nbsp;import java.io.IOException;
+<i>26</i>&nbsp;import java.io.InputStream;
+<i>27</i>&nbsp;import java.io.ObjectInputStream;
+<i>28</i>&nbsp;import java.io.ObjectOutputStream;
+<i>29</i>&nbsp;import java.io.OutputStream;
+<i>30</i>&nbsp;import java.io.Serializable;
+<i>31</i>&nbsp;import java.net.URL;
+<i>32</i>&nbsp;import java.nio.file.Path;
+<i>33</i>&nbsp;import java.util.HashMap;
+<i>34</i>&nbsp;import java.util.Map;
+<i>35</i>&nbsp;import java.util.Map.Entry;
+<i>36</i>&nbsp;import java.util.Objects;
+<i>37</i>&nbsp;import java.util.Properties;
+<i>38</i>&nbsp;import java.util.zip.ZipEntry;
+<i>39</i>&nbsp;import java.util.zip.ZipInputStream;
+<i>40</i>&nbsp;import java.util.zip.ZipOutputStream;
+<i>41</i>&nbsp;
+<i>42</i>&nbsp;import opennlp.tools.util.BaseToolFactory;
+<i>43</i>&nbsp;import opennlp.tools.util.InvalidFormatException;
+<i>44</i>&nbsp;import opennlp.tools.util.Version;
+<i>45</i>&nbsp;import opennlp.tools.util.ext.ExtensionLoader;
+<i>46</i>&nbsp;
+<i>47</i>&nbsp;/**
+<i>48</i>&nbsp; * This model is a common based which can be used by the components
+<i>49</i>&nbsp; * model classes.
+<i>50</i>&nbsp; *
+<i>51</i>&nbsp; * TODO:
+<i>52</i>&nbsp; * Provide sub classes access to serializers already in constructor
+<i>53</i>&nbsp; */
+<i>54</i>&nbsp;public abstract class BaseModel implements ArtifactProvider, Serializable {
+<i>55</i>&nbsp;
+<i>56</i>&nbsp;  protected static final String MANIFEST_ENTRY = &quot;manifest.properties&quot;;
+<i>57</i>&nbsp;  protected static final String FACTORY_NAME = &quot;factory&quot;;
+<i>58</i>&nbsp;
+<i>59</i>&nbsp;  private static final String MANIFEST_VERSION_PROPERTY = &quot;Manifest-Version&quot;;
+<i>60</i>&nbsp;  private static final String COMPONENT_NAME_PROPERTY = &quot;Component-Name&quot;;
+<i>61</i>&nbsp;  private static final String VERSION_PROPERTY = &quot;OpenNLP-Version&quot;;
+<i>62</i>&nbsp;  private static final String TIMESTAMP_PROPERTY = &quot;Timestamp&quot;;
+<i>63</i>&nbsp;  private static final String LANGUAGE_PROPERTY = &quot;Language&quot;;
+<i>64</i>&nbsp;
+<i>65</i>&nbsp;  public static final String TRAINING_CUTOFF_PROPERTY = &quot;Training-Cutoff&quot;;
+<i>66</i>&nbsp;  public static final String TRAINING_ITERATIONS_PROPERTY = &quot;Training-Iterations&quot;;
+<i>67</i>&nbsp;  public static final String TRAINING_EVENTHASH_PROPERTY = &quot;Training-Eventhash&quot;;
+<i>68</i>&nbsp;
+<b class="fc"><i>69</i>&nbsp;  private static String SERIALIZER_CLASS_NAME_PREFIX = &quot;serializer-class-&quot;;</b>
+<i>70</i>&nbsp;
+<b class="fc"><i>71</i>&nbsp;  private Map&lt;String, ArtifactSerializer&gt; artifactSerializers = new HashMap&lt;&gt;();</b>
+<i>72</i>&nbsp;
+<b class="fc"><i>73</i>&nbsp;  protected Map&lt;String, Object&gt; artifactMap = new HashMap&lt;&gt;();</b>
+<i>74</i>&nbsp;
+<i>75</i>&nbsp;  protected BaseToolFactory toolFactory;
+<i>76</i>&nbsp;
+<i>77</i>&nbsp;  private String componentName;
+<i>78</i>&nbsp;
+<b class="fc"><i>79</i>&nbsp;  private boolean subclassSerializersInitiated = false;</b>
+<b class="fc"><i>80</i>&nbsp;  private boolean finishedLoadingArtifacts = false;</b>
+<i>81</i>&nbsp;
+<i>82</i>&nbsp;  private boolean isLoadedFromSerialized;
+<i>83</i>&nbsp;
+<b class="fc"><i>84</i>&nbsp;  private BaseModel(String componentName, boolean isLoadedFromSerialized) {</b>
+<b class="fc"><i>85</i>&nbsp;    this.isLoadedFromSerialized = isLoadedFromSerialized;</b>
+<i>86</i>&nbsp;
+<b class="fc"><i>87</i>&nbsp;    this.componentName = Objects.requireNonNull(componentName, &quot;componentName must not be null!&quot;);</b>
+<b class="fc"><i>88</i>&nbsp;  }</b>
+<i>89</i>&nbsp;
+<i>90</i>&nbsp;  /**
+<i>91</i>&nbsp;   * Initializes the current instance. The sub-class constructor should call the
+<i>92</i>&nbsp;   * method {@link #checkArtifactMap()} to check the artifact map is OK.
+<i>93</i>&nbsp;   * &lt;p&gt;
+<i>94</i>&nbsp;   * Sub-classes will have access to custom artifacts and serializers provided
+<i>95</i>&nbsp;   * by the factory.
+<i>96</i>&nbsp;   *
+<i>97</i>&nbsp;   * @param componentName
+<i>98</i>&nbsp;   *          the component name
+<i>99</i>&nbsp;   * @param languageCode
+<i>100</i>&nbsp;   *          the language code
+<i>101</i>&nbsp;   * @param manifestInfoEntries
+<i>102</i>&nbsp;   *          additional information in the manifest
+<i>103</i>&nbsp;   * @param factory
+<i>104</i>&nbsp;   *          the factory
+<i>105</i>&nbsp;   */
+<i>106</i>&nbsp;  protected BaseModel(String componentName, String languageCode,
+<i>107</i>&nbsp;      Map&lt;String, String&gt; manifestInfoEntries, BaseToolFactory factory) {
+<i>108</i>&nbsp;
+<b class="fc"><i>109</i>&nbsp;    this(componentName, false);</b>
+<i>110</i>&nbsp;
+<b class="fc"><i>111</i>&nbsp;    Objects.requireNonNull(languageCode, &quot;languageCode must not be null&quot;);</b>
+<i>112</i>&nbsp;
+<b class="fc"><i>113</i>&nbsp;    createBaseArtifactSerializers(artifactSerializers);</b>
+<i>114</i>&nbsp;
+<b class="fc"><i>115</i>&nbsp;    Properties manifest = new Properties();</b>
+<b class="fc"><i>116</i>&nbsp;    manifest.setProperty(MANIFEST_VERSION_PROPERTY, &quot;1.0&quot;);</b>
+<b class="fc"><i>117</i>&nbsp;    manifest.setProperty(LANGUAGE_PROPERTY, languageCode);</b>
+<b class="fc"><i>118</i>&nbsp;    manifest.setProperty(VERSION_PROPERTY, Version.currentVersion().toString());</b>
+<b class="fc"><i>119</i>&nbsp;    manifest.setProperty(TIMESTAMP_PROPERTY, Long.toString(System.currentTimeMillis()));</b>
+<b class="fc"><i>120</i>&nbsp;    manifest.setProperty(COMPONENT_NAME_PROPERTY, componentName);</b>
+<i>121</i>&nbsp;
+<b class="fc"><i>122</i>&nbsp;    if (manifestInfoEntries != null) {</b>
+<b class="fc"><i>123</i>&nbsp;      for (Map.Entry&lt;String, String&gt; entry : manifestInfoEntries.entrySet()) {</b>
+<b class="fc"><i>124</i>&nbsp;        manifest.setProperty(entry.getKey(), entry.getValue());</b>
+<b class="fc"><i>125</i>&nbsp;      }</b>
+<i>126</i>&nbsp;    }
+<i>127</i>&nbsp;
+<b class="fc"><i>128</i>&nbsp;    artifactMap.put(MANIFEST_ENTRY, manifest);</b>
+<b class="fc"><i>129</i>&nbsp;    finishedLoadingArtifacts = true;</b>
+<i>130</i>&nbsp;
+<b class="fc"><i>131</i>&nbsp;    if (factory != null) {</b>
+<b class="fc"><i>132</i>&nbsp;      setManifestProperty(FACTORY_NAME, factory.getClass().getCanonicalName());</b>
+<b class="fc"><i>133</i>&nbsp;      artifactMap.putAll(factory.createArtifactMap());</b>
+<i>134</i>&nbsp;
+<i>135</i>&nbsp;      // new manifest entries
+<b class="fc"><i>136</i>&nbsp;      Map&lt;String, String&gt; entries = factory.createManifestEntries();</b>
+<b class="fc"><i>137</i>&nbsp;      for (Entry&lt;String, String&gt; entry : entries.entrySet()) {</b>
+<b class="fc"><i>138</i>&nbsp;        setManifestProperty(entry.getKey(), entry.getValue());</b>
+<b class="fc"><i>139</i>&nbsp;      }</b>
+<i>140</i>&nbsp;    }
+<i>141</i>&nbsp;
+<i>142</i>&nbsp;    try {
+<b class="fc"><i>143</i>&nbsp;      initializeFactory();</b>
+<b class="nc"><i>144</i>&nbsp;    } catch (InvalidFormatException e) {</b>
+<b class="nc"><i>145</i>&nbsp;      throw new IllegalArgumentException(&quot;Could not initialize tool factory. &quot;, e);</b>
+<b class="fc"><i>146</i>&nbsp;    }</b>
+<b class="fc"><i>147</i>&nbsp;    loadArtifactSerializers();</b>
+<b class="fc"><i>148</i>&nbsp;  }</b>
+<i>149</i>&nbsp;
+<i>150</i>&nbsp;  /**
+<i>151</i>&nbsp;   * Initializes the current instance. The sub-class constructor should call the
+<i>152</i>&nbsp;   * method {@link #checkArtifactMap()} to check the artifact map is OK.
+<i>153</i>&nbsp;   *
+<i>154</i>&nbsp;   * @param componentName
+<i>155</i>&nbsp;   *          the component name
+<i>156</i>&nbsp;   * @param languageCode
+<i>157</i>&nbsp;   *          the language code
+<i>158</i>&nbsp;   * @param manifestInfoEntries
+<i>159</i>&nbsp;   *          additional information in the manifest
+<i>160</i>&nbsp;   */
+<i>161</i>&nbsp;  protected BaseModel(String componentName, String languageCode, Map&lt;String, String&gt; manifestInfoEntries) {
+<b class="fc"><i>162</i>&nbsp;    this(componentName, languageCode, manifestInfoEntries, null);</b>
+<b class="fc"><i>163</i>&nbsp;  }</b>
+<i>164</i>&nbsp;
+<i>165</i>&nbsp;  /**
+<i>166</i>&nbsp;   * Initializes the current instance.
+<i>167</i>&nbsp;   *
+<i>168</i>&nbsp;   * @param componentName the component name
+<i>169</i>&nbsp;   * @param in the input stream containing the model
+<i>170</i>&nbsp;   *
+<i>171</i>&nbsp;   * @throws IOException
+<i>172</i>&nbsp;   */
+<i>173</i>&nbsp;  protected BaseModel(String componentName, InputStream in) throws IOException {
+<b class="fc"><i>174</i>&nbsp;    this(componentName, true);</b>
+<i>175</i>&nbsp;
+<b class="fc"><i>176</i>&nbsp;    loadModel(in);</b>
+<b class="fc"><i>177</i>&nbsp;  }</b>
+<i>178</i>&nbsp;
+<i>179</i>&nbsp;  protected BaseModel(String componentName, File modelFile) throws IOException  {
+<b class="nc"><i>180</i>&nbsp;    this(componentName, true);</b>
+<i>181</i>&nbsp;
+<b class="nc"><i>182</i>&nbsp;    try (InputStream in = new BufferedInputStream(new FileInputStream(modelFile))) {</b>
+<b class="nc"><i>183</i>&nbsp;      loadModel(in);</b>
+<b class="nc"><i>184</i>&nbsp;    }</b>
+<b class="nc"><i>185</i>&nbsp;  }</b>
+<i>186</i>&nbsp;
+<i>187</i>&nbsp;  protected BaseModel(String componentName, URL modelURL) throws IOException  {
+<b class="nc"><i>188</i>&nbsp;    this(componentName, true);</b>
+<i>189</i>&nbsp;
+<b class="nc"><i>190</i>&nbsp;    try (InputStream in = new BufferedInputStream(modelURL.openStream())) {</b>
+<b class="nc"><i>191</i>&nbsp;      loadModel(in);</b>
+<b class="nc"><i>192</i>&nbsp;    }</b>
+<b class="nc"><i>193</i>&nbsp;  }</b>
+<i>194</i>&nbsp;
+<i>195</i>&nbsp;  private void loadModel(InputStream in) throws IOException {
+<i>196</i>&nbsp;
+<b class="fc"><i>197</i>&nbsp;    Objects.requireNonNull(in, &quot;in must not be null&quot;);</b>
+<i>198</i>&nbsp;
+<b class="fc"><i>199</i>&nbsp;    createBaseArtifactSerializers(artifactSerializers);</b>
+<i>200</i>&nbsp;
+<b class="fc"><i>201</i>&nbsp;    if (!in.markSupported()) {</b>
+<b class="fc"><i>202</i>&nbsp;      in = new BufferedInputStream(in);</b>
+<i>203</i>&nbsp;    }
+<i>204</i>&nbsp;
+<i>205</i>&nbsp;    // TODO: Discuss this solution, the buffering should
+<b class="fc"><i>206</i>&nbsp;    int MODEL_BUFFER_SIZE_LIMIT = Integer.MAX_VALUE;</b>
+<b class="fc"><i>207</i>&nbsp;    in.mark(MODEL_BUFFER_SIZE_LIMIT);</b>
+<i>208</i>&nbsp;
+<b class="fc"><i>209</i>&nbsp;    final ZipInputStream zip = new ZipInputStream(in);</b>
+<i>210</i>&nbsp;
+<i>211</i>&nbsp;    // The model package can contain artifacts which are serialized with 3rd party
+<i>212</i>&nbsp;    // serializers which are configured in the manifest file. To be able to load
+<i>213</i>&nbsp;    // the model the manifest must be read first, and afterwards all the artifacts
+<i>214</i>&nbsp;    // can be de-serialized.
+<i>215</i>&nbsp;
+<i>216</i>&nbsp;    // The ordering of artifacts in a zip package is not guaranteed. The stream is first
+<i>217</i>&nbsp;    // read until the manifest appears, reseted, and read again to load all artifacts.
+<i>218</i>&nbsp;
+<b class="fc"><i>219</i>&nbsp;    boolean isSearchingForManifest = true;</b>
+<i>220</i>&nbsp;
+<i>221</i>&nbsp;    ZipEntry entry;
+<b class="fc"><i>222</i>&nbsp;    while ((entry = zip.getNextEntry()) != null &amp;&amp; isSearchingForManifest) {</b>
+<i>223</i>&nbsp;
+<b class="fc"><i>224</i>&nbsp;      if (&quot;manifest.properties&quot;.equals(entry.getName())) {</b>
+<i>225</i>&nbsp;        // TODO: Probably better to use the serializer here directly!
+<b class="fc"><i>226</i>&nbsp;        ArtifactSerializer factory = artifactSerializers.get(&quot;properties&quot;);</b>
+<b class="fc"><i>227</i>&nbsp;        artifactMap.put(entry.getName(), factory.create(zip));</b>
+<b class="fc"><i>228</i>&nbsp;        isSearchingForManifest = false;</b>
+<i>229</i>&nbsp;      }
+<i>230</i>&nbsp;
+<b class="fc"><i>231</i>&nbsp;      zip.closeEntry();</b>
+<i>232</i>&nbsp;    }
+<i>233</i>&nbsp;
+<b class="fc"><i>234</i>&nbsp;    initializeFactory();</b>
+<i>235</i>&nbsp;
+<b class="fc"><i>236</i>&nbsp;    loadArtifactSerializers();</b>
+<i>237</i>&nbsp;
+<i>238</i>&nbsp;    // The Input Stream should always be reset-able because if markSupport returns
+<i>239</i>&nbsp;    // false it is wrapped before hand into an Buffered InputStream
+<b class="fc"><i>240</i>&nbsp;    in.reset();</b>
+<i>241</i>&nbsp;
+<b class="fc"><i>242</i>&nbsp;    finishLoadingArtifacts(in);</b>
+<i>243</i>&nbsp;
+<b class="fc"><i>244</i>&nbsp;    checkArtifactMap();</b>
+<b class="fc"><i>245</i>&nbsp;  }</b>
+<i>246</i>&nbsp;
+<i>247</i>&nbsp;  private void initializeFactory() throws InvalidFormatException {
+<b class="fc"><i>248</i>&nbsp;    String factoryName = getManifestProperty(FACTORY_NAME);</b>
+<b class="fc"><i>249</i>&nbsp;    if (factoryName == null) {</b>
+<i>250</i>&nbsp;      // load the default factory
+<b class="fc"><i>251</i>&nbsp;      Class&lt;? extends BaseToolFactory&gt; factoryClass = getDefaultFactory();</b>
+<b class="fc"><i>252</i>&nbsp;      if (factoryClass != null) {</b>
+<b class="nc"><i>253</i>&nbsp;        this.toolFactory = BaseToolFactory.create(factoryClass, this);</b>
+<i>254</i>&nbsp;      }
+<b class="fc"><i>255</i>&nbsp;    } else {</b>
+<i>256</i>&nbsp;      try {
+<b class="fc"><i>257</i>&nbsp;        this.toolFactory = BaseToolFactory.create(factoryName, this);</b>
+<b class="nc"><i>258</i>&nbsp;      } catch (InvalidFormatException e) {</b>
+<b class="nc"><i>259</i>&nbsp;        throw new IllegalArgumentException(e);</b>
+<b class="fc"><i>260</i>&nbsp;      }</b>
+<i>261</i>&nbsp;    }
+<b class="fc"><i>262</i>&nbsp;  }</b>
+<i>263</i>&nbsp;
+<i>264</i>&nbsp;  /**
+<i>265</i>&nbsp;   * Sub-classes should override this method if their module has a default
+<i>266</i>&nbsp;   * BaseToolFactory sub-class.
+<i>267</i>&nbsp;   *
+<i>268</i>&nbsp;   * @return the default {@link BaseToolFactory} for the module, or null if none.
+<i>269</i>&nbsp;   */
+<i>270</i>&nbsp;  protected Class&lt;? extends BaseToolFactory&gt; getDefaultFactory() {
+<b class="fc"><i>271</i>&nbsp;    return null;</b>
+<i>272</i>&nbsp;  }
+<i>273</i>&nbsp;
+<i>274</i>&nbsp;  /**
+<i>275</i>&nbsp;   * Loads the artifact serializers.
+<i>276</i>&nbsp;   */
+<i>277</i>&nbsp;  private void loadArtifactSerializers() {
+<b class="fc"><i>278</i>&nbsp;    if (!subclassSerializersInitiated)</b>
+<b class="fc"><i>279</i>&nbsp;      createArtifactSerializers(artifactSerializers);</b>
+<b class="fc"><i>280</i>&nbsp;    subclassSerializersInitiated = true;</b>
+<b class="fc"><i>281</i>&nbsp;  }</b>
+<i>282</i>&nbsp;
+<i>283</i>&nbsp;  /**
+<i>284</i>&nbsp;   * Finish loading the artifacts now that it knows all serializers.
+<i>285</i>&nbsp;   */
+<i>286</i>&nbsp;  private void finishLoadingArtifacts(InputStream in)
+<i>287</i>&nbsp;      throws IOException {
+<i>288</i>&nbsp;
+<b class="fc"><i>289</i>&nbsp;    final ZipInputStream zip = new ZipInputStream(in);</b>
+<i>290</i>&nbsp;
+<b class="fc"><i>291</i>&nbsp;    Map&lt;String, Object&gt; artifactMap = new HashMap&lt;&gt;();</b>
+<i>292</i>&nbsp;
+<i>293</i>&nbsp;    ZipEntry entry;
+<b class="fc"><i>294</i>&nbsp;    while ((entry = zip.getNextEntry()) != null ) {</b>
+<i>295</i>&nbsp;
+<i>296</i>&nbsp;      // Note: The manifest.properties file will be read here again,
+<i>297</i>&nbsp;      // there should be no need to prevent that.
+<i>298</i>&nbsp;
+<b class="fc"><i>299</i>&nbsp;      String entryName = entry.getName();</b>
+<b class="fc"><i>300</i>&nbsp;      String extension = getEntryExtension(entryName);</b>
+<i>301</i>&nbsp;
+<b class="fc"><i>302</i>&nbsp;      ArtifactSerializer factory = artifactSerializers.get(extension);</b>
+<i>303</i>&nbsp;
+<b class="fc"><i>304</i>&nbsp;      String artifactSerializerClazzName =</b>
+<b class="fc"><i>305</i>&nbsp;          getManifestProperty(SERIALIZER_CLASS_NAME_PREFIX + entryName);</b>
+<i>306</i>&nbsp;
+<b class="fc"><i>307</i>&nbsp;      if (artifactSerializerClazzName != null) {</b>
+<b class="fc"><i>308</i>&nbsp;        factory = ExtensionLoader.instantiateExtension(ArtifactSerializer.class, artifactSerializerClazzName);</b>
+<i>309</i>&nbsp;      }
+<i>310</i>&nbsp;
+<b class="fc"><i>311</i>&nbsp;      if (factory != null) {</b>
+<b class="fc"><i>312</i>&nbsp;        artifactMap.put(entryName, factory.create(zip));</b>
+<i>313</i>&nbsp;      } else {
+<b class="nc"><i>314</i>&nbsp;        throw new InvalidFormatException(&quot;Unknown artifact format: &quot; + extension);</b>
+<i>315</i>&nbsp;      }
+<i>316</i>&nbsp;
+<b class="fc"><i>317</i>&nbsp;      zip.closeEntry();</b>
+<b class="fc"><i>318</i>&nbsp;    }</b>
+<i>319</i>&nbsp;
+<b class="fc"><i>320</i>&nbsp;    this.artifactMap.putAll(artifactMap);</b>
+<i>321</i>&nbsp;
+<b class="fc"><i>322</i>&nbsp;    finishedLoadingArtifacts = true;</b>
+<b class="fc"><i>323</i>&nbsp;  }</b>
+<i>324</i>&nbsp;
+<i>325</i>&nbsp;  /**
+<i>326</i>&nbsp;   * Extracts the &quot;.&quot; extension from an entry name.
+<i>327</i>&nbsp;   *
+<i>328</i>&nbsp;   * @param entry the entry name which contains the extension
+<i>329</i>&nbsp;   *
+<i>330</i>&nbsp;   * @return the extension
+<i>331</i>&nbsp;   *
+<i>332</i>&nbsp;   * @throws InvalidFormatException if no extension can be extracted
+<i>333</i>&nbsp;   */
+<i>334</i>&nbsp;  private String getEntryExtension(String entry) throws InvalidFormatException {
+<b class="fc"><i>335</i>&nbsp;    int extensionIndex = entry.lastIndexOf(&#39;.&#39;) + 1;</b>
+<i>336</i>&nbsp;
+<b class="fc"><i>337</i>&nbsp;    if (extensionIndex == -1 || extensionIndex &gt;= entry.length())</b>
+<b class="nc"><i>338</i>&nbsp;        throw new InvalidFormatException(&quot;Entry name must have type extension: &quot; + entry);</b>
+<i>339</i>&nbsp;
+<b class="fc"><i>340</i>&nbsp;    return entry.substring(extensionIndex);</b>
+<i>341</i>&nbsp;  }
+<i>342</i>&nbsp;
+<i>343</i>&nbsp;  protected ArtifactSerializer getArtifactSerializer(String resourceName) {
+<i>344</i>&nbsp;    try {
+<b class="fc"><i>345</i>&nbsp;      return artifactSerializers.get(getEntryExtension(resourceName));</b>
+<b class="nc"><i>346</i>&nbsp;    } catch (InvalidFormatException e) {</b>
+<b class="nc"><i>347</i>&nbsp;      throw new IllegalStateException(e);</b>
+<i>348</i>&nbsp;    }
+<i>349</i>&nbsp;  }
+<i>350</i>&nbsp;
+<i>351</i>&nbsp;  protected static Map&lt;String, ArtifactSerializer&gt; createArtifactSerializers() {
+<b class="fc"><i>352</i>&nbsp;    Map&lt;String, ArtifactSerializer&gt; serializers = new HashMap&lt;&gt;();</b>
+<i>353</i>&nbsp;
+<b class="fc"><i>354</i>&nbsp;    GenericModelSerializer.register(serializers);</b>
+<b class="fc"><i>355</i>&nbsp;    PropertiesSerializer.register(serializers);</b>
+<b class="fc"><i>356</i>&nbsp;    DictionarySerializer.register(serializers);</b>
+<b class="fc"><i>357</i>&nbsp;    serializers.put(&quot;txt&quot;, new ByteArraySerializer());</b>
+<b class="fc"><i>358</i>&nbsp;    serializers.put(&quot;html&quot;, new ByteArraySerializer());</b>
+<i>359</i>&nbsp;
+<b class="fc"><i>360</i>&nbsp;    return serializers;</b>
+<i>361</i>&nbsp;  }
+<i>362</i>&nbsp;
+<i>363</i>&nbsp;  /**
+<i>364</i>&nbsp;   * Registers all {@link ArtifactSerializer} for their artifact file name extensions.
+<i>365</i>&nbsp;   * The registered {@link ArtifactSerializer} are used to create and serialize
+<i>366</i>&nbsp;   * resources in the model package.
+<i>367</i>&nbsp;   *
+<i>368</i>&nbsp;   * Override this method to register custom {@link ArtifactSerializer}s.
+<i>369</i>&nbsp;   *
+<i>370</i>&nbsp;   * Note:
+<i>371</i>&nbsp;   * Subclasses should generally invoke super.createArtifactSerializers at the beginning
+<i>372</i>&nbsp;   * of this method.
+<i>373</i>&nbsp;   *
+<i>374</i>&nbsp;   * This method is called during construction.
+<i>375</i>&nbsp;   *
+<i>376</i>&nbsp;   * @param serializers the key of the map is the file extension used to lookup
+<i>377</i>&nbsp;   *     the {@link ArtifactSerializer}.
+<i>378</i>&nbsp;   */
+<i>379</i>&nbsp;  protected void createArtifactSerializers(
+<i>380</i>&nbsp;      Map&lt;String, ArtifactSerializer&gt; serializers) {
+<b class="fc"><i>381</i>&nbsp;    if (this.toolFactory != null)</b>
+<b class="fc"><i>382</i>&nbsp;      serializers.putAll(this.toolFactory.createArtifactSerializersMap());</b>
+<b class="fc"><i>383</i>&nbsp;  }</b>
+<i>384</i>&nbsp;
+<i>385</i>&nbsp;  private void createBaseArtifactSerializers(
+<i>386</i>&nbsp;      Map&lt;String, ArtifactSerializer&gt; serializers) {
+<b class="fc"><i>387</i>&nbsp;    serializers.putAll(createArtifactSerializers());</b>
+<b class="fc"><i>388</i>&nbsp;  }</b>
+<i>389</i>&nbsp;
+<i>390</i>&nbsp;  /**
+<i>391</i>&nbsp;   * Validates the parsed artifacts. If something is not
+<i>392</i>&nbsp;   * valid subclasses should throw an {@link InvalidFormatException}.
+<i>393</i>&nbsp;   *
+<i>394</i>&nbsp;   * Note:
+<i>395</i>&nbsp;   * Subclasses should generally invoke super.validateArtifactMap at the beginning
+<i>396</i>&nbsp;   * of this method.
+<i>397</i>&nbsp;   *
+<i>398</i>&nbsp;   * @throws InvalidFormatException
+<i>399</i>&nbsp;   */
+<i>400</i>&nbsp;  protected void validateArtifactMap() throws InvalidFormatException {
+<b class="fc"><i>401</i>&nbsp;    if (!(artifactMap.get(MANIFEST_ENTRY) instanceof Properties))</b>
+<b class="nc"><i>402</i>&nbsp;      throw new InvalidFormatException(&quot;Missing the &quot; + MANIFEST_ENTRY + &quot;!&quot;);</b>
+<i>403</i>&nbsp;
+<i>404</i>&nbsp;    // First check version, everything else might change in the future
+<b class="fc"><i>405</i>&nbsp;    String versionString = getManifestProperty(VERSION_PROPERTY);</b>
+<i>406</i>&nbsp;
+<b class="fc"><i>407</i>&nbsp;    if (versionString != null) {</b>
+<i>408</i>&nbsp;      Version version;
+<i>409</i>&nbsp;
+<i>410</i>&nbsp;      try {
+<b class="fc"><i>411</i>&nbsp;        version = Version.parse(versionString);</b>
+<i>412</i>&nbsp;      }
+<b class="nc"><i>413</i>&nbsp;      catch (NumberFormatException e) {</b>
+<b class="nc"><i>414</i>&nbsp;        throw new InvalidFormatException(&quot;Unable to parse model version &#39;&quot; + versionString + &quot;&#39;!&quot;, e);</b>
+<b class="fc"><i>415</i>&nbsp;      }</b>
+<i>416</i>&nbsp;
+<i>417</i>&nbsp;      // Version check is only performed if current version is not the dev/debug version
+<b class="fc"><i>418</i>&nbsp;      if (!Version.currentVersion().equals(Version.DEV_VERSION)) {</b>
+<i>419</i>&nbsp;        // Major and minor version must match, revision might be
+<i>420</i>&nbsp;        // this check allows for the use of models of n minor release behind current minor release
+<b class="fc"><i>421</i>&nbsp;        if (Version.currentVersion().getMajor() != version.getMajor() ||</b>
+<b class="fc"><i>422</i>&nbsp;            Version.currentVersion().getMinor() - 4 &gt; version.getMinor()) {</b>
+<b class="nc"><i>423</i>&nbsp;          throw new InvalidFormatException(&quot;Model version &quot; + version + &quot; is not supported by this (&quot;</b>
+<b class="nc"><i>424</i>&nbsp;              + Version.currentVersion() + &quot;) version of OpenNLP!&quot;);</b>
+<i>425</i>&nbsp;        }
+<i>426</i>&nbsp;
+<i>427</i>&nbsp;        // Reject loading a snapshot model with a non-snapshot version
+<b class="fc"><i>428</i>&nbsp;        if (!Version.currentVersion().isSnapshot() &amp;&amp; version.isSnapshot()) {</b>
+<b class="nc"><i>429</i>&nbsp;          throw new InvalidFormatException(&quot;Model version &quot; + version</b>
+<i>430</i>&nbsp;              + &quot; is a snapshot - snapshot models are not supported by this non-snapshot version (&quot;
+<b class="nc"><i>431</i>&nbsp;              + Version.currentVersion() + &quot;) of OpenNLP!&quot;);</b>
+<i>432</i>&nbsp;        }
+<i>433</i>&nbsp;      }
+<b class="fc"><i>434</i>&nbsp;    }</b>
+<i>435</i>&nbsp;    else {
+<b class="nc"><i>436</i>&nbsp;      throw new InvalidFormatException(&quot;Missing &quot; + VERSION_PROPERTY + &quot; property in &quot; +</b>
+<i>437</i>&nbsp;            MANIFEST_ENTRY + &quot;!&quot;);
+<i>438</i>&nbsp;    }
+<i>439</i>&nbsp;
+<b class="fc"><i>440</i>&nbsp;    if (getManifestProperty(COMPONENT_NAME_PROPERTY) == null)</b>
+<b class="nc"><i>441</i>&nbsp;      throw new InvalidFormatException(&quot;Missing &quot; + COMPONENT_NAME_PROPERTY + &quot; property in &quot; +</b>
+<i>442</i>&nbsp;            MANIFEST_ENTRY + &quot;!&quot;);
+<i>443</i>&nbsp;
+<b class="fc"><i>444</i>&nbsp;    if (!getManifestProperty(COMPONENT_NAME_PROPERTY).equals(componentName))</b>
+<b class="nc"><i>445</i>&nbsp;        throw new InvalidFormatException(&quot;The &quot; + componentName + &quot; cannot load a model for the &quot; +</b>
+<b class="nc"><i>446</i>&nbsp;            getManifestProperty(COMPONENT_NAME_PROPERTY) + &quot;!&quot;);</b>
+<i>447</i>&nbsp;
+<b class="fc"><i>448</i>&nbsp;    if (getManifestProperty(LANGUAGE_PROPERTY) == null)</b>
+<b class="nc"><i>449</i>&nbsp;      throw new InvalidFormatException(&quot;Missing &quot; + LANGUAGE_PROPERTY + &quot; property in &quot; +</b>
+<i>450</i>&nbsp;          MANIFEST_ENTRY + &quot;!&quot;);
+<i>451</i>&nbsp;
+<i>452</i>&nbsp;    // Validate the factory. We try to load it using the ExtensionLoader. It
+<i>453</i>&nbsp;    // will return the factory, null or raise an exception
+<b class="fc"><i>454</i>&nbsp;    String factoryName = getManifestProperty(FACTORY_NAME);</b>
+<b class="fc"><i>455</i>&nbsp;    if (factoryName != null) {</b>
+<i>456</i>&nbsp;      try {
+<b class="fc"><i>457</i>&nbsp;        if (ExtensionLoader.instantiateExtension(BaseToolFactory.class,</b>
+<i>458</i>&nbsp;            factoryName) == null) {
+<b class="nc"><i>459</i>&nbsp;          throw new InvalidFormatException(</b>
+<i>460</i>&nbsp;              &quot;Could not load an user extension specified by the model: &quot;
+<i>461</i>&nbsp;                  + factoryName);
+<i>462</i>&nbsp;        }
+<b class="nc"><i>463</i>&nbsp;      } catch (Exception e) {</b>
+<b class="nc"><i>464</i>&nbsp;        throw new InvalidFormatException(</b>
+<i>465</i>&nbsp;            &quot;Could not load an user extension specified by the model: &quot;
+<i>466</i>&nbsp;                + factoryName, e);
+<b class="fc"><i>467</i>&nbsp;      }</b>
+<i>468</i>&nbsp;    }
+<i>469</i>&nbsp;
+<i>470</i>&nbsp;    // validate artifacts declared by the factory
+<b class="fc"><i>471</i>&nbsp;    if (toolFactory != null) {</b>
+<b class="fc"><i>472</i>&nbsp;      toolFactory.validateArtifactMap();</b>
+<i>473</i>&nbsp;    }
+<b class="fc"><i>474</i>&nbsp;  }</b>
+<i>475</i>&nbsp;
+<i>476</i>&nbsp;  /**
+<i>477</i>&nbsp;   * Checks the artifact map.
+<i>478</i>&nbsp;   * &lt;p&gt;
+<i>479</i>&nbsp;   * A subclass should call this method from a constructor which accepts the individual
+<i>480</i>&nbsp;   * artifact map items, to validate that these items form a valid model.
+<i>481</i>&nbsp;   * &lt;p&gt;
+<i>482</i>&nbsp;   * If the artifacts are not valid an IllegalArgumentException will be thrown.
+<i>483</i>&nbsp;   */
+<i>484</i>&nbsp;  protected void checkArtifactMap() {
+<b class="fc"><i>485</i>&nbsp;    if (!finishedLoadingArtifacts)</b>
+<b class="nc"><i>486</i>&nbsp;      throw new IllegalStateException(</b>
+<i>487</i>&nbsp;          &quot;The method BaseModel.finishLoadingArtifacts(..) was not called by BaseModel sub-class.&quot;);
+<i>488</i>&nbsp;    try {
+<b class="fc"><i>489</i>&nbsp;      validateArtifactMap();</b>
+<b class="fc"><i>490</i>&nbsp;    } catch (InvalidFormatException e) {</b>
+<b class="fc"><i>491</i>&nbsp;      throw new IllegalArgumentException(e);</b>
+<b class="fc"><i>492</i>&nbsp;    }</b>
+<b class="fc"><i>493</i>&nbsp;  }</b>
+<i>494</i>&nbsp;
+<i>495</i>&nbsp;  /**
+<i>496</i>&nbsp;   * Retrieves the value to the given key from the manifest.properties
+<i>497</i>&nbsp;   * entry.
+<i>498</i>&nbsp;   *
+<i>499</i>&nbsp;   * @param key
+<i>500</i>&nbsp;   *
+<i>501</i>&nbsp;   * @return the value
+<i>502</i>&nbsp;   */
+<i>503</i>&nbsp;  public final String getManifestProperty(String key) {
+<b class="fc"><i>504</i>&nbsp;    Properties manifest = (Properties) artifactMap.get(MANIFEST_ENTRY);</b>
+<i>505</i>&nbsp;
+<b class="fc"><i>506</i>&nbsp;    return manifest.getProperty(key);</b>
+<i>507</i>&nbsp;  }
+<i>508</i>&nbsp;
+<i>509</i>&nbsp;  /**
+<i>510</i>&nbsp;   * Sets a given value for a given key to the manifest.properties entry.
+<i>511</i>&nbsp;   *
+<i>512</i>&nbsp;   * @param key
+<i>513</i>&nbsp;   * @param value
+<i>514</i>&nbsp;   */
+<i>515</i>&nbsp;  protected final void setManifestProperty(String key, String value) {
+<b class="fc"><i>516</i>&nbsp;    Properties manifest = (Properties) artifactMap.get(MANIFEST_ENTRY);</b>
+<i>517</i>&nbsp;
+<b class="fc"><i>518</i>&nbsp;    manifest.setProperty(key, value);</b>
+<b class="fc"><i>519</i>&nbsp;  }</b>
+<i>520</i>&nbsp;
+<i>521</i>&nbsp;  /**
+<i>522</i>&nbsp;   * Retrieves the language code of the material which
+<i>523</i>&nbsp;   * was used to train the model or x-unspecified if
+<i>524</i>&nbsp;   * non was set.
+<i>525</i>&nbsp;   *
+<i>526</i>&nbsp;   * @return the language code of this model
+<i>527</i>&nbsp;   */
+<i>528</i>&nbsp;  public final String getLanguage() {
+<b class="fc"><i>529</i>&nbsp;    return getManifestProperty(LANGUAGE_PROPERTY);</b>
+<i>530</i>&nbsp;  }
+<i>531</i>&nbsp;
+<i>532</i>&nbsp;  /**
+<i>533</i>&nbsp;   * Retrieves the OpenNLP version which was used
+<i>534</i>&nbsp;   * to create the model.
+<i>535</i>&nbsp;   *
+<i>536</i>&nbsp;   * @return the version
+<i>537</i>&nbsp;   */
+<i>538</i>&nbsp;  public final Version getVersion() {
+<b class="fc"><i>539</i>&nbsp;    String version = getManifestProperty(VERSION_PROPERTY);</b>
+<i>540</i>&nbsp;
+<b class="fc"><i>541</i>&nbsp;    return Version.parse(version);</b>
+<i>542</i>&nbsp;  }
+<i>543</i>&nbsp;
+<i>544</i>&nbsp;  /**
+<i>545</i>&nbsp;   * Serializes the model to the given {@link OutputStream}.
+<i>546</i>&nbsp;   *
+<i>547</i>&nbsp;   * @param out stream to write the model to
+<i>548</i>&nbsp;   * @throws IOException
+<i>549</i>&nbsp;   */
+<i>550</i>&nbsp;  @SuppressWarnings(&quot;unchecked&quot;)
+<i>551</i>&nbsp;  public final void serialize(OutputStream out) throws IOException {
+<b class="fc"><i>552</i>&nbsp;    if (!subclassSerializersInitiated) {</b>
+<b class="nc"><i>553</i>&nbsp;      throw new IllegalStateException(</b>
+<i>554</i>&nbsp;          &quot;The method BaseModel.loadArtifactSerializers() was not called by BaseModel subclass constructor.&quot;);
+<i>555</i>&nbsp;    }
+<i>556</i>&nbsp;
+<b class="fc"><i>557</i>&nbsp;    for (Entry&lt;String, Object&gt; entry : artifactMap.entrySet()) {</b>
+<b class="fc"><i>558</i>&nbsp;      final String name = entry.getKey();</b>
+<b class="fc"><i>559</i>&nbsp;      final Object artifact = entry.getValue();</b>
+<b class="fc"><i>560</i>&nbsp;      if (artifact instanceof SerializableArtifact) {</b>
+<i>561</i>&nbsp;
+<b class="fc"><i>562</i>&nbsp;        SerializableArtifact serializableArtifact = (SerializableArtifact) artifact;</b>
+<i>563</i>&nbsp;
+<b class="fc"><i>564</i>&nbsp;        String artifactSerializerName = serializableArtifact</b>
+<b class="fc"><i>565</i>&nbsp;            .getArtifactSerializerClass().getName();</b>
+<i>566</i>&nbsp;
+<b class="fc"><i>567</i>&nbsp;        setManifestProperty(SERIALIZER_CLASS_NAME_PREFIX + name,</b>
+<i>568</i>&nbsp;            artifactSerializerName);
+<i>569</i>&nbsp;      }
+<b class="fc"><i>570</i>&nbsp;    }</b>
+<i>571</i>&nbsp;
+<b class="fc"><i>572</i>&nbsp;    ZipOutputStream zip = new ZipOutputStream(out);</b>
+<i>573</i>&nbsp;
+<b class="fc"><i>574</i>&nbsp;    for (Entry&lt;String, Object&gt; entry : artifactMap.entrySet()) {</b>
+<b class="fc"><i>575</i>&nbsp;      String name = entry.getKey();</b>
+<b class="fc"><i>576</i>&nbsp;      zip.putNextEntry(new ZipEntry(name));</b>
+<i>577</i>&nbsp;
+<b class="fc"><i>578</i>&nbsp;      Object artifact = entry.getValue();</b>
+<i>579</i>&nbsp;
+<b class="fc"><i>580</i>&nbsp;      ArtifactSerializer serializer = getArtifactSerializer(name);</b>
+<i>581</i>&nbsp;
+<i>582</i>&nbsp;      // If model is serialize-able always use the provided serializer
+<b class="fc"><i>583</i>&nbsp;      if (artifact instanceof SerializableArtifact) {</b>
+<i>584</i>&nbsp;
+<b class="fc"><i>585</i>&nbsp;        SerializableArtifact serializableArtifact = (SerializableArtifact) artifact;</b>
+<i>586</i>&nbsp;
+<b class="fc"><i>587</i>&nbsp;        String artifactSerializerName =</b>
+<b class="fc"><i>588</i>&nbsp;            serializableArtifact.getArtifactSerializerClass().getName();</b>
+<i>589</i>&nbsp;
+<b class="fc"><i>590</i>&nbsp;        serializer = ExtensionLoader.instantiateExtension(ArtifactSerializer.class, artifactSerializerName);</b>
+<i>591</i>&nbsp;      }
+<i>592</i>&nbsp;
+<b class="fc"><i>593</i>&nbsp;      if (serializer == null) {</b>
+<b class="nc"><i>594</i>&nbsp;        throw new IllegalStateException(&quot;Missing serializer for &quot; + name);</b>
+<i>595</i>&nbsp;      }
+<i>596</i>&nbsp;
+<b class="fc"><i>597</i>&nbsp;      serializer.serialize(artifactMap.get(name), zip);</b>
+<i>598</i>&nbsp;
+<b class="fc"><i>599</i>&nbsp;      zip.closeEntry();</b>
+<b class="fc"><i>600</i>&nbsp;    }</b>
+<i>601</i>&nbsp;
+<b class="fc"><i>602</i>&nbsp;    zip.finish();</b>
+<b class="fc"><i>603</i>&nbsp;    zip.flush();</b>
+<b class="fc"><i>604</i>&nbsp;  }</b>
+<i>605</i>&nbsp;
+<i>606</i>&nbsp;  public final void serialize(File model) throws IOException {
+<b class="fc"><i>607</i>&nbsp;    try (OutputStream out = new BufferedOutputStream(new FileOutputStream(model))) {</b>
+<b class="fc"><i>608</i>&nbsp;      serialize(out);</b>
+<b class="fc"><i>609</i>&nbsp;    }</b>
+<b class="fc"><i>610</i>&nbsp;  }</b>
+<i>611</i>&nbsp;
+<i>612</i>&nbsp;  public final void serialize(Path model) throws IOException {
+<b class="nc"><i>613</i>&nbsp;    serialize(model.toFile());</b>
+<b class="nc"><i>614</i>&nbsp;  }</b>
+<i>615</i>&nbsp;
+<i>616</i>&nbsp;  @SuppressWarnings(&quot;unchecked&quot;)
+<i>617</i>&nbsp;  public &lt;T&gt; T getArtifact(String key) {
+<b class="fc"><i>618</i>&nbsp;    Object artifact = artifactMap.get(key);</b>
+<b class="fc"><i>619</i>&nbsp;    if (artifact == null)</b>
+<b class="fc"><i>620</i>&nbsp;      return null;</b>
+<b class="fc"><i>621</i>&nbsp;    return (T) artifact;</b>
+<i>622</i>&nbsp;  }
+<i>623</i>&nbsp;
+<i>624</i>&nbsp;  public boolean isLoadedFromSerialized() {
+<b class="fc"><i>625</i>&nbsp;    return isLoadedFromSerialized;</b>
+<i>626</i>&nbsp;  }
+<i>627</i>&nbsp;
+<i>628</i>&nbsp;  // These methods are required to serialize/deserialize the model because
+<i>629</i>&nbsp;  // many of the included objects in this model are not Serializable.
+<i>630</i>&nbsp;  // An alternative to this solution is to make all included objects
+<i>631</i>&nbsp;  // Serializable and remove the writeObject and readObject methods.
+<i>632</i>&nbsp;  // This will allow the usage of final for fields that should not change.
+<i>633</i>&nbsp;
+<i>634</i>&nbsp;  private void writeObject(ObjectOutputStream out) throws IOException {
+<b class="nc"><i>635</i>&nbsp;    out.writeUTF(componentName);</b>
+<b class="nc"><i>636</i>&nbsp;    this.serialize(out);</b>
+<b class="nc"><i>637</i>&nbsp;  }</b>
+<i>638</i>&nbsp;
+<i>639</i>&nbsp;  private void readObject(final ObjectInputStream in) throws IOException {
+<i>640</i>&nbsp;
+<b class="nc"><i>641</i>&nbsp;    isLoadedFromSerialized = true;</b>
+<b class="nc"><i>642</i>&nbsp;    artifactSerializers = new HashMap&lt;&gt;();</b>
+<b class="nc"><i>643</i>&nbsp;    artifactMap = new HashMap&lt;&gt;();</b>
+<i>644</i>&nbsp;
+<b class="nc"><i>645</i>&nbsp;    componentName = in.readUTF();</b>
+<i>646</i>&nbsp;
+<b class="nc"><i>647</i>&nbsp;    this.loadModel(in);</b>
+<b class="nc"><i>648</i>&nbsp;  }</b>
+<i>649</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-09 15:05</div>
+</div>
+</body>
+</html>

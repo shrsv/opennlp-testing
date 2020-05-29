@@ -1,0 +1,150 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: DocumentCategorizer</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">opennlp.tools.doccat</a> ]
+</div>
+
+<h1>Coverage Summary for Class: DocumentCategorizer (opennlp.tools.doccat)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+</tr>
+<tr>
+  <td class="name">DocumentCategorizer</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/*
+<i>2</i>&nbsp; * Licensed to the Apache Software Foundation (ASF) under one or more
+<i>3</i>&nbsp; * contributor license agreements.  See the NOTICE file distributed with
+<i>4</i>&nbsp; * this work for additional information regarding copyright ownership.
+<i>5</i>&nbsp; * The ASF licenses this file to You under the Apache License, Version 2.0
+<i>6</i>&nbsp; * (the &quot;License&quot;); you may not use this file except in compliance with
+<i>7</i>&nbsp; * the License. You may obtain a copy of the License at
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; *     http://www.apache.org/licenses/LICENSE-2.0
+<i>10</i>&nbsp; *
+<i>11</i>&nbsp; * Unless required by applicable law or agreed to in writing, software
+<i>12</i>&nbsp; * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<i>13</i>&nbsp; * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<i>14</i>&nbsp; * See the License for the specific language governing permissions and
+<i>15</i>&nbsp; * limitations under the License.
+<i>16</i>&nbsp; */
+<i>17</i>&nbsp;
+<i>18</i>&nbsp;package opennlp.tools.doccat;
+<i>19</i>&nbsp;
+<i>20</i>&nbsp;import java.util.Map;
+<i>21</i>&nbsp;import java.util.Set;
+<i>22</i>&nbsp;import java.util.SortedMap;
+<i>23</i>&nbsp;
+<i>24</i>&nbsp;/**
+<i>25</i>&nbsp; * Interface for classes which categorize documents.
+<i>26</i>&nbsp; */
+<i>27</i>&nbsp;public interface DocumentCategorizer {
+<i>28</i>&nbsp;
+<i>29</i>&nbsp;  /**
+<i>30</i>&nbsp;   * Categorize the given text provided as tokens along with
+<i>31</i>&nbsp;   * the provided extra information
+<i>32</i>&nbsp;   *
+<i>33</i>&nbsp;   * @param text the tokens of text to categorize
+<i>34</i>&nbsp;   * @param extraInformation extra information
+<i>35</i>&nbsp;   * @return per category probabilities
+<i>36</i>&nbsp;   */
+<i>37</i>&nbsp;  double[] categorize(String[] text, Map&lt;String, Object&gt; extraInformation);
+<i>38</i>&nbsp;
+<i>39</i>&nbsp;  /**
+<i>40</i>&nbsp;   * Categorizes the given text, provided in separate tokens.
+<i>41</i>&nbsp;   * @param text the tokens of text to categorize
+<i>42</i>&nbsp;   * @return per category probabilities
+<i>43</i>&nbsp;   */
+<i>44</i>&nbsp;  double[] categorize(String[] text);
+<i>45</i>&nbsp;
+<i>46</i>&nbsp;  /**
+<i>47</i>&nbsp;   * get the best category from previously generated outcome probabilities
+<i>48</i>&nbsp;   *
+<i>49</i>&nbsp;   * @param outcome a vector of outcome probabilities
+<i>50</i>&nbsp;   * @return the best category String
+<i>51</i>&nbsp;   */
+<i>52</i>&nbsp;  String getBestCategory(double[] outcome);
+<i>53</i>&nbsp;
+<i>54</i>&nbsp;  /**
+<i>55</i>&nbsp;   * get the index of a certain category
+<i>56</i>&nbsp;   *
+<i>57</i>&nbsp;   * @param category the category
+<i>58</i>&nbsp;   * @return an index
+<i>59</i>&nbsp;   */
+<i>60</i>&nbsp;  int getIndex(String category);
+<i>61</i>&nbsp;
+<i>62</i>&nbsp;  /**
+<i>63</i>&nbsp;   * get the category at a given index
+<i>64</i>&nbsp;   *
+<i>65</i>&nbsp;   * @param index the index
+<i>66</i>&nbsp;   * @return a category
+<i>67</i>&nbsp;   */
+<i>68</i>&nbsp;  String getCategory(int index);
+<i>69</i>&nbsp;
+<i>70</i>&nbsp;  /**
+<i>71</i>&nbsp;   * get the number of categories
+<i>72</i>&nbsp;   *
+<i>73</i>&nbsp;   * @return the no. of categories
+<i>74</i>&nbsp;   */
+<i>75</i>&nbsp;  int getNumberOfCategories();
+<i>76</i>&nbsp;
+<i>77</i>&nbsp;  /**
+<i>78</i>&nbsp;   * get the name of the category associated with the given probabilties
+<i>79</i>&nbsp;   *
+<i>80</i>&nbsp;   * @param results the probabilities of each category
+<i>81</i>&nbsp;   * @return the name of the outcome
+<i>82</i>&nbsp;   */
+<i>83</i>&nbsp;  String getAllResults(double[] results);
+<i>84</i>&nbsp;
+<i>85</i>&nbsp;  /**
+<i>86</i>&nbsp;   * Returns a map in which the key is the category name and the value is the score
+<i>87</i>&nbsp;   *
+<i>88</i>&nbsp;   * @param text the input text to classify
+<i>89</i>&nbsp;   * @return a map with the score as a key. The value is a Set of categories with the score.
+<i>90</i>&nbsp;   */
+<i>91</i>&nbsp;  Map&lt;String, Double&gt; scoreMap(String[] text);
+<i>92</i>&nbsp;
+<i>93</i>&nbsp;  /**
+<i>94</i>&nbsp;   * Get a map of the scores sorted in ascending aorder together with their associated categories.
+<i>95</i>&nbsp;   * Many categories can have the same score, hence the Set as value
+<i>96</i>&nbsp;   *
+<i>97</i>&nbsp;   * @param text the input text to classify
+<i>98</i>&nbsp;   * @return a map with the score as a key. The value is a Set of categories with the score.
+<i>99</i>&nbsp;   */
+<i>100</i>&nbsp;  SortedMap&lt;Double, Set&lt;String&gt;&gt; sortedScoreMap(String[] text);
+<i>101</i>&nbsp;
+<i>102</i>&nbsp;}
+<i>103</i>&nbsp;
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-09 18:47</div>
+</div>
+</body>
+</html>

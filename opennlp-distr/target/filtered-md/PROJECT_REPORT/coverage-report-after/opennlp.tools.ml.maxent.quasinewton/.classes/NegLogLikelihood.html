@@ -1,0 +1,243 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: NegLogLikelihood</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">opennlp.tools.ml.maxent.quasinewton</a> ]
+</div>
+
+<h1>Coverage Summary for Class: NegLogLikelihood (opennlp.tools.ml.maxent.quasinewton)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">NegLogLikelihood</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (6/ 6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    96.2%
+  </span>
+  <span class="absValue">
+    (50/ 52)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/*
+<i>2</i>&nbsp; * Licensed to the Apache Software Foundation (ASF) under one or more
+<i>3</i>&nbsp; * contributor license agreements.  See the NOTICE file distributed with
+<i>4</i>&nbsp; * this work for additional information regarding copyright ownership.
+<i>5</i>&nbsp; * The ASF licenses this file to You under the Apache License, Version 2.0
+<i>6</i>&nbsp; * (the &quot;License&quot;); you may not use this file except in compliance with
+<i>7</i>&nbsp; * the License. You may obtain a copy of the License at
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; *     http://www.apache.org/licenses/LICENSE-2.0
+<i>10</i>&nbsp; *
+<i>11</i>&nbsp; * Unless required by applicable law or agreed to in writing, software
+<i>12</i>&nbsp; * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<i>13</i>&nbsp; * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<i>14</i>&nbsp; * See the License for the specific language governing permissions and
+<i>15</i>&nbsp; * limitations under the License.
+<i>16</i>&nbsp; */
+<i>17</i>&nbsp;
+<i>18</i>&nbsp;package opennlp.tools.ml.maxent.quasinewton;
+<i>19</i>&nbsp;
+<i>20</i>&nbsp;import java.util.Arrays;
+<i>21</i>&nbsp;
+<i>22</i>&nbsp;import opennlp.tools.ml.ArrayMath;
+<i>23</i>&nbsp;import opennlp.tools.ml.model.DataIndexer;
+<i>24</i>&nbsp;import opennlp.tools.ml.model.OnePassRealValueDataIndexer;
+<i>25</i>&nbsp;
+<i>26</i>&nbsp;/**
+<i>27</i>&nbsp; * Evaluate negative log-likelihood and its gradient from DataIndexer.
+<i>28</i>&nbsp; */
+<i>29</i>&nbsp;public class NegLogLikelihood implements Function {
+<i>30</i>&nbsp;
+<i>31</i>&nbsp;  protected int dimension;
+<i>32</i>&nbsp;  protected int numOutcomes;
+<i>33</i>&nbsp;  protected int numFeatures;
+<i>34</i>&nbsp;  protected int numContexts;
+<i>35</i>&nbsp;
+<i>36</i>&nbsp;  // Information from data index
+<i>37</i>&nbsp;  protected final float[][] values;
+<i>38</i>&nbsp;  protected final int[][] contexts;
+<i>39</i>&nbsp;  protected final int[] outcomeList;
+<i>40</i>&nbsp;  protected final int[] numTimesEventsSeen;
+<i>41</i>&nbsp;
+<i>42</i>&nbsp;  // For calculating negLogLikelihood and gradient
+<i>43</i>&nbsp;  protected double[] tempSums;
+<i>44</i>&nbsp;  protected double[] expectation;
+<i>45</i>&nbsp;
+<i>46</i>&nbsp;  protected double[] gradient;
+<i>47</i>&nbsp;
+<b class="fc"><i>48</i>&nbsp;  public NegLogLikelihood(DataIndexer indexer) {</b>
+<i>49</i>&nbsp;
+<i>50</i>&nbsp;    // Get data from indexer.
+<b class="fc"><i>51</i>&nbsp;    if (indexer instanceof OnePassRealValueDataIndexer) {</b>
+<b class="fc"><i>52</i>&nbsp;      this.values = indexer.getValues();</b>
+<i>53</i>&nbsp;    } else {
+<b class="fc"><i>54</i>&nbsp;      this.values = null;</b>
+<i>55</i>&nbsp;    }
+<i>56</i>&nbsp;
+<b class="fc"><i>57</i>&nbsp;    this.contexts    = indexer.getContexts();</b>
+<b class="fc"><i>58</i>&nbsp;    this.outcomeList = indexer.getOutcomeList();</b>
+<b class="fc"><i>59</i>&nbsp;    this.numTimesEventsSeen = indexer.getNumTimesEventsSeen();</b>
+<i>60</i>&nbsp;
+<b class="fc"><i>61</i>&nbsp;    this.numOutcomes = indexer.getOutcomeLabels().length;</b>
+<b class="fc"><i>62</i>&nbsp;    this.numFeatures = indexer.getPredLabels().length;</b>
+<b class="fc"><i>63</i>&nbsp;    this.numContexts = this.contexts.length;</b>
+<b class="fc"><i>64</i>&nbsp;    this.dimension   = numOutcomes * numFeatures;</b>
+<i>65</i>&nbsp;
+<b class="fc"><i>66</i>&nbsp;    this.expectation = new double[numOutcomes];</b>
+<b class="fc"><i>67</i>&nbsp;    this.tempSums    = new double[numOutcomes];</b>
+<b class="fc"><i>68</i>&nbsp;    this.gradient    = new double[dimension];</b>
+<b class="fc"><i>69</i>&nbsp;  }</b>
+<i>70</i>&nbsp;
+<i>71</i>&nbsp;  public int getDimension() {
+<b class="fc"><i>72</i>&nbsp;    return this.dimension;</b>
+<i>73</i>&nbsp;  }
+<i>74</i>&nbsp;
+<i>75</i>&nbsp;  public double[] getInitialPoint() {
+<b class="fc"><i>76</i>&nbsp;    return new double[dimension];</b>
+<i>77</i>&nbsp;  }
+<i>78</i>&nbsp;
+<i>79</i>&nbsp;  /**
+<i>80</i>&nbsp;   * Negative log-likelihood
+<i>81</i>&nbsp;   */
+<i>82</i>&nbsp;  public double valueAt(double[] x) {
+<i>83</i>&nbsp;
+<b class="fc"><i>84</i>&nbsp;    if (x.length != dimension)</b>
+<b class="nc"><i>85</i>&nbsp;      throw new IllegalArgumentException(</b>
+<i>86</i>&nbsp;          &quot;x is invalid, its dimension is not equal to domain dimension.&quot;);
+<i>87</i>&nbsp;
+<i>88</i>&nbsp;    int ci, oi, ai, vectorIndex, outcome;
+<i>89</i>&nbsp;    double predValue, logSumOfExps;
+<b class="fc"><i>90</i>&nbsp;    double negLogLikelihood = 0;</b>
+<i>91</i>&nbsp;
+<b class="fc"><i>92</i>&nbsp;    for (ci = 0; ci &lt; numContexts; ci++) {</b>
+<b class="fc"><i>93</i>&nbsp;      for (oi = 0; oi &lt; numOutcomes; oi++) {</b>
+<b class="fc"><i>94</i>&nbsp;        tempSums[oi] = 0;</b>
+<b class="fc"><i>95</i>&nbsp;        for (ai = 0; ai &lt; contexts[ci].length; ai++) {</b>
+<b class="fc"><i>96</i>&nbsp;          vectorIndex = indexOf(oi, contexts[ci][ai]);</b>
+<b class="fc"><i>97</i>&nbsp;          predValue = values != null ? values[ci][ai] : 1.0;</b>
+<b class="fc"><i>98</i>&nbsp;          tempSums[oi] += predValue * x[vectorIndex];</b>
+<i>99</i>&nbsp;        }
+<i>100</i>&nbsp;      }
+<i>101</i>&nbsp;
+<b class="fc"><i>102</i>&nbsp;      logSumOfExps = ArrayMath.logSumOfExps(tempSums);</b>
+<i>103</i>&nbsp;
+<b class="fc"><i>104</i>&nbsp;      outcome = outcomeList[ci];</b>
+<b class="fc"><i>105</i>&nbsp;      negLogLikelihood -= (tempSums[outcome] - logSumOfExps) * numTimesEventsSeen[ci];</b>
+<i>106</i>&nbsp;    }
+<i>107</i>&nbsp;
+<b class="fc"><i>108</i>&nbsp;    return negLogLikelihood;</b>
+<i>109</i>&nbsp;  }
+<i>110</i>&nbsp;
+<i>111</i>&nbsp;  /**
+<i>112</i>&nbsp;   * Compute gradient
+<i>113</i>&nbsp;   */
+<i>114</i>&nbsp;  public double[] gradientAt(double[] x) {
+<i>115</i>&nbsp;
+<b class="fc"><i>116</i>&nbsp;    if (x.length != dimension)</b>
+<b class="nc"><i>117</i>&nbsp;      throw new IllegalArgumentException(</b>
+<i>118</i>&nbsp;          &quot;x is invalid, its dimension is not equal to the function.&quot;);
+<i>119</i>&nbsp;
+<i>120</i>&nbsp;    int ci, oi, ai, vectorIndex;
+<i>121</i>&nbsp;    double predValue, logSumOfExps;
+<i>122</i>&nbsp;    int empirical;
+<i>123</i>&nbsp;
+<i>124</i>&nbsp;    // Reset gradient
+<b class="fc"><i>125</i>&nbsp;    Arrays.fill(gradient, 0);</b>
+<i>126</i>&nbsp;
+<b class="fc"><i>127</i>&nbsp;    for (ci = 0; ci &lt; numContexts; ci++) {</b>
+<b class="fc"><i>128</i>&nbsp;      for (oi = 0; oi &lt; numOutcomes; oi++) {</b>
+<b class="fc"><i>129</i>&nbsp;        expectation[oi] = 0;</b>
+<b class="fc"><i>130</i>&nbsp;        for (ai = 0; ai &lt; contexts[ci].length; ai++) {</b>
+<b class="fc"><i>131</i>&nbsp;          vectorIndex = indexOf(oi, contexts[ci][ai]);</b>
+<b class="fc"><i>132</i>&nbsp;          predValue = values != null ? values[ci][ai] : 1.0;</b>
+<b class="fc"><i>133</i>&nbsp;          expectation[oi] += predValue * x[vectorIndex];</b>
+<i>134</i>&nbsp;        }
+<i>135</i>&nbsp;      }
+<i>136</i>&nbsp;
+<b class="fc"><i>137</i>&nbsp;      logSumOfExps = ArrayMath.logSumOfExps(expectation);</b>
+<i>138</i>&nbsp;
+<b class="fc"><i>139</i>&nbsp;      for (oi = 0; oi &lt; numOutcomes; oi++) {</b>
+<b class="fc"><i>140</i>&nbsp;        expectation[oi] = Math.exp(expectation[oi] - logSumOfExps);</b>
+<i>141</i>&nbsp;      }
+<i>142</i>&nbsp;
+<b class="fc"><i>143</i>&nbsp;      for (oi = 0; oi &lt; numOutcomes; oi++) {</b>
+<b class="fc"><i>144</i>&nbsp;        empirical = outcomeList[ci] == oi ? 1 : 0;</b>
+<b class="fc"><i>145</i>&nbsp;        for (ai = 0; ai &lt; contexts[ci].length; ai++) {</b>
+<b class="fc"><i>146</i>&nbsp;          vectorIndex = indexOf(oi, contexts[ci][ai]);</b>
+<b class="fc"><i>147</i>&nbsp;          predValue = values != null ? values[ci][ai] : 1.0;</b>
+<b class="fc"><i>148</i>&nbsp;          gradient[vectorIndex] +=</b>
+<i>149</i>&nbsp;              predValue * (expectation[oi] - empirical) * numTimesEventsSeen[ci];
+<i>150</i>&nbsp;        }
+<i>151</i>&nbsp;      }
+<i>152</i>&nbsp;    }
+<i>153</i>&nbsp;
+<b class="fc"><i>154</i>&nbsp;    return gradient;</b>
+<i>155</i>&nbsp;  }
+<i>156</i>&nbsp;
+<i>157</i>&nbsp;  protected int indexOf(int outcomeId, int featureId) {
+<b class="fc"><i>158</i>&nbsp;    return outcomeId * numFeatures + featureId;</b>
+<i>159</i>&nbsp;  }
+<i>160</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-09 18:47</div>
+</div>
+</body>
+</html>

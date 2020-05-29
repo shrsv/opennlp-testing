@@ -1,0 +1,188 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: ConfigurablePOSContextGenerator</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">opennlp.tools.postag</a> ]
+</div>
+
+<h1>Coverage Summary for Class: ConfigurablePOSContextGenerator (opennlp.tools.postag)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">ConfigurablePOSContextGenerator</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    66.7%
+  </span>
+  <span class="absValue">
+    (2/ 3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    92.9%
+  </span>
+  <span class="absValue">
+    (26/ 28)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/*
+<i>2</i>&nbsp; * Licensed to the Apache Software Foundation (ASF) under one or more
+<i>3</i>&nbsp; * contributor license agreements.  See the NOTICE file distributed with
+<i>4</i>&nbsp; * this work for additional information regarding copyright ownership.
+<i>5</i>&nbsp; * The ASF licenses this file to You under the Apache License, Version 2.0
+<i>6</i>&nbsp; * (the &quot;License&quot;); you may not use this file except in compliance with
+<i>7</i>&nbsp; * the License. You may obtain a copy of the License at
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; *     http://www.apache.org/licenses/LICENSE-2.0
+<i>10</i>&nbsp; *
+<i>11</i>&nbsp; * Unless required by applicable law or agreed to in writing, software
+<i>12</i>&nbsp; * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<i>13</i>&nbsp; * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<i>14</i>&nbsp; * See the License for the specific language governing permissions and
+<i>15</i>&nbsp; * limitations under the License.
+<i>16</i>&nbsp; */
+<i>17</i>&nbsp;
+<i>18</i>&nbsp;package opennlp.tools.postag;
+<i>19</i>&nbsp;
+<i>20</i>&nbsp;import java.util.ArrayList;
+<i>21</i>&nbsp;import java.util.List;
+<i>22</i>&nbsp;import java.util.Objects;
+<i>23</i>&nbsp;
+<i>24</i>&nbsp;import opennlp.tools.util.Cache;
+<i>25</i>&nbsp;import opennlp.tools.util.featuregen.AdaptiveFeatureGenerator;
+<i>26</i>&nbsp;
+<i>27</i>&nbsp;/**
+<i>28</i>&nbsp; * A context generator for the POS Tagger.
+<i>29</i>&nbsp; */
+<i>30</i>&nbsp;public class ConfigurablePOSContextGenerator implements POSContextGenerator {
+<i>31</i>&nbsp;
+<i>32</i>&nbsp;  private Cache&lt;String, String[]&gt; contextsCache;
+<i>33</i>&nbsp;  private Object wordsKey;
+<i>34</i>&nbsp;
+<i>35</i>&nbsp;  private final AdaptiveFeatureGenerator featureGenerator;
+<i>36</i>&nbsp;
+<i>37</i>&nbsp;  /**
+<i>38</i>&nbsp;   * Initializes the current instance.
+<i>39</i>&nbsp;   *
+<i>40</i>&nbsp;   * @param cacheSize
+<i>41</i>&nbsp;   */
+<b class="fc"><i>42</i>&nbsp;  public ConfigurablePOSContextGenerator(int cacheSize, AdaptiveFeatureGenerator featureGenerator) {</b>
+<b class="fc"><i>43</i>&nbsp;    this.featureGenerator = Objects.requireNonNull(featureGenerator, &quot;featureGenerator must not be null&quot;);</b>
+<i>44</i>&nbsp;
+<b class="fc"><i>45</i>&nbsp;    if (cacheSize &gt; 0) {</b>
+<b class="fc"><i>46</i>&nbsp;      contextsCache = new Cache&lt;&gt;(cacheSize);</b>
+<i>47</i>&nbsp;    }
+<b class="fc"><i>48</i>&nbsp;  }</b>
+<i>49</i>&nbsp;
+<i>50</i>&nbsp;  /**
+<i>51</i>&nbsp;   * Initializes the current instance.
+<i>52</i>&nbsp;   *
+<i>53</i>&nbsp;   */
+<i>54</i>&nbsp;  public ConfigurablePOSContextGenerator(AdaptiveFeatureGenerator featureGenerator) {
+<b class="nc"><i>55</i>&nbsp;    this(0, featureGenerator);</b>
+<b class="nc"><i>56</i>&nbsp;  }</b>
+<i>57</i>&nbsp;
+<i>58</i>&nbsp;  /**
+<i>59</i>&nbsp;   * Returns the context for making a pos tag decision at the specified token index
+<i>60</i>&nbsp;   * given the specified tokens and previous tags.
+<i>61</i>&nbsp;   * @param index The index of the token for which the context is provided.
+<i>62</i>&nbsp;   * @param tokens The tokens in the sentence.
+<i>63</i>&nbsp;   * @param tags The tags assigned to the previous words in the sentence.
+<i>64</i>&nbsp;   * @return The context for making a pos tag decision at the specified token index
+<i>65</i>&nbsp;   *     given the specified tokens and previous tags.
+<i>66</i>&nbsp;   */
+<i>67</i>&nbsp;  public String[] getContext(int index, String[] tokens, String[] tags,
+<i>68</i>&nbsp;      Object[] additionalContext) {
+<i>69</i>&nbsp;
+<b class="fc"><i>70</i>&nbsp;    String tagprev = null;</b>
+<b class="fc"><i>71</i>&nbsp;    String tagprevprev = null;</b>
+<i>72</i>&nbsp;
+<b class="fc"><i>73</i>&nbsp;    if (index - 1 &gt;= 0) {</b>
+<b class="fc"><i>74</i>&nbsp;      tagprev =  tags[index - 1];</b>
+<i>75</i>&nbsp;
+<b class="fc"><i>76</i>&nbsp;      if (index - 2 &gt;= 0) {</b>
+<b class="fc"><i>77</i>&nbsp;        tagprevprev = tags[index - 2];</b>
+<i>78</i>&nbsp;      }
+<i>79</i>&nbsp;    }
+<i>80</i>&nbsp;
+<b class="fc"><i>81</i>&nbsp;    String cacheKey = index + tagprev + tagprevprev;</b>
+<b class="fc"><i>82</i>&nbsp;    if (contextsCache != null) {</b>
+<b class="fc"><i>83</i>&nbsp;      if (wordsKey == tokens) {</b>
+<b class="fc"><i>84</i>&nbsp;        String[] cachedContexts = contextsCache.get(cacheKey);</b>
+<b class="fc"><i>85</i>&nbsp;        if (cachedContexts != null) {</b>
+<b class="fc"><i>86</i>&nbsp;          return cachedContexts;</b>
+<i>87</i>&nbsp;        }
+<b class="fc"><i>88</i>&nbsp;      }</b>
+<i>89</i>&nbsp;      else {
+<b class="fc"><i>90</i>&nbsp;        contextsCache.clear();</b>
+<b class="fc"><i>91</i>&nbsp;        wordsKey = tokens;</b>
+<i>92</i>&nbsp;      }
+<i>93</i>&nbsp;    }
+<i>94</i>&nbsp;
+<b class="fc"><i>95</i>&nbsp;    List&lt;String&gt; e = new ArrayList&lt;&gt;();</b>
+<i>96</i>&nbsp;
+<b class="fc"><i>97</i>&nbsp;    featureGenerator.createFeatures(e, tokens, index, tags);</b>
+<i>98</i>&nbsp;
+<b class="fc"><i>99</i>&nbsp;    String[] contexts = e.toArray(new String[e.size()]);</b>
+<b class="fc"><i>100</i>&nbsp;    if (contextsCache != null) {</b>
+<b class="fc"><i>101</i>&nbsp;      contextsCache.put(cacheKey, contexts);</b>
+<i>102</i>&nbsp;    }
+<b class="fc"><i>103</i>&nbsp;    return contexts;</b>
+<i>104</i>&nbsp;  }
+<i>105</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-09 18:47</div>
+</div>
+</body>
+</html>

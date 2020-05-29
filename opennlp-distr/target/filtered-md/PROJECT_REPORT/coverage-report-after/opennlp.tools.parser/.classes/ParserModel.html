@@ -1,0 +1,369 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: ParserModel</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">opennlp.tools.parser</a> ]
+</div>
+
+<h1>Coverage Summary for Class: ParserModel (opennlp.tools.parser)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">ParserModel</td>
+<td class="coverageStat">
+  <span class="percent">
+    60%
+  </span>
+  <span class="absValue">
+    (12/ 20)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    59.5%
+  </span>
+  <span class="absValue">
+    (44/ 74)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">ParserModel$HeadRulesSerializer</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 3)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    52.2%
+  </span>
+  <span class="absValue">
+    (12/ 23)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    57.1%
+  </span>
+  <span class="absValue">
+    (44/ 77)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/*
+<i>2</i>&nbsp; * Licensed to the Apache Software Foundation (ASF) under one or more
+<i>3</i>&nbsp; * contributor license agreements.  See the NOTICE file distributed with
+<i>4</i>&nbsp; * this work for additional information regarding copyright ownership.
+<i>5</i>&nbsp; * The ASF licenses this file to You under the Apache License, Version 2.0
+<i>6</i>&nbsp; * (the &quot;License&quot;); you may not use this file except in compliance with
+<i>7</i>&nbsp; * the License. You may obtain a copy of the License at
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; *     http://www.apache.org/licenses/LICENSE-2.0
+<i>10</i>&nbsp; *
+<i>11</i>&nbsp; * Unless required by applicable law or agreed to in writing, software
+<i>12</i>&nbsp; * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<i>13</i>&nbsp; * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<i>14</i>&nbsp; * See the License for the specific language governing permissions and
+<i>15</i>&nbsp; * limitations under the License.
+<i>16</i>&nbsp; */
+<i>17</i>&nbsp;
+<i>18</i>&nbsp;package opennlp.tools.parser;
+<i>19</i>&nbsp;
+<i>20</i>&nbsp;import java.io.BufferedReader;
+<i>21</i>&nbsp;import java.io.File;
+<i>22</i>&nbsp;import java.io.IOException;
+<i>23</i>&nbsp;import java.io.InputStream;
+<i>24</i>&nbsp;import java.io.InputStreamReader;
+<i>25</i>&nbsp;import java.io.OutputStream;
+<i>26</i>&nbsp;import java.io.OutputStreamWriter;
+<i>27</i>&nbsp;import java.net.URL;
+<i>28</i>&nbsp;import java.nio.charset.StandardCharsets;
+<i>29</i>&nbsp;import java.nio.file.Path;
+<i>30</i>&nbsp;import java.util.Map;
+<i>31</i>&nbsp;import java.util.Objects;
+<i>32</i>&nbsp;
+<i>33</i>&nbsp;import opennlp.tools.chunker.ChunkerModel;
+<i>34</i>&nbsp;import opennlp.tools.ml.model.AbstractModel;
+<i>35</i>&nbsp;import opennlp.tools.ml.model.MaxentModel;
+<i>36</i>&nbsp;import opennlp.tools.postag.POSModel;
+<i>37</i>&nbsp;import opennlp.tools.util.InvalidFormatException;
+<i>38</i>&nbsp;import opennlp.tools.util.model.ArtifactSerializer;
+<i>39</i>&nbsp;import opennlp.tools.util.model.BaseModel;
+<i>40</i>&nbsp;import opennlp.tools.util.model.ChunkerModelSerializer;
+<i>41</i>&nbsp;import opennlp.tools.util.model.POSModelSerializer;
+<i>42</i>&nbsp;
+<i>43</i>&nbsp;/**
+<i>44</i>&nbsp; * This is an abstract base class for {@link ParserModel} implementations.
+<i>45</i>&nbsp; */
+<i>46</i>&nbsp;// TODO: Model should validate the artifact map
+<i>47</i>&nbsp;public class ParserModel extends BaseModel {
+<i>48</i>&nbsp;
+<b class="nc"><i>49</i>&nbsp;  private static class HeadRulesSerializer implements</b>
+<i>50</i>&nbsp;      ArtifactSerializer&lt;opennlp.tools.parser.lang.en.HeadRules&gt; {
+<i>51</i>&nbsp;
+<i>52</i>&nbsp;    public opennlp.tools.parser.lang.en.HeadRules create(InputStream in)
+<i>53</i>&nbsp;        throws IOException, InvalidFormatException {
+<b class="nc"><i>54</i>&nbsp;      return new opennlp.tools.parser.lang.en.HeadRules(new BufferedReader(</b>
+<i>55</i>&nbsp;          new InputStreamReader(in, StandardCharsets.UTF_8)));
+<i>56</i>&nbsp;    }
+<i>57</i>&nbsp;
+<i>58</i>&nbsp;    public void serialize(opennlp.tools.parser.lang.en.HeadRules artifact,
+<i>59</i>&nbsp;        OutputStream out) throws IOException {
+<b class="nc"><i>60</i>&nbsp;      artifact.serialize(new OutputStreamWriter(out, StandardCharsets.UTF_8));</b>
+<i>61</i>&nbsp;    }
+<i>62</i>&nbsp;  }
+<i>63</i>&nbsp;
+<i>64</i>&nbsp;  private static final String COMPONENT_NAME = &quot;Parser&quot;;
+<i>65</i>&nbsp;
+<i>66</i>&nbsp;  private static final String BUILD_MODEL_ENTRY_NAME = &quot;build.model&quot;;
+<i>67</i>&nbsp;
+<i>68</i>&nbsp;  private static final String CHECK_MODEL_ENTRY_NAME = &quot;check.model&quot;;
+<i>69</i>&nbsp;
+<i>70</i>&nbsp;  private static final String ATTACH_MODEL_ENTRY_NAME = &quot;attach.model&quot;;
+<i>71</i>&nbsp;
+<i>72</i>&nbsp;  private static final String PARSER_TAGGER_MODEL_ENTRY_NAME = &quot;parsertager.postagger&quot;;
+<i>73</i>&nbsp;
+<i>74</i>&nbsp;  private static final String CHUNKER_TAGGER_MODEL_ENTRY_NAME = &quot;parserchunker.chunker&quot;;
+<i>75</i>&nbsp;
+<i>76</i>&nbsp;  private static final String HEAD_RULES_MODEL_ENTRY_NAME = &quot;head-rules.headrules&quot;;
+<i>77</i>&nbsp;
+<i>78</i>&nbsp;  private static final String PARSER_TYPE = &quot;parser-type&quot;;
+<i>79</i>&nbsp;
+<i>80</i>&nbsp;  public ParserModel(String languageCode, MaxentModel buildModel, MaxentModel checkModel,
+<i>81</i>&nbsp;      MaxentModel attachModel, POSModel parserTagger,
+<i>82</i>&nbsp;      ChunkerModel chunkerTagger, opennlp.tools.parser.HeadRules headRules,
+<i>83</i>&nbsp;      ParserType modelType, Map&lt;String, String&gt; manifestInfoEntries) {
+<i>84</i>&nbsp;
+<b class="fc"><i>85</i>&nbsp;    super(COMPONENT_NAME, languageCode, manifestInfoEntries);</b>
+<i>86</i>&nbsp;
+<b class="fc"><i>87</i>&nbsp;    setManifestProperty(PARSER_TYPE, modelType.name());</b>
+<i>88</i>&nbsp;
+<b class="fc"><i>89</i>&nbsp;    artifactMap.put(BUILD_MODEL_ENTRY_NAME, buildModel);</b>
+<i>90</i>&nbsp;
+<b class="fc"><i>91</i>&nbsp;    artifactMap.put(CHECK_MODEL_ENTRY_NAME, checkModel);</b>
+<i>92</i>&nbsp;
+<b class="fc"><i>93</i>&nbsp;    if (ParserType.CHUNKING.equals(modelType)) {</b>
+<b class="fc"><i>94</i>&nbsp;      if (attachModel != null)</b>
+<b class="nc"><i>95</i>&nbsp;          throw new IllegalArgumentException(&quot;attachModel must be null for chunking parser!&quot;);</b>
+<i>96</i>&nbsp;    }
+<b class="fc"><i>97</i>&nbsp;    else if (ParserType.TREEINSERT.equals(modelType)) {</b>
+<b class="fc"><i>98</i>&nbsp;      Objects.requireNonNull(attachModel, &quot;attachModel must not be null&quot;);</b>
+<b class="fc"><i>99</i>&nbsp;      artifactMap.put(ATTACH_MODEL_ENTRY_NAME, attachModel);</b>
+<i>100</i>&nbsp;    }
+<i>101</i>&nbsp;    else {
+<b class="nc"><i>102</i>&nbsp;      throw new IllegalStateException(&quot;Unknown ParserType &#39;&quot; + modelType + &quot;&#39;!&quot;);</b>
+<i>103</i>&nbsp;    }
+<i>104</i>&nbsp;
+<b class="fc"><i>105</i>&nbsp;    artifactMap.put(PARSER_TAGGER_MODEL_ENTRY_NAME, parserTagger);</b>
+<i>106</i>&nbsp;
+<b class="fc"><i>107</i>&nbsp;    artifactMap.put(CHUNKER_TAGGER_MODEL_ENTRY_NAME, chunkerTagger);</b>
+<i>108</i>&nbsp;
+<b class="fc"><i>109</i>&nbsp;    artifactMap.put(HEAD_RULES_MODEL_ENTRY_NAME, headRules);</b>
+<b class="fc"><i>110</i>&nbsp;    checkArtifactMap();</b>
+<b class="fc"><i>111</i>&nbsp;  }</b>
+<i>112</i>&nbsp;
+<i>113</i>&nbsp;  public ParserModel(String languageCode, MaxentModel buildModel, MaxentModel checkModel,
+<i>114</i>&nbsp;      MaxentModel attachModel, POSModel parserTagger,
+<i>115</i>&nbsp;      ChunkerModel chunkerTagger, opennlp.tools.parser.HeadRules headRules,
+<i>116</i>&nbsp;      ParserType modelType) {
+<b class="nc"><i>117</i>&nbsp;    this (languageCode, buildModel, checkModel, attachModel, parserTagger,</b>
+<i>118</i>&nbsp;        chunkerTagger, headRules, modelType, null);
+<b class="nc"><i>119</i>&nbsp;  }</b>
+<i>120</i>&nbsp;
+<i>121</i>&nbsp;  public ParserModel(String languageCode, MaxentModel buildModel, MaxentModel checkModel,
+<i>122</i>&nbsp;      POSModel parserTagger, ChunkerModel chunkerTagger,
+<i>123</i>&nbsp;      opennlp.tools.parser.HeadRules headRules, ParserType type,
+<i>124</i>&nbsp;      Map&lt;String, String&gt; manifestInfoEntries) {
+<b class="fc"><i>125</i>&nbsp;    this (languageCode, buildModel, checkModel, null, parserTagger,</b>
+<i>126</i>&nbsp;        chunkerTagger, headRules, type, manifestInfoEntries);
+<b class="fc"><i>127</i>&nbsp;  }</b>
+<i>128</i>&nbsp;
+<i>129</i>&nbsp;  public ParserModel(InputStream in) throws IOException {
+<b class="fc"><i>130</i>&nbsp;    super(COMPONENT_NAME, in);</b>
+<b class="fc"><i>131</i>&nbsp;  }</b>
+<i>132</i>&nbsp;
+<i>133</i>&nbsp;  public ParserModel(File modelFile) throws IOException {
+<b class="nc"><i>134</i>&nbsp;    super(COMPONENT_NAME, modelFile);</b>
+<b class="nc"><i>135</i>&nbsp;  }</b>
+<i>136</i>&nbsp;
+<i>137</i>&nbsp;  public ParserModel(Path modelPath) throws IOException {
+<b class="nc"><i>138</i>&nbsp;    this(modelPath.toFile());</b>
+<b class="nc"><i>139</i>&nbsp;  }</b>
+<i>140</i>&nbsp;
+<i>141</i>&nbsp;  public ParserModel(URL modelURL) throws IOException {
+<b class="nc"><i>142</i>&nbsp;    super(COMPONENT_NAME, modelURL);</b>
+<b class="nc"><i>143</i>&nbsp;  }</b>
+<i>144</i>&nbsp;
+<i>145</i>&nbsp;  @Override
+<i>146</i>&nbsp;  protected void createArtifactSerializers(
+<i>147</i>&nbsp;      Map&lt;String, ArtifactSerializer&gt; serializers) {
+<i>148</i>&nbsp;
+<b class="fc"><i>149</i>&nbsp;    super.createArtifactSerializers(serializers);</b>
+<i>150</i>&nbsp;
+<i>151</i>&nbsp;    // In 1.6.x the headrules artifact is serialized with the new API
+<i>152</i>&nbsp;    // which uses the Serializeable interface
+<i>153</i>&nbsp;    // This change is not backward compatible with the 1.5.x models.
+<i>154</i>&nbsp;    // In order to laod 1.5.x model the English headrules serializer must be
+<i>155</i>&nbsp;    // put on the serializer map.
+<i>156</i>&nbsp;
+<b class="fc"><i>157</i>&nbsp;    if (getVersion().getMajor() == 1 &amp;&amp; getVersion().getMinor() == 5) {</b>
+<b class="nc"><i>158</i>&nbsp;      serializers.put(&quot;headrules&quot;, new HeadRulesSerializer());</b>
+<i>159</i>&nbsp;    }
+<i>160</i>&nbsp;
+<b class="fc"><i>161</i>&nbsp;    serializers.put(&quot;postagger&quot;, new POSModelSerializer());</b>
+<b class="fc"><i>162</i>&nbsp;    serializers.put(&quot;chunker&quot;, new ChunkerModelSerializer());</b>
+<b class="fc"><i>163</i>&nbsp;  }</b>
+<i>164</i>&nbsp;
+<i>165</i>&nbsp;  public ParserType getParserType() {
+<b class="fc"><i>166</i>&nbsp;    return ParserType.parse(getManifestProperty(PARSER_TYPE));</b>
+<i>167</i>&nbsp;  }
+<i>168</i>&nbsp;
+<i>169</i>&nbsp;  public MaxentModel getBuildModel() {
+<b class="fc"><i>170</i>&nbsp;    return (MaxentModel) artifactMap.get(BUILD_MODEL_ENTRY_NAME);</b>
+<i>171</i>&nbsp;  }
+<i>172</i>&nbsp;
+<i>173</i>&nbsp;  public MaxentModel getCheckModel() {
+<b class="fc"><i>174</i>&nbsp;    return (MaxentModel) artifactMap.get(CHECK_MODEL_ENTRY_NAME);</b>
+<i>175</i>&nbsp;  }
+<i>176</i>&nbsp;
+<i>177</i>&nbsp;  public MaxentModel getAttachModel() {
+<b class="fc"><i>178</i>&nbsp;    return (MaxentModel) artifactMap.get(ATTACH_MODEL_ENTRY_NAME);</b>
+<i>179</i>&nbsp;  }
+<i>180</i>&nbsp;
+<i>181</i>&nbsp;  public POSModel getParserTaggerModel() {
+<b class="fc"><i>182</i>&nbsp;    return (POSModel) artifactMap.get(PARSER_TAGGER_MODEL_ENTRY_NAME);</b>
+<i>183</i>&nbsp;  }
+<i>184</i>&nbsp;
+<i>185</i>&nbsp;  public ChunkerModel getParserChunkerModel() {
+<b class="fc"><i>186</i>&nbsp;    return (ChunkerModel) artifactMap.get(CHUNKER_TAGGER_MODEL_ENTRY_NAME);</b>
+<i>187</i>&nbsp;  }
+<i>188</i>&nbsp;
+<i>189</i>&nbsp;  public opennlp.tools.parser.HeadRules getHeadRules() {
+<b class="fc"><i>190</i>&nbsp;    return (opennlp.tools.parser.HeadRules)</b>
+<b class="fc"><i>191</i>&nbsp;        artifactMap.get(HEAD_RULES_MODEL_ENTRY_NAME);</b>
+<i>192</i>&nbsp;  }
+<i>193</i>&nbsp;
+<i>194</i>&nbsp;  // TODO: Update model methods should make sure properties are copied correctly ...
+<i>195</i>&nbsp;  public ParserModel updateBuildModel(MaxentModel buildModel) {
+<b class="nc"><i>196</i>&nbsp;    return new ParserModel(getLanguage(), buildModel, getCheckModel(), getAttachModel(),</b>
+<b class="nc"><i>197</i>&nbsp;        getParserTaggerModel(), getParserChunkerModel(),</b>
+<b class="nc"><i>198</i>&nbsp;        getHeadRules(), getParserType());</b>
+<i>199</i>&nbsp;  }
+<i>200</i>&nbsp;
+<i>201</i>&nbsp;  public ParserModel updateCheckModel(MaxentModel checkModel) {
+<b class="nc"><i>202</i>&nbsp;    return new ParserModel(getLanguage(), getBuildModel(), checkModel,</b>
+<b class="nc"><i>203</i>&nbsp;        getAttachModel(), getParserTaggerModel(),</b>
+<b class="nc"><i>204</i>&nbsp;        getParserChunkerModel(), getHeadRules(), getParserType());</b>
+<i>205</i>&nbsp;  }
+<i>206</i>&nbsp;
+<i>207</i>&nbsp;  public ParserModel updateTaggerModel(POSModel taggerModel) {
+<b class="nc"><i>208</i>&nbsp;    return new ParserModel(getLanguage(), getBuildModel(), getCheckModel(), getAttachModel(),</b>
+<b class="nc"><i>209</i>&nbsp;        taggerModel, getParserChunkerModel(), getHeadRules(), getParserType());</b>
+<i>210</i>&nbsp;  }
+<i>211</i>&nbsp;
+<i>212</i>&nbsp;  public ParserModel updateChunkerModel(ChunkerModel chunkModel) {
+<b class="nc"><i>213</i>&nbsp;    return new ParserModel(getLanguage(), getBuildModel(), getCheckModel(), getAttachModel(),</b>
+<b class="nc"><i>214</i>&nbsp;        getParserTaggerModel(), chunkModel, getHeadRules(), getParserType());</b>
+<i>215</i>&nbsp;  }
+<i>216</i>&nbsp;
+<i>217</i>&nbsp;  @Override
+<i>218</i>&nbsp;  protected void validateArtifactMap() throws InvalidFormatException {
+<b class="fc"><i>219</i>&nbsp;    super.validateArtifactMap();</b>
+<i>220</i>&nbsp;
+<b class="fc"><i>221</i>&nbsp;    if (!(artifactMap.get(BUILD_MODEL_ENTRY_NAME)  instanceof AbstractModel)) {</b>
+<b class="nc"><i>222</i>&nbsp;      throw new InvalidFormatException(&quot;Missing the build model!&quot;);</b>
+<i>223</i>&nbsp;    }
+<i>224</i>&nbsp;
+<b class="fc"><i>225</i>&nbsp;    ParserType modelType = getParserType();</b>
+<i>226</i>&nbsp;
+<b class="fc"><i>227</i>&nbsp;    if (modelType != null) {</b>
+<b class="fc"><i>228</i>&nbsp;      if (ParserType.CHUNKING.equals(modelType)) {</b>
+<b class="fc"><i>229</i>&nbsp;        if (artifactMap.get(ATTACH_MODEL_ENTRY_NAME) != null)</b>
+<b class="nc"><i>230</i>&nbsp;            throw new InvalidFormatException(&quot;attachModel must be null for chunking parser!&quot;);</b>
+<i>231</i>&nbsp;      }
+<b class="fc"><i>232</i>&nbsp;      else if (ParserType.TREEINSERT.equals(modelType)) {</b>
+<b class="fc"><i>233</i>&nbsp;        if (!(artifactMap.get(ATTACH_MODEL_ENTRY_NAME)  instanceof AbstractModel))</b>
+<b class="nc"><i>234</i>&nbsp;          throw new InvalidFormatException(&quot;attachModel must not be null!&quot;);</b>
+<i>235</i>&nbsp;      }
+<i>236</i>&nbsp;      else {
+<b class="nc"><i>237</i>&nbsp;        throw new InvalidFormatException(&quot;Unknown ParserType &#39;&quot; + modelType + &quot;&#39;!&quot;);</b>
+<i>238</i>&nbsp;      }
+<i>239</i>&nbsp;    }
+<i>240</i>&nbsp;    else {
+<b class="nc"><i>241</i>&nbsp;      throw new InvalidFormatException(&quot;Missing the parser type property!&quot;);</b>
+<i>242</i>&nbsp;    }
+<i>243</i>&nbsp;
+<b class="fc"><i>244</i>&nbsp;    if (!(artifactMap.get(CHECK_MODEL_ENTRY_NAME)  instanceof AbstractModel)) {</b>
+<b class="nc"><i>245</i>&nbsp;      throw new InvalidFormatException(&quot;Missing the check model!&quot;);</b>
+<i>246</i>&nbsp;    }
+<i>247</i>&nbsp;
+<b class="fc"><i>248</i>&nbsp;    if (!(artifactMap.get(PARSER_TAGGER_MODEL_ENTRY_NAME)  instanceof POSModel)) {</b>
+<b class="nc"><i>249</i>&nbsp;      throw new InvalidFormatException(&quot;Missing the tagger model!&quot;);</b>
+<i>250</i>&nbsp;    }
+<i>251</i>&nbsp;
+<b class="fc"><i>252</i>&nbsp;    if (!(artifactMap.get(CHUNKER_TAGGER_MODEL_ENTRY_NAME)  instanceof ChunkerModel)) {</b>
+<b class="nc"><i>253</i>&nbsp;      throw new InvalidFormatException(&quot;Missing the chunker model!&quot;);</b>
+<i>254</i>&nbsp;    }
+<i>255</i>&nbsp;
+<b class="fc"><i>256</i>&nbsp;    if (!(artifactMap.get(HEAD_RULES_MODEL_ENTRY_NAME)  instanceof HeadRules)) {</b>
+<b class="nc"><i>257</i>&nbsp;      throw new InvalidFormatException(&quot;Missing the head rules!&quot;);</b>
+<i>258</i>&nbsp;    }
+<b class="fc"><i>259</i>&nbsp;  }</b>
+<i>260</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-09 18:47</div>
+</div>
+</body>
+</html>

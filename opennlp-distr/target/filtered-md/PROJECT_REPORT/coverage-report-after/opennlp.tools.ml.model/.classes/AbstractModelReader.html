@@ -1,0 +1,234 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: AbstractModelReader</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">opennlp.tools.ml.model</a> ]
+</div>
+
+<h1>Coverage Summary for Class: AbstractModelReader (opennlp.tools.ml.model)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">AbstractModelReader</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (10/ 10)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    95.8%
+  </span>
+  <span class="absValue">
+    (46/ 48)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/*
+<i>2</i>&nbsp; * Licensed to the Apache Software Foundation (ASF) under one or more
+<i>3</i>&nbsp; * contributor license agreements.  See the NOTICE file distributed with
+<i>4</i>&nbsp; * this work for additional information regarding copyright ownership.
+<i>5</i>&nbsp; * The ASF licenses this file to You under the Apache License, Version 2.0
+<i>6</i>&nbsp; * (the &quot;License&quot;); you may not use this file except in compliance with
+<i>7</i>&nbsp; * the License. You may obtain a copy of the License at
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; *     http://www.apache.org/licenses/LICENSE-2.0
+<i>10</i>&nbsp; *
+<i>11</i>&nbsp; * Unless required by applicable law or agreed to in writing, software
+<i>12</i>&nbsp; * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<i>13</i>&nbsp; * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<i>14</i>&nbsp; * See the License for the specific language governing permissions and
+<i>15</i>&nbsp; * limitations under the License.
+<i>16</i>&nbsp; */
+<i>17</i>&nbsp;
+<i>18</i>&nbsp;package opennlp.tools.ml.model;
+<i>19</i>&nbsp;
+<i>20</i>&nbsp;import java.io.File;
+<i>21</i>&nbsp;import java.io.FileInputStream;
+<i>22</i>&nbsp;import java.io.IOException;
+<i>23</i>&nbsp;import java.io.InputStream;
+<i>24</i>&nbsp;import java.util.StringTokenizer;
+<i>25</i>&nbsp;import java.util.zip.GZIPInputStream;
+<i>26</i>&nbsp;
+<i>27</i>&nbsp;
+<i>28</i>&nbsp;public abstract class AbstractModelReader {
+<i>29</i>&nbsp;
+<i>30</i>&nbsp;  /**
+<i>31</i>&nbsp;   * The number of predicates contained in the model.
+<i>32</i>&nbsp;   */
+<i>33</i>&nbsp;  protected int NUM_PREDS;
+<i>34</i>&nbsp;  protected DataReader dataReader;
+<i>35</i>&nbsp;
+<b class="fc"><i>36</i>&nbsp;  public AbstractModelReader(File f) throws IOException {</b>
+<b class="fc"><i>37</i>&nbsp;    String filename = f.getName();</b>
+<i>38</i>&nbsp;    InputStream input;
+<i>39</i>&nbsp;    // handle the zipped/not zipped distinction
+<b class="fc"><i>40</i>&nbsp;    if (filename.endsWith(&quot;.gz&quot;)) {</b>
+<b class="nc"><i>41</i>&nbsp;      input = new GZIPInputStream(new FileInputStream(f));</b>
+<b class="nc"><i>42</i>&nbsp;      filename = filename.substring(0,filename.length() - 3);</b>
+<i>43</i>&nbsp;    }
+<i>44</i>&nbsp;    else {
+<b class="fc"><i>45</i>&nbsp;      input = new FileInputStream(f);</b>
+<i>46</i>&nbsp;    }
+<i>47</i>&nbsp;
+<i>48</i>&nbsp;    // handle the different formats
+<b class="fc"><i>49</i>&nbsp;    if (filename.endsWith(&quot;.bin&quot;)) {</b>
+<b class="fc"><i>50</i>&nbsp;      this.dataReader = new BinaryFileDataReader(input);</b>
+<i>51</i>&nbsp;    }
+<i>52</i>&nbsp;    else {  // filename ends with &quot;.txt&quot;
+<b class="fc"><i>53</i>&nbsp;      this.dataReader = new PlainTextFileDataReader(input);</b>
+<i>54</i>&nbsp;    }
+<b class="fc"><i>55</i>&nbsp;  }</b>
+<i>56</i>&nbsp;
+<i>57</i>&nbsp;  public AbstractModelReader(DataReader dataReader) {
+<b class="fc"><i>58</i>&nbsp;    super();</b>
+<b class="fc"><i>59</i>&nbsp;    this.dataReader = dataReader;</b>
+<b class="fc"><i>60</i>&nbsp;  }</b>
+<i>61</i>&nbsp;
+<i>62</i>&nbsp;  /**
+<i>63</i>&nbsp;   * Implement as needed for the format the model is stored in.
+<i>64</i>&nbsp;   */
+<i>65</i>&nbsp;  public int readInt() throws java.io.IOException {
+<b class="fc"><i>66</i>&nbsp;    return dataReader.readInt();</b>
+<i>67</i>&nbsp;  }
+<i>68</i>&nbsp;
+<i>69</i>&nbsp;  /**
+<i>70</i>&nbsp;   * Implement as needed for the format the model is stored in.
+<i>71</i>&nbsp;   */
+<i>72</i>&nbsp;  public double readDouble() throws java.io.IOException {
+<b class="fc"><i>73</i>&nbsp;    return dataReader.readDouble();</b>
+<i>74</i>&nbsp;  }
+<i>75</i>&nbsp;
+<i>76</i>&nbsp;  /**
+<i>77</i>&nbsp;   * Implement as needed for the format the model is stored in.
+<i>78</i>&nbsp;   */
+<i>79</i>&nbsp;  public String readUTF() throws java.io.IOException {
+<b class="fc"><i>80</i>&nbsp;    return dataReader.readUTF();</b>
+<i>81</i>&nbsp;  }
+<i>82</i>&nbsp;
+<i>83</i>&nbsp;  public AbstractModel getModel() throws IOException {
+<b class="fc"><i>84</i>&nbsp;    checkModelType();</b>
+<b class="fc"><i>85</i>&nbsp;    return constructModel();</b>
+<i>86</i>&nbsp;  }
+<i>87</i>&nbsp;
+<i>88</i>&nbsp;  public abstract void checkModelType() throws java.io.IOException;
+<i>89</i>&nbsp;
+<i>90</i>&nbsp;  public abstract AbstractModel constructModel() throws java.io.IOException;
+<i>91</i>&nbsp;
+<i>92</i>&nbsp;  protected String[] getOutcomes() throws java.io.IOException {
+<b class="fc"><i>93</i>&nbsp;    int numOutcomes = readInt();</b>
+<b class="fc"><i>94</i>&nbsp;    String[] outcomeLabels = new String[numOutcomes];</b>
+<b class="fc"><i>95</i>&nbsp;    for (int i = 0; i &lt; numOutcomes; i++) outcomeLabels[i] = readUTF();</b>
+<b class="fc"><i>96</i>&nbsp;    return outcomeLabels;</b>
+<i>97</i>&nbsp;  }
+<i>98</i>&nbsp;
+<i>99</i>&nbsp;  protected int[][] getOutcomePatterns() throws java.io.IOException {
+<b class="fc"><i>100</i>&nbsp;    int numOCTypes = readInt();</b>
+<b class="fc"><i>101</i>&nbsp;    int[][] outcomePatterns = new int[numOCTypes][];</b>
+<b class="fc"><i>102</i>&nbsp;    for (int i = 0; i &lt; numOCTypes; i++) {</b>
+<b class="fc"><i>103</i>&nbsp;      StringTokenizer tok = new StringTokenizer(readUTF(), &quot; &quot;);</b>
+<b class="fc"><i>104</i>&nbsp;      int[] infoInts = new int[tok.countTokens()];</b>
+<b class="fc"><i>105</i>&nbsp;      for (int j = 0; tok.hasMoreTokens(); j++) {</b>
+<b class="fc"><i>106</i>&nbsp;        infoInts[j] = Integer.parseInt(tok.nextToken());</b>
+<i>107</i>&nbsp;      }
+<b class="fc"><i>108</i>&nbsp;      outcomePatterns[i] = infoInts;</b>
+<i>109</i>&nbsp;    }
+<b class="fc"><i>110</i>&nbsp;    return outcomePatterns;</b>
+<i>111</i>&nbsp;  }
+<i>112</i>&nbsp;
+<i>113</i>&nbsp;  protected String[] getPredicates() throws java.io.IOException {
+<b class="fc"><i>114</i>&nbsp;    NUM_PREDS = readInt();</b>
+<b class="fc"><i>115</i>&nbsp;    String[] predLabels = new String[NUM_PREDS];</b>
+<b class="fc"><i>116</i>&nbsp;    for (int i = 0; i &lt; NUM_PREDS; i++)</b>
+<b class="fc"><i>117</i>&nbsp;        predLabels[i] = readUTF();</b>
+<b class="fc"><i>118</i>&nbsp;    return predLabels;</b>
+<i>119</i>&nbsp;  }
+<i>120</i>&nbsp;
+<i>121</i>&nbsp;  /**
+<i>122</i>&nbsp;   * Reads the parameters from a file and populates an array of context objects.
+<i>123</i>&nbsp;   * @param outcomePatterns The outcomes patterns for the model.  The first index refers to which
+<i>124</i>&nbsp;   *     outcome pattern (a set of outcomes that occurs with a context) is being specified.  The
+<i>125</i>&nbsp;   *     second index specifies the number of contexts which use this pattern at index 0, and the
+<i>126</i>&nbsp;   *     index of each outcomes which make up this pattern in indicies 1-n.
+<i>127</i>&nbsp;   * @return An array of context objects.
+<i>128</i>&nbsp;   * @throws java.io.IOException when the model file does not match the outcome patterns or can not be read.
+<i>129</i>&nbsp;   */
+<i>130</i>&nbsp;  protected Context[] getParameters(int[][] outcomePatterns) throws java.io.IOException {
+<b class="fc"><i>131</i>&nbsp;    Context[] params = new Context[NUM_PREDS];</b>
+<b class="fc"><i>132</i>&nbsp;    int pid = 0;</b>
+<b class="fc"><i>133</i>&nbsp;    for (int i = 0; i &lt; outcomePatterns.length; i++) {</b>
+<i>134</i>&nbsp;      //construct outcome pattern
+<b class="fc"><i>135</i>&nbsp;      int[] outcomePattern = new int[outcomePatterns[i].length - 1];</b>
+<b class="fc"><i>136</i>&nbsp;      System.arraycopy(outcomePatterns[i], 1, outcomePattern, 0, outcomePatterns[i].length - 1);</b>
+<i>137</i>&nbsp;
+<i>138</i>&nbsp;      //populate parameters for each context which uses this outcome pattern.
+<b class="fc"><i>139</i>&nbsp;      for (int j = 0; j &lt; outcomePatterns[i][0]; j++) {</b>
+<b class="fc"><i>140</i>&nbsp;        double[] contextParameters = new double[outcomePatterns[i].length - 1];</b>
+<b class="fc"><i>141</i>&nbsp;        for (int k = 1; k &lt; outcomePatterns[i].length; k++) {</b>
+<b class="fc"><i>142</i>&nbsp;          contextParameters[k - 1] = readDouble();</b>
+<i>143</i>&nbsp;        }
+<b class="fc"><i>144</i>&nbsp;        params[pid] = new Context(outcomePattern,contextParameters);</b>
+<b class="fc"><i>145</i>&nbsp;        pid++;</b>
+<i>146</i>&nbsp;      }
+<i>147</i>&nbsp;    }
+<b class="fc"><i>148</i>&nbsp;    return params;</b>
+<i>149</i>&nbsp;  }
+<i>150</i>&nbsp;
+<i>151</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-09 18:47</div>
+</div>
+</body>
+</html>

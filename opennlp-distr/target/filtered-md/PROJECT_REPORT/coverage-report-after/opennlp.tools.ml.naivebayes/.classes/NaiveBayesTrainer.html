@@ -1,0 +1,286 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: NaiveBayesTrainer</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">opennlp.tools.ml.naivebayes</a> ]
+</div>
+
+<h1>Coverage Summary for Class: NaiveBayesTrainer (opennlp.tools.ml.naivebayes)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">NaiveBayesTrainer</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    85.7%
+  </span>
+  <span class="absValue">
+    (6/ 7)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    93.1%
+  </span>
+  <span class="absValue">
+    (54/ 58)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/*
+<i>2</i>&nbsp; * Licensed to the Apache Software Foundation (ASF) under one or more
+<i>3</i>&nbsp; * contributor license agreements.  See the NOTICE file distributed with
+<i>4</i>&nbsp; * this work for additional information regarding copyright ownership.
+<i>5</i>&nbsp; * The ASF licenses this file to You under the Apache License, Version 2.0
+<i>6</i>&nbsp; * (the &quot;License&quot;); you may not use this file except in compliance with
+<i>7</i>&nbsp; * the License. You may obtain a copy of the License at
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; *     http://www.apache.org/licenses/LICENSE-2.0
+<i>10</i>&nbsp; *
+<i>11</i>&nbsp; * Unless required by applicable law or agreed to in writing, software
+<i>12</i>&nbsp; * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<i>13</i>&nbsp; * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<i>14</i>&nbsp; * See the License for the specific language governing permissions and
+<i>15</i>&nbsp; * limitations under the License.
+<i>16</i>&nbsp; */
+<i>17</i>&nbsp;
+<i>18</i>&nbsp;package opennlp.tools.ml.naivebayes;
+<i>19</i>&nbsp;
+<i>20</i>&nbsp;import java.io.IOException;
+<i>21</i>&nbsp;
+<i>22</i>&nbsp;import opennlp.tools.ml.AbstractEventTrainer;
+<i>23</i>&nbsp;import opennlp.tools.ml.ArrayMath;
+<i>24</i>&nbsp;import opennlp.tools.ml.model.AbstractModel;
+<i>25</i>&nbsp;import opennlp.tools.ml.model.DataIndexer;
+<i>26</i>&nbsp;import opennlp.tools.ml.model.EvalParameters;
+<i>27</i>&nbsp;import opennlp.tools.ml.model.MutableContext;
+<i>28</i>&nbsp;import opennlp.tools.util.TrainingParameters;
+<i>29</i>&nbsp;
+<i>30</i>&nbsp;/**
+<i>31</i>&nbsp; * Trains models using the combination of EM algorithm and Naive Bayes classifier
+<i>32</i>&nbsp; * which is described in:
+<i>33</i>&nbsp; * Text Classification from Labeled and Unlabeled Documents using EM
+<i>34</i>&nbsp; * Nigam, McCallum, et al paper of 2000
+<i>35</i>&nbsp; */
+<i>36</i>&nbsp;public class NaiveBayesTrainer extends AbstractEventTrainer {
+<i>37</i>&nbsp;
+<i>38</i>&nbsp;  public static final String NAIVE_BAYES_VALUE = &quot;NAIVEBAYES&quot;;
+<i>39</i>&nbsp;
+<i>40</i>&nbsp;  /**
+<i>41</i>&nbsp;   * Number of unique events which occurred in the event set.
+<i>42</i>&nbsp;   */
+<i>43</i>&nbsp;  private int numUniqueEvents;
+<i>44</i>&nbsp;  /**
+<i>45</i>&nbsp;   * Number of events in the event set.
+<i>46</i>&nbsp;   */
+<i>47</i>&nbsp;  private int numEvents;
+<i>48</i>&nbsp;
+<i>49</i>&nbsp;  /**
+<i>50</i>&nbsp;   * Number of predicates.
+<i>51</i>&nbsp;   */
+<i>52</i>&nbsp;  private int numPreds;
+<i>53</i>&nbsp;  /**
+<i>54</i>&nbsp;   * Number of outcomes.
+<i>55</i>&nbsp;   */
+<i>56</i>&nbsp;  private int numOutcomes;
+<i>57</i>&nbsp;  /**
+<i>58</i>&nbsp;   * Records the array of predicates seen in each event.
+<i>59</i>&nbsp;   */
+<i>60</i>&nbsp;  private int[][] contexts;
+<i>61</i>&nbsp;
+<i>62</i>&nbsp;  /**
+<i>63</i>&nbsp;   * The value associates with each context. If null then context values are assumes to be 1.
+<i>64</i>&nbsp;   */
+<i>65</i>&nbsp;  private float[][] values;
+<i>66</i>&nbsp;
+<i>67</i>&nbsp;  /**
+<i>68</i>&nbsp;   * List of outcomes for each event i, in context[i].
+<i>69</i>&nbsp;   */
+<i>70</i>&nbsp;  private int[] outcomeList;
+<i>71</i>&nbsp;
+<i>72</i>&nbsp;  /**
+<i>73</i>&nbsp;   * Records the num of times an event has been seen for each event i, in context[i].
+<i>74</i>&nbsp;   */
+<i>75</i>&nbsp;  private int[] numTimesEventsSeen;
+<i>76</i>&nbsp;
+<i>77</i>&nbsp;  /**
+<i>78</i>&nbsp;   * Stores the String names of the outcomes.  The NaiveBayes only tracks outcomes
+<i>79</i>&nbsp;   * as ints, and so this array is needed to save the model to disk and
+<i>80</i>&nbsp;   * thereby allow users to know what the outcome was in human
+<i>81</i>&nbsp;   * understandable terms.
+<i>82</i>&nbsp;   */
+<i>83</i>&nbsp;  private String[] outcomeLabels;
+<i>84</i>&nbsp;
+<i>85</i>&nbsp;  /**
+<i>86</i>&nbsp;   * Stores the String names of the predicates. The NaiveBayes only tracks
+<i>87</i>&nbsp;   * predicates as ints, and so this array is needed to save the model to
+<i>88</i>&nbsp;   * disk and thereby allow users to know what the outcome was in human
+<i>89</i>&nbsp;   * understandable terms.
+<i>90</i>&nbsp;   */
+<i>91</i>&nbsp;  private String[] predLabels;
+<i>92</i>&nbsp;
+<b class="fc"><i>93</i>&nbsp;  public NaiveBayesTrainer() {</b>
+<b class="fc"><i>94</i>&nbsp;  }</b>
+<i>95</i>&nbsp;
+<i>96</i>&nbsp;  public NaiveBayesTrainer(TrainingParameters parameters) {
+<b class="nc"><i>97</i>&nbsp;    super(parameters);</b>
+<b class="nc"><i>98</i>&nbsp;  }</b>
+<i>99</i>&nbsp;  
+<i>100</i>&nbsp;  public boolean isSortAndMerge() {
+<b class="fc"><i>101</i>&nbsp;    return false;</b>
+<i>102</i>&nbsp;  }
+<i>103</i>&nbsp;
+<i>104</i>&nbsp;  public AbstractModel doTrain(DataIndexer indexer) throws IOException {
+<b class="fc"><i>105</i>&nbsp;    return this.trainModel(indexer);</b>
+<i>106</i>&nbsp;  }
+<i>107</i>&nbsp;
+<i>108</i>&nbsp;  // &lt;&lt; members related to AbstractSequenceTrainer
+<i>109</i>&nbsp;
+<i>110</i>&nbsp;  public AbstractModel trainModel(DataIndexer di) {
+<b class="fc"><i>111</i>&nbsp;    display(&quot;Incorporating indexed data for training...  \n&quot;);</b>
+<b class="fc"><i>112</i>&nbsp;    contexts = di.getContexts();</b>
+<b class="fc"><i>113</i>&nbsp;    values = di.getValues();</b>
+<b class="fc"><i>114</i>&nbsp;    numTimesEventsSeen = di.getNumTimesEventsSeen();</b>
+<b class="fc"><i>115</i>&nbsp;    numEvents = di.getNumEvents();</b>
+<b class="fc"><i>116</i>&nbsp;    numUniqueEvents = contexts.length;</b>
+<i>117</i>&nbsp;
+<b class="fc"><i>118</i>&nbsp;    outcomeLabels = di.getOutcomeLabels();</b>
+<b class="fc"><i>119</i>&nbsp;    outcomeList = di.getOutcomeList();</b>
+<i>120</i>&nbsp;
+<b class="fc"><i>121</i>&nbsp;    predLabels = di.getPredLabels();</b>
+<b class="fc"><i>122</i>&nbsp;    numPreds = predLabels.length;</b>
+<b class="fc"><i>123</i>&nbsp;    numOutcomes = outcomeLabels.length;</b>
+<i>124</i>&nbsp;
+<b class="fc"><i>125</i>&nbsp;    display(&quot;done.\n&quot;);</b>
+<i>126</i>&nbsp;
+<b class="fc"><i>127</i>&nbsp;    display(&quot;\tNumber of Event Tokens: &quot; + numUniqueEvents + &quot;\n&quot;);</b>
+<b class="fc"><i>128</i>&nbsp;    display(&quot;\t    Number of Outcomes: &quot; + numOutcomes + &quot;\n&quot;);</b>
+<b class="fc"><i>129</i>&nbsp;    display(&quot;\t  Number of Predicates: &quot; + numPreds + &quot;\n&quot;);</b>
+<i>130</i>&nbsp;
+<b class="fc"><i>131</i>&nbsp;    display(&quot;Computing model parameters...\n&quot;);</b>
+<i>132</i>&nbsp;
+<b class="fc"><i>133</i>&nbsp;    MutableContext[] finalParameters = findParameters();</b>
+<i>134</i>&nbsp;
+<b class="fc"><i>135</i>&nbsp;    display(&quot;...done.\n&quot;);</b>
+<i>136</i>&nbsp;
+<i>137</i>&nbsp;    /* Create and return the model ****/
+<b class="fc"><i>138</i>&nbsp;    return new NaiveBayesModel(finalParameters, predLabels, outcomeLabels);</b>
+<i>139</i>&nbsp;  }
+<i>140</i>&nbsp;
+<i>141</i>&nbsp;  private MutableContext[] findParameters() {
+<i>142</i>&nbsp;
+<b class="fc"><i>143</i>&nbsp;    int[] allOutcomesPattern = new int[numOutcomes];</b>
+<b class="fc"><i>144</i>&nbsp;    for (int oi = 0; oi &lt; numOutcomes; oi++)</b>
+<b class="fc"><i>145</i>&nbsp;      allOutcomesPattern[oi] = oi;</b>
+<i>146</i>&nbsp;
+<i>147</i>&nbsp;    /* Stores the estimated parameter value of each predicate during iteration. */
+<b class="fc"><i>148</i>&nbsp;    MutableContext[] params = new MutableContext[numPreds];</b>
+<b class="fc"><i>149</i>&nbsp;    for (int pi = 0; pi &lt; numPreds; pi++) {</b>
+<b class="fc"><i>150</i>&nbsp;      params[pi] = new MutableContext(allOutcomesPattern, new double[numOutcomes]);</b>
+<b class="fc"><i>151</i>&nbsp;      for (int aoi = 0; aoi &lt; numOutcomes; aoi++)</b>
+<b class="fc"><i>152</i>&nbsp;        params[pi].setParameter(aoi, 0.0);</b>
+<i>153</i>&nbsp;    }
+<i>154</i>&nbsp;
+<b class="fc"><i>155</i>&nbsp;    EvalParameters evalParams = new EvalParameters(params, numOutcomes);</b>
+<i>156</i>&nbsp;
+<b class="fc"><i>157</i>&nbsp;    double stepSize = 1;</b>
+<i>158</i>&nbsp;
+<b class="fc"><i>159</i>&nbsp;    for (int ei = 0; ei &lt; numUniqueEvents; ei++) {</b>
+<b class="fc"><i>160</i>&nbsp;      int targetOutcome = outcomeList[ei];</b>
+<b class="fc"><i>161</i>&nbsp;      for (int ni = 0; ni &lt; this.numTimesEventsSeen[ei]; ni++) {</b>
+<b class="fc"><i>162</i>&nbsp;        for (int ci = 0; ci &lt; contexts[ei].length; ci++) {</b>
+<b class="fc"><i>163</i>&nbsp;          int pi = contexts[ei][ci];</b>
+<b class="fc"><i>164</i>&nbsp;          if (values == null) {</b>
+<b class="fc"><i>165</i>&nbsp;            params[pi].updateParameter(targetOutcome, stepSize);</b>
+<i>166</i>&nbsp;          } else {
+<b class="nc"><i>167</i>&nbsp;            params[pi].updateParameter(targetOutcome, stepSize * values[ei][ci]);</b>
+<i>168</i>&nbsp;          }
+<i>169</i>&nbsp;        }
+<i>170</i>&nbsp;      }
+<i>171</i>&nbsp;    }
+<i>172</i>&nbsp;
+<i>173</i>&nbsp;    // Output the final training stats.
+<b class="fc"><i>174</i>&nbsp;    trainingStats(evalParams);</b>
+<i>175</i>&nbsp;
+<b class="fc"><i>176</i>&nbsp;    return params;</b>
+<i>177</i>&nbsp;
+<i>178</i>&nbsp;  }
+<i>179</i>&nbsp;
+<i>180</i>&nbsp;  private double trainingStats(EvalParameters evalParams) {
+<b class="fc"><i>181</i>&nbsp;    int numCorrect = 0;</b>
+<i>182</i>&nbsp;
+<b class="fc"><i>183</i>&nbsp;    for (int ei = 0; ei &lt; numUniqueEvents; ei++) {</b>
+<b class="fc"><i>184</i>&nbsp;      for (int ni = 0; ni &lt; this.numTimesEventsSeen[ei]; ni++) {</b>
+<i>185</i>&nbsp;
+<b class="fc"><i>186</i>&nbsp;        double[] modelDistribution = new double[numOutcomes];</b>
+<i>187</i>&nbsp;
+<b class="fc"><i>188</i>&nbsp;        if (values != null)</b>
+<b class="nc"><i>189</i>&nbsp;          NaiveBayesModel.eval(contexts[ei], values[ei], modelDistribution, evalParams, false);</b>
+<i>190</i>&nbsp;        else
+<b class="fc"><i>191</i>&nbsp;          NaiveBayesModel.eval(contexts[ei], null, modelDistribution, evalParams, false);</b>
+<i>192</i>&nbsp;
+<b class="fc"><i>193</i>&nbsp;        int max = ArrayMath.argmax(modelDistribution);</b>
+<b class="fc"><i>194</i>&nbsp;        if (max == outcomeList[ei])</b>
+<b class="fc"><i>195</i>&nbsp;          numCorrect++;</b>
+<i>196</i>&nbsp;      }
+<i>197</i>&nbsp;    }
+<b class="fc"><i>198</i>&nbsp;    double trainingAccuracy = (double) numCorrect / numEvents;</b>
+<b class="fc"><i>199</i>&nbsp;    display(&quot;Stats: (&quot; + numCorrect + &quot;/&quot; + numEvents + &quot;) &quot; + trainingAccuracy + &quot;\n&quot;);</b>
+<b class="fc"><i>200</i>&nbsp;    return trainingAccuracy;</b>
+<i>201</i>&nbsp;  }
+<i>202</i>&nbsp;
+<i>203</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-09 18:47</div>
+</div>
+</body>
+</html>

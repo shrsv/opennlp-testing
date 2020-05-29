@@ -1,0 +1,270 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: BeamSearch</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">opennlp.tools.ml</a> ]
+</div>
+
+<h1>Coverage Summary for Class: BeamSearch (opennlp.tools.ml)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">BeamSearch</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (7/ 7)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    85.2%
+  </span>
+  <span class="absValue">
+    (52/ 61)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/*
+<i>2</i>&nbsp; * Licensed to the Apache Software Foundation (ASF) under one or more
+<i>3</i>&nbsp; * contributor license agreements.  See the NOTICE file distributed with
+<i>4</i>&nbsp; * this work for additional information regarding copyright ownership.
+<i>5</i>&nbsp; * The ASF licenses this file to You under the Apache License, Version 2.0
+<i>6</i>&nbsp; * (the &quot;License&quot;); you may not use this file except in compliance with
+<i>7</i>&nbsp; * the License. You may obtain a copy of the License at
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; *     http://www.apache.org/licenses/LICENSE-2.0
+<i>10</i>&nbsp; *
+<i>11</i>&nbsp; * Unless required by applicable law or agreed to in writing, software
+<i>12</i>&nbsp; * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<i>13</i>&nbsp; * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<i>14</i>&nbsp; * See the License for the specific language governing permissions and
+<i>15</i>&nbsp; * limitations under the License.
+<i>16</i>&nbsp; */
+<i>17</i>&nbsp;
+<i>18</i>&nbsp;package opennlp.tools.ml;
+<i>19</i>&nbsp;
+<i>20</i>&nbsp;import java.util.Arrays;
+<i>21</i>&nbsp;import java.util.List;
+<i>22</i>&nbsp;import java.util.PriorityQueue;
+<i>23</i>&nbsp;import java.util.Queue;
+<i>24</i>&nbsp;
+<i>25</i>&nbsp;import opennlp.tools.ml.model.MaxentModel;
+<i>26</i>&nbsp;import opennlp.tools.ml.model.SequenceClassificationModel;
+<i>27</i>&nbsp;import opennlp.tools.util.BeamSearchContextGenerator;
+<i>28</i>&nbsp;import opennlp.tools.util.Cache;
+<i>29</i>&nbsp;import opennlp.tools.util.Sequence;
+<i>30</i>&nbsp;import opennlp.tools.util.SequenceValidator;
+<i>31</i>&nbsp;
+<i>32</i>&nbsp;/**
+<i>33</i>&nbsp; * Performs k-best search over sequence.  This is based on the description in
+<i>34</i>&nbsp; * Ratnaparkhi (1998), PhD diss, Univ. of Pennsylvania.
+<i>35</i>&nbsp; *
+<i>36</i>&nbsp; * @see Sequence
+<i>37</i>&nbsp; * @see SequenceValidator
+<i>38</i>&nbsp; * @see BeamSearchContextGenerator
+<i>39</i>&nbsp; */
+<i>40</i>&nbsp;public class BeamSearch&lt;T&gt; implements SequenceClassificationModel&lt;T&gt; {
+<i>41</i>&nbsp;
+<i>42</i>&nbsp;  public static final String BEAM_SIZE_PARAMETER = &quot;BeamSize&quot;;
+<i>43</i>&nbsp;
+<b class="fc"><i>44</i>&nbsp;  private static final Object[] EMPTY_ADDITIONAL_CONTEXT = new Object[0];</b>
+<i>45</i>&nbsp;
+<i>46</i>&nbsp;  protected int size;
+<i>47</i>&nbsp;  protected MaxentModel model;
+<i>48</i>&nbsp;
+<i>49</i>&nbsp;  private double[] probs;
+<i>50</i>&nbsp;  private Cache&lt;String[], double[]&gt; contextsCache;
+<i>51</i>&nbsp;  private static final int zeroLog = -100000;
+<i>52</i>&nbsp;
+<i>53</i>&nbsp;  /**
+<i>54</i>&nbsp;   * Creates new search object.
+<i>55</i>&nbsp;   *
+<i>56</i>&nbsp;   * @param size The size of the beam (k).
+<i>57</i>&nbsp;   * @param model the model for assigning probabilities to the sequence outcomes.
+<i>58</i>&nbsp;   */
+<i>59</i>&nbsp;  public BeamSearch(int size, MaxentModel model) {
+<b class="fc"><i>60</i>&nbsp;    this(size, model, 0);</b>
+<b class="fc"><i>61</i>&nbsp;  }</b>
+<i>62</i>&nbsp;
+<b class="fc"><i>63</i>&nbsp;  public BeamSearch(int size, MaxentModel model, int cacheSize) {</b>
+<i>64</i>&nbsp;
+<b class="fc"><i>65</i>&nbsp;    this.size = size;</b>
+<b class="fc"><i>66</i>&nbsp;    this.model = model;</b>
+<i>67</i>&nbsp;
+<b class="fc"><i>68</i>&nbsp;    if (cacheSize &gt; 0) {</b>
+<b class="nc"><i>69</i>&nbsp;      contextsCache = new Cache&lt;&gt;(cacheSize);</b>
+<i>70</i>&nbsp;    }
+<i>71</i>&nbsp;
+<b class="fc"><i>72</i>&nbsp;    this.probs = new double[model.getNumOutcomes()];</b>
+<b class="fc"><i>73</i>&nbsp;  }</b>
+<i>74</i>&nbsp;
+<i>75</i>&nbsp;  /**
+<i>76</i>&nbsp;   * Returns the best sequence of outcomes based on model for this object.
+<i>77</i>&nbsp;   *
+<i>78</i>&nbsp;   * @param sequence The input sequence.
+<i>79</i>&nbsp;   * @param additionalContext An Object[] of additional context.
+<i>80</i>&nbsp;   *     This is passed to the context generator blindly with the
+<i>81</i>&nbsp;   *     assumption that the context are appropiate.
+<i>82</i>&nbsp;   *
+<i>83</i>&nbsp;   * @return The top ranked sequence of outcomes or null if no sequence could be found
+<i>84</i>&nbsp;   */
+<i>85</i>&nbsp;  public Sequence[] bestSequences(int numSequences, T[] sequence,
+<i>86</i>&nbsp;      Object[] additionalContext, double minSequenceScore,
+<i>87</i>&nbsp;      BeamSearchContextGenerator&lt;T&gt; cg, SequenceValidator&lt;T&gt; validator) {
+<i>88</i>&nbsp;
+<b class="fc"><i>89</i>&nbsp;    Queue&lt;Sequence&gt; prev = new PriorityQueue&lt;&gt;(size);</b>
+<b class="fc"><i>90</i>&nbsp;    Queue&lt;Sequence&gt; next = new PriorityQueue&lt;&gt;(size);</b>
+<i>91</i>&nbsp;    Queue&lt;Sequence&gt; tmp;
+<b class="fc"><i>92</i>&nbsp;    prev.add(new Sequence());</b>
+<i>93</i>&nbsp;
+<b class="fc"><i>94</i>&nbsp;    if (additionalContext == null) {</b>
+<b class="fc"><i>95</i>&nbsp;      additionalContext = EMPTY_ADDITIONAL_CONTEXT;</b>
+<i>96</i>&nbsp;    }
+<i>97</i>&nbsp;
+<b class="fc"><i>98</i>&nbsp;    for (int i = 0; i &lt; sequence.length; i++) {</b>
+<b class="fc"><i>99</i>&nbsp;      int sz = Math.min(size, prev.size());</b>
+<i>100</i>&nbsp;
+<b class="fc"><i>101</i>&nbsp;      for (int sc = 0; prev.size() &gt; 0 &amp;&amp; sc &lt; sz; sc++) {</b>
+<b class="fc"><i>102</i>&nbsp;        Sequence top = prev.remove();</b>
+<b class="fc"><i>103</i>&nbsp;        List&lt;String&gt; tmpOutcomes = top.getOutcomes();</b>
+<b class="fc"><i>104</i>&nbsp;        String[] outcomes = tmpOutcomes.toArray(new String[tmpOutcomes.size()]);</b>
+<b class="fc"><i>105</i>&nbsp;        String[] contexts = cg.getContext(i, sequence, outcomes, additionalContext);</b>
+<i>106</i>&nbsp;        double[] scores;
+<b class="fc"><i>107</i>&nbsp;        if (contextsCache != null) {</b>
+<b class="nc"><i>108</i>&nbsp;          scores = contextsCache.computeIfAbsent(contexts, c -&gt; model.eval(c, probs));</b>
+<i>109</i>&nbsp;        } else {
+<b class="fc"><i>110</i>&nbsp;          scores = model.eval(contexts, probs);</b>
+<i>111</i>&nbsp;        }
+<i>112</i>&nbsp;
+<b class="fc"><i>113</i>&nbsp;        double[] temp_scores = new double[scores.length];</b>
+<b class="fc"><i>114</i>&nbsp;        System.arraycopy(scores, 0, temp_scores, 0, scores.length);</b>
+<i>115</i>&nbsp;
+<b class="fc"><i>116</i>&nbsp;        Arrays.sort(temp_scores);</b>
+<i>117</i>&nbsp;
+<b class="fc"><i>118</i>&nbsp;        double min = temp_scores[Math.max(0,scores.length - size)];</b>
+<i>119</i>&nbsp;
+<b class="fc"><i>120</i>&nbsp;        for (int p = 0; p &lt; scores.length; p++) {</b>
+<b class="fc"><i>121</i>&nbsp;          if (scores[p] &gt;= min) {</b>
+<b class="fc"><i>122</i>&nbsp;            String out = model.getOutcome(p);</b>
+<b class="fc"><i>123</i>&nbsp;            if (validator.validSequence(i, sequence, outcomes, out)) {</b>
+<b class="fc"><i>124</i>&nbsp;              Sequence ns = new Sequence(top, out, scores[p]);</b>
+<b class="fc"><i>125</i>&nbsp;              if (ns.getScore() &gt; minSequenceScore) {</b>
+<b class="fc"><i>126</i>&nbsp;                next.add(ns);</b>
+<i>127</i>&nbsp;              }
+<i>128</i>&nbsp;            }
+<i>129</i>&nbsp;          }
+<i>130</i>&nbsp;        }
+<i>131</i>&nbsp;
+<b class="fc"><i>132</i>&nbsp;        if (next.size() == 0) { //if no advanced sequences, advance all valid</b>
+<b class="nc"><i>133</i>&nbsp;          for (int p = 0; p &lt; scores.length; p++) {</b>
+<b class="nc"><i>134</i>&nbsp;            String out = model.getOutcome(p);</b>
+<b class="nc"><i>135</i>&nbsp;            if (validator.validSequence(i, sequence, outcomes, out)) {</b>
+<b class="nc"><i>136</i>&nbsp;              Sequence ns = new Sequence(top, out, scores[p]);</b>
+<b class="nc"><i>137</i>&nbsp;              if (ns.getScore() &gt; minSequenceScore) {</b>
+<b class="nc"><i>138</i>&nbsp;                next.add(ns);</b>
+<i>139</i>&nbsp;              }
+<i>140</i>&nbsp;            }
+<i>141</i>&nbsp;          }
+<i>142</i>&nbsp;        }
+<i>143</i>&nbsp;      }
+<i>144</i>&nbsp;
+<i>145</i>&nbsp;      //    make prev = next; and re-init next (we reuse existing prev set once we clear it)
+<b class="fc"><i>146</i>&nbsp;      prev.clear();</b>
+<b class="fc"><i>147</i>&nbsp;      tmp = prev;</b>
+<b class="fc"><i>148</i>&nbsp;      prev = next;</b>
+<b class="fc"><i>149</i>&nbsp;      next = tmp;</b>
+<i>150</i>&nbsp;    }
+<i>151</i>&nbsp;
+<b class="fc"><i>152</i>&nbsp;    int numSeq = Math.min(numSequences, prev.size());</b>
+<b class="fc"><i>153</i>&nbsp;    Sequence[] topSequences = new Sequence[numSeq];</b>
+<i>154</i>&nbsp;
+<b class="fc"><i>155</i>&nbsp;    for (int seqIndex = 0; seqIndex &lt; numSeq; seqIndex++) {</b>
+<b class="fc"><i>156</i>&nbsp;      topSequences[seqIndex] = prev.remove();</b>
+<i>157</i>&nbsp;    }
+<i>158</i>&nbsp;
+<b class="fc"><i>159</i>&nbsp;    return topSequences;</b>
+<i>160</i>&nbsp;  }
+<i>161</i>&nbsp;
+<i>162</i>&nbsp;  public Sequence[] bestSequences(int numSequences, T[] sequence,
+<i>163</i>&nbsp;      Object[] additionalContext, BeamSearchContextGenerator&lt;T&gt; cg, SequenceValidator&lt;T&gt; validator) {
+<b class="fc"><i>164</i>&nbsp;    return bestSequences(numSequences, sequence, additionalContext, zeroLog, cg, validator);</b>
+<i>165</i>&nbsp;  }
+<i>166</i>&nbsp;
+<i>167</i>&nbsp;  public Sequence bestSequence(T[] sequence, Object[] additionalContext,
+<i>168</i>&nbsp;      BeamSearchContextGenerator&lt;T&gt; cg, SequenceValidator&lt;T&gt; validator) {
+<b class="fc"><i>169</i>&nbsp;    Sequence[] sequences =  bestSequences(1, sequence, additionalContext, cg, validator);</b>
+<i>170</i>&nbsp;
+<b class="fc"><i>171</i>&nbsp;    if (sequences.length &gt; 0)</b>
+<b class="fc"><i>172</i>&nbsp;      return sequences[0];</b>
+<i>173</i>&nbsp;    else
+<b class="nc"><i>174</i>&nbsp;      return null;</b>
+<i>175</i>&nbsp;  }
+<i>176</i>&nbsp;
+<i>177</i>&nbsp;  @Override
+<i>178</i>&nbsp;  public String[] getOutcomes() {
+<b class="fc"><i>179</i>&nbsp;    String[] outcomes = new String[model.getNumOutcomes()];</b>
+<i>180</i>&nbsp;
+<b class="fc"><i>181</i>&nbsp;    for (int i = 0; i &lt; model.getNumOutcomes(); i++) {</b>
+<b class="fc"><i>182</i>&nbsp;      outcomes[i] = model.getOutcome(i);</b>
+<i>183</i>&nbsp;    }
+<i>184</i>&nbsp;
+<b class="fc"><i>185</i>&nbsp;    return outcomes;</b>
+<i>186</i>&nbsp;  }
+<i>187</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-09 18:47</div>
+</div>
+</body>
+</html>

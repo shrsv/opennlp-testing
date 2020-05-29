@@ -1,0 +1,370 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: QNTrainer</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">opennlp.tools.ml.maxent.quasinewton</a> ]
+</div>
+
+<h1>Coverage Summary for Class: QNTrainer (opennlp.tools.ml.maxent.quasinewton)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">QNTrainer</td>
+<td class="coverageStat">
+  <span class="percent">
+    69.2%
+  </span>
+  <span class="absValue">
+    (9/ 13)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    77.8%
+  </span>
+  <span class="absValue">
+    (56/ 72)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">QNTrainer$ModelEvaluator</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (2/ 2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (21/ 21)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    73.3%
+  </span>
+  <span class="absValue">
+    (11/ 15)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    82.8%
+  </span>
+  <span class="absValue">
+    (77/ 93)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/*
+<i>2</i>&nbsp; * Licensed to the Apache Software Foundation (ASF) under one or more
+<i>3</i>&nbsp; * contributor license agreements.  See the NOTICE file distributed with
+<i>4</i>&nbsp; * this work for additional information regarding copyright ownership.
+<i>5</i>&nbsp; * The ASF licenses this file to You under the Apache License, Version 2.0
+<i>6</i>&nbsp; * (the &quot;License&quot;); you may not use this file except in compliance with
+<i>7</i>&nbsp; * the License. You may obtain a copy of the License at
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; *     http://www.apache.org/licenses/LICENSE-2.0
+<i>10</i>&nbsp; *
+<i>11</i>&nbsp; * Unless required by applicable law or agreed to in writing, software
+<i>12</i>&nbsp; * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<i>13</i>&nbsp; * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<i>14</i>&nbsp; * See the License for the specific language governing permissions and
+<i>15</i>&nbsp; * limitations under the License.
+<i>16</i>&nbsp; */
+<i>17</i>&nbsp;
+<i>18</i>&nbsp;package opennlp.tools.ml.maxent.quasinewton;
+<i>19</i>&nbsp;
+<i>20</i>&nbsp;import java.io.IOException;
+<i>21</i>&nbsp;import java.util.ArrayList;
+<i>22</i>&nbsp;import java.util.List;
+<i>23</i>&nbsp;import java.util.Map;
+<i>24</i>&nbsp;
+<i>25</i>&nbsp;import opennlp.tools.ml.AbstractEventTrainer;
+<i>26</i>&nbsp;import opennlp.tools.ml.ArrayMath;
+<i>27</i>&nbsp;import opennlp.tools.ml.maxent.quasinewton.QNMinimizer.Evaluator;
+<i>28</i>&nbsp;import opennlp.tools.ml.model.AbstractModel;
+<i>29</i>&nbsp;import opennlp.tools.ml.model.Context;
+<i>30</i>&nbsp;import opennlp.tools.ml.model.DataIndexer;
+<i>31</i>&nbsp;import opennlp.tools.util.TrainingParameters;
+<i>32</i>&nbsp;
+<i>33</i>&nbsp;/**
+<i>34</i>&nbsp; * Maxent model trainer using L-BFGS algorithm.
+<i>35</i>&nbsp; */
+<i>36</i>&nbsp;public class QNTrainer extends AbstractEventTrainer {
+<i>37</i>&nbsp;
+<i>38</i>&nbsp;  public static final String MAXENT_QN_VALUE = &quot;MAXENT_QN&quot;;
+<i>39</i>&nbsp;
+<i>40</i>&nbsp;  public static final String THREADS_PARAM = &quot;Threads&quot;;
+<i>41</i>&nbsp;  public static final int THREADS_DEFAULT  = 1;
+<i>42</i>&nbsp;
+<i>43</i>&nbsp;  public static final String L1COST_PARAM   = &quot;L1Cost&quot;;
+<i>44</i>&nbsp;  public static final double L1COST_DEFAULT = 0.1;
+<i>45</i>&nbsp;
+<i>46</i>&nbsp;  public static final String L2COST_PARAM   = &quot;L2Cost&quot;;
+<i>47</i>&nbsp;  public static final double L2COST_DEFAULT = 0.1;
+<i>48</i>&nbsp;
+<i>49</i>&nbsp;  // Number of Hessian updates to store
+<i>50</i>&nbsp;  public static final String M_PARAM = &quot;NumOfUpdates&quot;;
+<i>51</i>&nbsp;  public static final int M_DEFAULT  = 15;
+<i>52</i>&nbsp;
+<i>53</i>&nbsp;  // Maximum number of function evaluations
+<i>54</i>&nbsp;  public static final String MAX_FCT_EVAL_PARAM = &quot;MaxFctEval&quot;;
+<i>55</i>&nbsp;  public static final int MAX_FCT_EVAL_DEFAULT  = 30000;
+<i>56</i>&nbsp;
+<i>57</i>&nbsp;  // Number of threads
+<i>58</i>&nbsp;  private int threads;
+<i>59</i>&nbsp;
+<i>60</i>&nbsp;  // L1-regularization cost
+<i>61</i>&nbsp;  private double l1Cost;
+<i>62</i>&nbsp;
+<i>63</i>&nbsp;  // L2-regularization cost
+<i>64</i>&nbsp;  private double l2Cost;
+<i>65</i>&nbsp;
+<i>66</i>&nbsp;  // Settings for QNMinimizer
+<i>67</i>&nbsp;  private int m;
+<i>68</i>&nbsp;  private int maxFctEval;
+<i>69</i>&nbsp;
+<i>70</i>&nbsp;  public QNTrainer(TrainingParameters parameters) {
+<b class="nc"><i>71</i>&nbsp;    super(parameters);</b>
+<b class="nc"><i>72</i>&nbsp;  }</b>
+<i>73</i>&nbsp;  
+<i>74</i>&nbsp;  // Constructor -- to log. For testing purpose
+<i>75</i>&nbsp;  public QNTrainer(boolean printMessages) {
+<b class="fc"><i>76</i>&nbsp;    this(M_DEFAULT, printMessages);</b>
+<b class="fc"><i>77</i>&nbsp;  }</b>
+<i>78</i>&nbsp;
+<i>79</i>&nbsp;  // Constructor -- m : number of hessian updates to store. For testing purpose
+<i>80</i>&nbsp;  public QNTrainer(int m) {
+<b class="nc"><i>81</i>&nbsp;    this(m, true);</b>
+<b class="nc"><i>82</i>&nbsp;  }</b>
+<i>83</i>&nbsp;
+<i>84</i>&nbsp;  // Constructor -- to log, number of hessian updates to store. For testing purpose
+<i>85</i>&nbsp;  public QNTrainer(int m, boolean verbose) {
+<b class="fc"><i>86</i>&nbsp;    this(m, MAX_FCT_EVAL_DEFAULT, verbose);</b>
+<b class="fc"><i>87</i>&nbsp;  }</b>
+<i>88</i>&nbsp;
+<i>89</i>&nbsp;  // For testing purpose
+<b class="fc"><i>90</i>&nbsp;  public QNTrainer(int m, int maxFctEval, boolean printMessages) {</b>
+<b class="fc"><i>91</i>&nbsp;    this.printMessages    = printMessages;</b>
+<b class="fc"><i>92</i>&nbsp;    this.m          = m &lt; 0 ? M_DEFAULT : m;</b>
+<b class="fc"><i>93</i>&nbsp;    this.maxFctEval = maxFctEval &lt; 0 ? MAX_FCT_EVAL_DEFAULT : maxFctEval;</b>
+<b class="fc"><i>94</i>&nbsp;    this.threads    = THREADS_DEFAULT;</b>
+<b class="fc"><i>95</i>&nbsp;    this.l1Cost     = L1COST_DEFAULT;</b>
+<b class="fc"><i>96</i>&nbsp;    this.l2Cost     = L2COST_DEFAULT;</b>
+<b class="fc"><i>97</i>&nbsp;  }</b>
+<i>98</i>&nbsp;
+<i>99</i>&nbsp;  // &gt;&gt; Members related to AbstractEventTrainer
+<b class="fc"><i>100</i>&nbsp;  public QNTrainer() {</b>
+<b class="fc"><i>101</i>&nbsp;  }</b>
+<i>102</i>&nbsp;
+<i>103</i>&nbsp;  @Override
+<i>104</i>&nbsp;  public void init(TrainingParameters trainingParameters, Map&lt;String, String&gt; reportMap) {
+<b class="fc"><i>105</i>&nbsp;    super.init(trainingParameters,reportMap);</b>
+<b class="fc"><i>106</i>&nbsp;    this.m = trainingParameters.getIntParameter(M_PARAM, M_DEFAULT);</b>
+<b class="fc"><i>107</i>&nbsp;    this.maxFctEval = trainingParameters.getIntParameter(MAX_FCT_EVAL_PARAM, MAX_FCT_EVAL_DEFAULT);</b>
+<b class="fc"><i>108</i>&nbsp;    this.threads = trainingParameters.getIntParameter(THREADS_PARAM, THREADS_DEFAULT);</b>
+<b class="fc"><i>109</i>&nbsp;    this.l1Cost = trainingParameters.getDoubleParameter(L1COST_PARAM, L1COST_DEFAULT);</b>
+<b class="fc"><i>110</i>&nbsp;    this.l2Cost = trainingParameters.getDoubleParameter(L2COST_PARAM, L2COST_DEFAULT);</b>
+<b class="fc"><i>111</i>&nbsp;  }</b>
+<i>112</i>&nbsp;  
+<i>113</i>&nbsp;  @Override
+<i>114</i>&nbsp;  @Deprecated
+<i>115</i>&nbsp;  public void init(Map&lt;String, String&gt; trainParams, Map&lt;String, String&gt; reportMap) {
+<b class="nc"><i>116</i>&nbsp;    init(new TrainingParameters(trainParams),reportMap);</b>
+<b class="nc"><i>117</i>&nbsp;  }</b>
+<i>118</i>&nbsp;
+<i>119</i>&nbsp;  @Override
+<i>120</i>&nbsp;  public void validate() {
+<b class="fc"><i>121</i>&nbsp;    super.validate();</b>
+<i>122</i>&nbsp;
+<b class="fc"><i>123</i>&nbsp;    String algorithmName = getAlgorithm();</b>
+<b class="fc"><i>124</i>&nbsp;    if (algorithmName != null &amp;&amp; !(MAXENT_QN_VALUE.equals(algorithmName))) {</b>
+<b class="nc"><i>125</i>&nbsp;      throw new IllegalArgumentException(&quot;algorithmName must be MAXENT_QN&quot;);</b>
+<i>126</i>&nbsp;    }
+<i>127</i>&nbsp;
+<i>128</i>&nbsp;    // Number of Hessian updates to remember
+<b class="fc"><i>129</i>&nbsp;    if (m &lt; 0) {</b>
+<b class="nc"><i>130</i>&nbsp;      throw new IllegalArgumentException(</b>
+<i>131</i>&nbsp;          &quot;Number of Hessian updates to remember must be &gt;= 0&quot;);
+<i>132</i>&nbsp;    }
+<i>133</i>&nbsp;
+<i>134</i>&nbsp;    // Maximum number of function evaluations
+<b class="fc"><i>135</i>&nbsp;    if (maxFctEval &lt; 0) {</b>
+<b class="nc"><i>136</i>&nbsp;      throw new IllegalArgumentException(</b>
+<i>137</i>&nbsp;          &quot;Maximum number of function evaluations must be &gt;= 0&quot;);
+<i>138</i>&nbsp;    }
+<i>139</i>&nbsp;
+<i>140</i>&nbsp;    // Number of threads must be &gt;= 1
+<b class="fc"><i>141</i>&nbsp;    if (threads &lt; 1) {</b>
+<b class="nc"><i>142</i>&nbsp;      throw new IllegalArgumentException(&quot;Number of threads must be &gt;= 1&quot;);</b>
+<i>143</i>&nbsp;    }
+<i>144</i>&nbsp;
+<i>145</i>&nbsp;    // Regularization costs must be &gt;= 0
+<b class="fc"><i>146</i>&nbsp;    if (l1Cost &lt; 0) {</b>
+<b class="nc"><i>147</i>&nbsp;      throw new IllegalArgumentException(&quot;Regularization costs must be &gt;= 0&quot;);</b>
+<i>148</i>&nbsp;    }
+<i>149</i>&nbsp;
+<b class="fc"><i>150</i>&nbsp;    if (l2Cost &lt; 0) {</b>
+<b class="nc"><i>151</i>&nbsp;      throw new IllegalArgumentException(&quot;Regularization costs must be &gt;= 0&quot;);</b>
+<i>152</i>&nbsp;    }
+<b class="fc"><i>153</i>&nbsp;  }</b>
+<i>154</i>&nbsp;
+<i>155</i>&nbsp;  @Deprecated
+<i>156</i>&nbsp;  @Override
+<i>157</i>&nbsp;  public boolean isValid() {
+<i>158</i>&nbsp;    try {
+<b class="nc"><i>159</i>&nbsp;      validate();</b>
+<b class="nc"><i>160</i>&nbsp;      return true;</b>
+<i>161</i>&nbsp;    }
+<b class="nc"><i>162</i>&nbsp;    catch (IllegalArgumentException e) {</b>
+<b class="nc"><i>163</i>&nbsp;      return false;</b>
+<i>164</i>&nbsp;    }
+<i>165</i>&nbsp;  }
+<i>166</i>&nbsp;
+<i>167</i>&nbsp;  public boolean isSortAndMerge() {
+<b class="fc"><i>168</i>&nbsp;    return true;</b>
+<i>169</i>&nbsp;  }
+<i>170</i>&nbsp;
+<i>171</i>&nbsp;  public AbstractModel doTrain(DataIndexer indexer) throws IOException {
+<b class="fc"><i>172</i>&nbsp;    int iterations = getIterations();</b>
+<b class="fc"><i>173</i>&nbsp;    return trainModel(iterations, indexer);</b>
+<i>174</i>&nbsp;  }
+<i>175</i>&nbsp;
+<i>176</i>&nbsp;  // &lt;&lt; Members related to AbstractEventTrainer
+<i>177</i>&nbsp;  public QNModel trainModel(int iterations, DataIndexer indexer) {
+<i>178</i>&nbsp;
+<i>179</i>&nbsp;    // Train model&#39;s parameters
+<i>180</i>&nbsp;    Function objectiveFunction;
+<b class="fc"><i>181</i>&nbsp;    if (threads == 1) {</b>
+<b class="fc"><i>182</i>&nbsp;      System.out.println(&quot;Computing model parameters ...&quot;);</b>
+<b class="fc"><i>183</i>&nbsp;      objectiveFunction = new NegLogLikelihood(indexer);</b>
+<i>184</i>&nbsp;    } else {
+<b class="fc"><i>185</i>&nbsp;      System.out.println(&quot;Computing model parameters in &quot; + threads + &quot; threads ...&quot;);</b>
+<b class="fc"><i>186</i>&nbsp;      objectiveFunction = new ParallelNegLogLikelihood(indexer, threads);</b>
+<i>187</i>&nbsp;    }
+<i>188</i>&nbsp;
+<b class="fc"><i>189</i>&nbsp;    QNMinimizer minimizer = new QNMinimizer(</b>
+<i>190</i>&nbsp;        l1Cost, l2Cost, iterations, m, maxFctEval, printMessages);
+<b class="fc"><i>191</i>&nbsp;    minimizer.setEvaluator(new ModelEvaluator(indexer));</b>
+<i>192</i>&nbsp;
+<b class="fc"><i>193</i>&nbsp;    double[] parameters = minimizer.minimize(objectiveFunction);</b>
+<i>194</i>&nbsp;
+<i>195</i>&nbsp;    // Construct model with trained parameters
+<b class="fc"><i>196</i>&nbsp;    String[] predLabels = indexer.getPredLabels();</b>
+<b class="fc"><i>197</i>&nbsp;    int nPredLabels = predLabels.length;</b>
+<i>198</i>&nbsp;
+<b class="fc"><i>199</i>&nbsp;    String[] outcomeNames = indexer.getOutcomeLabels();</b>
+<b class="fc"><i>200</i>&nbsp;    int nOutcomes = outcomeNames.length;</b>
+<i>201</i>&nbsp;
+<b class="fc"><i>202</i>&nbsp;    Context[] params = new Context[nPredLabels];</b>
+<b class="fc"><i>203</i>&nbsp;    for (int ci = 0; ci &lt; params.length; ci++) {</b>
+<b class="fc"><i>204</i>&nbsp;      List&lt;Integer&gt; outcomePattern = new ArrayList&lt;&gt;(nOutcomes);</b>
+<b class="fc"><i>205</i>&nbsp;      List&lt;Double&gt; alpha = new ArrayList&lt;&gt;(nOutcomes);</b>
+<b class="fc"><i>206</i>&nbsp;      for (int oi = 0; oi &lt; nOutcomes; oi++) {</b>
+<b class="fc"><i>207</i>&nbsp;        double val = parameters[oi * nPredLabels + ci];</b>
+<b class="fc"><i>208</i>&nbsp;        outcomePattern.add(oi);</b>
+<b class="fc"><i>209</i>&nbsp;        alpha.add(val);</b>
+<i>210</i>&nbsp;      }
+<b class="fc"><i>211</i>&nbsp;      params[ci] = new Context(ArrayMath.toIntArray(outcomePattern),</b>
+<b class="fc"><i>212</i>&nbsp;          ArrayMath.toDoubleArray(alpha));</b>
+<i>213</i>&nbsp;    }
+<i>214</i>&nbsp;
+<b class="fc"><i>215</i>&nbsp;    return new QNModel(params, predLabels, outcomeNames);</b>
+<i>216</i>&nbsp;  }
+<i>217</i>&nbsp;
+<i>218</i>&nbsp;  /**
+<i>219</i>&nbsp;   * For measuring model&#39;s training accuracy
+<i>220</i>&nbsp;   */
+<i>221</i>&nbsp;  private static class ModelEvaluator implements Evaluator {
+<i>222</i>&nbsp;
+<i>223</i>&nbsp;    private DataIndexer indexer;
+<i>224</i>&nbsp;
+<b class="fc"><i>225</i>&nbsp;    public ModelEvaluator(DataIndexer indexer) {</b>
+<b class="fc"><i>226</i>&nbsp;      this.indexer = indexer;</b>
+<b class="fc"><i>227</i>&nbsp;    }</b>
+<i>228</i>&nbsp;
+<i>229</i>&nbsp;    /**
+<i>230</i>&nbsp;     * Evaluate the current model on training data set
+<i>231</i>&nbsp;     * @return model&#39;s training accuracy
+<i>232</i>&nbsp;     */
+<i>233</i>&nbsp;    @Override
+<i>234</i>&nbsp;    public double evaluate(double[] parameters) {
+<b class="fc"><i>235</i>&nbsp;      int[][] contexts  = indexer.getContexts();</b>
+<b class="fc"><i>236</i>&nbsp;      float[][] values  = indexer.getValues();</b>
+<b class="fc"><i>237</i>&nbsp;      int[] nEventsSeen = indexer.getNumTimesEventsSeen();</b>
+<b class="fc"><i>238</i>&nbsp;      int[] outcomeList = indexer.getOutcomeList();</b>
+<b class="fc"><i>239</i>&nbsp;      int nOutcomes     = indexer.getOutcomeLabels().length;</b>
+<b class="fc"><i>240</i>&nbsp;      int nPredLabels   = indexer.getPredLabels().length;</b>
+<i>241</i>&nbsp;
+<b class="fc"><i>242</i>&nbsp;      int nCorrect     = 0;</b>
+<b class="fc"><i>243</i>&nbsp;      int nTotalEvents = 0;</b>
+<i>244</i>&nbsp;
+<b class="fc"><i>245</i>&nbsp;      for (int ei = 0; ei &lt; contexts.length; ei++) {</b>
+<b class="fc"><i>246</i>&nbsp;        int[] context  = contexts[ei];</b>
+<b class="fc"><i>247</i>&nbsp;        float[] value  = values == null ? null : values[ei];</b>
+<i>248</i>&nbsp;
+<b class="fc"><i>249</i>&nbsp;        double[] probs = new double[nOutcomes];</b>
+<b class="fc"><i>250</i>&nbsp;        QNModel.eval(context, value, probs, nOutcomes, nPredLabels, parameters);</b>
+<b class="fc"><i>251</i>&nbsp;        int outcome = ArrayMath.argmax(probs);</b>
+<b class="fc"><i>252</i>&nbsp;        if (outcome == outcomeList[ei]) {</b>
+<b class="fc"><i>253</i>&nbsp;          nCorrect += nEventsSeen[ei];</b>
+<i>254</i>&nbsp;        }
+<b class="fc"><i>255</i>&nbsp;        nTotalEvents += nEventsSeen[ei];</b>
+<i>256</i>&nbsp;      }
+<i>257</i>&nbsp;
+<b class="fc"><i>258</i>&nbsp;      return (double) nCorrect / nTotalEvents;</b>
+<i>259</i>&nbsp;    }
+<i>260</i>&nbsp;  }
+<i>261</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-09 15:05</div>
+</div>
+</body>
+</html>

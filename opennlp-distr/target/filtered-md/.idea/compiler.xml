@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="opennlp-morfologik-addon" />
+        <module name="opennlp-tools" />
+        <module name="opennlp-uima" />
+        <module name="opennlp-brat-annotator" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="opennlp" target="1.8" />
+      <module name="opennlp-brat-annotator" target="1.8" />
+      <module name="opennlp-distr" target="1.8" />
+      <module name="opennlp-docs" target="1.8" />
+      <module name="opennlp-morfologik-addon" target="1.8" />
+      <module name="opennlp-tools" target="1.8" />
+      <module name="opennlp-uima" target="1.8" />
+    </bytecodeTargetLevel>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="opennlp-brat-annotator" options="-Xlint" />
+      <module name="opennlp-morfologik-addon" options="-Xlint" />
+      <module name="opennlp-tools" options="-Xlint" />
+      <module name="opennlp-uima" options="-Xlint" />
+    </option>
+  </component>
+</project>

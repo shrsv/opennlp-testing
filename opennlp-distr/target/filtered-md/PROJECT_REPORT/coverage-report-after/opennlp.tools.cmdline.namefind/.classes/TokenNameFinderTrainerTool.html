@@ -1,0 +1,284 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: TokenNameFinderTrainerTool</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">opennlp.tools.cmdline.namefind</a> ]
+</div>
+
+<h1>Coverage Summary for Class: TokenNameFinderTrainerTool (opennlp.tools.cmdline.namefind)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">TokenNameFinderTrainerTool</td>
+<td class="coverageStat">
+  <span class="percent">
+    50%
+  </span>
+  <span class="absValue">
+    (3/ 6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    25.4%
+  </span>
+  <span class="absValue">
+    (18/ 71)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">TokenNameFinderTrainerTool$TrainerToolParams</td>
+  </tr>
+<tr>
+  <td class="name"><strong>total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    50%
+  </span>
+  <span class="absValue">
+    (3/ 6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    25.4%
+  </span>
+  <span class="absValue">
+    (18/ 71)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/*
+<i>2</i>&nbsp; * Licensed to the Apache Software Foundation (ASF) under one or more
+<i>3</i>&nbsp; * contributor license agreements.  See the NOTICE file distributed with
+<i>4</i>&nbsp; * this work for additional information regarding copyright ownership.
+<i>5</i>&nbsp; * The ASF licenses this file to You under the Apache License, Version 2.0
+<i>6</i>&nbsp; * (the &quot;License&quot;); you may not use this file except in compliance with
+<i>7</i>&nbsp; * the License. You may obtain a copy of the License at
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; *     http://www.apache.org/licenses/LICENSE-2.0
+<i>10</i>&nbsp; *
+<i>11</i>&nbsp; * Unless required by applicable law or agreed to in writing, software
+<i>12</i>&nbsp; * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<i>13</i>&nbsp; * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<i>14</i>&nbsp; * See the License for the specific language governing permissions and
+<i>15</i>&nbsp; * limitations under the License.
+<i>16</i>&nbsp; */
+<i>17</i>&nbsp;
+<i>18</i>&nbsp;package opennlp.tools.cmdline.namefind;
+<i>19</i>&nbsp;
+<i>20</i>&nbsp;import java.io.File;
+<i>21</i>&nbsp;import java.io.IOException;
+<i>22</i>&nbsp;import java.io.InputStream;
+<i>23</i>&nbsp;import java.util.HashMap;
+<i>24</i>&nbsp;import java.util.Map;
+<i>25</i>&nbsp;
+<i>26</i>&nbsp;import opennlp.tools.cmdline.AbstractTrainerTool;
+<i>27</i>&nbsp;import opennlp.tools.cmdline.CmdLineUtil;
+<i>28</i>&nbsp;import opennlp.tools.cmdline.TerminateToolException;
+<i>29</i>&nbsp;import opennlp.tools.cmdline.namefind.TokenNameFinderTrainerTool.TrainerToolParams;
+<i>30</i>&nbsp;import opennlp.tools.cmdline.params.TrainingToolParams;
+<i>31</i>&nbsp;import opennlp.tools.namefind.BilouCodec;
+<i>32</i>&nbsp;import opennlp.tools.namefind.BioCodec;
+<i>33</i>&nbsp;import opennlp.tools.namefind.NameSample;
+<i>34</i>&nbsp;import opennlp.tools.namefind.NameSampleTypeFilter;
+<i>35</i>&nbsp;import opennlp.tools.namefind.TokenNameFinderFactory;
+<i>36</i>&nbsp;import opennlp.tools.namefind.TokenNameFinderModel;
+<i>37</i>&nbsp;import opennlp.tools.util.InvalidFormatException;
+<i>38</i>&nbsp;import opennlp.tools.util.SequenceCodec;
+<i>39</i>&nbsp;import opennlp.tools.util.TrainingParameters;
+<i>40</i>&nbsp;import opennlp.tools.util.featuregen.GeneratorFactory;
+<i>41</i>&nbsp;import opennlp.tools.util.model.ArtifactSerializer;
+<i>42</i>&nbsp;import opennlp.tools.util.model.ModelUtil;
+<i>43</i>&nbsp;
+<i>44</i>&nbsp;public final class TokenNameFinderTrainerTool
+<i>45</i>&nbsp;    extends AbstractTrainerTool&lt;NameSample, TrainerToolParams&gt; {
+<i>46</i>&nbsp;
+<i>47</i>&nbsp;  interface TrainerToolParams extends TrainingParams, TrainingToolParams {
+<i>48</i>&nbsp;
+<i>49</i>&nbsp;  }
+<i>50</i>&nbsp;
+<i>51</i>&nbsp;  public TokenNameFinderTrainerTool() {
+<b class="fc"><i>52</i>&nbsp;    super(NameSample.class, TrainerToolParams.class);</b>
+<b class="fc"><i>53</i>&nbsp;  }</b>
+<i>54</i>&nbsp;
+<i>55</i>&nbsp;  public String getShortDescription() {
+<b class="fc"><i>56</i>&nbsp;    return &quot;trainer for the learnable name finder&quot;;</b>
+<i>57</i>&nbsp;  }
+<i>58</i>&nbsp;
+<i>59</i>&nbsp;  static byte[] openFeatureGeneratorBytes(String featureGenDescriptorFile) {
+<b class="nc"><i>60</i>&nbsp;    if (featureGenDescriptorFile != null) {</b>
+<b class="nc"><i>61</i>&nbsp;      return openFeatureGeneratorBytes(new File(featureGenDescriptorFile));</b>
+<i>62</i>&nbsp;    }
+<b class="nc"><i>63</i>&nbsp;    return null;</b>
+<i>64</i>&nbsp;  }
+<i>65</i>&nbsp;
+<i>66</i>&nbsp;  public static byte[] openFeatureGeneratorBytes(File featureGenDescriptorFile) {
+<b class="nc"><i>67</i>&nbsp;    byte[] featureGeneratorBytes = null;</b>
+<i>68</i>&nbsp;    // load descriptor file into memory
+<b class="nc"><i>69</i>&nbsp;    if (featureGenDescriptorFile != null) {</b>
+<i>70</i>&nbsp;
+<b class="nc"><i>71</i>&nbsp;      try (InputStream bytesIn = CmdLineUtil.openInFile(featureGenDescriptorFile)) {</b>
+<b class="nc"><i>72</i>&nbsp;        featureGeneratorBytes = ModelUtil.read(bytesIn);</b>
+<b class="nc"><i>73</i>&nbsp;      } catch (IOException e) {</b>
+<b class="nc"><i>74</i>&nbsp;        throw new TerminateToolException(-1, &quot;IO error while reading training data or indexing data: &quot;</b>
+<b class="nc"><i>75</i>&nbsp;            + e.getMessage(), e);</b>
+<b class="nc"><i>76</i>&nbsp;      }</b>
+<i>77</i>&nbsp;    }
+<b class="nc"><i>78</i>&nbsp;    return featureGeneratorBytes;</b>
+<i>79</i>&nbsp;  }
+<i>80</i>&nbsp;
+<i>81</i>&nbsp;  /**
+<i>82</i>&nbsp;   * Load the resources, such as dictionaries, by reading the feature xml descriptor
+<i>83</i>&nbsp;   * and looking into the directory passed as argument.
+<i>84</i>&nbsp;   * @param resourcePath the directory in which the resources are to be found
+<i>85</i>&nbsp;   * @param featureGenDescriptor the feature xml descriptor
+<i>86</i>&nbsp;   * @return a map consisting of the file name of the resource and its corresponding Object
+<i>87</i>&nbsp;   */
+<i>88</i>&nbsp;  public static Map&lt;String, Object&gt; loadResources(File resourcePath, File featureGenDescriptor)
+<i>89</i>&nbsp;      throws IOException {
+<b class="fc"><i>90</i>&nbsp;    Map&lt;String, Object&gt; resources = new HashMap&lt;&gt;();</b>
+<i>91</i>&nbsp;
+<b class="fc"><i>92</i>&nbsp;    if (resourcePath != null) {</b>
+<b class="fc"><i>93</i>&nbsp;      Map&lt;String, ArtifactSerializer&gt; artifactSerializers = new HashMap&lt;&gt;();</b>
+<i>94</i>&nbsp;
+<b class="fc"><i>95</i>&nbsp;      if (featureGenDescriptor != null) {</b>
+<i>96</i>&nbsp;
+<b class="fc"><i>97</i>&nbsp;        try (InputStream xmlDescriptorIn = CmdLineUtil.openInFile(featureGenDescriptor)) {</b>
+<b class="fc"><i>98</i>&nbsp;          artifactSerializers.putAll(</b>
+<b class="fc"><i>99</i>&nbsp;              GeneratorFactory.extractArtifactSerializerMappings(xmlDescriptorIn));</b>
+<b class="fc"><i>100</i>&nbsp;        }</b>
+<i>101</i>&nbsp;      }
+<i>102</i>&nbsp;
+<b class="fc"><i>103</i>&nbsp;      for (Map.Entry&lt;String, ArtifactSerializer&gt; serializerMapping : artifactSerializers.entrySet()) {</b>
+<b class="fc"><i>104</i>&nbsp;        String resourceName = serializerMapping.getKey();</b>
+<b class="fc"><i>105</i>&nbsp;        try (InputStream resourceIn = CmdLineUtil.openInFile(new File(resourcePath, resourceName))) {</b>
+<b class="fc"><i>106</i>&nbsp;          resources.put(resourceName, serializerMapping.getValue().create(resourceIn));</b>
+<b class="fc"><i>107</i>&nbsp;        }</b>
+<b class="fc"><i>108</i>&nbsp;      }</b>
+<i>109</i>&nbsp;    }
+<b class="fc"><i>110</i>&nbsp;    return resources;</b>
+<i>111</i>&nbsp;  }
+<i>112</i>&nbsp;
+<i>113</i>&nbsp;  public void run(String format, String[] args) {
+<b class="nc"><i>114</i>&nbsp;    super.run(format, args);</b>
+<i>115</i>&nbsp;
+<b class="nc"><i>116</i>&nbsp;    mlParams = CmdLineUtil.loadTrainingParameters(params.getParams(), true);</b>
+<b class="nc"><i>117</i>&nbsp;    if (mlParams == null) {</b>
+<b class="nc"><i>118</i>&nbsp;      mlParams = new TrainingParameters();</b>
+<i>119</i>&nbsp;    }
+<i>120</i>&nbsp;
+<b class="nc"><i>121</i>&nbsp;    File modelOutFile = params.getModel();</b>
+<i>122</i>&nbsp;
+<b class="nc"><i>123</i>&nbsp;    byte[] featureGeneratorBytes = openFeatureGeneratorBytes(params.getFeaturegen());</b>
+<i>124</i>&nbsp;
+<i>125</i>&nbsp;    // TODO: Support Custom resources:
+<i>126</i>&nbsp;    //       Must be loaded into memory, or written to tmp file until descriptor
+<i>127</i>&nbsp;    //       is loaded which defines parses when model is loaded
+<i>128</i>&nbsp;
+<i>129</i>&nbsp;    Map&lt;String, Object&gt; resources;
+<i>130</i>&nbsp;    try {
+<b class="nc"><i>131</i>&nbsp;      resources = loadResources(params.getResources(), params.getFeaturegen());</b>
+<i>132</i>&nbsp;    }
+<b class="nc"><i>133</i>&nbsp;    catch (IOException e) {</b>
+<b class="nc"><i>134</i>&nbsp;      throw new TerminateToolException(-1, e.getMessage(), e);</b>
+<b class="nc"><i>135</i>&nbsp;    }</b>
+<i>136</i>&nbsp;
+<b class="nc"><i>137</i>&nbsp;    CmdLineUtil.checkOutputFile(&quot;name finder model&quot;, modelOutFile);</b>
+<i>138</i>&nbsp;
+<b class="nc"><i>139</i>&nbsp;    if (params.getNameTypes() != null) {</b>
+<b class="nc"><i>140</i>&nbsp;      String[] nameTypes = params.getNameTypes().split(&quot;,&quot;);</b>
+<b class="nc"><i>141</i>&nbsp;      sampleStream = new NameSampleTypeFilter(nameTypes, sampleStream);</b>
+<i>142</i>&nbsp;    }
+<i>143</i>&nbsp;
+<b class="nc"><i>144</i>&nbsp;    String sequenceCodecImplName = params.getSequenceCodec();</b>
+<i>145</i>&nbsp;
+<b class="nc"><i>146</i>&nbsp;    if (&quot;BIO&quot;.equals(sequenceCodecImplName)) {</b>
+<b class="nc"><i>147</i>&nbsp;      sequenceCodecImplName = BioCodec.class.getName();</b>
+<i>148</i>&nbsp;    }
+<b class="nc"><i>149</i>&nbsp;    else if (&quot;BILOU&quot;.equals(sequenceCodecImplName)) {</b>
+<b class="nc"><i>150</i>&nbsp;      sequenceCodecImplName = BilouCodec.class.getName();</b>
+<i>151</i>&nbsp;    }
+<i>152</i>&nbsp;
+<b class="nc"><i>153</i>&nbsp;    SequenceCodec&lt;String&gt; sequenceCodec =</b>
+<b class="nc"><i>154</i>&nbsp;        TokenNameFinderFactory.instantiateSequenceCodec(sequenceCodecImplName);</b>
+<i>155</i>&nbsp;
+<i>156</i>&nbsp;    TokenNameFinderFactory nameFinderFactory;
+<i>157</i>&nbsp;    try {
+<b class="nc"><i>158</i>&nbsp;      nameFinderFactory = TokenNameFinderFactory.create(params.getFactory(),</b>
+<i>159</i>&nbsp;          featureGeneratorBytes, resources, sequenceCodec);
+<b class="nc"><i>160</i>&nbsp;    } catch (InvalidFormatException e) {</b>
+<b class="nc"><i>161</i>&nbsp;      throw new TerminateToolException(-1, e.getMessage(), e);</b>
+<b class="nc"><i>162</i>&nbsp;    }</b>
+<i>163</i>&nbsp;
+<b class="nc"><i>164</i>&nbsp;    NameSampleCountersStream counters = new NameSampleCountersStream(sampleStream);</b>
+<b class="nc"><i>165</i>&nbsp;    sampleStream = counters;</b>
+<i>166</i>&nbsp;
+<i>167</i>&nbsp;    TokenNameFinderModel model;
+<i>168</i>&nbsp;    try {
+<b class="nc"><i>169</i>&nbsp;      model = opennlp.tools.namefind.NameFinderME.train(</b>
+<b class="nc"><i>170</i>&nbsp;          params.getLang(), params.getType(), sampleStream, mlParams,</b>
+<i>171</i>&nbsp;          nameFinderFactory);
+<i>172</i>&nbsp;    }
+<b class="nc"><i>173</i>&nbsp;    catch (IOException e) {</b>
+<b class="nc"><i>174</i>&nbsp;      throw createTerminationIOException(e);</b>
+<i>175</i>&nbsp;    }
+<i>176</i>&nbsp;    finally {
+<b class="nc"><i>177</i>&nbsp;      try {</b>
+<b class="nc"><i>178</i>&nbsp;        sampleStream.close();</b>
+<b class="nc"><i>179</i>&nbsp;      } catch (IOException e) {</b>
+<i>180</i>&nbsp;        // sorry that this can fail
+<b class="nc"><i>181</i>&nbsp;      }</b>
+<b class="nc"><i>182</i>&nbsp;    }</b>
+<i>183</i>&nbsp;
+<b class="nc"><i>184</i>&nbsp;    System.out.println();</b>
+<b class="nc"><i>185</i>&nbsp;    counters.printSummary();</b>
+<b class="nc"><i>186</i>&nbsp;    System.out.println();</b>
+<i>187</i>&nbsp;
+<b class="nc"><i>188</i>&nbsp;    CmdLineUtil.writeModel(&quot;name finder&quot;, modelOutFile, model);</b>
+<i>189</i>&nbsp;
+<b class="nc"><i>190</i>&nbsp;  }</b>
+<i>191</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-09 18:47</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,4 @@
+opennlp/morfologik/builder/POSDictionayBuilderTest.class
+opennlp/morfologik/lemmatizer/MorfologikLemmatizerTest.class
+opennlp/morfologik/tagdict/POSTaggerFactoryTest.class
+opennlp/morfologik/tagdict/MorfologikTagDictionaryTest.class

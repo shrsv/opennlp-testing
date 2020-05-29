@@ -1,0 +1,874 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="BranchesTreeState">
+    <expand>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+    </expand>
+    <select />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="d552dbf8-f0a3-41a7-8cbc-2cac0a87f928" name="Default Changelist" comment="SWE215 Assignment1 test cases">
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_sun_activation_jakarta_activation_1_2_1.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_sun_xml_bind_jaxb_core_2_3_0_1.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_sun_xml_bind_jaxb_impl_2_3_1.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__jakarta_activation_jakarta_activation_api_1_2_1.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__jakarta_annotation_jakarta_annotation_api_1_3_5.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__jakarta_validation_jakarta_validation_api_2_0_2.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__jakarta_ws_rs_jakarta_ws_rs_api_2_1_6.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__jakarta_xml_bind_jakarta_xml_bind_api_2_3_2.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__javax_activation_javax_activation_api_1_2_0.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__javax_xml_bind_jaxb_api_2_3_1.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__junit_junit_4_13.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_bitbucket_mstrobel_procyon_compilertools_0_5_32.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_bitbucket_mstrobel_procyon_core_0_5_32.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_slf4j_slf4j_api_1_7_25.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/jarRepositories.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/jarRepositories.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__com_beust_jcommander_1_48.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_beust_jcommander_1_78.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__com_carrotsearch_hppc_0_7_1.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_carrotsearch_hppc_0_7_2.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__com_fasterxml_jackson_core_jackson_annotations_2_8_4.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_fasterxml_jackson_core_jackson_annotations_2_10_1.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__com_fasterxml_jackson_core_jackson_core_2_8_4.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_fasterxml_jackson_core_jackson_core_2_10_1.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__com_fasterxml_jackson_core_jackson_databind_2_8_4.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_fasterxml_jackson_core_jackson_databind_2_10_1.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__com_fasterxml_jackson_jaxrs_jackson_jaxrs_base_2_8_4.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__com_fasterxml_jackson_jaxrs_jackson_jaxrs_json_provider_2_8_4.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__com_fasterxml_jackson_module_jackson_module_jaxb_annotations_2_8_4.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_fasterxml_jackson_module_jackson_module_jaxb_annotations_2_10_1.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__commons_io_commons_io_2_4.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__commons_io_commons_io_2_6.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__javax_annotation_javax_annotation_api_1_2.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__javax_annotation_javax_annotation_api_1_3_2.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__javax_validation_validation_api_1_1_0_Final.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__javax_ws_rs_javax_ws_rs_api_2_0_1.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__junit_junit_4_12.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__net_bytebuddy_byte_buddy_1_10_5.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__net_bytebuddy_byte_buddy_agent_1_10_5.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_apache_uima_uimaj_core_2_3_1.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_apache_uima_uimaj_core_3_1_1.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_carrot2_morfologik_fsa_2_1_3.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_carrot2_morfologik_fsa_2_1_7.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_carrot2_morfologik_fsa_builders_2_1_3.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_carrot2_morfologik_fsa_builders_2_1_7.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_carrot2_morfologik_stemming_2_1_3.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_carrot2_morfologik_stemming_2_1_7.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_carrot2_morfologik_tools_2_1_3.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_carrot2_morfologik_tools_2_1_7.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_glassfish_grizzly_grizzly_framework_2_3_28.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_glassfish_grizzly_grizzly_framework_2_4_4.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_glassfish_grizzly_grizzly_http_2_3_28.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_glassfish_grizzly_grizzly_http_2_4_4.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_glassfish_grizzly_grizzly_http_server_2_3_28.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_glassfish_grizzly_grizzly_http_server_2_4_4.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_glassfish_hk2_external_aopalliance_repackaged_2_5_0_b30.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_glassfish_hk2_external_javax_inject_2_5_0_b30.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_glassfish_hk2_external_jakarta_inject_2_6_1.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_glassfish_hk2_hk2_api_2_5_0_b30.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_glassfish_hk2_hk2_locator_2_5_0_b30.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_glassfish_hk2_hk2_utils_2_5_0_b30.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_glassfish_hk2_osgi_resource_locator_1_0_1.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_glassfish_hk2_osgi_resource_locator_1_0_3.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_glassfish_jersey_bundles_repackaged_jersey_guava_2_25.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_glassfish_jersey_containers_jersey_container_grizzly2_http_2_25.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_glassfish_jersey_containers_jersey_container_grizzly2_http_2_30_1.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_glassfish_jersey_core_jersey_client_2_25.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_glassfish_jersey_core_jersey_client_2_30_1.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_glassfish_jersey_core_jersey_common_2_25.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_glassfish_jersey_core_jersey_common_2_30_1.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_glassfish_jersey_core_jersey_server_2_25.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_glassfish_jersey_core_jersey_server_2_30_1.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_glassfish_jersey_ext_jersey_entity_filtering_2_25.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_glassfish_jersey_ext_jersey_entity_filtering_2_30_1.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_glassfish_jersey_media_jersey_media_jaxb_2_25.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_glassfish_jersey_media_jersey_media_jaxb_2_30_1.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_glassfish_jersey_media_jersey_media_json_jackson_2_25.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_glassfish_jersey_media_jersey_media_json_jackson_2_30_1.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_javassist_javassist_3_20_0_GA.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_mockito_mockito_core_3_3_3.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_objenesis_objenesis_2_6.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.travis.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.travis.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-brat-annotator/opennlp-brat-annotator.iml" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-brat-annotator/opennlp-brat-annotator.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-brat-annotator/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-brat-annotator/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-distr/opennlp-distr.iml" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-distr/opennlp-distr.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-distr/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-distr/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-docs/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-docs/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-docs/src/docbkx/parser.xml" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-docs/src/docbkx/parser.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-morfologik-addon/opennlp-morfologik-addon.iml" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-morfologik-addon/opennlp-morfologik-addon.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-morfologik-addon/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-morfologik-addon/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-morfologik-addon/src/test/java/opennlp/morfologik/tagdict/POSTaggerFactoryTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-morfologik-addon/src/test/java/opennlp/morfologik/tagdict/POSTaggerFactoryTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-morfologik-addon/target/test-classes/opennlp/morfologik/tagdict/POSTaggerFactoryTest.class" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-morfologik-addon/target/test-classes/opennlp/morfologik/tagdict/POSTaggerFactoryTest.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/opennlp-tools.iml" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/opennlp-tools.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/src/main/java/opennlp/tools/cmdline/ArgumentParser.java" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/src/main/java/opennlp/tools/cmdline/ArgumentParser.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/src/main/java/opennlp/tools/cmdline/GenerateManualTool.java" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/src/main/java/opennlp/tools/cmdline/GenerateManualTool.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/src/main/java/opennlp/tools/dictionary/serializer/DictionaryEntryPersistor.java" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/src/main/java/opennlp/tools/dictionary/serializer/DictionaryEntryPersistor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/src/main/java/opennlp/tools/formats/BioNLP2004NameSampleStream.java" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/src/main/java/opennlp/tools/formats/BioNLP2004NameSampleStream.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/src/main/java/opennlp/tools/formats/Conll02NameSampleStream.java" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/src/main/java/opennlp/tools/formats/Conll02NameSampleStream.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/src/main/java/opennlp/tools/formats/Conll03NameSampleStream.java" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/src/main/java/opennlp/tools/formats/Conll03NameSampleStream.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/src/main/java/opennlp/tools/formats/ConllXPOSSampleStreamFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/src/main/java/opennlp/tools/formats/ConllXPOSSampleStreamFactory.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/src/main/java/opennlp/tools/formats/EvalitaNameSampleStream.java" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/src/main/java/opennlp/tools/formats/EvalitaNameSampleStream.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/src/main/java/opennlp/tools/langdetect/DefaultLanguageDetectorContextGenerator.java" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/src/main/java/opennlp/tools/langdetect/DefaultLanguageDetectorContextGenerator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/src/main/java/opennlp/tools/langdetect/LanguageDetector.java" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/src/main/java/opennlp/tools/langdetect/LanguageDetector.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/src/main/java/opennlp/tools/langdetect/LanguageDetectorContextGenerator.java" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/src/main/java/opennlp/tools/langdetect/LanguageDetectorContextGenerator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/src/main/java/opennlp/tools/langdetect/LanguageDetectorME.java" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/src/main/java/opennlp/tools/langdetect/LanguageDetectorME.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/src/main/java/opennlp/tools/ml/perceptron/SimplePerceptronSequenceTrainer.java" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/src/main/java/opennlp/tools/ml/perceptron/SimplePerceptronSequenceTrainer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/src/main/java/opennlp/tools/stemmer/snowball/SnowballStemmer.java" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/src/main/java/opennlp/tools/stemmer/snowball/SnowballStemmer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/src/main/java/opennlp/tools/util/StringUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/src/main/java/opennlp/tools/util/StringUtil.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/src/main/java/opennlp/tools/util/normalizer/CharSequenceNormalizer.java" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/src/main/java/opennlp/tools/util/normalizer/CharSequenceNormalizer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/src/test/java/opennlp/tools/cmdline/ArgumentParserTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/src/test/java/opennlp/tools/cmdline/ArgumentParserTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/src/test/java/opennlp/tools/cmdline/CLITest.java" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/src/test/java/opennlp/tools/cmdline/CLITest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/src/test/java/opennlp/tools/cmdline/CmdLineUtilTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/src/test/java/opennlp/tools/cmdline/CmdLineUtilTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/src/test/java/opennlp/tools/convert/FileToStringSampleStreamTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/src/test/java/opennlp/tools/convert/FileToStringSampleStreamTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/src/test/java/opennlp/tools/doccat/DoccatFactoryTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/src/test/java/opennlp/tools/doccat/DoccatFactoryTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/src/test/java/opennlp/tools/eval/ArvoresDeitadasEval.java" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/src/test/java/opennlp/tools/eval/ArvoresDeitadasEval.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/src/test/java/opennlp/tools/eval/Conll00ChunkerEval.java" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/src/test/java/opennlp/tools/eval/Conll00ChunkerEval.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/src/test/java/opennlp/tools/eval/Conll02NameFinderEval.java" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/src/test/java/opennlp/tools/eval/Conll02NameFinderEval.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/src/test/java/opennlp/tools/eval/ConllXPosTaggerEval.java" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/src/test/java/opennlp/tools/eval/ConllXPosTaggerEval.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/src/test/java/opennlp/tools/eval/OntoNotes4NameFinderEval.java" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/src/test/java/opennlp/tools/eval/OntoNotes4NameFinderEval.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/src/test/java/opennlp/tools/eval/OntoNotes4ParserEval.java" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/src/test/java/opennlp/tools/eval/OntoNotes4ParserEval.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/src/test/java/opennlp/tools/eval/OntoNotes4PosTaggerEval.java" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/src/test/java/opennlp/tools/eval/OntoNotes4PosTaggerEval.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/src/test/java/opennlp/tools/eval/SourceForgeModelEval.java" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/src/test/java/opennlp/tools/eval/SourceForgeModelEval.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/src/test/java/opennlp/tools/eval/UniversalDependency20Eval.java" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/src/test/java/opennlp/tools/eval/UniversalDependency20Eval.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/src/test/java/opennlp/tools/formats/ConllXPOSSampleStreamTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/src/test/java/opennlp/tools/formats/ConllXPOSSampleStreamTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/src/test/java/opennlp/tools/formats/ad/ADChunkSampleStreamTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/src/test/java/opennlp/tools/formats/ad/ADChunkSampleStreamTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/src/test/java/opennlp/tools/formats/ad/ADParagraphStreamTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/src/test/java/opennlp/tools/formats/ad/ADParagraphStreamTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/src/test/java/opennlp/tools/formats/ad/ADTokenSampleStreamTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/src/test/java/opennlp/tools/formats/ad/ADTokenSampleStreamTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/src/test/java/opennlp/tools/formats/muc/SgmlParserTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/src/test/java/opennlp/tools/formats/muc/SgmlParserTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/src/test/java/opennlp/tools/langdetect/LanguageDetectorFactoryTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/src/test/java/opennlp/tools/langdetect/LanguageDetectorFactoryTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/src/test/java/opennlp/tools/langdetect/LanguageDetectorMETest.java" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/src/test/java/opennlp/tools/langdetect/LanguageDetectorMETest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/src/test/java/opennlp/tools/lemmatizer/LemmatizerEvaluatorTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/src/test/java/opennlp/tools/lemmatizer/LemmatizerEvaluatorTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/src/test/java/opennlp/tools/lemmatizer/LemmatizerMETest.java" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/src/test/java/opennlp/tools/lemmatizer/LemmatizerMETest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/src/test/java/opennlp/tools/ml/PrepAttachDataUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/src/test/java/opennlp/tools/ml/PrepAttachDataUtil.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/src/test/java/opennlp/tools/ml/maxent/quasinewton/NegLogLikelihoodTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/src/test/java/opennlp/tools/ml/maxent/quasinewton/NegLogLikelihoodTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/src/test/java/opennlp/tools/namefind/NameFinderMETest.java" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/src/test/java/opennlp/tools/namefind/NameFinderMETest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/src/test/java/opennlp/tools/namefind/TokenNameFinderModelTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/src/test/java/opennlp/tools/namefind/TokenNameFinderModelTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/src/test/java/opennlp/tools/parser/ParserTestUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/src/test/java/opennlp/tools/parser/ParserTestUtil.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/src/test/java/opennlp/tools/parser/lang/en/HeadRulesTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/src/test/java/opennlp/tools/parser/lang/en/HeadRulesTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/src/test/java/opennlp/tools/stemmer/SnowballStemmerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/src/test/java/opennlp/tools/stemmer/SnowballStemmerTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/src/test/java/opennlp/tools/util/ParagraphStreamMockTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/src/test/java/opennlp/tools/util/ParagraphStreamMockTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/src/test/java/opennlp/tools/util/StringUtilTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/src/test/java/opennlp/tools/util/StringUtilTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/classes/META-INF/DEPENDENCIES" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/classes/META-INF/DEPENDENCIES" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/classes/META-INF/MANIFEST.MF" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/classes/opennlp/tools/cmdline/ArgumentParser$Argument.class" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/classes/opennlp/tools/cmdline/ArgumentParser$Argument.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/classes/opennlp/tools/cmdline/ArgumentParser$ArgumentProxy.class" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/classes/opennlp/tools/cmdline/ArgumentParser$ArgumentProxy.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/classes/opennlp/tools/cmdline/ArgumentParser$BooleanArgumentFactory.class" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/classes/opennlp/tools/cmdline/ArgumentParser$BooleanArgumentFactory.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/classes/opennlp/tools/cmdline/ArgumentParser$CharsetArgumentFactory.class" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/classes/opennlp/tools/cmdline/ArgumentParser$CharsetArgumentFactory.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/classes/opennlp/tools/cmdline/ArgumentParser$FileArgumentFactory.class" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/classes/opennlp/tools/cmdline/ArgumentParser$FileArgumentFactory.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/classes/opennlp/tools/cmdline/ArgumentParser$IntegerArgumentFactoryRedefined.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/classes/opennlp/tools/cmdline/ArgumentParser$StringArgumentFactory.class" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/classes/opennlp/tools/cmdline/ArgumentParser$StringArgumentFactory.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/classes/opennlp/tools/cmdline/ArgumentParser.class" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/classes/opennlp/tools/cmdline/ArgumentParser.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/classes/opennlp/tools/cmdline/GenerateManualTool.class" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/classes/opennlp/tools/cmdline/GenerateManualTool.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/classes/opennlp/tools/dictionary/serializer/DictionaryEntryPersistor$DictionaryContenthandler.class" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/classes/opennlp/tools/dictionary/serializer/DictionaryEntryPersistor$DictionaryContenthandler.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/classes/opennlp/tools/dictionary/serializer/DictionaryEntryPersistor.class" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/classes/opennlp/tools/dictionary/serializer/DictionaryEntryPersistor.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/classes/opennlp/tools/formats/BioNLP2004NameSampleStream.class" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/classes/opennlp/tools/formats/BioNLP2004NameSampleStream.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/classes/opennlp/tools/formats/Conll02NameSampleStream.class" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/classes/opennlp/tools/formats/Conll02NameSampleStream.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/classes/opennlp/tools/formats/Conll03NameSampleStream.class" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/classes/opennlp/tools/formats/Conll03NameSampleStream.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/classes/opennlp/tools/formats/ConllXPOSSampleStreamFactory.class" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/classes/opennlp/tools/formats/ConllXPOSSampleStreamFactory.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/classes/opennlp/tools/formats/EvalitaNameSampleStream.class" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/classes/opennlp/tools/formats/EvalitaNameSampleStream.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/classes/opennlp/tools/langdetect/DefaultLanguageDetectorContextGenerator.class" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/classes/opennlp/tools/langdetect/DefaultLanguageDetectorContextGenerator.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/classes/opennlp/tools/langdetect/LanguageDetector.class" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/classes/opennlp/tools/langdetect/LanguageDetector.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/classes/opennlp/tools/langdetect/LanguageDetectorContextGenerator.class" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/classes/opennlp/tools/langdetect/LanguageDetectorContextGenerator.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/classes/opennlp/tools/langdetect/LanguageDetectorME.class" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/classes/opennlp/tools/langdetect/LanguageDetectorME.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/classes/opennlp/tools/ml/perceptron/SimplePerceptronSequenceTrainer.class" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/classes/opennlp/tools/ml/perceptron/SimplePerceptronSequenceTrainer.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/classes/opennlp/tools/stemmer/snowball/SnowballStemmer$ALGORITHM.class" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/classes/opennlp/tools/stemmer/snowball/SnowballStemmer$ALGORITHM.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/classes/opennlp/tools/stemmer/snowball/SnowballStemmer.class" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/classes/opennlp/tools/stemmer/snowball/SnowballStemmer.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/classes/opennlp/tools/util/StringUtil.class" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/classes/opennlp/tools/util/StringUtil.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/classes/opennlp/tools/util/normalizer/CharSequenceNormalizer.class" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/classes/opennlp/tools/util/normalizer/CharSequenceNormalizer.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/classes/opennlp/tools/util/opennlp.version" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/classes/opennlp/tools/util/opennlp.version" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/javadoc-bundle-options/javadoc-options-javadoc-resources.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/maven-archiver/pom.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/maven-shared-archive-resources/META-INF/DEPENDENCIES" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/maven-shared-archive-resources/META-INF/DEPENDENCIES" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/createdFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/createdFiles.lst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/inputFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/inputFiles.lst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/opennlp-tools-1.9.2-tests.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/opennlp-tools-1.9.2.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.chunker.ChunkSampleStreamTest.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.chunker.ChunkSampleTest.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.chunker.ChunkerDetailedFMeasureListenerTest.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.chunker.ChunkerEvaluatorTest.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.chunker.ChunkerFactoryTest.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.chunker.ChunkerMETest.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.chunker.ChunkerModelTest.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.cmdline.ArgumentParserTest.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.cmdline.CLITest.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.cmdline.CmdLineUtilTest.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.cmdline.TerminateToolExceptionTest.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.cmdline.TokenNameFinderToolTest.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.convert.FileToStringSampleStreamTest.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.dictionary.DictionaryAsSetCaseInsensitiveTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.dictionary.DictionaryAsSetCaseInsensitiveTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.dictionary.DictionaryAsSetCaseSensitiveTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.dictionary.DictionaryAsSetCaseSensitiveTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.dictionary.DictionaryTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.dictionary.DictionaryTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.doccat.BagOfWordsFeatureGeneratorTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.doccat.BagOfWordsFeatureGeneratorTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.doccat.DoccatFactoryTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.doccat.DoccatFactoryTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.doccat.DocumentCategorizerMETest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.doccat.DocumentCategorizerMETest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.doccat.DocumentCategorizerNBTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.doccat.DocumentCategorizerNBTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.doccat.DocumentSampleTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.doccat.DocumentSampleTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.doccat.NGramFeatureGeneratorTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.doccat.NGramFeatureGeneratorTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.formats.Conll02NameSampleStreamTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.formats.Conll02NameSampleStreamTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.formats.Conll03NameSampleStreamTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.formats.Conll03NameSampleStreamTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.formats.ConllXPOSSampleStreamTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.formats.ConllXPOSSampleStreamTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.formats.DirectorySampleStreamTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.formats.DirectorySampleStreamTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.formats.EvalitaNameSampleStreamTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.formats.EvalitaNameSampleStreamTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.formats.NameFinderCensus90NameStreamTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.formats.NameFinderCensus90NameStreamTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.formats.ad.ADChunkSampleStreamTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.formats.ad.ADChunkSampleStreamTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.formats.ad.ADNameSampleStreamTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.formats.ad.ADNameSampleStreamTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.formats.ad.ADPOSSampleStreamTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.formats.ad.ADPOSSampleStreamTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.formats.ad.ADParagraphStreamTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.formats.ad.ADParagraphStreamTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.formats.ad.ADSentenceSampleStreamTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.formats.ad.ADSentenceSampleStreamTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.formats.ad.ADTokenSampleStreamTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.formats.ad.ADTokenSampleStreamTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.formats.brat.BratAnnotationStreamTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.formats.brat.BratAnnotationStreamTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.formats.brat.BratDocumentParserTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.formats.brat.BratDocumentParserTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.formats.brat.BratDocumentTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.formats.brat.BratDocumentTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.formats.brat.BratNameSampleStreamTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.formats.brat.BratNameSampleStreamTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.formats.conllu.ConlluLemmaSampleStreamTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.formats.conllu.ConlluLemmaSampleStreamTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.formats.conllu.ConlluPOSSampleStreamTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.formats.conllu.ConlluPOSSampleStreamTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.formats.conllu.ConlluSentenceSampleStreamTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.formats.conllu.ConlluSentenceSampleStreamTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.formats.conllu.ConlluStreamTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.formats.conllu.ConlluStreamTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.formats.conllu.ConlluTokenSampleStreamTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.formats.conllu.ConlluTokenSampleStreamTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.formats.conllu.ConlluWordLineTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.formats.conllu.ConlluWordLineTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.formats.frenchtreebank.ConstitParseSampleStreamTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.formats.frenchtreebank.ConstitParseSampleStreamTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.formats.irishsentencebank.IrishSentenceBankDocumentTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.formats.irishsentencebank.IrishSentenceBankDocumentTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.formats.leipzig.LeipzigLanguageSampleStreamTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.formats.leipzig.LeipzigLanguageSampleStreamTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.formats.letsmt.LetsmtDocumentTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.formats.letsmt.LetsmtDocumentTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.formats.muc.DocumentSplitterStreamTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.formats.muc.DocumentSplitterStreamTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.formats.muc.SgmlParserTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.formats.muc.SgmlParserTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.formats.nkjp.NKJPSegmentationDocumentTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.formats.nkjp.NKJPSegmentationDocumentTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.formats.nkjp.NKJPTextDocumentTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.formats.nkjp.NKJPTextDocumentTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.langdetect.DefaultLanguageDetectorContextGeneratorTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.langdetect.DefaultLanguageDetectorContextGeneratorTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.langdetect.LanguageDetectorCrossValidatorTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.langdetect.LanguageDetectorCrossValidatorTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.langdetect.LanguageDetectorEvaluatorTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.langdetect.LanguageDetectorEvaluatorTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.langdetect.LanguageDetectorFactoryTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.langdetect.LanguageDetectorFactoryTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.langdetect.LanguageDetectorMETest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.langdetect.LanguageDetectorMETest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.langdetect.LanguageSampleTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.langdetect.LanguageSampleTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.langdetect.LanguageTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.langdetect.LanguageTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.languagemodel.LanguageModelEvaluationTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.languagemodel.LanguageModelEvaluationTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.languagemodel.NgramLanguageModelTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.languagemodel.NgramLanguageModelTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.lemmatizer.DictionaryLemmatizerMultiTest.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.lemmatizer.DictionaryLemmatizerTest.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.lemmatizer.LemmaSampleTest.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.lemmatizer.LemmatizerEvaluatorTest.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.lemmatizer.LemmatizerMETest.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.ml.ArrayMathTest.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.ml.BeamSearchTest.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.ml.TrainerFactoryTest.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.ml.maxent.GISIndexingTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.ml.maxent.GISIndexingTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.ml.maxent.GISTrainerTest.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.ml.maxent.MaxentPrepAttachTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.ml.maxent.MaxentPrepAttachTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.ml.maxent.RealValueModelTest.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.ml.maxent.ScaleDoesntMatterTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.ml.maxent.ScaleDoesntMatterTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.ml.maxent.io.RealValueFileEventStreamTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.ml.maxent.io.RealValueFileEventStreamTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.ml.maxent.quasinewton.LineSearchTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.ml.maxent.quasinewton.LineSearchTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.ml.maxent.quasinewton.NegLogLikelihoodTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.ml.maxent.quasinewton.NegLogLikelihoodTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.ml.maxent.quasinewton.QNMinimizerTest.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.ml.maxent.quasinewton.QNPrepAttachTest.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.ml.maxent.quasinewton.QNTrainerTest.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.ml.model.EventTest.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.ml.model.FileEventStreamTest.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.ml.model.OnePassDataIndexerTest.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.ml.model.OnePassRealValueDataIndexerTest.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.ml.model.RealValueFileEventStreamTest.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.ml.model.TwoPassDataIndexerTest.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.ml.naivebayes.NaiveBayesCorrectnessTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.ml.naivebayes.NaiveBayesCorrectnessTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.ml.naivebayes.NaiveBayesModelReadWriteTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.ml.naivebayes.NaiveBayesModelReadWriteTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.ml.naivebayes.NaiveBayesPrepAttachTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.ml.naivebayes.NaiveBayesPrepAttachTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.ml.naivebayes.NaiveBayesSerializedCorrectnessTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.ml.naivebayes.NaiveBayesSerializedCorrectnessTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.ml.perceptron.PerceptronPrepAttachTest.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.namefind.BilouCodecTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.namefind.BilouCodecTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.namefind.BilouNameFinderSequenceValidatorTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.namefind.BilouNameFinderSequenceValidatorTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.namefind.BioCodecTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.namefind.BioCodecTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.namefind.DictionaryNameFinderEvaluatorTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.namefind.DictionaryNameFinderEvaluatorTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.namefind.DictionaryNameFinderTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.namefind.DictionaryNameFinderTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.namefind.NameFinderEventStreamTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.namefind.NameFinderEventStreamTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.namefind.NameFinderMETest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.namefind.NameFinderMETest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.namefind.NameFinderSequenceValidatorTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.namefind.NameFinderSequenceValidatorTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.namefind.NameSampleDataStreamTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.namefind.NameSampleDataStreamTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.namefind.NameSampleTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.namefind.NameSampleTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.namefind.NameSampleTypeFilterTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.namefind.NameSampleTypeFilterTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.namefind.RegexNameFinderFactoryTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.namefind.RegexNameFinderFactoryTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.namefind.RegexNameFinderTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.namefind.RegexNameFinderTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.namefind.TokenNameFinderCrossValidatorTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.namefind.TokenNameFinderCrossValidatorTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.namefind.TokenNameFinderEvaluatorTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.namefind.TokenNameFinderEvaluatorTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.namefind.TokenNameFinderModelTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.namefind.TokenNameFinderModelTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.ngram.NGramGeneratorTest.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.ngram.NGramModelTest.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.ngram.NGramUtilsTest.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.parser.ChunkSampleStreamTest.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.parser.ParseSampleStreamTest.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.parser.ParseTest.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.parser.PosSampleStreamTest.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.parser.chunking.ParserTest.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.parser.lang.en.HeadRulesTest.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.parser.treeinsert.ParserTest.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.postag.ConfigurablePOSContextGeneratorTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.postag.ConfigurablePOSContextGeneratorTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.postag.DefaultPOSContextGeneratorTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.postag.DefaultPOSContextGeneratorTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.postag.POSDictionaryTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.postag.POSDictionaryTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.postag.POSEvaluatorTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.postag.POSEvaluatorTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.postag.POSModelTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.postag.POSModelTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.postag.POSSampleEventStreamTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.postag.POSSampleEventStreamTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.postag.POSSampleTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.postag.POSSampleTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.postag.POSTaggerFactoryTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.postag.POSTaggerFactoryTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.postag.POSTaggerMETest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.postag.POSTaggerMETest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.postag.WordTagSampleStreamTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.postag.WordTagSampleStreamTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.sentdetect.DefaultEndOfSentenceScannerTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.sentdetect.DefaultEndOfSentenceScannerTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.sentdetect.DefaultSDContextGeneratorTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.sentdetect.DefaultSDContextGeneratorTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.sentdetect.NewlineSentenceDetectorTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.sentdetect.NewlineSentenceDetectorTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.sentdetect.SDEventStreamTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.sentdetect.SDEventStreamTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.sentdetect.SentenceDetectorEvaluatorTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.sentdetect.SentenceDetectorEvaluatorTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.sentdetect.SentenceDetectorFactoryTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.sentdetect.SentenceDetectorFactoryTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.sentdetect.SentenceDetectorMETest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.sentdetect.SentenceDetectorMETest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.sentdetect.SentenceSampleTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.sentdetect.SentenceSampleTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.tokenize.DetokenizationDictionaryTest.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.tokenize.DetokenizerEvaluatorTest.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.tokenize.DictionaryDetokenizerTest.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.tokenize.SimpleTokenizerTest.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.tokenize.TokSpanEventStreamTest.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.tokenize.TokenSampleStreamTest.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.tokenize.TokenSampleTest.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.tokenize.TokenizerEvaluatorTest.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.tokenize.TokenizerFactoryTest.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.tokenize.TokenizerMETest.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.tokenize.TokenizerModelTest.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.tokenize.WhitespaceTokenizerTest.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.util.AbstractEventStreamTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.util.AbstractEventStreamTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.util.ObjectStreamUtilsTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.util.ObjectStreamUtilsTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.util.ParagraphStreamMockTest.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.util.ParagraphStreamTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.util.ParagraphStreamTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.util.PlainTextByLineStreamTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.util.PlainTextByLineStreamTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.util.SequenceTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.util.SequenceTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.util.SpanTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.util.SpanTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.util.StringListTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.util.StringListTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.util.StringUtilTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.util.StringUtilTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.util.TrainingParametersTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.util.TrainingParametersTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.util.VersionTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.util.VersionTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.util.eval.CrossValidationPartitionerTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.util.eval.CrossValidationPartitionerTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.util.eval.FMeasureTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.util.eval.FMeasureTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.util.eval.MeanTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.util.eval.MeanTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.util.ext.ExtensionLoaderTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.util.ext.ExtensionLoaderTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.util.featuregen.BigramNameFeatureGeneratorTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.util.featuregen.BigramNameFeatureGeneratorTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.util.featuregen.BrownBigramFeatureGeneratorTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.util.featuregen.BrownBigramFeatureGeneratorTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.util.featuregen.CachedFeatureGeneratorTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.util.featuregen.CachedFeatureGeneratorTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.util.featuregen.CharacterNgramFeatureGeneratorTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.util.featuregen.CharacterNgramFeatureGeneratorTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.util.featuregen.FeatureGeneratorUtilTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.util.featuregen.FeatureGeneratorUtilTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.util.featuregen.GeneratorFactoryClassicFormatTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.util.featuregen.GeneratorFactoryClassicFormatTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.util.featuregen.GeneratorFactoryTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.util.featuregen.GeneratorFactoryTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.util.featuregen.InSpanGeneratorTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.util.featuregen.InSpanGeneratorTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.util.featuregen.POSTaggerNameFeatureGeneratorTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.util.featuregen.POSTaggerNameFeatureGeneratorTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.util.featuregen.PosTaggerFeatureGeneratorTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.util.featuregen.PosTaggerFeatureGeneratorTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.util.featuregen.PrefixFeatureGeneratorTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.util.featuregen.PrefixFeatureGeneratorTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.util.featuregen.PreviousMapFeatureGeneratorTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.util.featuregen.PreviousMapFeatureGeneratorTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.util.featuregen.PreviousTwoMapFeatureGeneratorTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.util.featuregen.PreviousTwoMapFeatureGeneratorTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.util.featuregen.SentenceFeatureGeneratorTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.util.featuregen.SentenceFeatureGeneratorTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.util.featuregen.StringPatternTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.util.featuregen.StringPatternTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.util.featuregen.SuffixFeatureGeneratorTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.util.featuregen.SuffixFeatureGeneratorTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.util.featuregen.TokenClassFeatureGeneratorTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.util.featuregen.TokenClassFeatureGeneratorTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.util.featuregen.TokenFeatureGeneratorTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.util.featuregen.TokenFeatureGeneratorTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.util.featuregen.TokenPatternFeatureGeneratorTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.util.featuregen.TokenPatternFeatureGeneratorTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.util.featuregen.TrigramNameFeatureGeneratorTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.util.featuregen.TrigramNameFeatureGeneratorTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.util.featuregen.WindowFeatureGeneratorTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.util.featuregen.WindowFeatureGeneratorTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.util.model.ByteArraySerializerTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.util.model.ByteArraySerializerTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.util.normalizer.EmojiCharSequenceNormalizerTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.util.normalizer.EmojiCharSequenceNormalizerTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.util.normalizer.NumberCharSequenceNormalizerTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.util.normalizer.NumberCharSequenceNormalizerTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.util.normalizer.ShrinkCharSequenceNormalizerTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.util.normalizer.ShrinkCharSequenceNormalizerTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.util.normalizer.TwitterCharSequenceNormalizerTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.util.normalizer.TwitterCharSequenceNormalizerTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.util.normalizer.UrlCharSequenceNormalizerTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/TEST-opennlp.tools.util.normalizer.UrlCharSequenceNormalizerTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.chunker.ChunkSampleStreamTest.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.chunker.ChunkSampleTest.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.chunker.ChunkerDetailedFMeasureListenerTest.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.chunker.ChunkerEvaluatorTest.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.chunker.ChunkerFactoryTest.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.chunker.ChunkerMETest.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.chunker.ChunkerModelTest.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.cmdline.ArgumentParserTest.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.cmdline.CLITest.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.cmdline.CmdLineUtilTest.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.cmdline.TerminateToolExceptionTest.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.cmdline.TokenNameFinderToolTest.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.convert.FileToStringSampleStreamTest.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.dictionary.DictionaryAsSetCaseInsensitiveTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.dictionary.DictionaryAsSetCaseInsensitiveTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.dictionary.DictionaryAsSetCaseSensitiveTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.dictionary.DictionaryAsSetCaseSensitiveTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.dictionary.DictionaryTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.dictionary.DictionaryTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.doccat.BagOfWordsFeatureGeneratorTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.doccat.BagOfWordsFeatureGeneratorTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.doccat.DoccatFactoryTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.doccat.DoccatFactoryTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.doccat.DocumentCategorizerMETest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.doccat.DocumentCategorizerMETest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.doccat.DocumentCategorizerNBTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.doccat.DocumentCategorizerNBTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.doccat.DocumentSampleTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.doccat.DocumentSampleTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.doccat.NGramFeatureGeneratorTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.doccat.NGramFeatureGeneratorTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.formats.Conll02NameSampleStreamTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.formats.Conll02NameSampleStreamTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.formats.Conll03NameSampleStreamTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.formats.Conll03NameSampleStreamTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.formats.ConllXPOSSampleStreamTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.formats.ConllXPOSSampleStreamTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.formats.DirectorySampleStreamTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.formats.DirectorySampleStreamTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.formats.EvalitaNameSampleStreamTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.formats.EvalitaNameSampleStreamTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.formats.NameFinderCensus90NameStreamTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.formats.NameFinderCensus90NameStreamTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.formats.ad.ADChunkSampleStreamTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.formats.ad.ADChunkSampleStreamTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.formats.ad.ADNameSampleStreamTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.formats.ad.ADNameSampleStreamTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.formats.ad.ADPOSSampleStreamTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.formats.ad.ADPOSSampleStreamTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.formats.ad.ADParagraphStreamTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.formats.ad.ADParagraphStreamTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.formats.ad.ADSentenceSampleStreamTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.formats.ad.ADSentenceSampleStreamTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.formats.ad.ADTokenSampleStreamTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.formats.ad.ADTokenSampleStreamTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.formats.brat.BratAnnotationStreamTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.formats.brat.BratAnnotationStreamTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.formats.brat.BratDocumentParserTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.formats.brat.BratDocumentParserTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.formats.brat.BratDocumentTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.formats.brat.BratDocumentTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.formats.brat.BratNameSampleStreamTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.formats.brat.BratNameSampleStreamTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.formats.conllu.ConlluLemmaSampleStreamTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.formats.conllu.ConlluLemmaSampleStreamTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.formats.conllu.ConlluPOSSampleStreamTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.formats.conllu.ConlluPOSSampleStreamTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.formats.conllu.ConlluSentenceSampleStreamTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.formats.conllu.ConlluSentenceSampleStreamTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.formats.conllu.ConlluStreamTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.formats.conllu.ConlluStreamTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.formats.conllu.ConlluTokenSampleStreamTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.formats.conllu.ConlluTokenSampleStreamTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.formats.conllu.ConlluWordLineTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.formats.conllu.ConlluWordLineTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.formats.frenchtreebank.ConstitParseSampleStreamTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.formats.frenchtreebank.ConstitParseSampleStreamTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.formats.irishsentencebank.IrishSentenceBankDocumentTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.formats.irishsentencebank.IrishSentenceBankDocumentTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.formats.leipzig.LeipzigLanguageSampleStreamTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.formats.leipzig.LeipzigLanguageSampleStreamTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.formats.letsmt.LetsmtDocumentTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.formats.letsmt.LetsmtDocumentTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.formats.muc.DocumentSplitterStreamTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.formats.muc.DocumentSplitterStreamTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.formats.muc.SgmlParserTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.formats.muc.SgmlParserTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.formats.nkjp.NKJPSegmentationDocumentTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.formats.nkjp.NKJPSegmentationDocumentTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.formats.nkjp.NKJPTextDocumentTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.formats.nkjp.NKJPTextDocumentTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.langdetect.DefaultLanguageDetectorContextGeneratorTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.langdetect.DefaultLanguageDetectorContextGeneratorTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.langdetect.LanguageDetectorCrossValidatorTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.langdetect.LanguageDetectorCrossValidatorTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.langdetect.LanguageDetectorEvaluatorTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.langdetect.LanguageDetectorEvaluatorTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.langdetect.LanguageDetectorFactoryTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.langdetect.LanguageDetectorFactoryTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.langdetect.LanguageDetectorMETest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.langdetect.LanguageDetectorMETest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.langdetect.LanguageSampleTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.langdetect.LanguageSampleTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.langdetect.LanguageTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.langdetect.LanguageTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.languagemodel.LanguageModelEvaluationTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.languagemodel.LanguageModelEvaluationTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.languagemodel.NgramLanguageModelTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.languagemodel.NgramLanguageModelTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.lemmatizer.DictionaryLemmatizerMultiTest.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.lemmatizer.DictionaryLemmatizerTest.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.lemmatizer.LemmaSampleTest.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.lemmatizer.LemmatizerEvaluatorTest.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.lemmatizer.LemmatizerMETest.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.ml.ArrayMathTest.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.ml.BeamSearchTest.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.ml.TrainerFactoryTest.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.ml.maxent.GISIndexingTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.ml.maxent.GISIndexingTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.ml.maxent.GISTrainerTest.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.ml.maxent.MaxentPrepAttachTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.ml.maxent.MaxentPrepAttachTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.ml.maxent.RealValueModelTest.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.ml.maxent.ScaleDoesntMatterTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.ml.maxent.ScaleDoesntMatterTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.ml.maxent.io.RealValueFileEventStreamTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.ml.maxent.io.RealValueFileEventStreamTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.ml.maxent.quasinewton.LineSearchTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.ml.maxent.quasinewton.LineSearchTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.ml.maxent.quasinewton.NegLogLikelihoodTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.ml.maxent.quasinewton.NegLogLikelihoodTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.ml.maxent.quasinewton.QNMinimizerTest.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.ml.maxent.quasinewton.QNPrepAttachTest.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.ml.maxent.quasinewton.QNTrainerTest.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.ml.model.EventTest.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.ml.model.FileEventStreamTest.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.ml.model.OnePassDataIndexerTest.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.ml.model.OnePassRealValueDataIndexerTest.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.ml.model.RealValueFileEventStreamTest.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.ml.model.TwoPassDataIndexerTest.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.ml.naivebayes.NaiveBayesCorrectnessTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.ml.naivebayes.NaiveBayesCorrectnessTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.ml.naivebayes.NaiveBayesModelReadWriteTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.ml.naivebayes.NaiveBayesModelReadWriteTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.ml.naivebayes.NaiveBayesPrepAttachTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.ml.naivebayes.NaiveBayesPrepAttachTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.ml.naivebayes.NaiveBayesSerializedCorrectnessTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.ml.naivebayes.NaiveBayesSerializedCorrectnessTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.ml.perceptron.PerceptronPrepAttachTest.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.namefind.BilouCodecTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.namefind.BilouCodecTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.namefind.BilouNameFinderSequenceValidatorTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.namefind.BilouNameFinderSequenceValidatorTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.namefind.BioCodecTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.namefind.BioCodecTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.namefind.DictionaryNameFinderEvaluatorTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.namefind.DictionaryNameFinderEvaluatorTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.namefind.DictionaryNameFinderTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.namefind.DictionaryNameFinderTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.namefind.NameFinderEventStreamTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.namefind.NameFinderEventStreamTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.namefind.NameFinderMETest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.namefind.NameFinderMETest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.namefind.NameFinderSequenceValidatorTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.namefind.NameFinderSequenceValidatorTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.namefind.NameSampleDataStreamTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.namefind.NameSampleDataStreamTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.namefind.NameSampleTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.namefind.NameSampleTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.namefind.NameSampleTypeFilterTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.namefind.NameSampleTypeFilterTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.namefind.RegexNameFinderFactoryTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.namefind.RegexNameFinderFactoryTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.namefind.RegexNameFinderTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.namefind.RegexNameFinderTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.namefind.TokenNameFinderCrossValidatorTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.namefind.TokenNameFinderCrossValidatorTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.namefind.TokenNameFinderEvaluatorTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.namefind.TokenNameFinderEvaluatorTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.namefind.TokenNameFinderModelTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.namefind.TokenNameFinderModelTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.ngram.NGramGeneratorTest.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.ngram.NGramModelTest.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.ngram.NGramUtilsTest.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.parser.ChunkSampleStreamTest.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.parser.ParseSampleStreamTest.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.parser.ParseTest.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.parser.PosSampleStreamTest.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.parser.chunking.ParserTest.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.parser.lang.en.HeadRulesTest.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.parser.treeinsert.ParserTest.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.postag.ConfigurablePOSContextGeneratorTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.postag.ConfigurablePOSContextGeneratorTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.postag.DefaultPOSContextGeneratorTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.postag.DefaultPOSContextGeneratorTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.postag.POSDictionaryTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.postag.POSDictionaryTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.postag.POSEvaluatorTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.postag.POSEvaluatorTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.postag.POSModelTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.postag.POSModelTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.postag.POSSampleEventStreamTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.postag.POSSampleEventStreamTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.postag.POSSampleTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.postag.POSSampleTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.postag.POSTaggerFactoryTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.postag.POSTaggerFactoryTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.postag.POSTaggerMETest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.postag.POSTaggerMETest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.postag.WordTagSampleStreamTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.postag.WordTagSampleStreamTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.sentdetect.DefaultEndOfSentenceScannerTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.sentdetect.DefaultEndOfSentenceScannerTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.sentdetect.DefaultSDContextGeneratorTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.sentdetect.DefaultSDContextGeneratorTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.sentdetect.NewlineSentenceDetectorTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.sentdetect.NewlineSentenceDetectorTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.sentdetect.SDEventStreamTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.sentdetect.SDEventStreamTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.sentdetect.SentenceDetectorEvaluatorTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.sentdetect.SentenceDetectorEvaluatorTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.sentdetect.SentenceDetectorFactoryTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.sentdetect.SentenceDetectorFactoryTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.sentdetect.SentenceDetectorMETest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.sentdetect.SentenceDetectorMETest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.sentdetect.SentenceSampleTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.sentdetect.SentenceSampleTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.tokenize.DetokenizationDictionaryTest.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.tokenize.DetokenizerEvaluatorTest.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.tokenize.DictionaryDetokenizerTest.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.tokenize.SimpleTokenizerTest.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.tokenize.TokSpanEventStreamTest.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.tokenize.TokenSampleStreamTest.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.tokenize.TokenSampleTest.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.tokenize.TokenizerEvaluatorTest.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.tokenize.TokenizerFactoryTest.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.tokenize.TokenizerMETest.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.tokenize.TokenizerModelTest.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.tokenize.WhitespaceTokenizerTest.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.util.AbstractEventStreamTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.util.AbstractEventStreamTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.util.ObjectStreamUtilsTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.util.ObjectStreamUtilsTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.util.ParagraphStreamMockTest.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.util.ParagraphStreamTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.util.ParagraphStreamTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.util.PlainTextByLineStreamTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.util.PlainTextByLineStreamTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.util.SequenceTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.util.SequenceTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.util.SpanTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.util.SpanTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.util.StringListTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.util.StringListTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.util.StringUtilTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.util.StringUtilTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.util.TrainingParametersTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.util.TrainingParametersTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.util.VersionTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.util.VersionTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.util.eval.CrossValidationPartitionerTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.util.eval.CrossValidationPartitionerTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.util.eval.FMeasureTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.util.eval.FMeasureTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.util.eval.MeanTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.util.eval.MeanTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.util.ext.ExtensionLoaderTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.util.ext.ExtensionLoaderTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.util.featuregen.BigramNameFeatureGeneratorTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.util.featuregen.BigramNameFeatureGeneratorTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.util.featuregen.BrownBigramFeatureGeneratorTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.util.featuregen.BrownBigramFeatureGeneratorTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.util.featuregen.CachedFeatureGeneratorTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.util.featuregen.CachedFeatureGeneratorTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.util.featuregen.CharacterNgramFeatureGeneratorTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.util.featuregen.CharacterNgramFeatureGeneratorTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.util.featuregen.FeatureGeneratorUtilTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.util.featuregen.FeatureGeneratorUtilTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.util.featuregen.GeneratorFactoryClassicFormatTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.util.featuregen.GeneratorFactoryClassicFormatTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.util.featuregen.GeneratorFactoryTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.util.featuregen.GeneratorFactoryTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.util.featuregen.InSpanGeneratorTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.util.featuregen.InSpanGeneratorTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.util.featuregen.POSTaggerNameFeatureGeneratorTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.util.featuregen.POSTaggerNameFeatureGeneratorTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.util.featuregen.PosTaggerFeatureGeneratorTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.util.featuregen.PosTaggerFeatureGeneratorTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.util.featuregen.PrefixFeatureGeneratorTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.util.featuregen.PrefixFeatureGeneratorTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.util.featuregen.PreviousMapFeatureGeneratorTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.util.featuregen.PreviousMapFeatureGeneratorTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.util.featuregen.PreviousTwoMapFeatureGeneratorTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.util.featuregen.PreviousTwoMapFeatureGeneratorTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.util.featuregen.SentenceFeatureGeneratorTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.util.featuregen.SentenceFeatureGeneratorTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.util.featuregen.StringPatternTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.util.featuregen.StringPatternTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.util.featuregen.SuffixFeatureGeneratorTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.util.featuregen.SuffixFeatureGeneratorTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.util.featuregen.TokenClassFeatureGeneratorTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.util.featuregen.TokenClassFeatureGeneratorTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.util.featuregen.TokenFeatureGeneratorTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.util.featuregen.TokenFeatureGeneratorTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.util.featuregen.TokenPatternFeatureGeneratorTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.util.featuregen.TokenPatternFeatureGeneratorTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.util.featuregen.TrigramNameFeatureGeneratorTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.util.featuregen.TrigramNameFeatureGeneratorTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.util.featuregen.WindowFeatureGeneratorTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.util.featuregen.WindowFeatureGeneratorTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.util.model.ByteArraySerializerTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.util.model.ByteArraySerializerTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.util.normalizer.EmojiCharSequenceNormalizerTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.util.normalizer.EmojiCharSequenceNormalizerTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.util.normalizer.NumberCharSequenceNormalizerTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.util.normalizer.NumberCharSequenceNormalizerTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.util.normalizer.ShrinkCharSequenceNormalizerTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.util.normalizer.ShrinkCharSequenceNormalizerTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.util.normalizer.TwitterCharSequenceNormalizerTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.util.normalizer.TwitterCharSequenceNormalizerTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.util.normalizer.UrlCharSequenceNormalizerTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/surefire-reports/opennlp.tools.util.normalizer.UrlCharSequenceNormalizerTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/test-classes/META-INF/DEPENDENCIES" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/test-classes/META-INF/DEPENDENCIES" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/test-classes/opennlp/tools/cmdline/ArgumentParserTest.class" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/test-classes/opennlp/tools/cmdline/ArgumentParserTest.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/test-classes/opennlp/tools/cmdline/CLITest$ExitException.class" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/test-classes/opennlp/tools/cmdline/CLITest$ExitException.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/test-classes/opennlp/tools/cmdline/CLITest$NoExitSecurityManager.class" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/test-classes/opennlp/tools/cmdline/CLITest$NoExitSecurityManager.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/test-classes/opennlp/tools/cmdline/CLITest.class" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/test-classes/opennlp/tools/cmdline/CLITest.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/test-classes/opennlp/tools/cmdline/CmdLineUtilTest.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/test-classes/opennlp/tools/convert/FileToStringSampleStreamTest.class" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/test-classes/opennlp/tools/convert/FileToStringSampleStreamTest.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/test-classes/opennlp/tools/doccat/DoccatFactoryTest.class" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/test-classes/opennlp/tools/doccat/DoccatFactoryTest.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/test-classes/opennlp/tools/eval/ArvoresDeitadasEval.class" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/test-classes/opennlp/tools/eval/ArvoresDeitadasEval.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/test-classes/opennlp/tools/eval/Conll00ChunkerEval.class" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/test-classes/opennlp/tools/eval/Conll00ChunkerEval.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/test-classes/opennlp/tools/eval/Conll02NameFinderEval.class" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/test-classes/opennlp/tools/eval/Conll02NameFinderEval.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/test-classes/opennlp/tools/eval/ConllXPosTaggerEval.class" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/test-classes/opennlp/tools/eval/ConllXPosTaggerEval.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/test-classes/opennlp/tools/eval/OntoNotes4NameFinderEval.class" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/test-classes/opennlp/tools/eval/OntoNotes4NameFinderEval.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/test-classes/opennlp/tools/eval/OntoNotes4ParserEval.class" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/test-classes/opennlp/tools/eval/OntoNotes4ParserEval.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/test-classes/opennlp/tools/eval/OntoNotes4PosTaggerEval.class" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/test-classes/opennlp/tools/eval/OntoNotes4PosTaggerEval.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/test-classes/opennlp/tools/eval/SourceForgeModelEval$LeipzigTestSample.class" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/test-classes/opennlp/tools/eval/SourceForgeModelEval$LeipzigTestSample.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/test-classes/opennlp/tools/eval/SourceForgeModelEval$LeipzigTestSampleStream.class" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/test-classes/opennlp/tools/eval/SourceForgeModelEval$LeipzigTestSampleStream.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/test-classes/opennlp/tools/eval/SourceForgeModelEval.class" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/test-classes/opennlp/tools/eval/SourceForgeModelEval.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/test-classes/opennlp/tools/eval/UniversalDependency20Eval.class" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/test-classes/opennlp/tools/eval/UniversalDependency20Eval.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/test-classes/opennlp/tools/formats/ConllXPOSSampleStreamTest.class" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/test-classes/opennlp/tools/formats/ConllXPOSSampleStreamTest.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/test-classes/opennlp/tools/formats/ad/ADChunkSampleStreamTest.class" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/test-classes/opennlp/tools/formats/ad/ADChunkSampleStreamTest.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/test-classes/opennlp/tools/formats/ad/ADParagraphStreamTest.class" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/test-classes/opennlp/tools/formats/ad/ADParagraphStreamTest.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/test-classes/opennlp/tools/formats/ad/ADTokenSampleStreamTest.class" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/test-classes/opennlp/tools/formats/ad/ADTokenSampleStreamTest.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/test-classes/opennlp/tools/formats/muc/SgmlParserTest$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/test-classes/opennlp/tools/formats/muc/SgmlParserTest$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/test-classes/opennlp/tools/formats/muc/SgmlParserTest.class" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/test-classes/opennlp/tools/formats/muc/SgmlParserTest.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/test-classes/opennlp/tools/langdetect/LanguageDetectorFactoryTest.class" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/test-classes/opennlp/tools/langdetect/LanguageDetectorFactoryTest.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/test-classes/opennlp/tools/langdetect/LanguageDetectorMETest.class" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/test-classes/opennlp/tools/langdetect/LanguageDetectorMETest.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/test-classes/opennlp/tools/lemmatizer/LemmatizerEvaluatorTest.class" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/test-classes/opennlp/tools/lemmatizer/LemmatizerEvaluatorTest.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/test-classes/opennlp/tools/lemmatizer/LemmatizerMETest.class" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/test-classes/opennlp/tools/lemmatizer/LemmatizerMETest.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/test-classes/opennlp/tools/ml/PrepAttachDataUtil.class" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/test-classes/opennlp/tools/ml/PrepAttachDataUtil.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/test-classes/opennlp/tools/ml/maxent/quasinewton/NegLogLikelihoodTest.class" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/test-classes/opennlp/tools/ml/maxent/quasinewton/NegLogLikelihoodTest.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/test-classes/opennlp/tools/namefind/NameFinderMETest.class" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/test-classes/opennlp/tools/namefind/NameFinderMETest.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/test-classes/opennlp/tools/namefind/TokenNameFinderModelTest.class" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/test-classes/opennlp/tools/namefind/TokenNameFinderModelTest.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/test-classes/opennlp/tools/parser/ParserTestUtil.class" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/test-classes/opennlp/tools/parser/ParserTestUtil.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/test-classes/opennlp/tools/parser/lang/en/HeadRulesTest.class" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/test-classes/opennlp/tools/parser/lang/en/HeadRulesTest.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/test-classes/opennlp/tools/stemmer/SnowballStemmerTest.class" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/test-classes/opennlp/tools/stemmer/SnowballStemmerTest.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/test-classes/opennlp/tools/util/ParagraphStreamMockTest.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/target/test-classes/opennlp/tools/util/StringUtilTest.class" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-tools/target/test-classes/opennlp/tools/util/StringUtilTest.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-tools/unreadablefile" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-uima/opennlp-uima.iml" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-uima/opennlp-uima.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-uima/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-uima/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-uima/src/main/java/opennlp/uima/normalizer/Normalizer.java" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-uima/src/main/java/opennlp/uima/normalizer/Normalizer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-uima/src/main/java/opennlp/uima/normalizer/StringDictionary.java" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-uima/src/main/java/opennlp/uima/normalizer/StringDictionary.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-uima/target/classes/opennlp/uima/doccat/AbstractDocumentCategorizer.class" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-uima/target/classes/opennlp/uima/doccat/AbstractDocumentCategorizer.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-uima/target/classes/opennlp/uima/doccat/DocumentCategorizer.class" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-uima/target/classes/opennlp/uima/doccat/DocumentCategorizer.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-uima/target/classes/opennlp/uima/normalizer/Normalizer.class" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-uima/target/classes/opennlp/uima/normalizer/Normalizer.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-uima/target/classes/opennlp/uima/normalizer/StringDictionary$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-uima/target/classes/opennlp/uima/normalizer/StringDictionary$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-uima/target/classes/opennlp/uima/normalizer/StringDictionary.class" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-uima/target/classes/opennlp/uima/normalizer/StringDictionary.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opennlp-uima/target/classes/opennlp/uima/util/AnnotationComboIterator.class" beforeDir="false" afterPath="$PROJECT_DIR$/opennlp-uima/target/classes/opennlp/uima/util/AnnotationComboIterator.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/rat.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/rat.txt" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ExportToHTMLSettings">
+    <option name="OPEN_IN_BROWSER" value="true" />
+    <option name="OUTPUT_DIRECTORY" value="$PROJECT_DIR$/coverage-report-after" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectId" id="1aDqC4zbMkK9Yjf22q2OCd8g6w7" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/PROJECT_REPORT" />
+    <property name="project.structure.last.edited" value="SDKs" />
+    <property name="project.structure.proportion" value="0.15" />
+    <property name="project.structure.side.proportion" value="0.2" />
+    <property name="settings.editor.selected.configurable" value="reference.settingsdialog.project.gant" />
+  </component>
+  <component name="RunManager" selected="JUnit.All in opennlp-tools">
+    <configuration name="All in opennlp-tools (2)" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="opennlp-tools" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="TEST_OBJECT" value="package" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="All in opennlp-tools (3)" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="opennlp-tools" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="TEST_OBJECT" value="package" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="All in opennlp-tools" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="opennlp-tools" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="TEST_OBJECT" value="package" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="ArgumentParserTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="opennlp-tools" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="opennlp.tools.cmdline.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="opennlp.tools.cmdline" />
+      <option name="MAIN_CLASS_NAME" value="opennlp.tools.cmdline.ArgumentParserTest" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Conll02NameFinderEval" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="opennlp-tools" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="opennlp.tools.eval.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="opennlp.tools.eval" />
+      <option name="MAIN_CLASS_NAME" value="opennlp.tools.eval.Conll02NameFinderEval" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="JUnit.All in opennlp-tools" />
+        <item itemvalue="JUnit.ArgumentParserTest" />
+        <item itemvalue="JUnit.All in opennlp-tools (3)" />
+        <item itemvalue="JUnit.All in opennlp-tools (2)" />
+        <item itemvalue="JUnit.Conll02NameFinderEval" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="d552dbf8-f0a3-41a7-8cbc-2cac0a87f928" name="Default Changelist" comment="" />
+      <created>1586280380787</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1586280380787</updated>
+    </task>
+    <task id="LOCAL-00001" summary="SWE215 initial commit">
+      <created>1587761310189</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1587761310189</updated>
+    </task>
+    <task id="LOCAL-00002" summary="SWE215 Assignment1 test cases">
+      <created>1587792743644</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1587792743644</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
+    <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="oldMeFiltersMigrated" value="true" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="SWE215 initial commit" />
+    <MESSAGE value="SWE215 Assignment1 test cases" />
+    <option name="LAST_COMMIT_MESSAGE" value="SWE215 Assignment1 test cases" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="2361" y="90" width="1028" height="835" key="#Project_Structure" timestamp="1586281783633">
+      <screen x="1920" y="0" width="1920" height="1080" />
+    </state>
+    <state x="2361" y="90" width="1028" height="835" key="#Project_Structure/0.0.1920.1080/1920.0.1920.1080@1920.0.1920.1080" timestamp="1586281783633" />
+    <state x="0" y="0" width="1920" height="1055" key="#com.intellij.execution.junit2.states.ComparisonFailureState$DiffDialog" timestamp="1590134590808">
+      <screen x="0" y="0" width="1920" height="1080" />
+    </state>
+    <state x="0" y="0" width="1920" height="1055" key="#com.intellij.execution.junit2.states.ComparisonFailureState$DiffDialog/0.0.1920.1080/1920.0.1920.1080@0.0.1920.1080" timestamp="1590134590808" />
+    <state x="477" y="219" width="964" height="420" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1589073534733">
+      <screen x="0" y="0" width="1920" height="1080" />
+    </state>
+    <state x="477" y="219" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1920.1080/1920.0.1920.1080@0.0.1920.1080" timestamp="1589073534733" />
+    <state x="2399" y="243" width="964" height="420" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1920.1080/1920.0.1920.1080@1920.0.1920.1080" timestamp="1588457804441" />
+    <state x="2732" y="457" key="#xdebugger.evaluate" timestamp="1587791866013">
+      <screen x="1920" y="0" width="1920" height="1080" />
+    </state>
+    <state x="2732" y="457" key="#xdebugger.evaluate/0.0.1920.1080/1920.0.1920.1080@1920.0.1920.1080" timestamp="1587791866013" />
+    <state x="2433" y="82" width="883" height="851" key="CommitChangelistDialog2" timestamp="1587760790529">
+      <screen x="1920" y="0" width="1920" height="1080" />
+    </state>
+    <state x="2433" y="82" width="883" height="851" key="CommitChangelistDialog2/0.0.1920.1080/1920.0.1920.1080@1920.0.1920.1080" timestamp="1587760790529" />
+    <state x="1007" y="149" width="552" height="474" key="FileChooserDialogImpl" timestamp="1590718076483">
+      <screen x="0" y="0" width="1920" height="1080" />
+    </state>
+    <state x="1007" y="149" width="552" height="474" key="FileChooserDialogImpl/0.0.1920.1080/1920.0.1920.1080@0.0.1920.1080" timestamp="1590718076483" />
+    <state x="2939" y="293" width="428" height="474" key="FileChooserDialogImpl/0.0.1920.1080/1920.0.1920.1080@1920.0.1920.1080" timestamp="1586281745283" />
+    <state width="1864" height="265" key="GridCell.Tab.0.bottom" timestamp="1590727515012">
+      <screen x="0" y="0" width="1920" height="1080" />
+    </state>
+    <state width="1864" height="265" key="GridCell.Tab.0.bottom/0.0.1920.1080/1920.0.1920.1080@0.0.1920.1080" timestamp="1590727515012" />
+    <state width="1864" height="265" key="GridCell.Tab.0.bottom/0.0.1920.1080/1920.0.1920.1080@1920.0.1920.1080" timestamp="1590118822772" />
+    <state width="1864" height="265" key="GridCell.Tab.0.center" timestamp="1590727515011">
+      <screen x="0" y="0" width="1920" height="1080" />
+    </state>
+    <state width="1864" height="265" key="GridCell.Tab.0.center/0.0.1920.1080/1920.0.1920.1080@0.0.1920.1080" timestamp="1590727515011" />
+    <state width="1864" height="265" key="GridCell.Tab.0.center/0.0.1920.1080/1920.0.1920.1080@1920.0.1920.1080" timestamp="1590118822772" />
+    <state width="1864" height="265" key="GridCell.Tab.0.left" timestamp="1590727515011">
+      <screen x="0" y="0" width="1920" height="1080" />
+    </state>
+    <state width="1864" height="265" key="GridCell.Tab.0.left/0.0.1920.1080/1920.0.1920.1080@0.0.1920.1080" timestamp="1590727515011" />
+    <state width="1864" height="265" key="GridCell.Tab.0.left/0.0.1920.1080/1920.0.1920.1080@1920.0.1920.1080" timestamp="1590118822772" />
+    <state width="1864" height="265" key="GridCell.Tab.0.right" timestamp="1590727515011">
+      <screen x="0" y="0" width="1920" height="1080" />
+    </state>
+    <state width="1864" height="265" key="GridCell.Tab.0.right/0.0.1920.1080/1920.0.1920.1080@0.0.1920.1080" timestamp="1590727515011" />
+    <state width="1864" height="265" key="GridCell.Tab.0.right/0.0.1920.1080/1920.0.1920.1080@1920.0.1920.1080" timestamp="1590118822772" />
+    <state width="1864" height="337" key="GridCell.Tab.1.bottom" timestamp="1589077384601">
+      <screen x="0" y="0" width="1920" height="1080" />
+    </state>
+    <state width="1864" height="337" key="GridCell.Tab.1.bottom/0.0.1920.1080/1920.0.1920.1080@0.0.1920.1080" timestamp="1589077384601" />
+    <state width="1864" height="337" key="GridCell.Tab.1.bottom/0.0.1920.1080/1920.0.1920.1080@1920.0.1920.1080" timestamp="1588463369145" />
+    <state width="1864" height="337" key="GridCell.Tab.1.center" timestamp="1589077384601">
+      <screen x="0" y="0" width="1920" height="1080" />
+    </state>
+    <state width="1864" height="337" key="GridCell.Tab.1.center/0.0.1920.1080/1920.0.1920.1080@0.0.1920.1080" timestamp="1589077384601" />
+    <state width="1864" height="337" key="GridCell.Tab.1.center/0.0.1920.1080/1920.0.1920.1080@1920.0.1920.1080" timestamp="1588463369145" />
+    <state width="1864" height="337" key="GridCell.Tab.1.left" timestamp="1589077384601">
+      <screen x="0" y="0" width="1920" height="1080" />
+    </state>
+    <state width="1864" height="337" key="GridCell.Tab.1.left/0.0.1920.1080/1920.0.1920.1080@0.0.1920.1080" timestamp="1589077384601" />
+    <state width="1864" height="337" key="GridCell.Tab.1.left/0.0.1920.1080/1920.0.1920.1080@1920.0.1920.1080" timestamp="1588463369145" />
+    <state width="1864" height="337" key="GridCell.Tab.1.right" timestamp="1589077384601">
+      <screen x="0" y="0" width="1920" height="1080" />
+    </state>
+    <state width="1864" height="337" key="GridCell.Tab.1.right/0.0.1920.1080/1920.0.1920.1080@0.0.1920.1080" timestamp="1589077384601" />
+    <state width="1864" height="337" key="GridCell.Tab.1.right/0.0.1920.1080/1920.0.1920.1080@1920.0.1920.1080" timestamp="1588463369145" />
+    <state x="2510" y="308" width="928" height="674" key="Maven.ArtifactSearchDialog" timestamp="1586281403095">
+      <screen x="1920" y="0" width="1920" height="1080" />
+    </state>
+    <state x="2510" y="308" width="928" height="674" key="Maven.ArtifactSearchDialog/0.0.1920.1080/1920.0.1920.1080@1920.0.1920.1080" timestamp="1586281403095" />
+    <state x="2396" y="207" width="958" height="600" key="RollbackChangesDialog" timestamp="1587761123377">
+      <screen x="1920" y="0" width="1920" height="1080" />
+    </state>
+    <state x="2396" y="207" width="958" height="600" key="RollbackChangesDialog/0.0.1920.1080/1920.0.1920.1080@1920.0.1920.1080" timestamp="1587761123377" />
+    <state x="568" y="-65" width="1284" height="1045" key="SettingsEditor" timestamp="1590727918506">
+      <screen x="0" y="0" width="1920" height="1080" />
+    </state>
+    <state x="568" y="-65" width="1284" height="1045" key="SettingsEditor/0.0.1920.1080/1920.0.1920.1080@0.0.1920.1080" timestamp="1590727918506" />
+    <state x="2668" y="127" width="1129" height="901" key="SettingsEditor/0.0.1920.1080/1920.0.1920.1080@1920.0.1920.1080" timestamp="1590527864411" />
+    <state x="2118" y="207" width="804" height="518" key="Vcs.Push.Dialog.v2" timestamp="1587792772405">
+      <screen x="1920" y="0" width="1920" height="1080" />
+    </state>
+    <state x="2118" y="207" width="804" height="518" key="Vcs.Push.Dialog.v2/0.0.1920.1080/1920.0.1920.1080@1920.0.1920.1080" timestamp="1587792772405" />
+    <state x="2481" y="-8" width="767" height="778" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser" timestamp="1590106065124">
+      <screen x="1920" y="0" width="1920" height="1080" />
+    </state>
+    <state x="2481" y="-8" width="767" height="778" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser/0.0.1920.1080/1920.0.1920.1080@1920.0.1920.1080" timestamp="1590106065124" />
+    <state x="2420" y="222" width="906" height="535" key="com.intellij.openapi.vcs.changes.SpecificFilesViewDialog" timestamp="1587760895849">
+      <screen x="1920" y="0" width="1920" height="1080" />
+    </state>
+    <state x="2420" y="222" width="906" height="535" key="com.intellij.openapi.vcs.changes.SpecificFilesViewDialog/0.0.1920.1080/1920.0.1920.1080@1920.0.1920.1080" timestamp="1587760895849" />
+    <state x="644" y="402" width="622" height="199" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1590174654191">
+      <screen x="0" y="0" width="1920" height="1080" />
+    </state>
+    <state x="644" y="402" width="622" height="199" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1920.1080/1920.0.1920.1080@0.0.1920.1080" timestamp="1590174654191" />
+    <state x="764" y="262" width="1117" height="762" key="find.popup" timestamp="1590784456956">
+      <screen x="0" y="0" width="1920" height="1080" />
+    </state>
+    <state x="764" y="262" width="1117" height="762" key="find.popup/0.0.1920.1080/1920.0.1920.1080@0.0.1920.1080" timestamp="1590784456956" />
+    <state x="2573" y="149" width="1157" height="762" key="find.popup/0.0.1920.1080/1920.0.1920.1080@1920.0.1920.1080" timestamp="1590116508415" />
+    <state x="539" y="45" width="874" height="1034" key="search.everywhere.popup" timestamp="1590784506624">
+      <screen x="0" y="0" width="1920" height="1080" />
+    </state>
+    <state x="539" y="45" width="874" height="1034" key="search.everywhere.popup/0.0.1920.1080/1920.0.1920.1080@0.0.1920.1080" timestamp="1590784506624" />
+    <state x="2459" y="45" width="874" height="1034" key="search.everywhere.popup/0.0.1920.1080/1920.0.1920.1080@1920.0.1920.1080" timestamp="1590116558867" />
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/opennlp$All_in_opennlp_tools.ic" NAME="All in opennlp-tools Coverage Results" MODIFIED="1589075014058" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
+    <SUITE FILE_PATH="coverage/opennlp$CmdLineUtilTest_createInputStreamFactory.ic" NAME="CmdLineUtilTest.createInputStreamFactory Coverage Results" MODIFIED="1589070422561" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
+      <FILTER>opennlp.tools.cmdline.*</FILTER>
+    </SUITE>
+    <SUITE FILE_PATH="coverage/opennlp$CmdLineUtilTest.ic" NAME="CmdLineUtilTest Coverage Results" MODIFIED="1589066216469" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
+      <FILTER>opennlp.tools.cmdline.*</FILTER>
+    </SUITE>
+    <SUITE FILE_PATH="coverage/opennlp$CmdLineUtilTest_testCIFNoPermissions.ic" NAME="CmdLineUtilTest.testCIFNoPermissions Coverage Results" MODIFIED="1589064859002" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
+      <FILTER>opennlp.tools.cmdline.*</FILTER>
+    </SUITE>
+    <SUITE FILE_PATH="coverage/opennlp$CmdLineUtilTest_testopenInFile.ic" NAME="CmdLineUtilTest.testopenInFile Coverage Results" MODIFIED="1589065773758" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
+      <FILTER>opennlp.tools.cmdline.*</FILTER>
+    </SUITE>
+  </component>
+</project>

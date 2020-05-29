@@ -1,0 +1,455 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: SimplePerceptronSequenceTrainer</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">opennlp.tools.ml.perceptron</a> ]
+</div>
+
+<h1>Coverage Summary for Class: SimplePerceptronSequenceTrainer (opennlp.tools.ml.perceptron)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">SimplePerceptronSequenceTrainer</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 8)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 167)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/*
+<i>2</i>&nbsp; * Licensed to the Apache Software Foundation (ASF) under one or more
+<i>3</i>&nbsp; * contributor license agreements.  See the NOTICE file distributed with
+<i>4</i>&nbsp; * this work for additional information regarding copyright ownership.
+<i>5</i>&nbsp; * The ASF licenses this file to You under the Apache License, Version 2.0
+<i>6</i>&nbsp; * (the &quot;License&quot;); you may not use this file except in compliance with
+<i>7</i>&nbsp; * the License. You may obtain a copy of the License at
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; *     http://www.apache.org/licenses/LICENSE-2.0
+<i>10</i>&nbsp; *
+<i>11</i>&nbsp; * Unless required by applicable law or agreed to in writing, software
+<i>12</i>&nbsp; * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<i>13</i>&nbsp; * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<i>14</i>&nbsp; * See the License for the specific language governing permissions and
+<i>15</i>&nbsp; * limitations under the License.
+<i>16</i>&nbsp; */
+<i>17</i>&nbsp;
+<i>18</i>&nbsp;package opennlp.tools.ml.perceptron;
+<i>19</i>&nbsp;
+<i>20</i>&nbsp;import java.io.IOException;
+<i>21</i>&nbsp;import java.util.ArrayList;
+<i>22</i>&nbsp;import java.util.HashMap;
+<i>23</i>&nbsp;import java.util.List;
+<i>24</i>&nbsp;import java.util.Map;
+<i>25</i>&nbsp;
+<i>26</i>&nbsp;import opennlp.tools.ml.AbstractEventModelSequenceTrainer;
+<i>27</i>&nbsp;import opennlp.tools.ml.model.AbstractDataIndexer;
+<i>28</i>&nbsp;import opennlp.tools.ml.model.AbstractModel;
+<i>29</i>&nbsp;import opennlp.tools.ml.model.DataIndexer;
+<i>30</i>&nbsp;import opennlp.tools.ml.model.Event;
+<i>31</i>&nbsp;import opennlp.tools.ml.model.MutableContext;
+<i>32</i>&nbsp;import opennlp.tools.ml.model.OnePassDataIndexer;
+<i>33</i>&nbsp;import opennlp.tools.ml.model.Sequence;
+<i>34</i>&nbsp;import opennlp.tools.ml.model.SequenceStream;
+<i>35</i>&nbsp;import opennlp.tools.ml.model.SequenceStreamEventStream;
+<i>36</i>&nbsp;
+<i>37</i>&nbsp;/**
+<i>38</i>&nbsp; * Trains models for sequences using the perceptron algorithm.  Each outcome is represented as
+<i>39</i>&nbsp; * a binary perceptron classifier.  This supports standard (integer) weighting as well
+<i>40</i>&nbsp; * average weighting.  Sequence information is used in a simplified was to that described in:
+<i>41</i>&nbsp; * Discriminative Training Methods for Hidden Markov Models: Theory and Experiments
+<i>42</i>&nbsp; * with the Perceptron Algorithm. Michael Collins, EMNLP 2002.
+<i>43</i>&nbsp; * Specifically only updates are applied to tokens which were incorrectly tagged by a sequence tagger
+<i>44</i>&nbsp; * rather than to all feature across the sequence which differ from the training sequence.
+<i>45</i>&nbsp; */
+<i>46</i>&nbsp;public class SimplePerceptronSequenceTrainer extends AbstractEventModelSequenceTrainer {
+<i>47</i>&nbsp;
+<i>48</i>&nbsp;  public static final String PERCEPTRON_SEQUENCE_VALUE = &quot;PERCEPTRON_SEQUENCE&quot;;
+<i>49</i>&nbsp;
+<i>50</i>&nbsp;  private int iterations;
+<i>51</i>&nbsp;  private SequenceStream sequenceStream;
+<i>52</i>&nbsp;  /** Number of events in the event set. */
+<i>53</i>&nbsp;  private int numEvents;
+<i>54</i>&nbsp;
+<i>55</i>&nbsp;  /** Number of predicates. */
+<i>56</i>&nbsp;  private int numPreds;
+<i>57</i>&nbsp;  private int numOutcomes;
+<i>58</i>&nbsp;
+<i>59</i>&nbsp;  /** List of outcomes for each event i, in context[i]. */
+<i>60</i>&nbsp;  private int[] outcomeList;
+<i>61</i>&nbsp;
+<i>62</i>&nbsp;  private String[] outcomeLabels;
+<i>63</i>&nbsp;
+<i>64</i>&nbsp;  /** Stores the average parameter values of each predicate during iteration. */
+<i>65</i>&nbsp;  private MutableContext[] averageParams;
+<i>66</i>&nbsp;
+<i>67</i>&nbsp;  /** Mapping between context and an integer */
+<i>68</i>&nbsp;  private Map&lt;String, Integer&gt; pmap;
+<i>69</i>&nbsp;
+<i>70</i>&nbsp;  private Map&lt;String,Integer&gt; omap;
+<i>71</i>&nbsp;
+<i>72</i>&nbsp;  /** Stores the estimated parameter value of each predicate during iteration. */
+<i>73</i>&nbsp;  private MutableContext[] params;
+<i>74</i>&nbsp;  private boolean useAverage;
+<i>75</i>&nbsp;  private int[][][] updates;
+<i>76</i>&nbsp;  private static final int VALUE = 0;
+<i>77</i>&nbsp;  private static final int ITER = 1;
+<i>78</i>&nbsp;  private static final int EVENT = 2;
+<i>79</i>&nbsp;
+<i>80</i>&nbsp;  private String[] predLabels;
+<i>81</i>&nbsp;  private int numSequences;
+<i>82</i>&nbsp;
+<b class="nc"><i>83</i>&nbsp;  public SimplePerceptronSequenceTrainer() {</b>
+<b class="nc"><i>84</i>&nbsp;  }</b>
+<i>85</i>&nbsp;
+<i>86</i>&nbsp;  @Override
+<i>87</i>&nbsp;  public void validate() {
+<b class="nc"><i>88</i>&nbsp;    super.validate();</b>
+<i>89</i>&nbsp;
+<b class="nc"><i>90</i>&nbsp;    String algorithmName = getAlgorithm();</b>
+<b class="nc"><i>91</i>&nbsp;    if (algorithmName != null) {</b>
+<b class="nc"><i>92</i>&nbsp;      if (!PERCEPTRON_SEQUENCE_VALUE.equals(algorithmName)) {</b>
+<b class="nc"><i>93</i>&nbsp;        throw new IllegalArgumentException(&quot;algorithmName must be PERCEPTRON_SEQUENCE&quot;);</b>
+<i>94</i>&nbsp;      }
+<i>95</i>&nbsp;    }
+<b class="nc"><i>96</i>&nbsp;  }</b>
+<i>97</i>&nbsp;
+<i>98</i>&nbsp;  @Deprecated
+<i>99</i>&nbsp;  @Override
+<i>100</i>&nbsp;  public boolean isValid() {
+<i>101</i>&nbsp;    try {
+<b class="nc"><i>102</i>&nbsp;      validate();</b>
+<b class="nc"><i>103</i>&nbsp;      return true;</b>
+<i>104</i>&nbsp;    }
+<b class="nc"><i>105</i>&nbsp;    catch (IllegalArgumentException e) {</b>
+<b class="nc"><i>106</i>&nbsp;      return false;</b>
+<i>107</i>&nbsp;    }
+<i>108</i>&nbsp;  }
+<i>109</i>&nbsp;
+<i>110</i>&nbsp;  public AbstractModel doTrain(SequenceStream events) throws IOException {
+<b class="nc"><i>111</i>&nbsp;    int iterations = getIterations();</b>
+<b class="nc"><i>112</i>&nbsp;    int cutoff = getCutoff();</b>
+<i>113</i>&nbsp;
+<b class="nc"><i>114</i>&nbsp;    boolean useAverage = trainingParameters.getBooleanParameter(&quot;UseAverage&quot;, true);</b>
+<i>115</i>&nbsp;
+<b class="nc"><i>116</i>&nbsp;    return trainModel(iterations, events, cutoff, useAverage);</b>
+<i>117</i>&nbsp;  }
+<i>118</i>&nbsp;
+<i>119</i>&nbsp;  // &lt;&lt; members related to AbstractSequenceTrainer
+<i>120</i>&nbsp;
+<i>121</i>&nbsp;  public AbstractModel trainModel(int iterations, SequenceStream sequenceStream,
+<i>122</i>&nbsp;                                  int cutoff, boolean useAverage) throws IOException {
+<b class="nc"><i>123</i>&nbsp;    this.iterations = iterations;</b>
+<b class="nc"><i>124</i>&nbsp;    this.sequenceStream = sequenceStream;</b>
+<i>125</i>&nbsp;
+<b class="nc"><i>126</i>&nbsp;    trainingParameters.put(AbstractDataIndexer.CUTOFF_PARAM, cutoff);</b>
+<b class="nc"><i>127</i>&nbsp;    trainingParameters.put(AbstractDataIndexer.SORT_PARAM, false);</b>
+<b class="nc"><i>128</i>&nbsp;    DataIndexer di = new OnePassDataIndexer();</b>
+<b class="nc"><i>129</i>&nbsp;    di.init(trainingParameters,reportMap);</b>
+<b class="nc"><i>130</i>&nbsp;    di.index(new SequenceStreamEventStream(sequenceStream));</b>
+<b class="nc"><i>131</i>&nbsp;    numSequences = 0;</b>
+<i>132</i>&nbsp;
+<b class="nc"><i>133</i>&nbsp;    sequenceStream.reset();</b>
+<i>134</i>&nbsp;
+<b class="nc"><i>135</i>&nbsp;    while (sequenceStream.read() != null) {</b>
+<b class="nc"><i>136</i>&nbsp;      numSequences++;</b>
+<i>137</i>&nbsp;    }
+<i>138</i>&nbsp;
+<b class="nc"><i>139</i>&nbsp;    outcomeList  = di.getOutcomeList();</b>
+<b class="nc"><i>140</i>&nbsp;    predLabels = di.getPredLabels();</b>
+<b class="nc"><i>141</i>&nbsp;    pmap = new HashMap&lt;&gt;();</b>
+<i>142</i>&nbsp;
+<b class="nc"><i>143</i>&nbsp;    for (int i = 0; i &lt; predLabels.length; i++) {</b>
+<b class="nc"><i>144</i>&nbsp;      pmap.put(predLabels[i], i);</b>
+<i>145</i>&nbsp;    }
+<i>146</i>&nbsp;
+<b class="nc"><i>147</i>&nbsp;    display(&quot;Incorporating indexed data for training...  \n&quot;);</b>
+<b class="nc"><i>148</i>&nbsp;    this.useAverage = useAverage;</b>
+<b class="nc"><i>149</i>&nbsp;    numEvents = di.getNumEvents();</b>
+<i>150</i>&nbsp;
+<b class="nc"><i>151</i>&nbsp;    this.iterations = iterations;</b>
+<b class="nc"><i>152</i>&nbsp;    outcomeLabels = di.getOutcomeLabels();</b>
+<b class="nc"><i>153</i>&nbsp;    omap = new HashMap&lt;&gt;();</b>
+<b class="nc"><i>154</i>&nbsp;    for (int oli = 0; oli &lt; outcomeLabels.length; oli++) {</b>
+<b class="nc"><i>155</i>&nbsp;      omap.put(outcomeLabels[oli], oli);</b>
+<i>156</i>&nbsp;    }
+<b class="nc"><i>157</i>&nbsp;    outcomeList = di.getOutcomeList();</b>
+<i>158</i>&nbsp;
+<b class="nc"><i>159</i>&nbsp;    numPreds = predLabels.length;</b>
+<b class="nc"><i>160</i>&nbsp;    numOutcomes = outcomeLabels.length;</b>
+<b class="nc"><i>161</i>&nbsp;    if (useAverage) {</b>
+<b class="nc"><i>162</i>&nbsp;      updates = new int[numPreds][numOutcomes][3];</b>
+<i>163</i>&nbsp;    }
+<i>164</i>&nbsp;
+<b class="nc"><i>165</i>&nbsp;    display(&quot;done.\n&quot;);</b>
+<i>166</i>&nbsp;
+<b class="nc"><i>167</i>&nbsp;    display(&quot;\tNumber of Event Tokens: &quot; + numEvents + &quot;\n&quot;);</b>
+<b class="nc"><i>168</i>&nbsp;    display(&quot;\t    Number of Outcomes: &quot; + numOutcomes + &quot;\n&quot;);</b>
+<b class="nc"><i>169</i>&nbsp;    display(&quot;\t  Number of Predicates: &quot; + numPreds + &quot;\n&quot;);</b>
+<i>170</i>&nbsp;
+<i>171</i>&nbsp;
+<b class="nc"><i>172</i>&nbsp;    params = new MutableContext[numPreds];</b>
+<b class="nc"><i>173</i>&nbsp;    if (useAverage) averageParams = new MutableContext[numPreds];</b>
+<i>174</i>&nbsp;
+<b class="nc"><i>175</i>&nbsp;    int[] allOutcomesPattern = new int[numOutcomes];</b>
+<b class="nc"><i>176</i>&nbsp;    for (int oi = 0; oi &lt; numOutcomes; oi++) {</b>
+<b class="nc"><i>177</i>&nbsp;      allOutcomesPattern[oi] = oi;</b>
+<i>178</i>&nbsp;    }
+<i>179</i>&nbsp;
+<b class="nc"><i>180</i>&nbsp;    for (int pi = 0; pi &lt; numPreds; pi++) {</b>
+<b class="nc"><i>181</i>&nbsp;      params[pi] = new MutableContext(allOutcomesPattern, new double[numOutcomes]);</b>
+<b class="nc"><i>182</i>&nbsp;      if (useAverage) averageParams[pi] = new MutableContext(allOutcomesPattern,new double[numOutcomes]);</b>
+<b class="nc"><i>183</i>&nbsp;      for (int aoi = 0; aoi &lt; numOutcomes; aoi++) {</b>
+<b class="nc"><i>184</i>&nbsp;        params[pi].setParameter(aoi, 0.0);</b>
+<b class="nc"><i>185</i>&nbsp;        if (useAverage) averageParams[pi].setParameter(aoi, 0.0);</b>
+<i>186</i>&nbsp;      }
+<i>187</i>&nbsp;    }
+<b class="nc"><i>188</i>&nbsp;    double[] modelDistribution = new double[numOutcomes];</b>
+<i>189</i>&nbsp;
+<b class="nc"><i>190</i>&nbsp;    display(&quot;Computing model parameters...\n&quot;);</b>
+<b class="nc"><i>191</i>&nbsp;    findParameters(iterations);</b>
+<b class="nc"><i>192</i>&nbsp;    display(&quot;...done.\n&quot;);</b>
+<i>193</i>&nbsp;
+<i>194</i>&nbsp;    /* Create and return the model ****/
+<b class="nc"><i>195</i>&nbsp;    String[] updatedPredLabels = predLabels;</b>
+<i>196</i>&nbsp;
+<b class="nc"><i>197</i>&nbsp;    if (useAverage) {</b>
+<b class="nc"><i>198</i>&nbsp;      return new PerceptronModel(averageParams, updatedPredLabels, outcomeLabels);</b>
+<i>199</i>&nbsp;    }
+<i>200</i>&nbsp;    else {
+<b class="nc"><i>201</i>&nbsp;      return new PerceptronModel(params, updatedPredLabels, outcomeLabels);</b>
+<i>202</i>&nbsp;    }
+<i>203</i>&nbsp;  }
+<i>204</i>&nbsp;
+<i>205</i>&nbsp;  private void findParameters(int iterations) throws IOException {
+<b class="nc"><i>206</i>&nbsp;    display(&quot;Performing &quot; + iterations + &quot; iterations.\n&quot;);</b>
+<b class="nc"><i>207</i>&nbsp;    for (int i = 1; i &lt;= iterations; i++) {</b>
+<b class="nc"><i>208</i>&nbsp;      if (i &lt; 10)</b>
+<b class="nc"><i>209</i>&nbsp;        display(&quot;  &quot; + i + &quot;:  &quot;);</b>
+<b class="nc"><i>210</i>&nbsp;      else if (i &lt; 100)</b>
+<b class="nc"><i>211</i>&nbsp;        display(&quot; &quot; + i + &quot;:  &quot;);</b>
+<i>212</i>&nbsp;      else
+<b class="nc"><i>213</i>&nbsp;        display(i + &quot;:  &quot;);</b>
+<b class="nc"><i>214</i>&nbsp;      nextIteration(i);</b>
+<i>215</i>&nbsp;    }
+<b class="nc"><i>216</i>&nbsp;    if (useAverage) {</b>
+<b class="nc"><i>217</i>&nbsp;      trainingStats(averageParams);</b>
+<i>218</i>&nbsp;    }
+<i>219</i>&nbsp;    else {
+<b class="nc"><i>220</i>&nbsp;      trainingStats(params);</b>
+<i>221</i>&nbsp;    }
+<b class="nc"><i>222</i>&nbsp;  }</b>
+<i>223</i>&nbsp;
+<i>224</i>&nbsp;  public void nextIteration(int iteration) throws IOException {
+<b class="nc"><i>225</i>&nbsp;    iteration--; //move to 0-based index</b>
+<b class="nc"><i>226</i>&nbsp;    int numCorrect = 0;</b>
+<b class="nc"><i>227</i>&nbsp;    int oei = 0;</b>
+<b class="nc"><i>228</i>&nbsp;    int si = 0;</b>
+<b class="nc"><i>229</i>&nbsp;    List&lt;Map&lt;String,Float&gt;&gt; featureCounts = new ArrayList&lt;&gt;(numOutcomes);</b>
+<b class="nc"><i>230</i>&nbsp;    for (int oi = 0; oi &lt; numOutcomes; oi++) {</b>
+<b class="nc"><i>231</i>&nbsp;      featureCounts.add(new HashMap&lt;&gt;());</b>
+<i>232</i>&nbsp;    }
+<b class="nc"><i>233</i>&nbsp;    PerceptronModel model = new PerceptronModel(params,predLabels,outcomeLabels);</b>
+<i>234</i>&nbsp;
+<b class="nc"><i>235</i>&nbsp;    sequenceStream.reset();</b>
+<i>236</i>&nbsp;
+<i>237</i>&nbsp;    Sequence sequence;
+<b class="nc"><i>238</i>&nbsp;    while ((sequence = sequenceStream.read()) != null) {</b>
+<b class="nc"><i>239</i>&nbsp;      Event[] taggerEvents = sequenceStream.updateContext(sequence, model);</b>
+<b class="nc"><i>240</i>&nbsp;      Event[] events = sequence.getEvents();</b>
+<b class="nc"><i>241</i>&nbsp;      boolean update = false;</b>
+<b class="nc"><i>242</i>&nbsp;      for (int ei = 0; ei &lt; events.length; ei++, oei++) {</b>
+<b class="nc"><i>243</i>&nbsp;        if (!taggerEvents[ei].getOutcome().equals(events[ei].getOutcome())) {</b>
+<b class="nc"><i>244</i>&nbsp;          update = true;</b>
+<i>245</i>&nbsp;          //break;
+<i>246</i>&nbsp;        }
+<i>247</i>&nbsp;        else {
+<b class="nc"><i>248</i>&nbsp;          numCorrect++;</b>
+<i>249</i>&nbsp;        }
+<i>250</i>&nbsp;      }
+<b class="nc"><i>251</i>&nbsp;      if (update) {</b>
+<b class="nc"><i>252</i>&nbsp;        for (int oi = 0; oi &lt; numOutcomes; oi++) {</b>
+<b class="nc"><i>253</i>&nbsp;          featureCounts.get(oi).clear();</b>
+<i>254</i>&nbsp;        }
+<i>255</i>&nbsp;        //System.err.print(&quot;train:&quot;);for (int ei=0;ei&lt;events.length;ei++)
+<i>256</i>&nbsp;        // {System.err.print(&quot; &quot;+events[ei].getOutcome());} System.err.println();
+<i>257</i>&nbsp;        //training feature count computation
+<b class="nc"><i>258</i>&nbsp;        for (int ei = 0; ei &lt; events.length; ei++, oei++) {</b>
+<b class="nc"><i>259</i>&nbsp;          String[] contextStrings = events[ei].getContext();</b>
+<b class="nc"><i>260</i>&nbsp;          float[] values = events[ei].getValues();</b>
+<b class="nc"><i>261</i>&nbsp;          int oi = omap.get(events[ei].getOutcome());</b>
+<b class="nc"><i>262</i>&nbsp;          for (int ci = 0; ci &lt; contextStrings.length; ci++) {</b>
+<b class="nc"><i>263</i>&nbsp;            float value = 1;</b>
+<b class="nc"><i>264</i>&nbsp;            if (values != null) {</b>
+<b class="nc"><i>265</i>&nbsp;              value = values[ci];</b>
+<i>266</i>&nbsp;            }
+<b class="nc"><i>267</i>&nbsp;            Float c = featureCounts.get(oi).get(contextStrings[ci]);</b>
+<b class="nc"><i>268</i>&nbsp;            if (c == null) {</b>
+<b class="nc"><i>269</i>&nbsp;              c = value;</b>
+<i>270</i>&nbsp;            }
+<i>271</i>&nbsp;            else {
+<b class="nc"><i>272</i>&nbsp;              c += value;</b>
+<i>273</i>&nbsp;            }
+<b class="nc"><i>274</i>&nbsp;            featureCounts.get(oi).put(contextStrings[ci], c);</b>
+<i>275</i>&nbsp;          }
+<i>276</i>&nbsp;        }
+<i>277</i>&nbsp;        //evaluation feature count computation
+<i>278</i>&nbsp;        //System.err.print(&quot;test: &quot;);for (int ei=0;ei&lt;taggerEvents.length;ei++)
+<i>279</i>&nbsp;        // {System.err.print(&quot; &quot;+taggerEvents[ei].getOutcome());} System.err.println();
+<b class="nc"><i>280</i>&nbsp;        for (Event taggerEvent : taggerEvents) {</b>
+<b class="nc"><i>281</i>&nbsp;          String[] contextStrings = taggerEvent.getContext();</b>
+<b class="nc"><i>282</i>&nbsp;          float[] values = taggerEvent.getValues();</b>
+<b class="nc"><i>283</i>&nbsp;          int oi = omap.get(taggerEvent.getOutcome());</b>
+<b class="nc"><i>284</i>&nbsp;          for (int ci = 0; ci &lt; contextStrings.length; ci++) {</b>
+<b class="nc"><i>285</i>&nbsp;            float value = 1;</b>
+<b class="nc"><i>286</i>&nbsp;            if (values != null) {</b>
+<b class="nc"><i>287</i>&nbsp;              value = values[ci];</b>
+<i>288</i>&nbsp;            }
+<b class="nc"><i>289</i>&nbsp;            Float c = featureCounts.get(oi).get(contextStrings[ci]);</b>
+<b class="nc"><i>290</i>&nbsp;            if (c == null) {</b>
+<b class="nc"><i>291</i>&nbsp;              c = -1 * value;</b>
+<i>292</i>&nbsp;            }
+<i>293</i>&nbsp;            else {
+<b class="nc"><i>294</i>&nbsp;              c -= value;</b>
+<i>295</i>&nbsp;            }
+<b class="nc"><i>296</i>&nbsp;            if (c == 0f) {</b>
+<b class="nc"><i>297</i>&nbsp;              featureCounts.get(oi).remove(contextStrings[ci]);</b>
+<i>298</i>&nbsp;            }
+<i>299</i>&nbsp;            else {
+<b class="nc"><i>300</i>&nbsp;              featureCounts.get(oi).put(contextStrings[ci], c);</b>
+<i>301</i>&nbsp;            }
+<i>302</i>&nbsp;          }
+<i>303</i>&nbsp;        }
+<b class="nc"><i>304</i>&nbsp;        for (int oi = 0; oi &lt; numOutcomes; oi++) {</b>
+<b class="nc"><i>305</i>&nbsp;          for (String feature : featureCounts.get(oi).keySet()) {</b>
+<b class="nc"><i>306</i>&nbsp;            int pi = pmap.get(feature);</b>
+<b class="nc"><i>307</i>&nbsp;            if (pi != -1) {</b>
+<i>308</i>&nbsp;              //System.err.println(si+&quot; &quot;+outcomeLabels[oi]+&quot; &quot;+feature+&quot; &quot;+featureCounts[oi].get(feature));
+<b class="nc"><i>309</i>&nbsp;              params[pi].updateParameter(oi, featureCounts.get(oi).get(feature));</b>
+<b class="nc"><i>310</i>&nbsp;              if (useAverage) {</b>
+<b class="nc"><i>311</i>&nbsp;                if (updates[pi][oi][VALUE] != 0) {</b>
+<b class="nc"><i>312</i>&nbsp;                  averageParams[pi].updateParameter(oi,updates[pi][oi][VALUE] * (numSequences</b>
+<i>313</i>&nbsp;                      * (iteration - updates[pi][oi][ITER]) + (si - updates[pi][oi][EVENT])));
+<i>314</i>&nbsp;                  //System.err.println(&quot;p avp[&quot;+pi+&quot;].&quot;+oi+&quot;=&quot;+averageParams[pi].getParameters()[oi]);
+<i>315</i>&nbsp;                }
+<i>316</i>&nbsp;                //System.err.println(&quot;p updates[&quot;+pi+&quot;][&quot;+oi+&quot;]=(&quot;+updates[pi][oi][ITER]+&quot;,&quot;
+<i>317</i>&nbsp;                // +updates[pi][oi][EVENT]+&quot;,&quot;+updates[pi][oi][VALUE]+&quot;) + (&quot;+iteration+&quot;,&quot;+oei+&quot;,&quot;
+<i>318</i>&nbsp;                // +params[pi].getParameters()[oi]+&quot;) -&gt; &quot;+averageParams[pi].getParameters()[oi]);
+<b class="nc"><i>319</i>&nbsp;                updates[pi][oi][VALUE] = (int) params[pi].getParameters()[oi];</b>
+<b class="nc"><i>320</i>&nbsp;                updates[pi][oi][ITER] = iteration;</b>
+<b class="nc"><i>321</i>&nbsp;                updates[pi][oi][EVENT] = si;</b>
+<i>322</i>&nbsp;              }
+<i>323</i>&nbsp;            }
+<b class="nc"><i>324</i>&nbsp;          }</b>
+<i>325</i>&nbsp;        }
+<b class="nc"><i>326</i>&nbsp;        model = new PerceptronModel(params,predLabels,outcomeLabels);</b>
+<i>327</i>&nbsp;      }
+<b class="nc"><i>328</i>&nbsp;      si++;</b>
+<b class="nc"><i>329</i>&nbsp;    }</b>
+<i>330</i>&nbsp;    //finish average computation
+<b class="nc"><i>331</i>&nbsp;    double totIterations = (double) iterations * si;</b>
+<b class="nc"><i>332</i>&nbsp;    if (useAverage &amp;&amp; iteration == iterations - 1) {</b>
+<b class="nc"><i>333</i>&nbsp;      for (int pi = 0; pi &lt; numPreds; pi++) {</b>
+<b class="nc"><i>334</i>&nbsp;        double[] predParams = averageParams[pi].getParameters();</b>
+<b class="nc"><i>335</i>&nbsp;        for (int oi = 0; oi &lt; numOutcomes; oi++) {</b>
+<b class="nc"><i>336</i>&nbsp;          if (updates[pi][oi][VALUE] != 0) {</b>
+<b class="nc"><i>337</i>&nbsp;            predParams[oi] += updates[pi][oi][VALUE] * (numSequences</b>
+<i>338</i>&nbsp;                * (iterations - updates[pi][oi][ITER]) - updates[pi][oi][EVENT]);
+<i>339</i>&nbsp;          }
+<b class="nc"><i>340</i>&nbsp;          if (predParams[oi] != 0) {</b>
+<b class="nc"><i>341</i>&nbsp;            predParams[oi] /= totIterations;</b>
+<b class="nc"><i>342</i>&nbsp;            averageParams[pi].setParameter(oi, predParams[oi]);</b>
+<i>343</i>&nbsp;            //System.err.println(&quot;updates[&quot;+pi+&quot;][&quot;+oi+&quot;]=(&quot;+updates[pi][oi][ITER]+&quot;,&quot;
+<i>344</i>&nbsp;            // +updates[pi][oi][EVENT]+&quot;,&quot;+updates[pi][oi][VALUE]+&quot;) + (&quot;+iterations+&quot;,&quot;+0+&quot;,&quot;
+<i>345</i>&nbsp;            // +params[pi].getParameters()[oi]+&quot;) -&gt; &quot;+averageParams[pi].getParameters()[oi]);
+<i>346</i>&nbsp;          }
+<i>347</i>&nbsp;        }
+<i>348</i>&nbsp;      }
+<i>349</i>&nbsp;    }
+<b class="nc"><i>350</i>&nbsp;    display(&quot;. (&quot; + numCorrect + &quot;/&quot; + numEvents + &quot;) &quot; + ((double) numCorrect / numEvents) + &quot;\n&quot;);</b>
+<b class="nc"><i>351</i>&nbsp;  }</b>
+<i>352</i>&nbsp;
+<i>353</i>&nbsp;  private void trainingStats(MutableContext[] params) throws IOException {
+<b class="nc"><i>354</i>&nbsp;    int numCorrect = 0;</b>
+<b class="nc"><i>355</i>&nbsp;    int oei = 0;</b>
+<i>356</i>&nbsp;
+<b class="nc"><i>357</i>&nbsp;    sequenceStream.reset();</b>
+<i>358</i>&nbsp;
+<i>359</i>&nbsp;    Sequence sequence;
+<b class="nc"><i>360</i>&nbsp;    while ((sequence = sequenceStream.read()) != null) {</b>
+<b class="nc"><i>361</i>&nbsp;      Event[] taggerEvents = sequenceStream.updateContext(sequence,</b>
+<i>362</i>&nbsp;          new PerceptronModel(params,predLabels,outcomeLabels));
+<b class="nc"><i>363</i>&nbsp;      for (int ei = 0; ei &lt; taggerEvents.length; ei++, oei++) {</b>
+<b class="nc"><i>364</i>&nbsp;        int max = omap.get(taggerEvents[ei].getOutcome());</b>
+<b class="nc"><i>365</i>&nbsp;        if (max == outcomeList[oei]) {</b>
+<b class="nc"><i>366</i>&nbsp;          numCorrect ++;</b>
+<i>367</i>&nbsp;        }
+<i>368</i>&nbsp;      }
+<b class="nc"><i>369</i>&nbsp;    }</b>
+<b class="nc"><i>370</i>&nbsp;    display(&quot;. (&quot; + numCorrect + &quot;/&quot; + numEvents + &quot;) &quot; + ((double) numCorrect / numEvents) + &quot;\n&quot;);</b>
+<b class="nc"><i>371</i>&nbsp;  }</b>
+<i>372</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-09 18:47</div>
+</div>
+</body>
+</html>

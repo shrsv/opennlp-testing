@@ -1,0 +1,275 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: BratDocumentParser</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">opennlp.tools.formats.brat</a> ]
+</div>
+
+<h1>Coverage Summary for Class: BratDocumentParser (opennlp.tools.formats.brat)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">BratDocumentParser</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (4/ 4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    85.7%
+  </span>
+  <span class="absValue">
+    (66/ 77)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/*
+<i>2</i>&nbsp; * Licensed to the Apache Software Foundation (ASF) under one or more
+<i>3</i>&nbsp; * contributor license agreements.  See the NOTICE file distributed with
+<i>4</i>&nbsp; * this work for additional information regarding copyright ownership.
+<i>5</i>&nbsp; * The ASF licenses this file to You under the Apache License, Version 2.0
+<i>6</i>&nbsp; * (the &quot;License&quot;); you may not use this file except in compliance with
+<i>7</i>&nbsp; * the License. You may obtain a copy of the License at
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; *     http://www.apache.org/licenses/LICENSE-2.0
+<i>10</i>&nbsp; *
+<i>11</i>&nbsp; * Unless required by applicable law or agreed to in writing, software
+<i>12</i>&nbsp; * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<i>13</i>&nbsp; * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<i>14</i>&nbsp; * See the License for the specific language governing permissions and
+<i>15</i>&nbsp; * limitations under the License.
+<i>16</i>&nbsp; */
+<i>17</i>&nbsp;
+<i>18</i>&nbsp;package opennlp.tools.formats.brat;
+<i>19</i>&nbsp;
+<i>20</i>&nbsp;
+<i>21</i>&nbsp;import java.util.ArrayList;
+<i>22</i>&nbsp;import java.util.Collections;
+<i>23</i>&nbsp;import java.util.HashMap;
+<i>24</i>&nbsp;import java.util.HashSet;
+<i>25</i>&nbsp;import java.util.List;
+<i>26</i>&nbsp;import java.util.Map;
+<i>27</i>&nbsp;import java.util.Set;
+<i>28</i>&nbsp;
+<i>29</i>&nbsp;import opennlp.tools.namefind.NameSample;
+<i>30</i>&nbsp;import opennlp.tools.sentdetect.SentenceDetector;
+<i>31</i>&nbsp;import opennlp.tools.tokenize.Tokenizer;
+<i>32</i>&nbsp;import opennlp.tools.util.Span;
+<i>33</i>&nbsp;
+<i>34</i>&nbsp;public class BratDocumentParser {
+<i>35</i>&nbsp;
+<i>36</i>&nbsp;  private SentenceDetector sentDetector;
+<i>37</i>&nbsp;  private Tokenizer tokenizer;
+<i>38</i>&nbsp;  private final Set&lt;String&gt; nameTypes;
+<i>39</i>&nbsp;
+<i>40</i>&nbsp;  public BratDocumentParser(SentenceDetector sentenceDetector, Tokenizer tokenizer) {
+<b class="fc"><i>41</i>&nbsp;    this(sentenceDetector, tokenizer, null);</b>
+<b class="fc"><i>42</i>&nbsp;  }</b>
+<i>43</i>&nbsp;
+<i>44</i>&nbsp;  public BratDocumentParser(SentenceDetector sentenceDetector, Tokenizer tokenizer,
+<b class="fc"><i>45</i>&nbsp;                            Set&lt;String&gt; nameTypes) {</b>
+<b class="fc"><i>46</i>&nbsp;    if (nameTypes != null &amp;&amp; nameTypes.size() == 0) {</b>
+<b class="fc"><i>47</i>&nbsp;      throw new IllegalArgumentException(&quot;nameTypes should be null or have one or more elements&quot;);</b>
+<i>48</i>&nbsp;    }
+<b class="fc"><i>49</i>&nbsp;    this.sentDetector = sentenceDetector;</b>
+<b class="fc"><i>50</i>&nbsp;    this.tokenizer = tokenizer;</b>
+<b class="fc"><i>51</i>&nbsp;    this.nameTypes = nameTypes;</b>
+<b class="fc"><i>52</i>&nbsp;  }</b>
+<i>53</i>&nbsp;
+<i>54</i>&nbsp;  public List&lt;NameSample&gt; parse(BratDocument sample) {
+<i>55</i>&nbsp;    // Note: Some entities might not match sentence boundaries,
+<i>56</i>&nbsp;    // to be able to print warning a set of entities id must be maintained
+<i>57</i>&nbsp;    // to check if all entities have been used up after the matching is done
+<i>58</i>&nbsp;
+<b class="fc"><i>59</i>&nbsp;    Set&lt;String&gt; entityIdSet = new HashSet&lt;&gt;();</b>
+<b class="fc"><i>60</i>&nbsp;    Map&lt;Integer, Span&gt; coveredIndexes = new HashMap&lt;&gt;();</b>
+<i>61</i>&nbsp;
+<b class="fc"><i>62</i>&nbsp;    for (BratAnnotation ann : sample.getAnnotations()) {</b>
+<b class="fc"><i>63</i>&nbsp;      if (isSpanAnnotation(ann)) {</b>
+<b class="fc"><i>64</i>&nbsp;        entityIdSet.add(ann.getId());</b>
+<i>65</i>&nbsp;
+<b class="fc"><i>66</i>&nbsp;        for (Span span : ((SpanAnnotation) ann).getSpans()) {</b>
+<b class="fc"><i>67</i>&nbsp;          for (int i = span.getStart(); i &lt; span.getEnd(); i++) {</b>
+<b class="fc"><i>68</i>&nbsp;            coveredIndexes.put(i, span);</b>
+<i>69</i>&nbsp;          }
+<i>70</i>&nbsp;        }
+<i>71</i>&nbsp;      }
+<b class="fc"><i>72</i>&nbsp;    }</b>
+<i>73</i>&nbsp;
+<i>74</i>&nbsp;    // Map spans to tokens, and merge fragments based on token
+<i>75</i>&nbsp;
+<i>76</i>&nbsp;    //
+<i>77</i>&nbsp;
+<i>78</i>&nbsp;
+<i>79</i>&nbsp;    // Detect sentence and correct sentence spans assuming no split can be inside a name annotation
+<b class="fc"><i>80</i>&nbsp;    List&lt;Span&gt; sentences = new ArrayList&lt;&gt;();</b>
+<b class="fc"><i>81</i>&nbsp;    for (Span sentence : sentDetector.sentPosDetect(sample.getText())) {</b>
+<b class="fc"><i>82</i>&nbsp;      Span conflictingName = coveredIndexes.get(sentence.getStart());</b>
+<i>83</i>&nbsp;
+<b class="fc"><i>84</i>&nbsp;      if (sentences.size() &gt; 0 &amp;&amp; conflictingName != null &amp;&amp;</b>
+<b class="fc"><i>85</i>&nbsp;          conflictingName.getStart() &lt; sentence.getStart()) {</b>
+<b class="nc"><i>86</i>&nbsp;        Span lastSentence = sentences.remove(sentences.size() - 1);</b>
+<b class="nc"><i>87</i>&nbsp;        sentences.add(new Span(lastSentence.getStart(), sentence.getEnd()));</b>
+<i>88</i>&nbsp;
+<b class="nc"><i>89</i>&nbsp;        System.out.println(&quot;Correcting sentence segmentation in document &quot; +</b>
+<b class="nc"><i>90</i>&nbsp;            sample.getId());</b>
+<b class="nc"><i>91</i>&nbsp;      }</b>
+<i>92</i>&nbsp;      else {
+<b class="fc"><i>93</i>&nbsp;        sentences.add(sentence);</b>
+<i>94</i>&nbsp;      }
+<i>95</i>&nbsp;    }
+<i>96</i>&nbsp;
+<i>97</i>&nbsp;    // TODO: Token breaks should be enforced on name span boundaries
+<i>98</i>&nbsp;    // a) Just split tokens
+<i>99</i>&nbsp;    // b) Implement a custom token split validator which can be injected into the Tokenizer
+<i>100</i>&nbsp;
+<i>101</i>&nbsp;    // Currently we are missing all
+<i>102</i>&nbsp;
+<b class="fc"><i>103</i>&nbsp;    List&lt;NameSample&gt; samples = new ArrayList&lt;&gt;(sentences.size());</b>
+<i>104</i>&nbsp;
+<b class="fc"><i>105</i>&nbsp;    for (Span sentence : sentences) {</b>
+<i>106</i>&nbsp;
+<b class="fc"><i>107</i>&nbsp;      String sentenceText = sentence.getCoveredText(</b>
+<b class="fc"><i>108</i>&nbsp;          sample.getText()).toString();</b>
+<i>109</i>&nbsp;
+<b class="fc"><i>110</i>&nbsp;      Span[] tokens = tokenizer.tokenizePos(sentenceText);</b>
+<i>111</i>&nbsp;
+<i>112</i>&nbsp;      // Note:
+<i>113</i>&nbsp;      // A begin and end token index can be identical, but map to different
+<i>114</i>&nbsp;      // tokens, to distinguish between between the two begin indexes are
+<i>115</i>&nbsp;      // stored with a negative sign, and end indexes are stored with a positive sign
+<i>116</i>&nbsp;      // in the tokenIndexMap.
+<i>117</i>&nbsp;      // The tokenIndexMap maps to the sentence local token index.
+<i>118</i>&nbsp;
+<b class="fc"><i>119</i>&nbsp;      Map&lt;Integer, Integer&gt; tokenIndexMap = new HashMap&lt;&gt;();</b>
+<i>120</i>&nbsp;
+<b class="fc"><i>121</i>&nbsp;      for (int i = 0; i &lt; tokens.length; i++) {</b>
+<b class="fc"><i>122</i>&nbsp;        tokenIndexMap.put(-(sentence.getStart() + tokens[i].getStart()), i);</b>
+<b class="fc"><i>123</i>&nbsp;        tokenIndexMap.put(sentence.getStart() + tokens[i].getEnd(), i + 1);</b>
+<i>124</i>&nbsp;      }
+<i>125</i>&nbsp;
+<b class="fc"><i>126</i>&nbsp;      List&lt;Span&gt; names = new ArrayList&lt;&gt;();</b>
+<i>127</i>&nbsp;
+<b class="fc"><i>128</i>&nbsp;      for (BratAnnotation ann : sample.getAnnotations()) {</b>
+<i>129</i>&nbsp;
+<b class="fc"><i>130</i>&nbsp;        if (isSpanAnnotation(ann)) {</b>
+<b class="fc"><i>131</i>&nbsp;          SpanAnnotation entity = (SpanAnnotation) ann;</b>
+<i>132</i>&nbsp;
+<b class="fc"><i>133</i>&nbsp;          List&lt;Span&gt; mappedFragments = new ArrayList&lt;&gt;();</b>
+<i>134</i>&nbsp;
+<b class="fc"><i>135</i>&nbsp;          for (Span entitySpan : entity.getSpans()) {</b>
+<b class="fc"><i>136</i>&nbsp;            if (sentence.contains(entitySpan)) {</b>
+<b class="fc"><i>137</i>&nbsp;              entityIdSet.remove(ann.getId());</b>
+<i>138</i>&nbsp;
+<b class="fc"><i>139</i>&nbsp;              entitySpan = entitySpan.trim(sample.getText());</b>
+<i>140</i>&nbsp;
+<b class="fc"><i>141</i>&nbsp;              Integer nameBeginIndex = tokenIndexMap.get(-entitySpan.getStart());</b>
+<b class="fc"><i>142</i>&nbsp;              Integer nameEndIndex = tokenIndexMap.get(entitySpan.getEnd());</b>
+<i>143</i>&nbsp;
+<b class="fc"><i>144</i>&nbsp;              if (nameBeginIndex != null &amp;&amp; nameEndIndex != null) {</b>
+<b class="fc"><i>145</i>&nbsp;                mappedFragments.add(new Span(nameBeginIndex, nameEndIndex, entity.getType()));</b>
+<i>146</i>&nbsp;              } else {
+<b class="nc"><i>147</i>&nbsp;                System.err.println(&quot;Dropped entity &quot; + entity.getId() + &quot; (&quot;</b>
+<b class="nc"><i>148</i>&nbsp;                    + entitySpan.getCoveredText(sample.getText()) + &quot;) &quot; + &quot; in document &quot;</b>
+<b class="nc"><i>149</i>&nbsp;                    + sample.getId() + &quot;, it is not matching tokenization!&quot;);</b>
+<i>150</i>&nbsp;              }
+<i>151</i>&nbsp;            }
+<i>152</i>&nbsp;          }
+<i>153</i>&nbsp;
+<b class="fc"><i>154</i>&nbsp;          Collections.sort(mappedFragments);</b>
+<i>155</i>&nbsp;
+<b class="fc"><i>156</i>&nbsp;          for (int i = 1; i &lt; mappedFragments.size(); i++) {</b>
+<b class="fc"><i>157</i>&nbsp;            if (mappedFragments.get(i - 1).getEnd() ==</b>
+<b class="fc"><i>158</i>&nbsp;                mappedFragments.get(i).getStart()) {</b>
+<b class="fc"><i>159</i>&nbsp;              mappedFragments.set(i, new Span(mappedFragments.get(i - 1).getStart(),</b>
+<b class="fc"><i>160</i>&nbsp;                  mappedFragments.get(i).getEnd(), mappedFragments.get(i).getType()));</b>
+<b class="fc"><i>161</i>&nbsp;              mappedFragments.set(i - 1, null);</b>
+<i>162</i>&nbsp;            }
+<i>163</i>&nbsp;          }
+<i>164</i>&nbsp;
+<b class="fc"><i>165</i>&nbsp;          for (Span span : mappedFragments) {</b>
+<b class="fc"><i>166</i>&nbsp;            if (span != null ) {</b>
+<b class="fc"><i>167</i>&nbsp;              names.add(span);</b>
+<i>168</i>&nbsp;            }
+<b class="fc"><i>169</i>&nbsp;          }</b>
+<i>170</i>&nbsp;        }
+<b class="fc"><i>171</i>&nbsp;      }</b>
+<i>172</i>&nbsp;
+<b class="fc"><i>173</i>&nbsp;      samples.add(new NameSample(sample.getId(), Span.spansToStrings(tokens, sentenceText),</b>
+<b class="fc"><i>174</i>&nbsp;          names.toArray(new Span[names.size()]), null, samples.size() == 0));</b>
+<b class="fc"><i>175</i>&nbsp;    }</b>
+<i>176</i>&nbsp;
+<b class="fc"><i>177</i>&nbsp;    for (String id : entityIdSet) {</b>
+<b class="nc"><i>178</i>&nbsp;      System.err.println(&quot;Dropped entity &quot; + id + &quot; in document &quot; +</b>
+<b class="nc"><i>179</i>&nbsp;          sample.getId() + &quot;, is not matching sentence segmentation!&quot;);</b>
+<b class="nc"><i>180</i>&nbsp;    }</b>
+<i>181</i>&nbsp;
+<b class="fc"><i>182</i>&nbsp;    return samples;</b>
+<i>183</i>&nbsp;  }
+<i>184</i>&nbsp;
+<i>185</i>&nbsp;  private boolean isSpanAnnotation(BratAnnotation ann) {
+<b class="fc"><i>186</i>&nbsp;    if (ann instanceof SpanAnnotation &amp;&amp; (nameTypes == null || nameTypes.contains(ann.getType()))) {</b>
+<b class="fc"><i>187</i>&nbsp;      return true;</b>
+<i>188</i>&nbsp;    }
+<b class="fc"><i>189</i>&nbsp;    return false;</b>
+<i>190</i>&nbsp;  }
+<i>191</i>&nbsp;}
+<i>192</i>&nbsp;
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-09 15:05</div>
+</div>
+</body>
+</html>

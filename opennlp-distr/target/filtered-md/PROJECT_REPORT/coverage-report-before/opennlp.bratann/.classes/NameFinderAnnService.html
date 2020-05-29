@@ -1,0 +1,183 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: NameFinderAnnService</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">opennlp.bratann</a> ]
+</div>
+
+<h1>Coverage Summary for Class: NameFinderAnnService (opennlp.bratann)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">NameFinderAnnService</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 28)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/*
+<i>2</i>&nbsp; * Licensed to the Apache Software Foundation (ASF) under one or more
+<i>3</i>&nbsp; * contributor license agreements.  See the NOTICE file distributed with
+<i>4</i>&nbsp; * this work for additional information regarding copyright ownership.
+<i>5</i>&nbsp; * The ASF licenses this file to You under the Apache License, Version 2.0
+<i>6</i>&nbsp; * (the &quot;License&quot;); you may not use this file except in compliance with
+<i>7</i>&nbsp; * the License. You may obtain a copy of the License at
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; *     http://www.apache.org/licenses/LICENSE-2.0
+<i>10</i>&nbsp; *
+<i>11</i>&nbsp; * Unless required by applicable law or agreed to in writing, software
+<i>12</i>&nbsp; * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<i>13</i>&nbsp; * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<i>14</i>&nbsp; * See the License for the specific language governing permissions and
+<i>15</i>&nbsp; * limitations under the License.
+<i>16</i>&nbsp; */
+<i>17</i>&nbsp;
+<i>18</i>&nbsp;package opennlp.bratann;
+<i>19</i>&nbsp;
+<i>20</i>&nbsp;import java.io.File;
+<i>21</i>&nbsp;import java.net.URI;
+<i>22</i>&nbsp;import java.util.Arrays;
+<i>23</i>&nbsp;import java.util.List;
+<i>24</i>&nbsp;
+<i>25</i>&nbsp;import javax.ws.rs.core.UriBuilder;
+<i>26</i>&nbsp;
+<i>27</i>&nbsp;import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
+<i>28</i>&nbsp;import org.glassfish.jersey.server.ResourceConfig;
+<i>29</i>&nbsp;
+<i>30</i>&nbsp;import opennlp.tools.namefind.NameFinderME;
+<i>31</i>&nbsp;import opennlp.tools.namefind.TokenNameFinder;
+<i>32</i>&nbsp;import opennlp.tools.namefind.TokenNameFinderModel;
+<i>33</i>&nbsp;import opennlp.tools.sentdetect.NewlineSentenceDetector;
+<i>34</i>&nbsp;import opennlp.tools.sentdetect.SentenceDetector;
+<i>35</i>&nbsp;import opennlp.tools.sentdetect.SentenceDetectorME;
+<i>36</i>&nbsp;import opennlp.tools.sentdetect.SentenceModel;
+<i>37</i>&nbsp;import opennlp.tools.tokenize.SimpleTokenizer;
+<i>38</i>&nbsp;import opennlp.tools.tokenize.Tokenizer;
+<i>39</i>&nbsp;import opennlp.tools.tokenize.TokenizerME;
+<i>40</i>&nbsp;import opennlp.tools.tokenize.TokenizerModel;
+<i>41</i>&nbsp;import opennlp.tools.tokenize.WhitespaceTokenizer;
+<i>42</i>&nbsp;
+<b class="nc"><i>43</i>&nbsp;public class NameFinderAnnService {</b>
+<i>44</i>&nbsp;
+<b class="nc"><i>45</i>&nbsp;  public static SentenceDetector sentenceDetector = new NewlineSentenceDetector();</b>
+<b class="nc"><i>46</i>&nbsp;  public static Tokenizer tokenizer = WhitespaceTokenizer.INSTANCE;</b>
+<i>47</i>&nbsp;  public static TokenNameFinder[] nameFinders;
+<i>48</i>&nbsp;
+<i>49</i>&nbsp;  public static void main(String[] args) throws Exception {
+<i>50</i>&nbsp;
+<b class="nc"><i>51</i>&nbsp;    if (args.length == 0) {</b>
+<b class="nc"><i>52</i>&nbsp;      System.out.println(&quot;Usage:&quot;);</b>
+<b class="nc"><i>53</i>&nbsp;      System.out.println(&quot;[NameFinderAnnService -serverPort port] [-tokenizerModel file] &quot;</b>
+<i>54</i>&nbsp;          + &quot;[-ruleBasedTokenizer whitespace|simple] &quot;
+<i>55</i>&nbsp;          + &quot;[-sentenceDetectorModel file] namefinderFile|nameFinderURI&quot;);
+<i>56</i>&nbsp;      return;
+<i>57</i>&nbsp;    }
+<i>58</i>&nbsp;
+<b class="nc"><i>59</i>&nbsp;    List&lt;String&gt; argList = Arrays.asList(args);</b>
+<i>60</i>&nbsp;
+<b class="nc"><i>61</i>&nbsp;    int serverPort = 8080;</b>
+<b class="nc"><i>62</i>&nbsp;    int serverPortIndex = argList.indexOf(&quot;-serverPort&quot;) + 1;</b>
+<i>63</i>&nbsp;
+<b class="nc"><i>64</i>&nbsp;    if (serverPortIndex &gt; 0 &amp;&amp; serverPortIndex &lt; args.length) {</b>
+<b class="nc"><i>65</i>&nbsp;      serverPort = Integer.parseInt(args[serverPortIndex]);</b>
+<i>66</i>&nbsp;    }
+<i>67</i>&nbsp;
+<b class="nc"><i>68</i>&nbsp;    int sentenceModelIndex = argList.indexOf(&quot;-sentenceDetectorModel&quot;) + 1;</b>
+<b class="nc"><i>69</i>&nbsp;    if (sentenceModelIndex &gt; 0 &amp;&amp; sentenceModelIndex &lt; args.length) {</b>
+<b class="nc"><i>70</i>&nbsp;      sentenceDetector = new SentenceDetectorME(</b>
+<i>71</i>&nbsp;          new SentenceModel(new File(args[sentenceModelIndex])));
+<i>72</i>&nbsp;    }
+<i>73</i>&nbsp;
+<b class="nc"><i>74</i>&nbsp;    int ruleBasedTokenizerIndex = argList.indexOf(&quot;-ruleBasedTokenizer&quot;) + 1;</b>
+<i>75</i>&nbsp;
+<b class="nc"><i>76</i>&nbsp;    if (ruleBasedTokenizerIndex &gt; 0 &amp;&amp; ruleBasedTokenizerIndex &lt; args.length) {</b>
+<b class="nc"><i>77</i>&nbsp;      if (&quot;whitespace&quot;.equals(args[ruleBasedTokenizerIndex])) {</b>
+<b class="nc"><i>78</i>&nbsp;        tokenizer = WhitespaceTokenizer.INSTANCE;</b>
+<b class="nc"><i>79</i>&nbsp;      } else if (&quot;simple&quot;.equals(args[ruleBasedTokenizerIndex])) {</b>
+<b class="nc"><i>80</i>&nbsp;        tokenizer = SimpleTokenizer.INSTANCE;</b>
+<i>81</i>&nbsp;      } else {
+<b class="nc"><i>82</i>&nbsp;        System.out.println(&quot;unkown tokenizer: &quot; + args[ruleBasedTokenizerIndex]);</b>
+<i>83</i>&nbsp;        return;
+<i>84</i>&nbsp;      }
+<i>85</i>&nbsp;    }
+<i>86</i>&nbsp;
+<b class="nc"><i>87</i>&nbsp;    int tokenizerModelIndex = argList.indexOf(&quot;-tokenizerModel&quot;) + 1;</b>
+<b class="nc"><i>88</i>&nbsp;    if (tokenizerModelIndex &gt; 0 &amp;&amp; tokenizerModelIndex &lt; args.length) {</b>
+<b class="nc"><i>89</i>&nbsp;      tokenizer = new TokenizerME(</b>
+<i>90</i>&nbsp;          new TokenizerModel(new File(args[tokenizerModelIndex])));
+<i>91</i>&nbsp;    }
+<i>92</i>&nbsp;
+<b class="nc"><i>93</i>&nbsp;    nameFinders = new TokenNameFinder[] {new NameFinderME(</b>
+<i>94</i>&nbsp;        new TokenNameFinderModel(new File(args[args.length - 1])))};
+<i>95</i>&nbsp;
+<b class="nc"><i>96</i>&nbsp;    URI baseUri = UriBuilder.fromUri(&quot;http://localhost/&quot;).port(serverPort).build();</b>
+<b class="nc"><i>97</i>&nbsp;    ResourceConfig config = new ResourceConfig(NameFinderResource.class);</b>
+<b class="nc"><i>98</i>&nbsp;    GrizzlyHttpServerFactory.createHttpServer(baseUri, config);</b>
+<i>99</i>&nbsp;  }
+<i>100</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-09 15:05</div>
+</div>
+</body>
+</html>

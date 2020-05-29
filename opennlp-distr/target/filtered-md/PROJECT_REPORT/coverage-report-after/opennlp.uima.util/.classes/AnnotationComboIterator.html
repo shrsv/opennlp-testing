@@ -1,0 +1,304 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: AnnotationComboIterator</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">opennlp.uima.util</a> ]
+</div>
+
+<h1>Coverage Summary for Class: AnnotationComboIterator (opennlp.uima.util)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">AnnotationComboIterator</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 24)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">AnnotationComboIterator$AnnotationIterator</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 30)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 12)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 54)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/*
+<i>2</i>&nbsp; * Licensed to the Apache Software Foundation (ASF) under one or more
+<i>3</i>&nbsp; * contributor license agreements.  See the NOTICE file distributed with
+<i>4</i>&nbsp; * this work for additional information regarding copyright ownership.
+<i>5</i>&nbsp; * The ASF licenses this file to You under the Apache License, Version 2.0
+<i>6</i>&nbsp; * (the &quot;License&quot;); you may not use this file except in compliance with
+<i>7</i>&nbsp; * the License. You may obtain a copy of the License at
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; *     http://www.apache.org/licenses/LICENSE-2.0
+<i>10</i>&nbsp; *
+<i>11</i>&nbsp; * Unless required by applicable law or agreed to in writing, software
+<i>12</i>&nbsp; * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<i>13</i>&nbsp; * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<i>14</i>&nbsp; * See the License for the specific language governing permissions and
+<i>15</i>&nbsp; * limitations under the License.
+<i>16</i>&nbsp; */
+<i>17</i>&nbsp;
+<i>18</i>&nbsp;package opennlp.uima.util;
+<i>19</i>&nbsp;
+<i>20</i>&nbsp;import java.util.Iterator;
+<i>21</i>&nbsp;import java.util.NoSuchElementException;
+<i>22</i>&nbsp;
+<i>23</i>&nbsp;import org.apache.uima.cas.CAS;
+<i>24</i>&nbsp;import org.apache.uima.cas.FSIterator;
+<i>25</i>&nbsp;import org.apache.uima.cas.Type;
+<i>26</i>&nbsp;import org.apache.uima.cas.text.AnnotationFS;
+<i>27</i>&nbsp;
+<i>28</i>&nbsp;/**
+<i>29</i>&nbsp; * UIMA Annotation iterator combination of super- and subiterator.
+<i>30</i>&nbsp; *
+<i>31</i>&nbsp; * &lt;p&gt;
+<i>32</i>&nbsp; * This class supports a common idiom in UIMA annotation iteration, where you need to iterate over
+<i>33</i>&nbsp; * two kinds of annotations in lock-step. For example, you often want to iterate over all sentences,
+<i>34</i>&nbsp; * then do something on each sentence and all tokens in that sentence. Here&#39;s how to do this with
+<i>35</i>&nbsp; * this class.
+<i>36</i>&nbsp; *
+<i>37</i>&nbsp; * &lt;pre&gt;
+<i>38</i>&nbsp; * CAS cas = ...
+<i>39</i>&nbsp; * Type sentenceType = ..., tokenType = ...
+<i>40</i>&nbsp; * // Init with CAS, upper and lower type.
+<i>41</i>&nbsp; * AnnotationComboIterator it = new AnnotationComboIterator(cas, sentenceType, tokenType);
+<i>42</i>&nbsp; * // Iterate over sentences
+<i>43</i>&nbsp; * for (AnnotationIteratorPair aiPair : it) {
+<i>44</i>&nbsp; *   // Obtain sentence annotation
+<i>45</i>&nbsp; *   AnnotationFS sentence = aiPair.getAnnotation();
+<i>46</i>&nbsp; *   // Do something with sentence...
+<i>47</i>&nbsp; *
+<i>48</i>&nbsp; *   // Iterate over tokens
+<i>49</i>&nbsp; *   for (AnnotationFS token : aiPair.getSubIterator()) {
+<i>50</i>&nbsp; *     // Do something with tokens...
+<i>51</i>&nbsp; *   }
+<i>52</i>&nbsp; * }
+<i>53</i>&nbsp; * &lt;/pre&gt;
+<i>54</i>&nbsp; *
+<i>55</i>&nbsp; * The combo iterator returns in its &lt;code&gt;next()&lt;/code&gt; method a pair of an annotation of the upper
+<i>56</i>&nbsp; * type (e.g., sentence), and an iterator over annotations of the lower type (e.g., tokens). Note
+<i>57</i>&nbsp; * that both the upper and lower iterator also implement the Iterable interface and can be use
+<i>58</i>&nbsp; * directly in for-loops.
+<i>59</i>&nbsp; *
+<i>60</i>&nbsp; * &lt;p&gt;
+<i>61</i>&nbsp; * Note that only this usage is safe. To keep the implementation efficient, the combo iterator keeps
+<i>62</i>&nbsp; * two iterators internally that it increments in lock-step. Do not attempt, for example, to collect
+<i>63</i>&nbsp; * more than one of the subiterators (token iterator in our example). Do not use this class if your
+<i>64</i>&nbsp; * intended usage does not fall into this pattern.
+<i>65</i>&nbsp; */
+<b class="nc"><i>66</i>&nbsp;public class AnnotationComboIterator implements Iterable&lt;AnnotationIteratorPair&gt;,</b>
+<i>67</i>&nbsp;    Iterator&lt;AnnotationIteratorPair&gt; {
+<i>68</i>&nbsp;
+<i>69</i>&nbsp;  // Internal implementation of subiterator
+<b class="nc"><i>70</i>&nbsp;  private class AnnotationIterator implements Iterable&lt;AnnotationFS&gt;, Iterator&lt;AnnotationFS&gt; {</b>
+<i>71</i>&nbsp;
+<b class="nc"><i>72</i>&nbsp;    private AnnotationIterator() {</b>
+<b class="nc"><i>73</i>&nbsp;      super();</b>
+<i>74</i>&nbsp;    }
+<i>75</i>&nbsp;
+<i>76</i>&nbsp;    public AnnotationIterator iterator() {
+<b class="nc"><i>77</i>&nbsp;      return this;</b>
+<i>78</i>&nbsp;    }
+<i>79</i>&nbsp;
+<i>80</i>&nbsp;    public boolean hasNext() {
+<b class="nc"><i>81</i>&nbsp;      if (AnnotationComboIterator.this.nextLowerChecked) {</b>
+<b class="nc"><i>82</i>&nbsp;        return AnnotationComboIterator.this.nextLowerAvailable;</b>
+<i>83</i>&nbsp;      }
+<b class="nc"><i>84</i>&nbsp;      AnnotationComboIterator.this.nextLowerChecked = true;</b>
+<b class="nc"><i>85</i>&nbsp;      AnnotationComboIterator.this.nextLowerAvailable = false;</b>
+<b class="nc"><i>86</i>&nbsp;      if (AnnotationComboIterator.this.lowerIt.isValid()) {</b>
+<b class="nc"><i>87</i>&nbsp;        AnnotationFS lowerFS = AnnotationComboIterator.this.lowerIt.get();</b>
+<b class="nc"><i>88</i>&nbsp;        int lowerBegin = lowerFS.getBegin();</b>
+<b class="nc"><i>89</i>&nbsp;        while (lowerBegin &lt; AnnotationComboIterator.this.upperBegin) {</b>
+<b class="nc"><i>90</i>&nbsp;          AnnotationComboIterator.this.lowerIt.moveToNext();</b>
+<b class="nc"><i>91</i>&nbsp;          if (AnnotationComboIterator.this.lowerIt.isValid()) {</b>
+<b class="nc"><i>92</i>&nbsp;            lowerFS = AnnotationComboIterator.this.lowerIt.get();</b>
+<b class="nc"><i>93</i>&nbsp;            lowerBegin = lowerFS.getBegin();</b>
+<i>94</i>&nbsp;          } else {
+<b class="nc"><i>95</i>&nbsp;            return false;</b>
+<i>96</i>&nbsp;          }
+<i>97</i>&nbsp;        }
+<b class="nc"><i>98</i>&nbsp;        if (AnnotationComboIterator.this.upperEnd &gt;= lowerFS.getEnd()) {</b>
+<b class="nc"><i>99</i>&nbsp;          AnnotationComboIterator.this.nextLowerAvailable = true;</b>
+<i>100</i>&nbsp;        }
+<i>101</i>&nbsp;      }
+<b class="nc"><i>102</i>&nbsp;      return AnnotationComboIterator.this.nextLowerAvailable;</b>
+<i>103</i>&nbsp;    }
+<i>104</i>&nbsp;
+<i>105</i>&nbsp;    public AnnotationFS next() {
+<b class="nc"><i>106</i>&nbsp;      if (AnnotationComboIterator.this.nextLowerChecked) {</b>
+<b class="nc"><i>107</i>&nbsp;        if (!AnnotationComboIterator.this.nextLowerAvailable) {</b>
+<b class="nc"><i>108</i>&nbsp;          throw new NoSuchElementException();</b>
+<i>109</i>&nbsp;        }
+<b class="nc"><i>110</i>&nbsp;      } else if (!hasNext()) {</b>
+<b class="nc"><i>111</i>&nbsp;        throw new NoSuchElementException();</b>
+<i>112</i>&nbsp;      }
+<b class="nc"><i>113</i>&nbsp;      AnnotationComboIterator.this.nextLowerChecked = false;</b>
+<b class="nc"><i>114</i>&nbsp;      final AnnotationFS rv = AnnotationComboIterator.this.lowerIt.get();</b>
+<b class="nc"><i>115</i>&nbsp;      AnnotationComboIterator.this.lowerIt.moveToNext();</b>
+<b class="nc"><i>116</i>&nbsp;      return rv;</b>
+<i>117</i>&nbsp;    }
+<i>118</i>&nbsp;
+<i>119</i>&nbsp;    public void remove() {
+<b class="nc"><i>120</i>&nbsp;      throw new UnsupportedOperationException();</b>
+<i>121</i>&nbsp;    }
+<i>122</i>&nbsp;
+<i>123</i>&nbsp;  }
+<i>124</i>&nbsp;
+<i>125</i>&nbsp;  // The upper iterator (e.g., sentence iterator)
+<i>126</i>&nbsp;  private final FSIterator&lt;AnnotationFS&gt; upperIt;
+<i>127</i>&nbsp;
+<i>128</i>&nbsp;  // The lower iterator (e.g., token iterator)
+<i>129</i>&nbsp;  private final FSIterator&lt;AnnotationFS&gt; lowerIt;
+<i>130</i>&nbsp;
+<i>131</i>&nbsp;  // Start position of current upper (e.g., sentence) annotation. Together with the end position,
+<i>132</i>&nbsp;  // this determines the boundaries for the lower iterator.
+<i>133</i>&nbsp;  private int upperBegin;
+<i>134</i>&nbsp;
+<i>135</i>&nbsp;  // End position of current upper annotation.
+<i>136</i>&nbsp;  private int upperEnd;
+<i>137</i>&nbsp;
+<i>138</i>&nbsp;  // Have we already checked that a next lower annotation is available? Premature optimization...
+<b class="nc"><i>139</i>&nbsp;  private boolean nextLowerChecked = false;</b>
+<i>140</i>&nbsp;
+<i>141</i>&nbsp;  // State variable that holds the status of the lower iterator only in case that nextLowerChecked
+<i>142</i>&nbsp;  // is true.
+<b class="nc"><i>143</i>&nbsp;  private boolean nextLowerAvailable = false;</b>
+<i>144</i>&nbsp;
+<i>145</i>&nbsp;  /**
+<i>146</i>&nbsp;   * Create a new combo iterator.
+<i>147</i>&nbsp;   *
+<i>148</i>&nbsp;   * @param cas
+<i>149</i>&nbsp;   *          The CAS we&#39;re operating on.
+<i>150</i>&nbsp;   * @param upper
+<i>151</i>&nbsp;   *          The type of the upper iterator, e.g., sentence.
+<i>152</i>&nbsp;   * @param lower
+<i>153</i>&nbsp;   *          The type of the lower iterator, e.g., token.
+<i>154</i>&nbsp;   */
+<b class="nc"><i>155</i>&nbsp;  public AnnotationComboIterator(CAS cas, Type upper, Type lower) {</b>
+<b class="nc"><i>156</i>&nbsp;    this.upperIt = cas.getAnnotationIndex(upper).iterator();</b>
+<b class="nc"><i>157</i>&nbsp;    this.lowerIt = cas.getAnnotationIndex(lower).iterator();</b>
+<b class="nc"><i>158</i>&nbsp;    this.upperIt.moveToFirst();</b>
+<b class="nc"><i>159</i>&nbsp;    this.lowerIt.moveToFirst();</b>
+<b class="nc"><i>160</i>&nbsp;    if (this.upperIt.isValid()) {</b>
+<b class="nc"><i>161</i>&nbsp;      final AnnotationFS upperFS = this.upperIt.get();</b>
+<b class="nc"><i>162</i>&nbsp;      this.upperBegin = upperFS.getBegin();</b>
+<b class="nc"><i>163</i>&nbsp;      this.upperEnd = upperFS.getEnd();</b>
+<b class="nc"><i>164</i>&nbsp;    } else {</b>
+<b class="nc"><i>165</i>&nbsp;      this.nextLowerChecked = true;</b>
+<i>166</i>&nbsp;    }
+<i>167</i>&nbsp;  }
+<i>168</i>&nbsp;
+<i>169</i>&nbsp;  public boolean hasNext() {
+<b class="nc"><i>170</i>&nbsp;    return this.upperIt.hasNext();</b>
+<i>171</i>&nbsp;  }
+<i>172</i>&nbsp;
+<i>173</i>&nbsp;  public AnnotationIteratorPair next() {
+<b class="nc"><i>174</i>&nbsp;    if (!this.upperIt.hasNext()) {</b>
+<b class="nc"><i>175</i>&nbsp;      throw new NoSuchElementException();</b>
+<i>176</i>&nbsp;    }
+<b class="nc"><i>177</i>&nbsp;    final AnnotationFS upperFS = this.upperIt.next();</b>
+<b class="nc"><i>178</i>&nbsp;    this.upperBegin = upperFS.getBegin();</b>
+<b class="nc"><i>179</i>&nbsp;    this.upperEnd = upperFS.getEnd();</b>
+<b class="nc"><i>180</i>&nbsp;    this.nextLowerChecked = false;</b>
+<b class="nc"><i>181</i>&nbsp;    return new AnnotationIteratorPair(upperFS, new AnnotationIterator());</b>
+<i>182</i>&nbsp;  }
+<i>183</i>&nbsp;
+<i>184</i>&nbsp;  public Iterator&lt;AnnotationIteratorPair&gt; iterator() {
+<b class="nc"><i>185</i>&nbsp;    return this;</b>
+<i>186</i>&nbsp;  }
+<i>187</i>&nbsp;
+<i>188</i>&nbsp;  /**
+<i>189</i>&nbsp;   * Not supported.
+<i>190</i>&nbsp;   */
+<i>191</i>&nbsp;  public void remove() {
+<b class="nc"><i>192</i>&nbsp;    throw new UnsupportedOperationException();</b>
+<i>193</i>&nbsp;  }
+<i>194</i>&nbsp;
+<i>195</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-09 18:47</div>
+</div>
+</body>
+</html>

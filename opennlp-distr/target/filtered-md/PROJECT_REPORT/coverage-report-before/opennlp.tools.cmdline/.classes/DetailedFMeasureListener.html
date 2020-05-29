@@ -1,0 +1,394 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: DetailedFMeasureListener</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">opennlp.tools.cmdline</a> ]
+</div>
+
+<h1>Coverage Summary for Class: DetailedFMeasureListener (opennlp.tools.cmdline)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">DetailedFMeasureListener</td>
+<td class="coverageStat">
+  <span class="percent">
+    72.7%
+  </span>
+  <span class="absValue">
+    (8/ 11)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    90%
+  </span>
+  <span class="absValue">
+    (63/ 70)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">DetailedFMeasureListener$F1Comparator</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (2/ 2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    93.8%
+  </span>
+  <span class="absValue">
+    (15/ 16)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">DetailedFMeasureListener$Stats</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (10/ 10)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (23/ 23)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    87%
+  </span>
+  <span class="absValue">
+    (20/ 23)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    92.7%
+  </span>
+  <span class="absValue">
+    (101/ 109)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/*
+<i>2</i>&nbsp; * Licensed to the Apache Software Foundation (ASF) under one or more
+<i>3</i>&nbsp; * contributor license agreements.  See the NOTICE file distributed with
+<i>4</i>&nbsp; * this work for additional information regarding copyright ownership.
+<i>5</i>&nbsp; * The ASF licenses this file to You under the Apache License, Version 2.0
+<i>6</i>&nbsp; * (the &quot;License&quot;); you may not use this file except in compliance with
+<i>7</i>&nbsp; * the License. You may obtain a copy of the License at
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; *     http://www.apache.org/licenses/LICENSE-2.0
+<i>10</i>&nbsp; *
+<i>11</i>&nbsp; * Unless required by applicable law or agreed to in writing, software
+<i>12</i>&nbsp; * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<i>13</i>&nbsp; * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<i>14</i>&nbsp; * See the License for the specific language governing permissions and
+<i>15</i>&nbsp; * limitations under the License.
+<i>16</i>&nbsp; */
+<i>17</i>&nbsp;
+<i>18</i>&nbsp;package opennlp.tools.cmdline;
+<i>19</i>&nbsp;
+<i>20</i>&nbsp;import java.util.Arrays;
+<i>21</i>&nbsp;import java.util.Comparator;
+<i>22</i>&nbsp;import java.util.HashMap;
+<i>23</i>&nbsp;import java.util.HashSet;
+<i>24</i>&nbsp;import java.util.Locale;
+<i>25</i>&nbsp;import java.util.Map;
+<i>26</i>&nbsp;import java.util.Set;
+<i>27</i>&nbsp;import java.util.SortedSet;
+<i>28</i>&nbsp;import java.util.TreeSet;
+<i>29</i>&nbsp;
+<i>30</i>&nbsp;import opennlp.tools.util.Span;
+<i>31</i>&nbsp;import opennlp.tools.util.eval.EvaluationMonitor;
+<i>32</i>&nbsp;
+<i>33</i>&nbsp;/**
+<i>34</i>&nbsp; * This listener will gather detailed information about the sample under evaluation and will
+<i>35</i>&nbsp; * allow detailed FMeasure for each outcome.
+<i>36</i>&nbsp; * &lt;p&gt;
+<i>37</i>&nbsp; * &lt;b&gt;Note:&lt;/b&gt; Do not use this class, internal use only!
+<i>38</i>&nbsp; */
+<b class="fc"><i>39</i>&nbsp;public abstract class DetailedFMeasureListener&lt;T&gt; implements</b>
+<i>40</i>&nbsp;    EvaluationMonitor&lt;T&gt; {
+<i>41</i>&nbsp;
+<b class="fc"><i>42</i>&nbsp;  private int samples = 0;</b>
+<b class="fc"><i>43</i>&nbsp;  private Stats generalStats = new Stats();</b>
+<b class="fc"><i>44</i>&nbsp;  private Map&lt;String, Stats&gt; statsForOutcome = new HashMap&lt;&gt;();</b>
+<i>45</i>&nbsp;
+<i>46</i>&nbsp;  protected abstract Span[] asSpanArray(T sample);
+<i>47</i>&nbsp;
+<i>48</i>&nbsp;  public void correctlyClassified(T reference, T prediction) {
+<b class="nc"><i>49</i>&nbsp;    samples++;</b>
+<i>50</i>&nbsp;    // add all true positives!
+<b class="nc"><i>51</i>&nbsp;    Span[] spans = asSpanArray(reference);</b>
+<b class="nc"><i>52</i>&nbsp;    for (Span span : spans) {</b>
+<b class="nc"><i>53</i>&nbsp;      addTruePositive(span.getType());</b>
+<i>54</i>&nbsp;    }
+<b class="nc"><i>55</i>&nbsp;  }</b>
+<i>56</i>&nbsp;
+<i>57</i>&nbsp;  public void missclassified(T reference, T prediction) {
+<b class="fc"><i>58</i>&nbsp;    samples++;</b>
+<b class="fc"><i>59</i>&nbsp;    Span[] references = asSpanArray(reference);</b>
+<b class="fc"><i>60</i>&nbsp;    Span[] predictions = asSpanArray(prediction);</b>
+<i>61</i>&nbsp;
+<b class="fc"><i>62</i>&nbsp;    Set&lt;Span&gt; refSet = new HashSet&lt;&gt;(Arrays.asList(references));</b>
+<b class="fc"><i>63</i>&nbsp;    Set&lt;Span&gt; predSet = new HashSet&lt;&gt;(Arrays.asList(predictions));</b>
+<i>64</i>&nbsp;
+<b class="fc"><i>65</i>&nbsp;    for (Span ref : refSet) {</b>
+<b class="fc"><i>66</i>&nbsp;      if (predSet.contains(ref)) {</b>
+<b class="fc"><i>67</i>&nbsp;        addTruePositive(ref.getType());</b>
+<i>68</i>&nbsp;      } else {
+<b class="fc"><i>69</i>&nbsp;        addFalseNegative(ref.getType());</b>
+<i>70</i>&nbsp;      }
+<b class="fc"><i>71</i>&nbsp;    }</b>
+<i>72</i>&nbsp;
+<b class="fc"><i>73</i>&nbsp;    for (Span pred : predSet) {</b>
+<b class="fc"><i>74</i>&nbsp;      if (!refSet.contains(pred)) {</b>
+<b class="fc"><i>75</i>&nbsp;        addFalsePositive(pred.getType());</b>
+<i>76</i>&nbsp;      }
+<b class="fc"><i>77</i>&nbsp;    }</b>
+<b class="fc"><i>78</i>&nbsp;  }</b>
+<i>79</i>&nbsp;
+<i>80</i>&nbsp;  private void addTruePositive(String type) {
+<b class="fc"><i>81</i>&nbsp;    Stats s = initStatsForOutcomeAndGet(type);</b>
+<b class="fc"><i>82</i>&nbsp;    s.incrementTruePositive();</b>
+<b class="fc"><i>83</i>&nbsp;    s.incrementTarget();</b>
+<i>84</i>&nbsp;
+<b class="fc"><i>85</i>&nbsp;    generalStats.incrementTruePositive();</b>
+<b class="fc"><i>86</i>&nbsp;    generalStats.incrementTarget();</b>
+<b class="fc"><i>87</i>&nbsp;  }</b>
+<i>88</i>&nbsp;
+<i>89</i>&nbsp;  private void addFalsePositive(String type) {
+<b class="fc"><i>90</i>&nbsp;    Stats s = initStatsForOutcomeAndGet(type);</b>
+<b class="fc"><i>91</i>&nbsp;    s.incrementFalsePositive();</b>
+<b class="fc"><i>92</i>&nbsp;    generalStats.incrementFalsePositive();</b>
+<b class="fc"><i>93</i>&nbsp;  }</b>
+<i>94</i>&nbsp;
+<i>95</i>&nbsp;  private void addFalseNegative(String type) {
+<b class="fc"><i>96</i>&nbsp;    Stats s = initStatsForOutcomeAndGet(type);</b>
+<b class="fc"><i>97</i>&nbsp;    s.incrementTarget();</b>
+<b class="fc"><i>98</i>&nbsp;    generalStats.incrementTarget();</b>
+<i>99</i>&nbsp;
+<b class="fc"><i>100</i>&nbsp;  }</b>
+<i>101</i>&nbsp;
+<i>102</i>&nbsp;  private Stats initStatsForOutcomeAndGet(String type) {
+<b class="fc"><i>103</i>&nbsp;    if (!statsForOutcome.containsKey(type)) {</b>
+<b class="fc"><i>104</i>&nbsp;      statsForOutcome.put(type, new Stats());</b>
+<i>105</i>&nbsp;    }
+<b class="fc"><i>106</i>&nbsp;    return statsForOutcome.get(type);</b>
+<i>107</i>&nbsp;  }
+<i>108</i>&nbsp;
+<i>109</i>&nbsp;  private static final String PERCENT = &quot;%\u00207.2f%%&quot;;
+<i>110</i>&nbsp;  private static final String FORMAT = &quot;%12s: precision: &quot; + PERCENT
+<i>111</i>&nbsp;      + &quot;;  recall: &quot; + PERCENT + &quot;; F1: &quot; + PERCENT + &quot;.&quot;;
+<i>112</i>&nbsp;  private static final String FORMAT_EXTRA = FORMAT
+<i>113</i>&nbsp;      + &quot; [target: %3d; tp: %3d; fp: %3d]&quot;;
+<i>114</i>&nbsp;
+<i>115</i>&nbsp;  public String createReport() {
+<b class="nc"><i>116</i>&nbsp;    return createReport(Locale.getDefault());</b>
+<i>117</i>&nbsp;  }
+<i>118</i>&nbsp;
+<i>119</i>&nbsp;  public String createReport(Locale locale) {
+<b class="fc"><i>120</i>&nbsp;    StringBuilder ret = new StringBuilder();</b>
+<b class="fc"><i>121</i>&nbsp;    int tp = generalStats.getTruePositives();</b>
+<b class="fc"><i>122</i>&nbsp;    int found = generalStats.getFalsePositives() + tp;</b>
+<b class="fc"><i>123</i>&nbsp;    ret.append(&quot;Evaluated &quot;).append(samples).append(&quot; samples with &quot;)</b>
+<b class="fc"><i>124</i>&nbsp;        .append(generalStats.getTarget()).append(&quot; entities; found: &quot;)</b>
+<b class="fc"><i>125</i>&nbsp;        .append(found).append(&quot; entities; correct: &quot;).append(tp).append(&quot;.\n&quot;);</b>
+<i>126</i>&nbsp;
+<b class="fc"><i>127</i>&nbsp;    ret.append(String.format(locale, FORMAT, &quot;TOTAL&quot;,</b>
+<b class="fc"><i>128</i>&nbsp;        zeroOrPositive(generalStats.getPrecisionScore() * 100),</b>
+<b class="fc"><i>129</i>&nbsp;        zeroOrPositive(generalStats.getRecallScore() * 100),</b>
+<b class="fc"><i>130</i>&nbsp;        zeroOrPositive(generalStats.getFMeasure() * 100)));</b>
+<b class="fc"><i>131</i>&nbsp;    ret.append(&quot;\n&quot;);</b>
+<b class="fc"><i>132</i>&nbsp;    SortedSet&lt;String&gt; set = new TreeSet&lt;&gt;(new F1Comparator());</b>
+<b class="fc"><i>133</i>&nbsp;    set.addAll(statsForOutcome.keySet());</b>
+<b class="fc"><i>134</i>&nbsp;    for (String type : set) {</b>
+<i>135</i>&nbsp;
+<b class="fc"><i>136</i>&nbsp;      ret.append(String.format(locale, FORMAT_EXTRA, type,</b>
+<b class="fc"><i>137</i>&nbsp;          zeroOrPositive(statsForOutcome.get(type).getPrecisionScore() * 100),</b>
+<b class="fc"><i>138</i>&nbsp;          zeroOrPositive(statsForOutcome.get(type).getRecallScore() * 100),</b>
+<b class="fc"><i>139</i>&nbsp;          zeroOrPositive(statsForOutcome.get(type).getFMeasure() * 100),</b>
+<b class="fc"><i>140</i>&nbsp;          statsForOutcome.get(type).getTarget(), statsForOutcome.get(type)</b>
+<b class="fc"><i>141</i>&nbsp;              .getTruePositives(), statsForOutcome.get(type)</b>
+<b class="fc"><i>142</i>&nbsp;              .getFalsePositives()));</b>
+<b class="fc"><i>143</i>&nbsp;      ret.append(&quot;\n&quot;);</b>
+<b class="fc"><i>144</i>&nbsp;    }</b>
+<i>145</i>&nbsp;
+<b class="fc"><i>146</i>&nbsp;    return ret.toString();</b>
+<i>147</i>&nbsp;  }
+<i>148</i>&nbsp;
+<i>149</i>&nbsp;  @Override
+<i>150</i>&nbsp;  public String toString() {
+<b class="nc"><i>151</i>&nbsp;    return createReport();</b>
+<i>152</i>&nbsp;  }
+<i>153</i>&nbsp;
+<i>154</i>&nbsp;  private double zeroOrPositive(double v) {
+<b class="fc"><i>155</i>&nbsp;    if (v &lt; 0) {</b>
+<b class="fc"><i>156</i>&nbsp;      return 0;</b>
+<i>157</i>&nbsp;    }
+<b class="fc"><i>158</i>&nbsp;    return v;</b>
+<i>159</i>&nbsp;  }
+<i>160</i>&nbsp;
+<b class="fc"><i>161</i>&nbsp;  private class F1Comparator implements Comparator&lt;String&gt; {</b>
+<i>162</i>&nbsp;    public int compare(String o1, String o2) {
+<b class="fc"><i>163</i>&nbsp;      if (o1.equals(o2))</b>
+<b class="fc"><i>164</i>&nbsp;        return 0;</b>
+<b class="fc"><i>165</i>&nbsp;      double t1 = 0;</b>
+<b class="fc"><i>166</i>&nbsp;      double t2 = 0;</b>
+<i>167</i>&nbsp;
+<b class="fc"><i>168</i>&nbsp;      if (statsForOutcome.containsKey(o1))</b>
+<b class="fc"><i>169</i>&nbsp;        t1 += statsForOutcome.get(o1).getFMeasure();</b>
+<b class="fc"><i>170</i>&nbsp;      if (statsForOutcome.containsKey(o2))</b>
+<b class="fc"><i>171</i>&nbsp;        t2 += statsForOutcome.get(o2).getFMeasure();</b>
+<i>172</i>&nbsp;
+<b class="fc"><i>173</i>&nbsp;      t1 = zeroOrPositive(t1);</b>
+<b class="fc"><i>174</i>&nbsp;      t2 = zeroOrPositive(t2);</b>
+<i>175</i>&nbsp;
+<b class="fc"><i>176</i>&nbsp;      if (t1 + t2 &gt; 0d) {</b>
+<b class="fc"><i>177</i>&nbsp;        if (t1 &gt; t2)</b>
+<b class="fc"><i>178</i>&nbsp;          return -1;</b>
+<b class="fc"><i>179</i>&nbsp;        return 1;</b>
+<i>180</i>&nbsp;      }
+<b class="nc"><i>181</i>&nbsp;      return o1.compareTo(o2);</b>
+<i>182</i>&nbsp;    }
+<i>183</i>&nbsp;
+<i>184</i>&nbsp;  }
+<i>185</i>&nbsp;
+<i>186</i>&nbsp;  /**
+<i>187</i>&nbsp;   * Store the statistics.
+<i>188</i>&nbsp;   */
+<b class="fc"><i>189</i>&nbsp;  private class Stats {</b>
+<i>190</i>&nbsp;
+<i>191</i>&nbsp;    // maybe we could use FMeasure class, but it wouldn&#39;t allow us to get
+<i>192</i>&nbsp;    // details like total number of false positives and true positives.
+<i>193</i>&nbsp;
+<b class="fc"><i>194</i>&nbsp;    private int falsePositiveCounter = 0;</b>
+<b class="fc"><i>195</i>&nbsp;    private int truePositiveCounter = 0;</b>
+<b class="fc"><i>196</i>&nbsp;    private int targetCounter = 0;</b>
+<i>197</i>&nbsp;
+<i>198</i>&nbsp;    public void incrementFalsePositive() {
+<b class="fc"><i>199</i>&nbsp;      falsePositiveCounter++;</b>
+<b class="fc"><i>200</i>&nbsp;    }</b>
+<i>201</i>&nbsp;
+<i>202</i>&nbsp;    public void incrementTruePositive() {
+<b class="fc"><i>203</i>&nbsp;      truePositiveCounter++;</b>
+<b class="fc"><i>204</i>&nbsp;    }</b>
+<i>205</i>&nbsp;
+<i>206</i>&nbsp;    public void incrementTarget() {
+<b class="fc"><i>207</i>&nbsp;      targetCounter++;</b>
+<b class="fc"><i>208</i>&nbsp;    }</b>
+<i>209</i>&nbsp;
+<i>210</i>&nbsp;    public int getFalsePositives() {
+<b class="fc"><i>211</i>&nbsp;      return falsePositiveCounter;</b>
+<i>212</i>&nbsp;    }
+<i>213</i>&nbsp;
+<i>214</i>&nbsp;    public int getTruePositives() {
+<b class="fc"><i>215</i>&nbsp;      return truePositiveCounter;</b>
+<i>216</i>&nbsp;    }
+<i>217</i>&nbsp;
+<i>218</i>&nbsp;    public int getTarget() {
+<b class="fc"><i>219</i>&nbsp;      return targetCounter;</b>
+<i>220</i>&nbsp;    }
+<i>221</i>&nbsp;
+<i>222</i>&nbsp;    /**
+<i>223</i>&nbsp;     * Retrieves the arithmetic mean of the precision scores calculated for each
+<i>224</i>&nbsp;     * evaluated sample.
+<i>225</i>&nbsp;     *
+<i>226</i>&nbsp;     * @return the arithmetic mean of all precision scores
+<i>227</i>&nbsp;     */
+<i>228</i>&nbsp;    public double getPrecisionScore() {
+<b class="fc"><i>229</i>&nbsp;      int tp = getTruePositives();</b>
+<b class="fc"><i>230</i>&nbsp;      int selected = tp + getFalsePositives();</b>
+<b class="fc"><i>231</i>&nbsp;      return selected &gt; 0 ? (double) tp / (double) selected : 0;</b>
+<i>232</i>&nbsp;    }
+<i>233</i>&nbsp;
+<i>234</i>&nbsp;    /**
+<i>235</i>&nbsp;     * Retrieves the arithmetic mean of the recall score calculated for each
+<i>236</i>&nbsp;     * evaluated sample.
+<i>237</i>&nbsp;     *
+<i>238</i>&nbsp;     * @return the arithmetic mean of all recall scores
+<i>239</i>&nbsp;     */
+<i>240</i>&nbsp;    public double getRecallScore() {
+<b class="fc"><i>241</i>&nbsp;      int target = getTarget();</b>
+<b class="fc"><i>242</i>&nbsp;      int tp = getTruePositives();</b>
+<b class="fc"><i>243</i>&nbsp;      return target &gt; 0 ? (double) tp / (double) target : 0;</b>
+<i>244</i>&nbsp;    }
+<i>245</i>&nbsp;
+<i>246</i>&nbsp;    /**
+<i>247</i>&nbsp;     * Retrieves the f-measure score.
+<i>248</i>&nbsp;     *
+<i>249</i>&nbsp;     * f-measure = 2 * precision * recall / (precision + recall)
+<i>250</i>&nbsp;     *
+<i>251</i>&nbsp;     * @return the f-measure or -1 if precision + recall &lt;= 0
+<i>252</i>&nbsp;     */
+<i>253</i>&nbsp;    public double getFMeasure() {
+<i>254</i>&nbsp;
+<b class="fc"><i>255</i>&nbsp;      if (getPrecisionScore() + getRecallScore() &gt; 0) {</b>
+<b class="fc"><i>256</i>&nbsp;        return 2 * (getPrecisionScore() * getRecallScore())</b>
+<b class="fc"><i>257</i>&nbsp;            / (getPrecisionScore() + getRecallScore());</b>
+<i>258</i>&nbsp;      } else {
+<i>259</i>&nbsp;        // cannot divide by zero, return error code
+<b class="fc"><i>260</i>&nbsp;        return -1;</b>
+<i>261</i>&nbsp;      }
+<i>262</i>&nbsp;    }
+<i>263</i>&nbsp;
+<i>264</i>&nbsp;  }
+<i>265</i>&nbsp;
+<i>266</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-09 15:05</div>
+</div>
+</body>
+</html>

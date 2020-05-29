@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<project name="maven-antrun-" default="main"  >
+<target name="main">
+  <checksum format="MD5SUM" fileext=".sha512" algorithm="sha-512">
+    <fileset dir="/home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-distr/target">
+      <include name="*.zip"/>
+      <include name="*.gz"/>
+    </fileset>
+  </checksum>
+</target>
+</project>

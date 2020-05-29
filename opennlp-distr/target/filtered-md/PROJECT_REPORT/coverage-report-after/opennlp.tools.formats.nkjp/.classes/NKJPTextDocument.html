@@ -1,0 +1,265 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: NKJPTextDocument</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">opennlp.tools.formats.nkjp</a> ]
+</div>
+
+<h1>Coverage Summary for Class: NKJPTextDocument (opennlp.tools.formats.nkjp)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">NKJPTextDocument</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    87.5%
+  </span>
+  <span class="absValue">
+    (7/ 8)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    82.2%
+  </span>
+  <span class="absValue">
+    (60/ 73)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/*
+<i>2</i>&nbsp; * Licensed to the Apache Software Foundation (ASF) under one or more
+<i>3</i>&nbsp; * contributor license agreements.  See the NOTICE file distributed with
+<i>4</i>&nbsp; * this work for additional information regarding copyright ownership.
+<i>5</i>&nbsp; * The ASF licenses this file to You under the Apache License, Version 2.0
+<i>6</i>&nbsp; * (the &quot;License&quot;); you may not use this file except in compliance with
+<i>7</i>&nbsp; * the License. You may obtain a copy of the License at
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; *     http://www.apache.org/licenses/LICENSE-2.0
+<i>10</i>&nbsp; *
+<i>11</i>&nbsp; * Unless required by applicable law or agreed to in writing, software
+<i>12</i>&nbsp; * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<i>13</i>&nbsp; * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<i>14</i>&nbsp; * See the License for the specific language governing permissions and
+<i>15</i>&nbsp; * limitations under the License.
+<i>16</i>&nbsp; */
+<i>17</i>&nbsp;
+<i>18</i>&nbsp;package opennlp.tools.formats.nkjp;
+<i>19</i>&nbsp;
+<i>20</i>&nbsp;import java.io.File;
+<i>21</i>&nbsp;import java.io.FileInputStream;
+<i>22</i>&nbsp;import java.io.IOException;
+<i>23</i>&nbsp;import java.io.InputStream;
+<i>24</i>&nbsp;import java.util.Collections;
+<i>25</i>&nbsp;import java.util.HashMap;
+<i>26</i>&nbsp;import java.util.Map;
+<i>27</i>&nbsp;
+<i>28</i>&nbsp;import javax.xml.parsers.DocumentBuilder;
+<i>29</i>&nbsp;import javax.xml.xpath.XPath;
+<i>30</i>&nbsp;import javax.xml.xpath.XPathConstants;
+<i>31</i>&nbsp;import javax.xml.xpath.XPathExpression;
+<i>32</i>&nbsp;import javax.xml.xpath.XPathExpressionException;
+<i>33</i>&nbsp;import javax.xml.xpath.XPathFactory;
+<i>34</i>&nbsp;
+<i>35</i>&nbsp;import org.w3c.dom.Document;
+<i>36</i>&nbsp;import org.w3c.dom.Node;
+<i>37</i>&nbsp;import org.w3c.dom.NodeList;
+<i>38</i>&nbsp;import org.xml.sax.SAXException;
+<i>39</i>&nbsp;
+<i>40</i>&nbsp;import opennlp.tools.util.XmlUtil;
+<i>41</i>&nbsp;
+<i>42</i>&nbsp;public class NKJPTextDocument {
+<i>43</i>&nbsp;
+<i>44</i>&nbsp;  Map&lt;String, String&gt; divtypes;
+<i>45</i>&nbsp;
+<i>46</i>&nbsp;  Map&lt;String, Map&lt;String, Map&lt;String, String&gt;&gt;&gt; texts;
+<i>47</i>&nbsp;
+<b class="fc"><i>48</i>&nbsp;  NKJPTextDocument() {</b>
+<b class="fc"><i>49</i>&nbsp;    divtypes = new HashMap&lt;&gt;();</b>
+<b class="fc"><i>50</i>&nbsp;    texts = new HashMap&lt;&gt;();</b>
+<b class="fc"><i>51</i>&nbsp;  }</b>
+<i>52</i>&nbsp;
+<i>53</i>&nbsp;  NKJPTextDocument(Map&lt;String, String&gt; divtypes, Map&lt;String, Map&lt;String, Map&lt;String, String&gt;&gt;&gt; texts) {
+<b class="fc"><i>54</i>&nbsp;    this();</b>
+<b class="fc"><i>55</i>&nbsp;    this.divtypes = divtypes;</b>
+<b class="fc"><i>56</i>&nbsp;    this.texts = texts;</b>
+<b class="fc"><i>57</i>&nbsp;  }</b>
+<i>58</i>&nbsp;
+<i>59</i>&nbsp;  public static NKJPTextDocument parse(InputStream is) throws IOException {
+<b class="fc"><i>60</i>&nbsp;    Map&lt;String, String&gt; divtypes = new HashMap&lt;&gt;();</b>
+<b class="fc"><i>61</i>&nbsp;    Map&lt;String, Map&lt;String, Map&lt;String, String&gt;&gt;&gt; texts = new HashMap&lt;&gt;();</b>
+<i>62</i>&nbsp;
+<i>63</i>&nbsp;    try {
+<b class="fc"><i>64</i>&nbsp;      DocumentBuilder docBuilder = XmlUtil.createDocumentBuilder();;</b>
+<b class="fc"><i>65</i>&nbsp;      Document doc = docBuilder.parse(is);</b>
+<i>66</i>&nbsp;
+<b class="fc"><i>67</i>&nbsp;      XPathFactory xPathfactory = XPathFactory.newInstance();</b>
+<b class="fc"><i>68</i>&nbsp;      XPath xpath = xPathfactory.newXPath();</b>
+<i>69</i>&nbsp;
+<b class="fc"><i>70</i>&nbsp;      final XPathExpression TEXT_NODES_EXAMPLE = xpath.compile(&quot;/teiCorpus/TEI/text/group/text&quot;);</b>
+<b class="fc"><i>71</i>&nbsp;      final XPathExpression TEXT_NODES_SAMPLE = xpath.compile(&quot;/teiCorpus/TEI/text&quot;);</b>
+<b class="fc"><i>72</i>&nbsp;      final XPathExpression DIV_NODES = xpath.compile(&quot;./body/div&quot;);</b>
+<b class="fc"><i>73</i>&nbsp;      final XPathExpression PARA_NODES = xpath.compile(&quot;./p|./ab&quot;);</b>
+<i>74</i>&nbsp;
+<b class="fc"><i>75</i>&nbsp;      doc.getDocumentElement().normalize();</b>
+<b class="fc"><i>76</i>&nbsp;      String root = doc.getDocumentElement().getNodeName();</b>
+<i>77</i>&nbsp;
+<b class="fc"><i>78</i>&nbsp;      if (!root.equalsIgnoreCase(&quot;teiCorpus&quot;)) {</b>
+<b class="nc"><i>79</i>&nbsp;        throw new IOException(&quot;Expected root node &quot; + root);</b>
+<i>80</i>&nbsp;      }
+<i>81</i>&nbsp;
+<b class="fc"><i>82</i>&nbsp;      String current_text = &quot;&quot;;</b>
+<b class="fc"><i>83</i>&nbsp;      NodeList textnl = (NodeList) TEXT_NODES_EXAMPLE.evaluate(doc, XPathConstants.NODESET);</b>
+<b class="fc"><i>84</i>&nbsp;      if (textnl.getLength() == 0) {</b>
+<b class="nc"><i>85</i>&nbsp;        textnl = (NodeList) TEXT_NODES_SAMPLE.evaluate(doc, XPathConstants.NODESET);</b>
+<i>86</i>&nbsp;      }
+<i>87</i>&nbsp;
+<b class="fc"><i>88</i>&nbsp;      for (int i = 0; i &lt; textnl.getLength(); i++) {</b>
+<b class="fc"><i>89</i>&nbsp;        Node textnode = textnl.item(i);</b>
+<b class="fc"><i>90</i>&nbsp;        current_text = attrib(textnode, &quot;xml:id&quot;, true);</b>
+<i>91</i>&nbsp;
+<b class="fc"><i>92</i>&nbsp;        Map&lt;String, Map&lt;String, String&gt;&gt; current_divs = new HashMap&lt;&gt;();</b>
+<b class="fc"><i>93</i>&nbsp;        NodeList divnl = (NodeList) DIV_NODES.evaluate(textnode, XPathConstants.NODESET);</b>
+<b class="fc"><i>94</i>&nbsp;        for (int j = 0; j &lt; divnl.getLength(); j++) {</b>
+<b class="fc"><i>95</i>&nbsp;          Node divnode = divnl.item(j);</b>
+<b class="fc"><i>96</i>&nbsp;          String divtype = attrib(divnode, &quot;type&quot;, false);</b>
+<b class="fc"><i>97</i>&nbsp;          String divid = attrib(divnode, &quot;xml:id&quot;, true);</b>
+<b class="fc"><i>98</i>&nbsp;          divtypes.put(divid, divtype);</b>
+<i>99</i>&nbsp;
+<b class="fc"><i>100</i>&nbsp;          Map&lt;String, String&gt; current_paras = new HashMap&lt;&gt;();</b>
+<b class="fc"><i>101</i>&nbsp;          NodeList paranl = (NodeList) PARA_NODES.evaluate(divnode, XPathConstants.NODESET);</b>
+<i>102</i>&nbsp;
+<b class="fc"><i>103</i>&nbsp;          for (int k = 0; k &lt; paranl.getLength(); k++) {</b>
+<b class="fc"><i>104</i>&nbsp;            Node pnode = paranl.item(k);</b>
+<b class="fc"><i>105</i>&nbsp;            String pid = attrib(pnode, &quot;xml:id&quot;, true);</b>
+<i>106</i>&nbsp;
+<b class="fc"><i>107</i>&nbsp;            if (pnode.getChildNodes().getLength() != 1</b>
+<b class="nc"><i>108</i>&nbsp;                &amp;&amp; !pnode.getFirstChild().getNodeName().equals(&quot;#text&quot;)) {</b>
+<b class="nc"><i>109</i>&nbsp;              throw new IOException(&quot;Unexpected content in p element &quot; + pid);</b>
+<i>110</i>&nbsp;            }
+<i>111</i>&nbsp;
+<b class="fc"><i>112</i>&nbsp;            String ptext = pnode.getTextContent();</b>
+<b class="fc"><i>113</i>&nbsp;            current_paras.put(pid, ptext);</b>
+<i>114</i>&nbsp;          }
+<i>115</i>&nbsp;
+<b class="fc"><i>116</i>&nbsp;          current_divs.put(divid, current_paras);</b>
+<i>117</i>&nbsp;        }
+<i>118</i>&nbsp;
+<b class="fc"><i>119</i>&nbsp;        texts.put(current_text, current_divs);</b>
+<i>120</i>&nbsp;      }
+<i>121</i>&nbsp;
+<b class="nc"><i>122</i>&nbsp;    } catch (SAXException | XPathExpressionException | IOException e) {</b>
+<b class="nc"><i>123</i>&nbsp;      throw new IOException(&quot;Failed to parse NKJP document&quot;, e);</b>
+<b class="fc"><i>124</i>&nbsp;    }</b>
+<b class="fc"><i>125</i>&nbsp;    return new NKJPTextDocument(divtypes, texts);</b>
+<i>126</i>&nbsp;  }
+<i>127</i>&nbsp;
+<i>128</i>&nbsp;  static NKJPTextDocument parse(File file) throws IOException {
+<b class="nc"><i>129</i>&nbsp;    try (InputStream in = new FileInputStream(file)) {</b>
+<b class="nc"><i>130</i>&nbsp;      return parse(in);</b>
+<b class="nc"><i>131</i>&nbsp;    }</b>
+<i>132</i>&nbsp;  }
+<i>133</i>&nbsp;
+<i>134</i>&nbsp;  Map&lt;String, String&gt; getDivtypes() {
+<b class="fc"><i>135</i>&nbsp;    return Collections.unmodifiableMap(this.divtypes);</b>
+<i>136</i>&nbsp;  }
+<i>137</i>&nbsp;
+<i>138</i>&nbsp;  Map&lt;String, Map&lt;String, Map&lt;String, String&gt;&gt;&gt; getTexts() {
+<b class="fc"><i>139</i>&nbsp;    return Collections.unmodifiableMap(this.texts);</b>
+<i>140</i>&nbsp;  }
+<i>141</i>&nbsp;
+<i>142</i>&nbsp;  /**
+<i>143</i>&nbsp;   * Segmentation etc. is done only in relation to the paragraph,
+<i>144</i>&nbsp;   * which are unique within a document. This is to simplify
+<i>145</i>&nbsp;   * working with the paragraphs within the document
+<i>146</i>&nbsp;   * @return a map of paragaph IDs and their text
+<i>147</i>&nbsp;   */
+<i>148</i>&nbsp;  Map&lt;String, String&gt; getParagraphs() {
+<b class="fc"><i>149</i>&nbsp;    Map&lt;String, String&gt; paragraphs = new HashMap&lt;&gt;();</b>
+<b class="fc"><i>150</i>&nbsp;    for (String dockey : texts.keySet()) {</b>
+<b class="fc"><i>151</i>&nbsp;      for (String divkey : texts.get(dockey).keySet()) {</b>
+<b class="fc"><i>152</i>&nbsp;        for (String pkey : texts.get(dockey).get(divkey).keySet()) {</b>
+<b class="fc"><i>153</i>&nbsp;          paragraphs.put(pkey, texts.get(dockey).get(divkey).get(pkey));</b>
+<b class="fc"><i>154</i>&nbsp;        }</b>
+<b class="fc"><i>155</i>&nbsp;      }</b>
+<b class="fc"><i>156</i>&nbsp;    }</b>
+<b class="fc"><i>157</i>&nbsp;    return paragraphs;</b>
+<i>158</i>&nbsp;  }
+<i>159</i>&nbsp;
+<i>160</i>&nbsp;  /**
+<i>161</i>&nbsp;   * Helper method to get the value of an attribute
+<i>162</i>&nbsp;   * @param n The node being processed
+<i>163</i>&nbsp;   * @param attrib The name of the attribute
+<i>164</i>&nbsp;   * @param required Whether or not the attribute is required
+<i>165</i>&nbsp;   * @return The value of the attribute, or null if not required and not present
+<i>166</i>&nbsp;   * @throws Exception
+<i>167</i>&nbsp;   */
+<i>168</i>&nbsp;  private static String attrib(Node n, String attrib, boolean required) throws IOException {
+<b class="fc"><i>169</i>&nbsp;    if (required &amp;&amp; (n.getAttributes() == null || n.getAttributes().getLength() == 0)) {</b>
+<b class="nc"><i>170</i>&nbsp;      throw new IOException(&quot;Missing required attributes in node &quot; + n.getNodeName());</b>
+<i>171</i>&nbsp;    }
+<b class="fc"><i>172</i>&nbsp;    if (n.getAttributes().getNamedItem(attrib) != null) {</b>
+<b class="fc"><i>173</i>&nbsp;      return n.getAttributes().getNamedItem(attrib).getTextContent();</b>
+<i>174</i>&nbsp;    } else {
+<b class="nc"><i>175</i>&nbsp;      if (required) {</b>
+<b class="nc"><i>176</i>&nbsp;        throw new IOException(&quot;Required attribute \&quot;&quot; + attrib + &quot;\&quot; missing in node &quot; + n.getNodeName());</b>
+<i>177</i>&nbsp;      } else {
+<b class="nc"><i>178</i>&nbsp;        return null;</b>
+<i>179</i>&nbsp;      }
+<i>180</i>&nbsp;    }
+<i>181</i>&nbsp;  }
+<i>182</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-09 18:47</div>
+</div>
+</body>
+</html>

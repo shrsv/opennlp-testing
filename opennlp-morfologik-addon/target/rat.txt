@@ -1,0 +1,152 @@
+
+*****************************************************
+Summary
+-------
+Generated at: 2020-05-29T13:41:42-07:00
+Notes: 0
+Binaries: 1
+Archives: 0
+Standards: 22
+
+Apache Licensed: 19
+Generated Documents: 0
+
+JavaDocs are generated and so license header is optional
+Generated files do not required license headers
+
+3 Unknown Licenses
+
+*******************************
+
+Unapproved licenses:
+
+  /home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-morfologik-addon/src/test/resources/dictionaryWithLemma.txt
+  /home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-morfologik-addon/src/test/resources/AnnotatedSentences.txt
+  /home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-morfologik-addon/src/test/resources/dictionaryWithLemma.info
+
+*******************************
+
+Archives:
+
+*****************************************************
+  Files with Apache License headers will be marked AL
+  Binary files (which do not require AL headers) will be marked B
+  Compressed archives will be marked A
+  Notices, licenses etc will be marked N
+  AL    /home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-morfologik-addon/bin/morfologik-addon.bat
+  AL    /home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-morfologik-addon/bin/morfologik-addon
+  AL    /home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-morfologik-addon/pom.xml
+  AL    /home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-morfologik-addon/src/test/java/opennlp/morfologik/builder/POSDictionayBuilderTest.java
+  AL    /home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-morfologik-addon/src/test/java/opennlp/morfologik/tagdict/POSTaggerFactoryTest.java
+  AL    /home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-morfologik-addon/src/test/java/opennlp/morfologik/tagdict/MorfologikTagDictionaryTest.java
+  AL    /home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-morfologik-addon/src/test/java/opennlp/morfologik/lemmatizer/MorfologikLemmatizerTest.java
+ !????? /home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-morfologik-addon/src/test/resources/dictionaryWithLemma.txt
+  B     /home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-morfologik-addon/src/test/resources/dictionaryWithLemma.dict
+ !????? /home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-morfologik-addon/src/test/resources/AnnotatedSentences.txt
+ !????? /home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-morfologik-addon/src/test/resources/dictionaryWithLemma.info
+  AL    /home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-morfologik-addon/src/main/bin/morfologik-addon.bat
+  AL    /home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-morfologik-addon/src/main/bin/morfologik-addon
+  AL    /home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-morfologik-addon/src/main/java/opennlp/morfologik/util/MorfologikUtil.java
+  AL    /home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-morfologik-addon/src/main/java/opennlp/morfologik/builder/MorfologikDictionayBuilder.java
+  AL    /home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-morfologik-addon/src/main/java/opennlp/morfologik/tagdict/MorfologikPOSTaggerFactory.java
+  AL    /home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-morfologik-addon/src/main/java/opennlp/morfologik/tagdict/MorfologikTagDictionary.java
+  AL    /home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-morfologik-addon/src/main/java/opennlp/morfologik/cmdline/builder/XMLDictionaryToTableTool.java
+  AL    /home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-morfologik-addon/src/main/java/opennlp/morfologik/cmdline/builder/MorfologikDictionaryBuilderTool.java
+  AL    /home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-morfologik-addon/src/main/java/opennlp/morfologik/cmdline/builder/XMLDictionaryToTableParams.java
+  AL    /home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-morfologik-addon/src/main/java/opennlp/morfologik/cmdline/builder/MorfologikDictionaryBuilderParams.java
+  AL    /home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-morfologik-addon/src/main/java/opennlp/morfologik/cmdline/CLI.java
+  AL    /home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-morfologik-addon/src/main/java/opennlp/morfologik/lemmatizer/MorfologikLemmatizer.java
+ 
+*****************************************************
+ Printing headers for files without AL header...
+ 
+ 
+=======================================================================
+==/home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-morfologik-addon/src/test/resources/dictionaryWithLemma.txt
+=======================================================================
+carro,carro,NOUN
+casa,casa,NOUN
+Casa,Casa,PROP
+casa,casinha,NOUN
+casa,casona,NOUN
+casar,casa,V
+casar,casar,V-INF
+ir,foi,V
+menino,menina,NOUN
+menino,menininho,NOUN
+menino,menino,NOUN
+menino,meninão,NOUN
+ser,foi,V
+
+=======================================================================
+==/home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-morfologik-addon/src/test/resources/AnnotatedSentences.txt
+=======================================================================
+Last_JJ September_NNP ,_, I_PRP tried_VBD to_TO find_VB out_RP the_DT address_NN of_IN an_DT old_JJ school_NN friend_NN whom_WP I_PRP had_VBD not_RB seen_VBN for_IN 15_CD years_NNS ._.
+I_PRP just_RB knew_VBD his_PRP$ name_NN ,_, Alan_NNP McKennedy_NNP ,_, and_CC I_PRP 'd_MD heard_VBD the_DT rumour_NN that_IN he_PRP 'd_MD moved_VBD to_TO Scotland_NNP ,_, the_DT country_NN of_IN his_PRP$ ancestors_NNS ._.
+So_IN I_PRP called_VBD Julie_NNP ,_, a_DT friend_NN who's_WDT still_RB in_IN contact_NN with_IN him_PRP ._.
+She_PRP told_VBD me_PRP that_IN he_PRP lived_VBD in_IN 23213_CD Edinburgh_NNP ,_, Worcesterstreet_NNP 12_CD ._.
+I_PRP wrote_VBD him_PRP a_DT letter_NN right_RB away_RB and_CC he_PRP answered_VBD soon_RB ,_, sounding_VBG very_RB happy_JJ and_CC delighted_JJ ._.
+
+Last_JJ year_NN ,_, I_PRP wanted_VBD to_TO write_VB a_DT letter_NN to_TO my_PRP$ grandaunt_NN ._.
+Her_PRP$ 86_CD th_NN birthday_NN was_VBD on_IN October_NNP 6_CD ,_, and_CC I_PRP no_RB longer_RB wanted_VBD to_TO be_VB hesitant_JJ to_TO get_VB in_IN touch_NN with_IN her_PRP ._.
+I_PRP did_VBD not_RB know_VB her_PRP face-to-face_RB ,_, and_CC so_RB it_PRP was_VBD not_RB easy_JJ for_IN me_PRP to_TO find_VB out_RP her_PRP$ address_NN ._.
+As_IN she_PRP had_VBD two_CD apartments_NNS in_IN different_JJ countries_NNS ,_, I_PRP decided_VBD to_TO write_VB to_TO both_DT ._.
+The_DT first_JJ was_VBD in_IN 12424_CD Paris_NNP in_IN Rue-de-Grandes-Illusions_NNP 5_CD ._.
+But_CC Marie_NNP Clara_NNP ,_, as_IN my_PRP$ aunt_NN is_VBZ called_VBN ,_, prefered_VBN her_PRP$ apartment_NN in_IN Berlin_NNP ._.
+It_PRP 's_VBZ postcode_JJ is_VBZ 30202_CD ._.
+She_PRP lived_VBD there_RB ,_, in_IN beautiful_JJ Kaiserstra?e_NNP 13_CD ,_, particulary_NN in_IN summer_NN ._.
+
+Hi_UH my_PRP$ name_NN is_VBZ Stefanie_NNP Schmidt_NNP ,_, how_WRB much_RB is_VBZ a_DT taxi_NN from_IN Ostbahnhof_NNP to_TO Hauptbahnhof_NNP ?_.
+About_IN 10_CD Euro_NNP ,_, I_PRP reckon_VBP ._.
+That_DT sounds_VBZ good_JJ ._.
+So_RB please_VB call_VB a_DT driver_NN to_TO Leonardstra?e_NNP 112_CD ,_, near_IN the_DT Ostbahnhof_NNP in_IN 56473_CD Hamburg_NNP ._.
+I_PRP 'd_MD like_VB to_TO be_VB at_IN Silberhornstra?e_NNP 12_CD as_RB soon_RB as_IN possible_JJ ._.
+Thank_VB you_PRP very_RB much_RB !_.
+
+Hi_NNP Mike_NNP ,_, it_PRP 's_VBZ Stefanie_NNP Schmidt_NNP ._.
+I_PRP 'm_VBP in_IN N?rnberg_NNP at_IN the_DT moment_NN and_CC I_PRP 've_VBP got_VBD the_DT problem_NN that_IN my_PRP$ bike_NN has_VBZ broken_VBN ._.
+Could_MD you_PRP please_VB pick_VB me_PRP up_RP from_IN Seidlstra?e_NNP 56_CD ,_, I_PRP 'm_VBP in_IN the_DT Caf?_NNP "Mondnacht"_NNP at_IN the_DT moment_NN ._.
+Please_VB hurry_VB up_RB ,_, I_PRP need_VBP to_TO be_VB back_RB in_IN Ulm_NNP at_IN 8_CD p.m._NN !_.
+
+My_PRP$ husband_NN George_NNP and_CC me_PRP recently_RB celebrated_VBD our_PRP$ 10_CD th_JJ wedding_NN anniversary_NN ._.
+We_PRP got_VBD married_VBN on_IN March_NNP 11_CD ,_, 1995_CD ._.
+Therefore_RB ,_, we_PRP found_VBD a_DT photo_NN album_NN with_IN pictures_NNS of_IN our_PRP$ first_JJ own_JJ apartment_NN ,_, which_WDT was_VBD in_IN 81234_CD Munich_NNP ._.
+As_IN a_DT young_JJ married_JJ couple_NN ,_, we_PRP did_VBD not_RB have_VB enough_JJ money_NN to_TO afford_VB a_DT bigger_JJR lodge_NN than_IN this_DT one_CD in_IN Blumenweg_NNP 1_CD ._.
+But_CC only_RB five_CD years_NNS later_RB ,_, my_PRP$ husband_NN was_VBD offered_VBN a_DT well-payed_JJ job_NN in_IN 17818_CD Hamburg_NNP ,_, so_IN we_PRP moved_VBD there_RB ._.
+Since_IN then_RB ,_, our_PRP$ guests_NNS have_VBP to_TO ring_VB at_IN Veilchenstra?e_NNP 11_CD if_IN they_PRP want_VBP to_TO visit_VB us_PRP ,_, Luise_NNP and_CC George_NNP Bauer_NNP ._.
+
+I_PRP read_VBD your_PRP$ help-wanted_JJ ad_NN with_IN great_JJ attention_NN ._.
+I_PRP 'm_VBP a_DT student_NN of_IN informatics_NNS ,_, 6th_JJ semester,_NN and_CC I_PRP 'm_VBP very_RB interested_VBN in_IN your_PRP$ part-time_JJ job_NN offer_NN ._.
+I_PRP have_VBP a_DT competent_JJ knowledge_NN of_IN programming_NN and_CC foreign_JJ languages_NNS ,_, like_IN French_JJ and_CC Italian_JJ ._.
+I_PRP 'm_VBP looking_VBG forward_RB to_TO your_PRP$ reply_NN ._.
+
+Alisa_NNP Fernandes_NNP ,_, a_DT tourist_NN from_IN Spain_NNP ,_, went_VBD to_TO the_DT reception_NN desk_NN of_IN the_DT famous_JJ Highfly-Hotel_NNP in_IN 30303_CD Berlin_NNP ._.
+As_IN she_PRP felt_VBD quite_RB homesick_JJ ,_, she_PRP asked_VBD the_DT staff_NN if_IN they_PRP knew_VBD a_DT good_JJ Spanish_JJ restaurant_NN in_IN Berlin_NNP ._.
+The_DT concierge_NN told_VBD her_PRP to_TO go_VB to_TO the_DT "Tapasbar"_NN in_IN Chesterstr._NNP 2_CD ._.
+Alisa_NNP appreciated_VBD the_DT hint_NN and_CC enjoyed_VBD a_DT delicious_JJ traditional_JJ meal_NN ._.
+
+An_DT old_JJ friend_NN from_IN France_NNP is_VBZ currently_RB travelling_VBG around_IN Europe_NNP ._.
+Yesterday_NN ,_, she_PRP arrived_VBD in_IN Berlin_NNP and_CC we_PRP met_VBD up_RP spontaneously_RB ._.
+She_PRP wanted_VBD me_PRP to_TO show_VB her_PRP some_DT famous_JJ sights_NNS ,_, like_IN the_DT Brandenburger_NNP Tor_NNP and_CC the_DT Reichstag_NNP ._.
+But_CC it_PRP was_VBD not_RB easy_JJ to_TO meet_VB up_RP in_IN the_DT city_NN because_IN she_PRP hardly_RB knows_VBZ any_DT streetname_NN or_CC building_NN ._.
+So_IN I_PRP proposed_VBD to_TO meet_VB at_IN a_DT quite_RB local_JJ point:_NN the_DT caf?_NN "Daily's"_NN in_IN Unter-den-Linden_NNP 18,_CD 30291_CD Berlin_NNP ._.
+It_PRP is_VBZ five_CD minutes_NNS away_RB from_IN the_DT underground_JJ station_NN "Westbad"_NN ._.
+
+=======================================================================
+==/home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-morfologik-addon/src/test/resources/dictionaryWithLemma.info
+=======================================================================
+#
+# REQUIRED PROPERTIES
+#
+
+# Column (lemma, inflected, tag) separator. This must be a single byte in the target encoding.
+fsa.dict.separator=,
+
+# The charset in which the input is encoded. UTF-8 is strongly recommended.
+fsa.dict.encoding=UTF-8
+
+# The type of lemma-inflected form encoding compression that precedes automaton
+# construction. Allowed values: [suffix, infix, prefix, none].
+# Details are in Daciuk's paper and in the code. 
+# Leave at 'prefix' if not sure.
+fsa.dict.encoder=prefix
