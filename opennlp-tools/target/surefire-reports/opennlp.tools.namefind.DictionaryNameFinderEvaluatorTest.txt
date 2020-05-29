@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: opennlp.tools.namefind.DictionaryNameFinderEvaluatorTest
+-------------------------------------------------------------------------------
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.727 sec - in opennlp.tools.namefind.DictionaryNameFinderEvaluatorTest

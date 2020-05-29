@@ -23,6 +23,7 @@ import java.math.BigInteger;
 
 import org.junit.Assert;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import opennlp.tools.formats.conllu.ConlluLemmaSampleStream;
@@ -38,6 +39,7 @@ import opennlp.tools.util.ObjectStream;
 import opennlp.tools.util.TrainingParameters;
 import opennlp.tools.util.model.ModelUtil;
 
+@Ignore
 public class UniversalDependency20Eval extends AbstractEvalTest {
 
   private static File SPA_ANCORA_TRAIN;      

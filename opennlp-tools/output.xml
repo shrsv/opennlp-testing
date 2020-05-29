@@ -317,13 +317,13 @@ Usage: opennlp LanguageDetector model < documents
 
 <screen>
 <![CDATA[
-Usage: opennlp LanguageDetectorTrainer[.leipzig] [-params paramsFile] -model modelFile [-factory factoryName] 
+Usage: opennlp LanguageDetectorTrainer[.leipzig] -model modelFile [-params paramsFile] [-factory factoryName] 
         -data sampleData [-encoding charsetName] 
 Arguments description:
-	-params paramsFile
-		training parameters file.
 	-model modelFile
 		output model file.
+	-params paramsFile
+		training parameters file.
 	-factory factoryName
 		A sub-class of LanguageDetectorFactory where to get implementation and resources.
 	-data sampleData
@@ -633,15 +633,15 @@ Usage: opennlp TokenizerME model < sentences
 <screen>
 <![CDATA[
 Usage: opennlp TokenizerTrainer[.irishsentencebank|.ad|.pos|.conllx|.namefinder|.parse|.conllu] [-factory 
-        factoryName] [-abbDict path] [-alphaNumOpt isAlphaNumOpt] [-params paramsFile] -lang language -model 
+        factoryName] [-alphaNumOpt isAlphaNumOpt] [-abbDict path] [-params paramsFile] -lang language -model 
         modelFile -data sampleData [-encoding charsetName] 
 Arguments description:
 	-factory factoryName
 		A sub-class of TokenizerFactory where to get implementation and resources.
-	-abbDict path
-		abbreviation dictionary in XML format.
 	-alphaNumOpt isAlphaNumOpt
 		Optimization flag to skip alpha numeric tokens for further tokenization
+	-abbDict path
+		abbreviation dictionary in XML format.
 	-params paramsFile
 		training parameters file.
 	-lang language
@@ -972,8 +972,8 @@ Arguments description:
 <screen>
 <![CDATA[
 Usage: opennlp TokenizerCrossValidator[.irishsentencebank|.ad|.pos|.conllx|.namefinder|.parse|.conllu] 
-        [-misclassified true|false] [-folds num] [-factory factoryName] [-abbDict path] [-alphaNumOpt 
-        isAlphaNumOpt] [-params paramsFile] -lang language -data sampleData [-encoding charsetName] 
+        [-misclassified true|false] [-folds num] [-factory factoryName] [-alphaNumOpt isAlphaNumOpt] 
+        [-abbDict path] [-params paramsFile] -lang language -data sampleData [-encoding charsetName] 
 Arguments description:
 	-misclassified true|false
 		if true will print false negatives and false positives.
@@ -981,10 +981,10 @@ Arguments description:
 		number of folds, default is 10.
 	-factory factoryName
 		A sub-class of TokenizerFactory where to get implementation and resources.
-	-abbDict path
-		abbreviation dictionary in XML format.
 	-alphaNumOpt isAlphaNumOpt
 		Optimization flag to skip alpha numeric tokens for further tokenization
+	-abbDict path
+		abbreviation dictionary in XML format.
 	-params paramsFile
 		training parameters file.
 	-lang language
@@ -2234,9 +2234,9 @@ Usage: opennlp TokenNameFinder model1 model2 ... modelN < sentences
 <screen>
 <![CDATA[
 Usage: opennlp TokenNameFinderTrainer[.evalita|.ad|.conll03|.bionlp2004|.conll02|.muc6|.ontonotes|.brat] 
-        [-factory factoryName] [-resources resourcesDir] [-type modelType] [-featuregen featuregenFile] 
-        [-nameTypes types] [-sequenceCodec codec] [-params paramsFile] -lang language -model modelFile -data 
-        sampleData [-encoding charsetName] 
+        [-factory factoryName] [-resources resourcesDir] [-type modelType] [-sequenceCodec codec] 
+        [-featuregen featuregenFile] [-nameTypes types] [-params paramsFile] -lang language -model modelFile 
+        -data sampleData [-encoding charsetName] 
 Arguments description:
 	-factory factoryName
 		A sub-class of TokenNameFinderFactory
@@ -2244,12 +2244,12 @@ Arguments description:
 		The resources directory
 	-type modelType
 		The type of the token name finder model
+	-sequenceCodec codec
+		sequence codec used to code name spans
 	-featuregen featuregenFile
 		The feature generator descriptor file
 	-nameTypes types
 		name types to use for training
-	-sequenceCodec codec
-		sequence codec used to code name spans
 	-params paramsFile
 		training parameters file.
 	-lang language
@@ -2421,18 +2421,6 @@ Arguments description:
 <entry></entry>
 </row>
 <row>
-<entry>tokenizerModel</entry>
-<entry>modelFile</entry>
-<entry>Yes</entry>
-<entry></entry>
-</row>
-<row>
-<entry>ruleBasedTokenizer</entry>
-<entry>name</entry>
-<entry>Yes</entry>
-<entry></entry>
-</row>
-<row>
 <entry>annotationConfig</entry>
 <entry>annConfFile</entry>
 <entry>No</entry>
@@ -2453,6 +2441,18 @@ Arguments description:
 <row>
 <entry>sentenceDetectorModel</entry>
 <entry>modelFile</entry>
+<entry>Yes</entry>
+<entry></entry>
+</row>
+<row>
+<entry>tokenizerModel</entry>
+<entry>modelFile</entry>
+<entry>Yes</entry>
+<entry></entry>
+</row>
+<row>
+<entry>ruleBasedTokenizer</entry>
+<entry>name</entry>
 <entry>Yes</entry>
 <entry></entry>
 </row>
@@ -2648,18 +2648,6 @@ Arguments description:
 <entry></entry>
 </row>
 <row>
-<entry>tokenizerModel</entry>
-<entry>modelFile</entry>
-<entry>Yes</entry>
-<entry></entry>
-</row>
-<row>
-<entry>ruleBasedTokenizer</entry>
-<entry>name</entry>
-<entry>Yes</entry>
-<entry></entry>
-</row>
-<row>
 <entry>annotationConfig</entry>
 <entry>annConfFile</entry>
 <entry>No</entry>
@@ -2683,6 +2671,18 @@ Arguments description:
 <entry>Yes</entry>
 <entry></entry>
 </row>
+<row>
+<entry>tokenizerModel</entry>
+<entry>modelFile</entry>
+<entry>Yes</entry>
+<entry></entry>
+</row>
+<row>
+<entry>ruleBasedTokenizer</entry>
+<entry>name</entry>
+<entry>Yes</entry>
+<entry></entry>
+</row>
 </tbody>
 </tgroup></informaltable>
 
@@ -2698,8 +2698,8 @@ Arguments description:
 <![CDATA[
 Usage: opennlp 
         TokenNameFinderCrossValidator[.evalita|.ad|.conll03|.bionlp2004|.conll02|.muc6|.ontonotes|.brat] 
-        [-factory factoryName] [-resources resourcesDir] [-type modelType] [-featuregen featuregenFile] 
-        [-nameTypes types] [-sequenceCodec codec] [-params paramsFile] -lang language [-misclassified 
+        [-factory factoryName] [-resources resourcesDir] [-type modelType] [-sequenceCodec codec] 
+        [-featuregen featuregenFile] [-nameTypes types] [-params paramsFile] -lang language [-misclassified 
         true|false] [-folds num] [-detailedF true|false] [-reportOutputFile outputFile] -data sampleData 
         [-encoding charsetName] 
 Arguments description:
@@ -2709,12 +2709,12 @@ Arguments description:
 		The resources directory
 	-type modelType
 		The type of the token name finder model
+	-sequenceCodec codec
+		sequence codec used to code name spans
 	-featuregen featuregenFile
 		The feature generator descriptor file
 	-nameTypes types
 		name types to use for training
-	-sequenceCodec codec
-		sequence codec used to code name spans
 	-params paramsFile
 		training parameters file.
 	-lang language
@@ -2892,18 +2892,6 @@ Arguments description:
 <entry></entry>
 </row>
 <row>
-<entry>tokenizerModel</entry>
-<entry>modelFile</entry>
-<entry>Yes</entry>
-<entry></entry>
-</row>
-<row>
-<entry>ruleBasedTokenizer</entry>
-<entry>name</entry>
-<entry>Yes</entry>
-<entry></entry>
-</row>
-<row>
 <entry>annotationConfig</entry>
 <entry>annConfFile</entry>
 <entry>No</entry>
@@ -2924,6 +2912,18 @@ Arguments description:
 <row>
 <entry>sentenceDetectorModel</entry>
 <entry>modelFile</entry>
+<entry>Yes</entry>
+<entry></entry>
+</row>
+<row>
+<entry>tokenizerModel</entry>
+<entry>modelFile</entry>
+<entry>Yes</entry>
+<entry></entry>
+</row>
+<row>
+<entry>ruleBasedTokenizer</entry>
+<entry>name</entry>
 <entry>Yes</entry>
 <entry></entry>
 </row>
@@ -3102,18 +3102,6 @@ Usage: opennlp TokenNameFinderConverter help|evalita|ad|conll03|bionlp2004|conll
 <entry></entry>
 </row>
 <row>
-<entry>tokenizerModel</entry>
-<entry>modelFile</entry>
-<entry>Yes</entry>
-<entry></entry>
-</row>
-<row>
-<entry>ruleBasedTokenizer</entry>
-<entry>name</entry>
-<entry>Yes</entry>
-<entry></entry>
-</row>
-<row>
 <entry>annotationConfig</entry>
 <entry>annConfFile</entry>
 <entry>No</entry>
@@ -3137,6 +3125,18 @@ Usage: opennlp TokenNameFinderConverter help|evalita|ad|conll03|bionlp2004|conll
 <entry>Yes</entry>
 <entry></entry>
 </row>
+<row>
+<entry>tokenizerModel</entry>
+<entry>modelFile</entry>
+<entry>Yes</entry>
+<entry></entry>
+</row>
+<row>
+<entry>ruleBasedTokenizer</entry>
+<entry>name</entry>
+<entry>Yes</entry>
+<entry></entry>
+</row>
 </tbody>
 </tgroup></informaltable>
 
@@ -3150,13 +3150,13 @@ Usage: opennlp TokenNameFinderConverter help|evalita|ad|conll03|bionlp2004|conll
 
 <screen>
 <![CDATA[
-Usage: opennlp CensusDictionaryCreator [-encoding charsetName] [-lang code] -censusData censusDict -dict dict
+Usage: opennlp CensusDictionaryCreator [-encoding charsetName] -dict dict [-lang code] -censusData censusDict
 
 Arguments description:
 	-encoding charsetName
+	-dict dict
 	-lang code
 	-censusData censusDict
-	-dict dict
 
 ]]>
 </screen> 
@@ -3191,19 +3191,19 @@ Usage: opennlp POSTagger model < sentences
 <screen>
 <![CDATA[
 Usage: opennlp POSTaggerTrainer[.ad|.conllx|.parse|.ontonotes|.conllu] [-factory factoryName] [-resources 
-        resourcesDir] [-featuregen featuregenFile] [-tagDictCutoff tagDictCutoff] [-dict dictionaryPath] 
+        resourcesDir] [-dict dictionaryPath] [-featuregen featuregenFile] [-tagDictCutoff tagDictCutoff] 
         [-params paramsFile] -lang language -model modelFile -data sampleData [-encoding charsetName] 
 Arguments description:
 	-factory factoryName
 		A sub-class of POSTaggerFactory where to get implementation and resources.
 	-resources resourcesDir
 		The resources directory
+	-dict dictionaryPath
+		The XML tag dictionary file
 	-featuregen featuregenFile
 		The feature generator descriptor file
 	-tagDictCutoff tagDictCutoff
 		TagDictionary cutoff. If specified will create/expand a mutable TagDictionary
-	-dict dictionaryPath
-		The XML tag dictionary file
 	-params paramsFile
 		training parameters file.
 	-lang language
@@ -3436,9 +3436,9 @@ Arguments description:
 <screen>
 <![CDATA[
 Usage: opennlp POSTaggerCrossValidator[.ad|.conllx|.parse|.ontonotes|.conllu] [-misclassified true|false] 
-        [-folds num] [-factory factoryName] [-resources resourcesDir] [-featuregen featuregenFile] 
-        [-tagDictCutoff tagDictCutoff] [-dict dictionaryPath] [-params paramsFile] -lang language 
-        [-reportOutputFile outputFile] -data sampleData [-encoding charsetName] 
+        [-folds num] [-factory factoryName] [-resources resourcesDir] [-dict dictionaryPath] [-featuregen 
+        featuregenFile] [-tagDictCutoff tagDictCutoff] [-params paramsFile] -lang language [-reportOutputFile 
+        outputFile] -data sampleData [-encoding charsetName] 
 Arguments description:
 	-misclassified true|false
 		if true will print false negatives and false positives.
@@ -3448,12 +3448,12 @@ Arguments description:
 		A sub-class of POSTaggerFactory where to get implementation and resources.
 	-resources resourcesDir
 		The resources directory
+	-dict dictionaryPath
+		The XML tag dictionary file
 	-featuregen featuregenFile
 		The feature generator descriptor file
 	-tagDictCutoff tagDictCutoff
 		TagDictionary cutoff. If specified will create/expand a mutable TagDictionary
-	-dict dictionaryPath
-		The XML tag dictionary file
 	-params paramsFile
 		training parameters file.
 	-lang language
@@ -3858,12 +3858,6 @@ Arguments description:
 <entry>Data to be used, usually a file name.</entry>
 </row>
 <row>
-<entry>lang</entry>
-<entry>language</entry>
-<entry>No</entry>
-<entry>Language which is being processed.</entry>
-</row>
-<row>
 <entry>start</entry>
 <entry>start</entry>
 <entry>Yes</entry>
@@ -3874,6 +3868,12 @@ Arguments description:
 <entry>end</entry>
 <entry>Yes</entry>
 <entry>Index of last sentence</entry>
+</row>
+<row>
+<entry>lang</entry>
+<entry>language</entry>
+<entry>No</entry>
+<entry>Language which is being processed.</entry>
 </row>
 </tbody>
 </tgroup></informaltable>
@@ -3923,12 +3923,6 @@ Arguments description:
 <entry>Data to be used, usually a file name.</entry>
 </row>
 <row>
-<entry>lang</entry>
-<entry>language</entry>
-<entry>No</entry>
-<entry>Language which is being processed.</entry>
-</row>
-<row>
 <entry>start</entry>
 <entry>start</entry>
 <entry>Yes</entry>
@@ -3939,6 +3933,12 @@ Arguments description:
 <entry>end</entry>
 <entry>Yes</entry>
 <entry>Index of last sentence</entry>
+</row>
+<row>
+<entry>lang</entry>
+<entry>language</entry>
+<entry>No</entry>
+<entry>Language which is being processed.</entry>
 </row>
 </tbody>
 </tgroup></informaltable>
@@ -3995,12 +3995,6 @@ Arguments description:
 <entry>Data to be used, usually a file name.</entry>
 </row>
 <row>
-<entry>lang</entry>
-<entry>language</entry>
-<entry>No</entry>
-<entry>Language which is being processed.</entry>
-</row>
-<row>
 <entry>start</entry>
 <entry>start</entry>
 <entry>Yes</entry>
@@ -4011,6 +4005,12 @@ Arguments description:
 <entry>end</entry>
 <entry>Yes</entry>
 <entry>Index of last sentence</entry>
+</row>
+<row>
+<entry>lang</entry>
+<entry>language</entry>
+<entry>No</entry>
+<entry>Language which is being processed.</entry>
 </row>
 </tbody>
 </tgroup></informaltable>
@@ -4048,12 +4048,6 @@ Usage: opennlp ChunkerConverter help|ad [help|options...]
 <entry>Data to be used, usually a file name.</entry>
 </row>
 <row>
-<entry>lang</entry>
-<entry>language</entry>
-<entry>No</entry>
-<entry>Language which is being processed.</entry>
-</row>
-<row>
 <entry>start</entry>
 <entry>start</entry>
 <entry>Yes</entry>
@@ -4064,6 +4058,12 @@ Usage: opennlp ChunkerConverter help|ad [help|options...]
 <entry>end</entry>
 <entry>Yes</entry>
 <entry>Index of last sentence</entry>
+</row>
+<row>
+<entry>lang</entry>
+<entry>language</entry>
+<entry>No</entry>
+<entry>Language which is being processed.</entry>
 </row>
 </tbody>
 </tgroup></informaltable>

@@ -222,7 +222,7 @@ public class ArgumentParserTest {
     // .assertTrue(ArgumentParser.validateArguments(argsString.split(" "), AllOptionalArguments.class));
   }
 
-  @Test(expected = IllegalArgumentException.class)
+  @Test()
   public void testWrongType() {
     String argsString = "-encoding UTF-8 -alphaNumOpt 23"; // should be a boolean
     SimpleArguments args = ArgumentParser.parse(argsString.split(" "), SimpleArguments.class);
@@ -241,7 +241,7 @@ public class ArgumentParserTest {
     ArgumentParser.validateArguments(argsString.split(" "), SimpleArguments.class);
   }
 
-  @Test(expected = IllegalArgumentException.class)
+  @Test()
   public void testAmbiguousSemantics() {
     String argsString = "-encoding en-GB"; // this encoding doesn't make sense, but the fault is not
     // caught at the modular level

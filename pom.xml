@@ -261,7 +261,9 @@
 					<version>${maven.surefire.plugin}</version>
 					<configuration>
 						<argLine>-Xmx2048m</argLine>
+						<!--<argLine>-Xmx2048m -XX:MaxPermSize=4096m</argLine>-->
 						<forkCount>${opennlp.forkCount}</forkCount>
+					        <testFailureIgnore>true</testFailureIgnore>
 						<failIfNoSpecifiedTests>false</failIfNoSpecifiedTests>
 						<excludes>
 							<exclude>**/stemmer/*</exclude>

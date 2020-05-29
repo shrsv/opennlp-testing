@@ -24,6 +24,7 @@ import java.nio.charset.StandardCharsets;
 
 import org.junit.Assert;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import opennlp.tools.chunker.ChunkerCrossValidator;
@@ -63,6 +64,8 @@ import opennlp.tools.util.model.ModelUtil;
  * Bosque_CF_8.0.ad.txt.gz </a></li>
  * </ul>
  */
+
+@Ignore
 public class ArvoresDeitadasEval extends AbstractEvalTest {
 
   private static final String BOSQUE = "ad/Bosque_CF_8.0.ad.txt";

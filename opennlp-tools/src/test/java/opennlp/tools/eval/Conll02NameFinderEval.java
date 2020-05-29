@@ -24,6 +24,7 @@ import java.math.BigInteger;
 
 import org.junit.Assert;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import opennlp.tools.formats.Conll02NameSampleStream;
@@ -51,6 +52,7 @@ import opennlp.tools.util.model.ModelUtil;
  * - Double check the encoding which is used to open the files. Currently that is UTF-8.
  * - Make the Conll02 reader compatible. Currently it doesn't work with spanish data without pos tags.
  */
+@Ignore
 public class Conll02NameFinderEval extends AbstractEvalTest {
 
   private static File dutchTrainingFile;

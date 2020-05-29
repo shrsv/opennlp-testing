@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: opennlp.tools.langdetect.LanguageDetectorMETest
+-------------------------------------------------------------------------------
+Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 732.913 sec - in opennlp.tools.langdetect.LanguageDetectorMETest

@@ -32,6 +32,7 @@ import java.util.Map;
 
 import org.junit.Assert;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import opennlp.tools.cmdline.namefind.TokenNameFinderTrainerTool;
@@ -46,6 +47,7 @@ import opennlp.tools.util.ObjectStream;
 import opennlp.tools.util.TrainingParameters;
 import opennlp.tools.util.model.ModelUtil;
 
+@Ignore
 public class OntoNotes4NameFinderEval extends AbstractEvalTest {
 
   private static ObjectStream<NameSample> createNameSampleStream() throws IOException {

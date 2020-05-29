@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: opennlp.tools.langdetect.LanguageDetectorFactoryTest
+-------------------------------------------------------------------------------
+Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.886 sec - in opennlp.tools.langdetect.LanguageDetectorFactoryTest

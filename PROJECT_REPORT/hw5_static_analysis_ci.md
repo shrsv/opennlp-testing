@@ -178,3 +178,58 @@ From the manual:
 #### PMD: "UnusedLocalVariable"
 
 > Detects when a local variable is declared and/or assigned, but not used.
+
+
+## Continuous Integration
+
+### 
+
+
+### Travis configuration
+
+I have added my comments to the configuration file from the original OpenNLP repository.
+```yaml
+language: java
+os: linux
+jdk: openjdk8
+
+# Super-user privileges not required for build
+sudo: false
+
+# Ensure security through PKI 
+env:
+  global:
+   # The next declaration is the encrypted COVERITY_SCAN_TOKEN, created
+   # via the "travis encrypt" command using the project repo's public key
+   - secure: "WLRKO/tD2rFN+a/HKSf9iZkaMaFE8/luXcJCXGfewoHysF7LgIJ76AN9HY50woVJykl+T/tEhK5c/+H/IKO5zH8Rvz/Q9XxPTvUTOwH7oFOHCQ66mKTvn27Z4fp+JbkPKJuhWDUzPvS/Alo3wE70UELnFRTFoRsemfNNa95uPJobfx5deOfX80mipHOn16dA1q8LuzQa6iF2HIVuh7ygLleTV0cDJyXmIlg3EbKGEitozIv0WkwALrBjLS7KmCcXTKxXqCm1Be2MFRoh9ab2bEooXlv2zRh2wT0c04RckFm1AJGpGQelXLl3NxxcRJSpIN9OTkpVUfwm28TIXk2SzdgPMrP11yFK/DPKTv0jwyk1bFrmZMMso5Y2rP6wjNEtw5ExYSpk3xebcieLJwXhCwkkWAT3DdAAeXO5z4Nf36lryjRgqvlsVF1ofqAK5Sh+qH93/TJOE+hVEj74xUT9pVaxemY61ymvSt8L21XkUsp8T5ILq9jWoaMQCaAwZIaJiHXYjQhmsrFRkNaY4cl9AUGwpHmm750uqhmoVfuJzQg5/vGMZ0LWeCgR9qsG5MG0yijE8ghExUOe7R4gcNAJW2XOfjzMTy74jdsJbsJPUeci/R4wzrXTSCQVJ5nj2LhBF6HyqPyUrIV2MB14gAIItc1LASuB1GLkGoXjIdt0HN8="
+
+# This is an important time optimization step
+# Maven stores all the project build dependencies in ~/.m2
+# (Source: https://www.baeldung.com/maven-local-repository)
+# Due to this, there is no need to download the dependencies every
+# time a build is triggered
+cache:
+  directories:
+    - $HOME/.m2
+
+# The following block downloads and sets up maven
+before_install:
+  # Download the installation archive
+  - wget http://mirrors.ae-online.de/apache/maven/maven-3/3.3.9/binaries/apache-maven-3.3.9-bin.tar.gz
+  # Extract the archive
+  - tar xf apache-maven-3.3.9-bin.tar.gz
+  # Set the mavel local repository environment variable
+  - export M2_HOME=$PWD/apache-maven-3.3.9
+  # Add maven executable path to the shell PATH variable
+  - export PATH=$M2_HOME/bin:$PATH
+
+# Build the project along with 'JaCoCo Java Code Coverage Library' as the profiler
+# "JaCoCo is a free code coverage library for Java, which has been created by the EclEmma team based on the lessons learned from using and integration existing libraries for many years."
+# (Source: https://www.eclemma.org/jacoco/)
+script: mvn clean install -Pjacoco -Dcheckstyle.skip
+
+
+after_success:
+  # Generate code coverage report
+  - mvn jacoco:report coveralls:report
+```

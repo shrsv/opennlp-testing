@@ -24,6 +24,7 @@ import java.nio.charset.StandardCharsets;
 
 import org.junit.Assert;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
@@ -57,6 +58,7 @@ import opennlp.tools.util.model.ModelUtil;
  * one package for each language, and an extra package containing the tests for all
  * languages.
  */
+@Ignore
 public class ConllXPosTaggerEval extends AbstractEvalTest {
 
   private POSModel train(File trainFile, String lang,

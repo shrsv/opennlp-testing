@@ -26,6 +26,7 @@ import java.nio.charset.StandardCharsets;
 
 import org.junit.Assert;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import opennlp.tools.formats.DirectorySampleStream;
@@ -41,6 +42,7 @@ import opennlp.tools.util.ObjectStream;
 import opennlp.tools.util.TrainingParameters;
 import opennlp.tools.util.model.ModelUtil;
 
+@Ignore
 public class OntoNotes4ParserEval extends AbstractEvalTest {
 
   private static ObjectStream<Parse> createParseSampleStream() throws IOException {

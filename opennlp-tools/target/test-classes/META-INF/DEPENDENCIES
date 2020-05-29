@@ -1,0 +1,23 @@
+// ------------------------------------------------------------------
+// Transitive dependencies of this project determined from the
+// maven pom organized by organization.
+// ------------------------------------------------------------------
+
+Apache OpenNLP Tools
+
+
+From: 'an unknown organization'
+  - Byte Buddy (without dependencies) (https://bytebuddy.net/byte-buddy) net.bytebuddy:byte-buddy:jar:1.10.5
+    License: Apache License, Version 2.0  (http://www.apache.org/licenses/LICENSE-2.0.txt)
+  - Byte Buddy agent (https://bytebuddy.net/byte-buddy-agent) net.bytebuddy:byte-buddy-agent:jar:1.10.5
+    License: Apache License, Version 2.0  (http://www.apache.org/licenses/LICENSE-2.0.txt)
+  - mockito-core (https://github.com/mockito/mockito) org.mockito:mockito-core:jar:3.3.3
+    License: The MIT License  (https://github.com/mockito/mockito/blob/master/LICENSE)
+
+From: 'Joe Walnes, Henri Tremblay, Leonardo Mesquita'
+  - Objenesis (http://objenesis.org) org.objenesis:objenesis:jar:2.6
+    License: Apache 2  (http://www.apache.org/licenses/LICENSE-2.0.txt)
+
+
+
+

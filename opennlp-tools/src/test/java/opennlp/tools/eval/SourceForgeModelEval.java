@@ -30,6 +30,7 @@ import java.util.Objects;
 
 import org.junit.Assert;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import opennlp.tools.chunker.Chunker;
@@ -85,6 +86,7 @@ import opennlp.tools.util.Span;
  * - models-sf/en-pos-perceptron.bin<br>
  * - models-sf/en-parser-chunking.bin.bin<br>
  */
+@Ignore
 public class SourceForgeModelEval extends AbstractEvalTest {
 
   private static class LeipzigTestSample {

@@ -24,6 +24,7 @@ import java.nio.charset.StandardCharsets;
 
 import org.junit.Assert;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
@@ -47,6 +48,7 @@ import opennlp.tools.util.model.ModelUtil;
  * <a href="http://www.cnts.ua.ac.be/conll2000/chunking/"> site </a>
  * and decompress them into this directory: $OPENNLP_DATA_DIR/conll00.
  */
+@Ignore
 public class Conll00ChunkerEval extends AbstractEvalTest {
 
   private static File TEST_DATA_FILE; 
@@ -92,6 +94,7 @@ public class Conll00ChunkerEval extends AbstractEvalTest {
 
   }
 
+  @Ignore
   @Test
   public void evalEnglishPerceptron() throws IOException {
     ChunkerModel maxentModel = train(TRAIN_DATA_FILE, createPerceptronParams());
@@ -99,7 +102,7 @@ public class Conll00ChunkerEval extends AbstractEvalTest {
     eval(maxentModel, TEST_DATA_FILE, 0.9295018353434714d);
   }
 
-  @Test
+  @Ignore @Test
   public void evalEnglishMaxentGis() throws IOException {
     ChunkerModel maxentModel = train(TRAIN_DATA_FILE, ModelUtil.createDefaultTrainingParameters());
 
@@ -107,7 +110,7 @@ public class Conll00ChunkerEval extends AbstractEvalTest {
   }
 
   // Note: Don't try to run this on your MacBook
-  @Test
+  @Ignore @Test
   @Category(HighMemoryUsage.class)
   public void evalEnglishMaxentQn() throws IOException {
     TrainingParameters params = createMaxentQnParams();
