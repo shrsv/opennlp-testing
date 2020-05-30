@@ -17,28 +17,18 @@
 
 package opennlp.tools.namefind;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Map;
-
 import opennlp.tools.namefind.TokenNameFinderModel.FeatureGeneratorCreationError;
 import opennlp.tools.util.BaseToolFactory;
 import opennlp.tools.util.InvalidFormatException;
 import opennlp.tools.util.SequenceCodec;
 import opennlp.tools.util.ext.ExtensionLoader;
-import opennlp.tools.util.featuregen.AdaptiveFeatureGenerator;
-import opennlp.tools.util.featuregen.AggregatedFeatureGenerator;
-import opennlp.tools.util.featuregen.BigramNameFeatureGenerator;
-import opennlp.tools.util.featuregen.CachedFeatureGenerator;
-import opennlp.tools.util.featuregen.GeneratorFactory;
-import opennlp.tools.util.featuregen.OutcomePriorFeatureGenerator;
-import opennlp.tools.util.featuregen.PreviousMapFeatureGenerator;
-import opennlp.tools.util.featuregen.SentenceFeatureGenerator;
-import opennlp.tools.util.featuregen.TokenClassFeatureGenerator;
-import opennlp.tools.util.featuregen.TokenFeatureGenerator;
-import opennlp.tools.util.featuregen.WindowFeatureGenerator;
+import opennlp.tools.util.featuregen.*;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Map;
 
 // Idea of this factory is that most resources/impls used by the name finder
 // can be modified through this class!
@@ -46,185 +36,181 @@ import opennlp.tools.util.featuregen.WindowFeatureGenerator;
 
 public class TokenNameFinderFactory extends BaseToolFactory {
 
-  private byte[] featureGeneratorBytes;
-  private Map<String, Object> resources;
-  private SequenceCodec<String> seqCodec;
+    private byte[] featureGeneratorBytes;
+    private Map<String, Object> resources;
+    private SequenceCodec<String> seqCodec;
 
-  /**
-   * Creates a {@link TokenNameFinderFactory} that provides the default implementation
-   * of the resources.
-   */
-  public TokenNameFinderFactory() {
-    this.seqCodec = new BioCodec();
-  }
-
-  public TokenNameFinderFactory(byte[] featureGeneratorBytes, final Map<String, Object> resources,
-      SequenceCodec<String> seqCodec) {
-    init(featureGeneratorBytes, resources, seqCodec);
-  }
-
-  void init(byte[] featureGeneratorBytes, final Map<String, Object> resources,
-      SequenceCodec<String> seqCodec) {
-    this.featureGeneratorBytes = featureGeneratorBytes;
-    this.resources = resources;
-    this.seqCodec = seqCodec;
-  }
-
-  private static byte[] loadDefaultFeatureGeneratorBytes() {
-
-    ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-    try (InputStream in = TokenNameFinderFactory.class.getResourceAsStream(
-        "/opennlp/tools/namefind/ner-default-features.xml")) {
-
-      if (in == null) {
-        throw new IllegalStateException("Classpath must contain ner-default-features.xml file!");
-      }
-
-      byte[] buf = new byte[1024];
-      int len;
-      while ((len = in.read(buf)) > 0) {
-        bytes.write(buf, 0, len);
-      }
-    }
-    catch (IOException e) {
-      throw new IllegalStateException("Failed reading from ner-default-features.xml file on classpath!");
+    /**
+     * Creates a {@link TokenNameFinderFactory} that provides the default implementation
+     * of the resources.
+     */
+    public TokenNameFinderFactory() {
+        this.seqCodec = new BioCodec();
     }
 
-    return bytes.toByteArray();
-  }
-
-  protected SequenceCodec<String> getSequenceCodec() {
-    return seqCodec;
-  }
-
-  protected Map<String, Object> getResources() {
-    return resources;
-  }
-
-  protected byte[] getFeatureGenerator() {
-    return featureGeneratorBytes;
-  }
-
-  public static TokenNameFinderFactory create(String subclassName, byte[] featureGeneratorBytes,
-      final Map<String, Object> resources, SequenceCodec<String> seqCodec)
-      throws InvalidFormatException {
-    TokenNameFinderFactory theFactory;
-    if (subclassName == null) {
-      // will create the default factory
-      theFactory = new TokenNameFinderFactory();
-    } else {
-      try {
-        theFactory = ExtensionLoader.instantiateExtension(
-            TokenNameFinderFactory.class, subclassName);
-      } catch (Exception e) {
-        String msg = "Could not instantiate the " + subclassName
-            + ". The initialization throw an exception.";
-        System.err.println(msg);
-        e.printStackTrace();
-        throw new InvalidFormatException(msg, e);
-      }
-    }
-    theFactory.init(featureGeneratorBytes, resources, seqCodec);
-    return theFactory;
-  }
-
-  @Override
-  public void validateArtifactMap() throws InvalidFormatException {
-    // no additional artifacts
-  }
-
-  public SequenceCodec<String> createSequenceCodec() {
-
-    if (artifactProvider != null) {
-      String sequeceCodecImplName = artifactProvider.getManifestProperty(
-          TokenNameFinderModel.SEQUENCE_CODEC_CLASS_NAME_PARAMETER);
-      return instantiateSequenceCodec(sequeceCodecImplName);
-    }
-    else {
-      return seqCodec;
-    }
-  }
-
-  public NameContextGenerator createContextGenerator() {
-
-    AdaptiveFeatureGenerator featureGenerator = createFeatureGenerators();
-
-    if (featureGenerator == null) {
-      featureGenerator = new CachedFeatureGenerator(
-          new WindowFeatureGenerator(new TokenFeatureGenerator(), 2, 2),
-          new WindowFeatureGenerator(new TokenClassFeatureGenerator(true), 2, 2),
-          new OutcomePriorFeatureGenerator(),
-          new PreviousMapFeatureGenerator(),
-          new BigramNameFeatureGenerator(),
-          new SentenceFeatureGenerator(true, false));
+    public TokenNameFinderFactory(byte[] featureGeneratorBytes, final Map<String, Object> resources,
+                                  SequenceCodec<String> seqCodec) {
+        init(featureGeneratorBytes, resources, seqCodec);
     }
 
-    return new DefaultNameContextGenerator(featureGenerator);
-  }
+    private static byte[] loadDefaultFeatureGeneratorBytes() {
 
-  /**
-   * Creates the {@link AdaptiveFeatureGenerator}. Usually this
-   * is a set of generators contained in the {@link AggregatedFeatureGenerator}.
-   *
-   * Note:
-   * The generators are created on every call to this method.
-   *
-   * @return the feature generator or null if there is no descriptor in the model
-   */
-  public AdaptiveFeatureGenerator createFeatureGenerators() {
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        try (InputStream in = TokenNameFinderFactory.class.getResourceAsStream(
+                "/opennlp/tools/namefind/ner-default-features.xml")) {
 
-    if (featureGeneratorBytes == null && artifactProvider != null) {
-      featureGeneratorBytes = artifactProvider.getArtifact(
-          TokenNameFinderModel.GENERATOR_DESCRIPTOR_ENTRY_NAME);
+            if (in == null) {
+                throw new IllegalStateException("Classpath must contain ner-default-features.xml file!");
+            }
+
+            byte[] buf = new byte[1024];
+            int len;
+            while ((len = in.read(buf)) > 0) {
+                bytes.write(buf, 0, len);
+            }
+        } catch (IOException e) {
+            throw new IllegalStateException("Failed reading from ner-default-features.xml file on classpath!");
+        }
+
+        return bytes.toByteArray();
     }
 
-    if (featureGeneratorBytes == null) {
-      featureGeneratorBytes = loadDefaultFeatureGeneratorBytes();
+    public static TokenNameFinderFactory create(String subclassName, byte[] featureGeneratorBytes,
+                                                final Map<String, Object> resources, SequenceCodec<String> seqCodec)
+            throws InvalidFormatException {
+        TokenNameFinderFactory theFactory;
+        if (subclassName == null) {
+            // will create the default factory
+            theFactory = new TokenNameFinderFactory();
+        } else {
+            try {
+                theFactory = ExtensionLoader.instantiateExtension(
+                        TokenNameFinderFactory.class, subclassName);
+            } catch (Exception e) {
+                String msg = "Could not instantiate the " + subclassName
+                        + ". The initialization throw an exception.";
+                System.err.println(msg);
+                e.printStackTrace();
+                throw new InvalidFormatException(msg, e);
+            }
+        }
+        theFactory.init(featureGeneratorBytes, resources, seqCodec);
+        return theFactory;
     }
 
-    InputStream descriptorIn = new ByteArrayInputStream(featureGeneratorBytes);
+    public static SequenceCodec<String> instantiateSequenceCodec(
+            String sequenceCodecImplName) {
 
-    AdaptiveFeatureGenerator generator;
-    try {
-      generator = GeneratorFactory.create(descriptorIn, key -> {
+        if (sequenceCodecImplName != null) {
+            return ExtensionLoader.instantiateExtension(
+                    SequenceCodec.class, sequenceCodecImplName);
+        } else {
+            // If nothing is specified return old default!
+            return new BioCodec();
+        }
+    }
+
+    void init(byte[] featureGeneratorBytes, final Map<String, Object> resources,
+              SequenceCodec<String> seqCodec) {
+        this.featureGeneratorBytes = featureGeneratorBytes;
+        this.resources = resources;
+        this.seqCodec = seqCodec;
+    }
+
+    protected SequenceCodec<String> getSequenceCodec() {
+        return seqCodec;
+    }
+
+    protected Map<String, Object> getResources() {
+        return resources;
+    }
+
+    protected byte[] getFeatureGenerator() {
+        return featureGeneratorBytes;
+    }
+
+    @Override
+    public void validateArtifactMap() throws InvalidFormatException {
+        // no additional artifacts
+    }
+
+    public SequenceCodec<String> createSequenceCodec() {
+
         if (artifactProvider != null) {
-          return artifactProvider.getArtifact(key);
+            String sequeceCodecImplName = artifactProvider.getManifestProperty(
+                    TokenNameFinderModel.SEQUENCE_CODEC_CLASS_NAME_PARAMETER);
+            return instantiateSequenceCodec(sequeceCodecImplName);
+        } else {
+            return seqCodec;
         }
-        else {
-          return resources.get(key);
+    }
+
+    public NameContextGenerator createContextGenerator() {
+
+        AdaptiveFeatureGenerator featureGenerator = createFeatureGenerators();
+
+        if (featureGenerator == null) {
+            featureGenerator = new CachedFeatureGenerator(
+                    new WindowFeatureGenerator(new TokenFeatureGenerator(), 2, 2),
+                    new WindowFeatureGenerator(new TokenClassFeatureGenerator(true), 2, 2),
+                    new OutcomePriorFeatureGenerator(),
+                    new PreviousMapFeatureGenerator(),
+                    new BigramNameFeatureGenerator(),
+                    new SentenceFeatureGenerator(true, false));
         }
-      });
-    } catch (InvalidFormatException e) {
-      // It is assumed that the creation of the feature generation does not
-      // fail after it succeeded once during model loading.
 
-      // But it might still be possible that such an exception is thrown,
-      // in this case the caller should not be forced to handle the exception
-      // and a Runtime Exception is thrown instead.
-
-      // If the re-creation of the feature generation fails it is assumed
-      // that this can only be caused by a programming mistake and therefore
-      // throwing a Runtime Exception is reasonable
-
-      throw new FeatureGeneratorCreationError(e);
-    } catch (IOException e) {
-      throw new IllegalStateException("Reading from mem cannot result in an I/O error", e);
+        return new DefaultNameContextGenerator(featureGenerator);
     }
 
-    return generator;
-  }
+    /**
+     * Creates the {@link AdaptiveFeatureGenerator}. Usually this
+     * is a set of generators contained in the {@link AggregatedFeatureGenerator}.
+     * <p>
+     * Note:
+     * The generators are created on every call to this method.
+     *
+     * @return the feature generator or null if there is no descriptor in the model
+     */
+    public AdaptiveFeatureGenerator createFeatureGenerators() {
 
-  public static SequenceCodec<String> instantiateSequenceCodec(
-      String sequenceCodecImplName) {
+        if (featureGeneratorBytes == null && artifactProvider != null) {
+            featureGeneratorBytes = artifactProvider.getArtifact(
+                    TokenNameFinderModel.GENERATOR_DESCRIPTOR_ENTRY_NAME);
+        }
 
-    if (sequenceCodecImplName != null) {
-      return ExtensionLoader.instantiateExtension(
-          SequenceCodec.class, sequenceCodecImplName);
+        if (featureGeneratorBytes == null) {
+            featureGeneratorBytes = loadDefaultFeatureGeneratorBytes();
+        }
+
+        InputStream descriptorIn = new ByteArrayInputStream(featureGeneratorBytes);
+
+        AdaptiveFeatureGenerator generator;
+        try {
+            generator = GeneratorFactory.create(descriptorIn, key -> {
+                if (artifactProvider != null) {
+                    return artifactProvider.getArtifact(key);
+                } else {
+                    return resources.get(key);
+                }
+            });
+        } catch (InvalidFormatException e) {
+            // It is assumed that the creation of the feature generation does not
+            // fail after it succeeded once during model loading.
+
+            // But it might still be possible that such an exception is thrown,
+            // in this case the caller should not be forced to handle the exception
+            // and a Runtime Exception is thrown instead.
+
+            // If the re-creation of the feature generation fails it is assumed
+            // that this can only be caused by a programming mistake and therefore
+            // throwing a Runtime Exception is reasonable
+
+            throw new FeatureGeneratorCreationError(e);
+        } catch (IOException e) {
+            throw new IllegalStateException("Reading from mem cannot result in an I/O error", e);
+        }
+
+        return generator;
     }
-    else {
-      // If nothing is specified return old default!
-      return new BioCodec();
-    }
-  }
 }
 

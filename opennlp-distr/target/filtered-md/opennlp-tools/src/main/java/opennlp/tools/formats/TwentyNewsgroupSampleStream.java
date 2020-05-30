@@ -17,6 +17,10 @@
 
 package opennlp.tools.formats;
 
+import opennlp.tools.doccat.DocumentSample;
+import opennlp.tools.tokenize.Tokenizer;
+import opennlp.tools.util.ObjectStream;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -24,49 +28,45 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import opennlp.tools.doccat.DocumentSample;
-import opennlp.tools.tokenize.Tokenizer;
-import opennlp.tools.util.ObjectStream;
-
 
 public class TwentyNewsgroupSampleStream implements ObjectStream<DocumentSample> {
 
-  private Tokenizer tokenizer;
+    private Tokenizer tokenizer;
 
-  private Map<Path, String> catFileMap = new HashMap<>();
-  private Iterator<Map.Entry<Path, String>> catFileTupleIterator;
+    private Map<Path, String> catFileMap = new HashMap<>();
+    private Iterator<Map.Entry<Path, String>> catFileTupleIterator;
 
-  TwentyNewsgroupSampleStream(Tokenizer tokenizer, Path dataDir) throws IOException {
-    this.tokenizer = tokenizer;
+    TwentyNewsgroupSampleStream(Tokenizer tokenizer, Path dataDir) throws IOException {
+        this.tokenizer = tokenizer;
 
-    for (Path dir : Files.newDirectoryStream(dataDir, entry -> Files.isDirectory(entry))) {
-      for (Path file : Files.newDirectoryStream(dir)) {
-        catFileMap.put(file, dir.getFileName().toString());
-      }
+        for (Path dir : Files.newDirectoryStream(dataDir, entry -> Files.isDirectory(entry))) {
+            for (Path file : Files.newDirectoryStream(dir)) {
+                catFileMap.put(file, dir.getFileName().toString());
+            }
+        }
+
+        reset();
     }
 
-    reset();
-  }
+    @Override
+    public DocumentSample read() throws IOException {
 
-  @Override
-  public DocumentSample read() throws IOException {
+        if (catFileTupleIterator.hasNext()) {
+            Map.Entry<Path, String> catFileTuple = catFileTupleIterator.next();
 
-    if (catFileTupleIterator.hasNext()) {
-      Map.Entry<Path, String> catFileTuple = catFileTupleIterator.next();
+            String text = new String(Files.readAllBytes(catFileTuple.getKey()));
+            return new DocumentSample(catFileTuple.getValue(), tokenizer.tokenize(text));
+        }
 
-      String text = new String(Files.readAllBytes(catFileTuple.getKey()));
-      return new DocumentSample(catFileTuple.getValue(), tokenizer.tokenize(text));
+        return null;
     }
 
-    return null;
-  }
+    @Override
+    public void reset() throws IOException, UnsupportedOperationException {
+        catFileTupleIterator = catFileMap.entrySet().iterator();
+    }
 
-  @Override
-  public void reset() throws IOException, UnsupportedOperationException {
-    catFileTupleIterator = catFileMap.entrySet().iterator();
-  }
-
-  @Override
-  public void close() throws IOException {
-  }
+    @Override
+    public void close() throws IOException {
+    }
 }

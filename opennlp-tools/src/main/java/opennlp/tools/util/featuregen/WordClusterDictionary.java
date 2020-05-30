@@ -17,69 +17,63 @@
 
 package opennlp.tools.util.featuregen;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
+import opennlp.tools.util.model.ArtifactSerializer;
+import opennlp.tools.util.model.SerializableArtifact;
+
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
-import opennlp.tools.util.model.ArtifactSerializer;
-import opennlp.tools.util.model.SerializableArtifact;
-
 public class WordClusterDictionary implements SerializableArtifact {
 
-  public static class WordClusterDictionarySerializer implements ArtifactSerializer<WordClusterDictionary> {
+    private Map<String, String> tokenToClusterMap = new HashMap<>();
 
-    public WordClusterDictionary create(InputStream in) throws IOException {
-      return new WordClusterDictionary(in);
+    /**
+     * Read word2vec and clark clustering style lexicons.
+     *
+     * @param in the inputstream
+     * @throws IOException the io exception
+     */
+    public WordClusterDictionary(InputStream in) throws IOException {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
+        String line;
+        while ((line = reader.readLine()) != null) {
+            String[] parts = line.split(" ");
+            if (parts.length == 3) {
+                tokenToClusterMap.put(parts[0], parts[1].intern());
+            } else if (parts.length == 2) {
+                tokenToClusterMap.put(parts[0], parts[1].intern());
+            }
+        }
     }
 
-    public void serialize(WordClusterDictionary artifact, OutputStream out) throws IOException {
-      artifact.serialize(out);
-    }
-  }
-
-  private Map<String, String> tokenToClusterMap = new HashMap<>();
-
-  /**
-   * Read word2vec and clark clustering style lexicons.
-   * @param in the inputstream
-   * @throws IOException the io exception
-   */
-  public WordClusterDictionary(InputStream in) throws IOException {
-    BufferedReader reader = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
-    String line;
-    while ((line = reader.readLine()) != null) {
-      String[] parts = line.split(" ");
-      if (parts.length == 3) {
-        tokenToClusterMap.put(parts[0], parts[1].intern());
-      } else if (parts.length == 2) {
-        tokenToClusterMap.put(parts[0], parts[1].intern());
-      }
-    }
-  }
-
-  public String lookupToken(String string) {
-    return tokenToClusterMap.get(string);
-  }
-
-  public void serialize(OutputStream out) throws IOException {
-    Writer writer = new BufferedWriter(new OutputStreamWriter(out));
-
-    for (Map.Entry<String, String> entry : tokenToClusterMap.entrySet()) {
-      writer.write(entry.getKey() + " " + entry.getValue() + "\n");
+    public String lookupToken(String string) {
+        return tokenToClusterMap.get(string);
     }
 
-    writer.flush();
-  }
+    public void serialize(OutputStream out) throws IOException {
+        Writer writer = new BufferedWriter(new OutputStreamWriter(out));
 
-  public Class<?> getArtifactSerializerClass() {
-    return WordClusterDictionarySerializer.class;
-  }
+        for (Map.Entry<String, String> entry : tokenToClusterMap.entrySet()) {
+            writer.write(entry.getKey() + " " + entry.getValue() + "\n");
+        }
+
+        writer.flush();
+    }
+
+    public Class<?> getArtifactSerializerClass() {
+        return WordClusterDictionarySerializer.class;
+    }
+
+    public static class WordClusterDictionarySerializer implements ArtifactSerializer<WordClusterDictionary> {
+
+        public WordClusterDictionary create(InputStream in) throws IOException {
+            return new WordClusterDictionary(in);
+        }
+
+        public void serialize(WordClusterDictionary artifact, OutputStream out) throws IOException {
+            artifact.serialize(out);
+        }
+    }
 }

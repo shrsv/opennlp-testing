@@ -33,64 +33,63 @@ import opennlp.tools.util.eval.FMeasure;
  */
 public class TokenNameFinderEvaluator extends Evaluator<NameSample> {
 
-  private FMeasure fmeasure = new FMeasure();
+    private FMeasure fmeasure = new FMeasure();
 
-  /**
-   * The {@link TokenNameFinder} used to create the predicted
-   * {@link NameSample} objects.
-   */
-  private TokenNameFinder nameFinder;
+    /**
+     * The {@link TokenNameFinder} used to create the predicted
+     * {@link NameSample} objects.
+     */
+    private TokenNameFinder nameFinder;
 
-  /**
-   * Initializes the current instance with the given
-   * {@link TokenNameFinder}.
-   *
-   * @param nameFinder the {@link TokenNameFinder} to evaluate.
-   * @param listeners evaluation sample listeners
-   */
-  public TokenNameFinderEvaluator(TokenNameFinder nameFinder,
-      TokenNameFinderEvaluationMonitor ... listeners) {
-    super(listeners);
-    this.nameFinder = nameFinder;
-  }
-
-  /**
-   * Evaluates the given reference {@link NameSample} object.
-   *
-   * This is done by finding the names with the
-   * {@link TokenNameFinder} in the sentence from the reference
-   * {@link NameSample}. The found names are then used to
-   * calculate and update the scores.
-   *
-   * @param reference the reference {@link NameSample}.
-   *
-   * @return the predicted {@link NameSample}.
-   */
-  @Override
-  protected NameSample processSample(NameSample reference) {
-
-    if (reference.isClearAdaptiveDataSet()) {
-      nameFinder.clearAdaptiveData();
+    /**
+     * Initializes the current instance with the given
+     * {@link TokenNameFinder}.
+     *
+     * @param nameFinder the {@link TokenNameFinder} to evaluate.
+     * @param listeners  evaluation sample listeners
+     */
+    public TokenNameFinderEvaluator(TokenNameFinder nameFinder,
+                                    TokenNameFinderEvaluationMonitor... listeners) {
+        super(listeners);
+        this.nameFinder = nameFinder;
     }
 
-    Span[] predictedNames = nameFinder.find(reference.getSentence());
-    Span[] references = reference.getNames();
+    /**
+     * Evaluates the given reference {@link NameSample} object.
+     * <p>
+     * This is done by finding the names with the
+     * {@link TokenNameFinder} in the sentence from the reference
+     * {@link NameSample}. The found names are then used to
+     * calculate and update the scores.
+     *
+     * @param reference the reference {@link NameSample}.
+     * @return the predicted {@link NameSample}.
+     */
+    @Override
+    protected NameSample processSample(NameSample reference) {
 
-    // OPENNLP-396 When evaluating with a file in the old format
-    // the type of the span is null, but must be set to default to match
-    // the output of the name finder.
-    for (int i = 0; i < references.length; i++) {
-      if (references[i].getType() == null) {
-        references[i] = new Span(references[i].getStart(), references[i].getEnd(), "default");
-      }
+        if (reference.isClearAdaptiveDataSet()) {
+            nameFinder.clearAdaptiveData();
+        }
+
+        Span[] predictedNames = nameFinder.find(reference.getSentence());
+        Span[] references = reference.getNames();
+
+        // OPENNLP-396 When evaluating with a file in the old format
+        // the type of the span is null, but must be set to default to match
+        // the output of the name finder.
+        for (int i = 0; i < references.length; i++) {
+            if (references[i].getType() == null) {
+                references[i] = new Span(references[i].getStart(), references[i].getEnd(), "default");
+            }
+        }
+
+        fmeasure.updateScores(references, predictedNames);
+
+        return new NameSample(reference.getSentence(), predictedNames, reference.isClearAdaptiveDataSet());
     }
 
-    fmeasure.updateScores(references, predictedNames);
-
-    return new NameSample(reference.getSentence(), predictedNames, reference.isClearAdaptiveDataSet());
-  }
-
-  public FMeasure getFMeasure() {
-    return fmeasure;
-  }
+    public FMeasure getFMeasure() {
+        return fmeasure;
+    }
 }

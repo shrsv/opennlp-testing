@@ -17,39 +17,38 @@
 
 package opennlp.tools.cmdline.postag;
 
-import java.io.OutputStream;
-
 import opennlp.tools.cmdline.EvaluationErrorPrinter;
 import opennlp.tools.postag.POSSample;
 import opennlp.tools.postag.POSTaggerEvaluationMonitor;
 import opennlp.tools.util.eval.EvaluationMonitor;
 
+import java.io.OutputStream;
+
 /**
  * A default implementation of {@link EvaluationMonitor} that prints
  * to an output stream.
- *
  */
 public class POSEvaluationErrorListener extends
-    EvaluationErrorPrinter<POSSample> implements POSTaggerEvaluationMonitor {
+        EvaluationErrorPrinter<POSSample> implements POSTaggerEvaluationMonitor {
 
-  /**
-   * Creates a listener that will print to System.err
-   */
-  public POSEvaluationErrorListener() {
-    super(System.err);
-  }
+    /**
+     * Creates a listener that will print to System.err
+     */
+    public POSEvaluationErrorListener() {
+        super(System.err);
+    }
 
-  /**
-   * Creates a listener that will print to a given {@link OutputStream}
-   */
-  public POSEvaluationErrorListener(OutputStream outputStream) {
-    super(outputStream);
-  }
+    /**
+     * Creates a listener that will print to a given {@link OutputStream}
+     */
+    public POSEvaluationErrorListener(OutputStream outputStream) {
+        super(outputStream);
+    }
 
-  @Override
-  public void missclassified(POSSample reference, POSSample prediction) {
-    printError(reference.getTags(), prediction.getTags(), reference,
-        prediction, reference.getSentence());
-  }
+    @Override
+    public void missclassified(POSSample reference, POSSample prediction) {
+        printError(reference.getTags(), prediction.getTags(), reference,
+                prediction, reference.getSentence());
+    }
 
 }

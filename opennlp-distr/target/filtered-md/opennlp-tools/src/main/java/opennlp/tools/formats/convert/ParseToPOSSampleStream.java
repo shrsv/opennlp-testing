@@ -17,42 +17,41 @@
 
 package opennlp.tools.formats.convert;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
 import opennlp.tools.parser.Parse;
 import opennlp.tools.postag.POSSample;
 import opennlp.tools.util.FilterObjectStream;
 import opennlp.tools.util.ObjectStream;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * <b>Note:</b> Do not use this class, internal use only!
  */
-public class ParseToPOSSampleStream extends FilterObjectStream<Parse, POSSample>  {
+public class ParseToPOSSampleStream extends FilterObjectStream<Parse, POSSample> {
 
-  public ParseToPOSSampleStream(ObjectStream<Parse> samples) {
-    super(samples);
-  }
-
-  public POSSample read() throws IOException {
-
-    Parse parse = samples.read();
-
-    if (parse != null) {
-
-      List<String> sentence = new ArrayList<>();
-      List<String> tags = new ArrayList<>();
-
-      for (Parse tagNode : parse.getTagNodes()) {
-        sentence.add(tagNode.getCoveredText());
-        tags.add(tagNode.getType());
-      }
-
-      return new POSSample(sentence, tags);
+    public ParseToPOSSampleStream(ObjectStream<Parse> samples) {
+        super(samples);
     }
-    else {
-      return null;
+
+    public POSSample read() throws IOException {
+
+        Parse parse = samples.read();
+
+        if (parse != null) {
+
+            List<String> sentence = new ArrayList<>();
+            List<String> tags = new ArrayList<>();
+
+            for (Parse tagNode : parse.getTagNodes()) {
+                sentence.add(tagNode.getCoveredText());
+                tags.add(tagNode.getType());
+            }
+
+            return new POSSample(sentence, tags);
+        } else {
+            return null;
+        }
     }
-  }
 }

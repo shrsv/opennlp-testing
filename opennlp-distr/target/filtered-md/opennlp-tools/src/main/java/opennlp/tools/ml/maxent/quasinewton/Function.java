@@ -22,9 +22,9 @@ package opennlp.tools.ml.maxent.quasinewton;
  */
 public interface Function {
 
-  int getDimension();
+    int getDimension();
 
-  double valueAt(double[] x);
+    double valueAt(double[] x);
 
-  double[] gradientAt(double[] x);
+    double[] gradientAt(double[] x);
 }

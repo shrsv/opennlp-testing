@@ -17,11 +17,11 @@
 
 package opennlp.tools.util.featuregen;
 
-import java.util.Map;
-
 import opennlp.tools.util.model.ArtifactSerializer;
+
+import java.util.Map;
 
 @Deprecated   // TODO: (OPENNLP-1174) remove back-compat support when it is unnecessary
 public interface ArtifactToSerializerMapper {
-  Map<String, ArtifactSerializer<?>> getArtifactSerializerMapping();
+    Map<String, ArtifactSerializer<?>> getArtifactSerializerMapping();
 }

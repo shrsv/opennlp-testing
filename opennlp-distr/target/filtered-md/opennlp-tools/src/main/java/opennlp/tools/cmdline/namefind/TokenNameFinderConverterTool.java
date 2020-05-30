@@ -26,7 +26,7 @@ import opennlp.tools.namefind.NameSample;
  */
 public class TokenNameFinderConverterTool extends AbstractConverterTool<NameSample> {
 
-  public TokenNameFinderConverterTool() {
-    super(NameSample.class);
-  }
+    public TokenNameFinderConverterTool() {
+        super(NameSample.class);
+    }
 }

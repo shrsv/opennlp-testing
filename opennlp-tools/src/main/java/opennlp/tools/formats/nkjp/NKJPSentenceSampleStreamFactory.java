@@ -17,9 +17,6 @@
 
 package opennlp.tools.formats.nkjp;
 
-import java.io.File;
-import java.io.IOException;
-
 import opennlp.tools.cmdline.ArgumentParser;
 import opennlp.tools.cmdline.CmdLineUtil;
 import opennlp.tools.cmdline.StreamFactoryRegistry;
@@ -28,42 +25,45 @@ import opennlp.tools.formats.AbstractSampleStreamFactory;
 import opennlp.tools.sentdetect.SentenceSample;
 import opennlp.tools.util.ObjectStream;
 
+import java.io.File;
+import java.io.IOException;
+
 public class NKJPSentenceSampleStreamFactory extends AbstractSampleStreamFactory<SentenceSample> {
 
-  interface Parameters extends BasicFormatParams {
-    @ArgumentParser.ParameterDescription(valueName = "text",
-        description = "file containing NKJP text")
-    File getTextFile();
-  }
-
-  public static void registerFactory() {
-    StreamFactoryRegistry.registerFactory(SentenceSample.class,
-        "nkjp", new NKJPSentenceSampleStreamFactory(
-        NKJPSentenceSampleStreamFactory.Parameters.class));
-  }
-
-  protected <P> NKJPSentenceSampleStreamFactory(Class<P> params) {
-    super(params);
-  }
-
-  @Override
-  public ObjectStream<SentenceSample> create(String[] args) {
-
-    Parameters params = ArgumentParser.parse(args, Parameters.class);
-
-    CmdLineUtil.checkInputFile("Data", params.getData());
-
-    CmdLineUtil.checkInputFile("Text", params.getTextFile());
-
-    NKJPSegmentationDocument segDoc = null;
-    NKJPTextDocument textDoc = null;
-    try {
-      segDoc = NKJPSegmentationDocument.parse(params.getData());
-      textDoc = NKJPTextDocument.parse(params.getTextFile());
-    } catch (IOException ex) {
-      CmdLineUtil.handleCreateObjectStreamError(ex);
+    protected <P> NKJPSentenceSampleStreamFactory(Class<P> params) {
+        super(params);
     }
 
-    return new NKJPSentenceSampleStream(segDoc, textDoc);
-  }
+    public static void registerFactory() {
+        StreamFactoryRegistry.registerFactory(SentenceSample.class,
+                "nkjp", new NKJPSentenceSampleStreamFactory(
+                        NKJPSentenceSampleStreamFactory.Parameters.class));
+    }
+
+    @Override
+    public ObjectStream<SentenceSample> create(String[] args) {
+
+        Parameters params = ArgumentParser.parse(args, Parameters.class);
+
+        CmdLineUtil.checkInputFile("Data", params.getData());
+
+        CmdLineUtil.checkInputFile("Text", params.getTextFile());
+
+        NKJPSegmentationDocument segDoc = null;
+        NKJPTextDocument textDoc = null;
+        try {
+            segDoc = NKJPSegmentationDocument.parse(params.getData());
+            textDoc = NKJPTextDocument.parse(params.getTextFile());
+        } catch (IOException ex) {
+            CmdLineUtil.handleCreateObjectStreamError(ex);
+        }
+
+        return new NKJPSentenceSampleStream(segDoc, textDoc);
+    }
+
+    interface Parameters extends BasicFormatParams {
+        @ArgumentParser.ParameterDescription(valueName = "text",
+                description = "file containing NKJP text")
+        File getTextFile();
+    }
 }

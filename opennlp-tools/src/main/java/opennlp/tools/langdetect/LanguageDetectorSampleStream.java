@@ -17,10 +17,10 @@
 
 package opennlp.tools.langdetect;
 
-import java.io.IOException;
-
 import opennlp.tools.util.FilterObjectStream;
 import opennlp.tools.util.ObjectStream;
+
+import java.io.IOException;
 
 /**
  * This class reads in string encoded training samples, parses them and
@@ -32,24 +32,24 @@ import opennlp.tools.util.ObjectStream;
  * Sample line: category-string tab-char document line-break-char(s)<br>
  */
 public class LanguageDetectorSampleStream
-    extends FilterObjectStream<String, LanguageSample> {
+        extends FilterObjectStream<String, LanguageSample> {
 
-  public LanguageDetectorSampleStream(ObjectStream<String> samples) {
-    super(samples);
-  }
-
-  public LanguageSample read() throws IOException {
-    String sampleString;
-    while ((sampleString = samples.read()) != null) {
-      int tabIndex = sampleString.indexOf("\t");
-      if (tabIndex > 0) {
-        String lang = sampleString.substring(0, tabIndex);
-        String context = sampleString.substring(tabIndex + 1);
-
-        return new LanguageSample(new Language(lang), context);
-      }
+    public LanguageDetectorSampleStream(ObjectStream<String> samples) {
+        super(samples);
     }
 
-    return null;
-  }
+    public LanguageSample read() throws IOException {
+        String sampleString;
+        while ((sampleString = samples.read()) != null) {
+            int tabIndex = sampleString.indexOf("\t");
+            if (tabIndex > 0) {
+                String lang = sampleString.substring(0, tabIndex);
+                String context = sampleString.substring(tabIndex + 1);
+
+                return new LanguageSample(new Language(lang), context);
+            }
+        }
+
+        return null;
+    }
 }

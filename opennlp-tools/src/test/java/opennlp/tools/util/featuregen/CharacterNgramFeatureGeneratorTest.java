@@ -17,45 +17,45 @@
 
 package opennlp.tools.util.featuregen;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class CharacterNgramFeatureGeneratorTest {
 
-  private List<String> features;
-  static String[] testSentence = new String[] {"This", "is", "an", "example", "sentence"};
+    static String[] testSentence = new String[]{"This", "is", "an", "example", "sentence"};
+    private List<String> features;
 
-  @Before
-  public void setUp() throws Exception {
-    features = new ArrayList<>();
-  }
-
-  @Test
-  public void testDefault() {
-
-    final int testTokenIndex = 3;
-
-    AdaptiveFeatureGenerator generator = new CharacterNgramFeatureGenerator();
-
-    generator.createFeatures(features, testSentence, testTokenIndex, null);
-
-    assertContainsNg(features,
-            "ex", "exa", "exam", "examp",
-            "xa", "xam", "xamp", "xampl",
-            "am", "amp", "ampl", "ample",
-            "mp", "mpl", "mple",
-            "pl", "ple",
-            "le");
-  }
-
-  private static void assertContainsNg(List<String> features, String... elements) {
-    Assert.assertEquals(elements.length, features.size());
-    for (String e: elements) {
-      Assert.assertTrue(features.contains("ng=" + e));
+    private static void assertContainsNg(List<String> features, String... elements) {
+        Assert.assertEquals(elements.length, features.size());
+        for (String e : elements) {
+            Assert.assertTrue(features.contains("ng=" + e));
+        }
     }
-  }
+
+    @Before
+    public void setUp() throws Exception {
+        features = new ArrayList<>();
+    }
+
+    @Test
+    public void testDefault() {
+
+        final int testTokenIndex = 3;
+
+        AdaptiveFeatureGenerator generator = new CharacterNgramFeatureGenerator();
+
+        generator.createFeatures(features, testSentence, testTokenIndex, null);
+
+        assertContainsNg(features,
+                "ex", "exa", "exam", "examp",
+                "xa", "xam", "xamp", "xampl",
+                "am", "amp", "ampl", "ample",
+                "mp", "mpl", "mple",
+                "pl", "ple",
+                "le");
+    }
 }

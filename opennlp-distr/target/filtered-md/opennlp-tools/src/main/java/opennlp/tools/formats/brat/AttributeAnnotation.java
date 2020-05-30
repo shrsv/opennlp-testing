@@ -19,26 +19,26 @@ package opennlp.tools.formats.brat;
 
 public class AttributeAnnotation extends BratAnnotation {
 
-  private final String attachedTo;
-  private final String value;
+    private final String attachedTo;
+    private final String value;
 
-  protected AttributeAnnotation(String id, String type, String attachedTo,
-      String value) {
-    super(id, type);
-    this.attachedTo = attachedTo;
-    this.value = value;
-  }
+    protected AttributeAnnotation(String id, String type, String attachedTo,
+                                  String value) {
+        super(id, type);
+        this.attachedTo = attachedTo;
+        this.value = value;
+    }
 
-  public String getAttachedTo() {
-    return attachedTo;
-  }
+    public String getAttachedTo() {
+        return attachedTo;
+    }
 
-  public String getValue() {
-    return value;
-  }
+    public String getValue() {
+        return value;
+    }
 
-  @Override
-  public String toString() {
-    return super.toString() + " " + attachedTo + (value != null ? " " + value : "");
-  }
+    @Override
+    public String toString() {
+        return super.toString() + " " + attachedTo + (value != null ? " " + value : "");
+    }
 }

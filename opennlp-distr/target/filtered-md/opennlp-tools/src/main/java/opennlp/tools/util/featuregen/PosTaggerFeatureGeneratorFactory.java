@@ -17,33 +17,32 @@
 
 package opennlp.tools.util.featuregen;
 
-import java.util.Map;
-
+import opennlp.tools.util.InvalidFormatException;
 import org.w3c.dom.Element;
 
-import opennlp.tools.util.InvalidFormatException;
+import java.util.Map;
 
 public class PosTaggerFeatureGeneratorFactory
-    extends GeneratorFactory.AbstractXmlFeatureGeneratorFactory
-    implements GeneratorFactory.XmlFeatureGeneratorFactory {
+        extends GeneratorFactory.AbstractXmlFeatureGeneratorFactory
+        implements GeneratorFactory.XmlFeatureGeneratorFactory {
 
-  public PosTaggerFeatureGeneratorFactory() {
-    super();
-  }
+    public PosTaggerFeatureGeneratorFactory() {
+        super();
+    }
 
-  @Deprecated // TODO: (OPENNLP-1174) just remove when back-compat is no longer needed
-  public AdaptiveFeatureGenerator create(Element generatorElement,
-             FeatureGeneratorResourceProvider resourceManager) {
-    return new PosTaggerFeatureGenerator();
-  }
+    @Deprecated // TODO: (OPENNLP-1174) just remove when back-compat is no longer needed
+    static void register(Map<String, GeneratorFactory.XmlFeatureGeneratorFactory> factoryMap) {
+        factoryMap.put("postagger", new PosTaggerFeatureGeneratorFactory());
+    }
 
-  @Deprecated // TODO: (OPENNLP-1174) just remove when back-compat is no longer needed
-  static void register(Map<String, GeneratorFactory.XmlFeatureGeneratorFactory> factoryMap) {
-    factoryMap.put("postagger", new PosTaggerFeatureGeneratorFactory());
-  }
+    @Deprecated // TODO: (OPENNLP-1174) just remove when back-compat is no longer needed
+    public AdaptiveFeatureGenerator create(Element generatorElement,
+                                           FeatureGeneratorResourceProvider resourceManager) {
+        return new PosTaggerFeatureGenerator();
+    }
 
-  @Override
-  public AdaptiveFeatureGenerator create() throws InvalidFormatException {
-    return new PosTaggerFeatureGenerator();
-  }
+    @Override
+    public AdaptiveFeatureGenerator create() throws InvalidFormatException {
+        return new PosTaggerFeatureGenerator();
+    }
 }

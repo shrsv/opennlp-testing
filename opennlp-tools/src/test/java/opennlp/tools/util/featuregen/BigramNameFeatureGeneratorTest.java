@@ -17,78 +17,78 @@
 
 package opennlp.tools.util.featuregen;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class BigramNameFeatureGeneratorTest {
 
-  private List<String> features;
-  static String[] testSentence = new String[] {"This", "is", "an", "example", "sentence"};
+    static String[] testSentence = new String[]{"This", "is", "an", "example", "sentence"};
+    private List<String> features;
 
-  @Before
-  public void setUp() throws Exception {
-    features = new ArrayList<>();
-  }
+    @Before
+    public void setUp() throws Exception {
+        features = new ArrayList<>();
+    }
 
-  @Test
-  public void testBegin() {
+    @Test
+    public void testBegin() {
 
-    final int testTokenIndex = 0;
+        final int testTokenIndex = 0;
 
-    AdaptiveFeatureGenerator generator = new BigramNameFeatureGenerator();
+        AdaptiveFeatureGenerator generator = new BigramNameFeatureGenerator();
 
-    generator.createFeatures(features, testSentence, testTokenIndex, null);
+        generator.createFeatures(features, testSentence, testTokenIndex, null);
 
-    Assert.assertEquals(2, features.size());
-    Assert.assertEquals("w,nw=This,is", features.get(0));
-    Assert.assertEquals("wc,nc=ic,lc", features.get(1));
-  }
+        Assert.assertEquals(2, features.size());
+        Assert.assertEquals("w,nw=This,is", features.get(0));
+        Assert.assertEquals("wc,nc=ic,lc", features.get(1));
+    }
 
-  @Test
-  public void testMiddle() {
+    @Test
+    public void testMiddle() {
 
-    final int testTokenIndex = 2;
+        final int testTokenIndex = 2;
 
-    AdaptiveFeatureGenerator generator = new BigramNameFeatureGenerator();
+        AdaptiveFeatureGenerator generator = new BigramNameFeatureGenerator();
 
-    generator.createFeatures(features, testSentence, testTokenIndex, null);
+        generator.createFeatures(features, testSentence, testTokenIndex, null);
 
-    Assert.assertEquals(4, features.size());
-    Assert.assertEquals("pw,w=is,an", features.get(0));
-    Assert.assertEquals("pwc,wc=lc,lc", features.get(1));
-    Assert.assertEquals("w,nw=an,example", features.get(2));
-    Assert.assertEquals("wc,nc=lc,lc", features.get(3));
-  }
+        Assert.assertEquals(4, features.size());
+        Assert.assertEquals("pw,w=is,an", features.get(0));
+        Assert.assertEquals("pwc,wc=lc,lc", features.get(1));
+        Assert.assertEquals("w,nw=an,example", features.get(2));
+        Assert.assertEquals("wc,nc=lc,lc", features.get(3));
+    }
 
-  @Test
-  public void testEnd() {
+    @Test
+    public void testEnd() {
 
-    final int testTokenIndex = 4;
+        final int testTokenIndex = 4;
 
-    AdaptiveFeatureGenerator generator = new BigramNameFeatureGenerator();
+        AdaptiveFeatureGenerator generator = new BigramNameFeatureGenerator();
 
-    generator.createFeatures(features, testSentence, testTokenIndex, null);
+        generator.createFeatures(features, testSentence, testTokenIndex, null);
 
-    Assert.assertEquals(2, features.size());
-    Assert.assertEquals("pw,w=example,sentence", features.get(0));
-    Assert.assertEquals("pwc,wc=lc,lc", features.get(1));
-  }
+        Assert.assertEquals(2, features.size());
+        Assert.assertEquals("pw,w=example,sentence", features.get(0));
+        Assert.assertEquals("pwc,wc=lc,lc", features.get(1));
+    }
 
-  @Test
-  public void testShort() {
+    @Test
+    public void testShort() {
 
-    String[] shortSentence = new String[] {"word"};
+        String[] shortSentence = new String[]{"word"};
 
-    final int testTokenIndex = 0;
+        final int testTokenIndex = 0;
 
-    AdaptiveFeatureGenerator generator = new BigramNameFeatureGenerator();
+        AdaptiveFeatureGenerator generator = new BigramNameFeatureGenerator();
 
-    generator.createFeatures(features, shortSentence, testTokenIndex, null);
+        generator.createFeatures(features, shortSentence, testTokenIndex, null);
 
-    Assert.assertEquals(0, features.size());
-  }
+        Assert.assertEquals(0, features.size());
+    }
 }

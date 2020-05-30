@@ -17,29 +17,29 @@
 
 package opennlp.tools.cmdline.sentdetect;
 
-import java.io.File;
-
 import opennlp.tools.cmdline.ArgumentParser.OptionalParameter;
 import opennlp.tools.cmdline.ArgumentParser.ParameterDescription;
 import opennlp.tools.cmdline.params.BasicTrainingParams;
 
+import java.io.File;
+
 /**
  * TrainingParams for Sentence Detector.
- *
+ * <p>
  * Note: Do not use this class, internal use only!
  */
 interface TrainingParams extends BasicTrainingParams {
 
-  @ParameterDescription(valueName = "path", description = "abbreviation dictionary in XML format.")
-  @OptionalParameter
-  File getAbbDict();
+    @ParameterDescription(valueName = "path", description = "abbreviation dictionary in XML format.")
+    @OptionalParameter
+    File getAbbDict();
 
-  @ParameterDescription(valueName = "string", description = "EOS characters.")
-  @OptionalParameter
-  String getEosChars();
+    @ParameterDescription(valueName = "string", description = "EOS characters.")
+    @OptionalParameter
+    String getEosChars();
 
-  @ParameterDescription(valueName = "factoryName",
-      description = "A sub-class of SentenceDetectorFactory where to get implementation and resources.")
-  @OptionalParameter
-  String getFactory();
+    @ParameterDescription(valueName = "factoryName",
+            description = "A sub-class of SentenceDetectorFactory where to get implementation and resources.")
+    @OptionalParameter
+    String getFactory();
 }

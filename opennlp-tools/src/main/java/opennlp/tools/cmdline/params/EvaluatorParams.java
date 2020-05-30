@@ -17,24 +17,24 @@
 
 package opennlp.tools.cmdline.params;
 
-import java.io.File;
-
 import opennlp.tools.cmdline.ArgumentParser.OptionalParameter;
 import opennlp.tools.cmdline.ArgumentParser.ParameterDescription;
 
+import java.io.File;
+
 /**
  * Common evaluation parameters.
- *
+ * <p>
  * Note: Do not use this class, internal use only!
  */
 public interface EvaluatorParams {
 
-  @ParameterDescription(valueName = "model", description = "the model file to be evaluated.")
-  File getModel();
+    @ParameterDescription(valueName = "model", description = "the model file to be evaluated.")
+    File getModel();
 
-  @ParameterDescription(valueName = "true|false",
-      description = "if true will print false negatives and false positives.")
-  @OptionalParameter(defaultValue = "false")
-  Boolean getMisclassified();
+    @ParameterDescription(valueName = "true|false",
+            description = "if true will print false negatives and false positives.")
+    @OptionalParameter(defaultValue = "false")
+    Boolean getMisclassified();
 
 }

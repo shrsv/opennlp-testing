@@ -22,34 +22,34 @@ import opennlp.tools.util.TokenTag;
 
 public class DummyChunkerFactory extends ChunkerFactory {
 
-  public DummyChunkerFactory() {
-  }
-
-  @Override
-  public ChunkerContextGenerator getContextGenerator() {
-    return new DummyContextGenerator();
-  }
-
-  @Override
-  public SequenceValidator<TokenTag> getSequenceValidator() {
-    return new DummySequenceValidator();
-  }
-
-  static class DummyContextGenerator extends DefaultChunkerContextGenerator {
+    public DummyChunkerFactory() {
+    }
 
     @Override
-    public String[] getContext(int i, String[] toks, String[] tags,
-        String[] preds) {
-      return super.getContext(i, toks, tags, preds);
+    public ChunkerContextGenerator getContextGenerator() {
+        return new DummyContextGenerator();
     }
-  }
-
-  static class DummySequenceValidator extends DefaultChunkerSequenceValidator {
 
     @Override
-    public boolean validSequence(int i, TokenTag[] sequence, String[] s,
-        String outcome) {
-      return super.validSequence(i, sequence, s, outcome);
+    public SequenceValidator<TokenTag> getSequenceValidator() {
+        return new DummySequenceValidator();
     }
-  }
+
+    static class DummyContextGenerator extends DefaultChunkerContextGenerator {
+
+        @Override
+        public String[] getContext(int i, String[] toks, String[] tags,
+                                   String[] preds) {
+            return super.getContext(i, toks, tags, preds);
+        }
+    }
+
+    static class DummySequenceValidator extends DefaultChunkerSequenceValidator {
+
+        @Override
+        public boolean validSequence(int i, TokenTag[] sequence, String[] s,
+                                     String outcome) {
+            return super.validSequence(i, sequence, s, outcome);
+        }
+    }
 }

@@ -1,4 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: opennlp.uima.dictionary.DictionaryResourceTest
 -------------------------------------------------------------------------------
-Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.385 s - in opennlp.uima.dictionary.DictionaryResourceTest
+Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.238 s - in opennlp.uima.dictionary.DictionaryResourceTest

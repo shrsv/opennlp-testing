@@ -17,51 +17,50 @@
 
 package opennlp.tools.formats.leipzig;
 
-import java.io.File;
-import java.io.IOException;
-
+import opennlp.tools.util.InvalidFormatException;
 import org.junit.Assert;
 import org.junit.Test;
 
-import opennlp.tools.util.InvalidFormatException;
+import java.io.File;
+import java.io.IOException;
 
 /**
  * Tests for the {@link LeipzigLanguageSampleStream} class.
  */
 public class LeipzigLanguageSampleStreamTest {
 
-  private static String testDataPath = LeipzigLanguageSampleStreamTest.class
-          .getClassLoader().getResource("opennlp/tools/formats/leipzig/samples").getPath();
+    private static String testDataPath = LeipzigLanguageSampleStreamTest.class
+            .getClassLoader().getResource("opennlp/tools/formats/leipzig/samples").getPath();
 
-  @Test
-  public void testReadSentenceFiles() {
+    @Test
+    public void testReadSentenceFiles() {
 
-    int samplesPerLanguage = 2;
-    int sentencesPerSample = 1;
-    try {
-      LeipzigLanguageSampleStream stream = new LeipzigLanguageSampleStream(new File(testDataPath),
-              sentencesPerSample, samplesPerLanguage);
-      int count = 0;
-      while (stream.read() != null)
-        count++;
+        int samplesPerLanguage = 2;
+        int sentencesPerSample = 1;
+        try {
+            LeipzigLanguageSampleStream stream = new LeipzigLanguageSampleStream(new File(testDataPath),
+                    sentencesPerSample, samplesPerLanguage);
+            int count = 0;
+            while (stream.read() != null)
+                count++;
 
-      Assert.assertEquals(4, count);
+            Assert.assertEquals(4, count);
 
-    } catch (IOException e) {
-      Assert.fail();
+        } catch (IOException e) {
+            Assert.fail();
+        }
     }
-  }
 
-  @Test(expected = InvalidFormatException.class)
-  public void testNotEnoughSentences() throws IOException {
-    int samplesPerLanguage = 2;
-    int sentencesPerSample = 2;
+    @Test(expected = InvalidFormatException.class)
+    public void testNotEnoughSentences() throws IOException {
+        int samplesPerLanguage = 2;
+        int sentencesPerSample = 2;
 
-    LeipzigLanguageSampleStream stream =
-            new LeipzigLanguageSampleStream(new File(testDataPath),
-              sentencesPerSample, samplesPerLanguage);
-    while (stream.read() != null);
+        LeipzigLanguageSampleStream stream =
+                new LeipzigLanguageSampleStream(new File(testDataPath),
+                        sentencesPerSample, samplesPerLanguage);
+        while (stream.read() != null) ;
 
-  }
+    }
 
 }

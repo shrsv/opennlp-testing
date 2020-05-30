@@ -22,7 +22,7 @@ import opennlp.tools.tokenize.TokenSample;
 
 public class TokenizerConverterTool extends AbstractConverterTool<TokenSample> {
 
-  public TokenizerConverterTool() {
-    super(TokenSample.class);
-  }
+    public TokenizerConverterTool() {
+        super(TokenSample.class);
+    }
 }

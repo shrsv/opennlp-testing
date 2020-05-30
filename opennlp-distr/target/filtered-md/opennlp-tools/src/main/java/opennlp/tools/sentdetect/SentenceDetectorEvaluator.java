@@ -32,47 +32,47 @@ import opennlp.tools.util.eval.FMeasure;
  */
 public class SentenceDetectorEvaluator extends Evaluator<SentenceSample> {
 
-  private FMeasure fmeasure = new FMeasure();
+    private FMeasure fmeasure = new FMeasure();
 
-  /**
-   * The {@link SentenceDetector} used to predict sentences.
-   */
-  private SentenceDetector sentenceDetector;
+    /**
+     * The {@link SentenceDetector} used to predict sentences.
+     */
+    private SentenceDetector sentenceDetector;
 
-  /**
-   * Initializes the current instance.
-   *
-   * @param sentenceDetector
-   * @param listeners evaluation sample listeners
-   */
-  public SentenceDetectorEvaluator(SentenceDetector sentenceDetector,
-                                   SentenceDetectorEvaluationMonitor... listeners) {
-    super(listeners);
-    this.sentenceDetector = sentenceDetector;
-  }
-
-  private Span[] trimSpans(String document, Span[] spans) {
-    Span[] trimedSpans = new Span[spans.length];
-
-    for (int i = 0; i < spans.length; i++) {
-      trimedSpans[i] = spans[i].trim(document);
+    /**
+     * Initializes the current instance.
+     *
+     * @param sentenceDetector
+     * @param listeners        evaluation sample listeners
+     */
+    public SentenceDetectorEvaluator(SentenceDetector sentenceDetector,
+                                     SentenceDetectorEvaluationMonitor... listeners) {
+        super(listeners);
+        this.sentenceDetector = sentenceDetector;
     }
 
-    return trimedSpans;
-  }
+    private Span[] trimSpans(String document, Span[] spans) {
+        Span[] trimedSpans = new Span[spans.length];
 
-  @Override
-  protected SentenceSample processSample(SentenceSample sample) {
-    Span[] predictions =
-        trimSpans(sample.getDocument(), sentenceDetector.sentPosDetect(sample.getDocument()));
-    Span[] references = trimSpans(sample.getDocument(), sample.getSentences());
+        for (int i = 0; i < spans.length; i++) {
+            trimedSpans[i] = spans[i].trim(document);
+        }
 
-    fmeasure.updateScores(references, predictions);
+        return trimedSpans;
+    }
 
-    return new SentenceSample(sample.getDocument(), predictions);
-  }
+    @Override
+    protected SentenceSample processSample(SentenceSample sample) {
+        Span[] predictions =
+                trimSpans(sample.getDocument(), sentenceDetector.sentPosDetect(sample.getDocument()));
+        Span[] references = trimSpans(sample.getDocument(), sample.getSentences());
 
-  public FMeasure getFMeasure() {
-    return fmeasure;
-  }
+        fmeasure.updateScores(references, predictions);
+
+        return new SentenceSample(sample.getDocument(), predictions);
+    }
+
+    public FMeasure getFMeasure() {
+        return fmeasure;
+    }
 }

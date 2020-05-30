@@ -17,8 +17,6 @@
 
 package opennlp.tools.formats;
 
-import java.io.IOException;
-
 import opennlp.tools.cmdline.ArgumentParser;
 import opennlp.tools.cmdline.CmdLineUtil;
 import opennlp.tools.cmdline.StreamFactoryRegistry;
@@ -29,37 +27,39 @@ import opennlp.tools.util.InputStreamFactory;
 import opennlp.tools.util.ObjectStream;
 import opennlp.tools.util.PlainTextByLineStream;
 
+import java.io.IOException;
+
 
 /**
  * Factory producing OpenNLP {@link SentenceSampleStream}s.
  */
 public class SentenceSampleStreamFactory extends AbstractSampleStreamFactory<SentenceSample> {
 
-  interface Parameters extends BasicFormatParams {
-  }
-
-  public static void registerFactory() {
-    StreamFactoryRegistry.registerFactory(SentenceSample.class,
-        StreamFactoryRegistry.DEFAULT_FORMAT, new SentenceSampleStreamFactory(Parameters.class));
-  }
-
-  protected <P> SentenceSampleStreamFactory(Class<P> params) {
-    super(params);
-  }
-
-  public ObjectStream<SentenceSample> create(String[] args) {
-    Parameters params = ArgumentParser.parse(args, Parameters.class);
-
-    CmdLineUtil.checkInputFile("Data", params.getData());
-    InputStreamFactory sampleDataIn = CmdLineUtil.createInputStreamFactory(params.getData());
-
-    ObjectStream<String> lineStream = null;
-    try {
-      lineStream = new PlainTextByLineStream(sampleDataIn, params.getEncoding());
-    } catch (IOException ex) {
-      CmdLineUtil.handleCreateObjectStreamError(ex);
+    protected <P> SentenceSampleStreamFactory(Class<P> params) {
+        super(params);
     }
 
-    return new SentenceSampleStream(lineStream);
-  }
+    public static void registerFactory() {
+        StreamFactoryRegistry.registerFactory(SentenceSample.class,
+                StreamFactoryRegistry.DEFAULT_FORMAT, new SentenceSampleStreamFactory(Parameters.class));
+    }
+
+    public ObjectStream<SentenceSample> create(String[] args) {
+        Parameters params = ArgumentParser.parse(args, Parameters.class);
+
+        CmdLineUtil.checkInputFile("Data", params.getData());
+        InputStreamFactory sampleDataIn = CmdLineUtil.createInputStreamFactory(params.getData());
+
+        ObjectStream<String> lineStream = null;
+        try {
+            lineStream = new PlainTextByLineStream(sampleDataIn, params.getEncoding());
+        } catch (IOException ex) {
+            CmdLineUtil.handleCreateObjectStreamError(ex);
+        }
+
+        return new SentenceSampleStream(lineStream);
+    }
+
+    interface Parameters extends BasicFormatParams {
+    }
 }

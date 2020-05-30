@@ -17,10 +17,6 @@
 
 package opennlp.tools.cmdline.chunker;
 
-import java.io.IOException;
-import java.util.LinkedList;
-import java.util.List;
-
 import opennlp.tools.chunker.ChunkSample;
 import opennlp.tools.chunker.ChunkerCrossValidator;
 import opennlp.tools.chunker.ChunkerEvaluationMonitor;
@@ -34,65 +30,67 @@ import opennlp.tools.util.eval.EvaluationMonitor;
 import opennlp.tools.util.eval.FMeasure;
 import opennlp.tools.util.model.ModelUtil;
 
+import java.io.IOException;
+import java.util.LinkedList;
+import java.util.List;
+
 public final class ChunkerCrossValidatorTool
-    extends AbstractCrossValidatorTool<ChunkSample, CVToolParams> {
+        extends AbstractCrossValidatorTool<ChunkSample, CVToolParams> {
 
-  interface CVToolParams extends TrainingParams, CVParams, DetailedFMeasureEvaluatorParams {
-  }
-
-  public ChunkerCrossValidatorTool() {
-    super(ChunkSample.class, CVToolParams.class);
-  }
-
-  public String getShortDescription() {
-    return "K-fold cross validator for the chunker";
-  }
-
-  public void run(String format, String[] args) {
-    super.run(format, args);
-
-    mlParams = CmdLineUtil.loadTrainingParameters(params.getParams(), false);
-    if (mlParams == null) {
-      mlParams = ModelUtil.createDefaultTrainingParameters();
+    public ChunkerCrossValidatorTool() {
+        super(ChunkSample.class, CVToolParams.class);
     }
 
-    List<EvaluationMonitor<ChunkSample>> listeners = new LinkedList<>();
-    ChunkerDetailedFMeasureListener detailedFMeasureListener = null;
-    if (params.getMisclassified()) {
-      listeners.add(new ChunkEvaluationErrorListener());
-    }
-    if (params.getDetailedF()) {
-      detailedFMeasureListener = new ChunkerDetailedFMeasureListener();
-      listeners.add(detailedFMeasureListener);
+    public String getShortDescription() {
+        return "K-fold cross validator for the chunker";
     }
 
-    ChunkerCrossValidator validator;
+    public void run(String format, String[] args) {
+        super.run(format, args);
 
-    try {
-      ChunkerFactory chunkerFactory = ChunkerFactory
-          .create(params.getFactory());
+        mlParams = CmdLineUtil.loadTrainingParameters(params.getParams(), false);
+        if (mlParams == null) {
+            mlParams = ModelUtil.createDefaultTrainingParameters();
+        }
 
-      validator = new ChunkerCrossValidator(params.getLang(), mlParams,
-          chunkerFactory,
-          listeners.toArray(new ChunkerEvaluationMonitor[listeners.size()]));
-      validator.evaluate(sampleStream, params.getFolds());
-    }
-    catch (IOException e) {
-      throw createTerminationIOException(e);
-    }
-    finally {
-      try {
-        sampleStream.close();
-      } catch (IOException e) {
-        // sorry that this can fail
-      }
+        List<EvaluationMonitor<ChunkSample>> listeners = new LinkedList<>();
+        ChunkerDetailedFMeasureListener detailedFMeasureListener = null;
+        if (params.getMisclassified()) {
+            listeners.add(new ChunkEvaluationErrorListener());
+        }
+        if (params.getDetailedF()) {
+            detailedFMeasureListener = new ChunkerDetailedFMeasureListener();
+            listeners.add(detailedFMeasureListener);
+        }
+
+        ChunkerCrossValidator validator;
+
+        try {
+            ChunkerFactory chunkerFactory = ChunkerFactory
+                    .create(params.getFactory());
+
+            validator = new ChunkerCrossValidator(params.getLang(), mlParams,
+                    chunkerFactory,
+                    listeners.toArray(new ChunkerEvaluationMonitor[listeners.size()]));
+            validator.evaluate(sampleStream, params.getFolds());
+        } catch (IOException e) {
+            throw createTerminationIOException(e);
+        } finally {
+            try {
+                sampleStream.close();
+            } catch (IOException e) {
+                // sorry that this can fail
+            }
+        }
+
+        if (detailedFMeasureListener == null) {
+            FMeasure result = validator.getFMeasure();
+            System.out.println(result.toString());
+        } else {
+            System.out.println(detailedFMeasureListener.toString());
+        }
     }
 
-    if (detailedFMeasureListener == null) {
-      FMeasure result = validator.getFMeasure();
-      System.out.println(result.toString());
-    } else {
-      System.out.println(detailedFMeasureListener.toString());
+    interface CVToolParams extends TrainingParams, CVParams, DetailedFMeasureEvaluatorParams {
     }
-  }
 }

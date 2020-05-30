@@ -30,8 +30,8 @@ public interface SentenceDetector {
      * Sentence detect a string.
      *
      * @param s The string to be sentence detected.
-     * @return  The String[] with the individual sentences as the array
-     *          elements.
+     * @return The String[] with the individual sentences as the array
+     * elements.
      */
     String[] sentDetect(String s);
 
@@ -39,7 +39,6 @@ public interface SentenceDetector {
      * Sentence detect a string.
      *
      * @param s The string to be sentence detected.
-     *
      * @return The Span[] with the spans (offsets into s) for each
      * detected sentence as the individuals array elements.
      */

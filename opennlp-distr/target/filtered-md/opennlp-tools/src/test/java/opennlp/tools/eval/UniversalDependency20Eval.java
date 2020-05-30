@@ -17,68 +17,63 @@
 
 package opennlp.tools.eval;
 
-import java.io.File;
-import java.io.IOException;
-import java.math.BigInteger;
-
-import org.junit.Assert;
-import org.junit.BeforeClass;
-import org.junit.Test;
-
 import opennlp.tools.formats.conllu.ConlluLemmaSampleStream;
 import opennlp.tools.formats.conllu.ConlluStream;
 import opennlp.tools.formats.conllu.ConlluTagset;
-import opennlp.tools.lemmatizer.LemmaSample;
-import opennlp.tools.lemmatizer.LemmatizerEvaluator;
-import opennlp.tools.lemmatizer.LemmatizerFactory;
-import opennlp.tools.lemmatizer.LemmatizerME;
-import opennlp.tools.lemmatizer.LemmatizerModel;
+import opennlp.tools.lemmatizer.*;
 import opennlp.tools.util.MarkableFileInputStreamFactory;
 import opennlp.tools.util.ObjectStream;
 import opennlp.tools.util.TrainingParameters;
 import opennlp.tools.util.model.ModelUtil;
+import org.junit.Assert;
+import org.junit.BeforeClass;
+import org.junit.Test;
+
+import java.io.File;
+import java.io.IOException;
+import java.math.BigInteger;
 
 public class UniversalDependency20Eval extends AbstractEvalTest {
 
-  private static File SPA_ANCORA_TRAIN;      
-  private static File SPA_ANCORA_DEV;
+    private static File SPA_ANCORA_TRAIN;
+    private static File SPA_ANCORA_DEV;
 
-  @BeforeClass
-  public static void verifyTrainingData() throws Exception {
+    @BeforeClass
+    public static void verifyTrainingData() throws Exception {
 
-    SPA_ANCORA_TRAIN = new File(getOpennlpDataDir(),"ud20/UD_Spanish-AnCora/es_ancora-ud-train.conllu");
-    SPA_ANCORA_DEV = new File(getOpennlpDataDir(),"ud20/UD_Spanish-AnCora/es_ancora-ud-dev.conllu");
+        SPA_ANCORA_TRAIN = new File(getOpennlpDataDir(), "ud20/UD_Spanish-AnCora/es_ancora-ud-train.conllu");
+        SPA_ANCORA_DEV = new File(getOpennlpDataDir(), "ud20/UD_Spanish-AnCora/es_ancora-ud-dev.conllu");
 
-    verifyFileChecksum(SPA_ANCORA_TRAIN.toPath(),
-        new BigInteger("224942804200733453179524127037951530195"));
-    verifyFileChecksum(SPA_ANCORA_DEV.toPath(),
-        new BigInteger("280996187464384493180190898172297941708"));
-  }
+        verifyFileChecksum(SPA_ANCORA_TRAIN.toPath(),
+                new BigInteger("224942804200733453179524127037951530195"));
+        verifyFileChecksum(SPA_ANCORA_DEV.toPath(),
+                new BigInteger("280996187464384493180190898172297941708"));
+    }
 
-  private double trainAndEval(String lang, File trainFile, TrainingParameters params,
-                                     File evalFile) throws IOException {
-    ConlluTagset tagset = ConlluTagset.X;
+    private double trainAndEval(String lang, File trainFile, TrainingParameters params,
+                                File evalFile) throws IOException {
+        ConlluTagset tagset = ConlluTagset.X;
 
-    ObjectStream<LemmaSample> trainSamples = new ConlluLemmaSampleStream(new ConlluStream(
-        new MarkableFileInputStreamFactory(trainFile)), tagset);
+        ObjectStream<LemmaSample> trainSamples = new ConlluLemmaSampleStream(new ConlluStream(
+                new MarkableFileInputStreamFactory(trainFile)), tagset);
 
-    LemmatizerModel model = LemmatizerME.train(lang, trainSamples, params, new LemmatizerFactory());
-    LemmatizerEvaluator evaluator = new LemmatizerEvaluator(new LemmatizerME(model));
+        LemmatizerModel model = LemmatizerME.train(lang, trainSamples, params, new LemmatizerFactory());
+        LemmatizerEvaluator evaluator = new LemmatizerEvaluator(new LemmatizerME(model));
 
-    evaluator.evaluate(new ConlluLemmaSampleStream(new ConlluStream(
-        new MarkableFileInputStreamFactory(evalFile)), tagset));
+        evaluator.evaluate(new ConlluLemmaSampleStream(new ConlluStream(
+                new MarkableFileInputStreamFactory(evalFile)), tagset));
 
-    return evaluator.getWordAccuracy();
-  }
+        return evaluator.getWordAccuracy();
+    }
 
-  @Test
-  public void trainAndEvalSpanishAncora() throws IOException {
-    TrainingParameters params = ModelUtil.createDefaultTrainingParameters();
-    params.put("Threads", "4");
+    @Test
+    public void trainAndEvalSpanishAncora() throws IOException {
+        TrainingParameters params = ModelUtil.createDefaultTrainingParameters();
+        params.put("Threads", "4");
 
-    double wordAccuracy = trainAndEval("spa", SPA_ANCORA_TRAIN,
-        params, SPA_ANCORA_DEV);
+        double wordAccuracy = trainAndEval("spa", SPA_ANCORA_TRAIN,
+                params, SPA_ANCORA_DEV);
 
-    Assert.assertEquals(0.9057341692068787d, wordAccuracy, ACCURACY_DELTA);
-  }
+        Assert.assertEquals(0.9057341692068787d, wordAccuracy, ACCURACY_DELTA);
+    }
 }

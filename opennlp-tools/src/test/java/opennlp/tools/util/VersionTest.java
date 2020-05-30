@@ -25,46 +25,44 @@ import org.junit.Test;
  */
 public class VersionTest {
 
-  @Test
-  public void testParse() {
-    Version referenceVersion = Version.currentVersion();
-    Assert.assertEquals(referenceVersion, Version.parse(referenceVersion.toString()));
+    @Test
+    public void testParse() {
+        Version referenceVersion = Version.currentVersion();
+        Assert.assertEquals(referenceVersion, Version.parse(referenceVersion.toString()));
 
-    Assert.assertEquals(new Version(1,5,2, false),
-        Version.parse("1.5.2-incubating"));
-    Assert.assertEquals(new Version(1,5,2, false),
-        Version.parse("1.5.2"));
-  }
-
-  @Test
-  public void testParseSnapshot() {
-    Assert.assertEquals(new Version(1,5,2, true),
-        Version.parse("1.5.2-incubating-SNAPSHOT"));
-    Assert.assertEquals(new Version(1,5,2, true),
-        Version.parse("1.5.2-SNAPSHOT"));
-  }
-
-  @Test
-  public void testParseInvalidVersion() {
-    try {
-      Version.parse("1.5.");
-    }
-    catch (NumberFormatException e) {
-      return;
+        Assert.assertEquals(new Version(1, 5, 2, false),
+                Version.parse("1.5.2-incubating"));
+        Assert.assertEquals(new Version(1, 5, 2, false),
+                Version.parse("1.5.2"));
     }
 
-    Assert.assertFalse(false);
-  }
-
-  @Test
-  public void testParseInvalidVersion2() {
-    try {
-      Version.parse("1.5");
-    }
-    catch (NumberFormatException e) {
-      return;
+    @Test
+    public void testParseSnapshot() {
+        Assert.assertEquals(new Version(1, 5, 2, true),
+                Version.parse("1.5.2-incubating-SNAPSHOT"));
+        Assert.assertEquals(new Version(1, 5, 2, true),
+                Version.parse("1.5.2-SNAPSHOT"));
     }
 
-    Assert.assertTrue(false);
-  }
+    @Test
+    public void testParseInvalidVersion() {
+        try {
+            Version.parse("1.5.");
+        } catch (NumberFormatException e) {
+            return;
+        }
+
+        Assert.assertFalse(false);
+    }
+
+    @Test
+    public void testParseInvalidVersion2() {
+        try {
+            Version.parse("1.5");
+        } catch (NumberFormatException e) {
+            return;
+        }
+
+        Assert.assertTrue(false);
+    }
 }

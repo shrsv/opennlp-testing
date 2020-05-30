@@ -17,6 +17,11 @@
 
 package opennlp.uima.normalizer;
 
+import opennlp.tools.dictionary.serializer.Attributes;
+import opennlp.tools.dictionary.serializer.DictionaryEntryPersistor;
+import opennlp.tools.dictionary.serializer.Entry;
+import opennlp.tools.util.StringList;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -24,84 +29,80 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import opennlp.tools.dictionary.serializer.Attributes;
-import opennlp.tools.dictionary.serializer.DictionaryEntryPersistor;
-import opennlp.tools.dictionary.serializer.Entry;
-import opennlp.tools.util.StringList;
-
 // lookup a string for given token list
 public class StringDictionary {
 
-  private Map<StringList, String> entries = new HashMap<>();
+    private Map<StringList, String> entries = new HashMap<>();
 
-  public StringDictionary() {
-  }
+    public StringDictionary() {
+    }
 
-  /**
-   * Initializes the current instance.
-   *
-   * @param in
-   * @throws IOException
-   */
-  public StringDictionary(InputStream in) throws IOException {
-    DictionaryEntryPersistor.create(in, entry -> {
-      String valueString = entry.getAttributes().getValue("value");
-      put(entry.getTokens(), valueString);
-    });
-  }
+    /**
+     * Initializes the current instance.
+     *
+     * @param in
+     * @throws IOException
+     */
+    public StringDictionary(InputStream in) throws IOException {
+        DictionaryEntryPersistor.create(in, entry -> {
+            String valueString = entry.getAttributes().getValue("value");
+            put(entry.getTokens(), valueString);
+        });
+    }
 
-  /**
-   * Returns a corresponding String value from hash map.
-   * @param key key to get value with
-   */
-  public String get(StringList key) {
-    return entries.get(key);
-  }
+    /**
+     * Returns a corresponding String value from hash map.
+     *
+     * @param key key to get value with
+     */
+    public String get(StringList key) {
+        return entries.get(key);
+    }
 
-  /**
-   * Adds a new entry to hash map.
-   * @param key key to put
-   * @param value value to put
-   */
-  public void put(StringList key, String value) {
-    entries.put(key, value);
-  }
+    /**
+     * Adds a new entry to hash map.
+     *
+     * @param key   key to put
+     * @param value value to put
+     */
+    public void put(StringList key, String value) {
+        entries.put(key, value);
+    }
 
-  Iterator<StringList> iterator() {
-    return entries.keySet().iterator();
-  }
+    Iterator<StringList> iterator() {
+        return entries.keySet().iterator();
+    }
 
-  /**
-   * Writes the ngram instance to the given {@link OutputStream}.
-   *
-   * @param out
-   * @throws IOException
-   *           if an I/O Error during writing occures
-   */
-  public void serialize(OutputStream out) throws IOException {
-    Iterator<Entry> entryIterator = new Iterator<Entry>() {
-      private Iterator<StringList> mDictionaryIterator = StringDictionary.this.iterator();
+    /**
+     * Writes the ngram instance to the given {@link OutputStream}.
+     *
+     * @param out
+     * @throws IOException if an I/O Error during writing occures
+     */
+    public void serialize(OutputStream out) throws IOException {
+        Iterator<Entry> entryIterator = new Iterator<Entry>() {
+            private Iterator<StringList> mDictionaryIterator = StringDictionary.this.iterator();
 
-      public boolean hasNext() {
-        return mDictionaryIterator.hasNext();
-      }
+            public boolean hasNext() {
+                return mDictionaryIterator.hasNext();
+            }
 
-      public Entry next() {
+            public Entry next() {
 
-        StringList tokens = mDictionaryIterator.next();
+                StringList tokens = mDictionaryIterator.next();
 
-        Attributes attributes = new Attributes();
+                Attributes attributes = new Attributes();
 
-        attributes.setValue("value", get(tokens));
+                attributes.setValue("value", get(tokens));
 
-        return new Entry(tokens, attributes);
-      }
+                return new Entry(tokens, attributes);
+            }
 
-      public void remove() {
-        throw new UnsupportedOperationException();
-      }
-    };
+            public void remove() {
+                throw new UnsupportedOperationException();
+            }
+        };
 
-    DictionaryEntryPersistor.serialize(out, entryIterator, true);
-  }
+        DictionaryEntryPersistor.serialize(out, entryIterator, true);
+    }
 }

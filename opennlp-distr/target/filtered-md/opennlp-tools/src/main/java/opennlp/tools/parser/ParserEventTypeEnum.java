@@ -23,13 +23,13 @@ package opennlp.tools.parser;
  */
 public enum ParserEventTypeEnum {
 
-  BUILD,
-  CHECK,
+    BUILD,
+    CHECK,
 
-  @Deprecated
-  CHUNK,
-  @Deprecated
-  TAG,
+    @Deprecated
+    CHUNK,
+    @Deprecated
+    TAG,
 
-  ATTACH
+    ATTACH
 }

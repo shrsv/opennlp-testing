@@ -17,81 +17,81 @@
 
 package opennlp.tools.formats.brat;
 
+import org.junit.Assert;
+import org.junit.Test;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.junit.Assert;
-import org.junit.Test;
-
 public class BratDocumentTest {
 
-  @Test
-  public void testDocumentWithEntitiesParsing() throws IOException {
+    @Test
+    public void testDocumentWithEntitiesParsing() throws IOException {
 
-    Map<String, String> typeToClassMap = new HashMap<>();
-    BratAnnotationStreamTest.addEntityTypes(typeToClassMap);
-    AnnotationConfiguration config = new AnnotationConfiguration(typeToClassMap);
+        Map<String, String> typeToClassMap = new HashMap<>();
+        BratAnnotationStreamTest.addEntityTypes(typeToClassMap);
+        AnnotationConfiguration config = new AnnotationConfiguration(typeToClassMap);
 
-    InputStream txtIn = BratDocumentTest.class.getResourceAsStream(
-        "/opennlp/tools/formats/brat/voa-with-entities.txt");
+        InputStream txtIn = BratDocumentTest.class.getResourceAsStream(
+                "/opennlp/tools/formats/brat/voa-with-entities.txt");
 
-    InputStream annIn = BratDocumentTest.class.getResourceAsStream(
-        "/opennlp/tools/formats/brat/voa-with-entities.ann");
+        InputStream annIn = BratDocumentTest.class.getResourceAsStream(
+                "/opennlp/tools/formats/brat/voa-with-entities.ann");
 
-    BratDocument doc = BratDocument.parseDocument(config, "voa-with-entities", txtIn, annIn);
+        BratDocument doc = BratDocument.parseDocument(config, "voa-with-entities", txtIn, annIn);
 
-    Assert.assertEquals("voa-with-entities", doc.getId());
-    Assert.assertTrue(doc.getText().startsWith(" U . S .  President "));
-    Assert.assertTrue(doc.getText().endsWith("multinational process . \n"));
+        Assert.assertEquals("voa-with-entities", doc.getId());
+        Assert.assertTrue(doc.getText().startsWith(" U . S .  President "));
+        Assert.assertTrue(doc.getText().endsWith("multinational process . \n"));
 
-    Assert.assertEquals(18, doc.getAnnotations().size());
-    
-    BratAnnotation annotation = doc.getAnnotation("T2");
-    checkNote(annotation, "Barack Obama", "President Obama was the 44th U.S. president");
-    annotation = doc.getAnnotation("T3");
-    checkNote(annotation,"South Korea","The capital of South Korea is Seoul");
-  }
-  
-  private void checkNote(BratAnnotation annotation, String expectedCoveredText, String expectedNote) {
-    Assert.assertTrue(annotation instanceof SpanAnnotation);
-    SpanAnnotation spanAnn = (SpanAnnotation) annotation;
-    Assert.assertEquals(expectedCoveredText, spanAnn.getCoveredText());
-    Assert.assertEquals(expectedNote, spanAnn.getNote());
-  }
+        Assert.assertEquals(18, doc.getAnnotations().size());
 
-  /**
-   * Parse spans that have multiple fragments and ensure they are matched to the correct tokens.
-   *
-   * Test to ensure OPENNLP-1193 works.
-   */
-  @Test
-  public void testSpanWithMultiFragments() throws IOException {
-    Map<String, String> typeToClassMap = new HashMap<>();
-    BratAnnotationStreamTest.addEntityTypes(typeToClassMap);
-    AnnotationConfiguration config = new AnnotationConfiguration(typeToClassMap);
+        BratAnnotation annotation = doc.getAnnotation("T2");
+        checkNote(annotation, "Barack Obama", "President Obama was the 44th U.S. president");
+        annotation = doc.getAnnotation("T3");
+        checkNote(annotation, "South Korea", "The capital of South Korea is Seoul");
+    }
 
-    InputStream txtIn = BratDocumentTest.class.getResourceAsStream(
-        "/opennlp/tools/formats/brat/opennlp-1193.txt");
+    private void checkNote(BratAnnotation annotation, String expectedCoveredText, String expectedNote) {
+        Assert.assertTrue(annotation instanceof SpanAnnotation);
+        SpanAnnotation spanAnn = (SpanAnnotation) annotation;
+        Assert.assertEquals(expectedCoveredText, spanAnn.getCoveredText());
+        Assert.assertEquals(expectedNote, spanAnn.getNote());
+    }
 
-    InputStream annIn = BratDocumentTest.class.getResourceAsStream(
-        "/opennlp/tools/formats/brat/opennlp-1193.ann");
+    /**
+     * Parse spans that have multiple fragments and ensure they are matched to the correct tokens.
+     * <p>
+     * Test to ensure OPENNLP-1193 works.
+     */
+    @Test
+    public void testSpanWithMultiFragments() throws IOException {
+        Map<String, String> typeToClassMap = new HashMap<>();
+        BratAnnotationStreamTest.addEntityTypes(typeToClassMap);
+        AnnotationConfiguration config = new AnnotationConfiguration(typeToClassMap);
 
-    BratDocument doc = BratDocument.parseDocument(config, "opennlp-1193", txtIn, annIn);
+        InputStream txtIn = BratDocumentTest.class.getResourceAsStream(
+                "/opennlp/tools/formats/brat/opennlp-1193.txt");
 
-    SpanAnnotation t1 = (SpanAnnotation) doc.getAnnotation("T1");
-    Assert.assertEquals(t1.getSpans()[0].getStart(), 0);
-    Assert.assertEquals(t1.getSpans()[0].getEnd(), 7);
-    Assert.assertEquals(t1.getSpans()[1].getStart(), 8);
-    Assert.assertEquals(t1.getSpans()[1].getEnd(), 15);
-    Assert.assertEquals(t1.getSpans()[2].getStart(), 17);
-    Assert.assertEquals(t1.getSpans()[2].getEnd(), 24);
+        InputStream annIn = BratDocumentTest.class.getResourceAsStream(
+                "/opennlp/tools/formats/brat/opennlp-1193.ann");
 
-    SpanAnnotation t2 = (SpanAnnotation) doc.getAnnotation("T2");
-    Assert.assertEquals(t2.getSpans()[0].getStart(), 26);
-    Assert.assertEquals(t2.getSpans()[0].getEnd(), 33);
-    Assert.assertEquals(t2.getSpans()[1].getStart(), 40);
-    Assert.assertEquals(t2.getSpans()[1].getEnd(), 47);
-  }
+        BratDocument doc = BratDocument.parseDocument(config, "opennlp-1193", txtIn, annIn);
+
+        SpanAnnotation t1 = (SpanAnnotation) doc.getAnnotation("T1");
+        Assert.assertEquals(t1.getSpans()[0].getStart(), 0);
+        Assert.assertEquals(t1.getSpans()[0].getEnd(), 7);
+        Assert.assertEquals(t1.getSpans()[1].getStart(), 8);
+        Assert.assertEquals(t1.getSpans()[1].getEnd(), 15);
+        Assert.assertEquals(t1.getSpans()[2].getStart(), 17);
+        Assert.assertEquals(t1.getSpans()[2].getEnd(), 24);
+
+        SpanAnnotation t2 = (SpanAnnotation) doc.getAnnotation("T2");
+        Assert.assertEquals(t2.getSpans()[0].getStart(), 26);
+        Assert.assertEquals(t2.getSpans()[0].getEnd(), 33);
+        Assert.assertEquals(t2.getSpans()[1].getStart(), 40);
+        Assert.assertEquals(t2.getSpans()[1].getEnd(), 47);
+    }
 }

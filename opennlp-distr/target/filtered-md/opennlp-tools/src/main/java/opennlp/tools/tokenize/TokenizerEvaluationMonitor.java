@@ -20,6 +20,6 @@ package opennlp.tools.tokenize;
 import opennlp.tools.util.eval.EvaluationMonitor;
 
 public interface TokenizerEvaluationMonitor extends
-    EvaluationMonitor<TokenSample> {
+        EvaluationMonitor<TokenSample> {
 
 }

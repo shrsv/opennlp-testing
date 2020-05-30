@@ -25,48 +25,48 @@ import java.util.Objects;
  * contextual predicates and an outcome.
  */
 public class Event {
-  private final String outcome;
-  private final String[] context;
-  private final float[] values;
+    private final String outcome;
+    private final String[] context;
+    private final float[] values;
 
-  public Event(String outcome, String[] context) {
-    this(outcome,context,null);
-  }
-
-  public Event(String outcome, String[] context, float[] values) {
-    this.outcome = Objects.requireNonNull(outcome, "outcome must not be null");
-    this.context = Objects.requireNonNull(context, "context must not be null");
-    this.values = values;
-  }
-
-  public String getOutcome() {
-    return outcome;
-  }
-
-  public String[] getContext() {
-    return context;
-  }
-
-  public float[] getValues() {
-    return values;
-  }
-
-  public String toString() {
-    StringBuilder sb = new StringBuilder();
-    sb.append(outcome).append(" [");
-    if (context.length > 0) {
-      sb.append(context[0]);
-      if (values != null) {
-        sb.append("=").append(values[0]);
-      }
+    public Event(String outcome, String[] context) {
+        this(outcome, context, null);
     }
-    for (int ci = 1; ci < context.length; ci++) {
-      sb.append(" ").append(context[ci]);
-      if (values != null) {
-        sb.append("=").append(values[ci]);
-      }
+
+    public Event(String outcome, String[] context, float[] values) {
+        this.outcome = Objects.requireNonNull(outcome, "outcome must not be null");
+        this.context = Objects.requireNonNull(context, "context must not be null");
+        this.values = values;
     }
-    sb.append("]");
-    return sb.toString();
-  }
+
+    public String getOutcome() {
+        return outcome;
+    }
+
+    public String[] getContext() {
+        return context;
+    }
+
+    public float[] getValues() {
+        return values;
+    }
+
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(outcome).append(" [");
+        if (context.length > 0) {
+            sb.append(context[0]);
+            if (values != null) {
+                sb.append("=").append(values[0]);
+            }
+        }
+        for (int ci = 1; ci < context.length; ci++) {
+            sb.append(" ").append(context[ci]);
+            if (values != null) {
+                sb.append("=").append(values[ci]);
+            }
+        }
+        sb.append("]");
+        return sb.toString();
+    }
 }

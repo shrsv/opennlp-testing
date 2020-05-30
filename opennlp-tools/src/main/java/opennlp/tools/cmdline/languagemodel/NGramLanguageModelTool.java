@@ -16,88 +16,84 @@
  */
 package opennlp.tools.cmdline.languagemodel;
 
+import opennlp.tools.cmdline.*;
+import opennlp.tools.languagemodel.NGramLanguageModel;
+import opennlp.tools.util.ObjectStream;
+import opennlp.tools.util.PlainTextByLineStream;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Arrays;
-
-import opennlp.tools.cmdline.BasicCmdLineTool;
-import opennlp.tools.cmdline.CLI;
-import opennlp.tools.cmdline.CmdLineUtil;
-import opennlp.tools.cmdline.PerformanceMonitor;
-import opennlp.tools.cmdline.SystemInputStreamFactory;
-import opennlp.tools.languagemodel.NGramLanguageModel;
-import opennlp.tools.util.ObjectStream;
-import opennlp.tools.util.PlainTextByLineStream;
 
 /**
  * Command line tool for {@link opennlp.tools.languagemodel.NGramLanguageModel}.
  */
 public class NGramLanguageModelTool extends BasicCmdLineTool {
 
-  @Override
-  public String getShortDescription() {
-    return "gives the probability and most probable next token(s) of a sequence of tokens in a " +
-        "language model";
-  }
-
-  @Override
-  public void run(String[] args) {
-    File lmFile = new File(args[0]);
-    FileInputStream stream = null;
-    try {
-      stream = new FileInputStream(lmFile);
-      NGramLanguageModel nGramLanguageModel = new NGramLanguageModel(stream);
-
-      ObjectStream<String> lineStream;
-      PerformanceMonitor perfMon = null;
-
-      try {
-        lineStream = new PlainTextByLineStream(new SystemInputStreamFactory(),
-            SystemInputStreamFactory.encoding());
-        perfMon = new PerformanceMonitor(System.err, "nglm");
-        perfMon.start();
-        String line;
-        while ((line = lineStream.read()) != null) {
-          double probability;
-          String[] predicted;
-          // TODO : use a Tokenizer here
-          String[] tokens = line.split(" ");
-          try {
-            probability = nGramLanguageModel.calculateProbability(tokens);
-            predicted = nGramLanguageModel.predictNextTokens(tokens);
-          } catch (Exception e) {
-            System.err.println("Error:" + e.getLocalizedMessage());
-            System.err.println(line);
-            continue;
-          }
-
-          System.out.println(Arrays.toString(tokens) + " -> prob:" + probability + ", " +
-              "next:" + Arrays.toString(predicted));
-
-          perfMon.incrementCounter();
-        }
-      } catch (IOException e) {
-        CmdLineUtil.handleStdinIoError(e);
-      }
-
-      perfMon.stopAndPrintFinalResult();
-
-    } catch (java.io.IOException e) {
-      System.err.println(e.getLocalizedMessage());
-    } finally {
-      if (stream != null) {
-        try {
-          stream.close();
-        } catch (IOException e) {
-          // do nothing
-        }
-      }
+    @Override
+    public String getShortDescription() {
+        return "gives the probability and most probable next token(s) of a sequence of tokens in a " +
+                "language model";
     }
-  }
 
-  @Override
-  public String getHelp() {
-    return "Usage: " + CLI.CMD + " " + getName() + " model";
-  }
+    @Override
+    public void run(String[] args) {
+        File lmFile = new File(args[0]);
+        FileInputStream stream = null;
+        try {
+            stream = new FileInputStream(lmFile);
+            NGramLanguageModel nGramLanguageModel = new NGramLanguageModel(stream);
+
+            ObjectStream<String> lineStream;
+            PerformanceMonitor perfMon = null;
+
+            try {
+                lineStream = new PlainTextByLineStream(new SystemInputStreamFactory(),
+                        SystemInputStreamFactory.encoding());
+                perfMon = new PerformanceMonitor(System.err, "nglm");
+                perfMon.start();
+                String line;
+                while ((line = lineStream.read()) != null) {
+                    double probability;
+                    String[] predicted;
+                    // TODO : use a Tokenizer here
+                    String[] tokens = line.split(" ");
+                    try {
+                        probability = nGramLanguageModel.calculateProbability(tokens);
+                        predicted = nGramLanguageModel.predictNextTokens(tokens);
+                    } catch (Exception e) {
+                        System.err.println("Error:" + e.getLocalizedMessage());
+                        System.err.println(line);
+                        continue;
+                    }
+
+                    System.out.println(Arrays.toString(tokens) + " -> prob:" + probability + ", " +
+                            "next:" + Arrays.toString(predicted));
+
+                    perfMon.incrementCounter();
+                }
+            } catch (IOException e) {
+                CmdLineUtil.handleStdinIoError(e);
+            }
+
+            perfMon.stopAndPrintFinalResult();
+
+        } catch (java.io.IOException e) {
+            System.err.println(e.getLocalizedMessage());
+        } finally {
+            if (stream != null) {
+                try {
+                    stream.close();
+                } catch (IOException e) {
+                    // do nothing
+                }
+            }
+        }
+    }
+
+    @Override
+    public String getHelp() {
+        return "Usage: " + CLI.CMD + " " + getName() + " model";
+    }
 }

@@ -31,26 +31,26 @@ import opennlp.tools.util.ObjectStream;
  */
 public class ParseToSentenceSampleStreamFactory extends DetokenizerSampleStreamFactory<SentenceSample> {
 
-  interface Parameters extends ParseSampleStreamFactory.Parameters, DetokenizerParameter {
-  }
+    private ParseToSentenceSampleStreamFactory() {
+        super(Parameters.class);
+    }
 
-  private ParseToSentenceSampleStreamFactory() {
-    super(Parameters.class);
-  }
+    public static void registerFactory() {
+        StreamFactoryRegistry.registerFactory(SentenceSample.class,
+                "parse", new ParseToSentenceSampleStreamFactory());
+    }
 
-  public ObjectStream<SentenceSample> create(String[] args) {
-    Parameters params = ArgumentParser.parse(args, Parameters.class);
+    public ObjectStream<SentenceSample> create(String[] args) {
+        Parameters params = ArgumentParser.parse(args, Parameters.class);
 
-    ObjectStream<Parse> parseSampleStream = StreamFactoryRegistry.getFactory(Parse.class,
-        StreamFactoryRegistry.DEFAULT_FORMAT).create(
-        ArgumentParser.filter(args, ParseSampleStreamFactory.Parameters.class));
+        ObjectStream<Parse> parseSampleStream = StreamFactoryRegistry.getFactory(Parse.class,
+                StreamFactoryRegistry.DEFAULT_FORMAT).create(
+                ArgumentParser.filter(args, ParseSampleStreamFactory.Parameters.class));
 
-    return new POSToSentenceSampleStream(createDetokenizer(params),
-        new ParseToPOSSampleStream(parseSampleStream), 30);
-  }
+        return new POSToSentenceSampleStream(createDetokenizer(params),
+                new ParseToPOSSampleStream(parseSampleStream), 30);
+    }
 
-  public static void registerFactory() {
-    StreamFactoryRegistry.registerFactory(SentenceSample.class,
-        "parse", new ParseToSentenceSampleStreamFactory());
-  }
+    interface Parameters extends ParseSampleStreamFactory.Parameters, DetokenizerParameter {
+    }
 }

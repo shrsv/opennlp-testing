@@ -17,54 +17,48 @@
 
 package opennlp.tools.namefind;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
 import opennlp.tools.util.FilterObjectStream;
 import opennlp.tools.util.ObjectStream;
 import opennlp.tools.util.Span;
+
+import java.io.IOException;
+import java.util.*;
 
 /**
  * A stream which removes Name Samples which do not have a certain type.
  */
 public class NameSampleTypeFilter extends FilterObjectStream<NameSample, NameSample> {
 
-  private final Set<String> types;
+    private final Set<String> types;
 
-  public NameSampleTypeFilter(String[] types, ObjectStream<NameSample> samples) {
-    super(samples);
-    this.types = Collections.unmodifiableSet(new HashSet<>(Arrays.asList(types)));
-  }
+    public NameSampleTypeFilter(String[] types, ObjectStream<NameSample> samples) {
+        super(samples);
+        this.types = Collections.unmodifiableSet(new HashSet<>(Arrays.asList(types)));
+    }
 
-  public NameSampleTypeFilter(Set<String> types, ObjectStream<NameSample> samples) {
-    super(samples);
-    this.types = Collections.unmodifiableSet(new HashSet<>(types));
-  }
+    public NameSampleTypeFilter(Set<String> types, ObjectStream<NameSample> samples) {
+        super(samples);
+        this.types = Collections.unmodifiableSet(new HashSet<>(types));
+    }
 
-  public NameSample read() throws IOException {
+    public NameSample read() throws IOException {
 
-    NameSample sample = samples.read();
+        NameSample sample = samples.read();
 
-    if (sample != null) {
+        if (sample != null) {
 
-      List<Span> filteredNames = new ArrayList<>();
+            List<Span> filteredNames = new ArrayList<>();
 
-      for (Span name : sample.getNames()) {
-        if (types.contains(name.getType())) {
-          filteredNames.add(name);
+            for (Span name : sample.getNames()) {
+                if (types.contains(name.getType())) {
+                    filteredNames.add(name);
+                }
+            }
+
+            return new NameSample(sample.getId(), sample.getSentence(),
+                    filteredNames.toArray(new Span[filteredNames.size()]), null, sample.isClearAdaptiveDataSet());
+        } else {
+            return null;
         }
-      }
-
-      return new NameSample(sample.getId(), sample.getSentence(),
-          filteredNames.toArray(new Span[filteredNames.size()]), null, sample.isClearAdaptiveDataSet());
     }
-    else {
-      return null;
-    }
-  }
 }

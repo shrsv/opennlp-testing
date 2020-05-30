@@ -17,12 +17,6 @@
 
 package opennlp.tools.cmdline.namefind;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.nio.charset.Charset;
-
 import opennlp.tools.cmdline.ArgumentParser.OptionalParameter;
 import opennlp.tools.cmdline.ArgumentParser.ParameterDescription;
 import opennlp.tools.cmdline.BasicCmdLineTool;
@@ -34,6 +28,12 @@ import opennlp.tools.util.InputStreamFactory;
 import opennlp.tools.util.ObjectStream;
 import opennlp.tools.util.StringList;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.charset.Charset;
+
 /**
  * This tool helps create a loadable dictionary for the {@code NameFinder},
  * from data collected from US Census data.
@@ -44,88 +44,88 @@ import opennlp.tools.util.StringList;
  */
 public class CensusDictionaryCreatorTool extends BasicCmdLineTool {
 
-  /**
-   * Create a list of expected parameters.
-   */
-  interface Parameters {
+    /**
+     * Creates a dictionary.
+     *
+     * @param sampleStream stream of samples.
+     * @return a {@code Dictionary} class containing the name dictionary
+     * built from the input file.
+     * @throws IOException IOException
+     */
+    public static Dictionary createDictionary(ObjectStream<StringList> sampleStream) throws IOException {
 
-    @ParameterDescription(valueName = "code")
-    @OptionalParameter(defaultValue = "eng")
-    String getLang();
+        Dictionary mNameDictionary = new Dictionary(true);
+        StringList entry;
 
-    @ParameterDescription(valueName = "charsetName")
-    @OptionalParameter(defaultValue = "UTF-8")
-    String getEncoding();
+        entry = sampleStream.read();
+        while (entry != null) {
+            if (!mNameDictionary.contains(entry)) {
+                mNameDictionary.put(entry);
+            }
+            entry = sampleStream.read();
+        }
 
-    @ParameterDescription(valueName = "censusDict")
-    String getCensusData();
-
-    @ParameterDescription(valueName = "dict")
-    String getDict();
-  }
-
-  public String getShortDescription() {
-    return "Converts 1990 US Census names into a dictionary";
-  }
-
-
-  public String getHelp() {
-    return getBasicHelp(Parameters.class);
-  }
-
-  /**
-   * Creates a dictionary.
-   *
-   * @param sampleStream stream of samples.
-   * @return a {@code Dictionary} class containing the name dictionary
-   *     built from the input file.
-   * @throws IOException IOException
-   */
-  public static Dictionary createDictionary(ObjectStream<StringList> sampleStream) throws IOException {
-
-    Dictionary mNameDictionary = new Dictionary(true);
-    StringList entry;
-
-    entry = sampleStream.read();
-    while (entry != null) {
-      if (!mNameDictionary.contains(entry)) {
-        mNameDictionary.put(entry);
-      }
-      entry = sampleStream.read();
+        return mNameDictionary;
     }
 
-    return mNameDictionary;
-  }
-
-  public void run(String[] args) {
-    Parameters params = validateAndParseParams(args, Parameters.class);
-
-    File testData = new File(params.getCensusData());
-    File dictOutFile = new File(params.getDict());
-
-    CmdLineUtil.checkInputFile("Name data", testData);
-    CmdLineUtil.checkOutputFile("Dictionary file", dictOutFile);
-
-    InputStreamFactory sampleDataIn = CmdLineUtil.createInputStreamFactory(testData);
-
-    Dictionary mDictionary;
-    try (
-        ObjectStream<StringList> sampleStream = new NameFinderCensus90NameStream(
-            sampleDataIn, Charset.forName(params.getEncoding()))) {
-      System.out.println("Creating Dictionary...");
-      mDictionary = createDictionary(sampleStream);
-    } catch (IOException e) {
-      throw new TerminateToolException(-1, "IO error while reading training data or indexing data: "
-          + e.getMessage(), e);
+    public String getShortDescription() {
+        return "Converts 1990 US Census names into a dictionary";
     }
 
-    System.out.println("Saving Dictionary...");
 
-    try (OutputStream out = new FileOutputStream(dictOutFile)) {
-      mDictionary.serialize(out);
-    } catch (IOException e) {
-      throw new TerminateToolException(-1, "IO error while writing dictionary file: "
-          + e.getMessage(), e);
+    public String getHelp() {
+        return getBasicHelp(Parameters.class);
     }
-  }
+
+    public void run(String[] args) {
+        Parameters params = validateAndParseParams(args, Parameters.class);
+
+        File testData = new File(params.getCensusData());
+        File dictOutFile = new File(params.getDict());
+
+        CmdLineUtil.checkInputFile("Name data", testData);
+        CmdLineUtil.checkOutputFile("Dictionary file", dictOutFile);
+
+        InputStreamFactory sampleDataIn = CmdLineUtil.createInputStreamFactory(testData);
+
+        Dictionary mDictionary;
+        try (
+                ObjectStream<StringList> sampleStream = new NameFinderCensus90NameStream(
+                        sampleDataIn, Charset.forName(params.getEncoding()))) {
+            System.out.println("Creating Dictionary...");
+            mDictionary = createDictionary(sampleStream);
+        } catch (IOException e) {
+            throw new TerminateToolException(-1, "IO error while reading training data or indexing data: "
+                    + e.getMessage(), e);
+        }
+
+        System.out.println("Saving Dictionary...");
+
+        try (OutputStream out = new FileOutputStream(dictOutFile)) {
+            mDictionary.serialize(out);
+        } catch (IOException e) {
+            throw new TerminateToolException(-1, "IO error while writing dictionary file: "
+                    + e.getMessage(), e);
+        }
+    }
+
+    /**
+     * Create a list of expected parameters.
+     */
+    interface Parameters {
+
+        @ParameterDescription(valueName = "code")
+        @OptionalParameter(defaultValue = "eng")
+        String getLang();
+
+        @ParameterDescription(valueName = "charsetName")
+        @OptionalParameter(defaultValue = "UTF-8")
+        String getEncoding();
+
+        @ParameterDescription(valueName = "censusDict")
+        String getCensusData();
+
+        @ParameterDescription(valueName = "dict")
+        String getDict();
+    }
 }

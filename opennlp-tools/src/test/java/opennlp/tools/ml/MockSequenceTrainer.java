@@ -17,27 +17,27 @@
 
 package opennlp.tools.ml;
 
-import java.io.IOException;
-import java.util.Map;
-
 import opennlp.tools.ml.model.AbstractModel;
 import opennlp.tools.ml.model.SequenceStream;
 import opennlp.tools.util.TrainingParameters;
 
+import java.io.IOException;
+import java.util.Map;
+
 public class MockSequenceTrainer implements EventModelSequenceTrainer {
 
-  public AbstractModel train(SequenceStream events) throws IOException {
-    return null;
-  }
+    public AbstractModel train(SequenceStream events) throws IOException {
+        return null;
+    }
 
-  @Override
-  public void init(Map<String, String> trainParams,
-      Map<String, String> reportMap) {
-  }
+    @Override
+    public void init(Map<String, String> trainParams,
+                     Map<String, String> reportMap) {
+    }
 
-  @Override
-  public void init(TrainingParameters trainParams,
-      Map<String, String> reportMap) {
-  }
-  
+    @Override
+    public void init(TrainingParameters trainParams,
+                     Map<String, String> reportMap) {
+    }
+
 }

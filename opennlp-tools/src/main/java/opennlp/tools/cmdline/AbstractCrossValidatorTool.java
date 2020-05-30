@@ -22,13 +22,13 @@ package opennlp.tools.cmdline;
  */
 public abstract class AbstractCrossValidatorTool<T, P> extends AbstractTrainerTool<T, P> {
 
-  /**
-   * Constructor with type parameters.
-   *
-   * @param sampleType class of the template parameter
-   * @param params     interface with parameters
-   */
-  protected AbstractCrossValidatorTool(Class<T> sampleType, Class<P> params) {
-    super(sampleType, params);
-  }
+    /**
+     * Constructor with type parameters.
+     *
+     * @param sampleType class of the template parameter
+     * @param params     interface with parameters
+     */
+    protected AbstractCrossValidatorTool(Class<T> sampleType, Class<P> params) {
+        super(sampleType, params);
+    }
 }

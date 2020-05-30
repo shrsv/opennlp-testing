@@ -19,8 +19,8 @@ package opennlp.tools.util.eval;
 
 public interface EvaluationMonitor<T> {
 
-  void correctlyClassified(T reference, T prediction);
+    void correctlyClassified(T reference, T prediction);
 
-  void missclassified(T reference, T prediction);
+    void missclassified(T reference, T prediction);
 
 }

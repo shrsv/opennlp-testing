@@ -17,76 +17,74 @@
 
 package opennlp.morfologik.tagdict;
 
+import morfologik.stemming.Dictionary;
+import opennlp.morfologik.builder.POSDictionayBuilderTest;
+import opennlp.tools.postag.TagDictionary;
+import org.junit.Assert;
+import org.junit.Test;
+
 import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.List;
 
-import morfologik.stemming.Dictionary;
-
-import org.junit.Assert;
-import org.junit.Test;
-
-import opennlp.morfologik.builder.POSDictionayBuilderTest;
-import opennlp.tools.postag.TagDictionary;
-
 public class MorfologikTagDictionaryTest {
 
-  @Test
-  public void testNoLemma() throws Exception {
-    MorfologikTagDictionary dict = createDictionary(false);
+    @Test
+    public void testNoLemma() throws Exception {
+        MorfologikTagDictionary dict = createDictionary(false);
 
-    List<String> tags = Arrays.asList(dict.getTags("carro"));
-    Assert.assertEquals(1, tags.size());
-    Assert.assertTrue(tags.contains("NOUN"));
-  }
+        List<String> tags = Arrays.asList(dict.getTags("carro"));
+        Assert.assertEquals(1, tags.size());
+        Assert.assertTrue(tags.contains("NOUN"));
+    }
 
-  @Test
-  public void testPOSDictionaryInsensitive() throws Exception {
-    TagDictionary dict = createDictionary(false);
+    @Test
+    public void testPOSDictionaryInsensitive() throws Exception {
+        TagDictionary dict = createDictionary(false);
 
-    List<String> tags = Arrays.asList(dict.getTags("casa"));
-    Assert.assertEquals(2, tags.size());
-    Assert.assertTrue(tags.contains("NOUN"));
-    Assert.assertTrue(tags.contains("V"));
+        List<String> tags = Arrays.asList(dict.getTags("casa"));
+        Assert.assertEquals(2, tags.size());
+        Assert.assertTrue(tags.contains("NOUN"));
+        Assert.assertTrue(tags.contains("V"));
 
-    // this is the behavior of case insensitive dictionary
-    // if we search it using case insensitive, Casa as a proper noun
-    // should be lower case in the dictionary
-    tags = Arrays.asList(dict.getTags("Casa"));
-    Assert.assertEquals(2, tags.size());
-    Assert.assertTrue(tags.contains("NOUN"));
-    Assert.assertTrue(tags.contains("V"));
-  }
+        // this is the behavior of case insensitive dictionary
+        // if we search it using case insensitive, Casa as a proper noun
+        // should be lower case in the dictionary
+        tags = Arrays.asList(dict.getTags("Casa"));
+        Assert.assertEquals(2, tags.size());
+        Assert.assertTrue(tags.contains("NOUN"));
+        Assert.assertTrue(tags.contains("V"));
+    }
 
-  @Test
-  public void testPOSDictionarySensitive() throws Exception {
-    TagDictionary dict = createDictionary(true);
+    @Test
+    public void testPOSDictionarySensitive() throws Exception {
+        TagDictionary dict = createDictionary(true);
 
-    List<String> tags = Arrays.asList(dict.getTags("casa"));
-    Assert.assertEquals(2, tags.size());
-    Assert.assertTrue(tags.contains("NOUN"));
-    Assert.assertTrue(tags.contains("V"));
+        List<String> tags = Arrays.asList(dict.getTags("casa"));
+        Assert.assertEquals(2, tags.size());
+        Assert.assertTrue(tags.contains("NOUN"));
+        Assert.assertTrue(tags.contains("V"));
 
-    // this is the behavior of case insensitive dictionary
-    // if we search it using case insensitive, Casa as a proper noun
-    // should be lower case in the dictionary
-    tags = Arrays.asList(dict.getTags("Casa"));
-    Assert.assertEquals(1, tags.size());
-    Assert.assertTrue(tags.contains("PROP"));
+        // this is the behavior of case insensitive dictionary
+        // if we search it using case insensitive, Casa as a proper noun
+        // should be lower case in the dictionary
+        tags = Arrays.asList(dict.getTags("Casa"));
+        Assert.assertEquals(1, tags.size());
+        Assert.assertTrue(tags.contains("PROP"));
 
-  }
+    }
 
-  private MorfologikTagDictionary createDictionary(boolean caseSensitive)
-      throws Exception {
-    return this.createDictionary(caseSensitive, null);
-  }
+    private MorfologikTagDictionary createDictionary(boolean caseSensitive)
+            throws Exception {
+        return this.createDictionary(caseSensitive, null);
+    }
 
-  private MorfologikTagDictionary createDictionary(boolean caseSensitive,
-      List<String> constant) throws Exception {
-    Path output = POSDictionayBuilderTest.createMorfologikDictionary();
-    output.toFile().deleteOnExit();
-    Dictionary dic = Dictionary.read(output);
-    return new MorfologikTagDictionary(dic, caseSensitive);
-  }
+    private MorfologikTagDictionary createDictionary(boolean caseSensitive,
+                                                     List<String> constant) throws Exception {
+        Path output = POSDictionayBuilderTest.createMorfologikDictionary();
+        output.toFile().deleteOnExit();
+        Dictionary dic = Dictionary.read(output);
+        return new MorfologikTagDictionary(dic, caseSensitive);
+    }
 
 }

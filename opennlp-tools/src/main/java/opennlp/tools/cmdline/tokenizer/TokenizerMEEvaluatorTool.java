@@ -17,8 +17,6 @@
 
 package opennlp.tools.cmdline.tokenizer;
 
-import java.io.IOException;
-
 import opennlp.tools.cmdline.AbstractEvaluatorTool;
 import opennlp.tools.cmdline.TerminateToolException;
 import opennlp.tools.cmdline.params.EvaluatorParams;
@@ -28,52 +26,54 @@ import opennlp.tools.tokenize.TokenizerEvaluationMonitor;
 import opennlp.tools.tokenize.TokenizerEvaluator;
 import opennlp.tools.tokenize.TokenizerModel;
 
+import java.io.IOException;
+
 public final class TokenizerMEEvaluatorTool
-    extends AbstractEvaluatorTool<TokenSample, EvalToolParams> {
+        extends AbstractEvaluatorTool<TokenSample, EvalToolParams> {
 
-  interface EvalToolParams extends EvaluatorParams {
-  }
-
-  public TokenizerMEEvaluatorTool() {
-    super(TokenSample.class, EvalToolParams.class);
-  }
-
-  public String getShortDescription() {
-    return "evaluator for the learnable tokenizer";
-  }
-
-  public void run(String format, String[] args) {
-    super.run(format, args);
-
-    TokenizerModel model = new TokenizerModelLoader().load(params.getModel());
-
-    TokenizerEvaluationMonitor misclassifiedListener = null;
-    if (params.getMisclassified()) {
-      misclassifiedListener = new TokenEvaluationErrorListener();
+    public TokenizerMEEvaluatorTool() {
+        super(TokenSample.class, EvalToolParams.class);
     }
 
-    TokenizerEvaluator evaluator = new TokenizerEvaluator(
-        new opennlp.tools.tokenize.TokenizerME(model), misclassifiedListener);
-
-    System.out.print("Evaluating ... ");
-
-    try {
-      evaluator.evaluate(sampleStream);
-    } catch (IOException e) {
-      System.err.println("failed");
-      throw new TerminateToolException(-1, "IO error while reading test data: " + e.getMessage(), e);
-    } finally {
-      try {
-        sampleStream.close();
-      } catch (IOException e) {
-        // sorry that this can fail
-      }
+    public String getShortDescription() {
+        return "evaluator for the learnable tokenizer";
     }
 
-    System.out.println("done");
+    public void run(String format, String[] args) {
+        super.run(format, args);
 
-    System.out.println();
+        TokenizerModel model = new TokenizerModelLoader().load(params.getModel());
 
-    System.out.println(evaluator.getFMeasure());
-  }
+        TokenizerEvaluationMonitor misclassifiedListener = null;
+        if (params.getMisclassified()) {
+            misclassifiedListener = new TokenEvaluationErrorListener();
+        }
+
+        TokenizerEvaluator evaluator = new TokenizerEvaluator(
+                new opennlp.tools.tokenize.TokenizerME(model), misclassifiedListener);
+
+        System.out.print("Evaluating ... ");
+
+        try {
+            evaluator.evaluate(sampleStream);
+        } catch (IOException e) {
+            System.err.println("failed");
+            throw new TerminateToolException(-1, "IO error while reading test data: " + e.getMessage(), e);
+        } finally {
+            try {
+                sampleStream.close();
+            } catch (IOException e) {
+                // sorry that this can fail
+            }
+        }
+
+        System.out.println("done");
+
+        System.out.println();
+
+        System.out.println(evaluator.getFMeasure());
+    }
+
+    interface EvalToolParams extends EvaluatorParams {
+    }
 }

@@ -17,52 +17,51 @@
 
 package opennlp.tools.convert;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.charset.Charset;
-import java.util.Arrays;
-import java.util.List;
-
+import opennlp.tools.formats.DirectorySampleStream;
+import opennlp.tools.formats.convert.FileToStringSampleStream;
 import org.apache.commons.io.FileUtils;
 import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
-import opennlp.tools.formats.DirectorySampleStream;
-import opennlp.tools.formats.convert.FileToStringSampleStream;
+import java.io.File;
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.util.Arrays;
+import java.util.List;
 
 public class FileToStringSampleStreamTest {
 
-  @Rule
-  public TemporaryFolder directory = new TemporaryFolder();
+    @Rule
+    public TemporaryFolder directory = new TemporaryFolder();
 
-  @Test
-  public void readFileTest() throws IOException {
+    @Test
+    public void readFileTest() throws IOException {
 
-    final String sentence1 = "This is a sentence.";
-    final String sentence2 = "This is another sentence.";
-  
-    List<String> sentences = Arrays.asList(sentence1, sentence2);
-    
-    DirectorySampleStream directorySampleStream =
-        new DirectorySampleStream(directory.getRoot(), null, false);
-      
-    File tempFile1 = directory.newFile();
-    FileUtils.writeStringToFile(tempFile1, sentence1);
-    
-    File tempFile2 = directory.newFile();
-    FileUtils.writeStringToFile(tempFile2, sentence2);
-    
-    try (FileToStringSampleStream stream =
-        new FileToStringSampleStream(directorySampleStream, Charset.defaultCharset())) {
+        final String sentence1 = "This is a sentence.";
+        final String sentence2 = "This is another sentence.";
 
-      String read = stream.read();
-      Assert.assertTrue(sentences.contains(read));
+        List<String> sentences = Arrays.asList(sentence1, sentence2);
 
-      read = stream.read();
-      Assert.assertTrue(sentences.contains(read));
+        DirectorySampleStream directorySampleStream =
+                new DirectorySampleStream(directory.getRoot(), null, false);
+
+        File tempFile1 = directory.newFile();
+        FileUtils.writeStringToFile(tempFile1, sentence1);
+
+        File tempFile2 = directory.newFile();
+        FileUtils.writeStringToFile(tempFile2, sentence2);
+
+        try (FileToStringSampleStream stream =
+                     new FileToStringSampleStream(directorySampleStream, Charset.defaultCharset())) {
+
+            String read = stream.read();
+            Assert.assertTrue(sentences.contains(read));
+
+            read = stream.read();
+            Assert.assertTrue(sentences.contains(read));
+        }
     }
-  }
 
 }

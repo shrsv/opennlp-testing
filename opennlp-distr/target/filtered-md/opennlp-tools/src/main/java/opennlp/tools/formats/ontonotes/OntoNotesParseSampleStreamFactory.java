@@ -17,9 +17,6 @@
 
 package opennlp.tools.formats.ontonotes;
 
-import java.io.File;
-import java.nio.charset.StandardCharsets;
-
 import opennlp.tools.cmdline.ArgumentParser;
 import opennlp.tools.cmdline.StreamFactoryRegistry;
 import opennlp.tools.formats.AbstractSampleStreamFactory;
@@ -28,36 +25,39 @@ import opennlp.tools.formats.convert.FileToStringSampleStream;
 import opennlp.tools.parser.Parse;
 import opennlp.tools.util.ObjectStream;
 
+import java.io.File;
+import java.nio.charset.StandardCharsets;
+
 public class OntoNotesParseSampleStreamFactory extends AbstractSampleStreamFactory<Parse> {
 
-  protected OntoNotesParseSampleStreamFactory() {
-    super(OntoNotesFormatParameters.class);
-  }
+    protected OntoNotesParseSampleStreamFactory() {
+        super(OntoNotesFormatParameters.class);
+    }
 
-  public ObjectStream<Parse> create(String[] args) {
+    public static void registerFactory() {
+        StreamFactoryRegistry.registerFactory(Parse.class, "ontonotes",
+                new OntoNotesParseSampleStreamFactory());
+    }
 
-    OntoNotesFormatParameters params = ArgumentParser.parse(args, OntoNotesFormatParameters.class);
+    public ObjectStream<Parse> create(String[] args) {
 
-    ObjectStream<File> documentStream = new DirectorySampleStream(new File(
-        params.getOntoNotesDir()),
-        file -> {
-          if (file.isFile()) {
-            return file.getName().endsWith(".parse");
-          }
+        OntoNotesFormatParameters params = ArgumentParser.parse(args, OntoNotesFormatParameters.class);
 
-          return file.isDirectory();
-        }, true);
+        ObjectStream<File> documentStream = new DirectorySampleStream(new File(
+                params.getOntoNotesDir()),
+                file -> {
+                    if (file.isFile()) {
+                        return file.getName().endsWith(".parse");
+                    }
 
-    // We need file to line here ... and that is probably best doen with the plain text stream
-    // lets copy it over here, refactor it, and then at some point we replace the current version
-    // with the refactored version
+                    return file.isDirectory();
+                }, true);
 
-    return new OntoNotesParseSampleStream(new DocumentToLineStream(new FileToStringSampleStream(
-        documentStream, StandardCharsets.UTF_8)));
-  }
+        // We need file to line here ... and that is probably best doen with the plain text stream
+        // lets copy it over here, refactor it, and then at some point we replace the current version
+        // with the refactored version
 
-  public static void registerFactory() {
-    StreamFactoryRegistry.registerFactory(Parse.class, "ontonotes",
-        new OntoNotesParseSampleStreamFactory());
-  }
+        return new OntoNotesParseSampleStream(new DocumentToLineStream(new FileToStringSampleStream(
+                documentStream, StandardCharsets.UTF_8)));
+    }
 }

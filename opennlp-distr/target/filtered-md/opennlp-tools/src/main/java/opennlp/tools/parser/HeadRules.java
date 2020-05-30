@@ -25,19 +25,19 @@ import java.util.Set;
  */
 public interface HeadRules {
 
-  /**
-   * Returns the head constituent for the specified constituents of the specified type.
-   *
-   * @param constituents The constituents which make up a constituent of the specified type.
-   * @param type The type of a constituent which is made up of the specified constituents.
-   * @return The constituent which is the head.
-   */
-  Parse getHead(Parse[] constituents, String type);
+    /**
+     * Returns the head constituent for the specified constituents of the specified type.
+     *
+     * @param constituents The constituents which make up a constituent of the specified type.
+     * @param type         The type of a constituent which is made up of the specified constituents.
+     * @return The constituent which is the head.
+     */
+    Parse getHead(Parse[] constituents, String type);
 
-  /**
-   * Returns the set of punctuation tags.  Attachment decisions for these tags will not be modeled.
-   *
-   * @return the set of punctuation tags.
-   */
-  Set<String> getPunctuationTags();
+    /**
+     * Returns the set of punctuation tags.  Attachment decisions for these tags will not be modeled.
+     *
+     * @return the set of punctuation tags.
+     */
+    Set<String> getPunctuationTags();
 }

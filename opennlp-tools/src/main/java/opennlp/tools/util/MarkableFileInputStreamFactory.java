@@ -27,17 +27,17 @@ import java.io.InputStream;
  */
 public class MarkableFileInputStreamFactory implements InputStreamFactory {
 
-  private File file;
+    private File file;
 
-  public MarkableFileInputStreamFactory(File file) throws FileNotFoundException {
-    if (!file.exists()) {
-      throw new FileNotFoundException("File '" + file + "' cannot be found");
+    public MarkableFileInputStreamFactory(File file) throws FileNotFoundException {
+        if (!file.exists()) {
+            throw new FileNotFoundException("File '" + file + "' cannot be found");
+        }
+        this.file = file;
     }
-    this.file = file;
-  }
 
-  @Override
-  public InputStream createInputStream() throws IOException {
-    return new MarkableFileInputStream(file);
-  }
+    @Override
+    public InputStream createInputStream() throws IOException {
+        return new MarkableFileInputStream(file);
+    }
 }

@@ -17,51 +17,46 @@
 
 package opennlp.tools.cmdline.dictionary;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.nio.charset.Charset;
-
 import opennlp.tools.cmdline.BasicCmdLineTool;
 import opennlp.tools.cmdline.CmdLineUtil;
 import opennlp.tools.cmdline.TerminateToolException;
 import opennlp.tools.dictionary.Dictionary;
 
+import java.io.*;
+import java.nio.charset.Charset;
+
 public class DictionaryBuilderTool extends BasicCmdLineTool {
 
-  interface Params extends DictionaryBuilderParams {
-  }
-
-  public String getShortDescription() {
-    return "builds a new dictionary";
-  }
-
-  public String getHelp() {
-    return getBasicHelp(Params.class);
-  }
-
-  public void run(String[] args) {
-    Params params = validateAndParseParams(args, Params.class);
-
-    File dictInFile = params.getInputFile();
-    File dictOutFile = params.getOutputFile();
-    Charset encoding = params.getEncoding();
-
-    CmdLineUtil.checkInputFile("dictionary input file", dictInFile);
-    CmdLineUtil.checkOutputFile("dictionary output file", dictOutFile);
-
-    try (InputStreamReader in = new InputStreamReader(new FileInputStream(dictInFile), encoding);
-        OutputStream out = new FileOutputStream(dictOutFile)) {
-
-      Dictionary dict = Dictionary.parseOneEntryPerLine(in);
-      dict.serialize(out);
-
-    } catch (IOException e) {
-      throw new TerminateToolException(-1, "IO error while reading training data or indexing data: "
-          + e.getMessage(), e);
+    public String getShortDescription() {
+        return "builds a new dictionary";
     }
-  }
+
+    public String getHelp() {
+        return getBasicHelp(Params.class);
+    }
+
+    public void run(String[] args) {
+        Params params = validateAndParseParams(args, Params.class);
+
+        File dictInFile = params.getInputFile();
+        File dictOutFile = params.getOutputFile();
+        Charset encoding = params.getEncoding();
+
+        CmdLineUtil.checkInputFile("dictionary input file", dictInFile);
+        CmdLineUtil.checkOutputFile("dictionary output file", dictOutFile);
+
+        try (InputStreamReader in = new InputStreamReader(new FileInputStream(dictInFile), encoding);
+             OutputStream out = new FileOutputStream(dictOutFile)) {
+
+            Dictionary dict = Dictionary.parseOneEntryPerLine(in);
+            dict.serialize(out);
+
+        } catch (IOException e) {
+            throw new TerminateToolException(-1, "IO error while reading training data or indexing data: "
+                    + e.getMessage(), e);
+        }
+    }
+
+    interface Params extends DictionaryBuilderParams {
+    }
 }

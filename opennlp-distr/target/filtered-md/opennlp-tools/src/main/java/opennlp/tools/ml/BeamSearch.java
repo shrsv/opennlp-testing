@@ -17,17 +17,17 @@
 
 package opennlp.tools.ml;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.PriorityQueue;
-import java.util.Queue;
-
 import opennlp.tools.ml.model.MaxentModel;
 import opennlp.tools.ml.model.SequenceClassificationModel;
 import opennlp.tools.util.BeamSearchContextGenerator;
 import opennlp.tools.util.Cache;
 import opennlp.tools.util.Sequence;
 import opennlp.tools.util.SequenceValidator;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.PriorityQueue;
+import java.util.Queue;
 
 /**
  * Performs k-best search over sequence.  This is based on the description in
@@ -39,149 +39,146 @@ import opennlp.tools.util.SequenceValidator;
  */
 public class BeamSearch<T> implements SequenceClassificationModel<T> {
 
-  public static final String BEAM_SIZE_PARAMETER = "BeamSize";
+    public static final String BEAM_SIZE_PARAMETER = "BeamSize";
 
-  private static final Object[] EMPTY_ADDITIONAL_CONTEXT = new Object[0];
+    private static final Object[] EMPTY_ADDITIONAL_CONTEXT = new Object[0];
+    private static final int zeroLog = -100000;
+    protected int size;
+    protected MaxentModel model;
+    private double[] probs;
+    private Cache<String[], double[]> contextsCache;
 
-  protected int size;
-  protected MaxentModel model;
-
-  private double[] probs;
-  private Cache<String[], double[]> contextsCache;
-  private static final int zeroLog = -100000;
-
-  /**
-   * Creates new search object.
-   *
-   * @param size The size of the beam (k).
-   * @param model the model for assigning probabilities to the sequence outcomes.
-   */
-  public BeamSearch(int size, MaxentModel model) {
-    this(size, model, 0);
-  }
-
-  public BeamSearch(int size, MaxentModel model, int cacheSize) {
-
-    this.size = size;
-    this.model = model;
-
-    if (cacheSize > 0) {
-      contextsCache = new Cache<>(cacheSize);
+    /**
+     * Creates new search object.
+     *
+     * @param size  The size of the beam (k).
+     * @param model the model for assigning probabilities to the sequence outcomes.
+     */
+    public BeamSearch(int size, MaxentModel model) {
+        this(size, model, 0);
     }
 
-    this.probs = new double[model.getNumOutcomes()];
-  }
+    public BeamSearch(int size, MaxentModel model, int cacheSize) {
 
-  /**
-   * Returns the best sequence of outcomes based on model for this object.
-   *
-   * @param sequence The input sequence.
-   * @param additionalContext An Object[] of additional context.
-   *     This is passed to the context generator blindly with the
-   *     assumption that the context are appropiate.
-   *
-   * @return The top ranked sequence of outcomes or null if no sequence could be found
-   */
-  public Sequence[] bestSequences(int numSequences, T[] sequence,
-      Object[] additionalContext, double minSequenceScore,
-      BeamSearchContextGenerator<T> cg, SequenceValidator<T> validator) {
+        this.size = size;
+        this.model = model;
 
-    Queue<Sequence> prev = new PriorityQueue<>(size);
-    Queue<Sequence> next = new PriorityQueue<>(size);
-    Queue<Sequence> tmp;
-    prev.add(new Sequence());
-
-    if (additionalContext == null) {
-      additionalContext = EMPTY_ADDITIONAL_CONTEXT;
-    }
-
-    for (int i = 0; i < sequence.length; i++) {
-      int sz = Math.min(size, prev.size());
-
-      for (int sc = 0; prev.size() > 0 && sc < sz; sc++) {
-        Sequence top = prev.remove();
-        List<String> tmpOutcomes = top.getOutcomes();
-        String[] outcomes = tmpOutcomes.toArray(new String[tmpOutcomes.size()]);
-        String[] contexts = cg.getContext(i, sequence, outcomes, additionalContext);
-        double[] scores;
-        if (contextsCache != null) {
-          scores = contextsCache.computeIfAbsent(contexts, c -> model.eval(c, probs));
-        } else {
-          scores = model.eval(contexts, probs);
+        if (cacheSize > 0) {
+            contextsCache = new Cache<>(cacheSize);
         }
 
-        double[] temp_scores = new double[scores.length];
-        System.arraycopy(scores, 0, temp_scores, 0, scores.length);
+        this.probs = new double[model.getNumOutcomes()];
+    }
 
-        Arrays.sort(temp_scores);
+    /**
+     * Returns the best sequence of outcomes based on model for this object.
+     *
+     * @param sequence          The input sequence.
+     * @param additionalContext An Object[] of additional context.
+     *                          This is passed to the context generator blindly with the
+     *                          assumption that the context are appropiate.
+     * @return The top ranked sequence of outcomes or null if no sequence could be found
+     */
+    public Sequence[] bestSequences(int numSequences, T[] sequence,
+                                    Object[] additionalContext, double minSequenceScore,
+                                    BeamSearchContextGenerator<T> cg, SequenceValidator<T> validator) {
 
-        double min = temp_scores[Math.max(0,scores.length - size)];
+        Queue<Sequence> prev = new PriorityQueue<>(size);
+        Queue<Sequence> next = new PriorityQueue<>(size);
+        Queue<Sequence> tmp;
+        prev.add(new Sequence());
 
-        for (int p = 0; p < scores.length; p++) {
-          if (scores[p] >= min) {
-            String out = model.getOutcome(p);
-            if (validator.validSequence(i, sequence, outcomes, out)) {
-              Sequence ns = new Sequence(top, out, scores[p]);
-              if (ns.getScore() > minSequenceScore) {
-                next.add(ns);
-              }
+        if (additionalContext == null) {
+            additionalContext = EMPTY_ADDITIONAL_CONTEXT;
+        }
+
+        for (int i = 0; i < sequence.length; i++) {
+            int sz = Math.min(size, prev.size());
+
+            for (int sc = 0; prev.size() > 0 && sc < sz; sc++) {
+                Sequence top = prev.remove();
+                List<String> tmpOutcomes = top.getOutcomes();
+                String[] outcomes = tmpOutcomes.toArray(new String[tmpOutcomes.size()]);
+                String[] contexts = cg.getContext(i, sequence, outcomes, additionalContext);
+                double[] scores;
+                if (contextsCache != null) {
+                    scores = contextsCache.computeIfAbsent(contexts, c -> model.eval(c, probs));
+                } else {
+                    scores = model.eval(contexts, probs);
+                }
+
+                double[] temp_scores = new double[scores.length];
+                System.arraycopy(scores, 0, temp_scores, 0, scores.length);
+
+                Arrays.sort(temp_scores);
+
+                double min = temp_scores[Math.max(0, scores.length - size)];
+
+                for (int p = 0; p < scores.length; p++) {
+                    if (scores[p] >= min) {
+                        String out = model.getOutcome(p);
+                        if (validator.validSequence(i, sequence, outcomes, out)) {
+                            Sequence ns = new Sequence(top, out, scores[p]);
+                            if (ns.getScore() > minSequenceScore) {
+                                next.add(ns);
+                            }
+                        }
+                    }
+                }
+
+                if (next.size() == 0) { //if no advanced sequences, advance all valid
+                    for (int p = 0; p < scores.length; p++) {
+                        String out = model.getOutcome(p);
+                        if (validator.validSequence(i, sequence, outcomes, out)) {
+                            Sequence ns = new Sequence(top, out, scores[p]);
+                            if (ns.getScore() > minSequenceScore) {
+                                next.add(ns);
+                            }
+                        }
+                    }
+                }
             }
-          }
+
+            //    make prev = next; and re-init next (we reuse existing prev set once we clear it)
+            prev.clear();
+            tmp = prev;
+            prev = next;
+            next = tmp;
         }
 
-        if (next.size() == 0) { //if no advanced sequences, advance all valid
-          for (int p = 0; p < scores.length; p++) {
-            String out = model.getOutcome(p);
-            if (validator.validSequence(i, sequence, outcomes, out)) {
-              Sequence ns = new Sequence(top, out, scores[p]);
-              if (ns.getScore() > minSequenceScore) {
-                next.add(ns);
-              }
-            }
-          }
+        int numSeq = Math.min(numSequences, prev.size());
+        Sequence[] topSequences = new Sequence[numSeq];
+
+        for (int seqIndex = 0; seqIndex < numSeq; seqIndex++) {
+            topSequences[seqIndex] = prev.remove();
         }
-      }
 
-      //    make prev = next; and re-init next (we reuse existing prev set once we clear it)
-      prev.clear();
-      tmp = prev;
-      prev = next;
-      next = tmp;
+        return topSequences;
     }
 
-    int numSeq = Math.min(numSequences, prev.size());
-    Sequence[] topSequences = new Sequence[numSeq];
-
-    for (int seqIndex = 0; seqIndex < numSeq; seqIndex++) {
-      topSequences[seqIndex] = prev.remove();
+    public Sequence[] bestSequences(int numSequences, T[] sequence,
+                                    Object[] additionalContext, BeamSearchContextGenerator<T> cg, SequenceValidator<T> validator) {
+        return bestSequences(numSequences, sequence, additionalContext, zeroLog, cg, validator);
     }
 
-    return topSequences;
-  }
+    public Sequence bestSequence(T[] sequence, Object[] additionalContext,
+                                 BeamSearchContextGenerator<T> cg, SequenceValidator<T> validator) {
+        Sequence[] sequences = bestSequences(1, sequence, additionalContext, cg, validator);
 
-  public Sequence[] bestSequences(int numSequences, T[] sequence,
-      Object[] additionalContext, BeamSearchContextGenerator<T> cg, SequenceValidator<T> validator) {
-    return bestSequences(numSequences, sequence, additionalContext, zeroLog, cg, validator);
-  }
-
-  public Sequence bestSequence(T[] sequence, Object[] additionalContext,
-      BeamSearchContextGenerator<T> cg, SequenceValidator<T> validator) {
-    Sequence[] sequences =  bestSequences(1, sequence, additionalContext, cg, validator);
-
-    if (sequences.length > 0)
-      return sequences[0];
-    else
-      return null;
-  }
-
-  @Override
-  public String[] getOutcomes() {
-    String[] outcomes = new String[model.getNumOutcomes()];
-
-    for (int i = 0; i < model.getNumOutcomes(); i++) {
-      outcomes[i] = model.getOutcome(i);
+        if (sequences.length > 0)
+            return sequences[0];
+        else
+            return null;
     }
 
-    return outcomes;
-  }
+    @Override
+    public String[] getOutcomes() {
+        String[] outcomes = new String[model.getNumOutcomes()];
+
+        for (int i = 0; i < model.getNumOutcomes(); i++) {
+            outcomes[i] = model.getOutcome(i);
+        }
+
+        return outcomes;
+    }
 }

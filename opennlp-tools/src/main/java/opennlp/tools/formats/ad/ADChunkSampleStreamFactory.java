@@ -17,10 +17,6 @@
 
 package opennlp.tools.formats.ad;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.charset.Charset;
-
 import opennlp.tools.chunker.ChunkSample;
 import opennlp.tools.cmdline.ArgumentParser;
 import opennlp.tools.cmdline.ArgumentParser.OptionalParameter;
@@ -32,6 +28,10 @@ import opennlp.tools.util.InputStreamFactory;
 import opennlp.tools.util.ObjectStream;
 import opennlp.tools.util.PlainTextByLineStream;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.charset.Charset;
+
 /**
  * A Factory to create a Arvores Deitadas ChunkStream from the command line
  * utility.
@@ -40,62 +40,62 @@ import opennlp.tools.util.PlainTextByLineStream;
  */
 public class ADChunkSampleStreamFactory extends LanguageSampleStreamFactory<ChunkSample> {
 
-  interface Parameters {
-    //all have to be repeated, because encoding is not optional,
-    //according to the check if (encoding == null) { below (now removed)
-    @ParameterDescription(valueName = "charsetName",
-        description = "encoding for reading and writing text, if absent the system default is used.")
-    Charset getEncoding();
-
-    @ParameterDescription(valueName = "sampleData", description = "data to be used, usually a file name.")
-    File getData();
-
-    @ParameterDescription(valueName = "language", description = "language which is being processed.")
-    String getLang();
-
-    @ParameterDescription(valueName = "start", description = "index of first sentence")
-    @OptionalParameter
-    Integer getStart();
-
-    @ParameterDescription(valueName = "end", description = "index of last sentence")
-    @OptionalParameter
-    Integer getEnd();
-  }
-
-  public static void registerFactory() {
-    StreamFactoryRegistry.registerFactory(ChunkSample.class,
-        "ad", new ADChunkSampleStreamFactory(Parameters.class));
-  }
-
-  protected <P> ADChunkSampleStreamFactory(Class<P> params) {
-    super(params);
-  }
-
-  public ObjectStream<ChunkSample> create(String[] args) {
-
-    Parameters params = ArgumentParser.parse(args, Parameters.class);
-
-    language = params.getLang();
-
-    InputStreamFactory sampleDataIn = CmdLineUtil.createInputStreamFactory(params.getData());
-
-    ObjectStream<String> lineStream = null;
-    try {
-      lineStream = new PlainTextByLineStream(sampleDataIn, params.getEncoding());
-    } catch (IOException ex) {
-      CmdLineUtil.handleCreateObjectStreamError(ex);
+    protected <P> ADChunkSampleStreamFactory(Class<P> params) {
+        super(params);
     }
 
-    ADChunkSampleStream sampleStream = new ADChunkSampleStream(lineStream);
-
-    if (params.getStart() != null && params.getStart() > -1) {
-      sampleStream.setStart(params.getStart());
+    public static void registerFactory() {
+        StreamFactoryRegistry.registerFactory(ChunkSample.class,
+                "ad", new ADChunkSampleStreamFactory(Parameters.class));
     }
 
-    if (params.getEnd() != null && params.getEnd() > -1) {
-      sampleStream.setEnd(params.getEnd());
+    public ObjectStream<ChunkSample> create(String[] args) {
+
+        Parameters params = ArgumentParser.parse(args, Parameters.class);
+
+        language = params.getLang();
+
+        InputStreamFactory sampleDataIn = CmdLineUtil.createInputStreamFactory(params.getData());
+
+        ObjectStream<String> lineStream = null;
+        try {
+            lineStream = new PlainTextByLineStream(sampleDataIn, params.getEncoding());
+        } catch (IOException ex) {
+            CmdLineUtil.handleCreateObjectStreamError(ex);
+        }
+
+        ADChunkSampleStream sampleStream = new ADChunkSampleStream(lineStream);
+
+        if (params.getStart() != null && params.getStart() > -1) {
+            sampleStream.setStart(params.getStart());
+        }
+
+        if (params.getEnd() != null && params.getEnd() > -1) {
+            sampleStream.setEnd(params.getEnd());
+        }
+
+        return sampleStream;
     }
 
-    return sampleStream;
-  }
+    interface Parameters {
+        //all have to be repeated, because encoding is not optional,
+        //according to the check if (encoding == null) { below (now removed)
+        @ParameterDescription(valueName = "charsetName",
+                description = "encoding for reading and writing text, if absent the system default is used.")
+        Charset getEncoding();
+
+        @ParameterDescription(valueName = "sampleData", description = "data to be used, usually a file name.")
+        File getData();
+
+        @ParameterDescription(valueName = "language", description = "language which is being processed.")
+        String getLang();
+
+        @ParameterDescription(valueName = "start", description = "index of first sentence")
+        @OptionalParameter
+        Integer getStart();
+
+        @ParameterDescription(valueName = "end", description = "index of last sentence")
+        @OptionalParameter
+        Integer getEnd();
+    }
 }

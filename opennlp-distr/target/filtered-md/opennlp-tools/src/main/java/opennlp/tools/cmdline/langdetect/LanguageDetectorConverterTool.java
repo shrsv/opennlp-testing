@@ -22,7 +22,7 @@ import opennlp.tools.langdetect.LanguageSample;
 
 public class LanguageDetectorConverterTool extends AbstractConverterTool<LanguageSample> {
 
-  public LanguageDetectorConverterTool() {
-    super(LanguageSample.class);
-  }
+    public LanguageDetectorConverterTool() {
+        super(LanguageSample.class);
+    }
 }

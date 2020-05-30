@@ -17,22 +17,22 @@
 
 package opennlp.uima.tokenize;
 
-import java.io.IOException;
-import java.io.InputStream;
-
 import opennlp.tools.tokenize.TokenizerModel;
 import opennlp.uima.util.AbstractModelResource;
 
+import java.io.IOException;
+import java.io.InputStream;
+
 public class TokenizerModelResourceImpl extends
-    AbstractModelResource<TokenizerModel> implements TokenizerModelResource {
+        AbstractModelResource<TokenizerModel> implements TokenizerModelResource {
 
-  public TokenizerModel getModel() {
-    return model;
-  }
+    public TokenizerModel getModel() {
+        return model;
+    }
 
-  @Override
-  protected TokenizerModel loadModel(InputStream in) throws IOException {
-    return new TokenizerModel(in);
-  }
+    @Override
+    protected TokenizerModel loadModel(InputStream in) throws IOException {
+        return new TokenizerModel(in);
+    }
 
 }

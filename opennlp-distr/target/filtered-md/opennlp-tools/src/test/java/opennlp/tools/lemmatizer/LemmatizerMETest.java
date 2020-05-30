@@ -17,19 +17,14 @@
 
 package opennlp.tools.lemmatizer;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-
+import opennlp.tools.util.*;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import opennlp.tools.util.InsufficientTrainingDataException;
-import opennlp.tools.util.MockInputStreamFactory;
-import opennlp.tools.util.ObjectStream;
-import opennlp.tools.util.PlainTextByLineStream;
-import opennlp.tools.util.TrainingParameters;
+import java.io.File;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 
 /**
  * This is the test class for {@link LemmatizerME}.
@@ -48,58 +43,55 @@ import opennlp.tools.util.TrainingParameters;
  */
 public class LemmatizerMETest {
 
-  private LemmatizerME lemmatizer;
+    private static String[] tokens = {"Rockwell", "said", "the", "agreement", "calls", "for",
+            "it", "to", "supply", "200", "additional", "so-called", "shipsets", "for",
+            "the", "planes", "."};
+    private static String[] postags = {"NNP", "VBD", "DT", "NN", "VBZ", "IN", "PRP", "TO", "VB",
+            "CD", "JJ", "JJ", "NNS", "IN", "DT", "NNS", "."};
+    private static String[] expect = {"rockwell", "say", "the", "agreement", "call", "for",
+            "it", "to", "supply", "200", "additional", "so-called", "shipset", "for",
+            "the", "plane", "."};
+    private LemmatizerME lemmatizer;
 
-  private static String[] tokens = { "Rockwell", "said", "the", "agreement", "calls", "for",
-      "it", "to", "supply", "200", "additional", "so-called", "shipsets", "for",
-      "the", "planes", "." };
+    @Before
+    public void startup() throws IOException {
+        // train the lemmatizer
 
-  private static String[] postags = { "NNP", "VBD", "DT", "NN", "VBZ", "IN", "PRP", "TO", "VB",
-      "CD", "JJ", "JJ", "NNS", "IN", "DT", "NNS", "." };
+        ObjectStream<LemmaSample> sampleStream = new LemmaSampleStream(
+                new PlainTextByLineStream(new MockInputStreamFactory(
+                        new File("opennlp/tools/lemmatizer/trial.old.tsv")), StandardCharsets.UTF_8));
 
-  private static String[] expect = { "rockwell", "say", "the", "agreement", "call", "for",
-      "it", "to", "supply", "200", "additional", "so-called", "shipset", "for",
-      "the", "plane", "." };
+        TrainingParameters params = new TrainingParameters();
+        params.put(TrainingParameters.ITERATIONS_PARAM, 100);
+        params.put(TrainingParameters.CUTOFF_PARAM, 5);
 
-  @Before
-  public void startup() throws IOException {
-    // train the lemmatizer
+        LemmatizerModel lemmatizerModel = LemmatizerME.train("eng", sampleStream,
+                params, new LemmatizerFactory());
 
-    ObjectStream<LemmaSample> sampleStream = new LemmaSampleStream(
-        new PlainTextByLineStream(new MockInputStreamFactory(
-          new File("opennlp/tools/lemmatizer/trial.old.tsv")), StandardCharsets.UTF_8));
+        this.lemmatizer = new LemmatizerME(lemmatizerModel);
+    }
 
-    TrainingParameters params = new TrainingParameters();
-    params.put(TrainingParameters.ITERATIONS_PARAM, 100);
-    params.put(TrainingParameters.CUTOFF_PARAM, 5);
+    @Test
+    public void testLemmasAsArray() throws Exception {
 
-    LemmatizerModel lemmatizerModel = LemmatizerME.train("eng", sampleStream,
-        params, new LemmatizerFactory());
+        String[] lemmas = lemmatizer.lemmatize(tokens, postags);
 
-    this.lemmatizer = new LemmatizerME(lemmatizerModel);
-  }
+        Assert.assertArrayEquals(expect, lemmas);
+    }
 
-  @Test
-  public void testLemmasAsArray() throws Exception {
+    @Test(expected = InsufficientTrainingDataException.class)
+    public void testInsufficientData() throws IOException {
 
-    String[] lemmas = lemmatizer.lemmatize(tokens, postags);
+        ObjectStream<LemmaSample> sampleStream = new LemmaSampleStream(
+                new PlainTextByLineStream(new MockInputStreamFactory(
+                        new File("opennlp/tools/lemmatizer/trial.old-insufficient.tsv")), StandardCharsets.UTF_8));
 
-    Assert.assertArrayEquals(expect, lemmas);
-  }
-  
-  @Test(expected = InsufficientTrainingDataException.class)
-  public void testInsufficientData() throws IOException {
- 
-    ObjectStream<LemmaSample> sampleStream = new LemmaSampleStream(
-        new PlainTextByLineStream(new MockInputStreamFactory(
-            new File("opennlp/tools/lemmatizer/trial.old-insufficient.tsv")), StandardCharsets.UTF_8));
+        TrainingParameters params = new TrainingParameters();
+        params.put(TrainingParameters.ITERATIONS_PARAM, 100);
+        params.put(TrainingParameters.CUTOFF_PARAM, 5);
 
-    TrainingParameters params = new TrainingParameters();
-    params.put(TrainingParameters.ITERATIONS_PARAM, 100);
-    params.put(TrainingParameters.CUTOFF_PARAM, 5);
+        LemmatizerME.train("eng", sampleStream, params, new LemmatizerFactory());
 
-    LemmatizerME.train("eng", sampleStream, params, new LemmatizerFactory());
-
-  }
+    }
 
 }

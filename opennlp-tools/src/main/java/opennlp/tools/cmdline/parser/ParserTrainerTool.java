@@ -17,10 +17,6 @@
 
 package opennlp.tools.cmdline.parser;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-
 import opennlp.tools.cmdline.AbstractTrainerTool;
 import opennlp.tools.cmdline.CmdLineUtil;
 import opennlp.tools.cmdline.TerminateToolException;
@@ -39,148 +35,144 @@ import opennlp.tools.util.ext.ExtensionLoader;
 import opennlp.tools.util.model.ArtifactSerializer;
 import opennlp.tools.util.model.ModelUtil;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+
 public final class ParserTrainerTool extends AbstractTrainerTool<Parse, TrainerToolParams> {
 
-  interface TrainerToolParams extends TrainingParams, TrainingToolParams, EncodingParameter {
-  }
-
-  public ParserTrainerTool() {
-    super(Parse.class, TrainerToolParams.class);
-  }
-
-  public String getShortDescription() {
-    return "trains the learnable parser";
-  }
-
-  static Dictionary buildDictionary(ObjectStream<Parse> parseSamples, HeadRules headRules, int cutoff) {
-    System.err.print("Building dictionary ...");
-
-    Dictionary mdict;
-    try {
-      mdict = Parser.
-          buildDictionary(parseSamples, headRules, cutoff);
-    } catch (IOException e) {
-      System.err.println("Error while building dictionary: " + e.getMessage());
-      mdict = null;
-    }
-    System.err.println("done");
-
-    return mdict;
-  }
-
-  static ParserType parseParserType(String typeAsString) {
-    ParserType type = null;
-    if (typeAsString != null && typeAsString.length() > 0) {
-      type = ParserType.parse(typeAsString);
-      if (type == null) {
-        throw new TerminateToolException(1, "ParserType training parameter '" + typeAsString +
-            "' is invalid!");
-      }
+    public ParserTrainerTool() {
+        super(Parse.class, TrainerToolParams.class);
     }
 
-    return type;
-  }
+    static Dictionary buildDictionary(ObjectStream<Parse> parseSamples, HeadRules headRules, int cutoff) {
+        System.err.print("Building dictionary ...");
 
-  static HeadRules creaeHeadRules(TrainerToolParams params) throws IOException {
+        Dictionary mdict;
+        try {
+            mdict = Parser.
+                    buildDictionary(parseSamples, headRules, cutoff);
+        } catch (IOException e) {
+            System.err.println("Error while building dictionary: " + e.getMessage());
+            mdict = null;
+        }
+        System.err.println("done");
 
-    ArtifactSerializer headRulesSerializer;
-
-    if (params.getHeadRulesSerializerImpl() != null) {
-      headRulesSerializer = ExtensionLoader.instantiateExtension(ArtifactSerializer.class,
-              params.getHeadRulesSerializerImpl());
-    }
-    else {
-      if ("en".equals(params.getLang()) || "eng".equals(params.getLang())) {
-        headRulesSerializer = new opennlp.tools.parser.lang.en.HeadRules.HeadRulesSerializer();
-      }
-      else if ("es".equals(params.getLang()) || "spa".equals(params.getLang())) {
-        headRulesSerializer = new opennlp.tools.parser.lang.es.AncoraSpanishHeadRules.HeadRulesSerializer();
-      }
-      else {
-        // default for now, this case should probably cause an error ...
-        headRulesSerializer = new opennlp.tools.parser.lang.en.HeadRules.HeadRulesSerializer();
-      }
+        return mdict;
     }
 
-    Object headRulesObject = headRulesSerializer.create(new FileInputStream(params.getHeadRules()));
+    static ParserType parseParserType(String typeAsString) {
+        ParserType type = null;
+        if (typeAsString != null && typeAsString.length() > 0) {
+            type = ParserType.parse(typeAsString);
+            if (type == null) {
+                throw new TerminateToolException(1, "ParserType training parameter '" + typeAsString +
+                        "' is invalid!");
+            }
+        }
 
-    if (headRulesObject instanceof HeadRules) {
-      return (HeadRules) headRulesObject;
-    }
-    else {
-      throw new TerminateToolException(-1,
-          "HeadRules Artifact Serializer must create an object of type HeadRules!");
-    }
-  }
-
-  // TODO: Add param to train tree insert parser
-  public void run(String format, String[] args) {
-    super.run(format, args);
-
-    mlParams = CmdLineUtil.loadTrainingParameters(params.getParams(), true);
-
-    if (mlParams != null) {
-      if (!TrainerFactory.isValid(mlParams.getParameters("build"))) {
-        throw new TerminateToolException(1, "Build training parameters are invalid!");
-      }
-
-      if (!TrainerFactory.isValid(mlParams.getParameters("check"))) {
-        throw new TerminateToolException(1, "Check training parameters are invalid!");
-      }
-
-      if (!TrainerFactory.isValid(mlParams.getParameters("attach"))) {
-        throw new TerminateToolException(1, "Attach training parameters are invalid!");
-      }
-
-      if (!TrainerFactory.isValid(mlParams.getParameters("tagger"))) {
-        throw new TerminateToolException(1, "Tagger training parameters are invalid!");
-      }
-
-      if (!TrainerFactory.isValid(mlParams.getParameters("chunker"))) {
-        throw new TerminateToolException(1, "Chunker training parameters are invalid!");
-      }
+        return type;
     }
 
-    if (mlParams == null) {
-      mlParams = ModelUtil.createDefaultTrainingParameters();
+    static HeadRules creaeHeadRules(TrainerToolParams params) throws IOException {
+
+        ArtifactSerializer headRulesSerializer;
+
+        if (params.getHeadRulesSerializerImpl() != null) {
+            headRulesSerializer = ExtensionLoader.instantiateExtension(ArtifactSerializer.class,
+                    params.getHeadRulesSerializerImpl());
+        } else {
+            if ("en".equals(params.getLang()) || "eng".equals(params.getLang())) {
+                headRulesSerializer = new opennlp.tools.parser.lang.en.HeadRules.HeadRulesSerializer();
+            } else if ("es".equals(params.getLang()) || "spa".equals(params.getLang())) {
+                headRulesSerializer = new opennlp.tools.parser.lang.es.AncoraSpanishHeadRules.HeadRulesSerializer();
+            } else {
+                // default for now, this case should probably cause an error ...
+                headRulesSerializer = new opennlp.tools.parser.lang.en.HeadRules.HeadRulesSerializer();
+            }
+        }
+
+        Object headRulesObject = headRulesSerializer.create(new FileInputStream(params.getHeadRules()));
+
+        if (headRulesObject instanceof HeadRules) {
+            return (HeadRules) headRulesObject;
+        } else {
+            throw new TerminateToolException(-1,
+                    "HeadRules Artifact Serializer must create an object of type HeadRules!");
+        }
     }
 
-    File modelOutFile = params.getModel();
-    CmdLineUtil.checkOutputFile("parser model", modelOutFile);
-
-    ParserModel model;
-    try {
-      HeadRules rules = creaeHeadRules(params);
-
-      ParserType type = parseParserType(params.getParserType());
-      if (params.getFun()) {
-        Parse.useFunctionTags(true);
-      }
-
-      if (ParserType.CHUNKING.equals(type)) {
-        model = opennlp.tools.parser.chunking.Parser.train(
-            params.getLang(), sampleStream, rules,
-            mlParams);
-      }
-      else if (ParserType.TREEINSERT.equals(type)) {
-        model = opennlp.tools.parser.treeinsert.Parser.train(params.getLang(), sampleStream, rules,
-            mlParams);
-      }
-      else {
-        throw new IllegalStateException();
-      }
-    }
-    catch (IOException e) {
-      throw createTerminationIOException(e);
-    }
-    finally {
-      try {
-        sampleStream.close();
-      } catch (IOException e) {
-        // sorry that this can fail
-      }
+    public String getShortDescription() {
+        return "trains the learnable parser";
     }
 
-    CmdLineUtil.writeModel("parser", modelOutFile, model);
-  }
+    // TODO: Add param to train tree insert parser
+    public void run(String format, String[] args) {
+        super.run(format, args);
+
+        mlParams = CmdLineUtil.loadTrainingParameters(params.getParams(), true);
+
+        if (mlParams != null) {
+            if (!TrainerFactory.isValid(mlParams.getParameters("build"))) {
+                throw new TerminateToolException(1, "Build training parameters are invalid!");
+            }
+
+            if (!TrainerFactory.isValid(mlParams.getParameters("check"))) {
+                throw new TerminateToolException(1, "Check training parameters are invalid!");
+            }
+
+            if (!TrainerFactory.isValid(mlParams.getParameters("attach"))) {
+                throw new TerminateToolException(1, "Attach training parameters are invalid!");
+            }
+
+            if (!TrainerFactory.isValid(mlParams.getParameters("tagger"))) {
+                throw new TerminateToolException(1, "Tagger training parameters are invalid!");
+            }
+
+            if (!TrainerFactory.isValid(mlParams.getParameters("chunker"))) {
+                throw new TerminateToolException(1, "Chunker training parameters are invalid!");
+            }
+        }
+
+        if (mlParams == null) {
+            mlParams = ModelUtil.createDefaultTrainingParameters();
+        }
+
+        File modelOutFile = params.getModel();
+        CmdLineUtil.checkOutputFile("parser model", modelOutFile);
+
+        ParserModel model;
+        try {
+            HeadRules rules = creaeHeadRules(params);
+
+            ParserType type = parseParserType(params.getParserType());
+            if (params.getFun()) {
+                Parse.useFunctionTags(true);
+            }
+
+            if (ParserType.CHUNKING.equals(type)) {
+                model = opennlp.tools.parser.chunking.Parser.train(
+                        params.getLang(), sampleStream, rules,
+                        mlParams);
+            } else if (ParserType.TREEINSERT.equals(type)) {
+                model = opennlp.tools.parser.treeinsert.Parser.train(params.getLang(), sampleStream, rules,
+                        mlParams);
+            } else {
+                throw new IllegalStateException();
+            }
+        } catch (IOException e) {
+            throw createTerminationIOException(e);
+        } finally {
+            try {
+                sampleStream.close();
+            } catch (IOException e) {
+                // sorry that this can fail
+            }
+        }
+
+        CmdLineUtil.writeModel("parser", modelOutFile, model);
+    }
+
+    interface TrainerToolParams extends TrainingParams, TrainingToolParams, EncodingParameter {
+    }
 }

@@ -22,43 +22,43 @@ import java.nio.FloatBuffer;
 
 class FloatArrayVector implements WordVector {
 
-  private final float[] vector;
+    private final float[] vector;
 
-  FloatArrayVector(float[] vector) {
-    this.vector = vector;
-  }
-
-  @Override
-  public WordVectorType getDataType() {
-    return WordVectorType.FLOAT;
-  }
-
-  @Override
-  public float getAsFloat(int index) {
-    return vector[index];
-  }
-
-  @Override
-  public double getAsDouble(int index) {
-    return getAsFloat(index);
-  }
-
-  @Override
-  public FloatBuffer toFloatBuffer() {
-    return FloatBuffer.wrap(vector).asReadOnlyBuffer();
-  }
-
-  @Override
-  public DoubleBuffer toDoubleBuffer() {
-    double[] doubleVector = new double[vector.length];
-    for (int i = 0; i < doubleVector.length ; i++) {
-      doubleVector[i] = vector[i];
+    FloatArrayVector(float[] vector) {
+        this.vector = vector;
     }
-    return DoubleBuffer.wrap(doubleVector).asReadOnlyBuffer();
-  }
 
-  @Override
-  public int dimension() {
-    return vector.length;
-  }
+    @Override
+    public WordVectorType getDataType() {
+        return WordVectorType.FLOAT;
+    }
+
+    @Override
+    public float getAsFloat(int index) {
+        return vector[index];
+    }
+
+    @Override
+    public double getAsDouble(int index) {
+        return getAsFloat(index);
+    }
+
+    @Override
+    public FloatBuffer toFloatBuffer() {
+        return FloatBuffer.wrap(vector).asReadOnlyBuffer();
+    }
+
+    @Override
+    public DoubleBuffer toDoubleBuffer() {
+        double[] doubleVector = new double[vector.length];
+        for (int i = 0; i < doubleVector.length; i++) {
+            doubleVector[i] = vector[i];
+        }
+        return DoubleBuffer.wrap(doubleVector).asReadOnlyBuffer();
+    }
+
+    @Override
+    public int dimension() {
+        return vector.length;
+    }
 }

@@ -17,56 +17,56 @@
 
 package opennlp.tools.formats.irishsentencebank;
 
+import opennlp.tools.sentdetect.SentenceSample;
+import opennlp.tools.util.ObjectStream;
+import opennlp.tools.util.Span;
+
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-import opennlp.tools.sentdetect.SentenceSample;
-import opennlp.tools.util.ObjectStream;
-import opennlp.tools.util.Span;
+class IrishSentenceBankSentenceStream implements ObjectStream<SentenceSample> {
 
-class IrishSentenceBankSentenceStream implements ObjectStream<SentenceSample>  {
+    private final IrishSentenceBankDocument source;
 
-  private final IrishSentenceBankDocument source;
+    private Iterator<IrishSentenceBankDocument.IrishSentenceBankSentence> sentenceIt;
 
-  private Iterator<IrishSentenceBankDocument.IrishSentenceBankSentence> sentenceIt;
-
-  IrishSentenceBankSentenceStream(IrishSentenceBankDocument source) {
-    this.source = source;
-    reset();
-  }
-
-  @Override
-  public SentenceSample read() throws IOException {
-
-    StringBuilder sentencesString = new StringBuilder();
-    List<Span> sentenceSpans = new LinkedList<>();
-
-    while (sentenceIt.hasNext()) {
-      IrishSentenceBankDocument.IrishSentenceBankSentence sentence = sentenceIt.next();
-
-      int begin = sentencesString.length();
-
-      if (sentence.getOriginal() != null) {
-        sentencesString.append(sentence.getOriginal());
-      }
-
-      sentenceSpans.add(new Span(begin, sentencesString.length()));
-      sentencesString.append(' ');
+    IrishSentenceBankSentenceStream(IrishSentenceBankDocument source) {
+        this.source = source;
+        reset();
     }
 
-    // end of stream is reached, indicate that with null return value
-    if (sentenceSpans.size() == 0) {
-      return null;
+    @Override
+    public SentenceSample read() throws IOException {
+
+        StringBuilder sentencesString = new StringBuilder();
+        List<Span> sentenceSpans = new LinkedList<>();
+
+        while (sentenceIt.hasNext()) {
+            IrishSentenceBankDocument.IrishSentenceBankSentence sentence = sentenceIt.next();
+
+            int begin = sentencesString.length();
+
+            if (sentence.getOriginal() != null) {
+                sentencesString.append(sentence.getOriginal());
+            }
+
+            sentenceSpans.add(new Span(begin, sentencesString.length()));
+            sentencesString.append(' ');
+        }
+
+        // end of stream is reached, indicate that with null return value
+        if (sentenceSpans.size() == 0) {
+            return null;
+        }
+
+        return new SentenceSample(sentencesString.toString(),
+                sentenceSpans.toArray(new Span[sentenceSpans.size()]));
     }
 
-    return new SentenceSample(sentencesString.toString(),
-        sentenceSpans.toArray(new Span[sentenceSpans.size()]));
-  }
-
-  @Override
-  public void reset() {
-    sentenceIt = source.getSentences().iterator();
-  }
+    @Override
+    public void reset() {
+        sentenceIt = source.getSentences().iterator();
+    }
 }

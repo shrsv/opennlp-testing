@@ -17,72 +17,68 @@
 
 package opennlp.tools.cmdline.chunker;
 
-import java.io.File;
-import java.io.IOException;
-
 import opennlp.tools.chunker.ChunkSample;
 import opennlp.tools.chunker.ChunkerME;
 import opennlp.tools.chunker.ChunkerModel;
-import opennlp.tools.cmdline.BasicCmdLineTool;
-import opennlp.tools.cmdline.CLI;
-import opennlp.tools.cmdline.CmdLineUtil;
-import opennlp.tools.cmdline.PerformanceMonitor;
-import opennlp.tools.cmdline.SystemInputStreamFactory;
+import opennlp.tools.cmdline.*;
 import opennlp.tools.postag.POSSample;
 import opennlp.tools.util.InvalidFormatException;
 import opennlp.tools.util.ObjectStream;
 import opennlp.tools.util.PlainTextByLineStream;
 
+import java.io.File;
+import java.io.IOException;
+
 public class ChunkerMETool extends BasicCmdLineTool {
 
-  public String getShortDescription() {
-    return "learnable chunker";
-  }
-
-  public String getHelp() {
-    return "Usage: " + CLI.CMD + " " + getName() + " model < sentences";
-  }
-
-  public void run(String[] args) {
-    if (args.length != 1) {
-      System.out.println(getHelp());
-    } else {
-      ChunkerModel model = new ChunkerModelLoader().load(new File(args[0]));
-
-      ChunkerME chunker = new ChunkerME(model);
-
-      ObjectStream<String> lineStream;
-      PerformanceMonitor perfMon = null;
-
-      try {
-        lineStream = new PlainTextByLineStream(new SystemInputStreamFactory(),
-            SystemInputStreamFactory.encoding());
-        perfMon = new PerformanceMonitor(System.err, "sent");
-        perfMon.start();
-        String line;
-        while ((line = lineStream.read()) != null) {
-
-          POSSample posSample;
-          try {
-            posSample = POSSample.parse(line);
-          } catch (InvalidFormatException e) {
-            System.err.println("Invalid format:");
-            System.err.println(line);
-            continue;
-          }
-
-          String[] chunks = chunker.chunk(posSample.getSentence(), posSample.getTags());
-
-          System.out.println(new ChunkSample(posSample.getSentence(),
-              posSample.getTags(), chunks).nicePrint());
-
-          perfMon.incrementCounter();
-        }
-      } catch (IOException e) {
-        CmdLineUtil.handleStdinIoError(e);
-      }
-
-      perfMon.stopAndPrintFinalResult();
+    public String getShortDescription() {
+        return "learnable chunker";
     }
-  }
+
+    public String getHelp() {
+        return "Usage: " + CLI.CMD + " " + getName() + " model < sentences";
+    }
+
+    public void run(String[] args) {
+        if (args.length != 1) {
+            System.out.println(getHelp());
+        } else {
+            ChunkerModel model = new ChunkerModelLoader().load(new File(args[0]));
+
+            ChunkerME chunker = new ChunkerME(model);
+
+            ObjectStream<String> lineStream;
+            PerformanceMonitor perfMon = null;
+
+            try {
+                lineStream = new PlainTextByLineStream(new SystemInputStreamFactory(),
+                        SystemInputStreamFactory.encoding());
+                perfMon = new PerformanceMonitor(System.err, "sent");
+                perfMon.start();
+                String line;
+                while ((line = lineStream.read()) != null) {
+
+                    POSSample posSample;
+                    try {
+                        posSample = POSSample.parse(line);
+                    } catch (InvalidFormatException e) {
+                        System.err.println("Invalid format:");
+                        System.err.println(line);
+                        continue;
+                    }
+
+                    String[] chunks = chunker.chunk(posSample.getSentence(), posSample.getTags());
+
+                    System.out.println(new ChunkSample(posSample.getSentence(),
+                            posSample.getTags(), chunks).nicePrint());
+
+                    perfMon.incrementCounter();
+                }
+            } catch (IOException e) {
+                CmdLineUtil.handleStdinIoError(e);
+            }
+
+            perfMon.stopAndPrintFinalResult();
+        }
+    }
 }

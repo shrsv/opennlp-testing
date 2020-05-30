@@ -18,12 +18,12 @@
 
 package opennlp.tools.util.featuregen;
 
-import java.util.List;
-import java.util.regex.Pattern;
-
 import opennlp.tools.tokenize.SimpleTokenizer;
 import opennlp.tools.tokenize.Tokenizer;
 import opennlp.tools.util.StringUtil;
+
+import java.util.List;
+import java.util.regex.Pattern;
 
 /**
  * Partitions tokens into sub-tokens based on character classes and generates
@@ -31,59 +31,59 @@ import opennlp.tools.util.StringUtil;
  */
 public class TokenPatternFeatureGenerator implements AdaptiveFeatureGenerator {
 
-  private Pattern noLetters = Pattern.compile("[^a-zA-Z]");
-  private Tokenizer tokenizer;
+    private Pattern noLetters = Pattern.compile("[^a-zA-Z]");
+    private Tokenizer tokenizer;
 
-  /**
-   * Initializes a new instance.
-   * For tokinization the {@link SimpleTokenizer} is used.
-   */
-  public TokenPatternFeatureGenerator() {
-      this(SimpleTokenizer.INSTANCE);
-  }
-
-  /**
-   * Initializes a new instance.
-   *
-   * @param supportTokenizer
-   */
-  public TokenPatternFeatureGenerator(Tokenizer supportTokenizer) {
-    tokenizer = supportTokenizer;
-  }
-
-  public void createFeatures(List<String> feats, String[] toks, int index, String[] preds) {
-
-    String[] tokenized = tokenizer.tokenize(toks[index]);
-
-    if (tokenized.length == 1) {
-      feats.add("st=" + StringUtil.toLowerCase(toks[index]));
-      return;
+    /**
+     * Initializes a new instance.
+     * For tokinization the {@link SimpleTokenizer} is used.
+     */
+    public TokenPatternFeatureGenerator() {
+        this(SimpleTokenizer.INSTANCE);
     }
 
-    feats.add("stn=" + tokenized.length);
-
-    StringBuilder pattern = new StringBuilder();
-
-    for (int i = 0; i < tokenized.length; i++) {
-
-      if (i < tokenized.length - 1) {
-        feats.add("pt2=" + FeatureGeneratorUtil.tokenFeature(tokenized[i]) +
-            FeatureGeneratorUtil.tokenFeature(tokenized[i + 1]));
-      }
-
-      if (i < tokenized.length - 2) {
-        feats.add("pt3=" + FeatureGeneratorUtil.tokenFeature(tokenized[i]) +
-            FeatureGeneratorUtil.tokenFeature(tokenized[i + 1]) +
-            FeatureGeneratorUtil.tokenFeature(tokenized[i + 2]));
-      }
-
-      pattern.append(FeatureGeneratorUtil.tokenFeature(tokenized[i]));
-
-      if (!noLetters.matcher(tokenized[i]).find()) {
-        feats.add("st=" + StringUtil.toLowerCase(tokenized[i]));
-      }
+    /**
+     * Initializes a new instance.
+     *
+     * @param supportTokenizer
+     */
+    public TokenPatternFeatureGenerator(Tokenizer supportTokenizer) {
+        tokenizer = supportTokenizer;
     }
 
-    feats.add("pta=" + pattern.toString());
-  }
+    public void createFeatures(List<String> feats, String[] toks, int index, String[] preds) {
+
+        String[] tokenized = tokenizer.tokenize(toks[index]);
+
+        if (tokenized.length == 1) {
+            feats.add("st=" + StringUtil.toLowerCase(toks[index]));
+            return;
+        }
+
+        feats.add("stn=" + tokenized.length);
+
+        StringBuilder pattern = new StringBuilder();
+
+        for (int i = 0; i < tokenized.length; i++) {
+
+            if (i < tokenized.length - 1) {
+                feats.add("pt2=" + FeatureGeneratorUtil.tokenFeature(tokenized[i]) +
+                        FeatureGeneratorUtil.tokenFeature(tokenized[i + 1]));
+            }
+
+            if (i < tokenized.length - 2) {
+                feats.add("pt3=" + FeatureGeneratorUtil.tokenFeature(tokenized[i]) +
+                        FeatureGeneratorUtil.tokenFeature(tokenized[i + 1]) +
+                        FeatureGeneratorUtil.tokenFeature(tokenized[i + 2]));
+            }
+
+            pattern.append(FeatureGeneratorUtil.tokenFeature(tokenized[i]));
+
+            if (!noLetters.matcher(tokenized[i]).find()) {
+                feats.add("st=" + StringUtil.toLowerCase(tokenized[i]));
+            }
+        }
+
+        feats.add("pta=" + pattern.toString());
+    }
 }

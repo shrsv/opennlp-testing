@@ -23,25 +23,25 @@ import org.junit.Test;
 
 public class UrlCharSequenceNormalizerTest {
 
-  public UrlCharSequenceNormalizer normalizer = UrlCharSequenceNormalizer.getInstance();
+    public UrlCharSequenceNormalizer normalizer = UrlCharSequenceNormalizer.getInstance();
 
-  @Test
-  public void normalizeUrl() throws Exception {
-    Assert.assertEquals(
-        "asdf   2nnfdf", normalizer.normalize("asdf http://asdf.com/dfa/cxs 2nnfdf"));
+    @Test
+    public void normalizeUrl() throws Exception {
+        Assert.assertEquals(
+                "asdf   2nnfdf", normalizer.normalize("asdf http://asdf.com/dfa/cxs 2nnfdf"));
 
 
-    Assert.assertEquals(
-        "asdf   2nnfdf  ", normalizer.normalize("asdf http://asdf.com/dfa/cx" +
-            "s 2nnfdf http://asdf.com/dfa/cxs"));
-  }
+        Assert.assertEquals(
+                "asdf   2nnfdf  ", normalizer.normalize("asdf http://asdf.com/dfa/cx" +
+                        "s 2nnfdf http://asdf.com/dfa/cxs"));
+    }
 
-  @Test
-  public void normalizeEmail() throws Exception {
-    Assert.assertEquals(
-        "asdf   2nnfdf", normalizer.normalize("asdf asd.fdfa@hasdk23.com.br 2nnfdf"));
-    Assert.assertEquals(
-        "asdf   2nnfdf  ", normalizer.normalize("asdf asd.fdfa@hasdk23.com.br" +
-            " 2nnfdf asd.fdfa@hasdk23.com.br"));
-  }
+    @Test
+    public void normalizeEmail() throws Exception {
+        Assert.assertEquals(
+                "asdf   2nnfdf", normalizer.normalize("asdf asd.fdfa@hasdk23.com.br 2nnfdf"));
+        Assert.assertEquals(
+                "asdf   2nnfdf  ", normalizer.normalize("asdf asd.fdfa@hasdk23.com.br" +
+                        " 2nnfdf asd.fdfa@hasdk23.com.br"));
+    }
 }

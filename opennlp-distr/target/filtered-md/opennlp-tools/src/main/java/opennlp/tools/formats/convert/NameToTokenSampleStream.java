@@ -17,37 +17,37 @@
 
 package opennlp.tools.formats.convert;
 
-import java.io.IOException;
-
 import opennlp.tools.namefind.NameSample;
 import opennlp.tools.tokenize.Detokenizer;
 import opennlp.tools.tokenize.TokenSample;
 import opennlp.tools.util.FilterObjectStream;
 import opennlp.tools.util.ObjectStream;
 
+import java.io.IOException;
+
 /**
  * <b>Note:</b> Do not use this class, internal use only!
  */
 public class NameToTokenSampleStream extends FilterObjectStream<NameSample, TokenSample> {
 
-  private final Detokenizer detokenizer;
+    private final Detokenizer detokenizer;
 
-  public NameToTokenSampleStream(Detokenizer detokenizer, ObjectStream<NameSample> samples) {
-    super(samples);
+    public NameToTokenSampleStream(Detokenizer detokenizer, ObjectStream<NameSample> samples) {
+        super(samples);
 
-    this.detokenizer = detokenizer;
-  }
-
-  public TokenSample read() throws IOException {
-    NameSample nameSample = samples.read();
-
-    TokenSample tokenSample = null;
-
-    if (nameSample != null ) {
-      tokenSample = new TokenSample(detokenizer, nameSample.getSentence());
+        this.detokenizer = detokenizer;
     }
 
-    return tokenSample;
-  }
+    public TokenSample read() throws IOException {
+        NameSample nameSample = samples.read();
+
+        TokenSample tokenSample = null;
+
+        if (nameSample != null) {
+            tokenSample = new TokenSample(detokenizer, nameSample.getSentence());
+        }
+
+        return tokenSample;
+    }
 
 }

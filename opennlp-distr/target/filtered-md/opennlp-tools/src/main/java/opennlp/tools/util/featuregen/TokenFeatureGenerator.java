@@ -18,32 +18,31 @@
 
 package opennlp.tools.util.featuregen;
 
-import java.util.List;
-
 import opennlp.tools.util.StringUtil;
+
+import java.util.List;
 
 /**
  * Generates a feature which contains the token itself.
  */
 public class TokenFeatureGenerator implements AdaptiveFeatureGenerator {
 
-  private static final String WORD_PREFIX = "w";
-  private boolean lowercase;
+    private static final String WORD_PREFIX = "w";
+    private boolean lowercase;
 
-  public TokenFeatureGenerator(boolean lowercase) {
-    this.lowercase = lowercase;
-  }
-
-  public TokenFeatureGenerator() {
-    this(true);
-  }
-
-  public void createFeatures(List<String> features, String[] tokens, int index, String[] preds) {
-    if (lowercase) {
-      features.add(WORD_PREFIX + "=" + StringUtil.toLowerCase(tokens[index]));
+    public TokenFeatureGenerator(boolean lowercase) {
+        this.lowercase = lowercase;
     }
-    else {
-      features.add(WORD_PREFIX + "=" + tokens[index]);
+
+    public TokenFeatureGenerator() {
+        this(true);
     }
-  }
+
+    public void createFeatures(List<String> features, String[] tokens, int index, String[] preds) {
+        if (lowercase) {
+            features.add(WORD_PREFIX + "=" + StringUtil.toLowerCase(tokens[index]));
+        } else {
+            features.add(WORD_PREFIX + "=" + tokens[index]);
+        }
+    }
 }

@@ -22,7 +22,7 @@ import opennlp.tools.postag.POSSample;
 
 public class POSTaggerConverterTool extends AbstractConverterTool<POSSample> {
 
-  public POSTaggerConverterTool() {
-    super(POSSample.class);
-  }
+    public POSTaggerConverterTool() {
+        super(POSSample.class);
+    }
 }

@@ -17,29 +17,29 @@
 
 package opennlp.tools.util.model;
 
+import org.junit.Assert;
+import org.junit.Test;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Random;
 
-import org.junit.Assert;
-import org.junit.Test;
-
 public class ByteArraySerializerTest {
 
-  @Test
-  public void testSerialization() throws IOException {
+    @Test
+    public void testSerialization() throws IOException {
 
-    byte[] b = new byte[1024];
-    new Random(23).nextBytes(b);
+        byte[] b = new byte[1024];
+        new Random(23).nextBytes(b);
 
-    ByteArraySerializer serializer = new ByteArraySerializer();
+        ByteArraySerializer serializer = new ByteArraySerializer();
 
-    ByteArrayOutputStream bOut = new ByteArrayOutputStream();
-    serializer.serialize(Arrays.copyOf(b, b.length), bOut) ;
+        ByteArrayOutputStream bOut = new ByteArrayOutputStream();
+        serializer.serialize(Arrays.copyOf(b, b.length), bOut);
 
-    Assert.assertArrayEquals(b, bOut.toByteArray());
-    Assert.assertArrayEquals(b, serializer.create(new ByteArrayInputStream(b)));
-  }
+        Assert.assertArrayEquals(b, bOut.toByteArray());
+        Assert.assertArrayEquals(b, serializer.create(new ByteArrayInputStream(b)));
+    }
 }

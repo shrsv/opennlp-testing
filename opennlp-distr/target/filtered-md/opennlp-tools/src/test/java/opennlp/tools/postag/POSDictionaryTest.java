@@ -17,103 +17,102 @@
 
 package opennlp.tools.postag;
 
+import org.junit.Assert;
+import org.junit.Test;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-
-import org.junit.Assert;
-import org.junit.Test;
 
 /**
  * Tests for the {@link POSDictionary} class.
  */
 public class POSDictionaryTest {
 
-  private static POSDictionary loadDictionary(String name) throws IOException {
-    return POSDictionary.create(POSDictionaryTest.class.getResourceAsStream(name));
-  }
-
-  private static POSDictionary serializeDeserializeDict(POSDictionary dict) throws IOException {
-    ByteArrayOutputStream out = new ByteArrayOutputStream();
-
-    try {
-      dict.serialize(out);
-    }
-    finally {
-      out.close();
+    private static POSDictionary loadDictionary(String name) throws IOException {
+        return POSDictionary.create(POSDictionaryTest.class.getResourceAsStream(name));
     }
 
-    POSDictionary serializedDictionary;
-    try (InputStream in = new ByteArrayInputStream(out.toByteArray())) {
-      serializedDictionary = POSDictionary.create(in);
+    private static POSDictionary serializeDeserializeDict(POSDictionary dict) throws IOException {
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+
+        try {
+            dict.serialize(out);
+        } finally {
+            out.close();
+        }
+
+        POSDictionary serializedDictionary;
+        try (InputStream in = new ByteArrayInputStream(out.toByteArray())) {
+            serializedDictionary = POSDictionary.create(in);
+        }
+
+        return serializedDictionary;
     }
 
-    return serializedDictionary;
-  }
+    @Test
+    public void testSerialization() throws IOException {
+        POSDictionary dictionary = new POSDictionary();
 
-  @Test
-  public void testSerialization() throws IOException {
-    POSDictionary dictionary = new POSDictionary();
+        dictionary.put("a", "1", "2", "3");
+        dictionary.put("b", "4", "5", "6");
+        dictionary.put("c", "7", "8", "9");
+        dictionary.put("Always", "RB", "NNP");
 
-    dictionary.put("a", "1", "2", "3");
-    dictionary.put("b", "4", "5", "6");
-    dictionary.put("c", "7", "8", "9");
-    dictionary.put("Always", "RB","NNP");
+        Assert.assertTrue(dictionary.equals(serializeDeserializeDict(dictionary)));
+    }
 
-    Assert.assertTrue(dictionary.equals(serializeDeserializeDict(dictionary)));
-  }
+    @Test
+    public void testLoadingDictionaryWithoutCaseAttribute() throws IOException {
+        POSDictionary dict = loadDictionary("TagDictionaryWithoutCaseAttribute.xml");
 
-  @Test
-  public void testLoadingDictionaryWithoutCaseAttribute() throws IOException {
-    POSDictionary dict = loadDictionary("TagDictionaryWithoutCaseAttribute.xml");
+        Assert.assertArrayEquals(new String[]{"NNP"}, dict.getTags("McKinsey"));
+        Assert.assertNull(dict.getTags("Mckinsey"));
+    }
 
-    Assert.assertArrayEquals(new String[]{"NNP"}, dict.getTags("McKinsey"));
-    Assert.assertNull(dict.getTags("Mckinsey"));
-  }
+    @Test
+    public void testCaseSensitiveDictionary() throws IOException {
+        POSDictionary dict = loadDictionary("TagDictionaryCaseSensitive.xml");
 
-  @Test
-  public void testCaseSensitiveDictionary() throws IOException {
-    POSDictionary dict = loadDictionary("TagDictionaryCaseSensitive.xml");
+        Assert.assertArrayEquals(new String[]{"NNP"}, dict.getTags("McKinsey"));
+        Assert.assertNull(dict.getTags("Mckinsey"));
 
-    Assert.assertArrayEquals(new String[]{"NNP"}, dict.getTags("McKinsey"));
-    Assert.assertNull(dict.getTags("Mckinsey"));
+        dict = serializeDeserializeDict(dict);
 
-    dict = serializeDeserializeDict(dict);
+        Assert.assertArrayEquals(new String[]{"NNP"}, dict.getTags("McKinsey"));
+        Assert.assertNull(dict.getTags("Mckinsey"));
+    }
 
-    Assert.assertArrayEquals(new String[]{"NNP"}, dict.getTags("McKinsey"));
-    Assert.assertNull(dict.getTags("Mckinsey"));
-  }
+    @Test
+    public void testCaseInsensitiveDictionary() throws IOException {
+        POSDictionary dict = loadDictionary("TagDictionaryCaseInsensitive.xml");
 
-  @Test
-  public void testCaseInsensitiveDictionary() throws IOException {
-    POSDictionary dict = loadDictionary("TagDictionaryCaseInsensitive.xml");
+        Assert.assertArrayEquals(new String[]{"NNP"}, dict.getTags("McKinsey"));
+        Assert.assertArrayEquals(new String[]{"NNP"}, dict.getTags("Mckinsey"));
+        Assert.assertArrayEquals(new String[]{"NNP"}, dict.getTags("MCKINSEY"));
+        Assert.assertArrayEquals(new String[]{"NNP"}, dict.getTags("mckinsey"));
 
-    Assert.assertArrayEquals(new String[]{"NNP"}, dict.getTags("McKinsey"));
-    Assert.assertArrayEquals(new String[]{"NNP"}, dict.getTags("Mckinsey"));
-    Assert.assertArrayEquals(new String[]{"NNP"}, dict.getTags("MCKINSEY"));
-    Assert.assertArrayEquals(new String[]{"NNP"}, dict.getTags("mckinsey"));
+        dict = serializeDeserializeDict(dict);
 
-    dict = serializeDeserializeDict(dict);
+        Assert.assertArrayEquals(new String[]{"NNP"}, dict.getTags("McKinsey"));
+        Assert.assertArrayEquals(new String[]{"NNP"}, dict.getTags("Mckinsey"));
+    }
 
-    Assert.assertArrayEquals(new String[]{"NNP"}, dict.getTags("McKinsey"));
-    Assert.assertArrayEquals(new String[]{"NNP"}, dict.getTags("Mckinsey"));
-  }
+    @Test
+    public void testToString() throws IOException {
+        POSDictionary dict = loadDictionary("TagDictionaryCaseInsensitive.xml");
+        Assert.assertEquals("POSDictionary{size=1, caseSensitive=false}", dict.toString());
+        dict = loadDictionary("TagDictionaryCaseSensitive.xml");
+        Assert.assertEquals("POSDictionary{size=1, caseSensitive=true}", dict.toString());
+    }
 
-  @Test
-  public void testToString() throws IOException {
-    POSDictionary dict = loadDictionary("TagDictionaryCaseInsensitive.xml");
-    Assert.assertEquals("POSDictionary{size=1, caseSensitive=false}", dict.toString());
-    dict = loadDictionary("TagDictionaryCaseSensitive.xml");
-    Assert.assertEquals("POSDictionary{size=1, caseSensitive=true}", dict.toString());
-  }
+    @Test
+    public void testEqualsAndHashCode() throws IOException {
+        POSDictionary dictA = loadDictionary("TagDictionaryCaseInsensitive.xml");
+        POSDictionary dictB = loadDictionary("TagDictionaryCaseInsensitive.xml");
 
-  @Test
-  public void testEqualsAndHashCode() throws IOException {
-    POSDictionary dictA = loadDictionary("TagDictionaryCaseInsensitive.xml");
-    POSDictionary dictB = loadDictionary("TagDictionaryCaseInsensitive.xml");
-
-    Assert.assertEquals(dictA, dictB);
-    Assert.assertEquals(dictA.hashCode(), dictB.hashCode());
-  }
+        Assert.assertEquals(dictA, dictB);
+        Assert.assertEquals(dictA.hashCode(), dictB.hashCode());
+    }
 }

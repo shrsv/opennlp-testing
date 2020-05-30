@@ -18,34 +18,34 @@
 
 package opennlp.tools.formats.ontonotes;
 
+import opennlp.tools.formats.brat.SegmenterObjectStream;
+import opennlp.tools.util.ObjectStream;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-import opennlp.tools.formats.brat.SegmenterObjectStream;
-import opennlp.tools.util.ObjectStream;
 
 /**
  * Reads a plain text file and return each line as a <code>String</code> object.
  */
 public class DocumentToLineStream extends SegmenterObjectStream<String, String> {
 
-  public DocumentToLineStream(ObjectStream<String> samples) {
-    super(samples);
-  }
-
-  @Override
-  protected List<String> read(String sample) throws IOException {
-    List<String> lines = Arrays.asList(sample.split("\n"));
-
-    // documents must be empty line terminated
-    if (!lines.get(lines.size() - 1).trim().isEmpty()) {
-      lines = new ArrayList<>(lines);
-      lines.add("");
+    public DocumentToLineStream(ObjectStream<String> samples) {
+        super(samples);
     }
 
-    return lines;
-  }
+    @Override
+    protected List<String> read(String sample) throws IOException {
+        List<String> lines = Arrays.asList(sample.split("\n"));
+
+        // documents must be empty line terminated
+        if (!lines.get(lines.size() - 1).trim().isEmpty()) {
+            lines = new ArrayList<>(lines);
+            lines.add("");
+        }
+
+        return lines;
+    }
 }
 

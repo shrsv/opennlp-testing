@@ -17,9 +17,9 @@
 
 package opennlp.tools.util.featuregen;
 
-import java.util.List;
-
 import opennlp.tools.util.StringUtil;
+
+import java.util.List;
 
 
 /**
@@ -27,26 +27,26 @@ import opennlp.tools.util.StringUtil;
  */
 public class TokenClassFeatureGenerator implements AdaptiveFeatureGenerator {
 
-  private static final String TOKEN_CLASS_PREFIX = "wc";
-  private static final String TOKEN_AND_CLASS_PREFIX = "w&c";
+    private static final String TOKEN_CLASS_PREFIX = "wc";
+    private static final String TOKEN_AND_CLASS_PREFIX = "w&c";
 
-  private boolean generateWordAndClassFeature;
+    private boolean generateWordAndClassFeature;
 
-  public TokenClassFeatureGenerator() {
-    this(false);
-  }
-
-  public TokenClassFeatureGenerator(boolean generateWordAndClassFeature) {
-    this.generateWordAndClassFeature = generateWordAndClassFeature;
-  }
-
-  public void createFeatures(List<String> features, String[] tokens, int index, String[] preds) {
-    String wordClass = FeatureGeneratorUtil.tokenFeature(tokens[index]);
-    features.add(TOKEN_CLASS_PREFIX + "=" + wordClass);
-
-    if (generateWordAndClassFeature) {
-      features.add(TOKEN_AND_CLASS_PREFIX + "=" + StringUtil.toLowerCase(tokens[index]) +
-          "," + wordClass);
+    public TokenClassFeatureGenerator() {
+        this(false);
     }
-  }
+
+    public TokenClassFeatureGenerator(boolean generateWordAndClassFeature) {
+        this.generateWordAndClassFeature = generateWordAndClassFeature;
+    }
+
+    public void createFeatures(List<String> features, String[] tokens, int index, String[] preds) {
+        String wordClass = FeatureGeneratorUtil.tokenFeature(tokens[index]);
+        features.add(TOKEN_CLASS_PREFIX + "=" + wordClass);
+
+        if (generateWordAndClassFeature) {
+            features.add(TOKEN_AND_CLASS_PREFIX + "=" + StringUtil.toLowerCase(tokens[index]) +
+                    "," + wordClass);
+        }
+    }
 }

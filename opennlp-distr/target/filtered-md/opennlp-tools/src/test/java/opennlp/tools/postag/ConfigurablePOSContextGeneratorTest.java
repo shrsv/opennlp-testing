@@ -17,39 +17,38 @@
 
 package opennlp.tools.postag;
 
+import opennlp.tools.util.featuregen.AdaptiveFeatureGenerator;
+import opennlp.tools.util.featuregen.TokenFeatureGenerator;
 import org.junit.Assert;
 import org.junit.Test;
 
-import opennlp.tools.util.featuregen.AdaptiveFeatureGenerator;
-import opennlp.tools.util.featuregen.TokenFeatureGenerator;
-
 public class ConfigurablePOSContextGeneratorTest {
 
-  private void testContextGeneration(int cacheSize) {
-    AdaptiveFeatureGenerator fg = new TokenFeatureGenerator();
-    ConfigurablePOSContextGenerator cg = new ConfigurablePOSContextGenerator(cacheSize, fg);
+    private void testContextGeneration(int cacheSize) {
+        AdaptiveFeatureGenerator fg = new TokenFeatureGenerator();
+        ConfigurablePOSContextGenerator cg = new ConfigurablePOSContextGenerator(cacheSize, fg);
 
-    String[] tokens = new String[] {"a", "b", "c", "d", "e"};
-    String[] tags = new String[] {"t_a", "t_b", "t_c", "t_d", "t_e"};
+        String[] tokens = new String[]{"a", "b", "c", "d", "e"};
+        String[] tags = new String[]{"t_a", "t_b", "t_c", "t_d", "t_e"};
 
-    cg.getContext(0, tokens, tags, null);
+        cg.getContext(0, tokens, tags, null);
 
-    Assert.assertEquals(1, cg.getContext(0, tokens, tags, null).length);
-    Assert.assertEquals("w=a", cg.getContext(0, tokens, tags, null)[0]);
-    Assert.assertEquals("w=b", cg.getContext(1, tokens, tags, null)[0]);
-    Assert.assertEquals("w=c", cg.getContext(2, tokens, tags, null)[0]);
-    Assert.assertEquals("w=d", cg.getContext(3, tokens, tags, null)[0]);
-    Assert.assertEquals("w=e", cg.getContext(4, tokens, tags, null)[0]);
-  }
+        Assert.assertEquals(1, cg.getContext(0, tokens, tags, null).length);
+        Assert.assertEquals("w=a", cg.getContext(0, tokens, tags, null)[0]);
+        Assert.assertEquals("w=b", cg.getContext(1, tokens, tags, null)[0]);
+        Assert.assertEquals("w=c", cg.getContext(2, tokens, tags, null)[0]);
+        Assert.assertEquals("w=d", cg.getContext(3, tokens, tags, null)[0]);
+        Assert.assertEquals("w=e", cg.getContext(4, tokens, tags, null)[0]);
+    }
 
-  @Test
-  public void testWithoutCache() {
-    testContextGeneration(0);
-  }
+    @Test
+    public void testWithoutCache() {
+        testContextGeneration(0);
+    }
 
-  @Test
-  public void testWithCache() {
-    testContextGeneration(3);
-  }
+    @Test
+    public void testWithCache() {
+        testContextGeneration(3);
+    }
 
 }

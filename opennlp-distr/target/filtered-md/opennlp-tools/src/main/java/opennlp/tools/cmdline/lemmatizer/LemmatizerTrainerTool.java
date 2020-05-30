@@ -17,9 +17,6 @@
 
 package opennlp.tools.cmdline.lemmatizer;
 
-import java.io.File;
-import java.io.IOException;
-
 import opennlp.tools.cmdline.AbstractTrainerTool;
 import opennlp.tools.cmdline.CmdLineUtil;
 import opennlp.tools.cmdline.lemmatizer.LemmatizerTrainerTool.TrainerToolParams;
@@ -30,50 +27,53 @@ import opennlp.tools.lemmatizer.LemmatizerME;
 import opennlp.tools.lemmatizer.LemmatizerModel;
 import opennlp.tools.util.model.ModelUtil;
 
+import java.io.File;
+import java.io.IOException;
+
 public class LemmatizerTrainerTool
-    extends AbstractTrainerTool<LemmaSample, TrainerToolParams> {
+        extends AbstractTrainerTool<LemmaSample, TrainerToolParams> {
 
-  interface TrainerToolParams extends TrainingParams, TrainingToolParams {
-  }
-
-  public LemmatizerTrainerTool() {
-    super(LemmaSample.class, TrainerToolParams.class);
-  }
-
-  public String getName() {
-    return "LemmatizerTrainerME";
-  }
-
-  public String getShortDescription() {
-    return "trainer for the learnable lemmatizer";
-  }
-
-  public void run(String format, String[] args) {
-    super.run(format, args);
-
-    mlParams = CmdLineUtil.loadTrainingParameters(params.getParams(), false);
-    if (mlParams == null) {
-      mlParams = ModelUtil.createDefaultTrainingParameters();
+    public LemmatizerTrainerTool() {
+        super(LemmaSample.class, TrainerToolParams.class);
     }
 
-    File modelOutFile = params.getModel();
-    CmdLineUtil.checkOutputFile("lemmatizer model", modelOutFile);
-
-    LemmatizerModel model;
-    try {
-      LemmatizerFactory lemmatizerFactory = LemmatizerFactory
-          .create(params.getFactory());
-      model = LemmatizerME.train(params.getLang(), sampleStream, mlParams,
-          lemmatizerFactory);
-    } catch (IOException e) {
-      throw createTerminationIOException(e);
-    } finally {
-      try {
-        sampleStream.close();
-      } catch (IOException e) {
-        // sorry that this can fail
-      }
+    public String getName() {
+        return "LemmatizerTrainerME";
     }
-    CmdLineUtil.writeModel("lemmatizer", modelOutFile, model);
-  }
+
+    public String getShortDescription() {
+        return "trainer for the learnable lemmatizer";
+    }
+
+    public void run(String format, String[] args) {
+        super.run(format, args);
+
+        mlParams = CmdLineUtil.loadTrainingParameters(params.getParams(), false);
+        if (mlParams == null) {
+            mlParams = ModelUtil.createDefaultTrainingParameters();
+        }
+
+        File modelOutFile = params.getModel();
+        CmdLineUtil.checkOutputFile("lemmatizer model", modelOutFile);
+
+        LemmatizerModel model;
+        try {
+            LemmatizerFactory lemmatizerFactory = LemmatizerFactory
+                    .create(params.getFactory());
+            model = LemmatizerME.train(params.getLang(), sampleStream, mlParams,
+                    lemmatizerFactory);
+        } catch (IOException e) {
+            throw createTerminationIOException(e);
+        } finally {
+            try {
+                sampleStream.close();
+            } catch (IOException e) {
+                // sorry that this can fail
+            }
+        }
+        CmdLineUtil.writeModel("lemmatizer", modelOutFile, model);
+    }
+
+    interface TrainerToolParams extends TrainingParams, TrainingToolParams {
+    }
 }

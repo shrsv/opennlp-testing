@@ -23,21 +23,21 @@ import org.junit.Test;
 
 public class EmojiCharSequenceNormalizerTest {
 
-  public EmojiCharSequenceNormalizer normalizer = EmojiCharSequenceNormalizer.getInstance();
+    public EmojiCharSequenceNormalizer normalizer = EmojiCharSequenceNormalizer.getInstance();
 
-  @Test
-  public void normalizeEmoji() throws Exception {
+    @Test
+    public void normalizeEmoji() throws Exception {
 
-    String s = new StringBuilder()
-        .append("Any funny text goes here ")
-        .appendCodePoint(0x1F606)
-        .appendCodePoint(0x1F606)
-        .appendCodePoint(0x1F606)
-        .append(" ")
-        .appendCodePoint(0x1F61B)
-        .toString();
-    Assert.assertEquals(
-        "Any funny text goes here    ", normalizer.normalize(s));
-  }
+        String s = new StringBuilder()
+                .append("Any funny text goes here ")
+                .appendCodePoint(0x1F606)
+                .appendCodePoint(0x1F606)
+                .appendCodePoint(0x1F606)
+                .append(" ")
+                .appendCodePoint(0x1F61B)
+                .toString();
+        Assert.assertEquals(
+                "Any funny text goes here    ", normalizer.normalize(s));
+    }
 
 }

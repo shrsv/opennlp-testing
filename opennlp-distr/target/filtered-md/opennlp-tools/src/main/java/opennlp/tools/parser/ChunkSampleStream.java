@@ -17,92 +17,87 @@
 
 package opennlp.tools.parser;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
 import opennlp.tools.chunker.ChunkSample;
 import opennlp.tools.parser.chunking.Parser;
 import opennlp.tools.util.FilterObjectStream;
 import opennlp.tools.util.ObjectStream;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
 public class ChunkSampleStream extends FilterObjectStream<Parse, ChunkSample> {
 
-  public ChunkSampleStream(ObjectStream<Parse> in) {
-    super(in);
-  }
-
-  private static void getInitialChunks(Parse p, List<Parse> ichunks) {
-    if (p.isPosTag()) {
-      ichunks.add(p);
+    public ChunkSampleStream(ObjectStream<Parse> in) {
+        super(in);
     }
-    else {
-      Parse[] kids = p.getChildren();
-      boolean allKidsAreTags = true;
-      for (int ci = 0, cl = kids.length; ci < cl; ci++) {
-        if (!kids[ci].isPosTag()) {
-          allKidsAreTags = false;
-          break;
-        }
-      }
-      if (allKidsAreTags) {
-        ichunks.add(p);
-      }
-      else {
-        for (int ci = 0, cl = kids.length; ci < cl; ci++) {
-          getInitialChunks(kids[ci], ichunks);
-        }
-      }
-    }
-  }
 
-  public static Parse[] getInitialChunks(Parse p) {
-    List<Parse> chunks = new ArrayList<>();
-    getInitialChunks(p, chunks);
-    return chunks.toArray(new Parse[chunks.size()]);
-  }
-
-  public ChunkSample read() throws IOException {
-
-    Parse parse = samples.read();
-
-    if (parse != null) {
-      Parse[] chunks = getInitialChunks(parse);
-      List<String> toks = new ArrayList<>();
-      List<String> tags = new ArrayList<>();
-      List<String> preds = new ArrayList<>();
-      for (int ci = 0, cl = chunks.length; ci < cl; ci++) {
-        Parse c = chunks[ci];
-        if (c.isPosTag()) {
-          toks.add(c.getCoveredText());
-          tags.add(c.getType());
-          preds.add(Parser.OTHER);
-        }
-        else {
-          boolean start = true;
-          String ctype = c.getType();
-          Parse[] kids = c.getChildren();
-          for (int ti = 0, tl = kids.length; ti < tl; ti++) {
-            Parse tok = kids[ti];
-            toks.add(tok.getCoveredText());
-            tags.add(tok.getType());
-            if (start) {
-              preds.add(Parser.START + ctype);
-              start = false;
+    private static void getInitialChunks(Parse p, List<Parse> ichunks) {
+        if (p.isPosTag()) {
+            ichunks.add(p);
+        } else {
+            Parse[] kids = p.getChildren();
+            boolean allKidsAreTags = true;
+            for (int ci = 0, cl = kids.length; ci < cl; ci++) {
+                if (!kids[ci].isPosTag()) {
+                    allKidsAreTags = false;
+                    break;
+                }
             }
-            else {
-              preds.add(Parser.CONT + ctype);
+            if (allKidsAreTags) {
+                ichunks.add(p);
+            } else {
+                for (int ci = 0, cl = kids.length; ci < cl; ci++) {
+                    getInitialChunks(kids[ci], ichunks);
+                }
             }
-          }
         }
-      }
+    }
 
-      return new ChunkSample(toks.toArray(new String[toks.size()]),
-          tags.toArray(new String[tags.size()]),
-          preds.toArray(new String[preds.size()]));
+    public static Parse[] getInitialChunks(Parse p) {
+        List<Parse> chunks = new ArrayList<>();
+        getInitialChunks(p, chunks);
+        return chunks.toArray(new Parse[chunks.size()]);
     }
-    else {
-      return null;
+
+    public ChunkSample read() throws IOException {
+
+        Parse parse = samples.read();
+
+        if (parse != null) {
+            Parse[] chunks = getInitialChunks(parse);
+            List<String> toks = new ArrayList<>();
+            List<String> tags = new ArrayList<>();
+            List<String> preds = new ArrayList<>();
+            for (int ci = 0, cl = chunks.length; ci < cl; ci++) {
+                Parse c = chunks[ci];
+                if (c.isPosTag()) {
+                    toks.add(c.getCoveredText());
+                    tags.add(c.getType());
+                    preds.add(Parser.OTHER);
+                } else {
+                    boolean start = true;
+                    String ctype = c.getType();
+                    Parse[] kids = c.getChildren();
+                    for (int ti = 0, tl = kids.length; ti < tl; ti++) {
+                        Parse tok = kids[ti];
+                        toks.add(tok.getCoveredText());
+                        tags.add(tok.getType());
+                        if (start) {
+                            preds.add(Parser.START + ctype);
+                            start = false;
+                        } else {
+                            preds.add(Parser.CONT + ctype);
+                        }
+                    }
+                }
+            }
+
+            return new ChunkSample(toks.toArray(new String[toks.size()]),
+                    tags.toArray(new String[tags.size()]),
+                    preds.toArray(new String[preds.size()]));
+        } else {
+            return null;
+        }
     }
-  }
 }

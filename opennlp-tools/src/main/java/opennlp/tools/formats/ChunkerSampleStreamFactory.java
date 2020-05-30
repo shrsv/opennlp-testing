@@ -17,8 +17,6 @@
 
 package opennlp.tools.formats;
 
-import java.io.IOException;
-
 import opennlp.tools.chunker.ChunkSample;
 import opennlp.tools.chunker.ChunkSampleStream;
 import opennlp.tools.cmdline.ArgumentParser;
@@ -29,36 +27,38 @@ import opennlp.tools.util.InputStreamFactory;
 import opennlp.tools.util.ObjectStream;
 import opennlp.tools.util.PlainTextByLineStream;
 
+import java.io.IOException;
+
 /**
  * Factory producing OpenNLP {@link ChunkSampleStream}s.
  */
 public class ChunkerSampleStreamFactory extends AbstractSampleStreamFactory<ChunkSample> {
 
-  interface Parameters extends BasicFormatParams {
-  }
-
-  public static void registerFactory() {
-    StreamFactoryRegistry.registerFactory(ChunkSample.class,
-            StreamFactoryRegistry.DEFAULT_FORMAT, new ChunkerSampleStreamFactory(Parameters.class));
-  }
-
-  protected <P> ChunkerSampleStreamFactory(Class<P> params) {
-    super(params);
-  }
-
-  public ObjectStream<ChunkSample> create(String[] args) {
-    Parameters params = ArgumentParser.parse(args, Parameters.class);
-
-    CmdLineUtil.checkInputFile("Data", params.getData());
-    InputStreamFactory sampleDataIn = CmdLineUtil.createInputStreamFactory(params.getData());
-    ObjectStream<String> lineStream = null;
-    try {
-      lineStream = new PlainTextByLineStream(sampleDataIn, params.getEncoding());
-
-    } catch (IOException ex) {
-      CmdLineUtil.handleCreateObjectStreamError(ex);
+    protected <P> ChunkerSampleStreamFactory(Class<P> params) {
+        super(params);
     }
 
-    return new ChunkSampleStream(lineStream);
-  }
+    public static void registerFactory() {
+        StreamFactoryRegistry.registerFactory(ChunkSample.class,
+                StreamFactoryRegistry.DEFAULT_FORMAT, new ChunkerSampleStreamFactory(Parameters.class));
+    }
+
+    public ObjectStream<ChunkSample> create(String[] args) {
+        Parameters params = ArgumentParser.parse(args, Parameters.class);
+
+        CmdLineUtil.checkInputFile("Data", params.getData());
+        InputStreamFactory sampleDataIn = CmdLineUtil.createInputStreamFactory(params.getData());
+        ObjectStream<String> lineStream = null;
+        try {
+            lineStream = new PlainTextByLineStream(sampleDataIn, params.getEncoding());
+
+        } catch (IOException ex) {
+            CmdLineUtil.handleCreateObjectStreamError(ex);
+        }
+
+        return new ChunkSampleStream(lineStream);
+    }
+
+    interface Parameters extends BasicFormatParams {
+    }
 }

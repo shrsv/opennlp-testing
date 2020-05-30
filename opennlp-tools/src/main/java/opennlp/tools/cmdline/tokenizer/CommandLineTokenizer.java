@@ -17,8 +17,6 @@
 
 package opennlp.tools.cmdline.tokenizer;
 
-import java.io.IOException;
-
 import opennlp.tools.cmdline.CmdLineUtil;
 import opennlp.tools.cmdline.PerformanceMonitor;
 import opennlp.tools.cmdline.SystemInputStreamFactory;
@@ -28,39 +26,41 @@ import opennlp.tools.tokenize.WhitespaceTokenStream;
 import opennlp.tools.util.ObjectStream;
 import opennlp.tools.util.PlainTextByLineStream;
 
+import java.io.IOException;
+
 final class CommandLineTokenizer {
 
-  private final Tokenizer tokenizer;
+    private final Tokenizer tokenizer;
 
-  CommandLineTokenizer(Tokenizer tokenizer) {
-    this.tokenizer = tokenizer;
-  }
-
-  void process() {
-    ObjectStream<String> untokenizedLineStream;
-
-    ObjectStream<String> tokenizedLineStream;
-    PerformanceMonitor perfMon = null;
-    try {
-      untokenizedLineStream =
-              new PlainTextByLineStream(new SystemInputStreamFactory(), SystemInputStreamFactory.encoding());
-
-      tokenizedLineStream = new WhitespaceTokenStream(
-              new TokenizerStream(tokenizer, untokenizedLineStream));
-
-      perfMon = new PerformanceMonitor(System.err, "sent");
-      perfMon.start();
-
-
-      String tokenizedLine;
-      while ((tokenizedLine = tokenizedLineStream.read()) != null) {
-        System.out.println(tokenizedLine);
-        perfMon.incrementCounter();
-      }
-    } catch (IOException e) {
-      CmdLineUtil.handleStdinIoError(e);
+    CommandLineTokenizer(Tokenizer tokenizer) {
+        this.tokenizer = tokenizer;
     }
 
-    perfMon.stopAndPrintFinalResult();
-  }
+    void process() {
+        ObjectStream<String> untokenizedLineStream;
+
+        ObjectStream<String> tokenizedLineStream;
+        PerformanceMonitor perfMon = null;
+        try {
+            untokenizedLineStream =
+                    new PlainTextByLineStream(new SystemInputStreamFactory(), SystemInputStreamFactory.encoding());
+
+            tokenizedLineStream = new WhitespaceTokenStream(
+                    new TokenizerStream(tokenizer, untokenizedLineStream));
+
+            perfMon = new PerformanceMonitor(System.err, "sent");
+            perfMon.start();
+
+
+            String tokenizedLine;
+            while ((tokenizedLine = tokenizedLineStream.read()) != null) {
+                System.out.println(tokenizedLine);
+                perfMon.incrementCounter();
+            }
+        } catch (IOException e) {
+            CmdLineUtil.handleStdinIoError(e);
+        }
+
+        perfMon.stopAndPrintFinalResult();
+    }
 }

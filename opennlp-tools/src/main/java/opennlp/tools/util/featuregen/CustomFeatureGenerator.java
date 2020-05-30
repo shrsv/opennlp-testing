@@ -17,19 +17,19 @@
 
 package opennlp.tools.util.featuregen;
 
-import java.util.Map;
-
 import opennlp.tools.util.InvalidFormatException;
+
+import java.util.Map;
 
 @Deprecated   // TODO: (OPENNLP-1174) remove back-compat support when it is unnecessary
 public abstract class CustomFeatureGenerator implements AdaptiveFeatureGenerator {
 
-  /**
-   * Initialized the Custom Feature Generator with defined properties and loaded resources.
-   *
-   * @param properties
-   * @param resourceProvider
-   */
-  public abstract void init(Map<String, String> properties, FeatureGeneratorResourceProvider resourceProvider)
-        throws InvalidFormatException;
+    /**
+     * Initialized the Custom Feature Generator with defined properties and loaded resources.
+     *
+     * @param properties
+     * @param resourceProvider
+     */
+    public abstract void init(Map<String, String> properties, FeatureGeneratorResourceProvider resourceProvider)
+            throws InvalidFormatException;
 }

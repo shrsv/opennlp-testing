@@ -17,81 +17,75 @@
 
 package opennlp.morfologik.lemmatizer;
 
-import java.io.IOException;
-import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
-
 import morfologik.stemming.Dictionary;
 import morfologik.stemming.DictionaryLookup;
 import morfologik.stemming.IStemmer;
 import morfologik.stemming.WordData;
-
 import opennlp.tools.lemmatizer.Lemmatizer;
+
+import java.io.IOException;
+import java.nio.file.Path;
+import java.util.*;
 
 public class MorfologikLemmatizer implements Lemmatizer {
 
-  private IStemmer dictLookup;
+    private IStemmer dictLookup;
 
-  public MorfologikLemmatizer(Path dictionaryPath) throws IllegalArgumentException,
-      IOException {
-    this(Dictionary.read(dictionaryPath));
-  }
-
-  public MorfologikLemmatizer(Dictionary dictionary) throws IllegalArgumentException,
-      IOException {
-    dictLookup = new DictionaryLookup(dictionary);
-  }
-
-  private List<String> lemmatize(String word, String postag) {
-    List<WordData> dictMap = dictLookup.lookup(word.toLowerCase());
-    Set<String> lemmas = new HashSet<>();
-    for (WordData wordData : dictMap) {
-      if (Objects.equals(postag, asString(wordData.getTag()))) {
-        lemmas.add(asString(wordData.getStem()));
-      }
+    public MorfologikLemmatizer(Path dictionaryPath) throws IllegalArgumentException,
+            IOException {
+        this(Dictionary.read(dictionaryPath));
     }
-    return Collections.unmodifiableList(new ArrayList<>(lemmas));
-  }
 
-  private String asString(CharSequence tag) {
-    if (tag == null) {
-      return null;
+    public MorfologikLemmatizer(Dictionary dictionary) throws IllegalArgumentException,
+            IOException {
+        dictLookup = new DictionaryLookup(dictionary);
     }
-    return tag.toString();
-  }
 
-  @Override
-  public String[] lemmatize(String[] toks, String[] tags) {
-    String[] lemmas = new String[toks.length];
-    for (int i = 0; i < toks.length; i++) {
-      List<String> l = lemmatize(toks[i], tags[i]);
-      if (l.size() > 0) {
-        lemmas[i] = l.get(0);
-      } else {
-        lemmas[i] = null;
-      }
+    private List<String> lemmatize(String word, String postag) {
+        List<WordData> dictMap = dictLookup.lookup(word.toLowerCase());
+        Set<String> lemmas = new HashSet<>();
+        for (WordData wordData : dictMap) {
+            if (Objects.equals(postag, asString(wordData.getTag()))) {
+                lemmas.add(asString(wordData.getStem()));
+            }
+        }
+        return Collections.unmodifiableList(new ArrayList<>(lemmas));
     }
-    return lemmas;
-  }
 
-
-  /**
-   * Generates a lemma tags for the word and postag returning the result in list of possible lemmas.
-   *
-   * @param toks an array of the tokens
-   * @param tags an array of the pos tags
-   * @return an list of possible lemmas for each token in the sequence.
-   */
-  public List<List<String>> lemmatize(List<String> toks, List<String> tags) {
-    List<List<String>> lemmas = new ArrayList<>();
-    for (int i = 0; i < toks.size(); i++) {
-      lemmas.add(lemmatize(toks.get(i), tags.get(i)));
+    private String asString(CharSequence tag) {
+        if (tag == null) {
+            return null;
+        }
+        return tag.toString();
     }
-    return lemmas;
-  }
+
+    @Override
+    public String[] lemmatize(String[] toks, String[] tags) {
+        String[] lemmas = new String[toks.length];
+        for (int i = 0; i < toks.length; i++) {
+            List<String> l = lemmatize(toks[i], tags[i]);
+            if (l.size() > 0) {
+                lemmas[i] = l.get(0);
+            } else {
+                lemmas[i] = null;
+            }
+        }
+        return lemmas;
+    }
+
+
+    /**
+     * Generates a lemma tags for the word and postag returning the result in list of possible lemmas.
+     *
+     * @param toks an array of the tokens
+     * @param tags an array of the pos tags
+     * @return an list of possible lemmas for each token in the sequence.
+     */
+    public List<List<String>> lemmatize(List<String> toks, List<String> tags) {
+        List<List<String>> lemmas = new ArrayList<>();
+        for (int i = 0; i < toks.size(); i++) {
+            lemmas.add(lemmatize(toks.get(i), tags.get(i)));
+        }
+        return lemmas;
+    }
 }

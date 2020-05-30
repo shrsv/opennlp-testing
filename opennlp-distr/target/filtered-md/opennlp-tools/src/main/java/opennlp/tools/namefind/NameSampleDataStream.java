@@ -17,11 +17,11 @@
 
 package opennlp.tools.namefind;
 
-import java.io.IOException;
-
 import opennlp.tools.ml.maxent.DataStream;
 import opennlp.tools.util.FilterObjectStream;
 import opennlp.tools.util.ObjectStream;
+
+import java.io.IOException;
 
 /**
  * The {@link NameSampleDataStream} class converts tagged {@link String}s
@@ -31,32 +31,31 @@ import opennlp.tools.util.ObjectStream;
  */
 public class NameSampleDataStream extends FilterObjectStream<String, NameSample> {
 
-  public static final String START_TAG_PREFIX = "<START:";
-  public static final String START_TAG = "<START>";
-  public static final String END_TAG = "<END>";
+    public static final String START_TAG_PREFIX = "<START:";
+    public static final String START_TAG = "<START>";
+    public static final String END_TAG = "<END>";
 
-  public NameSampleDataStream(ObjectStream<String> in) {
-    super(in);
-  }
-
-  public NameSample read() throws IOException {
-    String token = samples.read();
-
-    boolean isClearAdaptiveData = false;
-
-    // An empty line indicates the begin of a new article
-    // for which the adaptive data in the feature generators
-    // must be cleared
-    while (token != null && token.trim().length() == 0) {
-      isClearAdaptiveData = true;
-      token = samples.read();
+    public NameSampleDataStream(ObjectStream<String> in) {
+        super(in);
     }
 
-    if (token != null) {
-      return NameSample.parse(token, isClearAdaptiveData);
+    public NameSample read() throws IOException {
+        String token = samples.read();
+
+        boolean isClearAdaptiveData = false;
+
+        // An empty line indicates the begin of a new article
+        // for which the adaptive data in the feature generators
+        // must be cleared
+        while (token != null && token.trim().length() == 0) {
+            isClearAdaptiveData = true;
+            token = samples.read();
+        }
+
+        if (token != null) {
+            return NameSample.parse(token, isClearAdaptiveData);
+        } else {
+            return null;
+        }
     }
-    else {
-      return null;
-    }
-  }
 }

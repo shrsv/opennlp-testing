@@ -17,11 +17,11 @@
 
 package opennlp.tools.cmdline.lemmatizer;
 
-import java.io.IOException;
-import java.io.InputStream;
-
 import opennlp.tools.cmdline.ModelLoader;
 import opennlp.tools.lemmatizer.LemmatizerModel;
+
+import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * Loads a Lemmatizer Model for the command line tools.
@@ -30,14 +30,14 @@ import opennlp.tools.lemmatizer.LemmatizerModel;
  */
 public class LemmatizerModelLoader extends ModelLoader<LemmatizerModel> {
 
-  public LemmatizerModelLoader() {
-    super("Lemmatizer");
-  }
+    public LemmatizerModelLoader() {
+        super("Lemmatizer");
+    }
 
-  @Override
-  protected LemmatizerModel loadModel(InputStream modelIn) throws IOException {
-    return new LemmatizerModel(modelIn);
-  }
+    @Override
+    protected LemmatizerModel loadModel(InputStream modelIn) throws IOException {
+        return new LemmatizerModel(modelIn);
+    }
 
 }
 

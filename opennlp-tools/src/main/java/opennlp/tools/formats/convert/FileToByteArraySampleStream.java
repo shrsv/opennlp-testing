@@ -17,46 +17,40 @@
 
 package opennlp.tools.formats.convert;
 
-import java.io.BufferedInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-
 import opennlp.tools.util.FilterObjectStream;
 import opennlp.tools.util.ObjectStream;
 
+import java.io.*;
+
 public class FileToByteArraySampleStream extends FilterObjectStream<File, byte[]> {
 
-  public FileToByteArraySampleStream(ObjectStream<File> samples) {
-    super(samples);
-  }
-
-  private static byte[] readFile(File file) throws IOException {
-
-    ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-
-    try (InputStream in = new BufferedInputStream(new FileInputStream(file))) {
-      byte[] buffer = new byte[1024];
-      int length;
-      while ((length = in.read(buffer, 0, buffer.length)) > 0) {
-        bytes.write(buffer, 0, length);
-      }
+    public FileToByteArraySampleStream(ObjectStream<File> samples) {
+        super(samples);
     }
 
-    return bytes.toByteArray();
-  }
+    private static byte[] readFile(File file) throws IOException {
 
-  public byte[] read() throws IOException {
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
 
-    File sampleFile = samples.read();
+        try (InputStream in = new BufferedInputStream(new FileInputStream(file))) {
+            byte[] buffer = new byte[1024];
+            int length;
+            while ((length = in.read(buffer, 0, buffer.length)) > 0) {
+                bytes.write(buffer, 0, length);
+            }
+        }
 
-    if (sampleFile != null) {
-      return readFile(sampleFile);
+        return bytes.toByteArray();
     }
-    else {
-      return null;
+
+    public byte[] read() throws IOException {
+
+        File sampleFile = samples.read();
+
+        if (sampleFile != null) {
+            return readFile(sampleFile);
+        } else {
+            return null;
+        }
     }
-  }
 }

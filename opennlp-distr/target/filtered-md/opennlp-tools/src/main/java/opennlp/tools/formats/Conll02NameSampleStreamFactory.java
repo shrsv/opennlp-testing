@@ -17,8 +17,6 @@
 
 package opennlp.tools.formats;
 
-import java.io.IOException;
-
 import opennlp.tools.cmdline.ArgumentParser;
 import opennlp.tools.cmdline.ArgumentParser.ParameterDescription;
 import opennlp.tools.cmdline.CmdLineUtil;
@@ -29,70 +27,70 @@ import opennlp.tools.formats.Conll02NameSampleStream.LANGUAGE;
 import opennlp.tools.namefind.NameSample;
 import opennlp.tools.util.ObjectStream;
 
+import java.io.IOException;
+
 /**
  * <b>Note:</b> Do not use this class, internal use only!
  */
 public class Conll02NameSampleStreamFactory extends LanguageSampleStreamFactory<NameSample> {
 
-  interface Parameters extends BasicFormatParams {
-    @ParameterDescription(valueName = "spa|nld")
-    String getLang();
-
-    @ParameterDescription(valueName = "per,loc,org,misc")
-    String getTypes();
-  }
-
-  public static void registerFactory() {
-    StreamFactoryRegistry.registerFactory(NameSample.class,
-        "conll02", new Conll02NameSampleStreamFactory(Parameters.class));
-  }
-
-  protected <P> Conll02NameSampleStreamFactory(Class<P> params) {
-    super(params);
-  }
-
-  public ObjectStream<NameSample> create(String[] args) {
-
-    Parameters params = ArgumentParser.parse(args, Parameters.class);
-
-    LANGUAGE lang;
-    if ("nl".equals(params.getLang()) || "nld".equals(params.getLang())) {
-      lang = LANGUAGE.NLD;
-      language = params.getLang();
-    }
-    else if ("es".equals(params.getLang()) || "spa".equals(params.getLang())) {
-      lang = LANGUAGE.SPA;
-      language = params.getLang();
-    }
-    else {
-      throw new TerminateToolException(1, "Unsupported language: " + params.getLang());
+    protected <P> Conll02NameSampleStreamFactory(Class<P> params) {
+        super(params);
     }
 
-    int typesToGenerate = 0;
-
-    if (params.getTypes().contains("per")) {
-      typesToGenerate = typesToGenerate |
-          Conll02NameSampleStream.GENERATE_PERSON_ENTITIES;
-    }
-    if (params.getTypes().contains("org")) {
-      typesToGenerate = typesToGenerate |
-          Conll02NameSampleStream.GENERATE_ORGANIZATION_ENTITIES;
-    }
-    if (params.getTypes().contains("loc")) {
-      typesToGenerate = typesToGenerate |
-          Conll02NameSampleStream.GENERATE_LOCATION_ENTITIES;
-    }
-    if (params.getTypes().contains("misc")) {
-      typesToGenerate = typesToGenerate |
-          Conll02NameSampleStream.GENERATE_MISC_ENTITIES;
+    public static void registerFactory() {
+        StreamFactoryRegistry.registerFactory(NameSample.class,
+                "conll02", new Conll02NameSampleStreamFactory(Parameters.class));
     }
 
+    public ObjectStream<NameSample> create(String[] args) {
 
-    try {
-      return new Conll02NameSampleStream(lang,
-          CmdLineUtil.createInputStreamFactory(params.getData()), typesToGenerate);
-    } catch (IOException e) {
-      throw CmdLineUtil.createObjectStreamError(e);
+        Parameters params = ArgumentParser.parse(args, Parameters.class);
+
+        LANGUAGE lang;
+        if ("nl".equals(params.getLang()) || "nld".equals(params.getLang())) {
+            lang = LANGUAGE.NLD;
+            language = params.getLang();
+        } else if ("es".equals(params.getLang()) || "spa".equals(params.getLang())) {
+            lang = LANGUAGE.SPA;
+            language = params.getLang();
+        } else {
+            throw new TerminateToolException(1, "Unsupported language: " + params.getLang());
+        }
+
+        int typesToGenerate = 0;
+
+        if (params.getTypes().contains("per")) {
+            typesToGenerate = typesToGenerate |
+                    Conll02NameSampleStream.GENERATE_PERSON_ENTITIES;
+        }
+        if (params.getTypes().contains("org")) {
+            typesToGenerate = typesToGenerate |
+                    Conll02NameSampleStream.GENERATE_ORGANIZATION_ENTITIES;
+        }
+        if (params.getTypes().contains("loc")) {
+            typesToGenerate = typesToGenerate |
+                    Conll02NameSampleStream.GENERATE_LOCATION_ENTITIES;
+        }
+        if (params.getTypes().contains("misc")) {
+            typesToGenerate = typesToGenerate |
+                    Conll02NameSampleStream.GENERATE_MISC_ENTITIES;
+        }
+
+
+        try {
+            return new Conll02NameSampleStream(lang,
+                    CmdLineUtil.createInputStreamFactory(params.getData()), typesToGenerate);
+        } catch (IOException e) {
+            throw CmdLineUtil.createObjectStreamError(e);
+        }
     }
-  }
+
+    interface Parameters extends BasicFormatParams {
+        @ParameterDescription(valueName = "spa|nld")
+        String getLang();
+
+        @ParameterDescription(valueName = "per,loc,org,misc")
+        String getTypes();
+    }
 }

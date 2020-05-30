@@ -17,38 +17,37 @@
 
 package opennlp.tools.cmdline.doccat;
 
-import java.io.OutputStream;
-
 import opennlp.tools.cmdline.EvaluationErrorPrinter;
 import opennlp.tools.doccat.DoccatEvaluationMonitor;
 import opennlp.tools.doccat.DocumentSample;
 import opennlp.tools.util.eval.EvaluationMonitor;
 
+import java.io.OutputStream;
+
 /**
  * A default implementation of {@link EvaluationMonitor} that prints to an
  * output stream.
- *
  */
 public class DoccatEvaluationErrorListener extends
-    EvaluationErrorPrinter<DocumentSample> implements DoccatEvaluationMonitor {
+        EvaluationErrorPrinter<DocumentSample> implements DoccatEvaluationMonitor {
 
-  /**
-   * Creates a listener that will print to System.err
-   */
-  public DoccatEvaluationErrorListener() {
-    super(System.err);
-  }
+    /**
+     * Creates a listener that will print to System.err
+     */
+    public DoccatEvaluationErrorListener() {
+        super(System.err);
+    }
 
-  /**
-   * Creates a listener that will print to a given {@link OutputStream}
-   */
-  public DoccatEvaluationErrorListener(OutputStream outputStream) {
-    super(outputStream);
-  }
+    /**
+     * Creates a listener that will print to a given {@link OutputStream}
+     */
+    public DoccatEvaluationErrorListener(OutputStream outputStream) {
+        super(outputStream);
+    }
 
-  @Override
-  public void missclassified(DocumentSample reference, DocumentSample prediction) {
-    printError(reference, prediction);
-  }
+    @Override
+    public void missclassified(DocumentSample reference, DocumentSample prediction) {
+        printError(reference, prediction);
+    }
 
 }

@@ -36,133 +36,126 @@ import java.util.concurrent.TimeUnit;
  */
 public class PerformanceMonitor {
 
-  private ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1, runnable -> {
-    Thread thread = new Thread(runnable);
-    thread.setName("opennlp.tools.cmdline.PerformanceMonitor");
-    thread.setDaemon(true);
-    return thread;
-  });
+    private final String unit;
+    private final PrintStream out;
+    private ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1, runnable -> {
+        Thread thread = new Thread(runnable);
+        thread.setName("opennlp.tools.cmdline.PerformanceMonitor");
+        thread.setDaemon(true);
+        return thread;
+    });
+    private ScheduledFuture<?> beeperHandle;
+    private volatile long startTime = -1;
+    private volatile int counter;
 
-  private final String unit;
+    public PerformanceMonitor(PrintStream out, String unit) {
+        this.out = out;
+        this.unit = unit;
+    }
 
-  private ScheduledFuture<?> beeperHandle;
+    public PerformanceMonitor(String unit) {
+        this(System.out, unit);
+    }
 
-  private volatile long startTime = -1;
+    public boolean isStarted() {
+        return startTime != -1;
+    }
 
-  private volatile int counter;
+    public void incrementCounter(int increment) {
 
-  private final PrintStream out;
+        if (!isStarted())
+            throw new IllegalStateException("Must be started first!");
 
-  public PerformanceMonitor(PrintStream out, String unit) {
-    this.out = out;
-    this.unit = unit;
-  }
+        if (increment < 0)
+            throw new IllegalArgumentException("increment must be zero or positive but was " + increment + "!");
 
-  public PerformanceMonitor(String unit) {
-    this(System.out, unit);
-  }
+        counter += increment;
+    }
 
-  public boolean isStarted() {
-    return startTime != -1;
-  }
+    public void incrementCounter() {
+        incrementCounter(1);
+    }
 
-  public void incrementCounter(int increment) {
+    public void start() {
 
-    if (!isStarted())
-      throw new IllegalStateException("Must be started first!");
+        if (isStarted())
+            throw new IllegalStateException("Already started!");
 
-    if (increment < 0)
-      throw new IllegalArgumentException("increment must be zero or positive but was " + increment + "!");
-
-    counter += increment;
-  }
-
-  public void incrementCounter() {
-    incrementCounter(1);
-  }
-
-  public void start() {
-
-    if (isStarted())
-      throw new IllegalStateException("Already started!");
-
-    startTime = System.currentTimeMillis();
-  }
+        startTime = System.currentTimeMillis();
+    }
 
 
-  public void startAndPrintThroughput() {
+    public void startAndPrintThroughput() {
 
-    start();
+        start();
 
-    final Runnable beeper = new Runnable() {
+        final Runnable beeper = new Runnable() {
 
-      private long lastTimeStamp = startTime;
-      private int lastCount = counter;
+            private long lastTimeStamp = startTime;
+            private int lastCount = counter;
 
-      public void run() {
+            public void run() {
 
-        int deltaCount = counter - lastCount;
+                int deltaCount = counter - lastCount;
 
-        long timePassedSinceLastCount = System.currentTimeMillis()
-            - lastTimeStamp;
+                long timePassedSinceLastCount = System.currentTimeMillis()
+                        - lastTimeStamp;
 
-        double currentThroughput;
+                double currentThroughput;
 
-        if (timePassedSinceLastCount > 0) {
-          currentThroughput = deltaCount / ((double) timePassedSinceLastCount / 1000);
+                if (timePassedSinceLastCount > 0) {
+                    currentThroughput = deltaCount / ((double) timePassedSinceLastCount / 1000);
+                } else {
+                    currentThroughput = 0;
+                }
+
+                long totalTimePassed = System.currentTimeMillis() - startTime;
+
+                double averageThroughput;
+                if (totalTimePassed > 0) {
+                    averageThroughput = counter / (((double) totalTimePassed) / 1000);
+                } else {
+                    averageThroughput = 0;
+                }
+
+                out.printf("current: %.1f " + unit + "/s avg: %.1f " + unit + "/s total: %d "
+                        + unit + "%n", currentThroughput, averageThroughput, counter);
+
+                lastTimeStamp = System.currentTimeMillis();
+                lastCount = counter;
+            }
+        };
+
+        beeperHandle = scheduler.scheduleAtFixedRate(beeper, 1, 1, TimeUnit.SECONDS);
+    }
+
+    public void stopAndPrintFinalResult() {
+
+        if (!isStarted())
+            throw new IllegalStateException("Must be started first!");
+
+        if (beeperHandle != null) {
+            // yeah we have time to finish current
+            // printing if there is one
+            beeperHandle.cancel(false);
+        }
+
+        scheduler.shutdown();
+
+        long timePassed = System.currentTimeMillis() - startTime;
+
+        double average;
+        if (timePassed > 0) {
+            average = counter / (timePassed / 1000d);
         } else {
-          currentThroughput = 0;
+            average = 0;
         }
 
-        long totalTimePassed = System.currentTimeMillis() - startTime;
+        out.println();
+        out.println();
 
-        double averageThroughput;
-        if (totalTimePassed > 0) {
-          averageThroughput = counter / (((double) totalTimePassed) / 1000);
-        }
-        else {
-          averageThroughput = 0;
-        }
-
-        out.printf("current: %.1f " + unit + "/s avg: %.1f " + unit + "/s total: %d "
-            + unit + "%n", currentThroughput, averageThroughput, counter);
-
-        lastTimeStamp = System.currentTimeMillis();
-        lastCount = counter;
-      }
-    };
-
-    beeperHandle = scheduler.scheduleAtFixedRate(beeper, 1, 1, TimeUnit.SECONDS);
-  }
-
-  public void stopAndPrintFinalResult() {
-
-    if (!isStarted())
-      throw new IllegalStateException("Must be started first!");
-
-    if (beeperHandle != null) {
-      // yeah we have time to finish current
-      // printing if there is one
-      beeperHandle.cancel(false);
+        out.printf("Average: %.1f " + unit + "/s %n", average);
+        out.println("Total: " + counter + " " + unit);
+        out.println("Runtime: " + timePassed / 1000d + "s");
     }
-
-    scheduler.shutdown();
-
-    long timePassed = System.currentTimeMillis() - startTime;
-
-    double average;
-    if (timePassed > 0) {
-      average = counter / (timePassed / 1000d);
-    }
-    else {
-      average = 0;
-    }
-
-    out.println();
-    out.println();
-
-    out.printf("Average: %.1f " + unit + "/s %n", average);
-    out.println("Total: " + counter + " " + unit);
-    out.println("Runtime: " + timePassed / 1000d + "s");
-  }
 }

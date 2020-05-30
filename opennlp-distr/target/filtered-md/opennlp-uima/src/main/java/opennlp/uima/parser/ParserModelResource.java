@@ -20,5 +20,5 @@ package opennlp.uima.parser;
 import opennlp.tools.parser.ParserModel;
 
 public interface ParserModelResource {
-  ParserModel getModel();
+    ParserModel getModel();
 }

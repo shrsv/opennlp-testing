@@ -17,26 +17,26 @@
 
 package opennlp.tools.ml;
 
-import java.io.IOException;
-
 import opennlp.tools.ml.model.SequenceClassificationModel;
 import opennlp.tools.ml.model.SequenceStream;
 
+import java.io.IOException;
+
 public abstract class AbstractSequenceTrainer extends AbstractTrainer implements
-    SequenceTrainer {
+        SequenceTrainer {
 
-  public AbstractSequenceTrainer() {
-  }
+    public AbstractSequenceTrainer() {
+    }
 
-  public abstract SequenceClassificationModel<String> doTrain(SequenceStream events)
-      throws IOException;
+    public abstract SequenceClassificationModel<String> doTrain(SequenceStream events)
+            throws IOException;
 
-  public final SequenceClassificationModel<String> train(SequenceStream events) throws IOException {
-    validate();
+    public final SequenceClassificationModel<String> train(SequenceStream events) throws IOException {
+        validate();
 
-    SequenceClassificationModel<String> model = doTrain(events);
-    addToReport(AbstractTrainer.TRAINER_TYPE_PARAM, SequenceTrainer.SEQUENCE_VALUE);
-    return model;
-  }
+        SequenceClassificationModel<String> model = doTrain(events);
+        addToReport(AbstractTrainer.TRAINER_TYPE_PARAM, SequenceTrainer.SEQUENCE_VALUE);
+        return model;
+    }
 
 }

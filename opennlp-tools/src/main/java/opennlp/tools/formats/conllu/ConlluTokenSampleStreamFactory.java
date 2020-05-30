@@ -17,8 +17,6 @@
 
 package opennlp.tools.formats.conllu;
 
-import java.io.IOException;
-
 import opennlp.tools.cmdline.ArgumentParser;
 import opennlp.tools.cmdline.CmdLineUtil;
 import opennlp.tools.cmdline.StreamFactoryRegistry;
@@ -28,34 +26,36 @@ import opennlp.tools.tokenize.TokenSample;
 import opennlp.tools.util.InputStreamFactory;
 import opennlp.tools.util.ObjectStream;
 
+import java.io.IOException;
+
 public class ConlluTokenSampleStreamFactory extends AbstractSampleStreamFactory<TokenSample> {
 
-  interface Parameters extends BasicFormatParams {
-  }
-
-  public static void registerFactory() {
-    StreamFactoryRegistry.registerFactory(TokenSample.class,
-        ConlluPOSSampleStreamFactory.CONLLU_FORMAT,
-        new ConlluTokenSampleStreamFactory(ConlluTokenSampleStreamFactory.Parameters.class));
-  }
-
-  protected <P> ConlluTokenSampleStreamFactory(Class<P> params) {
-    super(params);
-  }
-
-  @Override
-  public ObjectStream<TokenSample> create(String[] args) {
-    Parameters params = ArgumentParser.parse(args, Parameters.class);
-
-    InputStreamFactory inFactory =
-        CmdLineUtil.createInputStreamFactory(params.getData());
-
-    try {
-      return new ConlluTokenSampleStream(new ConlluStream(inFactory));
-    } catch (IOException e) {
-      // That will throw an exception
-      CmdLineUtil.handleCreateObjectStreamError(e);
+    protected <P> ConlluTokenSampleStreamFactory(Class<P> params) {
+        super(params);
     }
-    return null;
-  }
+
+    public static void registerFactory() {
+        StreamFactoryRegistry.registerFactory(TokenSample.class,
+                ConlluPOSSampleStreamFactory.CONLLU_FORMAT,
+                new ConlluTokenSampleStreamFactory(ConlluTokenSampleStreamFactory.Parameters.class));
+    }
+
+    @Override
+    public ObjectStream<TokenSample> create(String[] args) {
+        Parameters params = ArgumentParser.parse(args, Parameters.class);
+
+        InputStreamFactory inFactory =
+                CmdLineUtil.createInputStreamFactory(params.getData());
+
+        try {
+            return new ConlluTokenSampleStream(new ConlluStream(inFactory));
+        } catch (IOException e) {
+            // That will throw an exception
+            CmdLineUtil.handleCreateObjectStreamError(e);
+        }
+        return null;
+    }
+
+    interface Parameters extends BasicFormatParams {
+    }
 }

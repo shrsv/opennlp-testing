@@ -17,43 +17,43 @@
 
 package opennlp.tools.formats.moses;
 
-import java.io.IOException;
-import java.util.LinkedList;
-import java.util.List;
-
 import opennlp.tools.sentdetect.EmptyLinePreprocessorStream;
 import opennlp.tools.sentdetect.SentenceSample;
 import opennlp.tools.util.FilterObjectStream;
 import opennlp.tools.util.ObjectStream;
 import opennlp.tools.util.Span;
 
+import java.io.IOException;
+import java.util.LinkedList;
+import java.util.List;
+
 public class MosesSentenceSampleStream extends FilterObjectStream<String, SentenceSample> {
 
-  public MosesSentenceSampleStream(ObjectStream<String> sentences) {
-    super(new EmptyLinePreprocessorStream(sentences));
-  }
-
-  public SentenceSample read() throws IOException {
-
-    StringBuilder sentencesString = new StringBuilder();
-    List<Span> sentenceSpans = new LinkedList<>();
-
-    String sentence;
-    for (int i = 0; i < 25 && (sentence = samples.read()) != null; i++) {
-      int begin = sentencesString.length();
-      sentence = sentence.trim();
-      sentencesString.append(sentence);
-
-      int end = sentencesString.length();
-      sentenceSpans.add(new Span(begin, end));
-      sentencesString.append(' ');
+    public MosesSentenceSampleStream(ObjectStream<String> sentences) {
+        super(new EmptyLinePreprocessorStream(sentences));
     }
 
-    if (sentenceSpans.size() > 0) {
-      return new SentenceSample(sentencesString.toString(),
-          sentenceSpans.toArray(new Span[sentenceSpans.size()]));
-    }
+    public SentenceSample read() throws IOException {
 
-    return null;
-  }
+        StringBuilder sentencesString = new StringBuilder();
+        List<Span> sentenceSpans = new LinkedList<>();
+
+        String sentence;
+        for (int i = 0; i < 25 && (sentence = samples.read()) != null; i++) {
+            int begin = sentencesString.length();
+            sentence = sentence.trim();
+            sentencesString.append(sentence);
+
+            int end = sentencesString.length();
+            sentenceSpans.add(new Span(begin, end));
+            sentencesString.append(' ');
+        }
+
+        if (sentenceSpans.size() > 0) {
+            return new SentenceSample(sentencesString.toString(),
+                    sentenceSpans.toArray(new Span[sentenceSpans.size()]));
+        }
+
+        return null;
+    }
 }

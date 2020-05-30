@@ -37,180 +37,174 @@ import java.util.Properties;
  */
 public class Version {
 
-  private static final String DEV_VERSION_STRING = "0.0.0-SNAPSHOT";
+    private static final String DEV_VERSION_STRING = "0.0.0-SNAPSHOT";
+    private static final String SNAPSHOT_MARKER = "-SNAPSHOT";
+    public static final Version DEV_VERSION = Version.parse(DEV_VERSION_STRING);
+    private final int major;
 
-  public static final Version DEV_VERSION = Version.parse(DEV_VERSION_STRING);
+    private final int minor;
 
-  private static final String SNAPSHOT_MARKER = "-SNAPSHOT";
+    private final int revision;
 
-  private final int major;
+    private final boolean snapshot;
 
-  private final int minor;
-
-  private final int revision;
-
-  private final boolean snapshot;
-
-  /**
-   * Initializes the current instance with the provided
-   * versions.
-   *
-   * @param major
-   * @param minor
-   * @param revision
-   * @param snapshot
-   */
-  public Version(int major, int minor, int revision, boolean snapshot) {
-    this.major = major;
-    this.minor = minor;
-    this.revision = revision;
-    this.snapshot = snapshot;
-  }
-
-  /**
-   * Initializes the current instance with the provided
-   * versions. The version will not be a snapshot version.
-   *
-   * @param major
-   * @param minor
-   * @param revision
-   */
-  public Version(int major, int minor, int revision) {
-   this(major, minor, revision, false);
-  }
-
-  /**
-   * Retrieves the major version.
-   *
-   * @return major version
-   */
-  public int getMajor() {
-    return major;
-  }
-
-  /**
-   * Retrieves the minor version.
-   *
-   * @return minor version
-   */
-  public int getMinor() {
-    return minor;
-  }
-
-  /**
-   * Retrieves the revision version.
-   *
-   * @return revision version
-   */
-  public int getRevision() {
-    return revision;
-  }
-
-  public boolean isSnapshot() {
-    return snapshot;
-  }
-
-  /**
-   * Retrieves the version string.
-   *
-   * The {@link #parse(String)} method can create an instance
-   * of {@link Version} with the returned version value string.
-   *
-   * @return the version value string
-   */
-  @Override
-  public String toString() {
-    return Integer.toString(getMajor()) + "." + Integer.toString(getMinor()) +
-      "." + Integer.toString(getRevision()) + (isSnapshot() ? SNAPSHOT_MARKER : "");
-  }
-
-  @Override
-  public int hashCode() {
-    return Objects.hash(getMajor(), getMinor(), getRevision(), isSnapshot());
-  }
-
-  @Override
-  public boolean equals(Object obj) {
-    if (obj == this) {
-      return true;
+    /**
+     * Initializes the current instance with the provided
+     * versions.
+     *
+     * @param major
+     * @param minor
+     * @param revision
+     * @param snapshot
+     */
+    public Version(int major, int minor, int revision, boolean snapshot) {
+        this.major = major;
+        this.minor = minor;
+        this.revision = revision;
+        this.snapshot = snapshot;
     }
 
-    if (obj instanceof Version) {
-      Version version = (Version) obj;
-
-      return getMajor() == version.getMajor()
-          && getMinor() == version.getMinor()
-          && getRevision() == version.getRevision()
-          && isSnapshot() == version.isSnapshot();
+    /**
+     * Initializes the current instance with the provided
+     * versions. The version will not be a snapshot version.
+     *
+     * @param major
+     * @param minor
+     * @param revision
+     */
+    public Version(int major, int minor, int revision) {
+        this(major, minor, revision, false);
     }
 
-    return false;
-  }
+    /**
+     * Return a new {@link Version} initialized to the value
+     * represented by the specified {@link String}
+     *
+     * @param version the string to be parsed
+     * @return the version represented by the string value
+     * @throws NumberFormatException if the string does
+     *                               not contain a valid version
+     */
+    public static Version parse(String version) {
 
-  /**
-   * Return a new {@link Version} initialized to the value
-   * represented by the specified {@link String}
-   *
-   * @param version the string to be parsed
-   *
-   * @return the version represented by the string value
-   *
-   * @throws NumberFormatException if the string does
-   *     not contain a valid version
-   */
-  public static Version parse(String version) {
+        int indexFirstDot = version.indexOf('.');
 
-    int indexFirstDot = version.indexOf('.');
+        int indexSecondDot = version.indexOf('.', indexFirstDot + 1);
 
-    int indexSecondDot = version.indexOf('.', indexFirstDot + 1);
+        if (indexFirstDot == -1 || indexSecondDot == -1) {
+            throw new NumberFormatException("Invalid version format '" + version + "', expected two dots!");
+        }
 
-    if (indexFirstDot == -1 || indexSecondDot == -1) {
-      throw new NumberFormatException("Invalid version format '" + version + "', expected two dots!");
+        int indexFirstDash = version.indexOf('-');
+
+        int versionEnd;
+        if (indexFirstDash == -1) {
+            versionEnd = version.length();
+        } else {
+            versionEnd = indexFirstDash;
+        }
+
+        boolean snapshot = version.endsWith(SNAPSHOT_MARKER);
+
+        return new Version(Integer.parseInt(version.substring(0, indexFirstDot)),
+                Integer.parseInt(version.substring(indexFirstDot + 1, indexSecondDot)),
+                Integer.parseInt(version.substring(indexSecondDot + 1, versionEnd)), snapshot);
     }
 
-    int indexFirstDash = version.indexOf('-');
+    /**
+     * Retrieves the current version of the OpenNlp Tools library.
+     *
+     * @return the current version
+     */
+    public static Version currentVersion() {
 
-    int versionEnd;
-    if (indexFirstDash == -1) {
-      versionEnd = version.length();
-    }
-    else {
-      versionEnd = indexFirstDash;
-    }
+        Properties manifest = new Properties();
 
-    boolean snapshot = version.endsWith(SNAPSHOT_MARKER);
+        // Try to read the version from the version file if it is available,
+        // otherwise set the version to the development version
 
-    return new Version(Integer.parseInt(version.substring(0, indexFirstDot)),
-        Integer.parseInt(version.substring(indexFirstDot + 1, indexSecondDot)),
-        Integer.parseInt(version.substring(indexSecondDot + 1, versionEnd)), snapshot);
-  }
+        try (InputStream versionIn =
+                     Version.class.getResourceAsStream("opennlp.version")) {
+            if (versionIn != null) {
+                manifest.load(versionIn);
+            }
+        } catch (IOException e) {
+            // ignore error
+        }
 
-  /**
-   * Retrieves the current version of the OpenNlp Tools library.
-   *
-   * @return the current version
-   */
-  public static Version currentVersion() {
+        String versionString = manifest.getProperty("OpenNLP-Version", DEV_VERSION_STRING);
 
-    Properties manifest = new Properties();
+        if (versionString.equals("${project.version}"))
+            versionString = DEV_VERSION_STRING;
 
-    // Try to read the version from the version file if it is available,
-    // otherwise set the version to the development version
-
-    try (InputStream versionIn =
-        Version.class.getResourceAsStream("opennlp.version")) {
-      if (versionIn != null) {
-        manifest.load(versionIn);
-      }
-    } catch (IOException e) {
-      // ignore error
+        return Version.parse(versionString);
     }
 
-    String versionString = manifest.getProperty("OpenNLP-Version", DEV_VERSION_STRING);
+    /**
+     * Retrieves the major version.
+     *
+     * @return major version
+     */
+    public int getMajor() {
+        return major;
+    }
 
-    if (versionString.equals("${project.version}"))
-      versionString = DEV_VERSION_STRING;
+    /**
+     * Retrieves the minor version.
+     *
+     * @return minor version
+     */
+    public int getMinor() {
+        return minor;
+    }
 
-    return Version.parse(versionString);
-  }
+    /**
+     * Retrieves the revision version.
+     *
+     * @return revision version
+     */
+    public int getRevision() {
+        return revision;
+    }
+
+    public boolean isSnapshot() {
+        return snapshot;
+    }
+
+    /**
+     * Retrieves the version string.
+     * <p>
+     * The {@link #parse(String)} method can create an instance
+     * of {@link Version} with the returned version value string.
+     *
+     * @return the version value string
+     */
+    @Override
+    public String toString() {
+        return Integer.toString(getMajor()) + "." + Integer.toString(getMinor()) +
+                "." + Integer.toString(getRevision()) + (isSnapshot() ? SNAPSHOT_MARKER : "");
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getMajor(), getMinor(), getRevision(), isSnapshot());
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this) {
+            return true;
+        }
+
+        if (obj instanceof Version) {
+            Version version = (Version) obj;
+
+            return getMajor() == version.getMajor()
+                    && getMinor() == version.getMinor()
+                    && getRevision() == version.getRevision()
+                    && isSnapshot() == version.isSnapshot();
+        }
+
+        return false;
+    }
 }

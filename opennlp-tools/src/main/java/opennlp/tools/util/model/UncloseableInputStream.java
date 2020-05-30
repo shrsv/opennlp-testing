@@ -27,15 +27,15 @@ import java.io.InputStream;
  */
 public class UncloseableInputStream extends FilterInputStream {
 
-  public UncloseableInputStream(InputStream in) {
-    super(in);
-  }
+    public UncloseableInputStream(InputStream in) {
+        super(in);
+    }
 
-  /**
-   * This method does not has any effect the {@link InputStream}
-   * cannot be closed.
-   */
-  @Override
-  public void close() throws IOException {
-  }
+    /**
+     * This method does not has any effect the {@link InputStream}
+     * cannot be closed.
+     */
+    @Override
+    public void close() throws IOException {
+    }
 }

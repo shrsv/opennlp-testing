@@ -24,25 +24,25 @@ import java.util.List;
  */
 public class SentenceFeatureGenerator implements AdaptiveFeatureGenerator {
 
-  private final boolean isGenerateFirstWordFeature;
-  private final boolean isGenerateLastWordFeature;
+    private final boolean isGenerateFirstWordFeature;
+    private final boolean isGenerateLastWordFeature;
 
-  public SentenceFeatureGenerator(boolean isGenerateFirstWordFeature,
-      boolean isGenerateLastWordFeature) {
-    this.isGenerateFirstWordFeature = isGenerateFirstWordFeature;
-    this.isGenerateLastWordFeature = isGenerateLastWordFeature;
-  }
-
-  public void createFeatures(List<String> features, String[] tokens, int index,
-      String[] previousOutcomes) {
-
-    if (isGenerateFirstWordFeature && index == 0) {
-      features.add("S=begin");
+    public SentenceFeatureGenerator(boolean isGenerateFirstWordFeature,
+                                    boolean isGenerateLastWordFeature) {
+        this.isGenerateFirstWordFeature = isGenerateFirstWordFeature;
+        this.isGenerateLastWordFeature = isGenerateLastWordFeature;
     }
 
-    if (isGenerateLastWordFeature && tokens.length == index + 1) {
-      features.add("S=end");
+    public void createFeatures(List<String> features, String[] tokens, int index,
+                               String[] previousOutcomes) {
+
+        if (isGenerateFirstWordFeature && index == 0) {
+            features.add("S=begin");
+        }
+
+        if (isGenerateLastWordFeature && tokens.length == index + 1) {
+            features.add("S=end");
+        }
     }
-  }
 
 }

@@ -17,48 +17,47 @@
 
 package opennlp.tools.formats.muc;
 
-import java.io.IOException;
-import java.io.StringReader;
-import java.util.ArrayList;
-import java.util.List;
-
 import opennlp.tools.namefind.NameSample;
 import opennlp.tools.tokenize.Tokenizer;
 import opennlp.tools.util.FilterObjectStream;
 import opennlp.tools.util.ObjectStream;
 
+import java.io.IOException;
+import java.io.StringReader;
+import java.util.ArrayList;
+import java.util.List;
+
 public class MucNameSampleStream extends FilterObjectStream<String, NameSample> {
 
-  private final Tokenizer tokenizer;
+    private final Tokenizer tokenizer;
 
-  private List<NameSample> storedSamples = new ArrayList<>();
+    private List<NameSample> storedSamples = new ArrayList<>();
 
-  protected MucNameSampleStream(Tokenizer tokenizer, ObjectStream<String> samples) {
-    super(samples);
-    this.tokenizer = tokenizer;
-  }
-
-  public NameSample read() throws IOException {
-    if (storedSamples.isEmpty()) {
-
-      String document = samples.read();
-
-      if (document != null) {
-
-        // Note: This is a hack to fix invalid formating in
-        // some MUC files ...
-        document = document.replace(">>", ">");
-
-        new SgmlParser().parse(new StringReader(document),
-            new MucNameContentHandler(tokenizer, storedSamples));
-      }
+    protected MucNameSampleStream(Tokenizer tokenizer, ObjectStream<String> samples) {
+        super(samples);
+        this.tokenizer = tokenizer;
     }
 
-    if (storedSamples.size() > 0) {
-      return storedSamples.remove(0);
+    public NameSample read() throws IOException {
+        if (storedSamples.isEmpty()) {
+
+            String document = samples.read();
+
+            if (document != null) {
+
+                // Note: This is a hack to fix invalid formating in
+                // some MUC files ...
+                document = document.replace(">>", ">");
+
+                new SgmlParser().parse(new StringReader(document),
+                        new MucNameContentHandler(tokenizer, storedSamples));
+            }
+        }
+
+        if (storedSamples.size() > 0) {
+            return storedSamples.remove(0);
+        } else {
+            return null;
+        }
     }
-    else {
-      return null;
-    }
-  }
 }

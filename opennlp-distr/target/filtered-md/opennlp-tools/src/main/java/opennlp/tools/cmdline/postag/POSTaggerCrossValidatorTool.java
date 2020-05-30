@@ -17,13 +17,6 @@
 
 package opennlp.tools.cmdline.postag;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.util.Map;
-
 import opennlp.tools.cmdline.AbstractCrossValidatorTool;
 import opennlp.tools.cmdline.CmdLineUtil;
 import opennlp.tools.cmdline.TerminateToolException;
@@ -36,93 +29,95 @@ import opennlp.tools.postag.POSTaggerCrossValidator;
 import opennlp.tools.postag.POSTaggerEvaluationMonitor;
 import opennlp.tools.util.model.ModelUtil;
 
+import java.io.*;
+import java.util.Map;
+
 public final class POSTaggerCrossValidatorTool
-    extends AbstractCrossValidatorTool<POSSample, CVToolParams> {
+        extends AbstractCrossValidatorTool<POSSample, CVToolParams> {
 
-  interface CVToolParams extends CVParams, TrainingParams, FineGrainedEvaluatorParams {
-  }
-
-  public POSTaggerCrossValidatorTool() {
-    super(POSSample.class, CVToolParams.class);
-  }
-
-  public String getShortDescription() {
-    return "K-fold cross validator for the learnable POS tagger";
-  }
-
-  public void run(String format, String[] args) {
-    super.run(format, args);
-
-    mlParams = CmdLineUtil.loadTrainingParameters(params.getParams(), false);
-    if (mlParams == null) {
-      mlParams = ModelUtil.createDefaultTrainingParameters();
+    public POSTaggerCrossValidatorTool() {
+        super(POSSample.class, CVToolParams.class);
     }
 
-    POSTaggerEvaluationMonitor missclassifiedListener = null;
-    if (params.getMisclassified()) {
-      missclassifiedListener = new POSEvaluationErrorListener();
+    public String getShortDescription() {
+        return "K-fold cross validator for the learnable POS tagger";
     }
 
-    POSTaggerFineGrainedReportListener reportListener = null;
-    File reportFile = params.getReportOutputFile();
-    OutputStream reportOutputStream = null;
-    if (reportFile != null) {
-      CmdLineUtil.checkOutputFile("Report Output File", reportFile);
-      try {
-        reportOutputStream = new FileOutputStream(reportFile);
-        reportListener = new POSTaggerFineGrainedReportListener(
-            reportOutputStream);
-      } catch (FileNotFoundException e) {
-        throw createTerminationIOException(e);
-      }
+    public void run(String format, String[] args) {
+        super.run(format, args);
+
+        mlParams = CmdLineUtil.loadTrainingParameters(params.getParams(), false);
+        if (mlParams == null) {
+            mlParams = ModelUtil.createDefaultTrainingParameters();
+        }
+
+        POSTaggerEvaluationMonitor missclassifiedListener = null;
+        if (params.getMisclassified()) {
+            missclassifiedListener = new POSEvaluationErrorListener();
+        }
+
+        POSTaggerFineGrainedReportListener reportListener = null;
+        File reportFile = params.getReportOutputFile();
+        OutputStream reportOutputStream = null;
+        if (reportFile != null) {
+            CmdLineUtil.checkOutputFile("Report Output File", reportFile);
+            try {
+                reportOutputStream = new FileOutputStream(reportFile);
+                reportListener = new POSTaggerFineGrainedReportListener(
+                        reportOutputStream);
+            } catch (FileNotFoundException e) {
+                throw createTerminationIOException(e);
+            }
+        }
+
+        Map<String, Object> resources;
+        try {
+            resources = TokenNameFinderTrainerTool.loadResources(params.getResources(), params.getFeaturegen());
+        } catch (IOException e) {
+            throw new TerminateToolException(-1, "IO error while loading resources", e);
+        }
+
+        byte[] featureGeneratorBytes =
+                TokenNameFinderTrainerTool.openFeatureGeneratorBytes(params.getFeaturegen());
+
+        POSTaggerCrossValidator validator;
+        try {
+            validator = new POSTaggerCrossValidator(params.getLang(), mlParams,
+                    params.getDict(), featureGeneratorBytes, resources, params.getTagDictCutoff(),
+                    params.getFactory(), missclassifiedListener, reportListener);
+
+            validator.evaluate(sampleStream, params.getFolds());
+        } catch (IOException e) {
+            throw new TerminateToolException(-1, "IO error while reading training data or indexing data: "
+                    + e.getMessage(), e);
+        } finally {
+            try {
+                sampleStream.close();
+            } catch (IOException e) {
+                // sorry that this can fail
+            }
+        }
+
+        System.out.println("done");
+
+        if (reportListener != null) {
+            System.out.println("Writing fine-grained report to "
+                    + params.getReportOutputFile().getAbsolutePath());
+            reportListener.writeReport();
+
+            try {
+                // TODO: is it a problem to close the stream now?
+                reportOutputStream.close();
+            } catch (IOException e) {
+                // nothing to do
+            }
+        }
+
+        System.out.println();
+
+        System.out.println("Accuracy: " + validator.getWordAccuracy());
     }
 
-    Map<String, Object> resources;
-    try {
-      resources = TokenNameFinderTrainerTool.loadResources(params.getResources(), params.getFeaturegen());
+    interface CVToolParams extends CVParams, TrainingParams, FineGrainedEvaluatorParams {
     }
-    catch (IOException e) {
-      throw new TerminateToolException(-1,"IO error while loading resources", e);
-    }
-
-    byte[] featureGeneratorBytes =
-        TokenNameFinderTrainerTool.openFeatureGeneratorBytes(params.getFeaturegen());
-
-    POSTaggerCrossValidator validator;
-    try {
-      validator = new POSTaggerCrossValidator(params.getLang(), mlParams,
-          params.getDict(), featureGeneratorBytes, resources, params.getTagDictCutoff(),
-          params.getFactory(), missclassifiedListener, reportListener);
-
-      validator.evaluate(sampleStream, params.getFolds());
-    } catch (IOException e) {
-      throw new TerminateToolException(-1, "IO error while reading training data or indexing data: "
-          + e.getMessage(), e);
-    } finally {
-      try {
-        sampleStream.close();
-      } catch (IOException e) {
-        // sorry that this can fail
-      }
-    }
-
-    System.out.println("done");
-
-    if (reportListener != null) {
-      System.out.println("Writing fine-grained report to "
-          + params.getReportOutputFile().getAbsolutePath());
-      reportListener.writeReport();
-
-      try {
-        // TODO: is it a problem to close the stream now?
-        reportOutputStream.close();
-      } catch (IOException e) {
-        // nothing to do
-      }
-    }
-
-    System.out.println();
-
-    System.out.println("Accuracy: " + validator.getWordAccuracy());
-  }
 }

@@ -17,22 +17,22 @@
 
 package opennlp.uima.chunker;
 
-import java.io.IOException;
-import java.io.InputStream;
-
 import opennlp.tools.chunker.ChunkerModel;
 import opennlp.uima.util.AbstractModelResource;
 
+import java.io.IOException;
+import java.io.InputStream;
+
 public class ChunkerModelResourceImpl extends AbstractModelResource<ChunkerModel>
-    implements ChunkerModelResource {
+        implements ChunkerModelResource {
 
-  public ChunkerModel getModel() {
-    return model;
-  }
+    public ChunkerModel getModel() {
+        return model;
+    }
 
-  @Override
-  protected ChunkerModel loadModel(InputStream in) throws IOException {
-    return new ChunkerModel(in);
-  }
+    @Override
+    protected ChunkerModel loadModel(InputStream in) throws IOException {
+        return new ChunkerModel(in);
+    }
 
 }

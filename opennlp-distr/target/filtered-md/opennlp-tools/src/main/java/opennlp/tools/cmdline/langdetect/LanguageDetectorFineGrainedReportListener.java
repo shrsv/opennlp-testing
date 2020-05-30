@@ -17,11 +17,11 @@
 
 package opennlp.tools.cmdline.langdetect;
 
-import java.io.OutputStream;
-
 import opennlp.tools.cmdline.FineGrainedReportListener;
 import opennlp.tools.langdetect.LanguageDetectorEvaluationMonitor;
 import opennlp.tools.langdetect.LanguageSample;
+
+import java.io.OutputStream;
 
 /**
  * Generates a detailed report for the POS Tagger.
@@ -30,41 +30,41 @@ import opennlp.tools.langdetect.LanguageSample;
  * provided getters
  */
 public class LanguageDetectorFineGrainedReportListener
-    extends FineGrainedReportListener implements LanguageDetectorEvaluationMonitor {
+        extends FineGrainedReportListener implements LanguageDetectorEvaluationMonitor {
 
-  /**
-   * Creates a listener that will print to {@link System#err}
-   */
-  public LanguageDetectorFineGrainedReportListener() {
-    this(System.err);
-  }
+    /**
+     * Creates a listener that will print to {@link System#err}
+     */
+    public LanguageDetectorFineGrainedReportListener() {
+        this(System.err);
+    }
 
-  /**
-   * Creates a listener that prints to a given {@link OutputStream}
-   */
-  public LanguageDetectorFineGrainedReportListener(OutputStream outputStream) {
-    super(outputStream);
-  }
+    /**
+     * Creates a listener that prints to a given {@link OutputStream}
+     */
+    public LanguageDetectorFineGrainedReportListener(OutputStream outputStream) {
+        super(outputStream);
+    }
 
-  // methods inherited from EvaluationMonitor
+    // methods inherited from EvaluationMonitor
 
-  public void missclassified(LanguageSample reference, LanguageSample prediction) {
-    statsAdd(reference, prediction);
-  }
+    public void missclassified(LanguageSample reference, LanguageSample prediction) {
+        statsAdd(reference, prediction);
+    }
 
-  public void correctlyClassified(LanguageSample reference, LanguageSample prediction) {
-    statsAdd(reference, prediction);
-  }
+    public void correctlyClassified(LanguageSample reference, LanguageSample prediction) {
+        statsAdd(reference, prediction);
+    }
 
-  private void statsAdd(LanguageSample reference, LanguageSample prediction) {
-    getStats().add(reference.getContext(),
-        reference.getLanguage().getLang(), prediction.getLanguage().getLang());
-  }
+    private void statsAdd(LanguageSample reference, LanguageSample prediction) {
+        getStats().add(reference.getContext(),
+                reference.getLanguage().getLang(), prediction.getLanguage().getLang());
+    }
 
-  public void writeReport() {
-    printGeneralStatistics();
-    printTagsErrorRank();
-    printGeneralConfusionTable();
-  }
+    public void writeReport() {
+        printGeneralStatistics();
+        printTagsErrorRank();
+        printGeneralConfusionTable();
+    }
 
 }

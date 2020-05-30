@@ -17,34 +17,34 @@
 
 package opennlp.tools.util;
 
+import opennlp.tools.ml.model.Event;
+
 import java.io.IOException;
 import java.io.Writer;
 
-import opennlp.tools.ml.model.Event;
-
 public class EventTraceStream extends FilterObjectStream<Event, Event> {
 
-  private Writer writer;
+    private Writer writer;
 
-  public EventTraceStream(ObjectStream<Event> stream, Writer writer) {
-    super(stream);
+    public EventTraceStream(ObjectStream<Event> stream, Writer writer) {
+        super(stream);
 
-    this.writer = writer;
-  }
-
-
-  public Event read() throws IOException {
-    Event event = samples.read();
-
-    if (event != null) {
-      writer.write(event.toString());
-      writer.write("\n");
+        this.writer = writer;
     }
 
-    return event;
-  }
 
-  public void remove() {
-    // TODO: not supported, should be removed ...
-  }
+    public Event read() throws IOException {
+        Event event = samples.read();
+
+        if (event != null) {
+            writer.write(event.toString());
+            writer.write("\n");
+        }
+
+        return event;
+    }
+
+    public void remove() {
+        // TODO: not supported, should be removed ...
+    }
 }

@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Automatic-Module-Name: org.apache.opennlp.tools
-Bnd-LastModified: 1590784856181
+Bnd-LastModified: 1590879564600
 Build-Jdk: 11.0.7
 Built-By: lg
 Bundle-Activator: opennlp.tools.util.ext.OSGiExtensionLoader

@@ -25,9 +25,9 @@ import org.junit.Test;
  */
 public class TerminateToolExceptionTest {
 
-  @Test
-  public void testCreation() {
-    TerminateToolException e = new TerminateToolException(-500);
-    Assert.assertEquals(-500, e.getCode());
-  }
+    @Test
+    public void testCreation() {
+        TerminateToolException e = new TerminateToolException(-500);
+        Assert.assertEquals(-500, e.getCode());
+    }
 }

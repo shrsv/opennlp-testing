@@ -17,92 +17,92 @@
 
 package opennlp.tools.util.featuregen;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class TrigramNameFeatureGeneratorTest {
 
-  private List<String> features;
-  static String[] testSentence = new String[] {"This", "is", "an", "example", "sentence"};
+    static String[] testSentence = new String[]{"This", "is", "an", "example", "sentence"};
+    private List<String> features;
 
-  @Before
-  public void setUp() throws Exception {
-    features = new ArrayList<>();
-  }
+    @Before
+    public void setUp() throws Exception {
+        features = new ArrayList<>();
+    }
 
-  @Test
-  public void testBegin() {
+    @Test
+    public void testBegin() {
 
-    final int testTokenIndex = 0;
+        final int testTokenIndex = 0;
 
-    AdaptiveFeatureGenerator generator = new TrigramNameFeatureGenerator();
+        AdaptiveFeatureGenerator generator = new TrigramNameFeatureGenerator();
 
-    generator.createFeatures(features, testSentence, testTokenIndex, null);
+        generator.createFeatures(features, testSentence, testTokenIndex, null);
 
-    Assert.assertEquals(2, features.size());
-    Assert.assertEquals("w,nw,nnw=This,is,an", features.get(0));
-    Assert.assertEquals("wc,nwc,nnwc=ic,lc,lc", features.get(1));
-  }
+        Assert.assertEquals(2, features.size());
+        Assert.assertEquals("w,nw,nnw=This,is,an", features.get(0));
+        Assert.assertEquals("wc,nwc,nnwc=ic,lc,lc", features.get(1));
+    }
 
-  @Test
-  public void testNextOfBegin() {
+    @Test
+    public void testNextOfBegin() {
 
-    final int testTokenIndex = 1;
+        final int testTokenIndex = 1;
 
-    AdaptiveFeatureGenerator generator = new TrigramNameFeatureGenerator();
+        AdaptiveFeatureGenerator generator = new TrigramNameFeatureGenerator();
 
-    generator.createFeatures(features, testSentence, testTokenIndex, null);
+        generator.createFeatures(features, testSentence, testTokenIndex, null);
 
-    Assert.assertEquals(2, features.size());
-    Assert.assertEquals("w,nw,nnw=is,an,example", features.get(0));
-    Assert.assertEquals("wc,nwc,nnwc=lc,lc,lc", features.get(1));
-  }
+        Assert.assertEquals(2, features.size());
+        Assert.assertEquals("w,nw,nnw=is,an,example", features.get(0));
+        Assert.assertEquals("wc,nwc,nnwc=lc,lc,lc", features.get(1));
+    }
 
-  @Test
-  public void testMiddle() {
+    @Test
+    public void testMiddle() {
 
-    final int testTokenIndex = 2;
+        final int testTokenIndex = 2;
 
-    AdaptiveFeatureGenerator generator = new TrigramNameFeatureGenerator();
+        AdaptiveFeatureGenerator generator = new TrigramNameFeatureGenerator();
 
-    generator.createFeatures(features, testSentence, testTokenIndex, null);
+        generator.createFeatures(features, testSentence, testTokenIndex, null);
 
-    Assert.assertEquals(4, features.size());
-    Assert.assertEquals("ppw,pw,w=This,is,an", features.get(0));
-    Assert.assertEquals("ppwc,pwc,wc=ic,lc,lc", features.get(1));
-    Assert.assertEquals("w,nw,nnw=an,example,sentence", features.get(2));
-    Assert.assertEquals("wc,nwc,nnwc=lc,lc,lc", features.get(3));
-  }
+        Assert.assertEquals(4, features.size());
+        Assert.assertEquals("ppw,pw,w=This,is,an", features.get(0));
+        Assert.assertEquals("ppwc,pwc,wc=ic,lc,lc", features.get(1));
+        Assert.assertEquals("w,nw,nnw=an,example,sentence", features.get(2));
+        Assert.assertEquals("wc,nwc,nnwc=lc,lc,lc", features.get(3));
+    }
 
-  @Test
-  public void testEnd() {
+    @Test
+    public void testEnd() {
 
-    final int testTokenIndex = 4;
+        final int testTokenIndex = 4;
 
-    AdaptiveFeatureGenerator generator = new TrigramNameFeatureGenerator();
+        AdaptiveFeatureGenerator generator = new TrigramNameFeatureGenerator();
 
-    generator.createFeatures(features, testSentence, testTokenIndex, null);
+        generator.createFeatures(features, testSentence, testTokenIndex, null);
 
-    Assert.assertEquals(2, features.size());
-    Assert.assertEquals("ppw,pw,w=an,example,sentence", features.get(0));
-    Assert.assertEquals("ppwc,pwc,wc=lc,lc,lc", features.get(1));
-  }
+        Assert.assertEquals(2, features.size());
+        Assert.assertEquals("ppw,pw,w=an,example,sentence", features.get(0));
+        Assert.assertEquals("ppwc,pwc,wc=lc,lc,lc", features.get(1));
+    }
 
-  @Test
-  public void testShort() {
+    @Test
+    public void testShort() {
 
-    String[] shortSentence = new String[] {"I", "know", "it"};
+        String[] shortSentence = new String[]{"I", "know", "it"};
 
-    final int testTokenIndex = 1;
+        final int testTokenIndex = 1;
 
-    AdaptiveFeatureGenerator generator = new TrigramNameFeatureGenerator();
+        AdaptiveFeatureGenerator generator = new TrigramNameFeatureGenerator();
 
-    generator.createFeatures(features, shortSentence, testTokenIndex, null);
+        generator.createFeatures(features, shortSentence, testTokenIndex, null);
 
-    Assert.assertEquals(0, features.size());
-  }
+        Assert.assertEquals(0, features.size());
+    }
 }

@@ -17,15 +17,7 @@
 
 package opennlp.tools.cmdline.chunker;
 
-import java.io.IOException;
-import java.util.LinkedList;
-import java.util.List;
-
-import opennlp.tools.chunker.ChunkSample;
-import opennlp.tools.chunker.ChunkerEvaluationMonitor;
-import opennlp.tools.chunker.ChunkerEvaluator;
-import opennlp.tools.chunker.ChunkerME;
-import opennlp.tools.chunker.ChunkerModel;
+import opennlp.tools.chunker.*;
 import opennlp.tools.cmdline.AbstractEvaluatorTool;
 import opennlp.tools.cmdline.PerformanceMonitor;
 import opennlp.tools.cmdline.TerminateToolException;
@@ -35,79 +27,83 @@ import opennlp.tools.cmdline.params.EvaluatorParams;
 import opennlp.tools.util.ObjectStream;
 import opennlp.tools.util.eval.EvaluationMonitor;
 
+import java.io.IOException;
+import java.util.LinkedList;
+import java.util.List;
+
 public final class ChunkerEvaluatorTool
-    extends AbstractEvaluatorTool<ChunkSample, EvalToolParams> {
+        extends AbstractEvaluatorTool<ChunkSample, EvalToolParams> {
 
-  interface EvalToolParams extends EvaluatorParams, DetailedFMeasureEvaluatorParams {
-  }
-
-  public ChunkerEvaluatorTool() {
-    super(ChunkSample.class, EvalToolParams.class);
-  }
-
-  public String getShortDescription() {
-    return "Measures the performance of the Chunker model with the reference data";
-  }
-
-  public void run(String format, String[] args) {
-    super.run(format, args);
-
-    ChunkerModel model = new ChunkerModelLoader().load(params.getModel());
-
-    List<EvaluationMonitor<ChunkSample>> listeners = new LinkedList<>();
-    ChunkerDetailedFMeasureListener detailedFMeasureListener = null;
-    if (params.getMisclassified()) {
-      listeners.add(new ChunkEvaluationErrorListener());
-    }
-    if (params.getDetailedF()) {
-      detailedFMeasureListener = new ChunkerDetailedFMeasureListener();
-      listeners.add(detailedFMeasureListener);
+    public ChunkerEvaluatorTool() {
+        super(ChunkSample.class, EvalToolParams.class);
     }
 
-    ChunkerEvaluator evaluator = new ChunkerEvaluator(new ChunkerME(model),
-        listeners.toArray(new ChunkerEvaluationMonitor[listeners.size()]));
-
-    final PerformanceMonitor monitor = new PerformanceMonitor("sent");
-
-    ObjectStream<ChunkSample> measuredSampleStream = new ObjectStream<ChunkSample>() {
-
-      public ChunkSample read() throws IOException {
-        monitor.incrementCounter();
-        return sampleStream.read();
-      }
-
-      public void reset() throws IOException {
-        sampleStream.reset();
-      }
-
-      public void close() throws IOException {
-        sampleStream.close();
-      }
-    };
-
-    monitor.startAndPrintThroughput();
-
-    try {
-      evaluator.evaluate(measuredSampleStream);
-    } catch (IOException e) {
-      System.err.println("failed");
-      throw new TerminateToolException(-1, "IO error while reading test data: " + e.getMessage(), e);
-    } finally {
-      try {
-        measuredSampleStream.close();
-      } catch (IOException e) {
-        // sorry that this can fail
-      }
+    public String getShortDescription() {
+        return "Measures the performance of the Chunker model with the reference data";
     }
 
-    monitor.stopAndPrintFinalResult();
+    public void run(String format, String[] args) {
+        super.run(format, args);
 
-    System.out.println();
+        ChunkerModel model = new ChunkerModelLoader().load(params.getModel());
 
-    if (detailedFMeasureListener == null) {
-      System.out.println(evaluator.getFMeasure());
-    } else {
-      System.out.println(detailedFMeasureListener.toString());
+        List<EvaluationMonitor<ChunkSample>> listeners = new LinkedList<>();
+        ChunkerDetailedFMeasureListener detailedFMeasureListener = null;
+        if (params.getMisclassified()) {
+            listeners.add(new ChunkEvaluationErrorListener());
+        }
+        if (params.getDetailedF()) {
+            detailedFMeasureListener = new ChunkerDetailedFMeasureListener();
+            listeners.add(detailedFMeasureListener);
+        }
+
+        ChunkerEvaluator evaluator = new ChunkerEvaluator(new ChunkerME(model),
+                listeners.toArray(new ChunkerEvaluationMonitor[listeners.size()]));
+
+        final PerformanceMonitor monitor = new PerformanceMonitor("sent");
+
+        ObjectStream<ChunkSample> measuredSampleStream = new ObjectStream<ChunkSample>() {
+
+            public ChunkSample read() throws IOException {
+                monitor.incrementCounter();
+                return sampleStream.read();
+            }
+
+            public void reset() throws IOException {
+                sampleStream.reset();
+            }
+
+            public void close() throws IOException {
+                sampleStream.close();
+            }
+        };
+
+        monitor.startAndPrintThroughput();
+
+        try {
+            evaluator.evaluate(measuredSampleStream);
+        } catch (IOException e) {
+            System.err.println("failed");
+            throw new TerminateToolException(-1, "IO error while reading test data: " + e.getMessage(), e);
+        } finally {
+            try {
+                measuredSampleStream.close();
+            } catch (IOException e) {
+                // sorry that this can fail
+            }
+        }
+
+        monitor.stopAndPrintFinalResult();
+
+        System.out.println();
+
+        if (detailedFMeasureListener == null) {
+            System.out.println(evaluator.getFMeasure());
+        } else {
+            System.out.println(detailedFMeasureListener.toString());
+        }
     }
-  }
+
+    interface EvalToolParams extends EvaluatorParams, DetailedFMeasureEvaluatorParams {
+    }
 }

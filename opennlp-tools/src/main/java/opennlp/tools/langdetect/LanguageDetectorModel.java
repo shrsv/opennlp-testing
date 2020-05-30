@@ -17,66 +17,66 @@
 
 package opennlp.tools.langdetect;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
-import java.util.Map;
-
 import opennlp.tools.ml.model.AbstractModel;
 import opennlp.tools.ml.model.MaxentModel;
 import opennlp.tools.util.BaseToolFactory;
 import opennlp.tools.util.InvalidFormatException;
 import opennlp.tools.util.model.BaseModel;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.util.Map;
+
 /**
  * A model for language detection
  */
 public class LanguageDetectorModel extends BaseModel {
 
-  private static final String COMPONENT_NAME = "LanguageDetectorME";
-  private static final String LANGDETECT_MODEL_ENTRY_NAME = "langdetect.model";
+    private static final String COMPONENT_NAME = "LanguageDetectorME";
+    private static final String LANGDETECT_MODEL_ENTRY_NAME = "langdetect.model";
 
-  public LanguageDetectorModel(MaxentModel langdetectModel,
-                               Map<String, String> manifestInfoEntries,
-                               LanguageDetectorFactory factory) {
-    super(COMPONENT_NAME, "und", manifestInfoEntries, factory);
+    public LanguageDetectorModel(MaxentModel langdetectModel,
+                                 Map<String, String> manifestInfoEntries,
+                                 LanguageDetectorFactory factory) {
+        super(COMPONENT_NAME, "und", manifestInfoEntries, factory);
 
-    artifactMap.put(LANGDETECT_MODEL_ENTRY_NAME, langdetectModel);
-    checkArtifactMap();
-  }
-
-  public LanguageDetectorModel(InputStream in) throws IOException {
-    super(COMPONENT_NAME, in);
-  }
-
-  public LanguageDetectorModel(File modelFile) throws IOException {
-    super(COMPONENT_NAME, modelFile);
-  }
-
-  public LanguageDetectorModel(URL modelURL) throws IOException {
-    super(COMPONENT_NAME, modelURL);
-  }
-
-  @Override
-  protected void validateArtifactMap() throws InvalidFormatException {
-    super.validateArtifactMap();
-
-    if (!(artifactMap.get(LANGDETECT_MODEL_ENTRY_NAME) instanceof AbstractModel)) {
-      throw new InvalidFormatException("Language detector model is incomplete!");
+        artifactMap.put(LANGDETECT_MODEL_ENTRY_NAME, langdetectModel);
+        checkArtifactMap();
     }
-  }
 
-  public LanguageDetectorFactory getFactory() {
-    return (LanguageDetectorFactory) this.toolFactory;
-  }
+    public LanguageDetectorModel(InputStream in) throws IOException {
+        super(COMPONENT_NAME, in);
+    }
 
-  @Override
-  protected Class<? extends BaseToolFactory> getDefaultFactory() {
-    return LanguageDetectorFactory.class;
-  }
+    public LanguageDetectorModel(File modelFile) throws IOException {
+        super(COMPONENT_NAME, modelFile);
+    }
 
-  public MaxentModel getMaxentModel() {
-    return (MaxentModel) artifactMap.get(LANGDETECT_MODEL_ENTRY_NAME);
-  }
+    public LanguageDetectorModel(URL modelURL) throws IOException {
+        super(COMPONENT_NAME, modelURL);
+    }
+
+    @Override
+    protected void validateArtifactMap() throws InvalidFormatException {
+        super.validateArtifactMap();
+
+        if (!(artifactMap.get(LANGDETECT_MODEL_ENTRY_NAME) instanceof AbstractModel)) {
+            throw new InvalidFormatException("Language detector model is incomplete!");
+        }
+    }
+
+    public LanguageDetectorFactory getFactory() {
+        return (LanguageDetectorFactory) this.toolFactory;
+    }
+
+    @Override
+    protected Class<? extends BaseToolFactory> getDefaultFactory() {
+        return LanguageDetectorFactory.class;
+    }
+
+    public MaxentModel getMaxentModel() {
+        return (MaxentModel) artifactMap.get(LANGDETECT_MODEL_ENTRY_NAME);
+    }
 }

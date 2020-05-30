@@ -29,12 +29,11 @@ package opennlp.tools.util.featuregen;
  */
 public interface FeatureGeneratorResourceProvider {
 
-  /**
-   * Retrieves the resource object for the given name/identifier.
-   *
-   * @param resourceIdentifier the identifier which names the resource.
-   *
-   * @return the resource object
-   */
-  Object getResource(String resourceIdentifier);
+    /**
+     * Retrieves the resource object for the given name/identifier.
+     *
+     * @param resourceIdentifier the identifier which names the resource.
+     * @return the resource object
+     */
+    Object getResource(String resourceIdentifier);
 }

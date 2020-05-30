@@ -17,49 +17,48 @@
 
 package opennlp.tools.util.featuregen;
 
-import java.util.Map;
-
+import opennlp.tools.util.InvalidFormatException;
 import org.w3c.dom.Element;
 
-import opennlp.tools.util.InvalidFormatException;
+import java.util.Map;
 
 /**
  * @see SentenceFeatureGenerator
  */
 public class SentenceFeatureGeneratorFactory
-    extends GeneratorFactory.AbstractXmlFeatureGeneratorFactory
-    implements GeneratorFactory.XmlFeatureGeneratorFactory {
+        extends GeneratorFactory.AbstractXmlFeatureGeneratorFactory
+        implements GeneratorFactory.XmlFeatureGeneratorFactory {
 
-  public SentenceFeatureGeneratorFactory() {
-    super();
-  }
+    public SentenceFeatureGeneratorFactory() {
+        super();
+    }
 
-  @Deprecated // TODO: (OPENNLP-1174) just remove when back-compat is no longer needed
-  public AdaptiveFeatureGenerator create(Element generatorElement,
-             FeatureGeneratorResourceProvider resourceManager) {
+    @Deprecated // TODO: (OPENNLP-1174) just remove when back-compat is no longer needed
+    static void register(Map<String, GeneratorFactory.XmlFeatureGeneratorFactory> factoryMap) {
+        factoryMap.put("sentence", new SentenceFeatureGeneratorFactory());
+    }
 
-    String beginFeatureString = generatorElement.getAttribute("begin");
+    @Deprecated // TODO: (OPENNLP-1174) just remove when back-compat is no longer needed
+    public AdaptiveFeatureGenerator create(Element generatorElement,
+                                           FeatureGeneratorResourceProvider resourceManager) {
 
-    boolean beginFeature = true;
-    if (beginFeatureString.length() != 0)
-      beginFeature = Boolean.parseBoolean(beginFeatureString);
+        String beginFeatureString = generatorElement.getAttribute("begin");
 
-    String endFeatureString = generatorElement.getAttribute("end");
-    boolean endFeature = true;
-    if (endFeatureString.length() != 0)
-      endFeature = Boolean.parseBoolean(endFeatureString);
+        boolean beginFeature = true;
+        if (beginFeatureString.length() != 0)
+            beginFeature = Boolean.parseBoolean(beginFeatureString);
 
-    return new SentenceFeatureGenerator(beginFeature, endFeature);
-  }
+        String endFeatureString = generatorElement.getAttribute("end");
+        boolean endFeature = true;
+        if (endFeatureString.length() != 0)
+            endFeature = Boolean.parseBoolean(endFeatureString);
 
-  @Deprecated // TODO: (OPENNLP-1174) just remove when back-compat is no longer needed
-  static void register(Map<String, GeneratorFactory.XmlFeatureGeneratorFactory> factoryMap) {
-    factoryMap.put("sentence", new SentenceFeatureGeneratorFactory());
-  }
+        return new SentenceFeatureGenerator(beginFeature, endFeature);
+    }
 
-  @Override
-  public AdaptiveFeatureGenerator create() throws InvalidFormatException {
-    String beginFeatureString = generatorElement.getAttribute("begin");
-    return new SentenceFeatureGenerator(getBool("begin", true), getBool("end", true));
-  }
+    @Override
+    public AdaptiveFeatureGenerator create() throws InvalidFormatException {
+        String beginFeatureString = generatorElement.getAttribute("begin");
+        return new SentenceFeatureGenerator(getBool("begin", true), getBool("end", true));
+    }
 }

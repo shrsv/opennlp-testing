@@ -17,34 +17,34 @@
 
 package opennlp.tools.util.featuregen;
 
-import java.util.List;
-
 import opennlp.tools.util.StringUtil;
+
+import java.util.List;
 
 public class WordClusterFeatureGenerator implements AdaptiveFeatureGenerator {
 
-  private WordClusterDictionary tokenDictionary;
-  private String resourceName;
-  private boolean lowerCaseDictionary;
+    private WordClusterDictionary tokenDictionary;
+    private String resourceName;
+    private boolean lowerCaseDictionary;
 
-  public WordClusterFeatureGenerator(WordClusterDictionary dict,
-      String dictResourceKey, boolean lowerCaseDictionary) {
-    tokenDictionary = dict;
-    resourceName = dictResourceKey;
-    this.lowerCaseDictionary = lowerCaseDictionary;
-  }
-
-  public void createFeatures(List<String> features, String[] tokens, int index,
-      String[] previousOutcomes) {
-
-    String clusterId;
-    if (lowerCaseDictionary) {
-      clusterId = tokenDictionary.lookupToken(StringUtil.toLowerCase(tokens[index]));
-    } else {
-      clusterId = tokenDictionary.lookupToken(tokens[index]);
+    public WordClusterFeatureGenerator(WordClusterDictionary dict,
+                                       String dictResourceKey, boolean lowerCaseDictionary) {
+        tokenDictionary = dict;
+        resourceName = dictResourceKey;
+        this.lowerCaseDictionary = lowerCaseDictionary;
     }
-    if (clusterId != null) {
-      features.add(resourceName + clusterId);
+
+    public void createFeatures(List<String> features, String[] tokens, int index,
+                               String[] previousOutcomes) {
+
+        String clusterId;
+        if (lowerCaseDictionary) {
+            clusterId = tokenDictionary.lookupToken(StringUtil.toLowerCase(tokens[index]));
+        } else {
+            clusterId = tokenDictionary.lookupToken(tokens[index]);
+        }
+        if (clusterId != null) {
+            features.add(resourceName + clusterId);
+        }
     }
-  }
 }

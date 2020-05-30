@@ -17,12 +17,12 @@
 
 package opennlp.tools.lemmatizer;
 
+import opennlp.tools.util.FilterObjectStream;
+import opennlp.tools.util.ObjectStream;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
-import opennlp.tools.util.FilterObjectStream;
-import opennlp.tools.util.ObjectStream;
 
 /**
  * This dummy lemma sample stream reads a file containing forms, postags, gold
@@ -30,53 +30,53 @@ import opennlp.tools.util.ObjectStream;
  * simulate a lemmatizer.
  */
 public class DummyLemmaSampleStream
-    extends FilterObjectStream<String, LemmaSample> {
+        extends FilterObjectStream<String, LemmaSample> {
 
-  private boolean mIsPredicted;
-  private int count = 0;
+    private boolean mIsPredicted;
+    private int count = 0;
 
-  // the predicted flag sets if the stream will contain the expected or the
-  // predicted tags.
-  public DummyLemmaSampleStream(ObjectStream<String> samples,
-      boolean isPredicted) {
-    super(samples);
-    mIsPredicted = isPredicted;
-  }
-
-  public LemmaSample read() throws IOException {
-
-    List<String> toks = new ArrayList<>();
-    List<String> posTags = new ArrayList<>();
-    List<String> goldLemmas = new ArrayList<>();
-    List<String> predictedLemmas = new ArrayList<>();
-
-    for (String line = samples.read(); line != null
-        && !line.equals(""); line = samples.read()) {
-      String[] parts = line.split("\t");
-      if (parts.length != 4) {
-        System.err.println("Skipping corrupt line " + count + ": " + line);
-      } else {
-        toks.add(parts[0]);
-        posTags.add(parts[1]);
-        goldLemmas.add(parts[2]);
-        predictedLemmas.add(parts[3]);
-      }
-      count++;
+    // the predicted flag sets if the stream will contain the expected or the
+    // predicted tags.
+    public DummyLemmaSampleStream(ObjectStream<String> samples,
+                                  boolean isPredicted) {
+        super(samples);
+        mIsPredicted = isPredicted;
     }
 
-    if (toks.size() > 0) {
-      if (mIsPredicted) {
-        return new LemmaSample(toks.toArray(new String[toks.size()]),
-            posTags.toArray(new String[posTags.size()]),
-            predictedLemmas.toArray(new String[predictedLemmas.size()]));
-      } else
-        return new LemmaSample(toks.toArray(new String[toks.size()]),
-            posTags.toArray(new String[posTags.size()]),
-            goldLemmas.toArray(new String[goldLemmas.size()]));
-    } else {
-      return null;
-    }
+    public LemmaSample read() throws IOException {
 
-  }
+        List<String> toks = new ArrayList<>();
+        List<String> posTags = new ArrayList<>();
+        List<String> goldLemmas = new ArrayList<>();
+        List<String> predictedLemmas = new ArrayList<>();
+
+        for (String line = samples.read(); line != null
+                && !line.equals(""); line = samples.read()) {
+            String[] parts = line.split("\t");
+            if (parts.length != 4) {
+                System.err.println("Skipping corrupt line " + count + ": " + line);
+            } else {
+                toks.add(parts[0]);
+                posTags.add(parts[1]);
+                goldLemmas.add(parts[2]);
+                predictedLemmas.add(parts[3]);
+            }
+            count++;
+        }
+
+        if (toks.size() > 0) {
+            if (mIsPredicted) {
+                return new LemmaSample(toks.toArray(new String[toks.size()]),
+                        posTags.toArray(new String[posTags.size()]),
+                        predictedLemmas.toArray(new String[predictedLemmas.size()]));
+            } else
+                return new LemmaSample(toks.toArray(new String[toks.size()]),
+                        posTags.toArray(new String[posTags.size()]),
+                        goldLemmas.toArray(new String[goldLemmas.size()]));
+        } else {
+            return null;
+        }
+
+    }
 
 }

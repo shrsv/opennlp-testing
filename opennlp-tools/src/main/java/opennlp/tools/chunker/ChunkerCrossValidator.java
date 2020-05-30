@@ -17,63 +17,60 @@
 
 package opennlp.tools.chunker;
 
-import java.io.IOException;
-
 import opennlp.tools.util.ObjectStream;
 import opennlp.tools.util.TrainingParameters;
 import opennlp.tools.util.eval.CrossValidationPartitioner;
 import opennlp.tools.util.eval.FMeasure;
 
+import java.io.IOException;
+
 public class ChunkerCrossValidator {
 
-  private final String languageCode;
-  private final TrainingParameters params;
+    private final String languageCode;
+    private final TrainingParameters params;
 
-  private FMeasure fmeasure = new FMeasure();
-  private ChunkerEvaluationMonitor[] listeners;
-  private ChunkerFactory chunkerFactory;
+    private FMeasure fmeasure = new FMeasure();
+    private ChunkerEvaluationMonitor[] listeners;
+    private ChunkerFactory chunkerFactory;
 
-  public ChunkerCrossValidator(String languageCode, TrainingParameters params,
-      ChunkerFactory factory, ChunkerEvaluationMonitor... listeners) {
-    this.chunkerFactory = factory;
-    this.languageCode = languageCode;
-    this.params = params;
-    this.listeners = listeners;
-  }
-
-  /**
-   * Starts the evaluation.
-   *
-   * @param samples
-   *          the data to train and test
-   * @param nFolds
-   *          number of folds
-   *
-   * @throws IOException
-   */
-  public void evaluate(ObjectStream<ChunkSample> samples, int nFolds)
-      throws IOException {
-    CrossValidationPartitioner<ChunkSample> partitioner = new CrossValidationPartitioner<>(
-        samples, nFolds);
-
-    while (partitioner.hasNext()) {
-
-      CrossValidationPartitioner.TrainingSampleStream<ChunkSample> trainingSampleStream = partitioner
-          .next();
-
-      ChunkerModel model = ChunkerME.train(languageCode, trainingSampleStream,
-          params, chunkerFactory);
-
-      // do testing
-      ChunkerEvaluator evaluator = new ChunkerEvaluator(new ChunkerME(model), listeners);
-
-      evaluator.evaluate(trainingSampleStream.getTestSampleStream());
-
-      fmeasure.mergeInto(evaluator.getFMeasure());
+    public ChunkerCrossValidator(String languageCode, TrainingParameters params,
+                                 ChunkerFactory factory, ChunkerEvaluationMonitor... listeners) {
+        this.chunkerFactory = factory;
+        this.languageCode = languageCode;
+        this.params = params;
+        this.listeners = listeners;
     }
-  }
 
-  public FMeasure getFMeasure() {
-    return fmeasure;
-  }
+    /**
+     * Starts the evaluation.
+     *
+     * @param samples the data to train and test
+     * @param nFolds  number of folds
+     * @throws IOException
+     */
+    public void evaluate(ObjectStream<ChunkSample> samples, int nFolds)
+            throws IOException {
+        CrossValidationPartitioner<ChunkSample> partitioner = new CrossValidationPartitioner<>(
+                samples, nFolds);
+
+        while (partitioner.hasNext()) {
+
+            CrossValidationPartitioner.TrainingSampleStream<ChunkSample> trainingSampleStream = partitioner
+                    .next();
+
+            ChunkerModel model = ChunkerME.train(languageCode, trainingSampleStream,
+                    params, chunkerFactory);
+
+            // do testing
+            ChunkerEvaluator evaluator = new ChunkerEvaluator(new ChunkerME(model), listeners);
+
+            evaluator.evaluate(trainingSampleStream.getTestSampleStream());
+
+            fmeasure.mergeInto(evaluator.getFMeasure());
+        }
+    }
+
+    public FMeasure getFMeasure() {
+        return fmeasure;
+    }
 }

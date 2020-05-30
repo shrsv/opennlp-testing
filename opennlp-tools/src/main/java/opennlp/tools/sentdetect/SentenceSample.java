@@ -17,15 +17,11 @@
 
 package opennlp.tools.sentdetect;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
-
 import opennlp.tools.tokenize.Detokenizer;
 import opennlp.tools.util.Span;
+
+import java.io.Serializable;
+import java.util.*;
 
 /**
  * A {@link SentenceSample} contains a document with
@@ -33,98 +29,97 @@ import opennlp.tools.util.Span;
  */
 public class SentenceSample implements Serializable {
 
-  private final String document;
-  private final List<Span> sentences;
+    private final String document;
+    private final List<Span> sentences;
 
-  /**
-   * Initializes the current instance.
-   *
-   * @param document
-   * @param sentences
-   */
-  public SentenceSample(CharSequence document, Span... sentences) {
-    this.document = document.toString();
-    this.sentences = Collections.unmodifiableList(new ArrayList<>(Arrays.asList(sentences)));
+    /**
+     * Initializes the current instance.
+     *
+     * @param document
+     * @param sentences
+     */
+    public SentenceSample(CharSequence document, Span... sentences) {
+        this.document = document.toString();
+        this.sentences = Collections.unmodifiableList(new ArrayList<>(Arrays.asList(sentences)));
 
-    // validate that all spans are inside the document text
-    for (Span sentence : sentences) {
-      if (sentence.getEnd() > document.length()) {
-        throw new IllegalArgumentException(
-            String.format("Sentence span is outside of document text [len %d] and span %s",
-            document.length(), sentence));
-      }
-    }
-  }
-
-  public SentenceSample(Detokenizer detokenizer, String[][] sentences) {
-
-    List<Span> spans = new ArrayList<>(sentences.length);
-
-    StringBuilder documentBuilder = new StringBuilder();
-
-    for (String[] sentenceTokens : sentences) {
-
-      String sampleSentence = detokenizer.detokenize(sentenceTokens, null);
-
-      int beginIndex = documentBuilder.length();
-      documentBuilder.append(sampleSentence);
-
-      spans.add(new Span(beginIndex, documentBuilder.length()));
+        // validate that all spans are inside the document text
+        for (Span sentence : sentences) {
+            if (sentence.getEnd() > document.length()) {
+                throw new IllegalArgumentException(
+                        String.format("Sentence span is outside of document text [len %d] and span %s",
+                                document.length(), sentence));
+            }
+        }
     }
 
-    document = documentBuilder.toString();
-    this.sentences = Collections.unmodifiableList(spans);
-  }
+    public SentenceSample(Detokenizer detokenizer, String[][] sentences) {
 
-  /**
-   * Retrieves the document.
-   *
-   * @return the document
-   */
-  public String getDocument() {
-    return document;
-  }
+        List<Span> spans = new ArrayList<>(sentences.length);
 
-  /**
-   * Retrieves the sentences.
-   *
-   * @return the begin indexes of the sentences in the document.
+        StringBuilder documentBuilder = new StringBuilder();
 
-   */
-  public Span[] getSentences() {
-    return sentences.toArray(new Span[sentences.size()]);
-  }
+        for (String[] sentenceTokens : sentences) {
 
-  // TODO: This one must output the tags!
-  @Override
-  public String toString() {
-    StringBuilder documentBuilder = new StringBuilder();
-    for (Span sentSpan : sentences) {
-      documentBuilder.append(sentSpan.getCoveredText(document).toString()
-          .replace("\r", "<CR>").replace("\n", "<LF>"));
-      documentBuilder.append("\n");
-    }
-    return documentBuilder.toString();
-  }
+            String sampleSentence = detokenizer.detokenize(sentenceTokens, null);
 
-  @Override
-  public int hashCode() {
-    return Objects.hash(getDocument(), Arrays.hashCode(getSentences()));
-  }
+            int beginIndex = documentBuilder.length();
+            documentBuilder.append(sampleSentence);
 
-  @Override
-  public boolean equals(Object obj) {
-    if (this == obj) {
-      return true;
+            spans.add(new Span(beginIndex, documentBuilder.length()));
+        }
+
+        document = documentBuilder.toString();
+        this.sentences = Collections.unmodifiableList(spans);
     }
 
-    if (obj instanceof SentenceSample) {
-      SentenceSample a = (SentenceSample) obj;
-
-      return getDocument().equals(a.getDocument())
-          && Arrays.equals(getSentences(), a.getSentences());
+    /**
+     * Retrieves the document.
+     *
+     * @return the document
+     */
+    public String getDocument() {
+        return document;
     }
 
-    return false;
-  }
+    /**
+     * Retrieves the sentences.
+     *
+     * @return the begin indexes of the sentences in the document.
+     */
+    public Span[] getSentences() {
+        return sentences.toArray(new Span[sentences.size()]);
+    }
+
+    // TODO: This one must output the tags!
+    @Override
+    public String toString() {
+        StringBuilder documentBuilder = new StringBuilder();
+        for (Span sentSpan : sentences) {
+            documentBuilder.append(sentSpan.getCoveredText(document).toString()
+                    .replace("\r", "<CR>").replace("\n", "<LF>"));
+            documentBuilder.append("\n");
+        }
+        return documentBuilder.toString();
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getDocument(), Arrays.hashCode(getSentences()));
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+
+        if (obj instanceof SentenceSample) {
+            SentenceSample a = (SentenceSample) obj;
+
+            return getDocument().equals(a.getDocument())
+                    && Arrays.equals(getSentences(), a.getSentences());
+        }
+
+        return false;
+    }
 }

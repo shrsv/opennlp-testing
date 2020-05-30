@@ -30,24 +30,24 @@ import opennlp.tools.util.ObjectStream;
  */
 public class ConllXTokenSampleStreamFactory extends DetokenizerSampleStreamFactory<TokenSample> {
 
-  interface Parameters extends ConllXPOSSampleStreamFactory.Parameters, DetokenizerParameter {
-  }
+    protected <P> ConllXTokenSampleStreamFactory(Class<P> params) {
+        super(params);
+    }
 
-  public static void registerFactory() {
-    StreamFactoryRegistry.registerFactory(TokenSample.class,
-        ConllXPOSSampleStreamFactory.CONLLX_FORMAT, new ConllXTokenSampleStreamFactory(Parameters.class));
-  }
+    public static void registerFactory() {
+        StreamFactoryRegistry.registerFactory(TokenSample.class,
+                ConllXPOSSampleStreamFactory.CONLLX_FORMAT, new ConllXTokenSampleStreamFactory(Parameters.class));
+    }
 
-  protected <P> ConllXTokenSampleStreamFactory(Class<P> params) {
-    super(params);
-  }
+    public ObjectStream<TokenSample> create(String[] args) {
+        Parameters params = ArgumentParser.parse(args, Parameters.class);
 
-  public ObjectStream<TokenSample> create(String[] args) {
-    Parameters params = ArgumentParser.parse(args, Parameters.class);
+        ObjectStream<POSSample> samples = StreamFactoryRegistry.getFactory(POSSample.class,
+                ConllXPOSSampleStreamFactory.CONLLX_FORMAT).create(
+                ArgumentParser.filter(args, ConllXPOSSampleStreamFactory.Parameters.class));
+        return new POSToTokenSampleStream(createDetokenizer(params), samples);
+    }
 
-    ObjectStream<POSSample> samples = StreamFactoryRegistry.getFactory(POSSample.class,
-        ConllXPOSSampleStreamFactory.CONLLX_FORMAT).create(
-        ArgumentParser.filter(args, ConllXPOSSampleStreamFactory.Parameters.class));
-    return new POSToTokenSampleStream(createDetokenizer(params), samples);
-  }
+    interface Parameters extends ConllXPOSSampleStreamFactory.Parameters, DetokenizerParameter {
+    }
 }

@@ -17,30 +17,30 @@
 
 package opennlp.tools.sentdetect;
 
-import java.util.List;
-
 import org.junit.Assert;
 import org.junit.Test;
+
+import java.util.List;
 
 /**
  * Tests for the {@link DefaultEndOfSentenceScanner} class.
  */
 public class DefaultEndOfSentenceScannerTest {
 
-  @Test
-  public void testScanning() {
-    EndOfSentenceScanner scanner = new DefaultEndOfSentenceScanner(
-        new char[]{'.', '!', '?'});
+    @Test
+    public void testScanning() {
+        EndOfSentenceScanner scanner = new DefaultEndOfSentenceScanner(
+                new char[]{'.', '!', '?'});
 
-    List<Integer> eosPositions =
-        scanner.getPositions("... um die Wertmarken zu auswählen !?");
+        List<Integer> eosPositions =
+                scanner.getPositions("... um die Wertmarken zu auswählen !?");
 
-    Assert.assertEquals(0, eosPositions.get(0).intValue());
-    Assert.assertEquals(1, eosPositions.get(1).intValue());
-    Assert.assertEquals(2, eosPositions.get(2).intValue());
+        Assert.assertEquals(0, eosPositions.get(0).intValue());
+        Assert.assertEquals(1, eosPositions.get(1).intValue());
+        Assert.assertEquals(2, eosPositions.get(2).intValue());
 
-    Assert.assertEquals(35, eosPositions.get(3).intValue());
-    Assert.assertEquals(36, eosPositions.get(4).intValue());
-  }
+        Assert.assertEquals(35, eosPositions.get(3).intValue());
+        Assert.assertEquals(36, eosPositions.get(4).intValue());
+    }
 
 }

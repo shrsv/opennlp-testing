@@ -17,34 +17,33 @@
 
 package opennlp.tools.util.featuregen;
 
-import java.util.Map;
-
+import opennlp.tools.util.InvalidFormatException;
 import org.w3c.dom.Element;
 
-import opennlp.tools.util.InvalidFormatException;
+import java.util.Map;
 
 public class BigramNameFeatureGeneratorFactory
-    extends GeneratorFactory.AbstractXmlFeatureGeneratorFactory
-    implements GeneratorFactory.XmlFeatureGeneratorFactory {
+        extends GeneratorFactory.AbstractXmlFeatureGeneratorFactory
+        implements GeneratorFactory.XmlFeatureGeneratorFactory {
 
-  public BigramNameFeatureGeneratorFactory() {
-    super();
-  }
+    public BigramNameFeatureGeneratorFactory() {
+        super();
+    }
 
-  @Deprecated // TODO: (OPENNLP-1174) just remove when back-compat is no longer needed
-  public AdaptiveFeatureGenerator create(Element generatorElement,
-             FeatureGeneratorResourceProvider resourceManager) {
+    @Deprecated // TODO: (OPENNLP-1174) just remove when back-compat is no longer needed
+    static void register(Map<String, GeneratorFactory.XmlFeatureGeneratorFactory> factoryMap) {
+        factoryMap.put("bigram", new BigramNameFeatureGeneratorFactory());
+    }
 
-    return new BigramNameFeatureGenerator();
-  }
+    @Deprecated // TODO: (OPENNLP-1174) just remove when back-compat is no longer needed
+    public AdaptiveFeatureGenerator create(Element generatorElement,
+                                           FeatureGeneratorResourceProvider resourceManager) {
 
-  @Deprecated // TODO: (OPENNLP-1174) just remove when back-compat is no longer needed
-  static void register(Map<String, GeneratorFactory.XmlFeatureGeneratorFactory> factoryMap) {
-    factoryMap.put("bigram", new BigramNameFeatureGeneratorFactory());
-  }
+        return new BigramNameFeatureGenerator();
+    }
 
-  @Override
-  public AdaptiveFeatureGenerator create() throws InvalidFormatException {
-    return new BigramNameFeatureGenerator();
-  }
+    @Override
+    public AdaptiveFeatureGenerator create() throws InvalidFormatException {
+        return new BigramNameFeatureGenerator();
+    }
 }

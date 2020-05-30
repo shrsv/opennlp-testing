@@ -25,94 +25,94 @@ import java.util.Objects;
  * predicates indexes contained in the events.
  */
 public class ComparableEvent implements Comparable<ComparableEvent> {
-  public int outcome;
-  public int[] predIndexes;
-  public int seen = 1; // the number of times this event has been seen.
+    public int outcome;
+    public int[] predIndexes;
+    public int seen = 1; // the number of times this event has been seen.
 
-  public float[] values;
+    public float[] values;
 
-  public ComparableEvent(int oc, int[] pids, float[] values) {
-    outcome = oc;
-    this.values = values;
-    predIndexes = pids;
-  }
-
-  public ComparableEvent(int oc, int[] pids) {
-    this(oc, pids, null);
-  }
-
-  public int compareTo(ComparableEvent ce) {
-
-    int compareOutcome = Integer.compare(outcome, ce.outcome);
-    if (compareOutcome != 0) {
-      return compareOutcome;
+    public ComparableEvent(int oc, int[] pids, float[] values) {
+        outcome = oc;
+        this.values = values;
+        predIndexes = pids;
     }
 
-    int smallerLength = Math.min(predIndexes.length, ce.predIndexes.length);
+    public ComparableEvent(int oc, int[] pids) {
+        this(oc, pids, null);
+    }
 
-    for (int i = 0; i < smallerLength; i++) {
-      int comparePredIndexes = Integer.compare(predIndexes[i], ce.predIndexes[i]);
-      if (comparePredIndexes != 0) {
-        return comparePredIndexes;
-      }
-      if (values != null && ce.values != null) {
-        float compareValues = Float.compare(values[i], ce.values[i]);
-        if (!Float.valueOf(compareValues).equals(Float.valueOf(0.0f))) {
-          return (int) compareValues;
+    public int compareTo(ComparableEvent ce) {
+
+        int compareOutcome = Integer.compare(outcome, ce.outcome);
+        if (compareOutcome != 0) {
+            return compareOutcome;
         }
-      } else if (values != null) {
-        float compareValues = Float.compare(values[i], 1.0f);
-        if (!Float.valueOf(compareValues).equals(Float.valueOf(0.0f))) {
-          return (int) compareValues;
+
+        int smallerLength = Math.min(predIndexes.length, ce.predIndexes.length);
+
+        for (int i = 0; i < smallerLength; i++) {
+            int comparePredIndexes = Integer.compare(predIndexes[i], ce.predIndexes[i]);
+            if (comparePredIndexes != 0) {
+                return comparePredIndexes;
+            }
+            if (values != null && ce.values != null) {
+                float compareValues = Float.compare(values[i], ce.values[i]);
+                if (!Float.valueOf(compareValues).equals(Float.valueOf(0.0f))) {
+                    return (int) compareValues;
+                }
+            } else if (values != null) {
+                float compareValues = Float.compare(values[i], 1.0f);
+                if (!Float.valueOf(compareValues).equals(Float.valueOf(0.0f))) {
+                    return (int) compareValues;
+                }
+            } else if (ce.values != null) {
+                float compareValues = Float.compare(1.0f, ce.values[i]);
+                if (!Float.valueOf(compareValues).equals(Float.valueOf(0.0f))) {
+                    return (int) compareValues;
+                }
+            }
         }
-      } else if (ce.values != null) {
-        float compareValues = Float.compare(1.0f, ce.values[i]);
-        if (!Float.valueOf(compareValues).equals(Float.valueOf(0.0f))) {
-          return (int) compareValues;
+
+        int comparePredIndexesLength = Integer.compare(predIndexes.length, ce.predIndexes.length);
+        if (comparePredIndexesLength != 0) {
+            return comparePredIndexesLength;
         }
-      }
+
+        return 0;
     }
 
-    int comparePredIndexesLength = Integer.compare(predIndexes.length, ce.predIndexes.length);
-    if (comparePredIndexesLength != 0) {
-      return comparePredIndexesLength;
+    @Override
+    public boolean equals(Object obj) {
+
+        if (this == obj)
+            return true;
+
+        if (obj instanceof ComparableEvent) {
+            ComparableEvent other = (ComparableEvent) obj;
+            return outcome == other.outcome &&
+                    Arrays.equals(predIndexes, other.predIndexes) &&
+                    seen == other.seen &&
+                    Arrays.equals(values, other.values);
+        }
+
+        return false;
     }
 
-    return 0;
-  }
-
-  @Override
-  public boolean equals(Object obj) {
-
-    if (this == obj)
-      return true;
-
-    if (obj instanceof ComparableEvent) {
-      ComparableEvent other = (ComparableEvent) obj;
-      return outcome == other.outcome &&
-          Arrays.equals(predIndexes, other.predIndexes) &&
-          seen == other.seen &&
-          Arrays.equals(values, other.values);
+    @Override
+    public int hashCode() {
+        return Objects.hash(outcome, Arrays.hashCode(predIndexes), seen, Arrays.hashCode(values));
     }
 
-    return false;
-  }
-
-  @Override
-  public int hashCode() {
-    return Objects.hash(outcome, Arrays.hashCode(predIndexes), seen, Arrays.hashCode(values));
-  }
-
-  public String toString() {
-    StringBuilder s = new StringBuilder().append(outcome).append(":");
-    for (int i = 0; i < predIndexes.length; i++) {
-      s.append(" ").append(predIndexes[i]);
-      if (values != null) {
-        s.append("=").append(values[i]);
-      }
+    public String toString() {
+        StringBuilder s = new StringBuilder().append(outcome).append(":");
+        for (int i = 0; i < predIndexes.length; i++) {
+            s.append(" ").append(predIndexes[i]);
+            if (values != null) {
+                s.append("=").append(values[i]);
+            }
+        }
+        return s.toString();
     }
-    return s.toString();
-  }
 
 }
 

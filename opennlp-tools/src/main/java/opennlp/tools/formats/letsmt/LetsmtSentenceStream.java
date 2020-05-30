@@ -17,58 +17,58 @@
 
 package opennlp.tools.formats.letsmt;
 
+import opennlp.tools.sentdetect.SentenceSample;
+import opennlp.tools.util.ObjectStream;
+import opennlp.tools.util.Span;
+
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-import opennlp.tools.sentdetect.SentenceSample;
-import opennlp.tools.util.ObjectStream;
-import opennlp.tools.util.Span;
+class LetsmtSentenceStream implements ObjectStream<SentenceSample> {
 
-class LetsmtSentenceStream implements ObjectStream<SentenceSample>  {
+    private final LetsmtDocument source;
 
-  private final LetsmtDocument source;
+    private Iterator<LetsmtDocument.LetsmtSentence> sentenceIt;
 
-  private Iterator<LetsmtDocument.LetsmtSentence> sentenceIt;
-
-  LetsmtSentenceStream(LetsmtDocument source) {
-    this.source = source;
-    reset();
-  }
-
-  @Override
-  public SentenceSample read() throws IOException {
-
-    StringBuilder sentencesString = new StringBuilder();
-    List<Span> sentenceSpans = new LinkedList<>();
-
-    for (int i = 0; sentenceIt.hasNext() && i < 25 ; i++) {
-      LetsmtDocument.LetsmtSentence sentence = sentenceIt.next();
-
-      int begin = sentencesString.length();
-
-      if (sentence.getTokens() != null) {
-        sentencesString.append(String.join(" ", sentence.getTokens()));
-      } else if (sentence.getNonTokenizedText() != null) {
-        sentencesString.append(sentence.getNonTokenizedText());
-      }
-
-      sentenceSpans.add(new Span(begin, sentencesString.length()));
-      sentencesString.append(' ');
+    LetsmtSentenceStream(LetsmtDocument source) {
+        this.source = source;
+        reset();
     }
 
-    // end of stream is reached, indicate that with null return value
-    if (sentenceSpans.size() == 0) {
-      return null;
+    @Override
+    public SentenceSample read() throws IOException {
+
+        StringBuilder sentencesString = new StringBuilder();
+        List<Span> sentenceSpans = new LinkedList<>();
+
+        for (int i = 0; sentenceIt.hasNext() && i < 25; i++) {
+            LetsmtDocument.LetsmtSentence sentence = sentenceIt.next();
+
+            int begin = sentencesString.length();
+
+            if (sentence.getTokens() != null) {
+                sentencesString.append(String.join(" ", sentence.getTokens()));
+            } else if (sentence.getNonTokenizedText() != null) {
+                sentencesString.append(sentence.getNonTokenizedText());
+            }
+
+            sentenceSpans.add(new Span(begin, sentencesString.length()));
+            sentencesString.append(' ');
+        }
+
+        // end of stream is reached, indicate that with null return value
+        if (sentenceSpans.size() == 0) {
+            return null;
+        }
+
+        return new SentenceSample(sentencesString.toString(),
+                sentenceSpans.toArray(new Span[sentenceSpans.size()]));
     }
 
-    return new SentenceSample(sentencesString.toString(),
-        sentenceSpans.toArray(new Span[sentenceSpans.size()]));
-  }
-
-  @Override
-  public void reset() {
-    sentenceIt = source.getSentences().iterator();
-  }
+    @Override
+    public void reset() {
+        sentenceIt = source.getSentences().iterator();
+    }
 }

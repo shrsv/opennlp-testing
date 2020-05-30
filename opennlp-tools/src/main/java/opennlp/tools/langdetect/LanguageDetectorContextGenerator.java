@@ -23,5 +23,5 @@ import java.io.Serializable;
  * A context generator interface for language detector.
  */
 public interface LanguageDetectorContextGenerator extends Serializable {
-  String[] getContext(CharSequence document);
+    String[] getContext(CharSequence document);
 }

@@ -17,11 +17,7 @@
 
 package opennlp.tools.util.ext;
 
-import org.osgi.framework.BundleActivator;
-import org.osgi.framework.BundleContext;
-import org.osgi.framework.Filter;
-import org.osgi.framework.FrameworkUtil;
-import org.osgi.framework.InvalidSyntaxException;
+import org.osgi.framework.*;
 import org.osgi.util.tracker.ServiceTracker;
 
 /**
@@ -32,68 +28,68 @@ import org.osgi.util.tracker.ServiceTracker;
  */
 public class OSGiExtensionLoader implements BundleActivator {
 
-  private static OSGiExtensionLoader instance;
+    private static OSGiExtensionLoader instance;
 
-  private BundleContext context;
+    private BundleContext context;
 
-  public void start(BundleContext context) throws Exception {
-    instance = this;
-    this.context = context;
-    ExtensionLoader.setOSGiAvailable();
-  }
-
-  public void stop(BundleContext context) throws Exception {
-    instance = null;
-    this.context = null;
-  }
-
-  /**
-   * Retrieves the
-   *
-   * @param clazz
-   * @param id
-   * @return
-   */
-  <T> T getExtension(Class<T> clazz, String id) {
-
-    if (context == null) {
-      throw new IllegalStateException("OpenNLP Tools Bundle is not active!");
+    static OSGiExtensionLoader getInstance() {
+        return instance;
     }
 
-    Filter filter;
-    try {
-      filter = FrameworkUtil.createFilter("(&(objectclass=" + clazz.getName() + ")(" +
-          "opennlp" + "=" + id + "))");
-    } catch (InvalidSyntaxException e) {
-      // Might happen when the provided IDs are invalid in some way.
-      throw new ExtensionNotLoadedException(e);
+    public void start(BundleContext context) throws Exception {
+        instance = this;
+        this.context = context;
+        ExtensionLoader.setOSGiAvailable();
     }
 
-    // NOTE: In 4.3 the parameters are <T, T>
-    ServiceTracker extensionTracker = new ServiceTracker(context, filter, null);
-
-    T extension = null;
-
-    try {
-      extensionTracker.open();
-
-      try {
-        extension = (T) extensionTracker.waitForService(30000);
-      } catch (InterruptedException e) {
-        Thread.currentThread().interrupt();
-      }
-    } finally {
-      extensionTracker.close();
+    public void stop(BundleContext context) throws Exception {
+        instance = null;
+        this.context = null;
     }
 
-    if (extension == null) {
-      throw new ExtensionNotLoadedException("No suitable extension found. Extension name: " + id);
+    /**
+     * Retrieves the
+     *
+     * @param clazz
+     * @param id
+     * @return
+     */
+    <T> T getExtension(Class<T> clazz, String id) {
+
+        if (context == null) {
+            throw new IllegalStateException("OpenNLP Tools Bundle is not active!");
+        }
+
+        Filter filter;
+        try {
+            filter = FrameworkUtil.createFilter("(&(objectclass=" + clazz.getName() + ")(" +
+                    "opennlp" + "=" + id + "))");
+        } catch (InvalidSyntaxException e) {
+            // Might happen when the provided IDs are invalid in some way.
+            throw new ExtensionNotLoadedException(e);
+        }
+
+        // NOTE: In 4.3 the parameters are <T, T>
+        ServiceTracker extensionTracker = new ServiceTracker(context, filter, null);
+
+        T extension = null;
+
+        try {
+            extensionTracker.open();
+
+            try {
+                extension = (T) extensionTracker.waitForService(30000);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        } finally {
+            extensionTracker.close();
+        }
+
+        if (extension == null) {
+            throw new ExtensionNotLoadedException("No suitable extension found. Extension name: " + id);
+        }
+
+        return extension;
     }
-
-    return extension;
-  }
-
-  static OSGiExtensionLoader getInstance() {
-    return instance;
-  }
 }

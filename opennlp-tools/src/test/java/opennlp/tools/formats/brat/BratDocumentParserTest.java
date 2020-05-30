@@ -17,62 +17,61 @@
 
 package opennlp.tools.formats.brat;
 
+import opennlp.tools.namefind.NameSample;
+import opennlp.tools.sentdetect.NewlineSentenceDetector;
+import opennlp.tools.tokenize.WhitespaceTokenizer;
+import org.junit.Assert;
+import org.junit.Test;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.junit.Assert;
-import org.junit.Test;
-
-import opennlp.tools.namefind.NameSample;
-import opennlp.tools.sentdetect.NewlineSentenceDetector;
-import opennlp.tools.tokenize.WhitespaceTokenizer;
-
 public class BratDocumentParserTest {
 
-  @Test
-  public void testParse() throws IOException {
+    @Test
+    public void testParse() throws IOException {
 
-    Map<String, String> typeToClassMap = new HashMap<>();
-    BratAnnotationStreamTest.addEntityTypes(typeToClassMap);
-    AnnotationConfiguration config = new AnnotationConfiguration(typeToClassMap);
+        Map<String, String> typeToClassMap = new HashMap<>();
+        BratAnnotationStreamTest.addEntityTypes(typeToClassMap);
+        AnnotationConfiguration config = new AnnotationConfiguration(typeToClassMap);
 
-    InputStream txtIn = BratDocumentTest.class.getResourceAsStream(
-        "/opennlp/tools/formats/brat/opennlp-1193.txt");
+        InputStream txtIn = BratDocumentTest.class.getResourceAsStream(
+                "/opennlp/tools/formats/brat/opennlp-1193.txt");
 
-    InputStream annIn = BratDocumentTest.class.getResourceAsStream(
-        "/opennlp/tools/formats/brat/opennlp-1193.ann");
+        InputStream annIn = BratDocumentTest.class.getResourceAsStream(
+                "/opennlp/tools/formats/brat/opennlp-1193.ann");
 
-    BratDocument doc = BratDocument.parseDocument(config, "opennlp-1193", txtIn, annIn);
+        BratDocument doc = BratDocument.parseDocument(config, "opennlp-1193", txtIn, annIn);
 
-    BratDocumentParser parser = new BratDocumentParser(new NewlineSentenceDetector(),
-        WhitespaceTokenizer.INSTANCE);
+        BratDocumentParser parser = new BratDocumentParser(new NewlineSentenceDetector(),
+                WhitespaceTokenizer.INSTANCE);
 
-    List<NameSample> names = parser.parse(doc);
+        List<NameSample> names = parser.parse(doc);
 
-    Assert.assertEquals(3, names.size());
+        Assert.assertEquals(3, names.size());
 
-    NameSample sample1 = names.get(0);
+        NameSample sample1 = names.get(0);
 
-    Assert.assertEquals(1, sample1.getNames().length);
-    Assert.assertEquals(0, sample1.getNames()[0].getStart());
-    Assert.assertEquals(2, sample1.getNames()[0].getEnd());
+        Assert.assertEquals(1, sample1.getNames().length);
+        Assert.assertEquals(0, sample1.getNames()[0].getStart());
+        Assert.assertEquals(2, sample1.getNames()[0].getEnd());
 
 
-    NameSample sample2 = names.get(1);
-    Assert.assertEquals(1, sample2.getNames().length);
-    Assert.assertEquals(0, sample2.getNames()[0].getStart());
-    Assert.assertEquals(1, sample2.getNames()[0].getEnd());
+        NameSample sample2 = names.get(1);
+        Assert.assertEquals(1, sample2.getNames().length);
+        Assert.assertEquals(0, sample2.getNames()[0].getStart());
+        Assert.assertEquals(1, sample2.getNames()[0].getEnd());
 
-    NameSample sample3 = names.get(2);
-    Assert.assertEquals(3, sample3.getNames().length);
-    Assert.assertEquals(0, sample3.getNames()[0].getStart());
-    Assert.assertEquals(1, sample3.getNames()[0].getEnd());
-    Assert.assertEquals(1, sample3.getNames()[1].getStart());
-    Assert.assertEquals(2, sample3.getNames()[1].getEnd());
-    Assert.assertEquals(2, sample3.getNames()[2].getStart());
-    Assert.assertEquals(3, sample3.getNames()[2].getEnd());
-  }
+        NameSample sample3 = names.get(2);
+        Assert.assertEquals(3, sample3.getNames().length);
+        Assert.assertEquals(0, sample3.getNames()[0].getStart());
+        Assert.assertEquals(1, sample3.getNames()[0].getEnd());
+        Assert.assertEquals(1, sample3.getNames()[1].getStart());
+        Assert.assertEquals(2, sample3.getNames()[1].getEnd());
+        Assert.assertEquals(2, sample3.getNames()[2].getStart());
+        Assert.assertEquals(3, sample3.getNames()[2].getEnd());
+    }
 }

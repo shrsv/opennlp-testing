@@ -17,40 +17,39 @@
 
 package opennlp.tools.cmdline.chunker;
 
-import java.io.OutputStream;
-
 import opennlp.tools.chunker.ChunkSample;
 import opennlp.tools.chunker.ChunkerEvaluationMonitor;
 import opennlp.tools.cmdline.EvaluationErrorPrinter;
 import opennlp.tools.util.eval.EvaluationMonitor;
 
+import java.io.OutputStream;
+
 /**
  * A default implementation of {@link EvaluationMonitor} that prints
  * to an output stream.
- *
  */
 public class ChunkEvaluationErrorListener extends
-    EvaluationErrorPrinter<ChunkSample> implements ChunkerEvaluationMonitor {
+        EvaluationErrorPrinter<ChunkSample> implements ChunkerEvaluationMonitor {
 
-  /**
-   * Creates a listener that will print to System.err
-   */
-  public ChunkEvaluationErrorListener() {
-    super(System.err);
-  }
+    /**
+     * Creates a listener that will print to System.err
+     */
+    public ChunkEvaluationErrorListener() {
+        super(System.err);
+    }
 
-  /**
-   * Creates a listener that will print to a given {@link OutputStream}
-   */
-  public ChunkEvaluationErrorListener(OutputStream outputStream) {
-    super(outputStream);
-  }
+    /**
+     * Creates a listener that will print to a given {@link OutputStream}
+     */
+    public ChunkEvaluationErrorListener(OutputStream outputStream) {
+        super(outputStream);
+    }
 
-  @Override
-  public void missclassified(ChunkSample reference, ChunkSample prediction) {
-    printError(reference.getPhrasesAsSpanList(),
-        prediction.getPhrasesAsSpanList(), reference, prediction,
-        reference.getSentence());
-  }
+    @Override
+    public void missclassified(ChunkSample reference, ChunkSample prediction) {
+        printError(reference.getPhrasesAsSpanList(),
+                prediction.getPhrasesAsSpanList(), reference, prediction,
+                reference.getSentence());
+    }
 
 }

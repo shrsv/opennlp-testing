@@ -25,40 +25,40 @@ import opennlp.tools.util.ext.ExtensionLoader;
 
 public class ChunkerFactory extends BaseToolFactory {
 
-  /**
-   * Creates a {@link ChunkerFactory} that provides the default implementation
-   * of the resources.
-   */
-  public ChunkerFactory() {
-  }
-
-  public static ChunkerFactory create(String subclassName)
-      throws InvalidFormatException {
-    if (subclassName == null) {
-      // will create the default factory
-      return new ChunkerFactory();
+    /**
+     * Creates a {@link ChunkerFactory} that provides the default implementation
+     * of the resources.
+     */
+    public ChunkerFactory() {
     }
-    try {
-      return ExtensionLoader.instantiateExtension(ChunkerFactory.class, subclassName);
-    } catch (Exception e) {
-      String msg = "Could not instantiate the " + subclassName
-          + ". The initialization throw an exception.";
-      System.err.println(msg);
-      e.printStackTrace();
-      throw new InvalidFormatException(msg, e);
+
+    public static ChunkerFactory create(String subclassName)
+            throws InvalidFormatException {
+        if (subclassName == null) {
+            // will create the default factory
+            return new ChunkerFactory();
+        }
+        try {
+            return ExtensionLoader.instantiateExtension(ChunkerFactory.class, subclassName);
+        } catch (Exception e) {
+            String msg = "Could not instantiate the " + subclassName
+                    + ". The initialization throw an exception.";
+            System.err.println(msg);
+            e.printStackTrace();
+            throw new InvalidFormatException(msg, e);
+        }
     }
-  }
 
-  @Override
-  public void validateArtifactMap() throws InvalidFormatException {
-    // no additional artifacts
-  }
+    @Override
+    public void validateArtifactMap() throws InvalidFormatException {
+        // no additional artifacts
+    }
 
-  public SequenceValidator<TokenTag> getSequenceValidator() {
-    return new DefaultChunkerSequenceValidator();
-  }
+    public SequenceValidator<TokenTag> getSequenceValidator() {
+        return new DefaultChunkerSequenceValidator();
+    }
 
-  public ChunkerContextGenerator getContextGenerator() {
-    return new DefaultChunkerContextGenerator();
-  }
+    public ChunkerContextGenerator getContextGenerator() {
+        return new DefaultChunkerContextGenerator();
+    }
 }

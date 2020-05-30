@@ -1,4 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: opennlp.tools.lemmatizer.LemmatizerMETest
 -------------------------------------------------------------------------------
-Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.093 s - in opennlp.tools.lemmatizer.LemmatizerMETest
+Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.087 s - in opennlp.tools.lemmatizer.LemmatizerMETest

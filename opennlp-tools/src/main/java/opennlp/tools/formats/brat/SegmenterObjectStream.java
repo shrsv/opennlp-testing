@@ -17,43 +17,42 @@
 
 package opennlp.tools.formats.brat;
 
+import opennlp.tools.util.FilterObjectStream;
+import opennlp.tools.util.ObjectStream;
+
 import java.io.IOException;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
-import opennlp.tools.util.FilterObjectStream;
-import opennlp.tools.util.ObjectStream;
-
 public abstract class SegmenterObjectStream<S, T> extends FilterObjectStream<S, T> {
 
-  private Iterator<T> sampleIt = Collections.<T>emptySet().iterator();
+    private Iterator<T> sampleIt = Collections.<T>emptySet().iterator();
 
-  public SegmenterObjectStream(ObjectStream<S> in) {
-    super(in);
-  }
-
-  protected abstract List<T> read(S sample) throws IOException;
-
-  public final T read() throws IOException {
-
-    if (sampleIt.hasNext()) {
-      return sampleIt.next();
+    public SegmenterObjectStream(ObjectStream<S> in) {
+        super(in);
     }
-    else {
-      S inSample = samples.read();
 
-      if (inSample != null) {
-        List<T> outSamples = read(inSample);
+    protected abstract List<T> read(S sample) throws IOException;
 
-        if (outSamples != null) {
-          sampleIt = outSamples.iterator();
+    public final T read() throws IOException {
+
+        if (sampleIt.hasNext()) {
+            return sampleIt.next();
+        } else {
+            S inSample = samples.read();
+
+            if (inSample != null) {
+                List<T> outSamples = read(inSample);
+
+                if (outSamples != null) {
+                    sampleIt = outSamples.iterator();
+                }
+
+                return read();
+            }
         }
 
-        return read();
-      }
+        return null;
     }
-
-    return null;
-  }
 }

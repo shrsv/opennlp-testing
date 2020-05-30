@@ -22,61 +22,62 @@ package opennlp.tools.cmdline;
  */
 public abstract class CmdLineTool {
 
-  protected CmdLineTool() {
-  }
-
-  /**
-   * Retrieves the name of the training data tool. The name (used as command)
-   * must not contain white spaces.
-   *
-   * @return the name of the command line tool
-   */
-  public String getName() {
-    if (getClass().getName().endsWith("Tool")) {
-      return getClass().getSimpleName().substring(0, getClass().getSimpleName().length() - 4);
-    } else {
-      return getClass().getSimpleName();
+    protected CmdLineTool() {
     }
-  }
 
-  /**
-   * Returns whether the tool has any command line params.
-   * @return whether the tool has any command line params
-   */
-  public boolean hasParams() {
-    return true;
-  }
-
-  protected String getBasicHelp(Class<?> argProxyInterface) {
-    return getBasicHelp(new Class[]{argProxyInterface});
-  }
-
-  protected String getBasicHelp(Class<?>... argProxyInterfaces) {
-    return "Usage: " + CLI.CMD + " " + getName() + " " +
-        ArgumentParser.createUsage(argProxyInterfaces);
-  }
-
-  /**
-   * Retrieves a description on how to use the tool.
-   *
-   * @return a description on how to use the tool
-   */
-  public abstract String getHelp();
-
-  protected <T> T validateAndParseParams(String[] args, Class<T> argProxyInterface) {
-    String errorMessage = ArgumentParser.validateArgumentsLoudly(args, argProxyInterface);
-    if (null != errorMessage) {
-      throw new TerminateToolException(1, errorMessage + "\n" + getHelp());
+    /**
+     * Retrieves the name of the training data tool. The name (used as command)
+     * must not contain white spaces.
+     *
+     * @return the name of the command line tool
+     */
+    public String getName() {
+        if (getClass().getName().endsWith("Tool")) {
+            return getClass().getSimpleName().substring(0, getClass().getSimpleName().length() - 4);
+        } else {
+            return getClass().getSimpleName();
+        }
     }
-    return ArgumentParser.parse(args, argProxyInterface);
-  }
 
-  /**
-   * Retrieves a short description of what the tool does.
-   *
-   * @return a short description of what the tool does
-   */
-  public String getShortDescription() {
-    return "";
-  }
+    /**
+     * Returns whether the tool has any command line params.
+     *
+     * @return whether the tool has any command line params
+     */
+    public boolean hasParams() {
+        return true;
+    }
+
+    protected String getBasicHelp(Class<?> argProxyInterface) {
+        return getBasicHelp(new Class[]{argProxyInterface});
+    }
+
+    protected String getBasicHelp(Class<?>... argProxyInterfaces) {
+        return "Usage: " + CLI.CMD + " " + getName() + " " +
+                ArgumentParser.createUsage(argProxyInterfaces);
+    }
+
+    /**
+     * Retrieves a description on how to use the tool.
+     *
+     * @return a description on how to use the tool
+     */
+    public abstract String getHelp();
+
+    protected <T> T validateAndParseParams(String[] args, Class<T> argProxyInterface) {
+        String errorMessage = ArgumentParser.validateArgumentsLoudly(args, argProxyInterface);
+        if (null != errorMessage) {
+            throw new TerminateToolException(1, errorMessage + "\n" + getHelp());
+        }
+        return ArgumentParser.parse(args, argProxyInterface);
+    }
+
+    /**
+     * Retrieves a short description of what the tool does.
+     *
+     * @return a short description of what the tool does
+     */
+    public String getShortDescription() {
+        return "";
+    }
 }

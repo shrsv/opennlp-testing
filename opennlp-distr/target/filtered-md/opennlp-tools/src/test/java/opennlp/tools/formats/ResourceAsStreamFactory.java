@@ -17,24 +17,24 @@
 
 package opennlp.tools.formats;
 
+import opennlp.tools.util.InputStreamFactory;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Objects;
 
-import opennlp.tools.util.InputStreamFactory;
-
 public class ResourceAsStreamFactory implements InputStreamFactory {
 
-  private Class<?> clazz;
-  private String name;
+    private Class<?> clazz;
+    private String name;
 
-  public ResourceAsStreamFactory(Class<?> clazz, String name) {
-    this.clazz = Objects.requireNonNull(clazz, "callz must not be null");
-    this.name = Objects.requireNonNull(name, "name must not be null");
-  }
+    public ResourceAsStreamFactory(Class<?> clazz, String name) {
+        this.clazz = Objects.requireNonNull(clazz, "callz must not be null");
+        this.name = Objects.requireNonNull(name, "name must not be null");
+    }
 
-  @Override
-  public InputStream createInputStream() throws IOException {
-    return clazz.getResourceAsStream(name);
-  }
+    @Override
+    public InputStream createInputStream() throws IOException {
+        return clazz.getResourceAsStream(name);
+    }
 }

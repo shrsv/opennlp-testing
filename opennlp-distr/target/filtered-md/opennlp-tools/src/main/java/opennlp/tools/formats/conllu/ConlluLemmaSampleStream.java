@@ -17,41 +17,41 @@
 
 package opennlp.tools.formats.conllu;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
 import opennlp.tools.lemmatizer.LemmaSample;
 import opennlp.tools.util.FilterObjectStream;
 import opennlp.tools.util.ObjectStream;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
 public class ConlluLemmaSampleStream extends FilterObjectStream<ConlluSentence, LemmaSample> {
 
-  private final ConlluTagset tagset;
+    private final ConlluTagset tagset;
 
-  public ConlluLemmaSampleStream(ObjectStream<ConlluSentence> samples, ConlluTagset tagset) {
-    super(samples);
-    this.tagset = tagset;
-  }
-
-  @Override
-  public LemmaSample read() throws IOException {
-    ConlluSentence sentence = samples.read();
-
-    if (sentence != null) {
-      List<String> tokens = new ArrayList<>();
-      List<String> tags = new ArrayList<>();
-      List<String> lemmas = new ArrayList<>();
-
-      for (ConlluWordLine line : sentence.getWordLines()) {
-        tokens.add(line.getForm());
-        tags.add(line.getPosTag(tagset));
-        lemmas.add(line.getLemma());
-      }
-
-      return new LemmaSample(tokens, tags, lemmas);
+    public ConlluLemmaSampleStream(ObjectStream<ConlluSentence> samples, ConlluTagset tagset) {
+        super(samples);
+        this.tagset = tagset;
     }
 
-    return null;
-  }
+    @Override
+    public LemmaSample read() throws IOException {
+        ConlluSentence sentence = samples.read();
+
+        if (sentence != null) {
+            List<String> tokens = new ArrayList<>();
+            List<String> tags = new ArrayList<>();
+            List<String> lemmas = new ArrayList<>();
+
+            for (ConlluWordLine line : sentence.getWordLines()) {
+                tokens.add(line.getForm());
+                tags.add(line.getPosTag(tagset));
+                lemmas.add(line.getLemma());
+            }
+
+            return new LemmaSample(tokens, tags, lemmas);
+        }
+
+        return null;
+    }
 }

@@ -17,98 +17,85 @@
 
 package opennlp.tools.namefind;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import opennlp.tools.cmdline.TerminateToolException;
+import opennlp.tools.cmdline.namefind.TokenNameFinderTrainerTool;
+import opennlp.tools.postag.POSModel;
+import opennlp.tools.postag.POSTaggerMETest;
+import opennlp.tools.util.*;
+import opennlp.tools.util.model.ModelType;
+import org.junit.Assert;
+import org.junit.Test;
+
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import org.junit.Assert;
-import org.junit.Test;
-
-import opennlp.tools.cmdline.TerminateToolException;
-import opennlp.tools.cmdline.namefind.TokenNameFinderTrainerTool;
-import opennlp.tools.postag.POSModel;
-import opennlp.tools.postag.POSTaggerMETest;
-import opennlp.tools.util.FileUtil;
-import opennlp.tools.util.MockInputStreamFactory;
-import opennlp.tools.util.ObjectStream;
-import opennlp.tools.util.PlainTextByLineStream;
-import opennlp.tools.util.TrainingParameters;
-import opennlp.tools.util.model.ModelType;
-
 public class TokenNameFinderModelTest {
 
-  @Test
-  public void testNERWithPOSModel() throws IOException {
+    @Test
+    public void testNERWithPOSModel() throws IOException {
 
-    // create a resources folder
-    Path resourcesFolder = Files.createTempDirectory("resources").toAbsolutePath();
+        // create a resources folder
+        Path resourcesFolder = Files.createTempDirectory("resources").toAbsolutePath();
 
-    // save a POS model there
-    POSModel posModel = POSTaggerMETest.trainPOSModel(ModelType.MAXENT);
-    File posModelFile = new File(resourcesFolder.toFile(),"pos-model.bin");
+        // save a POS model there
+        POSModel posModel = POSTaggerMETest.trainPOSModel(ModelType.MAXENT);
+        File posModelFile = new File(resourcesFolder.toFile(), "pos-model.bin");
 
-    posModel.serialize(posModelFile);
+        posModel.serialize(posModelFile);
 
-    Assert.assertTrue(posModelFile.exists());
+        Assert.assertTrue(posModelFile.exists());
 
-    // load feature generator xml bytes
-    InputStream fgInputStream = this.getClass().getResourceAsStream("ner-pos-features.xml");
-    BufferedReader buffers = new BufferedReader(new InputStreamReader(fgInputStream));
-    String featureGeneratorString = buffers.lines().
-        collect(Collectors.joining("\n"));
+        // load feature generator xml bytes
+        InputStream fgInputStream = this.getClass().getResourceAsStream("ner-pos-features.xml");
+        BufferedReader buffers = new BufferedReader(new InputStreamReader(fgInputStream));
+        String featureGeneratorString = buffers.lines().
+                collect(Collectors.joining("\n"));
 
-    // create a featuregenerator file
-    Path featureGenerator = Files.createTempFile("ner-featuregen", ".xml");
-    Files.write(featureGenerator, featureGeneratorString.getBytes());
+        // create a featuregenerator file
+        Path featureGenerator = Files.createTempFile("ner-featuregen", ".xml");
+        Files.write(featureGenerator, featureGeneratorString.getBytes());
 
 
-    Map<String, Object> resources;
-    try {
-      resources = TokenNameFinderTrainerTool.loadResources(resourcesFolder.toFile(),
-          featureGenerator.toAbsolutePath().toFile());
+        Map<String, Object> resources;
+        try {
+            resources = TokenNameFinderTrainerTool.loadResources(resourcesFolder.toFile(),
+                    featureGenerator.toAbsolutePath().toFile());
+        } catch (IOException e) {
+            throw new TerminateToolException(-1, e.getMessage(), e);
+        } finally {
+            Files.delete(featureGenerator);
+        }
+
+
+        // train a name finder
+        ObjectStream<NameSample> sampleStream = new NameSampleDataStream(
+                new PlainTextByLineStream(new MockInputStreamFactory(
+                        new File("opennlp/tools/namefind/voa1.train")), StandardCharsets.UTF_8));
+
+        TrainingParameters params = new TrainingParameters();
+        params.put(TrainingParameters.ITERATIONS_PARAM, 70);
+        params.put(TrainingParameters.CUTOFF_PARAM, 1);
+
+        TokenNameFinderModel nameFinderModel = NameFinderME.train("en", null, sampleStream,
+                params, TokenNameFinderFactory.create(null,
+                        featureGeneratorString.getBytes(), resources, new BioCodec()));
+
+
+        File model = File.createTempFile("nermodel", ".bin");
+        try {
+            FileOutputStream modelOut = new FileOutputStream(model);
+            nameFinderModel.serialize(modelOut);
+
+            modelOut.close();
+
+            Assert.assertTrue(model.exists());
+        } finally {
+            model.delete();
+            FileUtil.deleteDirectory(resourcesFolder.toFile());
+        }
     }
-    catch (IOException e) {
-      throw new TerminateToolException(-1, e.getMessage(), e);
-    }
-    finally {
-      Files.delete(featureGenerator);
-    }
-
-
-    // train a name finder
-    ObjectStream<NameSample> sampleStream = new NameSampleDataStream(
-        new PlainTextByLineStream(new MockInputStreamFactory(
-            new File("opennlp/tools/namefind/voa1.train")), StandardCharsets.UTF_8));
-
-    TrainingParameters params = new TrainingParameters();
-    params.put(TrainingParameters.ITERATIONS_PARAM, 70);
-    params.put(TrainingParameters.CUTOFF_PARAM, 1);
-
-    TokenNameFinderModel nameFinderModel = NameFinderME.train("en", null, sampleStream,
-        params, TokenNameFinderFactory.create(null,
-            featureGeneratorString.getBytes(), resources, new BioCodec()));
-
-
-    File model = File.createTempFile("nermodel", ".bin");
-    try {
-      FileOutputStream modelOut = new FileOutputStream(model);
-      nameFinderModel.serialize(modelOut);
-
-      modelOut.close();
-
-      Assert.assertTrue(model.exists());
-    }
-    finally {
-      model.delete();
-      FileUtil.deleteDirectory(resourcesFolder.toFile());
-    }
-  }
 }

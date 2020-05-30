@@ -17,35 +17,34 @@
 
 package opennlp.tools.postag;
 
-import org.junit.Assert;
-import org.junit.Test;
-
 import opennlp.tools.ml.model.Event;
 import opennlp.tools.util.ObjectStream;
 import opennlp.tools.util.ObjectStreamUtils;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
  * Tests for the {@link POSSampleEventStream} class.
  */
 public class POSSampleEventStreamTest {
 
-  /**
-   * Tests that the outcomes for a single sentence match the
-   * expected outcomes.
-   */
-  @Test
-  public void testOutcomesForSingleSentence() throws Exception {
-    String sentence = "That_DT sounds_VBZ good_JJ ._.";
+    /**
+     * Tests that the outcomes for a single sentence match the
+     * expected outcomes.
+     */
+    @Test
+    public void testOutcomesForSingleSentence() throws Exception {
+        String sentence = "That_DT sounds_VBZ good_JJ ._.";
 
-    POSSample sample = POSSample.parse(sentence);
+        POSSample sample = POSSample.parse(sentence);
 
-    try (ObjectStream<Event> eventStream = new POSSampleEventStream(
-        ObjectStreamUtils.createObjectStream(sample))) {
-      Assert.assertEquals("DT", eventStream.read().getOutcome());
-      Assert.assertEquals("VBZ", eventStream.read().getOutcome());
-      Assert.assertEquals("JJ", eventStream.read().getOutcome());
-      Assert.assertEquals(".", eventStream.read().getOutcome());
-      Assert.assertNull(eventStream.read());
+        try (ObjectStream<Event> eventStream = new POSSampleEventStream(
+                ObjectStreamUtils.createObjectStream(sample))) {
+            Assert.assertEquals("DT", eventStream.read().getOutcome());
+            Assert.assertEquals("VBZ", eventStream.read().getOutcome());
+            Assert.assertEquals("JJ", eventStream.read().getOutcome());
+            Assert.assertEquals(".", eventStream.read().getOutcome());
+            Assert.assertNull(eventStream.read());
+        }
     }
-  }
 }

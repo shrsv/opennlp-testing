@@ -25,34 +25,34 @@ import org.junit.Test;
  */
 public class ChunkerModelTest {
 
-  @Test
-  public void testInvalidFactorySignature() throws Exception {
+    @Test
+    public void testInvalidFactorySignature() throws Exception {
 
-    ChunkerModel model = null;
-    try {
-      model = new ChunkerModel(this.getClass().getResourceAsStream("chunker170custom.bin"));
-    } catch (IllegalArgumentException e) {
-      Assert.assertTrue("Exception must state ChunkerFactory",
-          e.getMessage().contains("ChunkerFactory"));
-      Assert.assertTrue("Exception must mention DummyChunkerFactory",
-          e.getMessage().contains("opennlp.tools.chunker.DummyChunkerFactory"));
+        ChunkerModel model = null;
+        try {
+            model = new ChunkerModel(this.getClass().getResourceAsStream("chunker170custom.bin"));
+        } catch (IllegalArgumentException e) {
+            Assert.assertTrue("Exception must state ChunkerFactory",
+                    e.getMessage().contains("ChunkerFactory"));
+            Assert.assertTrue("Exception must mention DummyChunkerFactory",
+                    e.getMessage().contains("opennlp.tools.chunker.DummyChunkerFactory"));
+        }
+        Assert.assertNull(model);
     }
-    Assert.assertNull(model);
-  }
 
-  @Test
-  public void test170DefaultFactory() throws Exception {
+    @Test
+    public void test170DefaultFactory() throws Exception {
 
-    Assert.assertNotNull(
-        new ChunkerModel(this.getClass().getResourceAsStream("chunker170default.bin")));
+        Assert.assertNotNull(
+                new ChunkerModel(this.getClass().getResourceAsStream("chunker170default.bin")));
 
-  }
+    }
 
-  @Test
-  public void test180CustomFactory() throws Exception {
+    @Test
+    public void test180CustomFactory() throws Exception {
 
-    Assert.assertNotNull(
-        new ChunkerModel(this.getClass().getResourceAsStream("chunker180custom.bin")));
+        Assert.assertNotNull(
+                new ChunkerModel(this.getClass().getResourceAsStream("chunker180custom.bin")));
 
-  }
+    }
 }

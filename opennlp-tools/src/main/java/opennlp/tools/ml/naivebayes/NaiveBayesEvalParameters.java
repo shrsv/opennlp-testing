@@ -25,22 +25,22 @@ import opennlp.tools.ml.model.EvalParameters;
  */
 public class NaiveBayesEvalParameters extends EvalParameters {
 
-  protected double[] outcomeTotals;
-  protected long vocabulary;
+    protected double[] outcomeTotals;
+    protected long vocabulary;
 
-  public NaiveBayesEvalParameters(Context[] params, int numOutcomes,
-      double[] outcomeTotals, long vocabulary) {
-    super(params, numOutcomes);
-    this.outcomeTotals = outcomeTotals;
-    this.vocabulary = vocabulary;
-  }
+    public NaiveBayesEvalParameters(Context[] params, int numOutcomes,
+                                    double[] outcomeTotals, long vocabulary) {
+        super(params, numOutcomes);
+        this.outcomeTotals = outcomeTotals;
+        this.vocabulary = vocabulary;
+    }
 
-  public double[] getOutcomeTotals() {
-    return outcomeTotals;
-  }
+    public double[] getOutcomeTotals() {
+        return outcomeTotals;
+    }
 
-  public long getVocabulary() {
-    return vocabulary;
-  }
+    public long getVocabulary() {
+        return vocabulary;
+    }
 
 }

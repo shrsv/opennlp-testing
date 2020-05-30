@@ -17,27 +17,27 @@
 
 package opennlp.uima.util;
 
-import java.io.IOException;
-import java.io.InputStream;
-
 import org.apache.uima.resource.DataResource;
 import org.apache.uima.resource.ResourceInitializationException;
 import org.apache.uima.resource.SharedResourceObject;
 
+import java.io.IOException;
+import java.io.InputStream;
+
 public abstract class AbstractModelResource<T> implements SharedResourceObject {
 
-  protected T model;
+    protected T model;
 
-  protected abstract T loadModel(InputStream in) throws IOException;
+    protected abstract T loadModel(InputStream in) throws IOException;
 
-  public void load(DataResource resource) throws ResourceInitializationException {
-    try {
-      model = loadModel(resource.getInputStream());
-    } catch (IOException e) {
-      throw new ResourceInitializationException(
-          ExceptionMessages.MESSAGE_CATALOG,
-          ExceptionMessages.IO_ERROR_MODEL_READING, new Object[] {
-              e.getMessage()}, e);
+    public void load(DataResource resource) throws ResourceInitializationException {
+        try {
+            model = loadModel(resource.getInputStream());
+        } catch (IOException e) {
+            throw new ResourceInitializationException(
+                    ExceptionMessages.MESSAGE_CATALOG,
+                    ExceptionMessages.IO_ERROR_MODEL_READING, new Object[]{
+                    e.getMessage()}, e);
+        }
     }
-  }
 }

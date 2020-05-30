@@ -22,19 +22,19 @@ import opennlp.tools.cmdline.ArgumentParser.ParameterDescription;
 
 /**
  * TrainingParams for Language Detector.
- *
+ * <p>
  * Note: Do not use this class, internal use only!
  */
 interface TrainingParams {
 
-  @ParameterDescription(valueName = "paramsFile", description = "training parameters file.")
-  @OptionalParameter()
-  String getParams();
+    @ParameterDescription(valueName = "paramsFile", description = "training parameters file.")
+    @OptionalParameter()
+    String getParams();
 
-  @ParameterDescription(valueName = "factoryName",
-      description = "A sub-class of LanguageDetectorFactory" +
-          " where to get implementation and resources.")
-  @OptionalParameter
-  String getFactory();
+    @ParameterDescription(valueName = "factoryName",
+            description = "A sub-class of LanguageDetectorFactory" +
+                    " where to get implementation and resources.")
+    @OptionalParameter
+    String getFactory();
 
 }

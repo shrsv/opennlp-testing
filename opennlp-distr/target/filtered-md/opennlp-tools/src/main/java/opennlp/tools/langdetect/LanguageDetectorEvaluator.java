@@ -31,69 +31,67 @@ import opennlp.tools.util.eval.Mean;
  */
 public class LanguageDetectorEvaluator extends Evaluator<LanguageSample> {
 
-  private LanguageDetector languageDetector;
+    private LanguageDetector languageDetector;
 
-  private Mean accuracy = new Mean();
+    private Mean accuracy = new Mean();
 
-  /**
-   * Initializes the current instance.
-   *
-   * @param langDetect the language detector instance
-   */
-  public LanguageDetectorEvaluator(LanguageDetector langDetect,
-                                   LanguageDetectorEvaluationMonitor ... listeners) {
-    super(listeners);
-    this.languageDetector = langDetect;
-  }
-
-  /**
-   * Evaluates the given reference {@link LanguageSample} object.
-   *
-   * This is done by categorizing the document from the provided
-   * {@link LanguageSample}. The detected language is then used
-   * to calculate and update the score.
-   *
-   * @param sample the reference {@link LanguageSample}.
-   */
-  public LanguageSample processSample(LanguageSample sample) {
-
-    CharSequence document = sample.getContext();
-
-    Language predicted = languageDetector.predictLanguage(document);
-
-
-
-    if (sample.getLanguage().getLang().equals(predicted.getLang())) {
-      accuracy.add(1);
-    }
-    else {
-      accuracy.add(0);
+    /**
+     * Initializes the current instance.
+     *
+     * @param langDetect the language detector instance
+     */
+    public LanguageDetectorEvaluator(LanguageDetector langDetect,
+                                     LanguageDetectorEvaluationMonitor... listeners) {
+        super(listeners);
+        this.languageDetector = langDetect;
     }
 
-    return new LanguageSample(predicted, sample.getContext());
-  }
+    /**
+     * Evaluates the given reference {@link LanguageSample} object.
+     * <p>
+     * This is done by categorizing the document from the provided
+     * {@link LanguageSample}. The detected language is then used
+     * to calculate and update the score.
+     *
+     * @param sample the reference {@link LanguageSample}.
+     */
+    public LanguageSample processSample(LanguageSample sample) {
 
-  /**
-   * Retrieves the accuracy of provided {@link DocumentCategorizer}.
-   *
-   * accuracy = correctly categorized documents / total documents
-   *
-   * @return the accuracy
-   */
-  public double getAccuracy() {
-    return accuracy.mean();
-  }
+        CharSequence document = sample.getContext();
 
-  public long getDocumentCount() {
-    return accuracy.count();
-  }
+        Language predicted = languageDetector.predictLanguage(document);
 
-  /**
-   * Represents this objects as human readable {@link String}.
-   */
-  @Override
-  public String toString() {
-    return "Accuracy: " + accuracy.mean() + "\n" +
-        "Number of documents: " + accuracy.count();
-  }
+
+        if (sample.getLanguage().getLang().equals(predicted.getLang())) {
+            accuracy.add(1);
+        } else {
+            accuracy.add(0);
+        }
+
+        return new LanguageSample(predicted, sample.getContext());
+    }
+
+    /**
+     * Retrieves the accuracy of provided {@link DocumentCategorizer}.
+     * <p>
+     * accuracy = correctly categorized documents / total documents
+     *
+     * @return the accuracy
+     */
+    public double getAccuracy() {
+        return accuracy.mean();
+    }
+
+    public long getDocumentCount() {
+        return accuracy.count();
+    }
+
+    /**
+     * Represents this objects as human readable {@link String}.
+     */
+    @Override
+    public String toString() {
+        return "Accuracy: " + accuracy.mean() + "\n" +
+                "Number of documents: " + accuracy.count();
+    }
 }

@@ -17,40 +17,40 @@
 
 package opennlp.tools.formats.conllu;
 
+import opennlp.tools.postag.POSSample;
+import opennlp.tools.util.FilterObjectStream;
+import opennlp.tools.util.ObjectStream;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import opennlp.tools.postag.POSSample;
-import opennlp.tools.util.FilterObjectStream;
-import opennlp.tools.util.ObjectStream;
-
 public class ConlluPOSSampleStream extends FilterObjectStream<ConlluSentence, POSSample> {
 
-  private final ConlluTagset tagset;
+    private final ConlluTagset tagset;
 
-  ConlluPOSSampleStream(ObjectStream<ConlluSentence> samples, ConlluTagset tagset) {
-    super(samples);
-    this.tagset = Objects.requireNonNull(tagset);
-  }
-
-  @Override
-  public POSSample read() throws IOException {
-    ConlluSentence sentence = samples.read();
-
-    if (sentence != null) {
-      List<String> tokens = new ArrayList<>();
-      List<String> tags = new ArrayList<>();
-
-      for (ConlluWordLine line : sentence.getWordLines()) {
-        tokens.add(line.getForm());
-        tags.add(line.getPosTag(tagset));
-      }
-
-      return new POSSample(tokens, tags);
+    ConlluPOSSampleStream(ObjectStream<ConlluSentence> samples, ConlluTagset tagset) {
+        super(samples);
+        this.tagset = Objects.requireNonNull(tagset);
     }
 
-    return null;
-  }
+    @Override
+    public POSSample read() throws IOException {
+        ConlluSentence sentence = samples.read();
+
+        if (sentence != null) {
+            List<String> tokens = new ArrayList<>();
+            List<String> tags = new ArrayList<>();
+
+            for (ConlluWordLine line : sentence.getWordLines()) {
+                tokens.add(line.getForm());
+                tags.add(line.getPosTag(tagset));
+            }
+
+            return new POSSample(tokens, tags);
+        }
+
+        return null;
+    }
 }

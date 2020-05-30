@@ -17,33 +17,33 @@
 
 package opennlp.tools.cmdline.tokenizer;
 
-import java.io.File;
-
 import opennlp.tools.cmdline.BasicCmdLineTool;
 import opennlp.tools.cmdline.CLI;
 import opennlp.tools.tokenize.TokenizerModel;
 
+import java.io.File;
+
 public final class TokenizerMETool extends BasicCmdLineTool {
 
-  public String getShortDescription() {
-    return "learnable tokenizer";
-  }
-
-  public String getHelp() {
-    return "Usage: " + CLI.CMD + " " + getName() + " model < sentences";
-  }
-
-  public void run(String[] args) {
-    if (args.length != 1) {
-      System.out.println(getHelp());
-    } else {
-
-      TokenizerModel model = new TokenizerModelLoader().load(new File(args[0]));
-
-      CommandLineTokenizer tokenizer =
-          new CommandLineTokenizer(new opennlp.tools.tokenize.TokenizerME(model));
-
-      tokenizer.process();
+    public String getShortDescription() {
+        return "learnable tokenizer";
     }
-  }
+
+    public String getHelp() {
+        return "Usage: " + CLI.CMD + " " + getName() + " model < sentences";
+    }
+
+    public void run(String[] args) {
+        if (args.length != 1) {
+            System.out.println(getHelp());
+        } else {
+
+            TokenizerModel model = new TokenizerModelLoader().load(new File(args[0]));
+
+            CommandLineTokenizer tokenizer =
+                    new CommandLineTokenizer(new opennlp.tools.tokenize.TokenizerME(model));
+
+            tokenizer.process();
+        }
+    }
 }

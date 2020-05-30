@@ -17,113 +17,112 @@
 
 package opennlp.tools.formats.frenchtreebank;
 
+import opennlp.tools.parser.Parse;
+import opennlp.tools.util.ObjectStream;
+import opennlp.tools.util.ObjectStreamUtils;
+import org.junit.Assert;
+import org.junit.Test;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-import org.junit.Assert;
-import org.junit.Test;
-
-import opennlp.tools.parser.Parse;
-import opennlp.tools.util.ObjectStream;
-import opennlp.tools.util.ObjectStreamUtils;
-
 public class ConstitParseSampleStreamTest {
 
-  private String[] sample1Tokens = new String[]{
-      "L'",
-      "autonomie",
-      "de",
-      "la",
-      "Bundesbank",
-      ",",
-      "la",
-      "politique",
-      "de",
-      "stabilité",
-      "qu'",
-      "elle",
-      "a",
-      "fait",
-      "prévaloir",
-      "(",
-      "avec",
-      "moins",
-      "de",
-      "succès",
-      "et",
-      "de",
-      "sévérité",
-      "qu'",
-      "on",
-      "ne",
-      "le",
-      "dit",
-      ",",
-      "mais",
-      "tout",
-      "est",
-      "relatif",
-      ")",
-      ",",
-      "est",
-      "une",
-      "pièce",
-      "essentielle",
-      "de",
-      "la",
-      "division",
-      "des",
-      "pouvoirs",
-      "en",
-      "Allemagne",
-      "."
-  };
+    private String[] sample1Tokens = new String[]{
+            "L'",
+            "autonomie",
+            "de",
+            "la",
+            "Bundesbank",
+            ",",
+            "la",
+            "politique",
+            "de",
+            "stabilité",
+            "qu'",
+            "elle",
+            "a",
+            "fait",
+            "prévaloir",
+            "(",
+            "avec",
+            "moins",
+            "de",
+            "succès",
+            "et",
+            "de",
+            "sévérité",
+            "qu'",
+            "on",
+            "ne",
+            "le",
+            "dit",
+            ",",
+            "mais",
+            "tout",
+            "est",
+            "relatif",
+            ")",
+            ",",
+            "est",
+            "une",
+            "pièce",
+            "essentielle",
+            "de",
+            "la",
+            "division",
+            "des",
+            "pouvoirs",
+            "en",
+            "Allemagne",
+            "."
+    };
 
-  /**
-   * Reads sample1.xml into a byte array.
-   *
-   * @return byte array containing sample1.xml.
-   */
-  private static byte[] getSample1() throws IOException {
-    ByteArrayOutputStream out = new ByteArrayOutputStream();
+    /**
+     * Reads sample1.xml into a byte array.
+     *
+     * @return byte array containing sample1.xml.
+     */
+    private static byte[] getSample1() throws IOException {
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
 
-    byte[] buffer = new byte[1024];
-    int length;
-    try (InputStream sampleIn =
-        ConstitParseSampleStreamTest.class.getResourceAsStream("sample1.xml")) {
-      while ((length = sampleIn.read(buffer)) > 0) {
-        out.write(buffer, 0, length);
-      }
+        byte[] buffer = new byte[1024];
+        int length;
+        try (InputStream sampleIn =
+                     ConstitParseSampleStreamTest.class.getResourceAsStream("sample1.xml")) {
+            while ((length = sampleIn.read(buffer)) > 0) {
+                out.write(buffer, 0, length);
+            }
+        }
+
+        return out.toByteArray();
     }
 
-    return out.toByteArray();
-  }
-
-  @Test
-  public void testThereIsExactlyOneSent() throws IOException {
-    try (ObjectStream<Parse> samples =
-        new ConstitParseSampleStream(ObjectStreamUtils.createObjectStream(getSample1()))) {
-      Assert.assertNotNull(samples.read());
-      Assert.assertNull(samples.read());
-      Assert.assertNull(samples.read());
+    @Test
+    public void testThereIsExactlyOneSent() throws IOException {
+        try (ObjectStream<Parse> samples =
+                     new ConstitParseSampleStream(ObjectStreamUtils.createObjectStream(getSample1()))) {
+            Assert.assertNotNull(samples.read());
+            Assert.assertNull(samples.read());
+            Assert.assertNull(samples.read());
+        }
     }
-  }
 
-  @Test
-  public void testTokensAreCorrect() throws IOException {
+    @Test
+    public void testTokensAreCorrect() throws IOException {
 
-    try (ObjectStream<Parse> samples =
-        new ConstitParseSampleStream(ObjectStreamUtils.createObjectStream(getSample1()))) {
-      Parse p = samples.read();
+        try (ObjectStream<Parse> samples =
+                     new ConstitParseSampleStream(ObjectStreamUtils.createObjectStream(getSample1()))) {
+            Parse p = samples.read();
 
-      Parse[] tagNodes = p.getTagNodes();
-      String[] tokens = new String[tagNodes.length];
-      for (int ti = 0; ti < tagNodes.length; ti++) {
-        tokens[ti] = tagNodes[ti].getCoveredText();
-      }
+            Parse[] tagNodes = p.getTagNodes();
+            String[] tokens = new String[tagNodes.length];
+            for (int ti = 0; ti < tagNodes.length; ti++) {
+                tokens[ti] = tagNodes[ti].getCoveredText();
+            }
 
-      Assert.assertArrayEquals(sample1Tokens, tokens);
+            Assert.assertArrayEquals(sample1Tokens, tokens);
+        }
     }
-  }
 }

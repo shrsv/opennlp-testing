@@ -17,10 +17,6 @@
 
 package opennlp.tools.formats.ad;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.charset.Charset;
-
 import opennlp.tools.cmdline.ArgumentParser;
 import opennlp.tools.cmdline.ArgumentParser.OptionalParameter;
 import opennlp.tools.cmdline.ArgumentParser.ParameterDescription;
@@ -32,59 +28,63 @@ import opennlp.tools.util.InputStreamFactory;
 import opennlp.tools.util.ObjectStream;
 import opennlp.tools.util.PlainTextByLineStream;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.charset.Charset;
+
 /**
  * <b>Note:</b> Do not use this class, internal use only!
  */
 public class ADPOSSampleStreamFactory extends
-    LanguageSampleStreamFactory<POSSample> {
+        LanguageSampleStreamFactory<POSSample> {
 
-  interface Parameters {
-    @ParameterDescription(valueName = "charsetName",
-        description = "encoding for reading and writing text, if absent the system default is used.")
-    Charset getEncoding();
-
-    @ParameterDescription(valueName = "sampleData", description = "data to be used, usually a file name.")
-    File getData();
-
-    @ParameterDescription(valueName = "language", description = "language which is being processed.")
-    String getLang();
-
-    @ParameterDescription(valueName = "expandME", description = "expand multiword expressions.")
-    @OptionalParameter(defaultValue = "false")
-    Boolean getExpandME();
-
-    @ParameterDescription(valueName = "includeFeatures",
-        description = "combine POS Tags with word features, like number and gender.")
-    @OptionalParameter(defaultValue = "false")
-    Boolean getIncludeFeatures();
-  }
-
-  public static void registerFactory() {
-    StreamFactoryRegistry.registerFactory(POSSample.class, "ad",
-        new ADPOSSampleStreamFactory(Parameters.class));
-  }
-
-  protected <P> ADPOSSampleStreamFactory(Class<P> params) {
-    super(params);
-  }
-
-  public ObjectStream<POSSample> create(String[] args) {
-
-    Parameters params = ArgumentParser.parse(args, Parameters.class);
-
-    language = params.getLang();
-
-    InputStreamFactory sampleDataIn = CmdLineUtil.createInputStreamFactory(params.getData());
-
-    ObjectStream<String> lineStream = null;
-    try {
-      lineStream = new PlainTextByLineStream(sampleDataIn, params.getEncoding());
-    } catch (IOException ex) {
-      CmdLineUtil.handleCreateObjectStreamError(ex);
+    protected <P> ADPOSSampleStreamFactory(Class<P> params) {
+        super(params);
     }
 
-    return new ADPOSSampleStream(lineStream,
-        params.getExpandME(), params.getIncludeFeatures());
-  }
+    public static void registerFactory() {
+        StreamFactoryRegistry.registerFactory(POSSample.class, "ad",
+                new ADPOSSampleStreamFactory(Parameters.class));
+    }
+
+    public ObjectStream<POSSample> create(String[] args) {
+
+        Parameters params = ArgumentParser.parse(args, Parameters.class);
+
+        language = params.getLang();
+
+        InputStreamFactory sampleDataIn = CmdLineUtil.createInputStreamFactory(params.getData());
+
+        ObjectStream<String> lineStream = null;
+        try {
+            lineStream = new PlainTextByLineStream(sampleDataIn, params.getEncoding());
+        } catch (IOException ex) {
+            CmdLineUtil.handleCreateObjectStreamError(ex);
+        }
+
+        return new ADPOSSampleStream(lineStream,
+                params.getExpandME(), params.getIncludeFeatures());
+    }
+
+    interface Parameters {
+        @ParameterDescription(valueName = "charsetName",
+                description = "encoding for reading and writing text, if absent the system default is used.")
+        Charset getEncoding();
+
+        @ParameterDescription(valueName = "sampleData", description = "data to be used, usually a file name.")
+        File getData();
+
+        @ParameterDescription(valueName = "language", description = "language which is being processed.")
+        String getLang();
+
+        @ParameterDescription(valueName = "expandME", description = "expand multiword expressions.")
+        @OptionalParameter(defaultValue = "false")
+        Boolean getExpandME();
+
+        @ParameterDescription(valueName = "includeFeatures",
+                description = "combine POS Tags with word features, like number and gender.")
+        @OptionalParameter(defaultValue = "false")
+        Boolean getIncludeFeatures();
+    }
 
 }

@@ -21,5 +21,5 @@ import opennlp.tools.sentdetect.SentenceModel;
 
 public interface SentenceModelResource {
 
-  SentenceModel getModel();
+    SentenceModel getModel();
 }

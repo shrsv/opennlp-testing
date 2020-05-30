@@ -24,29 +24,29 @@ import opennlp.tools.util.ObjectStream;
  */
 public class AbstractEvaluatorTool<T, P> extends AbstractTypedParamTool<T, P> {
 
-  protected P params;
-  protected ObjectStreamFactory<T> factory;
-  protected ObjectStream<T> sampleStream;
+    protected P params;
+    protected ObjectStreamFactory<T> factory;
+    protected ObjectStream<T> sampleStream;
 
-  /**
-   * Constructor with type parameters.
-   *
-   * @param sampleType class of the template parameter
-   * @param params     interface with parameters
-   */
-  protected AbstractEvaluatorTool(Class<T> sampleType, Class<P> params) {
-    super(sampleType, params);
-  }
+    /**
+     * Constructor with type parameters.
+     *
+     * @param sampleType class of the template parameter
+     * @param params     interface with parameters
+     */
+    protected AbstractEvaluatorTool(Class<T> sampleType, Class<P> params) {
+        super(sampleType, params);
+    }
 
-  public void run(String format, String[] args) {
-    validateAllArgs(args, this.paramsClass, format);
+    public void run(String format, String[] args) {
+        validateAllArgs(args, this.paramsClass, format);
 
-    params = ArgumentParser.parse(
-        ArgumentParser.filter(args, this.paramsClass), this.paramsClass);
+        params = ArgumentParser.parse(
+                ArgumentParser.filter(args, this.paramsClass), this.paramsClass);
 
-    factory = getStreamFactory(format);
-    String[] fargs = ArgumentParser.filter(args, factory.getParameters());
-    validateFactoryArgs(factory, fargs);
-    sampleStream = factory.create(fargs);
-  }
+        factory = getStreamFactory(format);
+        String[] fargs = ArgumentParser.filter(args, factory.getParameters());
+        validateFactoryArgs(factory, fargs);
+        sampleStream = factory.create(fargs);
+    }
 }

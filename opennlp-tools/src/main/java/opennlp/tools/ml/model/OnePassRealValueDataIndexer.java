@@ -17,9 +17,9 @@
 
 package opennlp.tools.ml.model;
 
-import java.util.List;
-
 import opennlp.tools.util.InsufficientTrainingDataException;
+
+import java.util.List;
 
 /**
  * An indexer for maxent model data which handles cutoffs for uncommon
@@ -28,27 +28,27 @@ import opennlp.tools.util.InsufficientTrainingDataException;
  */
 public class OnePassRealValueDataIndexer extends OnePassDataIndexer {
 
-  float[][] values;
+    float[][] values;
 
-  public OnePassRealValueDataIndexer() {
-  }
-
-  public float[][] getValues() {
-    return values;
-  }
-
-  protected int sortAndMerge(List<ComparableEvent> eventsToCompare, boolean sort)
-      throws InsufficientTrainingDataException {
-    int numUniqueEvents = super.sortAndMerge(eventsToCompare,sort);
-    values = new float[numUniqueEvents][];
-    int numEvents = eventsToCompare.size();
-    for (int i = 0, j = 0; i < numEvents; i++) {
-      ComparableEvent evt = eventsToCompare.get(i);
-      if (null == evt) {
-        continue; // this was a dupe, skip over it.
-      }
-      values[j++] = evt.values;
+    public OnePassRealValueDataIndexer() {
     }
-    return numUniqueEvents;
-  }
+
+    public float[][] getValues() {
+        return values;
+    }
+
+    protected int sortAndMerge(List<ComparableEvent> eventsToCompare, boolean sort)
+            throws InsufficientTrainingDataException {
+        int numUniqueEvents = super.sortAndMerge(eventsToCompare, sort);
+        values = new float[numUniqueEvents][];
+        int numEvents = eventsToCompare.size();
+        for (int i = 0, j = 0; i < numEvents; i++) {
+            ComparableEvent evt = eventsToCompare.get(i);
+            if (null == evt) {
+                continue; // this was a dupe, skip over it.
+            }
+            values[j++] = evt.values;
+        }
+        return numUniqueEvents;
+    }
 }

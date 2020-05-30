@@ -17,8 +17,6 @@
 
 package opennlp.tools.formats.conllu;
 
-import java.io.IOException;
-
 import opennlp.tools.cmdline.ArgumentParser;
 import opennlp.tools.cmdline.CmdLineUtil;
 import opennlp.tools.cmdline.StreamFactoryRegistry;
@@ -28,38 +26,40 @@ import opennlp.tools.sentdetect.SentenceSample;
 import opennlp.tools.util.InputStreamFactory;
 import opennlp.tools.util.ObjectStream;
 
+import java.io.IOException;
+
 public class ConlluSentenceSampleStreamFactory extends AbstractSampleStreamFactory<SentenceSample> {
 
-  interface Parameters extends BasicFormatParams {
-    @ArgumentParser.ParameterDescription(valueName = "sentencesPerSample",
-        description = "number of sentences per sample")
-    String getSentencesPerSample();
-  }
-
-  public static void registerFactory() {
-    StreamFactoryRegistry.registerFactory(SentenceSample.class,
-        ConlluPOSSampleStreamFactory.CONLLU_FORMAT,
-        new ConlluSentenceSampleStreamFactory(ConlluSentenceSampleStreamFactory.Parameters.class));
-  }
-
-  protected <P> ConlluSentenceSampleStreamFactory(Class<P> params) {
-    super(params);
-  }
-
-  @Override
-  public ObjectStream<SentenceSample> create(String[] args) {
-    Parameters params = ArgumentParser.parse(args, Parameters.class);
-
-    InputStreamFactory inFactory =
-        CmdLineUtil.createInputStreamFactory(params.getData());
-
-    try {
-      return new ConlluSentenceSampleStream(new ConlluStream(inFactory),
-          Integer.parseInt(params.getSentencesPerSample()));
-    } catch (IOException e) {
-      // That will throw an exception
-      CmdLineUtil.handleCreateObjectStreamError(e);
+    protected <P> ConlluSentenceSampleStreamFactory(Class<P> params) {
+        super(params);
     }
-    return null;
-  }
+
+    public static void registerFactory() {
+        StreamFactoryRegistry.registerFactory(SentenceSample.class,
+                ConlluPOSSampleStreamFactory.CONLLU_FORMAT,
+                new ConlluSentenceSampleStreamFactory(ConlluSentenceSampleStreamFactory.Parameters.class));
+    }
+
+    @Override
+    public ObjectStream<SentenceSample> create(String[] args) {
+        Parameters params = ArgumentParser.parse(args, Parameters.class);
+
+        InputStreamFactory inFactory =
+                CmdLineUtil.createInputStreamFactory(params.getData());
+
+        try {
+            return new ConlluSentenceSampleStream(new ConlluStream(inFactory),
+                    Integer.parseInt(params.getSentencesPerSample()));
+        } catch (IOException e) {
+            // That will throw an exception
+            CmdLineUtil.handleCreateObjectStreamError(e);
+        }
+        return null;
+    }
+
+    interface Parameters extends BasicFormatParams {
+        @ArgumentParser.ParameterDescription(valueName = "sentencesPerSample",
+                description = "number of sentences per sample")
+        String getSentencesPerSample();
+    }
 }

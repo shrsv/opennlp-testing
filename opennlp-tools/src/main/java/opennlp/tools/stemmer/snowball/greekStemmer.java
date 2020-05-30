@@ -41,1144 +41,1144 @@ package opennlp.tools.stemmer.snowball;
  */
 
 public class greekStemmer extends AbstractSnowballStemmer {
-    
+
     private final static greekStemmer methodObject = new greekStemmer();
 
     private final static Among a_0[] = {
-        new Among("", -1, 25, "", methodObject),
-        new Among("\u0386", 0, 1, "", methodObject),
-        new Among("\u0388", 0, 5, "", methodObject),
-        new Among("\u0389", 0, 7, "", methodObject),
-        new Among("\u038A", 0, 9, "", methodObject),
-        new Among("\u038C", 0, 15, "", methodObject),
-        new Among("\u038E", 0, 20, "", methodObject),
-        new Among("\u038F", 0, 24, "", methodObject),
-        new Among("\u0390", 0, 7, "", methodObject),
-        new Among("\u0391", 0, 1, "", methodObject),
-        new Among("\u0392", 0, 2, "", methodObject),
-        new Among("\u0393", 0, 3, "", methodObject),
-        new Among("\u0394", 0, 4, "", methodObject),
-        new Among("\u0395", 0, 5, "", methodObject),
-        new Among("\u0396", 0, 6, "", methodObject),
-        new Among("\u0397", 0, 7, "", methodObject),
-        new Among("\u0398", 0, 8, "", methodObject),
-        new Among("\u0399", 0, 9, "", methodObject),
-        new Among("\u039A", 0, 10, "", methodObject),
-        new Among("\u039B", 0, 11, "", methodObject),
-        new Among("\u039C", 0, 12, "", methodObject),
-        new Among("\u039D", 0, 13, "", methodObject),
-        new Among("\u039E", 0, 14, "", methodObject),
-        new Among("\u039F", 0, 15, "", methodObject),
-        new Among("\u03A0", 0, 16, "", methodObject),
-        new Among("\u03A1", 0, 17, "", methodObject),
-        new Among("\u03A3", 0, 18, "", methodObject),
-        new Among("\u03A4", 0, 19, "", methodObject),
-        new Among("\u03A5", 0, 20, "", methodObject),
-        new Among("\u03A6", 0, 21, "", methodObject),
-        new Among("\u03A7", 0, 22, "", methodObject),
-        new Among("\u03A8", 0, 23, "", methodObject),
-        new Among("\u03A9", 0, 24, "", methodObject),
-        new Among("\u03AA", 0, 9, "", methodObject),
-        new Among("\u03AB", 0, 20, "", methodObject),
-        new Among("\u03AC", 0, 1, "", methodObject),
-        new Among("\u03AD", 0, 5, "", methodObject),
-        new Among("\u03AE", 0, 7, "", methodObject),
-        new Among("\u03AF", 0, 9, "", methodObject),
-        new Among("\u03B0", 0, 20, "", methodObject),
-        new Among("\u03C2", 0, 18, "", methodObject),
-        new Among("\u03CA", 0, 7, "", methodObject),
-        new Among("\u03CB", 0, 20, "", methodObject),
-        new Among("\u03CC", 0, 15, "", methodObject),
-        new Among("\u03CD", 0, 20, "", methodObject),
-        new Among("\u03CE", 0, 24, "", methodObject)
+            new Among("", -1, 25, "", methodObject),
+            new Among("\u0386", 0, 1, "", methodObject),
+            new Among("\u0388", 0, 5, "", methodObject),
+            new Among("\u0389", 0, 7, "", methodObject),
+            new Among("\u038A", 0, 9, "", methodObject),
+            new Among("\u038C", 0, 15, "", methodObject),
+            new Among("\u038E", 0, 20, "", methodObject),
+            new Among("\u038F", 0, 24, "", methodObject),
+            new Among("\u0390", 0, 7, "", methodObject),
+            new Among("\u0391", 0, 1, "", methodObject),
+            new Among("\u0392", 0, 2, "", methodObject),
+            new Among("\u0393", 0, 3, "", methodObject),
+            new Among("\u0394", 0, 4, "", methodObject),
+            new Among("\u0395", 0, 5, "", methodObject),
+            new Among("\u0396", 0, 6, "", methodObject),
+            new Among("\u0397", 0, 7, "", methodObject),
+            new Among("\u0398", 0, 8, "", methodObject),
+            new Among("\u0399", 0, 9, "", methodObject),
+            new Among("\u039A", 0, 10, "", methodObject),
+            new Among("\u039B", 0, 11, "", methodObject),
+            new Among("\u039C", 0, 12, "", methodObject),
+            new Among("\u039D", 0, 13, "", methodObject),
+            new Among("\u039E", 0, 14, "", methodObject),
+            new Among("\u039F", 0, 15, "", methodObject),
+            new Among("\u03A0", 0, 16, "", methodObject),
+            new Among("\u03A1", 0, 17, "", methodObject),
+            new Among("\u03A3", 0, 18, "", methodObject),
+            new Among("\u03A4", 0, 19, "", methodObject),
+            new Among("\u03A5", 0, 20, "", methodObject),
+            new Among("\u03A6", 0, 21, "", methodObject),
+            new Among("\u03A7", 0, 22, "", methodObject),
+            new Among("\u03A8", 0, 23, "", methodObject),
+            new Among("\u03A9", 0, 24, "", methodObject),
+            new Among("\u03AA", 0, 9, "", methodObject),
+            new Among("\u03AB", 0, 20, "", methodObject),
+            new Among("\u03AC", 0, 1, "", methodObject),
+            new Among("\u03AD", 0, 5, "", methodObject),
+            new Among("\u03AE", 0, 7, "", methodObject),
+            new Among("\u03AF", 0, 9, "", methodObject),
+            new Among("\u03B0", 0, 20, "", methodObject),
+            new Among("\u03C2", 0, 18, "", methodObject),
+            new Among("\u03CA", 0, 7, "", methodObject),
+            new Among("\u03CB", 0, 20, "", methodObject),
+            new Among("\u03CC", 0, 15, "", methodObject),
+            new Among("\u03CD", 0, 20, "", methodObject),
+            new Among("\u03CE", 0, 24, "", methodObject)
     };
 
     private final static Among a_1[] = {
-        new Among("\u03C3\u03BA\u03B1\u03B3\u03B9\u03B1", -1, 2, "", methodObject),
-        new Among("\u03C6\u03B1\u03B3\u03B9\u03B1", -1, 1, "", methodObject),
-        new Among("\u03BF\u03BB\u03BF\u03B3\u03B9\u03B1", -1, 3, "", methodObject),
-        new Among("\u03C3\u03BF\u03B3\u03B9\u03B1", -1, 4, "", methodObject),
-        new Among("\u03C4\u03B1\u03C4\u03BF\u03B3\u03B9\u03B1", -1, 5, "", methodObject),
-        new Among("\u03BA\u03C1\u03B5\u03B1\u03C4\u03B1", -1, 6, "", methodObject),
-        new Among("\u03C0\u03B5\u03C1\u03B1\u03C4\u03B1", -1, 7, "", methodObject),
-        new Among("\u03C4\u03B5\u03C1\u03B1\u03C4\u03B1", -1, 8, "", methodObject),
-        new Among("\u03B3\u03B5\u03B3\u03BF\u03BD\u03BF\u03C4\u03B1", -1, 11, "", methodObject),
-        new Among("\u03BA\u03B1\u03B8\u03B5\u03C3\u03C4\u03C9\u03C4\u03B1", -1, 10, "", methodObject),
-        new Among("\u03C6\u03C9\u03C4\u03B1", -1, 9, "", methodObject),
-        new Among("\u03C0\u03B5\u03C1\u03B1\u03C4\u03B7", -1, 7, "", methodObject),
-        new Among("\u03C3\u03BA\u03B1\u03B3\u03B9\u03C9\u03BD", -1, 2, "", methodObject),
-        new Among("\u03C6\u03B1\u03B3\u03B9\u03C9\u03BD", -1, 1, "", methodObject),
-        new Among("\u03BF\u03BB\u03BF\u03B3\u03B9\u03C9\u03BD", -1, 3, "", methodObject),
-        new Among("\u03C3\u03BF\u03B3\u03B9\u03C9\u03BD", -1, 4, "", methodObject),
-        new Among("\u03C4\u03B1\u03C4\u03BF\u03B3\u03B9\u03C9\u03BD", -1, 5, "", methodObject),
-        new Among("\u03BA\u03C1\u03B5\u03B1\u03C4\u03C9\u03BD", -1, 6, "", methodObject),
-        new Among("\u03C0\u03B5\u03C1\u03B1\u03C4\u03C9\u03BD", -1, 7, "", methodObject),
-        new Among("\u03C4\u03B5\u03C1\u03B1\u03C4\u03C9\u03BD", -1, 8, "", methodObject),
-        new Among("\u03B3\u03B5\u03B3\u03BF\u03BD\u03BF\u03C4\u03C9\u03BD", -1, 11, "", methodObject),
-        new Among("\u03BA\u03B1\u03B8\u03B5\u03C3\u03C4\u03C9\u03C4\u03C9\u03BD", -1, 10, "", methodObject),
-        new Among("\u03C6\u03C9\u03C4\u03C9\u03BD", -1, 9, "", methodObject),
-        new Among("\u03BA\u03C1\u03B5\u03B1\u03C3", -1, 6, "", methodObject),
-        new Among("\u03C0\u03B5\u03C1\u03B1\u03C3", -1, 7, "", methodObject),
-        new Among("\u03C4\u03B5\u03C1\u03B1\u03C3", -1, 8, "", methodObject),
-        new Among("\u03B3\u03B5\u03B3\u03BF\u03BD\u03BF\u03C3", -1, 11, "", methodObject),
-        new Among("\u03BA\u03C1\u03B5\u03B1\u03C4\u03BF\u03C3", -1, 6, "", methodObject),
-        new Among("\u03C0\u03B5\u03C1\u03B1\u03C4\u03BF\u03C3", -1, 7, "", methodObject),
-        new Among("\u03C4\u03B5\u03C1\u03B1\u03C4\u03BF\u03C3", -1, 8, "", methodObject),
-        new Among("\u03B3\u03B5\u03B3\u03BF\u03BD\u03BF\u03C4\u03BF\u03C3", -1, 11, "", methodObject),
-        new Among("\u03BA\u03B1\u03B8\u03B5\u03C3\u03C4\u03C9\u03C4\u03BF\u03C3", -1, 10, "", methodObject),
-        new Among("\u03C6\u03C9\u03C4\u03BF\u03C3", -1, 9, "", methodObject),
-        new Among("\u03BA\u03B1\u03B8\u03B5\u03C3\u03C4\u03C9\u03C3", -1, 10, "", methodObject),
-        new Among("\u03C6\u03C9\u03C3", -1, 9, "", methodObject),
-        new Among("\u03C3\u03BA\u03B1\u03B3\u03B9\u03BF\u03C5", -1, 2, "", methodObject),
-        new Among("\u03C6\u03B1\u03B3\u03B9\u03BF\u03C5", -1, 1, "", methodObject),
-        new Among("\u03BF\u03BB\u03BF\u03B3\u03B9\u03BF\u03C5", -1, 3, "", methodObject),
-        new Among("\u03C3\u03BF\u03B3\u03B9\u03BF\u03C5", -1, 4, "", methodObject),
-        new Among("\u03C4\u03B1\u03C4\u03BF\u03B3\u03B9\u03BF\u03C5", -1, 5, "", methodObject)
+            new Among("\u03C3\u03BA\u03B1\u03B3\u03B9\u03B1", -1, 2, "", methodObject),
+            new Among("\u03C6\u03B1\u03B3\u03B9\u03B1", -1, 1, "", methodObject),
+            new Among("\u03BF\u03BB\u03BF\u03B3\u03B9\u03B1", -1, 3, "", methodObject),
+            new Among("\u03C3\u03BF\u03B3\u03B9\u03B1", -1, 4, "", methodObject),
+            new Among("\u03C4\u03B1\u03C4\u03BF\u03B3\u03B9\u03B1", -1, 5, "", methodObject),
+            new Among("\u03BA\u03C1\u03B5\u03B1\u03C4\u03B1", -1, 6, "", methodObject),
+            new Among("\u03C0\u03B5\u03C1\u03B1\u03C4\u03B1", -1, 7, "", methodObject),
+            new Among("\u03C4\u03B5\u03C1\u03B1\u03C4\u03B1", -1, 8, "", methodObject),
+            new Among("\u03B3\u03B5\u03B3\u03BF\u03BD\u03BF\u03C4\u03B1", -1, 11, "", methodObject),
+            new Among("\u03BA\u03B1\u03B8\u03B5\u03C3\u03C4\u03C9\u03C4\u03B1", -1, 10, "", methodObject),
+            new Among("\u03C6\u03C9\u03C4\u03B1", -1, 9, "", methodObject),
+            new Among("\u03C0\u03B5\u03C1\u03B1\u03C4\u03B7", -1, 7, "", methodObject),
+            new Among("\u03C3\u03BA\u03B1\u03B3\u03B9\u03C9\u03BD", -1, 2, "", methodObject),
+            new Among("\u03C6\u03B1\u03B3\u03B9\u03C9\u03BD", -1, 1, "", methodObject),
+            new Among("\u03BF\u03BB\u03BF\u03B3\u03B9\u03C9\u03BD", -1, 3, "", methodObject),
+            new Among("\u03C3\u03BF\u03B3\u03B9\u03C9\u03BD", -1, 4, "", methodObject),
+            new Among("\u03C4\u03B1\u03C4\u03BF\u03B3\u03B9\u03C9\u03BD", -1, 5, "", methodObject),
+            new Among("\u03BA\u03C1\u03B5\u03B1\u03C4\u03C9\u03BD", -1, 6, "", methodObject),
+            new Among("\u03C0\u03B5\u03C1\u03B1\u03C4\u03C9\u03BD", -1, 7, "", methodObject),
+            new Among("\u03C4\u03B5\u03C1\u03B1\u03C4\u03C9\u03BD", -1, 8, "", methodObject),
+            new Among("\u03B3\u03B5\u03B3\u03BF\u03BD\u03BF\u03C4\u03C9\u03BD", -1, 11, "", methodObject),
+            new Among("\u03BA\u03B1\u03B8\u03B5\u03C3\u03C4\u03C9\u03C4\u03C9\u03BD", -1, 10, "", methodObject),
+            new Among("\u03C6\u03C9\u03C4\u03C9\u03BD", -1, 9, "", methodObject),
+            new Among("\u03BA\u03C1\u03B5\u03B1\u03C3", -1, 6, "", methodObject),
+            new Among("\u03C0\u03B5\u03C1\u03B1\u03C3", -1, 7, "", methodObject),
+            new Among("\u03C4\u03B5\u03C1\u03B1\u03C3", -1, 8, "", methodObject),
+            new Among("\u03B3\u03B5\u03B3\u03BF\u03BD\u03BF\u03C3", -1, 11, "", methodObject),
+            new Among("\u03BA\u03C1\u03B5\u03B1\u03C4\u03BF\u03C3", -1, 6, "", methodObject),
+            new Among("\u03C0\u03B5\u03C1\u03B1\u03C4\u03BF\u03C3", -1, 7, "", methodObject),
+            new Among("\u03C4\u03B5\u03C1\u03B1\u03C4\u03BF\u03C3", -1, 8, "", methodObject),
+            new Among("\u03B3\u03B5\u03B3\u03BF\u03BD\u03BF\u03C4\u03BF\u03C3", -1, 11, "", methodObject),
+            new Among("\u03BA\u03B1\u03B8\u03B5\u03C3\u03C4\u03C9\u03C4\u03BF\u03C3", -1, 10, "", methodObject),
+            new Among("\u03C6\u03C9\u03C4\u03BF\u03C3", -1, 9, "", methodObject),
+            new Among("\u03BA\u03B1\u03B8\u03B5\u03C3\u03C4\u03C9\u03C3", -1, 10, "", methodObject),
+            new Among("\u03C6\u03C9\u03C3", -1, 9, "", methodObject),
+            new Among("\u03C3\u03BA\u03B1\u03B3\u03B9\u03BF\u03C5", -1, 2, "", methodObject),
+            new Among("\u03C6\u03B1\u03B3\u03B9\u03BF\u03C5", -1, 1, "", methodObject),
+            new Among("\u03BF\u03BB\u03BF\u03B3\u03B9\u03BF\u03C5", -1, 3, "", methodObject),
+            new Among("\u03C3\u03BF\u03B3\u03B9\u03BF\u03C5", -1, 4, "", methodObject),
+            new Among("\u03C4\u03B1\u03C4\u03BF\u03B3\u03B9\u03BF\u03C5", -1, 5, "", methodObject)
     };
 
     private final static Among a_2[] = {
-        new Among("\u03C0\u03B1", -1, 1, "", methodObject),
-        new Among("\u03BE\u03B1\u03BD\u03B1\u03C0\u03B1", 0, 1, "", methodObject),
-        new Among("\u03B5\u03C0\u03B1", 0, 1, "", methodObject),
-        new Among("\u03C0\u03B5\u03C1\u03B9\u03C0\u03B1", 0, 1, "", methodObject),
-        new Among("\u03B1\u03BD\u03B1\u03BC\u03C0\u03B1", 0, 1, "", methodObject),
-        new Among("\u03B5\u03BC\u03C0\u03B1", 0, 1, "", methodObject),
-        new Among("\u03B4\u03B1\u03BD\u03B5", -1, 1, "", methodObject),
-        new Among("\u03B1\u03B8\u03C1\u03BF", -1, 1, "", methodObject),
-        new Among("\u03C3\u03C5\u03BD\u03B1\u03B8\u03C1\u03BF", 7, 1, "", methodObject)
+            new Among("\u03C0\u03B1", -1, 1, "", methodObject),
+            new Among("\u03BE\u03B1\u03BD\u03B1\u03C0\u03B1", 0, 1, "", methodObject),
+            new Among("\u03B5\u03C0\u03B1", 0, 1, "", methodObject),
+            new Among("\u03C0\u03B5\u03C1\u03B9\u03C0\u03B1", 0, 1, "", methodObject),
+            new Among("\u03B1\u03BD\u03B1\u03BC\u03C0\u03B1", 0, 1, "", methodObject),
+            new Among("\u03B5\u03BC\u03C0\u03B1", 0, 1, "", methodObject),
+            new Among("\u03B4\u03B1\u03BD\u03B5", -1, 1, "", methodObject),
+            new Among("\u03B1\u03B8\u03C1\u03BF", -1, 1, "", methodObject),
+            new Among("\u03C3\u03C5\u03BD\u03B1\u03B8\u03C1\u03BF", 7, 1, "", methodObject)
     };
 
     private final static Among a_3[] = {
-        new Among("\u03B2", -1, 1, "", methodObject),
-        new Among("\u03B2\u03B1\u03B8\u03C5\u03C1\u03B9", -1, 1, "", methodObject),
-        new Among("\u03B2\u03B1\u03C1\u03BA", -1, 1, "", methodObject),
-        new Among("\u03BC\u03B1\u03C1\u03BA", -1, 1, "", methodObject),
-        new Among("\u03BB", -1, 1, "", methodObject),
-        new Among("\u03BC", -1, 1, "", methodObject),
-        new Among("\u03BA\u03BF\u03C1\u03BD", -1, 1, "", methodObject),
-        new Among("\u03C0", -1, 1, "", methodObject),
-        new Among("\u03B9\u03BC\u03C0", 7, 1, "", methodObject),
-        new Among("\u03C1", -1, 1, "", methodObject),
-        new Among("\u03BC\u03B1\u03C1", 9, 1, "", methodObject),
-        new Among("\u03B1\u03BC\u03C0\u03B1\u03C1", 9, 1, "", methodObject),
-        new Among("\u03B3\u03BA\u03C1", 9, 1, "", methodObject),
-        new Among("\u03B2\u03BF\u03BB\u03B2\u03BF\u03C1", 9, 1, "", methodObject),
-        new Among("\u03B3\u03BB\u03C5\u03BA\u03BF\u03C1", 9, 1, "", methodObject),
-        new Among("\u03C0\u03B9\u03C0\u03B5\u03C1\u03BF\u03C1", 9, 1, "", methodObject),
-        new Among("\u03C0\u03C1", 9, 1, "", methodObject),
-        new Among("\u03BC\u03C0\u03C1", 16, 1, "", methodObject),
-        new Among("\u03B1\u03C1\u03C1", 9, 1, "", methodObject),
-        new Among("\u03B3\u03BB\u03C5\u03BA\u03C5\u03C1", 9, 1, "", methodObject),
-        new Among("\u03C0\u03BF\u03BB\u03C5\u03C1", 9, 1, "", methodObject),
-        new Among("\u03BB\u03BF\u03C5", -1, 1, "", methodObject)
+            new Among("\u03B2", -1, 1, "", methodObject),
+            new Among("\u03B2\u03B1\u03B8\u03C5\u03C1\u03B9", -1, 1, "", methodObject),
+            new Among("\u03B2\u03B1\u03C1\u03BA", -1, 1, "", methodObject),
+            new Among("\u03BC\u03B1\u03C1\u03BA", -1, 1, "", methodObject),
+            new Among("\u03BB", -1, 1, "", methodObject),
+            new Among("\u03BC", -1, 1, "", methodObject),
+            new Among("\u03BA\u03BF\u03C1\u03BD", -1, 1, "", methodObject),
+            new Among("\u03C0", -1, 1, "", methodObject),
+            new Among("\u03B9\u03BC\u03C0", 7, 1, "", methodObject),
+            new Among("\u03C1", -1, 1, "", methodObject),
+            new Among("\u03BC\u03B1\u03C1", 9, 1, "", methodObject),
+            new Among("\u03B1\u03BC\u03C0\u03B1\u03C1", 9, 1, "", methodObject),
+            new Among("\u03B3\u03BA\u03C1", 9, 1, "", methodObject),
+            new Among("\u03B2\u03BF\u03BB\u03B2\u03BF\u03C1", 9, 1, "", methodObject),
+            new Among("\u03B3\u03BB\u03C5\u03BA\u03BF\u03C1", 9, 1, "", methodObject),
+            new Among("\u03C0\u03B9\u03C0\u03B5\u03C1\u03BF\u03C1", 9, 1, "", methodObject),
+            new Among("\u03C0\u03C1", 9, 1, "", methodObject),
+            new Among("\u03BC\u03C0\u03C1", 16, 1, "", methodObject),
+            new Among("\u03B1\u03C1\u03C1", 9, 1, "", methodObject),
+            new Among("\u03B3\u03BB\u03C5\u03BA\u03C5\u03C1", 9, 1, "", methodObject),
+            new Among("\u03C0\u03BF\u03BB\u03C5\u03C1", 9, 1, "", methodObject),
+            new Among("\u03BB\u03BF\u03C5", -1, 1, "", methodObject)
     };
 
     private final static Among a_4[] = {
-        new Among("\u03B9\u03B6\u03B1", -1, 1, "", methodObject),
-        new Among("\u03B9\u03B6\u03B5", -1, 1, "", methodObject),
-        new Among("\u03B9\u03B6\u03B1\u03BC\u03B5", -1, 1, "", methodObject),
-        new Among("\u03B9\u03B6\u03BF\u03C5\u03BC\u03B5", -1, 1, "", methodObject),
-        new Among("\u03B9\u03B6\u03B1\u03BD\u03B5", -1, 1, "", methodObject),
-        new Among("\u03B9\u03B6\u03BF\u03C5\u03BD\u03B5", -1, 1, "", methodObject),
-        new Among("\u03B9\u03B6\u03B1\u03C4\u03B5", -1, 1, "", methodObject),
-        new Among("\u03B9\u03B6\u03B5\u03C4\u03B5", -1, 1, "", methodObject),
-        new Among("\u03B9\u03B6\u03B5\u03B9", -1, 1, "", methodObject),
-        new Among("\u03B9\u03B6\u03B1\u03BD", -1, 1, "", methodObject),
-        new Among("\u03B9\u03B6\u03BF\u03C5\u03BD", -1, 1, "", methodObject),
-        new Among("\u03B9\u03B6\u03B5\u03C3", -1, 1, "", methodObject),
-        new Among("\u03B9\u03B6\u03B5\u03B9\u03C3", -1, 1, "", methodObject),
-        new Among("\u03B9\u03B6\u03C9", -1, 1, "", methodObject)
+            new Among("\u03B9\u03B6\u03B1", -1, 1, "", methodObject),
+            new Among("\u03B9\u03B6\u03B5", -1, 1, "", methodObject),
+            new Among("\u03B9\u03B6\u03B1\u03BC\u03B5", -1, 1, "", methodObject),
+            new Among("\u03B9\u03B6\u03BF\u03C5\u03BC\u03B5", -1, 1, "", methodObject),
+            new Among("\u03B9\u03B6\u03B1\u03BD\u03B5", -1, 1, "", methodObject),
+            new Among("\u03B9\u03B6\u03BF\u03C5\u03BD\u03B5", -1, 1, "", methodObject),
+            new Among("\u03B9\u03B6\u03B1\u03C4\u03B5", -1, 1, "", methodObject),
+            new Among("\u03B9\u03B6\u03B5\u03C4\u03B5", -1, 1, "", methodObject),
+            new Among("\u03B9\u03B6\u03B5\u03B9", -1, 1, "", methodObject),
+            new Among("\u03B9\u03B6\u03B1\u03BD", -1, 1, "", methodObject),
+            new Among("\u03B9\u03B6\u03BF\u03C5\u03BD", -1, 1, "", methodObject),
+            new Among("\u03B9\u03B6\u03B5\u03C3", -1, 1, "", methodObject),
+            new Among("\u03B9\u03B6\u03B5\u03B9\u03C3", -1, 1, "", methodObject),
+            new Among("\u03B9\u03B6\u03C9", -1, 1, "", methodObject)
     };
 
     private final static Among a_5[] = {
-        new Among("\u03B2\u03B9", -1, 1, "", methodObject),
-        new Among("\u03BB\u03B9", -1, 1, "", methodObject),
-        new Among("\u03B1\u03BB", -1, 1, "", methodObject),
-        new Among("\u03B5\u03BD", -1, 1, "", methodObject),
-        new Among("\u03C3", -1, 1, "", methodObject),
-        new Among("\u03C7", -1, 1, "", methodObject),
-        new Among("\u03C5\u03C8", -1, 1, "", methodObject),
-        new Among("\u03B6\u03C9", -1, 1, "", methodObject)
+            new Among("\u03B2\u03B9", -1, 1, "", methodObject),
+            new Among("\u03BB\u03B9", -1, 1, "", methodObject),
+            new Among("\u03B1\u03BB", -1, 1, "", methodObject),
+            new Among("\u03B5\u03BD", -1, 1, "", methodObject),
+            new Among("\u03C3", -1, 1, "", methodObject),
+            new Among("\u03C7", -1, 1, "", methodObject),
+            new Among("\u03C5\u03C8", -1, 1, "", methodObject),
+            new Among("\u03B6\u03C9", -1, 1, "", methodObject)
     };
 
     private final static Among a_6[] = {
-        new Among("\u03C9\u03B8\u03B7\u03BA\u03B1", -1, 1, "", methodObject),
-        new Among("\u03C9\u03B8\u03B7\u03BA\u03B5", -1, 1, "", methodObject),
-        new Among("\u03C9\u03B8\u03B7\u03BA\u03B1\u03BC\u03B5", -1, 1, "", methodObject),
-        new Among("\u03C9\u03B8\u03B7\u03BA\u03B1\u03BD\u03B5", -1, 1, "", methodObject),
-        new Among("\u03C9\u03B8\u03B7\u03BA\u03B1\u03C4\u03B5", -1, 1, "", methodObject),
-        new Among("\u03C9\u03B8\u03B7\u03BA\u03B1\u03BD", -1, 1, "", methodObject),
-        new Among("\u03C9\u03B8\u03B7\u03BA\u03B5\u03C3", -1, 1, "", methodObject)
+            new Among("\u03C9\u03B8\u03B7\u03BA\u03B1", -1, 1, "", methodObject),
+            new Among("\u03C9\u03B8\u03B7\u03BA\u03B5", -1, 1, "", methodObject),
+            new Among("\u03C9\u03B8\u03B7\u03BA\u03B1\u03BC\u03B5", -1, 1, "", methodObject),
+            new Among("\u03C9\u03B8\u03B7\u03BA\u03B1\u03BD\u03B5", -1, 1, "", methodObject),
+            new Among("\u03C9\u03B8\u03B7\u03BA\u03B1\u03C4\u03B5", -1, 1, "", methodObject),
+            new Among("\u03C9\u03B8\u03B7\u03BA\u03B1\u03BD", -1, 1, "", methodObject),
+            new Among("\u03C9\u03B8\u03B7\u03BA\u03B5\u03C3", -1, 1, "", methodObject)
     };
 
     private final static Among a_7[] = {
-        new Among("\u03BE\u03B1\u03BD\u03B1\u03C0\u03B1", -1, 1, "", methodObject),
-        new Among("\u03B5\u03C0\u03B1", -1, 1, "", methodObject),
-        new Among("\u03C0\u03B5\u03C1\u03B9\u03C0\u03B1", -1, 1, "", methodObject),
-        new Among("\u03B1\u03BD\u03B1\u03BC\u03C0\u03B1", -1, 1, "", methodObject),
-        new Among("\u03B5\u03BC\u03C0\u03B1", -1, 1, "", methodObject),
-        new Among("\u03C7\u03B1\u03C1\u03C4\u03BF\u03C0\u03B1", -1, 1, "", methodObject),
-        new Among("\u03B5\u03BE\u03B1\u03C1\u03C7\u03B1", -1, 1, "", methodObject),
-        new Among("\u03BA\u03BB\u03B5", -1, 1, "", methodObject),
-        new Among("\u03B5\u03BA\u03BB\u03B5", 7, 1, "", methodObject),
-        new Among("\u03B1\u03C0\u03B5\u03BA\u03BB\u03B5", 8, 1, "", methodObject),
-        new Among("\u03B1\u03C0\u03BF\u03BA\u03BB\u03B5", 7, 1, "", methodObject),
-        new Among("\u03B5\u03C3\u03C9\u03BA\u03BB\u03B5", 7, 1, "", methodObject),
-        new Among("\u03B4\u03B1\u03BD\u03B5", -1, 1, "", methodObject),
-        new Among("\u03C0\u03B5", -1, 1, "", methodObject),
-        new Among("\u03B5\u03C0\u03B5", 13, 1, "", methodObject),
-        new Among("\u03BC\u03B5\u03C4\u03B5\u03C0\u03B5", 14, 1, "", methodObject),
-        new Among("\u03B5\u03C3\u03B5", -1, 1, "", methodObject),
-        new Among("\u03B1\u03B8\u03C1\u03BF", -1, 1, "", methodObject),
-        new Among("\u03C3\u03C5\u03BD\u03B1\u03B8\u03C1\u03BF", 17, 1, "", methodObject)
+            new Among("\u03BE\u03B1\u03BD\u03B1\u03C0\u03B1", -1, 1, "", methodObject),
+            new Among("\u03B5\u03C0\u03B1", -1, 1, "", methodObject),
+            new Among("\u03C0\u03B5\u03C1\u03B9\u03C0\u03B1", -1, 1, "", methodObject),
+            new Among("\u03B1\u03BD\u03B1\u03BC\u03C0\u03B1", -1, 1, "", methodObject),
+            new Among("\u03B5\u03BC\u03C0\u03B1", -1, 1, "", methodObject),
+            new Among("\u03C7\u03B1\u03C1\u03C4\u03BF\u03C0\u03B1", -1, 1, "", methodObject),
+            new Among("\u03B5\u03BE\u03B1\u03C1\u03C7\u03B1", -1, 1, "", methodObject),
+            new Among("\u03BA\u03BB\u03B5", -1, 1, "", methodObject),
+            new Among("\u03B5\u03BA\u03BB\u03B5", 7, 1, "", methodObject),
+            new Among("\u03B1\u03C0\u03B5\u03BA\u03BB\u03B5", 8, 1, "", methodObject),
+            new Among("\u03B1\u03C0\u03BF\u03BA\u03BB\u03B5", 7, 1, "", methodObject),
+            new Among("\u03B5\u03C3\u03C9\u03BA\u03BB\u03B5", 7, 1, "", methodObject),
+            new Among("\u03B4\u03B1\u03BD\u03B5", -1, 1, "", methodObject),
+            new Among("\u03C0\u03B5", -1, 1, "", methodObject),
+            new Among("\u03B5\u03C0\u03B5", 13, 1, "", methodObject),
+            new Among("\u03BC\u03B5\u03C4\u03B5\u03C0\u03B5", 14, 1, "", methodObject),
+            new Among("\u03B5\u03C3\u03B5", -1, 1, "", methodObject),
+            new Among("\u03B1\u03B8\u03C1\u03BF", -1, 1, "", methodObject),
+            new Among("\u03C3\u03C5\u03BD\u03B1\u03B8\u03C1\u03BF", 17, 1, "", methodObject)
     };
 
     private final static Among a_8[] = {
-        new Among("\u03B3\u03B5", -1, 1, "", methodObject),
-        new Among("\u03B3\u03BA\u03B5", -1, 1, "", methodObject),
-        new Among("\u03B3\u03BA", -1, 1, "", methodObject),
-        new Among("\u03BC", -1, 1, "", methodObject),
-        new Among("\u03C0\u03BF\u03C5\u03BA\u03B1\u03BC", 3, 1, "", methodObject),
-        new Among("\u03BA\u03BF\u03BC", 3, 1, "", methodObject),
-        new Among("\u03B1\u03BD", -1, 1, "", methodObject),
-        new Among("\u03BF\u03BB\u03BF", -1, 1, "", methodObject),
-        new Among("\u03C0", -1, 1, "", methodObject),
-        new Among("\u03BB\u03B1\u03C1", -1, 1, "", methodObject),
-        new Among("\u03B4\u03B7\u03BC\u03BF\u03BA\u03C1\u03B1\u03C4", -1, 1, "", methodObject),
-        new Among("\u03B1\u03C6", -1, 1, "", methodObject),
-        new Among("\u03B3\u03B9\u03B3\u03B1\u03BD\u03C4\u03BF\u03B1\u03C6", 11, 1, "", methodObject)
+            new Among("\u03B3\u03B5", -1, 1, "", methodObject),
+            new Among("\u03B3\u03BA\u03B5", -1, 1, "", methodObject),
+            new Among("\u03B3\u03BA", -1, 1, "", methodObject),
+            new Among("\u03BC", -1, 1, "", methodObject),
+            new Among("\u03C0\u03BF\u03C5\u03BA\u03B1\u03BC", 3, 1, "", methodObject),
+            new Among("\u03BA\u03BF\u03BC", 3, 1, "", methodObject),
+            new Among("\u03B1\u03BD", -1, 1, "", methodObject),
+            new Among("\u03BF\u03BB\u03BF", -1, 1, "", methodObject),
+            new Among("\u03C0", -1, 1, "", methodObject),
+            new Among("\u03BB\u03B1\u03C1", -1, 1, "", methodObject),
+            new Among("\u03B4\u03B7\u03BC\u03BF\u03BA\u03C1\u03B1\u03C4", -1, 1, "", methodObject),
+            new Among("\u03B1\u03C6", -1, 1, "", methodObject),
+            new Among("\u03B3\u03B9\u03B3\u03B1\u03BD\u03C4\u03BF\u03B1\u03C6", 11, 1, "", methodObject)
     };
 
     private final static Among a_9[] = {
-        new Among("\u03B9\u03C3\u03B1", -1, 1, "", methodObject),
-        new Among("\u03B9\u03C3\u03B1\u03BC\u03B5", -1, 1, "", methodObject),
-        new Among("\u03B9\u03C3\u03B1\u03BD\u03B5", -1, 1, "", methodObject),
-        new Among("\u03B9\u03C3\u03B5", -1, 1, "", methodObject),
-        new Among("\u03B9\u03C3\u03B1\u03C4\u03B5", -1, 1, "", methodObject),
-        new Among("\u03B9\u03C3\u03B1\u03BD", -1, 1, "", methodObject),
-        new Among("\u03B9\u03C3\u03B5\u03C3", -1, 1, "", methodObject)
+            new Among("\u03B9\u03C3\u03B1", -1, 1, "", methodObject),
+            new Among("\u03B9\u03C3\u03B1\u03BC\u03B5", -1, 1, "", methodObject),
+            new Among("\u03B9\u03C3\u03B1\u03BD\u03B5", -1, 1, "", methodObject),
+            new Among("\u03B9\u03C3\u03B5", -1, 1, "", methodObject),
+            new Among("\u03B9\u03C3\u03B1\u03C4\u03B5", -1, 1, "", methodObject),
+            new Among("\u03B9\u03C3\u03B1\u03BD", -1, 1, "", methodObject),
+            new Among("\u03B9\u03C3\u03B5\u03C3", -1, 1, "", methodObject)
     };
 
     private final static Among a_10[] = {
-        new Among("\u03BE\u03B1\u03BD\u03B1\u03C0\u03B1", -1, 1, "", methodObject),
-        new Among("\u03B5\u03C0\u03B1", -1, 1, "", methodObject),
-        new Among("\u03C0\u03B5\u03C1\u03B9\u03C0\u03B1", -1, 1, "", methodObject),
-        new Among("\u03B1\u03BD\u03B1\u03BC\u03C0\u03B1", -1, 1, "", methodObject),
-        new Among("\u03B5\u03BC\u03C0\u03B1", -1, 1, "", methodObject),
-        new Among("\u03C7\u03B1\u03C1\u03C4\u03BF\u03C0\u03B1", -1, 1, "", methodObject),
-        new Among("\u03B5\u03BE\u03B1\u03C1\u03C7\u03B1", -1, 1, "", methodObject),
-        new Among("\u03BA\u03BB\u03B5", -1, 1, "", methodObject),
-        new Among("\u03B5\u03BA\u03BB\u03B5", 7, 1, "", methodObject),
-        new Among("\u03B1\u03C0\u03B5\u03BA\u03BB\u03B5", 8, 1, "", methodObject),
-        new Among("\u03B1\u03C0\u03BF\u03BA\u03BB\u03B5", 7, 1, "", methodObject),
-        new Among("\u03B5\u03C3\u03C9\u03BA\u03BB\u03B5", 7, 1, "", methodObject),
-        new Among("\u03B4\u03B1\u03BD\u03B5", -1, 1, "", methodObject),
-        new Among("\u03C0\u03B5", -1, 1, "", methodObject),
-        new Among("\u03B5\u03C0\u03B5", 13, 1, "", methodObject),
-        new Among("\u03BC\u03B5\u03C4\u03B5\u03C0\u03B5", 14, 1, "", methodObject),
-        new Among("\u03B5\u03C3\u03B5", -1, 1, "", methodObject),
-        new Among("\u03B1\u03B8\u03C1\u03BF", -1, 1, "", methodObject),
-        new Among("\u03C3\u03C5\u03BD\u03B1\u03B8\u03C1\u03BF", 17, 1, "", methodObject)
+            new Among("\u03BE\u03B1\u03BD\u03B1\u03C0\u03B1", -1, 1, "", methodObject),
+            new Among("\u03B5\u03C0\u03B1", -1, 1, "", methodObject),
+            new Among("\u03C0\u03B5\u03C1\u03B9\u03C0\u03B1", -1, 1, "", methodObject),
+            new Among("\u03B1\u03BD\u03B1\u03BC\u03C0\u03B1", -1, 1, "", methodObject),
+            new Among("\u03B5\u03BC\u03C0\u03B1", -1, 1, "", methodObject),
+            new Among("\u03C7\u03B1\u03C1\u03C4\u03BF\u03C0\u03B1", -1, 1, "", methodObject),
+            new Among("\u03B5\u03BE\u03B1\u03C1\u03C7\u03B1", -1, 1, "", methodObject),
+            new Among("\u03BA\u03BB\u03B5", -1, 1, "", methodObject),
+            new Among("\u03B5\u03BA\u03BB\u03B5", 7, 1, "", methodObject),
+            new Among("\u03B1\u03C0\u03B5\u03BA\u03BB\u03B5", 8, 1, "", methodObject),
+            new Among("\u03B1\u03C0\u03BF\u03BA\u03BB\u03B5", 7, 1, "", methodObject),
+            new Among("\u03B5\u03C3\u03C9\u03BA\u03BB\u03B5", 7, 1, "", methodObject),
+            new Among("\u03B4\u03B1\u03BD\u03B5", -1, 1, "", methodObject),
+            new Among("\u03C0\u03B5", -1, 1, "", methodObject),
+            new Among("\u03B5\u03C0\u03B5", 13, 1, "", methodObject),
+            new Among("\u03BC\u03B5\u03C4\u03B5\u03C0\u03B5", 14, 1, "", methodObject),
+            new Among("\u03B5\u03C3\u03B5", -1, 1, "", methodObject),
+            new Among("\u03B1\u03B8\u03C1\u03BF", -1, 1, "", methodObject),
+            new Among("\u03C3\u03C5\u03BD\u03B1\u03B8\u03C1\u03BF", 17, 1, "", methodObject)
     };
 
     private final static Among a_11[] = {
-        new Among("\u03B9\u03C3\u03BF\u03C5\u03BC\u03B5", -1, 1, "", methodObject),
-        new Among("\u03B9\u03C3\u03BF\u03C5\u03BD\u03B5", -1, 1, "", methodObject),
-        new Among("\u03B9\u03C3\u03B5\u03C4\u03B5", -1, 1, "", methodObject),
-        new Among("\u03B9\u03C3\u03B5\u03B9", -1, 1, "", methodObject),
-        new Among("\u03B9\u03C3\u03BF\u03C5\u03BD", -1, 1, "", methodObject),
-        new Among("\u03B9\u03C3\u03B5\u03B9\u03C3", -1, 1, "", methodObject),
-        new Among("\u03B9\u03C3\u03C9", -1, 1, "", methodObject)
+            new Among("\u03B9\u03C3\u03BF\u03C5\u03BC\u03B5", -1, 1, "", methodObject),
+            new Among("\u03B9\u03C3\u03BF\u03C5\u03BD\u03B5", -1, 1, "", methodObject),
+            new Among("\u03B9\u03C3\u03B5\u03C4\u03B5", -1, 1, "", methodObject),
+            new Among("\u03B9\u03C3\u03B5\u03B9", -1, 1, "", methodObject),
+            new Among("\u03B9\u03C3\u03BF\u03C5\u03BD", -1, 1, "", methodObject),
+            new Among("\u03B9\u03C3\u03B5\u03B9\u03C3", -1, 1, "", methodObject),
+            new Among("\u03B9\u03C3\u03C9", -1, 1, "", methodObject)
     };
 
     private final static Among a_12[] = {
-        new Among("\u03BA\u03BB\u03B5", -1, 1, "", methodObject),
-        new Among("\u03B5\u03C3\u03C9\u03BA\u03BB\u03B5", 0, 1, "", methodObject),
-        new Among("\u03C0\u03BB\u03B5", -1, 1, "", methodObject),
-        new Among("\u03B4\u03B1\u03BD\u03B5", -1, 1, "", methodObject),
-        new Among("\u03C3\u03B5", -1, 1, "", methodObject),
-        new Among("\u03B1\u03C3\u03B5", 4, 1, "", methodObject),
-        new Among("\u03C3\u03C5\u03BD\u03B1\u03B8\u03C1\u03BF", -1, 1, "", methodObject)
+            new Among("\u03BA\u03BB\u03B5", -1, 1, "", methodObject),
+            new Among("\u03B5\u03C3\u03C9\u03BA\u03BB\u03B5", 0, 1, "", methodObject),
+            new Among("\u03C0\u03BB\u03B5", -1, 1, "", methodObject),
+            new Among("\u03B4\u03B1\u03BD\u03B5", -1, 1, "", methodObject),
+            new Among("\u03C3\u03B5", -1, 1, "", methodObject),
+            new Among("\u03B1\u03C3\u03B5", 4, 1, "", methodObject),
+            new Among("\u03C3\u03C5\u03BD\u03B1\u03B8\u03C1\u03BF", -1, 1, "", methodObject)
     };
 
     private final static Among a_13[] = {
-        new Among("\u03B1\u03C4\u03B1", -1, 1, "", methodObject),
-        new Among("\u03C6\u03B1", -1, 1, "", methodObject),
-        new Among("\u03B7\u03C6\u03B1", 1, 1, "", methodObject),
-        new Among("\u03BC\u03B5\u03B3", -1, 1, "", methodObject),
-        new Among("\u03BB\u03C5\u03B3", -1, 1, "", methodObject),
-        new Among("\u03B7\u03B4", -1, 1, "", methodObject),
-        new Among("\u03BA\u03B1\u03B8", -1, 1, "", methodObject),
-        new Among("\u03B5\u03C7\u03B8", -1, 1, "", methodObject),
-        new Among("\u03BA\u03B1\u03BA", -1, 1, "", methodObject),
-        new Among("\u03BC\u03B1\u03BA", -1, 1, "", methodObject),
-        new Among("\u03C3\u03BA", -1, 1, "", methodObject),
-        new Among("\u03C6\u03B9\u03BB", -1, 1, "", methodObject),
-        new Among("\u03BA\u03C5\u03BB", -1, 1, "", methodObject),
-        new Among("\u03BC", -1, 1, "", methodObject),
-        new Among("\u03B3\u03B5\u03BC", 13, 1, "", methodObject),
-        new Among("\u03B1\u03C7\u03BD", -1, 1, "", methodObject),
-        new Among("\u03C0", -1, 1, "", methodObject),
-        new Among("\u03B1\u03C0", 16, 1, "", methodObject),
-        new Among("\u03B5\u03BC\u03C0", 16, 1, "", methodObject),
-        new Among("\u03B5\u03C5\u03C0", 16, 1, "", methodObject),
-        new Among("\u03B1\u03C1", -1, 1, "", methodObject),
-        new Among("\u03B1\u03BF\u03C1", -1, 1, "", methodObject),
-        new Among("\u03B3\u03C5\u03C1", -1, 1, "", methodObject),
-        new Among("\u03C7\u03C1", -1, 1, "", methodObject),
-        new Among("\u03C7\u03C9\u03C1", -1, 1, "", methodObject),
-        new Among("\u03BA\u03C4", -1, 1, "", methodObject),
-        new Among("\u03B1\u03BA\u03C4", 25, 1, "", methodObject),
-        new Among("\u03C7\u03C4", -1, 1, "", methodObject),
-        new Among("\u03B1\u03C7\u03C4", 27, 1, "", methodObject),
-        new Among("\u03C4\u03B1\u03C7", -1, 1, "", methodObject),
-        new Among("\u03C3\u03C7", -1, 1, "", methodObject),
-        new Among("\u03B1\u03C3\u03C7", 30, 1, "", methodObject),
-        new Among("\u03C5\u03C8", -1, 1, "", methodObject)
+            new Among("\u03B1\u03C4\u03B1", -1, 1, "", methodObject),
+            new Among("\u03C6\u03B1", -1, 1, "", methodObject),
+            new Among("\u03B7\u03C6\u03B1", 1, 1, "", methodObject),
+            new Among("\u03BC\u03B5\u03B3", -1, 1, "", methodObject),
+            new Among("\u03BB\u03C5\u03B3", -1, 1, "", methodObject),
+            new Among("\u03B7\u03B4", -1, 1, "", methodObject),
+            new Among("\u03BA\u03B1\u03B8", -1, 1, "", methodObject),
+            new Among("\u03B5\u03C7\u03B8", -1, 1, "", methodObject),
+            new Among("\u03BA\u03B1\u03BA", -1, 1, "", methodObject),
+            new Among("\u03BC\u03B1\u03BA", -1, 1, "", methodObject),
+            new Among("\u03C3\u03BA", -1, 1, "", methodObject),
+            new Among("\u03C6\u03B9\u03BB", -1, 1, "", methodObject),
+            new Among("\u03BA\u03C5\u03BB", -1, 1, "", methodObject),
+            new Among("\u03BC", -1, 1, "", methodObject),
+            new Among("\u03B3\u03B5\u03BC", 13, 1, "", methodObject),
+            new Among("\u03B1\u03C7\u03BD", -1, 1, "", methodObject),
+            new Among("\u03C0", -1, 1, "", methodObject),
+            new Among("\u03B1\u03C0", 16, 1, "", methodObject),
+            new Among("\u03B5\u03BC\u03C0", 16, 1, "", methodObject),
+            new Among("\u03B5\u03C5\u03C0", 16, 1, "", methodObject),
+            new Among("\u03B1\u03C1", -1, 1, "", methodObject),
+            new Among("\u03B1\u03BF\u03C1", -1, 1, "", methodObject),
+            new Among("\u03B3\u03C5\u03C1", -1, 1, "", methodObject),
+            new Among("\u03C7\u03C1", -1, 1, "", methodObject),
+            new Among("\u03C7\u03C9\u03C1", -1, 1, "", methodObject),
+            new Among("\u03BA\u03C4", -1, 1, "", methodObject),
+            new Among("\u03B1\u03BA\u03C4", 25, 1, "", methodObject),
+            new Among("\u03C7\u03C4", -1, 1, "", methodObject),
+            new Among("\u03B1\u03C7\u03C4", 27, 1, "", methodObject),
+            new Among("\u03C4\u03B1\u03C7", -1, 1, "", methodObject),
+            new Among("\u03C3\u03C7", -1, 1, "", methodObject),
+            new Among("\u03B1\u03C3\u03C7", 30, 1, "", methodObject),
+            new Among("\u03C5\u03C8", -1, 1, "", methodObject)
     };
 
     private final static Among a_14[] = {
-        new Among("\u03B9\u03C3\u03C4\u03B1", -1, 1, "", methodObject),
-        new Among("\u03B9\u03C3\u03C4\u03B5", -1, 1, "", methodObject),
-        new Among("\u03B9\u03C3\u03C4\u03B7", -1, 1, "", methodObject),
-        new Among("\u03B9\u03C3\u03C4\u03BF\u03B9", -1, 1, "", methodObject),
-        new Among("\u03B9\u03C3\u03C4\u03C9\u03BD", -1, 1, "", methodObject),
-        new Among("\u03B9\u03C3\u03C4\u03BF", -1, 1, "", methodObject),
-        new Among("\u03B9\u03C3\u03C4\u03B5\u03C3", -1, 1, "", methodObject),
-        new Among("\u03B9\u03C3\u03C4\u03B7\u03C3", -1, 1, "", methodObject),
-        new Among("\u03B9\u03C3\u03C4\u03BF\u03C3", -1, 1, "", methodObject),
-        new Among("\u03B9\u03C3\u03C4\u03BF\u03C5\u03C3", -1, 1, "", methodObject),
-        new Among("\u03B9\u03C3\u03C4\u03BF\u03C5", -1, 1, "", methodObject)
+            new Among("\u03B9\u03C3\u03C4\u03B1", -1, 1, "", methodObject),
+            new Among("\u03B9\u03C3\u03C4\u03B5", -1, 1, "", methodObject),
+            new Among("\u03B9\u03C3\u03C4\u03B7", -1, 1, "", methodObject),
+            new Among("\u03B9\u03C3\u03C4\u03BF\u03B9", -1, 1, "", methodObject),
+            new Among("\u03B9\u03C3\u03C4\u03C9\u03BD", -1, 1, "", methodObject),
+            new Among("\u03B9\u03C3\u03C4\u03BF", -1, 1, "", methodObject),
+            new Among("\u03B9\u03C3\u03C4\u03B5\u03C3", -1, 1, "", methodObject),
+            new Among("\u03B9\u03C3\u03C4\u03B7\u03C3", -1, 1, "", methodObject),
+            new Among("\u03B9\u03C3\u03C4\u03BF\u03C3", -1, 1, "", methodObject),
+            new Among("\u03B9\u03C3\u03C4\u03BF\u03C5\u03C3", -1, 1, "", methodObject),
+            new Among("\u03B9\u03C3\u03C4\u03BF\u03C5", -1, 1, "", methodObject)
     };
 
     private final static Among a_15[] = {
-        new Among("\u03B5\u03B3\u03BA\u03BB\u03B5", -1, 1, "", methodObject),
-        new Among("\u03B1\u03C0\u03BF\u03BA\u03BB\u03B5", -1, 1, "", methodObject),
-        new Among("\u03C3\u03B5", -1, 1, "", methodObject),
-        new Among("\u03BC\u03B5\u03C4\u03B1\u03C3\u03B5", 2, 1, "", methodObject),
-        new Among("\u03BC\u03B9\u03BA\u03C1\u03BF\u03C3\u03B5", 2, 1, "", methodObject)
+            new Among("\u03B5\u03B3\u03BA\u03BB\u03B5", -1, 1, "", methodObject),
+            new Among("\u03B1\u03C0\u03BF\u03BA\u03BB\u03B5", -1, 1, "", methodObject),
+            new Among("\u03C3\u03B5", -1, 1, "", methodObject),
+            new Among("\u03BC\u03B5\u03C4\u03B1\u03C3\u03B5", 2, 1, "", methodObject),
+            new Among("\u03BC\u03B9\u03BA\u03C1\u03BF\u03C3\u03B5", 2, 1, "", methodObject)
     };
 
     private final static Among a_16[] = {
-        new Among("\u03B4\u03B1\u03BD\u03B5", -1, 1, "", methodObject),
-        new Among("\u03B1\u03BD\u03C4\u03B9\u03B4\u03B1\u03BD\u03B5", 0, 1, "", methodObject)
+            new Among("\u03B4\u03B1\u03BD\u03B5", -1, 1, "", methodObject),
+            new Among("\u03B1\u03BD\u03C4\u03B9\u03B4\u03B1\u03BD\u03B5", 0, 1, "", methodObject)
     };
 
     private final static Among a_17[] = {
-        new Among("\u03B1\u03C4\u03BF\u03BC\u03B9\u03BA", -1, 2, "", methodObject),
-        new Among("\u03B5\u03B8\u03BD\u03B9\u03BA", -1, 4, "", methodObject),
-        new Among("\u03C4\u03BF\u03C0\u03B9\u03BA", -1, 7, "", methodObject),
-        new Among("\u03B5\u03BA\u03BB\u03B5\u03BA\u03C4\u03B9\u03BA", -1, 5, "", methodObject),
-        new Among("\u03C3\u03BA\u03B5\u03C0\u03C4\u03B9\u03BA", -1, 6, "", methodObject),
-        new Among("\u03B3\u03BD\u03C9\u03C3\u03C4\u03B9\u03BA", -1, 3, "", methodObject),
-        new Among("\u03B1\u03B3\u03BD\u03C9\u03C3\u03C4\u03B9\u03BA", 5, 1, "", methodObject),
-        new Among("\u03B1\u03BB\u03B5\u03BE\u03B1\u03BD\u03B4\u03C1\u03B9\u03BD", -1, 8, "", methodObject),
-        new Among("\u03B8\u03B5\u03B1\u03C4\u03C1\u03B9\u03BD", -1, 10, "", methodObject),
-        new Among("\u03B2\u03C5\u03B6\u03B1\u03BD\u03C4\u03B9\u03BD", -1, 9, "", methodObject)
+            new Among("\u03B1\u03C4\u03BF\u03BC\u03B9\u03BA", -1, 2, "", methodObject),
+            new Among("\u03B5\u03B8\u03BD\u03B9\u03BA", -1, 4, "", methodObject),
+            new Among("\u03C4\u03BF\u03C0\u03B9\u03BA", -1, 7, "", methodObject),
+            new Among("\u03B5\u03BA\u03BB\u03B5\u03BA\u03C4\u03B9\u03BA", -1, 5, "", methodObject),
+            new Among("\u03C3\u03BA\u03B5\u03C0\u03C4\u03B9\u03BA", -1, 6, "", methodObject),
+            new Among("\u03B3\u03BD\u03C9\u03C3\u03C4\u03B9\u03BA", -1, 3, "", methodObject),
+            new Among("\u03B1\u03B3\u03BD\u03C9\u03C3\u03C4\u03B9\u03BA", 5, 1, "", methodObject),
+            new Among("\u03B1\u03BB\u03B5\u03BE\u03B1\u03BD\u03B4\u03C1\u03B9\u03BD", -1, 8, "", methodObject),
+            new Among("\u03B8\u03B5\u03B1\u03C4\u03C1\u03B9\u03BD", -1, 10, "", methodObject),
+            new Among("\u03B2\u03C5\u03B6\u03B1\u03BD\u03C4\u03B9\u03BD", -1, 9, "", methodObject)
     };
 
     private final static Among a_18[] = {
-        new Among("\u03B9\u03C3\u03BC\u03BF\u03B9", -1, 1, "", methodObject),
-        new Among("\u03B9\u03C3\u03BC\u03C9\u03BD", -1, 1, "", methodObject),
-        new Among("\u03B9\u03C3\u03BC\u03BF", -1, 1, "", methodObject),
-        new Among("\u03B9\u03C3\u03BC\u03BF\u03C3", -1, 1, "", methodObject),
-        new Among("\u03B9\u03C3\u03BC\u03BF\u03C5\u03C3", -1, 1, "", methodObject),
-        new Among("\u03B9\u03C3\u03BC\u03BF\u03C5", -1, 1, "", methodObject)
+            new Among("\u03B9\u03C3\u03BC\u03BF\u03B9", -1, 1, "", methodObject),
+            new Among("\u03B9\u03C3\u03BC\u03C9\u03BD", -1, 1, "", methodObject),
+            new Among("\u03B9\u03C3\u03BC\u03BF", -1, 1, "", methodObject),
+            new Among("\u03B9\u03C3\u03BC\u03BF\u03C3", -1, 1, "", methodObject),
+            new Among("\u03B9\u03C3\u03BC\u03BF\u03C5\u03C3", -1, 1, "", methodObject),
+            new Among("\u03B9\u03C3\u03BC\u03BF\u03C5", -1, 1, "", methodObject)
     };
 
     private final static Among a_19[] = {
-        new Among("\u03C3", -1, 1, "", methodObject),
-        new Among("\u03C7", -1, 1, "", methodObject)
+            new Among("\u03C3", -1, 1, "", methodObject),
+            new Among("\u03C7", -1, 1, "", methodObject)
     };
 
     private final static Among a_20[] = {
-        new Among("\u03BF\u03C5\u03B4\u03B1\u03BA\u03B9\u03B1", -1, 1, "", methodObject),
-        new Among("\u03B1\u03C1\u03B1\u03BA\u03B9\u03B1", -1, 1, "", methodObject),
-        new Among("\u03BF\u03C5\u03B4\u03B1\u03BA\u03B9", -1, 1, "", methodObject),
-        new Among("\u03B1\u03C1\u03B1\u03BA\u03B9", -1, 1, "", methodObject)
+            new Among("\u03BF\u03C5\u03B4\u03B1\u03BA\u03B9\u03B1", -1, 1, "", methodObject),
+            new Among("\u03B1\u03C1\u03B1\u03BA\u03B9\u03B1", -1, 1, "", methodObject),
+            new Among("\u03BF\u03C5\u03B4\u03B1\u03BA\u03B9", -1, 1, "", methodObject),
+            new Among("\u03B1\u03C1\u03B1\u03BA\u03B9", -1, 1, "", methodObject)
     };
 
     private final static Among a_21[] = {
-        new Among("\u03B2\u03B1\u03BC\u03B2", -1, 1, "", methodObject),
-        new Among("\u03C3\u03BB\u03BF\u03B2", -1, 1, "", methodObject),
-        new Among("\u03C4\u03C3\u03B5\u03C7\u03BF\u03C3\u03BB\u03BF\u03B2", 1, 1, "", methodObject),
-        new Among("\u03C4\u03B6", -1, 1, "", methodObject),
-        new Among("\u03BA", -1, 1, "", methodObject),
-        new Among("\u03BA\u03B1\u03C0\u03B1\u03BA", 4, 1, "", methodObject),
-        new Among("\u03C3\u03BF\u03BA", 4, 1, "", methodObject),
-        new Among("\u03C3\u03BA", 4, 1, "", methodObject),
-        new Among("\u03BC\u03B1\u03BB", -1, 1, "", methodObject),
-        new Among("\u03C0\u03BB", -1, 1, "", methodObject),
-        new Among("\u03BB\u03BF\u03C5\u03BB", -1, 1, "", methodObject),
-        new Among("\u03C6\u03C5\u03BB", -1, 1, "", methodObject),
-        new Among("\u03BA\u03B1\u03B9\u03BC", -1, 1, "", methodObject),
-        new Among("\u03BA\u03BB\u03B9\u03BC", -1, 1, "", methodObject),
-        new Among("\u03C6\u03B1\u03C1\u03BC", -1, 1, "", methodObject),
-        new Among("\u03C3\u03C0\u03B1\u03BD", -1, 1, "", methodObject),
-        new Among("\u03BA\u03BF\u03BD", -1, 1, "", methodObject),
-        new Among("\u03BA\u03B1\u03C4\u03C1\u03B1\u03C0", -1, 1, "", methodObject),
-        new Among("\u03C1", -1, 1, "", methodObject),
-        new Among("\u03B2\u03C1", 18, 1, "", methodObject),
-        new Among("\u03BB\u03B1\u03B2\u03C1", 19, 1, "", methodObject),
-        new Among("\u03B1\u03BC\u03B2\u03C1", 19, 1, "", methodObject),
-        new Among("\u03BC\u03B5\u03C1", 18, 1, "", methodObject),
-        new Among("\u03B1\u03BD\u03B8\u03C1", 18, 1, "", methodObject),
-        new Among("\u03BA\u03BF\u03C1", 18, 1, "", methodObject),
-        new Among("\u03C3", -1, 1, "", methodObject),
-        new Among("\u03BD\u03B1\u03B3\u03BA\u03B1\u03C3", 25, 1, "", methodObject),
-        new Among("\u03BC\u03BF\u03C5\u03C3\u03C4", -1, 1, "", methodObject),
-        new Among("\u03C1\u03C5", -1, 1, "", methodObject),
-        new Among("\u03C6", -1, 1, "", methodObject),
-        new Among("\u03C3\u03C6", 29, 1, "", methodObject),
-        new Among("\u03B1\u03BB\u03B9\u03C3\u03C6", 30, 1, "", methodObject),
-        new Among("\u03C7", -1, 1, "", methodObject)
+            new Among("\u03B2\u03B1\u03BC\u03B2", -1, 1, "", methodObject),
+            new Among("\u03C3\u03BB\u03BF\u03B2", -1, 1, "", methodObject),
+            new Among("\u03C4\u03C3\u03B5\u03C7\u03BF\u03C3\u03BB\u03BF\u03B2", 1, 1, "", methodObject),
+            new Among("\u03C4\u03B6", -1, 1, "", methodObject),
+            new Among("\u03BA", -1, 1, "", methodObject),
+            new Among("\u03BA\u03B1\u03C0\u03B1\u03BA", 4, 1, "", methodObject),
+            new Among("\u03C3\u03BF\u03BA", 4, 1, "", methodObject),
+            new Among("\u03C3\u03BA", 4, 1, "", methodObject),
+            new Among("\u03BC\u03B1\u03BB", -1, 1, "", methodObject),
+            new Among("\u03C0\u03BB", -1, 1, "", methodObject),
+            new Among("\u03BB\u03BF\u03C5\u03BB", -1, 1, "", methodObject),
+            new Among("\u03C6\u03C5\u03BB", -1, 1, "", methodObject),
+            new Among("\u03BA\u03B1\u03B9\u03BC", -1, 1, "", methodObject),
+            new Among("\u03BA\u03BB\u03B9\u03BC", -1, 1, "", methodObject),
+            new Among("\u03C6\u03B1\u03C1\u03BC", -1, 1, "", methodObject),
+            new Among("\u03C3\u03C0\u03B1\u03BD", -1, 1, "", methodObject),
+            new Among("\u03BA\u03BF\u03BD", -1, 1, "", methodObject),
+            new Among("\u03BA\u03B1\u03C4\u03C1\u03B1\u03C0", -1, 1, "", methodObject),
+            new Among("\u03C1", -1, 1, "", methodObject),
+            new Among("\u03B2\u03C1", 18, 1, "", methodObject),
+            new Among("\u03BB\u03B1\u03B2\u03C1", 19, 1, "", methodObject),
+            new Among("\u03B1\u03BC\u03B2\u03C1", 19, 1, "", methodObject),
+            new Among("\u03BC\u03B5\u03C1", 18, 1, "", methodObject),
+            new Among("\u03B1\u03BD\u03B8\u03C1", 18, 1, "", methodObject),
+            new Among("\u03BA\u03BF\u03C1", 18, 1, "", methodObject),
+            new Among("\u03C3", -1, 1, "", methodObject),
+            new Among("\u03BD\u03B1\u03B3\u03BA\u03B1\u03C3", 25, 1, "", methodObject),
+            new Among("\u03BC\u03BF\u03C5\u03C3\u03C4", -1, 1, "", methodObject),
+            new Among("\u03C1\u03C5", -1, 1, "", methodObject),
+            new Among("\u03C6", -1, 1, "", methodObject),
+            new Among("\u03C3\u03C6", 29, 1, "", methodObject),
+            new Among("\u03B1\u03BB\u03B9\u03C3\u03C6", 30, 1, "", methodObject),
+            new Among("\u03C7", -1, 1, "", methodObject)
     };
 
     private final static Among a_22[] = {
-        new Among("\u03B2", -1, 1, "", methodObject),
-        new Among("\u03BA\u03B1\u03C1\u03B4", -1, 1, "", methodObject),
-        new Among("\u03B6", -1, 1, "", methodObject),
-        new Among("\u03C3\u03BA", -1, 1, "", methodObject),
-        new Among("\u03B2\u03B1\u03BB", -1, 1, "", methodObject),
-        new Among("\u03B3\u03BB", -1, 1, "", methodObject),
-        new Among("\u03C4\u03C1\u03B9\u03C0\u03BF\u03BB", -1, 1, "", methodObject),
-        new Among("\u03B3\u03B9\u03B1\u03BD", -1, 1, "", methodObject),
-        new Among("\u03B7\u03B3\u03BF\u03C5\u03BC\u03B5\u03BD", -1, 1, "", methodObject),
-        new Among("\u03BA\u03BF\u03BD", -1, 1, "", methodObject),
-        new Among("\u03BC\u03B1\u03BA\u03C1\u03C5\u03BD", -1, 1, "", methodObject),
-        new Among("\u03C0", -1, 1, "", methodObject),
-        new Among("\u03C0\u03B1\u03C4\u03B5\u03C1", -1, 1, "", methodObject),
-        new Among("\u03C4\u03BF\u03C3", -1, 1, "", methodObject),
-        new Among("\u03BD\u03C5\u03C6", -1, 1, "", methodObject)
+            new Among("\u03B2", -1, 1, "", methodObject),
+            new Among("\u03BA\u03B1\u03C1\u03B4", -1, 1, "", methodObject),
+            new Among("\u03B6", -1, 1, "", methodObject),
+            new Among("\u03C3\u03BA", -1, 1, "", methodObject),
+            new Among("\u03B2\u03B1\u03BB", -1, 1, "", methodObject),
+            new Among("\u03B3\u03BB", -1, 1, "", methodObject),
+            new Among("\u03C4\u03C1\u03B9\u03C0\u03BF\u03BB", -1, 1, "", methodObject),
+            new Among("\u03B3\u03B9\u03B1\u03BD", -1, 1, "", methodObject),
+            new Among("\u03B7\u03B3\u03BF\u03C5\u03BC\u03B5\u03BD", -1, 1, "", methodObject),
+            new Among("\u03BA\u03BF\u03BD", -1, 1, "", methodObject),
+            new Among("\u03BC\u03B1\u03BA\u03C1\u03C5\u03BD", -1, 1, "", methodObject),
+            new Among("\u03C0", -1, 1, "", methodObject),
+            new Among("\u03C0\u03B1\u03C4\u03B5\u03C1", -1, 1, "", methodObject),
+            new Among("\u03C4\u03BF\u03C3", -1, 1, "", methodObject),
+            new Among("\u03BD\u03C5\u03C6", -1, 1, "", methodObject)
     };
 
     private final static Among a_23[] = {
-        new Among("\u03B1\u03BA\u03B9\u03B1", -1, 1, "", methodObject),
-        new Among("\u03B1\u03C1\u03B1\u03BA\u03B9\u03B1", 0, 1, "", methodObject),
-        new Among("\u03B9\u03C4\u03C3\u03B1", -1, 1, "", methodObject),
-        new Among("\u03B1\u03BA\u03B9", -1, 1, "", methodObject),
-        new Among("\u03B1\u03C1\u03B1\u03BA\u03B9", 3, 1, "", methodObject),
-        new Among("\u03B9\u03C4\u03C3\u03C9\u03BD", -1, 1, "", methodObject),
-        new Among("\u03B9\u03C4\u03C3\u03B1\u03C3", -1, 1, "", methodObject),
-        new Among("\u03B9\u03C4\u03C3\u03B5\u03C3", -1, 1, "", methodObject)
+            new Among("\u03B1\u03BA\u03B9\u03B1", -1, 1, "", methodObject),
+            new Among("\u03B1\u03C1\u03B1\u03BA\u03B9\u03B1", 0, 1, "", methodObject),
+            new Among("\u03B9\u03C4\u03C3\u03B1", -1, 1, "", methodObject),
+            new Among("\u03B1\u03BA\u03B9", -1, 1, "", methodObject),
+            new Among("\u03B1\u03C1\u03B1\u03BA\u03B9", 3, 1, "", methodObject),
+            new Among("\u03B9\u03C4\u03C3\u03C9\u03BD", -1, 1, "", methodObject),
+            new Among("\u03B9\u03C4\u03C3\u03B1\u03C3", -1, 1, "", methodObject),
+            new Among("\u03B9\u03C4\u03C3\u03B5\u03C3", -1, 1, "", methodObject)
     };
 
     private final static Among a_24[] = {
-        new Among("\u03C8\u03B1\u03BB", -1, 1, "", methodObject),
-        new Among("\u03B1\u03B9\u03C6\u03BD", -1, 1, "", methodObject),
-        new Among("\u03BF\u03BB\u03BF", -1, 1, "", methodObject),
-        new Among("\u03B9\u03C1", -1, 1, "", methodObject)
+            new Among("\u03C8\u03B1\u03BB", -1, 1, "", methodObject),
+            new Among("\u03B1\u03B9\u03C6\u03BD", -1, 1, "", methodObject),
+            new Among("\u03BF\u03BB\u03BF", -1, 1, "", methodObject),
+            new Among("\u03B9\u03C1", -1, 1, "", methodObject)
     };
 
     private final static Among a_25[] = {
-        new Among("\u03B5", -1, 1, "", methodObject),
-        new Among("\u03C0\u03B1\u03B9\u03C7\u03BD", -1, 1, "", methodObject)
+            new Among("\u03B5", -1, 1, "", methodObject),
+            new Among("\u03C0\u03B1\u03B9\u03C7\u03BD", -1, 1, "", methodObject)
     };
 
     private final static Among a_26[] = {
-        new Among("\u03B9\u03B4\u03B9\u03B1", -1, 1, "", methodObject),
-        new Among("\u03B9\u03B4\u03B9\u03C9\u03BD", -1, 1, "", methodObject),
-        new Among("\u03B9\u03B4\u03B9\u03BF", -1, 1, "", methodObject)
+            new Among("\u03B9\u03B4\u03B9\u03B1", -1, 1, "", methodObject),
+            new Among("\u03B9\u03B4\u03B9\u03C9\u03BD", -1, 1, "", methodObject),
+            new Among("\u03B9\u03B4\u03B9\u03BF", -1, 1, "", methodObject)
     };
 
     private final static Among a_27[] = {
-        new Among("\u03B9\u03B2", -1, 1, "", methodObject),
-        new Among("\u03B4", -1, 1, "", methodObject),
-        new Among("\u03C6\u03C1\u03B1\u03B3\u03BA", -1, 1, "", methodObject),
-        new Among("\u03BB\u03C5\u03BA", -1, 1, "", methodObject),
-        new Among("\u03BF\u03B2\u03B5\u03BB", -1, 1, "", methodObject),
-        new Among("\u03BC\u03B7\u03BD", -1, 1, "", methodObject),
-        new Among("\u03C1", -1, 1, "", methodObject)
+            new Among("\u03B9\u03B2", -1, 1, "", methodObject),
+            new Among("\u03B4", -1, 1, "", methodObject),
+            new Among("\u03C6\u03C1\u03B1\u03B3\u03BA", -1, 1, "", methodObject),
+            new Among("\u03BB\u03C5\u03BA", -1, 1, "", methodObject),
+            new Among("\u03BF\u03B2\u03B5\u03BB", -1, 1, "", methodObject),
+            new Among("\u03BC\u03B7\u03BD", -1, 1, "", methodObject),
+            new Among("\u03C1", -1, 1, "", methodObject)
     };
 
     private final static Among a_28[] = {
-        new Among("\u03B9\u03C3\u03BA\u03B5", -1, 1, "", methodObject),
-        new Among("\u03B9\u03C3\u03BA\u03BF", -1, 1, "", methodObject),
-        new Among("\u03B9\u03C3\u03BA\u03BF\u03C3", -1, 1, "", methodObject),
-        new Among("\u03B9\u03C3\u03BA\u03BF\u03C5", -1, 1, "", methodObject)
+            new Among("\u03B9\u03C3\u03BA\u03B5", -1, 1, "", methodObject),
+            new Among("\u03B9\u03C3\u03BA\u03BF", -1, 1, "", methodObject),
+            new Among("\u03B9\u03C3\u03BA\u03BF\u03C3", -1, 1, "", methodObject),
+            new Among("\u03B9\u03C3\u03BA\u03BF\u03C5", -1, 1, "", methodObject)
     };
 
     private final static Among a_29[] = {
-        new Among("\u03B1\u03B4\u03C9\u03BD", -1, 1, "", methodObject),
-        new Among("\u03B1\u03B4\u03B5\u03C3", -1, 1, "", methodObject)
+            new Among("\u03B1\u03B4\u03C9\u03BD", -1, 1, "", methodObject),
+            new Among("\u03B1\u03B4\u03B5\u03C3", -1, 1, "", methodObject)
     };
 
     private final static Among a_30[] = {
-        new Among("\u03B3\u03B9\u03B1\u03B3\u03B9", -1, -1, "", methodObject),
-        new Among("\u03B8\u03B5\u03B9", -1, -1, "", methodObject),
-        new Among("\u03BF\u03BA", -1, -1, "", methodObject),
-        new Among("\u03BC\u03B1\u03BC", -1, -1, "", methodObject),
-        new Among("\u03BC\u03B1\u03BD", -1, -1, "", methodObject),
-        new Among("\u03BC\u03C0\u03B1\u03BC\u03C0", -1, -1, "", methodObject),
-        new Among("\u03C0\u03B5\u03B8\u03B5\u03C1", -1, -1, "", methodObject),
-        new Among("\u03C0\u03B1\u03C4\u03B5\u03C1", -1, -1, "", methodObject),
-        new Among("\u03BA\u03C5\u03C1", -1, -1, "", methodObject),
-        new Among("\u03BD\u03C4\u03B1\u03BD\u03C4", -1, -1, "", methodObject)
+            new Among("\u03B3\u03B9\u03B1\u03B3\u03B9", -1, -1, "", methodObject),
+            new Among("\u03B8\u03B5\u03B9", -1, -1, "", methodObject),
+            new Among("\u03BF\u03BA", -1, -1, "", methodObject),
+            new Among("\u03BC\u03B1\u03BC", -1, -1, "", methodObject),
+            new Among("\u03BC\u03B1\u03BD", -1, -1, "", methodObject),
+            new Among("\u03BC\u03C0\u03B1\u03BC\u03C0", -1, -1, "", methodObject),
+            new Among("\u03C0\u03B5\u03B8\u03B5\u03C1", -1, -1, "", methodObject),
+            new Among("\u03C0\u03B1\u03C4\u03B5\u03C1", -1, -1, "", methodObject),
+            new Among("\u03BA\u03C5\u03C1", -1, -1, "", methodObject),
+            new Among("\u03BD\u03C4\u03B1\u03BD\u03C4", -1, -1, "", methodObject)
     };
 
     private final static Among a_31[] = {
-        new Among("\u03B5\u03B4\u03C9\u03BD", -1, 1, "", methodObject),
-        new Among("\u03B5\u03B4\u03B5\u03C3", -1, 1, "", methodObject)
+            new Among("\u03B5\u03B4\u03C9\u03BD", -1, 1, "", methodObject),
+            new Among("\u03B5\u03B4\u03B5\u03C3", -1, 1, "", methodObject)
     };
 
     private final static Among a_32[] = {
-        new Among("\u03BC\u03B9\u03BB", -1, 1, "", methodObject),
-        new Among("\u03B4\u03B1\u03C0", -1, 1, "", methodObject),
-        new Among("\u03B3\u03B7\u03C0", -1, 1, "", methodObject),
-        new Among("\u03B9\u03C0", -1, 1, "", methodObject),
-        new Among("\u03B5\u03BC\u03C0", -1, 1, "", methodObject),
-        new Among("\u03BF\u03C0", -1, 1, "", methodObject),
-        new Among("\u03BA\u03C1\u03B1\u03C3\u03C0", -1, 1, "", methodObject),
-        new Among("\u03C5\u03C0", -1, 1, "", methodObject)
+            new Among("\u03BC\u03B9\u03BB", -1, 1, "", methodObject),
+            new Among("\u03B4\u03B1\u03C0", -1, 1, "", methodObject),
+            new Among("\u03B3\u03B7\u03C0", -1, 1, "", methodObject),
+            new Among("\u03B9\u03C0", -1, 1, "", methodObject),
+            new Among("\u03B5\u03BC\u03C0", -1, 1, "", methodObject),
+            new Among("\u03BF\u03C0", -1, 1, "", methodObject),
+            new Among("\u03BA\u03C1\u03B1\u03C3\u03C0", -1, 1, "", methodObject),
+            new Among("\u03C5\u03C0", -1, 1, "", methodObject)
     };
 
     private final static Among a_33[] = {
-        new Among("\u03BF\u03C5\u03B4\u03C9\u03BD", -1, 1, "", methodObject),
-        new Among("\u03BF\u03C5\u03B4\u03B5\u03C3", -1, 1, "", methodObject)
+            new Among("\u03BF\u03C5\u03B4\u03C9\u03BD", -1, 1, "", methodObject),
+            new Among("\u03BF\u03C5\u03B4\u03B5\u03C3", -1, 1, "", methodObject)
     };
 
     private final static Among a_34[] = {
-        new Among("\u03C4\u03C1\u03B1\u03B3", -1, 1, "", methodObject),
-        new Among("\u03C6\u03B5", -1, 1, "", methodObject),
-        new Among("\u03BA\u03B1\u03BB\u03B9\u03B1\u03BA", -1, 1, "", methodObject),
-        new Among("\u03B1\u03C1\u03BA", -1, 1, "", methodObject),
-        new Among("\u03C3\u03BA", -1, 1, "", methodObject),
-        new Among("\u03C0\u03B5\u03C4\u03B1\u03BB", -1, 1, "", methodObject),
-        new Among("\u03B2\u03B5\u03BB", -1, 1, "", methodObject),
-        new Among("\u03BB\u03BF\u03C5\u03BB", -1, 1, "", methodObject),
-        new Among("\u03C6\u03BB", -1, 1, "", methodObject),
-        new Among("\u03C7\u03BD", -1, 1, "", methodObject),
-        new Among("\u03C0\u03BB\u03B5\u03BE", -1, 1, "", methodObject),
-        new Among("\u03C3\u03C0", -1, 1, "", methodObject),
-        new Among("\u03C6\u03C1", -1, 1, "", methodObject),
-        new Among("\u03C3", -1, 1, "", methodObject),
-        new Among("\u03BB\u03B9\u03C7", -1, 1, "", methodObject)
+            new Among("\u03C4\u03C1\u03B1\u03B3", -1, 1, "", methodObject),
+            new Among("\u03C6\u03B5", -1, 1, "", methodObject),
+            new Among("\u03BA\u03B1\u03BB\u03B9\u03B1\u03BA", -1, 1, "", methodObject),
+            new Among("\u03B1\u03C1\u03BA", -1, 1, "", methodObject),
+            new Among("\u03C3\u03BA", -1, 1, "", methodObject),
+            new Among("\u03C0\u03B5\u03C4\u03B1\u03BB", -1, 1, "", methodObject),
+            new Among("\u03B2\u03B5\u03BB", -1, 1, "", methodObject),
+            new Among("\u03BB\u03BF\u03C5\u03BB", -1, 1, "", methodObject),
+            new Among("\u03C6\u03BB", -1, 1, "", methodObject),
+            new Among("\u03C7\u03BD", -1, 1, "", methodObject),
+            new Among("\u03C0\u03BB\u03B5\u03BE", -1, 1, "", methodObject),
+            new Among("\u03C3\u03C0", -1, 1, "", methodObject),
+            new Among("\u03C6\u03C1", -1, 1, "", methodObject),
+            new Among("\u03C3", -1, 1, "", methodObject),
+            new Among("\u03BB\u03B9\u03C7", -1, 1, "", methodObject)
     };
 
     private final static Among a_35[] = {
-        new Among("\u03B5\u03C9\u03BD", -1, 1, "", methodObject),
-        new Among("\u03B5\u03C9\u03C3", -1, 1, "", methodObject)
+            new Among("\u03B5\u03C9\u03BD", -1, 1, "", methodObject),
+            new Among("\u03B5\u03C9\u03C3", -1, 1, "", methodObject)
     };
 
     private final static Among a_36[] = {
-        new Among("\u03B4", -1, 1, "", methodObject),
-        new Among("\u03B9\u03B4", 0, 1, "", methodObject),
-        new Among("\u03B8", -1, 1, "", methodObject),
-        new Among("\u03B3\u03B1\u03BB", -1, 1, "", methodObject),
-        new Among("\u03B5\u03BB", -1, 1, "", methodObject),
-        new Among("\u03BD", -1, 1, "", methodObject),
-        new Among("\u03C0", -1, 1, "", methodObject),
-        new Among("\u03C0\u03B1\u03C1", -1, 1, "", methodObject)
+            new Among("\u03B4", -1, 1, "", methodObject),
+            new Among("\u03B9\u03B4", 0, 1, "", methodObject),
+            new Among("\u03B8", -1, 1, "", methodObject),
+            new Among("\u03B3\u03B1\u03BB", -1, 1, "", methodObject),
+            new Among("\u03B5\u03BB", -1, 1, "", methodObject),
+            new Among("\u03BD", -1, 1, "", methodObject),
+            new Among("\u03C0", -1, 1, "", methodObject),
+            new Among("\u03C0\u03B1\u03C1", -1, 1, "", methodObject)
     };
 
     private final static Among a_37[] = {
-        new Among("\u03B9\u03B1", -1, 1, "", methodObject),
-        new Among("\u03B9\u03C9\u03BD", -1, 1, "", methodObject),
-        new Among("\u03B9\u03BF\u03C5", -1, 1, "", methodObject)
+            new Among("\u03B9\u03B1", -1, 1, "", methodObject),
+            new Among("\u03B9\u03C9\u03BD", -1, 1, "", methodObject),
+            new Among("\u03B9\u03BF\u03C5", -1, 1, "", methodObject)
     };
 
     private final static Among a_38[] = {
-        new Among("\u03B9\u03BA\u03B1", -1, 1, "", methodObject),
-        new Among("\u03B9\u03BA\u03C9\u03BD", -1, 1, "", methodObject),
-        new Among("\u03B9\u03BA\u03BF", -1, 1, "", methodObject),
-        new Among("\u03B9\u03BA\u03BF\u03C5", -1, 1, "", methodObject)
+            new Among("\u03B9\u03BA\u03B1", -1, 1, "", methodObject),
+            new Among("\u03B9\u03BA\u03C9\u03BD", -1, 1, "", methodObject),
+            new Among("\u03B9\u03BA\u03BF", -1, 1, "", methodObject),
+            new Among("\u03B9\u03BA\u03BF\u03C5", -1, 1, "", methodObject)
     };
 
     private final static Among a_39[] = {
-        new Among("\u03B1\u03B4", -1, 1, "", methodObject),
-        new Among("\u03C3\u03C5\u03BD\u03B1\u03B4", 0, 1, "", methodObject),
-        new Among("\u03BA\u03B1\u03C4\u03B1\u03B4", 0, 1, "", methodObject),
-        new Among("\u03B1\u03BD\u03C4\u03B9\u03B4", -1, 1, "", methodObject),
-        new Among("\u03B5\u03BD\u03B4", -1, 1, "", methodObject),
-        new Among("\u03C6\u03C5\u03BB\u03BF\u03B4", -1, 1, "", methodObject),
-        new Among("\u03C5\u03C0\u03BF\u03B4", -1, 1, "", methodObject),
-        new Among("\u03C0\u03C1\u03C9\u03C4\u03BF\u03B4", -1, 1, "", methodObject),
-        new Among("\u03B5\u03BE\u03C9\u03B4", -1, 1, "", methodObject),
-        new Among("\u03B7\u03B8", -1, 1, "", methodObject),
-        new Among("\u03B1\u03BD\u03B7\u03B8", 9, 1, "", methodObject),
-        new Among("\u03BE\u03B9\u03BA", -1, 1, "", methodObject),
-        new Among("\u03B1\u03BB", -1, 1, "", methodObject),
-        new Among("\u03B1\u03BC\u03BC\u03BF\u03C7\u03B1\u03BB", 12, 1, "", methodObject),
-        new Among("\u03C3\u03C5\u03BD\u03BF\u03BC\u03B7\u03BB", -1, 1, "", methodObject),
-        new Among("\u03BC\u03C0\u03BF\u03BB", -1, 1, "", methodObject),
-        new Among("\u03BC\u03BF\u03C5\u03BB", -1, 1, "", methodObject),
-        new Among("\u03C4\u03C3\u03B1\u03BC", -1, 1, "", methodObject),
-        new Among("\u03B2\u03C1\u03C9\u03BC", -1, 1, "", methodObject),
-        new Among("\u03B1\u03BC\u03B1\u03BD", -1, 1, "", methodObject),
-        new Among("\u03BC\u03C0\u03B1\u03BD", -1, 1, "", methodObject),
-        new Among("\u03BA\u03B1\u03BB\u03BB\u03B9\u03BD", -1, 1, "", methodObject),
-        new Among("\u03C0\u03BF\u03C3\u03C4\u03B5\u03BB\u03BD", -1, 1, "", methodObject),
-        new Among("\u03C6\u03B9\u03BB\u03BF\u03BD", -1, 1, "", methodObject),
-        new Among("\u03BA\u03B1\u03BB\u03C0", -1, 1, "", methodObject),
-        new Among("\u03B3\u03B5\u03C1", -1, 1, "", methodObject),
-        new Among("\u03C7\u03B1\u03C3", -1, 1, "", methodObject),
-        new Among("\u03BC\u03C0\u03BF\u03C3", -1, 1, "", methodObject),
-        new Among("\u03C0\u03BB\u03B9\u03B1\u03C4\u03C3", -1, 1, "", methodObject),
-        new Among("\u03C0\u03B5\u03C4\u03C3", -1, 1, "", methodObject),
-        new Among("\u03C0\u03B9\u03C4\u03C3", -1, 1, "", methodObject),
-        new Among("\u03C6\u03C5\u03C3", -1, 1, "", methodObject),
-        new Among("\u03BC\u03C0\u03B1\u03B3\u03B9\u03B1\u03C4", -1, 1, "", methodObject),
-        new Among("\u03BD\u03B9\u03C4", -1, 1, "", methodObject),
-        new Among("\u03C0\u03B9\u03BA\u03B1\u03BD\u03C4", -1, 1, "", methodObject),
-        new Among("\u03C3\u03B5\u03C1\u03C4", -1, 1, "", methodObject)
+            new Among("\u03B1\u03B4", -1, 1, "", methodObject),
+            new Among("\u03C3\u03C5\u03BD\u03B1\u03B4", 0, 1, "", methodObject),
+            new Among("\u03BA\u03B1\u03C4\u03B1\u03B4", 0, 1, "", methodObject),
+            new Among("\u03B1\u03BD\u03C4\u03B9\u03B4", -1, 1, "", methodObject),
+            new Among("\u03B5\u03BD\u03B4", -1, 1, "", methodObject),
+            new Among("\u03C6\u03C5\u03BB\u03BF\u03B4", -1, 1, "", methodObject),
+            new Among("\u03C5\u03C0\u03BF\u03B4", -1, 1, "", methodObject),
+            new Among("\u03C0\u03C1\u03C9\u03C4\u03BF\u03B4", -1, 1, "", methodObject),
+            new Among("\u03B5\u03BE\u03C9\u03B4", -1, 1, "", methodObject),
+            new Among("\u03B7\u03B8", -1, 1, "", methodObject),
+            new Among("\u03B1\u03BD\u03B7\u03B8", 9, 1, "", methodObject),
+            new Among("\u03BE\u03B9\u03BA", -1, 1, "", methodObject),
+            new Among("\u03B1\u03BB", -1, 1, "", methodObject),
+            new Among("\u03B1\u03BC\u03BC\u03BF\u03C7\u03B1\u03BB", 12, 1, "", methodObject),
+            new Among("\u03C3\u03C5\u03BD\u03BF\u03BC\u03B7\u03BB", -1, 1, "", methodObject),
+            new Among("\u03BC\u03C0\u03BF\u03BB", -1, 1, "", methodObject),
+            new Among("\u03BC\u03BF\u03C5\u03BB", -1, 1, "", methodObject),
+            new Among("\u03C4\u03C3\u03B1\u03BC", -1, 1, "", methodObject),
+            new Among("\u03B2\u03C1\u03C9\u03BC", -1, 1, "", methodObject),
+            new Among("\u03B1\u03BC\u03B1\u03BD", -1, 1, "", methodObject),
+            new Among("\u03BC\u03C0\u03B1\u03BD", -1, 1, "", methodObject),
+            new Among("\u03BA\u03B1\u03BB\u03BB\u03B9\u03BD", -1, 1, "", methodObject),
+            new Among("\u03C0\u03BF\u03C3\u03C4\u03B5\u03BB\u03BD", -1, 1, "", methodObject),
+            new Among("\u03C6\u03B9\u03BB\u03BF\u03BD", -1, 1, "", methodObject),
+            new Among("\u03BA\u03B1\u03BB\u03C0", -1, 1, "", methodObject),
+            new Among("\u03B3\u03B5\u03C1", -1, 1, "", methodObject),
+            new Among("\u03C7\u03B1\u03C3", -1, 1, "", methodObject),
+            new Among("\u03BC\u03C0\u03BF\u03C3", -1, 1, "", methodObject),
+            new Among("\u03C0\u03BB\u03B9\u03B1\u03C4\u03C3", -1, 1, "", methodObject),
+            new Among("\u03C0\u03B5\u03C4\u03C3", -1, 1, "", methodObject),
+            new Among("\u03C0\u03B9\u03C4\u03C3", -1, 1, "", methodObject),
+            new Among("\u03C6\u03C5\u03C3", -1, 1, "", methodObject),
+            new Among("\u03BC\u03C0\u03B1\u03B3\u03B9\u03B1\u03C4", -1, 1, "", methodObject),
+            new Among("\u03BD\u03B9\u03C4", -1, 1, "", methodObject),
+            new Among("\u03C0\u03B9\u03BA\u03B1\u03BD\u03C4", -1, 1, "", methodObject),
+            new Among("\u03C3\u03B5\u03C1\u03C4", -1, 1, "", methodObject)
     };
 
     private final static Among a_40[] = {
-        new Among("\u03B1\u03B3\u03B1\u03BC\u03B5", -1, 1, "", methodObject),
-        new Among("\u03B7\u03BA\u03B1\u03BC\u03B5", -1, 1, "", methodObject),
-        new Among("\u03B7\u03B8\u03B7\u03BA\u03B1\u03BC\u03B5", 1, 1, "", methodObject),
-        new Among("\u03B7\u03C3\u03B1\u03BC\u03B5", -1, 1, "", methodObject),
-        new Among("\u03BF\u03C5\u03C3\u03B1\u03BC\u03B5", -1, 1, "", methodObject)
+            new Among("\u03B1\u03B3\u03B1\u03BC\u03B5", -1, 1, "", methodObject),
+            new Among("\u03B7\u03BA\u03B1\u03BC\u03B5", -1, 1, "", methodObject),
+            new Among("\u03B7\u03B8\u03B7\u03BA\u03B1\u03BC\u03B5", 1, 1, "", methodObject),
+            new Among("\u03B7\u03C3\u03B1\u03BC\u03B5", -1, 1, "", methodObject),
+            new Among("\u03BF\u03C5\u03C3\u03B1\u03BC\u03B5", -1, 1, "", methodObject)
     };
 
     private final static Among a_41[] = {
-        new Among("\u03B2\u03BF\u03C5\u03B2", -1, 1, "", methodObject),
-        new Among("\u03BE\u03B5\u03B8", -1, 1, "", methodObject),
-        new Among("\u03C0\u03B5\u03B8", -1, 1, "", methodObject),
-        new Among("\u03B1\u03C0\u03BF\u03B8", -1, 1, "", methodObject),
-        new Among("\u03B1\u03C0\u03BF\u03BA", -1, 1, "", methodObject),
-        new Among("\u03BF\u03C5\u03BB", -1, 1, "", methodObject),
-        new Among("\u03B1\u03BD\u03B1\u03C0", -1, 1, "", methodObject),
-        new Among("\u03C0\u03B9\u03BA\u03C1", -1, 1, "", methodObject),
-        new Among("\u03C0\u03BF\u03C4", -1, 1, "", methodObject),
-        new Among("\u03B1\u03C0\u03BF\u03C3\u03C4", -1, 1, "", methodObject),
-        new Among("\u03C7", -1, 1, "", methodObject),
-        new Among("\u03C3\u03B9\u03C7", 10, 1, "", methodObject)
+            new Among("\u03B2\u03BF\u03C5\u03B2", -1, 1, "", methodObject),
+            new Among("\u03BE\u03B5\u03B8", -1, 1, "", methodObject),
+            new Among("\u03C0\u03B5\u03B8", -1, 1, "", methodObject),
+            new Among("\u03B1\u03C0\u03BF\u03B8", -1, 1, "", methodObject),
+            new Among("\u03B1\u03C0\u03BF\u03BA", -1, 1, "", methodObject),
+            new Among("\u03BF\u03C5\u03BB", -1, 1, "", methodObject),
+            new Among("\u03B1\u03BD\u03B1\u03C0", -1, 1, "", methodObject),
+            new Among("\u03C0\u03B9\u03BA\u03C1", -1, 1, "", methodObject),
+            new Among("\u03C0\u03BF\u03C4", -1, 1, "", methodObject),
+            new Among("\u03B1\u03C0\u03BF\u03C3\u03C4", -1, 1, "", methodObject),
+            new Among("\u03C7", -1, 1, "", methodObject),
+            new Among("\u03C3\u03B9\u03C7", 10, 1, "", methodObject)
     };
 
     private final static Among a_42[] = {
-        new Among("\u03C4\u03C1", -1, 1, "", methodObject),
-        new Among("\u03C4\u03C3", -1, 1, "", methodObject)
+            new Among("\u03C4\u03C1", -1, 1, "", methodObject),
+            new Among("\u03C4\u03C3", -1, 1, "", methodObject)
     };
 
     private final static Among a_43[] = {
-        new Among("\u03B1\u03B3\u03B1\u03BD\u03B5", -1, 1, "", methodObject),
-        new Among("\u03B7\u03BA\u03B1\u03BD\u03B5", -1, 1, "", methodObject),
-        new Among("\u03B7\u03B8\u03B7\u03BA\u03B1\u03BD\u03B5", 1, 1, "", methodObject),
-        new Among("\u03B7\u03C3\u03B1\u03BD\u03B5", -1, 1, "", methodObject),
-        new Among("\u03BF\u03C5\u03C3\u03B1\u03BD\u03B5", -1, 1, "", methodObject),
-        new Among("\u03BF\u03BD\u03C4\u03B1\u03BD\u03B5", -1, 1, "", methodObject),
-        new Among("\u03B9\u03BF\u03BD\u03C4\u03B1\u03BD\u03B5", 5, 1, "", methodObject),
-        new Among("\u03BF\u03C5\u03BD\u03C4\u03B1\u03BD\u03B5", -1, 1, "", methodObject),
-        new Among("\u03B9\u03BF\u03C5\u03BD\u03C4\u03B1\u03BD\u03B5", 7, 1, "", methodObject),
-        new Among("\u03BF\u03C4\u03B1\u03BD\u03B5", -1, 1, "", methodObject),
-        new Among("\u03B9\u03BF\u03C4\u03B1\u03BD\u03B5", 9, 1, "", methodObject)
+            new Among("\u03B1\u03B3\u03B1\u03BD\u03B5", -1, 1, "", methodObject),
+            new Among("\u03B7\u03BA\u03B1\u03BD\u03B5", -1, 1, "", methodObject),
+            new Among("\u03B7\u03B8\u03B7\u03BA\u03B1\u03BD\u03B5", 1, 1, "", methodObject),
+            new Among("\u03B7\u03C3\u03B1\u03BD\u03B5", -1, 1, "", methodObject),
+            new Among("\u03BF\u03C5\u03C3\u03B1\u03BD\u03B5", -1, 1, "", methodObject),
+            new Among("\u03BF\u03BD\u03C4\u03B1\u03BD\u03B5", -1, 1, "", methodObject),
+            new Among("\u03B9\u03BF\u03BD\u03C4\u03B1\u03BD\u03B5", 5, 1, "", methodObject),
+            new Among("\u03BF\u03C5\u03BD\u03C4\u03B1\u03BD\u03B5", -1, 1, "", methodObject),
+            new Among("\u03B9\u03BF\u03C5\u03BD\u03C4\u03B1\u03BD\u03B5", 7, 1, "", methodObject),
+            new Among("\u03BF\u03C4\u03B1\u03BD\u03B5", -1, 1, "", methodObject),
+            new Among("\u03B9\u03BF\u03C4\u03B1\u03BD\u03B5", 9, 1, "", methodObject)
     };
 
     private final static Among a_44[] = {
-        new Among("\u03C4\u03B1\u03B2", -1, 1, "", methodObject),
-        new Among("\u03BD\u03C4\u03B1\u03B2", 0, 1, "", methodObject),
-        new Among("\u03C8\u03B7\u03BB\u03BF\u03C4\u03B1\u03B2", 0, 1, "", methodObject),
-        new Among("\u03BB\u03B9\u03B2", -1, 1, "", methodObject),
-        new Among("\u03BA\u03BB\u03B9\u03B2", 3, 1, "", methodObject),
-        new Among("\u03BE\u03B7\u03C1\u03BF\u03BA\u03BB\u03B9\u03B2", 4, 1, "", methodObject),
-        new Among("\u03B3", -1, 1, "", methodObject),
-        new Among("\u03B1\u03B3", 6, 1, "", methodObject),
-        new Among("\u03C4\u03C1\u03B1\u03B3", 7, 1, "", methodObject),
-        new Among("\u03C4\u03C3\u03B1\u03B3", 7, 1, "", methodObject),
-        new Among("\u03B1\u03B8\u03B9\u03B3\u03B3", 6, 1, "", methodObject),
-        new Among("\u03C4\u03C3\u03B9\u03B3\u03B3", 6, 1, "", methodObject),
-        new Among("\u03B1\u03C4\u03C3\u03B9\u03B3\u03B3", 11, 1, "", methodObject),
-        new Among("\u03C3\u03C4\u03B5\u03B3", 6, 1, "", methodObject),
-        new Among("\u03B1\u03C0\u03B7\u03B3", 6, 1, "", methodObject),
-        new Among("\u03C3\u03B9\u03B3", 6, 1, "", methodObject),
-        new Among("\u03B1\u03BD\u03BF\u03C1\u03B3", 6, 1, "", methodObject),
-        new Among("\u03B5\u03BD\u03BF\u03C1\u03B3", 6, 1, "", methodObject),
-        new Among("\u03BA\u03B1\u03BB\u03C0\u03BF\u03C5\u03B6", -1, 1, "", methodObject),
-        new Among("\u03B8", -1, 1, "", methodObject),
-        new Among("\u03BC\u03C9\u03B1\u03BC\u03B5\u03B8", 19, 1, "", methodObject),
-        new Among("\u03C0\u03B9\u03B8", 19, 1, "", methodObject),
-        new Among("\u03B1\u03C0\u03B9\u03B8", 21, 1, "", methodObject),
-        new Among("\u03B4\u03B5\u03BA", -1, 1, "", methodObject),
-        new Among("\u03C0\u03B5\u03BB\u03B5\u03BA", -1, 1, "", methodObject),
-        new Among("\u03B9\u03BA", -1, 1, "", methodObject),
-        new Among("\u03B1\u03BD\u03B9\u03BA", 25, 1, "", methodObject),
-        new Among("\u03B2\u03BF\u03C5\u03BB\u03BA", -1, 1, "", methodObject),
-        new Among("\u03B2\u03B1\u03C3\u03BA", -1, 1, "", methodObject),
-        new Among("\u03B2\u03C1\u03B1\u03C7\u03C5\u03BA", -1, 1, "", methodObject),
-        new Among("\u03B3\u03B1\u03BB", -1, 1, "", methodObject),
-        new Among("\u03BA\u03B1\u03C4\u03B1\u03B3\u03B1\u03BB", 30, 1, "", methodObject),
-        new Among("\u03BF\u03BB\u03BF\u03B3\u03B1\u03BB", 30, 1, "", methodObject),
-        new Among("\u03B2\u03B1\u03B8\u03C5\u03B3\u03B1\u03BB", 30, 1, "", methodObject),
-        new Among("\u03BC\u03B5\u03BB", -1, 1, "", methodObject),
-        new Among("\u03BA\u03B1\u03C3\u03C4\u03B5\u03BB", -1, 1, "", methodObject),
-        new Among("\u03C0\u03BF\u03C1\u03C4\u03BF\u03BB", -1, 1, "", methodObject),
-        new Among("\u03C0\u03BB", -1, 1, "", methodObject),
-        new Among("\u03B4\u03B9\u03C0\u03BB", 37, 1, "", methodObject),
-        new Among("\u03BB\u03B1\u03BF\u03C0\u03BB", 37, 1, "", methodObject),
-        new Among("\u03C8\u03C5\u03C7\u03BF\u03C0\u03BB", 37, 1, "", methodObject),
-        new Among("\u03BF\u03C5\u03BB", -1, 1, "", methodObject),
-        new Among("\u03BC", -1, 1, "", methodObject),
-        new Among("\u03BF\u03BB\u03B9\u03B3\u03BF\u03B4\u03B1\u03BC", 42, 1, "", methodObject),
-        new Among("\u03BC\u03BF\u03C5\u03C3\u03BF\u03C5\u03BB\u03BC", 42, 1, "", methodObject),
-        new Among("\u03B4\u03C1\u03B1\u03B4\u03BF\u03C5\u03BC", 42, 1, "", methodObject),
-        new Among("\u03B2\u03C1\u03B1\u03C7\u03BC", 42, 1, "", methodObject),
-        new Among("\u03BD", -1, 1, "", methodObject),
-        new Among("\u03B1\u03BC\u03B5\u03C1\u03B9\u03BA\u03B1\u03BD", 47, 1, "", methodObject),
-        new Among("\u03C0", -1, 1, "", methodObject),
-        new Among("\u03B1\u03B4\u03B1\u03C0", 49, 1, "", methodObject),
-        new Among("\u03C7\u03B1\u03BC\u03B7\u03BB\u03BF\u03B4\u03B1\u03C0", 49, 1, "", methodObject),
-        new Among("\u03C0\u03BF\u03BB\u03C5\u03B4\u03B1\u03C0", 49, 1, "", methodObject),
-        new Among("\u03BA\u03BF\u03C0", 49, 1, "", methodObject),
-        new Among("\u03C5\u03C0\u03BF\u03BA\u03BF\u03C0", 53, 1, "", methodObject),
-        new Among("\u03C4\u03C3\u03BF\u03C0", 49, 1, "", methodObject),
-        new Among("\u03C3\u03C0", 49, 1, "", methodObject),
-        new Among("\u03B5\u03C1", -1, 1, "", methodObject),
-        new Among("\u03B3\u03B5\u03C1", 57, 1, "", methodObject),
-        new Among("\u03B2\u03B5\u03C4\u03B5\u03C1", 57, 1, "", methodObject),
-        new Among("\u03BB\u03BF\u03C5\u03B8\u03B7\u03C1", -1, 1, "", methodObject),
-        new Among("\u03BA\u03BF\u03C1\u03BC\u03BF\u03C1", -1, 1, "", methodObject),
-        new Among("\u03C0\u03B5\u03C1\u03B9\u03C4\u03C1", -1, 1, "", methodObject),
-        new Among("\u03BF\u03C5\u03C1", -1, 1, "", methodObject),
-        new Among("\u03C3", -1, 1, "", methodObject),
-        new Among("\u03B2\u03B1\u03C3", 64, 1, "", methodObject),
-        new Among("\u03C0\u03BF\u03BB\u03B9\u03C3", 64, 1, "", methodObject),
-        new Among("\u03C3\u03B1\u03C1\u03B1\u03BA\u03B1\u03C4\u03C3", 64, 1, "", methodObject),
-        new Among("\u03B8\u03C5\u03C3", 64, 1, "", methodObject),
-        new Among("\u03B4\u03B9\u03B1\u03C4", -1, 1, "", methodObject),
-        new Among("\u03C0\u03BB\u03B1\u03C4", -1, 1, "", methodObject),
-        new Among("\u03C4\u03C3\u03B1\u03C1\u03BB\u03B1\u03C4", -1, 1, "", methodObject),
-        new Among("\u03C4\u03B5\u03C4", -1, 1, "", methodObject),
-        new Among("\u03C0\u03BF\u03C5\u03C1\u03B9\u03C4", -1, 1, "", methodObject),
-        new Among("\u03C3\u03BF\u03C5\u03BB\u03C4", -1, 1, "", methodObject),
-        new Among("\u03BC\u03B1\u03B9\u03BD\u03C4", -1, 1, "", methodObject),
-        new Among("\u03B6\u03C9\u03BD\u03C4", -1, 1, "", methodObject),
-        new Among("\u03BA\u03B1\u03C3\u03C4", -1, 1, "", methodObject),
-        new Among("\u03C6", -1, 1, "", methodObject),
-        new Among("\u03B4\u03B9\u03B1\u03C6", 78, 1, "", methodObject),
-        new Among("\u03C3\u03C4\u03B5\u03C6", 78, 1, "", methodObject),
-        new Among("\u03C6\u03C9\u03C4\u03BF\u03C3\u03C4\u03B5\u03C6", 80, 1, "", methodObject),
-        new Among("\u03C0\u03B5\u03C1\u03B7\u03C6", 78, 1, "", methodObject),
-        new Among("\u03C5\u03C0\u03B5\u03C1\u03B7\u03C6", 82, 1, "", methodObject),
-        new Among("\u03BA\u03BF\u03B9\u03BB\u03B1\u03C1\u03C6", 78, 1, "", methodObject),
-        new Among("\u03C0\u03B5\u03BD\u03C4\u03B1\u03C1\u03C6", 78, 1, "", methodObject),
-        new Among("\u03BF\u03C1\u03C6", 78, 1, "", methodObject),
-        new Among("\u03C7", -1, 1, "", methodObject),
-        new Among("\u03B1\u03BC\u03B7\u03C7", 87, 1, "", methodObject),
-        new Among("\u03B2\u03B9\u03BF\u03BC\u03B7\u03C7", 87, 1, "", methodObject),
-        new Among("\u03BC\u03B5\u03B3\u03BB\u03BF\u03B2\u03B9\u03BF\u03BC\u03B7\u03C7", 89, 1, "", methodObject),
-        new Among("\u03BA\u03B1\u03C0\u03BD\u03BF\u03B2\u03B9\u03BF\u03BC\u03B7\u03C7", 89, 1, "", methodObject),
-        new Among("\u03BC\u03B9\u03BA\u03C1\u03BF\u03B2\u03B9\u03BF\u03BC\u03B7\u03C7", 89, 1, "", methodObject),
-        new Among("\u03C0\u03BF\u03BB\u03C5\u03BC\u03B7\u03C7", 87, 1, "", methodObject),
-        new Among("\u03BB\u03B9\u03C7", 87, 1, "", methodObject)
+            new Among("\u03C4\u03B1\u03B2", -1, 1, "", methodObject),
+            new Among("\u03BD\u03C4\u03B1\u03B2", 0, 1, "", methodObject),
+            new Among("\u03C8\u03B7\u03BB\u03BF\u03C4\u03B1\u03B2", 0, 1, "", methodObject),
+            new Among("\u03BB\u03B9\u03B2", -1, 1, "", methodObject),
+            new Among("\u03BA\u03BB\u03B9\u03B2", 3, 1, "", methodObject),
+            new Among("\u03BE\u03B7\u03C1\u03BF\u03BA\u03BB\u03B9\u03B2", 4, 1, "", methodObject),
+            new Among("\u03B3", -1, 1, "", methodObject),
+            new Among("\u03B1\u03B3", 6, 1, "", methodObject),
+            new Among("\u03C4\u03C1\u03B1\u03B3", 7, 1, "", methodObject),
+            new Among("\u03C4\u03C3\u03B1\u03B3", 7, 1, "", methodObject),
+            new Among("\u03B1\u03B8\u03B9\u03B3\u03B3", 6, 1, "", methodObject),
+            new Among("\u03C4\u03C3\u03B9\u03B3\u03B3", 6, 1, "", methodObject),
+            new Among("\u03B1\u03C4\u03C3\u03B9\u03B3\u03B3", 11, 1, "", methodObject),
+            new Among("\u03C3\u03C4\u03B5\u03B3", 6, 1, "", methodObject),
+            new Among("\u03B1\u03C0\u03B7\u03B3", 6, 1, "", methodObject),
+            new Among("\u03C3\u03B9\u03B3", 6, 1, "", methodObject),
+            new Among("\u03B1\u03BD\u03BF\u03C1\u03B3", 6, 1, "", methodObject),
+            new Among("\u03B5\u03BD\u03BF\u03C1\u03B3", 6, 1, "", methodObject),
+            new Among("\u03BA\u03B1\u03BB\u03C0\u03BF\u03C5\u03B6", -1, 1, "", methodObject),
+            new Among("\u03B8", -1, 1, "", methodObject),
+            new Among("\u03BC\u03C9\u03B1\u03BC\u03B5\u03B8", 19, 1, "", methodObject),
+            new Among("\u03C0\u03B9\u03B8", 19, 1, "", methodObject),
+            new Among("\u03B1\u03C0\u03B9\u03B8", 21, 1, "", methodObject),
+            new Among("\u03B4\u03B5\u03BA", -1, 1, "", methodObject),
+            new Among("\u03C0\u03B5\u03BB\u03B5\u03BA", -1, 1, "", methodObject),
+            new Among("\u03B9\u03BA", -1, 1, "", methodObject),
+            new Among("\u03B1\u03BD\u03B9\u03BA", 25, 1, "", methodObject),
+            new Among("\u03B2\u03BF\u03C5\u03BB\u03BA", -1, 1, "", methodObject),
+            new Among("\u03B2\u03B1\u03C3\u03BA", -1, 1, "", methodObject),
+            new Among("\u03B2\u03C1\u03B1\u03C7\u03C5\u03BA", -1, 1, "", methodObject),
+            new Among("\u03B3\u03B1\u03BB", -1, 1, "", methodObject),
+            new Among("\u03BA\u03B1\u03C4\u03B1\u03B3\u03B1\u03BB", 30, 1, "", methodObject),
+            new Among("\u03BF\u03BB\u03BF\u03B3\u03B1\u03BB", 30, 1, "", methodObject),
+            new Among("\u03B2\u03B1\u03B8\u03C5\u03B3\u03B1\u03BB", 30, 1, "", methodObject),
+            new Among("\u03BC\u03B5\u03BB", -1, 1, "", methodObject),
+            new Among("\u03BA\u03B1\u03C3\u03C4\u03B5\u03BB", -1, 1, "", methodObject),
+            new Among("\u03C0\u03BF\u03C1\u03C4\u03BF\u03BB", -1, 1, "", methodObject),
+            new Among("\u03C0\u03BB", -1, 1, "", methodObject),
+            new Among("\u03B4\u03B9\u03C0\u03BB", 37, 1, "", methodObject),
+            new Among("\u03BB\u03B1\u03BF\u03C0\u03BB", 37, 1, "", methodObject),
+            new Among("\u03C8\u03C5\u03C7\u03BF\u03C0\u03BB", 37, 1, "", methodObject),
+            new Among("\u03BF\u03C5\u03BB", -1, 1, "", methodObject),
+            new Among("\u03BC", -1, 1, "", methodObject),
+            new Among("\u03BF\u03BB\u03B9\u03B3\u03BF\u03B4\u03B1\u03BC", 42, 1, "", methodObject),
+            new Among("\u03BC\u03BF\u03C5\u03C3\u03BF\u03C5\u03BB\u03BC", 42, 1, "", methodObject),
+            new Among("\u03B4\u03C1\u03B1\u03B4\u03BF\u03C5\u03BC", 42, 1, "", methodObject),
+            new Among("\u03B2\u03C1\u03B1\u03C7\u03BC", 42, 1, "", methodObject),
+            new Among("\u03BD", -1, 1, "", methodObject),
+            new Among("\u03B1\u03BC\u03B5\u03C1\u03B9\u03BA\u03B1\u03BD", 47, 1, "", methodObject),
+            new Among("\u03C0", -1, 1, "", methodObject),
+            new Among("\u03B1\u03B4\u03B1\u03C0", 49, 1, "", methodObject),
+            new Among("\u03C7\u03B1\u03BC\u03B7\u03BB\u03BF\u03B4\u03B1\u03C0", 49, 1, "", methodObject),
+            new Among("\u03C0\u03BF\u03BB\u03C5\u03B4\u03B1\u03C0", 49, 1, "", methodObject),
+            new Among("\u03BA\u03BF\u03C0", 49, 1, "", methodObject),
+            new Among("\u03C5\u03C0\u03BF\u03BA\u03BF\u03C0", 53, 1, "", methodObject),
+            new Among("\u03C4\u03C3\u03BF\u03C0", 49, 1, "", methodObject),
+            new Among("\u03C3\u03C0", 49, 1, "", methodObject),
+            new Among("\u03B5\u03C1", -1, 1, "", methodObject),
+            new Among("\u03B3\u03B5\u03C1", 57, 1, "", methodObject),
+            new Among("\u03B2\u03B5\u03C4\u03B5\u03C1", 57, 1, "", methodObject),
+            new Among("\u03BB\u03BF\u03C5\u03B8\u03B7\u03C1", -1, 1, "", methodObject),
+            new Among("\u03BA\u03BF\u03C1\u03BC\u03BF\u03C1", -1, 1, "", methodObject),
+            new Among("\u03C0\u03B5\u03C1\u03B9\u03C4\u03C1", -1, 1, "", methodObject),
+            new Among("\u03BF\u03C5\u03C1", -1, 1, "", methodObject),
+            new Among("\u03C3", -1, 1, "", methodObject),
+            new Among("\u03B2\u03B1\u03C3", 64, 1, "", methodObject),
+            new Among("\u03C0\u03BF\u03BB\u03B9\u03C3", 64, 1, "", methodObject),
+            new Among("\u03C3\u03B1\u03C1\u03B1\u03BA\u03B1\u03C4\u03C3", 64, 1, "", methodObject),
+            new Among("\u03B8\u03C5\u03C3", 64, 1, "", methodObject),
+            new Among("\u03B4\u03B9\u03B1\u03C4", -1, 1, "", methodObject),
+            new Among("\u03C0\u03BB\u03B1\u03C4", -1, 1, "", methodObject),
+            new Among("\u03C4\u03C3\u03B1\u03C1\u03BB\u03B1\u03C4", -1, 1, "", methodObject),
+            new Among("\u03C4\u03B5\u03C4", -1, 1, "", methodObject),
+            new Among("\u03C0\u03BF\u03C5\u03C1\u03B9\u03C4", -1, 1, "", methodObject),
+            new Among("\u03C3\u03BF\u03C5\u03BB\u03C4", -1, 1, "", methodObject),
+            new Among("\u03BC\u03B1\u03B9\u03BD\u03C4", -1, 1, "", methodObject),
+            new Among("\u03B6\u03C9\u03BD\u03C4", -1, 1, "", methodObject),
+            new Among("\u03BA\u03B1\u03C3\u03C4", -1, 1, "", methodObject),
+            new Among("\u03C6", -1, 1, "", methodObject),
+            new Among("\u03B4\u03B9\u03B1\u03C6", 78, 1, "", methodObject),
+            new Among("\u03C3\u03C4\u03B5\u03C6", 78, 1, "", methodObject),
+            new Among("\u03C6\u03C9\u03C4\u03BF\u03C3\u03C4\u03B5\u03C6", 80, 1, "", methodObject),
+            new Among("\u03C0\u03B5\u03C1\u03B7\u03C6", 78, 1, "", methodObject),
+            new Among("\u03C5\u03C0\u03B5\u03C1\u03B7\u03C6", 82, 1, "", methodObject),
+            new Among("\u03BA\u03BF\u03B9\u03BB\u03B1\u03C1\u03C6", 78, 1, "", methodObject),
+            new Among("\u03C0\u03B5\u03BD\u03C4\u03B1\u03C1\u03C6", 78, 1, "", methodObject),
+            new Among("\u03BF\u03C1\u03C6", 78, 1, "", methodObject),
+            new Among("\u03C7", -1, 1, "", methodObject),
+            new Among("\u03B1\u03BC\u03B7\u03C7", 87, 1, "", methodObject),
+            new Among("\u03B2\u03B9\u03BF\u03BC\u03B7\u03C7", 87, 1, "", methodObject),
+            new Among("\u03BC\u03B5\u03B3\u03BB\u03BF\u03B2\u03B9\u03BF\u03BC\u03B7\u03C7", 89, 1, "", methodObject),
+            new Among("\u03BA\u03B1\u03C0\u03BD\u03BF\u03B2\u03B9\u03BF\u03BC\u03B7\u03C7", 89, 1, "", methodObject),
+            new Among("\u03BC\u03B9\u03BA\u03C1\u03BF\u03B2\u03B9\u03BF\u03BC\u03B7\u03C7", 89, 1, "", methodObject),
+            new Among("\u03C0\u03BF\u03BB\u03C5\u03BC\u03B7\u03C7", 87, 1, "", methodObject),
+            new Among("\u03BB\u03B9\u03C7", 87, 1, "", methodObject)
     };
 
     private final static Among a_45[] = {
-        new Among("\u03B7\u03C3\u03B5\u03C4\u03B5", -1, 1, "", methodObject)
+            new Among("\u03B7\u03C3\u03B5\u03C4\u03B5", -1, 1, "", methodObject)
     };
 
     private final static Among a_46[] = {
-        new Among("\u03B5\u03BD\u03B4", -1, 1, "", methodObject),
-        new Among("\u03C3\u03C5\u03BD\u03B4", -1, 1, "", methodObject),
-        new Among("\u03BF\u03B4", -1, 1, "", methodObject),
-        new Among("\u03B4\u03B9\u03B1\u03B8", -1, 1, "", methodObject),
-        new Among("\u03BA\u03B1\u03B8", -1, 1, "", methodObject),
-        new Among("\u03C1\u03B1\u03B8", -1, 1, "", methodObject),
-        new Among("\u03C4\u03B1\u03B8", -1, 1, "", methodObject),
-        new Among("\u03C4\u03B9\u03B8", -1, 1, "", methodObject),
-        new Among("\u03B5\u03BA\u03B8", -1, 1, "", methodObject),
-        new Among("\u03B5\u03BD\u03B8", -1, 1, "", methodObject),
-        new Among("\u03C3\u03C5\u03BD\u03B8", -1, 1, "", methodObject),
-        new Among("\u03C1\u03BF\u03B8", -1, 1, "", methodObject),
-        new Among("\u03C5\u03C0\u03B5\u03C1\u03B8", -1, 1, "", methodObject),
-        new Among("\u03C3\u03B8", -1, 1, "", methodObject),
-        new Among("\u03B5\u03C5\u03B8", -1, 1, "", methodObject),
-        new Among("\u03B1\u03C1\u03BA", -1, 1, "", methodObject),
-        new Among("\u03C9\u03C6\u03B5\u03BB", -1, 1, "", methodObject),
-        new Among("\u03B2\u03BF\u03BB", -1, 1, "", methodObject),
-        new Among("\u03B1\u03B9\u03BD", -1, 1, "", methodObject),
-        new Among("\u03C0\u03BF\u03BD", -1, 1, "", methodObject),
-        new Among("\u03C1\u03BF\u03BD", -1, 1, "", methodObject),
-        new Among("\u03C3\u03C5\u03BD", -1, 1, "", methodObject),
-        new Among("\u03B2\u03B1\u03C1", -1, 1, "", methodObject),
-        new Among("\u03B2\u03C1", -1, 1, "", methodObject),
-        new Among("\u03B1\u03B9\u03C1", -1, 1, "", methodObject),
-        new Among("\u03C6\u03BF\u03C1", -1, 1, "", methodObject),
-        new Among("\u03B5\u03C5\u03C1", -1, 1, "", methodObject),
-        new Among("\u03C0\u03C5\u03C1", -1, 1, "", methodObject),
-        new Among("\u03C7\u03C9\u03C1", -1, 1, "", methodObject),
-        new Among("\u03BD\u03B5\u03C4", -1, 1, "", methodObject),
-        new Among("\u03C3\u03C7", -1, 1, "", methodObject)
+            new Among("\u03B5\u03BD\u03B4", -1, 1, "", methodObject),
+            new Among("\u03C3\u03C5\u03BD\u03B4", -1, 1, "", methodObject),
+            new Among("\u03BF\u03B4", -1, 1, "", methodObject),
+            new Among("\u03B4\u03B9\u03B1\u03B8", -1, 1, "", methodObject),
+            new Among("\u03BA\u03B1\u03B8", -1, 1, "", methodObject),
+            new Among("\u03C1\u03B1\u03B8", -1, 1, "", methodObject),
+            new Among("\u03C4\u03B1\u03B8", -1, 1, "", methodObject),
+            new Among("\u03C4\u03B9\u03B8", -1, 1, "", methodObject),
+            new Among("\u03B5\u03BA\u03B8", -1, 1, "", methodObject),
+            new Among("\u03B5\u03BD\u03B8", -1, 1, "", methodObject),
+            new Among("\u03C3\u03C5\u03BD\u03B8", -1, 1, "", methodObject),
+            new Among("\u03C1\u03BF\u03B8", -1, 1, "", methodObject),
+            new Among("\u03C5\u03C0\u03B5\u03C1\u03B8", -1, 1, "", methodObject),
+            new Among("\u03C3\u03B8", -1, 1, "", methodObject),
+            new Among("\u03B5\u03C5\u03B8", -1, 1, "", methodObject),
+            new Among("\u03B1\u03C1\u03BA", -1, 1, "", methodObject),
+            new Among("\u03C9\u03C6\u03B5\u03BB", -1, 1, "", methodObject),
+            new Among("\u03B2\u03BF\u03BB", -1, 1, "", methodObject),
+            new Among("\u03B1\u03B9\u03BD", -1, 1, "", methodObject),
+            new Among("\u03C0\u03BF\u03BD", -1, 1, "", methodObject),
+            new Among("\u03C1\u03BF\u03BD", -1, 1, "", methodObject),
+            new Among("\u03C3\u03C5\u03BD", -1, 1, "", methodObject),
+            new Among("\u03B2\u03B1\u03C1", -1, 1, "", methodObject),
+            new Among("\u03B2\u03C1", -1, 1, "", methodObject),
+            new Among("\u03B1\u03B9\u03C1", -1, 1, "", methodObject),
+            new Among("\u03C6\u03BF\u03C1", -1, 1, "", methodObject),
+            new Among("\u03B5\u03C5\u03C1", -1, 1, "", methodObject),
+            new Among("\u03C0\u03C5\u03C1", -1, 1, "", methodObject),
+            new Among("\u03C7\u03C9\u03C1", -1, 1, "", methodObject),
+            new Among("\u03BD\u03B5\u03C4", -1, 1, "", methodObject),
+            new Among("\u03C3\u03C7", -1, 1, "", methodObject)
     };
 
     private final static Among a_47[] = {
-        new Among("\u03C0\u03B1\u03B3", -1, 1, "", methodObject),
-        new Among("\u03B4", -1, 1, "", methodObject),
-        new Among("\u03B1\u03B4", 1, 1, "", methodObject),
-        new Among("\u03B8", -1, 1, "", methodObject),
-        new Among("\u03B1\u03B8", 3, 1, "", methodObject),
-        new Among("\u03C4\u03BF\u03BA", -1, 1, "", methodObject),
-        new Among("\u03C3\u03BA", -1, 1, "", methodObject),
-        new Among("\u03C0\u03B1\u03C1\u03B1\u03BA\u03B1\u03BB", -1, 1, "", methodObject),
-        new Among("\u03C3\u03BA\u03B5\u03BB", -1, 1, "", methodObject),
-        new Among("\u03B1\u03C0\u03BB", -1, 1, "", methodObject),
-        new Among("\u03B5\u03BC", -1, 1, "", methodObject),
-        new Among("\u03B1\u03BD", -1, 1, "", methodObject),
-        new Among("\u03B2\u03B5\u03BD", -1, 1, "", methodObject),
-        new Among("\u03B2\u03B1\u03C1\u03BF\u03BD", -1, 1, "", methodObject),
-        new Among("\u03BA\u03BF\u03C0", -1, 1, "", methodObject),
-        new Among("\u03C3\u03B5\u03C1\u03C0", -1, 1, "", methodObject),
-        new Among("\u03B1\u03B2\u03B1\u03C1", -1, 1, "", methodObject),
-        new Among("\u03B5\u03BD\u03B1\u03C1", -1, 1, "", methodObject),
-        new Among("\u03B1\u03B2\u03C1", -1, 1, "", methodObject),
-        new Among("\u03BC\u03C0\u03BF\u03C1", -1, 1, "", methodObject),
-        new Among("\u03B8\u03B1\u03C1\u03C1", -1, 1, "", methodObject),
-        new Among("\u03BD\u03C4\u03C1", -1, 1, "", methodObject),
-        new Among("\u03C5", -1, 1, "", methodObject),
-        new Among("\u03BD\u03B9\u03C6", -1, 1, "", methodObject),
-        new Among("\u03C3\u03C5\u03C1\u03C6", -1, 1, "", methodObject)
+            new Among("\u03C0\u03B1\u03B3", -1, 1, "", methodObject),
+            new Among("\u03B4", -1, 1, "", methodObject),
+            new Among("\u03B1\u03B4", 1, 1, "", methodObject),
+            new Among("\u03B8", -1, 1, "", methodObject),
+            new Among("\u03B1\u03B8", 3, 1, "", methodObject),
+            new Among("\u03C4\u03BF\u03BA", -1, 1, "", methodObject),
+            new Among("\u03C3\u03BA", -1, 1, "", methodObject),
+            new Among("\u03C0\u03B1\u03C1\u03B1\u03BA\u03B1\u03BB", -1, 1, "", methodObject),
+            new Among("\u03C3\u03BA\u03B5\u03BB", -1, 1, "", methodObject),
+            new Among("\u03B1\u03C0\u03BB", -1, 1, "", methodObject),
+            new Among("\u03B5\u03BC", -1, 1, "", methodObject),
+            new Among("\u03B1\u03BD", -1, 1, "", methodObject),
+            new Among("\u03B2\u03B5\u03BD", -1, 1, "", methodObject),
+            new Among("\u03B2\u03B1\u03C1\u03BF\u03BD", -1, 1, "", methodObject),
+            new Among("\u03BA\u03BF\u03C0", -1, 1, "", methodObject),
+            new Among("\u03C3\u03B5\u03C1\u03C0", -1, 1, "", methodObject),
+            new Among("\u03B1\u03B2\u03B1\u03C1", -1, 1, "", methodObject),
+            new Among("\u03B5\u03BD\u03B1\u03C1", -1, 1, "", methodObject),
+            new Among("\u03B1\u03B2\u03C1", -1, 1, "", methodObject),
+            new Among("\u03BC\u03C0\u03BF\u03C1", -1, 1, "", methodObject),
+            new Among("\u03B8\u03B1\u03C1\u03C1", -1, 1, "", methodObject),
+            new Among("\u03BD\u03C4\u03C1", -1, 1, "", methodObject),
+            new Among("\u03C5", -1, 1, "", methodObject),
+            new Among("\u03BD\u03B9\u03C6", -1, 1, "", methodObject),
+            new Among("\u03C3\u03C5\u03C1\u03C6", -1, 1, "", methodObject)
     };
 
     private final static Among a_48[] = {
-        new Among("\u03BF\u03BD\u03C4\u03B1\u03C3", -1, 1, "", methodObject),
-        new Among("\u03C9\u03BD\u03C4\u03B1\u03C3", -1, 1, "", methodObject)
+            new Among("\u03BF\u03BD\u03C4\u03B1\u03C3", -1, 1, "", methodObject),
+            new Among("\u03C9\u03BD\u03C4\u03B1\u03C3", -1, 1, "", methodObject)
     };
 
     private final static Among a_49[] = {
-        new Among("\u03BF\u03BC\u03B1\u03C3\u03C4\u03B5", -1, 1, "", methodObject),
-        new Among("\u03B9\u03BF\u03BC\u03B1\u03C3\u03C4\u03B5", 0, 1, "", methodObject)
+            new Among("\u03BF\u03BC\u03B1\u03C3\u03C4\u03B5", -1, 1, "", methodObject),
+            new Among("\u03B9\u03BF\u03BC\u03B1\u03C3\u03C4\u03B5", 0, 1, "", methodObject)
     };
 
     private final static Among a_50[] = {
-        new Among("\u03C0", -1, 1, "", methodObject),
-        new Among("\u03B1\u03C0", 0, 1, "", methodObject),
-        new Among("\u03B1\u03BA\u03B1\u03C4\u03B1\u03C0", 1, 1, "", methodObject),
-        new Among("\u03C3\u03C5\u03BC\u03C0", 0, 1, "", methodObject),
-        new Among("\u03B1\u03C3\u03C5\u03BC\u03C0", 3, 1, "", methodObject),
-        new Among("\u03B1\u03BC\u03B5\u03C4\u03B1\u03BC\u03C6", -1, 1, "", methodObject)
+            new Among("\u03C0", -1, 1, "", methodObject),
+            new Among("\u03B1\u03C0", 0, 1, "", methodObject),
+            new Among("\u03B1\u03BA\u03B1\u03C4\u03B1\u03C0", 1, 1, "", methodObject),
+            new Among("\u03C3\u03C5\u03BC\u03C0", 0, 1, "", methodObject),
+            new Among("\u03B1\u03C3\u03C5\u03BC\u03C0", 3, 1, "", methodObject),
+            new Among("\u03B1\u03BC\u03B5\u03C4\u03B1\u03BC\u03C6", -1, 1, "", methodObject)
     };
 
     private final static Among a_51[] = {
-        new Among("\u03B6", -1, 1, "", methodObject),
-        new Among("\u03B1\u03BB", -1, 1, "", methodObject),
-        new Among("\u03C0\u03B1\u03C1\u03B1\u03BA\u03B1\u03BB", 1, 1, "", methodObject),
-        new Among("\u03B5\u03BA\u03C4\u03B5\u03BB", -1, 1, "", methodObject),
-        new Among("\u03BC", -1, 1, "", methodObject),
-        new Among("\u03BE", -1, 1, "", methodObject),
-        new Among("\u03C0\u03C1\u03BF", -1, 1, "", methodObject),
-        new Among("\u03B1\u03C1", -1, 1, "", methodObject),
-        new Among("\u03BD\u03B9\u03C3", -1, 1, "", methodObject)
+            new Among("\u03B6", -1, 1, "", methodObject),
+            new Among("\u03B1\u03BB", -1, 1, "", methodObject),
+            new Among("\u03C0\u03B1\u03C1\u03B1\u03BA\u03B1\u03BB", 1, 1, "", methodObject),
+            new Among("\u03B5\u03BA\u03C4\u03B5\u03BB", -1, 1, "", methodObject),
+            new Among("\u03BC", -1, 1, "", methodObject),
+            new Among("\u03BE", -1, 1, "", methodObject),
+            new Among("\u03C0\u03C1\u03BF", -1, 1, "", methodObject),
+            new Among("\u03B1\u03C1", -1, 1, "", methodObject),
+            new Among("\u03BD\u03B9\u03C3", -1, 1, "", methodObject)
     };
 
     private final static Among a_52[] = {
-        new Among("\u03B7\u03B8\u03B7\u03BA\u03B1", -1, 1, "", methodObject),
-        new Among("\u03B7\u03B8\u03B7\u03BA\u03B5", -1, 1, "", methodObject),
-        new Among("\u03B7\u03B8\u03B7\u03BA\u03B5\u03C3", -1, 1, "", methodObject)
+            new Among("\u03B7\u03B8\u03B7\u03BA\u03B1", -1, 1, "", methodObject),
+            new Among("\u03B7\u03B8\u03B7\u03BA\u03B5", -1, 1, "", methodObject),
+            new Among("\u03B7\u03B8\u03B7\u03BA\u03B5\u03C3", -1, 1, "", methodObject)
     };
 
     private final static Among a_53[] = {
-        new Among("\u03C0\u03B9\u03B8", -1, 1, "", methodObject),
-        new Among("\u03BF\u03B8", -1, 1, "", methodObject),
-        new Among("\u03BD\u03B1\u03C1\u03B8", -1, 1, "", methodObject),
-        new Among("\u03C3\u03BA\u03BF\u03C5\u03BB", -1, 1, "", methodObject),
-        new Among("\u03C3\u03BA\u03C9\u03BB", -1, 1, "", methodObject),
-        new Among("\u03C3\u03C6", -1, 1, "", methodObject)
+            new Among("\u03C0\u03B9\u03B8", -1, 1, "", methodObject),
+            new Among("\u03BF\u03B8", -1, 1, "", methodObject),
+            new Among("\u03BD\u03B1\u03C1\u03B8", -1, 1, "", methodObject),
+            new Among("\u03C3\u03BA\u03BF\u03C5\u03BB", -1, 1, "", methodObject),
+            new Among("\u03C3\u03BA\u03C9\u03BB", -1, 1, "", methodObject),
+            new Among("\u03C3\u03C6", -1, 1, "", methodObject)
     };
 
     private final static Among a_54[] = {
-        new Among("\u03B8", -1, 1, "", methodObject),
-        new Among("\u03B4\u03B9\u03B1\u03B8", 0, 1, "", methodObject),
-        new Among("\u03C0\u03B1\u03C1\u03B1\u03BA\u03B1\u03C4\u03B1\u03B8", 0, 1, "", methodObject),
-        new Among("\u03C3\u03C5\u03BD\u03B8", 0, 1, "", methodObject),
-        new Among("\u03C0\u03C1\u03BF\u03C3\u03B8", 0, 1, "", methodObject)
+            new Among("\u03B8", -1, 1, "", methodObject),
+            new Among("\u03B4\u03B9\u03B1\u03B8", 0, 1, "", methodObject),
+            new Among("\u03C0\u03B1\u03C1\u03B1\u03BA\u03B1\u03C4\u03B1\u03B8", 0, 1, "", methodObject),
+            new Among("\u03C3\u03C5\u03BD\u03B8", 0, 1, "", methodObject),
+            new Among("\u03C0\u03C1\u03BF\u03C3\u03B8", 0, 1, "", methodObject)
     };
 
     private final static Among a_55[] = {
-        new Among("\u03B7\u03BA\u03B1", -1, 1, "", methodObject),
-        new Among("\u03B7\u03BA\u03B5", -1, 1, "", methodObject),
-        new Among("\u03B7\u03BA\u03B5\u03C3", -1, 1, "", methodObject)
+            new Among("\u03B7\u03BA\u03B1", -1, 1, "", methodObject),
+            new Among("\u03B7\u03BA\u03B5", -1, 1, "", methodObject),
+            new Among("\u03B7\u03BA\u03B5\u03C3", -1, 1, "", methodObject)
     };
 
     private final static Among a_56[] = {
-        new Among("\u03C6\u03B1\u03B3", -1, 1, "", methodObject),
-        new Among("\u03BB\u03B7\u03B3", -1, 1, "", methodObject),
-        new Among("\u03C6\u03C1\u03C5\u03B4", -1, 1, "", methodObject),
-        new Among("\u03BC\u03B1\u03BD\u03C4\u03B9\u03BB", -1, 1, "", methodObject),
-        new Among("\u03BC\u03B1\u03BB\u03BB", -1, 1, "", methodObject),
-        new Among("\u03BF\u03BC", -1, 1, "", methodObject),
-        new Among("\u03B2\u03BB\u03B5\u03C0", -1, 1, "", methodObject),
-        new Among("\u03C0\u03BF\u03B4\u03B1\u03C1", -1, 1, "", methodObject),
-        new Among("\u03BA\u03C5\u03BC\u03B1\u03C4", -1, 1, "", methodObject),
-        new Among("\u03C0\u03C1\u03C9\u03C4", -1, 1, "", methodObject),
-        new Among("\u03BB\u03B1\u03C7", -1, 1, "", methodObject),
-        new Among("\u03C0\u03B1\u03BD\u03C4\u03B1\u03C7", -1, 1, "", methodObject)
+            new Among("\u03C6\u03B1\u03B3", -1, 1, "", methodObject),
+            new Among("\u03BB\u03B7\u03B3", -1, 1, "", methodObject),
+            new Among("\u03C6\u03C1\u03C5\u03B4", -1, 1, "", methodObject),
+            new Among("\u03BC\u03B1\u03BD\u03C4\u03B9\u03BB", -1, 1, "", methodObject),
+            new Among("\u03BC\u03B1\u03BB\u03BB", -1, 1, "", methodObject),
+            new Among("\u03BF\u03BC", -1, 1, "", methodObject),
+            new Among("\u03B2\u03BB\u03B5\u03C0", -1, 1, "", methodObject),
+            new Among("\u03C0\u03BF\u03B4\u03B1\u03C1", -1, 1, "", methodObject),
+            new Among("\u03BA\u03C5\u03BC\u03B1\u03C4", -1, 1, "", methodObject),
+            new Among("\u03C0\u03C1\u03C9\u03C4", -1, 1, "", methodObject),
+            new Among("\u03BB\u03B1\u03C7", -1, 1, "", methodObject),
+            new Among("\u03C0\u03B1\u03BD\u03C4\u03B1\u03C7", -1, 1, "", methodObject)
     };
 
     private final static Among a_57[] = {
-        new Among("\u03C4\u03C3\u03B1", -1, 1, "", methodObject),
-        new Among("\u03C7\u03B1\u03B4", -1, 1, "", methodObject),
-        new Among("\u03BC\u03B5\u03B4", -1, 1, "", methodObject),
-        new Among("\u03BB\u03B1\u03BC\u03C0\u03B9\u03B4", -1, 1, "", methodObject),
-        new Among("\u03B4\u03B5", -1, 1, "", methodObject),
-        new Among("\u03C0\u03BB\u03B5", -1, 1, "", methodObject),
-        new Among("\u03BC\u03B5\u03C3\u03B1\u03B6", -1, 1, "", methodObject),
-        new Among("\u03B4\u03B5\u03C3\u03C0\u03BF\u03B6", -1, 1, "", methodObject),
-        new Among("\u03B1\u03B9\u03B8", -1, 1, "", methodObject),
-        new Among("\u03C6\u03B1\u03C1\u03BC\u03B1\u03BA", -1, 1, "", methodObject),
-        new Among("\u03B1\u03B3\u03BA", -1, 1, "", methodObject),
-        new Among("\u03B1\u03BD\u03B7\u03BA", -1, 1, "", methodObject),
-        new Among("\u03BB", -1, 1, "", methodObject),
-        new Among("\u03BC", -1, 1, "", methodObject),
-        new Among("\u03B1\u03BC", 13, 1, "", methodObject),
-        new Among("\u03B2\u03C1\u03BF\u03BC", 13, 1, "", methodObject),
-        new Among("\u03C5\u03C0\u03BF\u03C4\u03B5\u03B9\u03BD", -1, 1, "", methodObject),
-        new Among("\u03B5\u03BA\u03BB\u03B9\u03C0", -1, 1, "", methodObject),
-        new Among("\u03C1", -1, 1, "", methodObject),
-        new Among("\u03B5\u03BD\u03B4\u03B9\u03B1\u03C6\u03B5\u03C1", 18, 1, "", methodObject),
-        new Among("\u03B1\u03BD\u03B1\u03C1\u03C1", 18, 1, "", methodObject),
-        new Among("\u03C0\u03B1\u03C4", -1, 1, "", methodObject),
-        new Among("\u03BA\u03B1\u03B8\u03B1\u03C1\u03B5\u03C5", -1, 1, "", methodObject),
-        new Among("\u03B4\u03B5\u03C5\u03C4\u03B5\u03C1\u03B5\u03C5", -1, 1, "", methodObject),
-        new Among("\u03BB\u03B5\u03C7", -1, 1, "", methodObject)
+            new Among("\u03C4\u03C3\u03B1", -1, 1, "", methodObject),
+            new Among("\u03C7\u03B1\u03B4", -1, 1, "", methodObject),
+            new Among("\u03BC\u03B5\u03B4", -1, 1, "", methodObject),
+            new Among("\u03BB\u03B1\u03BC\u03C0\u03B9\u03B4", -1, 1, "", methodObject),
+            new Among("\u03B4\u03B5", -1, 1, "", methodObject),
+            new Among("\u03C0\u03BB\u03B5", -1, 1, "", methodObject),
+            new Among("\u03BC\u03B5\u03C3\u03B1\u03B6", -1, 1, "", methodObject),
+            new Among("\u03B4\u03B5\u03C3\u03C0\u03BF\u03B6", -1, 1, "", methodObject),
+            new Among("\u03B1\u03B9\u03B8", -1, 1, "", methodObject),
+            new Among("\u03C6\u03B1\u03C1\u03BC\u03B1\u03BA", -1, 1, "", methodObject),
+            new Among("\u03B1\u03B3\u03BA", -1, 1, "", methodObject),
+            new Among("\u03B1\u03BD\u03B7\u03BA", -1, 1, "", methodObject),
+            new Among("\u03BB", -1, 1, "", methodObject),
+            new Among("\u03BC", -1, 1, "", methodObject),
+            new Among("\u03B1\u03BC", 13, 1, "", methodObject),
+            new Among("\u03B2\u03C1\u03BF\u03BC", 13, 1, "", methodObject),
+            new Among("\u03C5\u03C0\u03BF\u03C4\u03B5\u03B9\u03BD", -1, 1, "", methodObject),
+            new Among("\u03B5\u03BA\u03BB\u03B9\u03C0", -1, 1, "", methodObject),
+            new Among("\u03C1", -1, 1, "", methodObject),
+            new Among("\u03B5\u03BD\u03B4\u03B9\u03B1\u03C6\u03B5\u03C1", 18, 1, "", methodObject),
+            new Among("\u03B1\u03BD\u03B1\u03C1\u03C1", 18, 1, "", methodObject),
+            new Among("\u03C0\u03B1\u03C4", -1, 1, "", methodObject),
+            new Among("\u03BA\u03B1\u03B8\u03B1\u03C1\u03B5\u03C5", -1, 1, "", methodObject),
+            new Among("\u03B4\u03B5\u03C5\u03C4\u03B5\u03C1\u03B5\u03C5", -1, 1, "", methodObject),
+            new Among("\u03BB\u03B5\u03C7", -1, 1, "", methodObject)
     };
 
     private final static Among a_58[] = {
-        new Among("\u03BF\u03C5\u03C3\u03B1", -1, 1, "", methodObject),
-        new Among("\u03BF\u03C5\u03C3\u03B5", -1, 1, "", methodObject),
-        new Among("\u03BF\u03C5\u03C3\u03B5\u03C3", -1, 1, "", methodObject)
+            new Among("\u03BF\u03C5\u03C3\u03B1", -1, 1, "", methodObject),
+            new Among("\u03BF\u03C5\u03C3\u03B5", -1, 1, "", methodObject),
+            new Among("\u03BF\u03C5\u03C3\u03B5\u03C3", -1, 1, "", methodObject)
     };
 
     private final static Among a_59[] = {
-        new Among("\u03C8\u03BF\u03C6", -1, -1, "", methodObject),
-        new Among("\u03BD\u03B1\u03C5\u03BB\u03BF\u03C7", -1, -1, "", methodObject)
+            new Among("\u03C8\u03BF\u03C6", -1, -1, "", methodObject),
+            new Among("\u03BD\u03B1\u03C5\u03BB\u03BF\u03C7", -1, -1, "", methodObject)
     };
 
     private final static Among a_60[] = {
-        new Among("\u03C0\u03B5\u03BB", -1, 1, "", methodObject),
-        new Among("\u03BB\u03BB", -1, 1, "", methodObject),
-        new Among("\u03C3\u03BC\u03B7\u03BD", -1, 1, "", methodObject),
-        new Among("\u03C1\u03C0", -1, 1, "", methodObject),
-        new Among("\u03C0\u03C1", -1, 1, "", methodObject),
-        new Among("\u03C6\u03C1", -1, 1, "", methodObject),
-        new Among("\u03C7\u03BF\u03C1\u03C4", -1, 1, "", methodObject),
-        new Among("\u03BF\u03C6", -1, 1, "", methodObject),
-        new Among("\u03C3\u03C6", -1, 1, "", methodObject),
-        new Among("\u03BB\u03BF\u03C7", -1, 1, "", methodObject)
+            new Among("\u03C0\u03B5\u03BB", -1, 1, "", methodObject),
+            new Among("\u03BB\u03BB", -1, 1, "", methodObject),
+            new Among("\u03C3\u03BC\u03B7\u03BD", -1, 1, "", methodObject),
+            new Among("\u03C1\u03C0", -1, 1, "", methodObject),
+            new Among("\u03C0\u03C1", -1, 1, "", methodObject),
+            new Among("\u03C6\u03C1", -1, 1, "", methodObject),
+            new Among("\u03C7\u03BF\u03C1\u03C4", -1, 1, "", methodObject),
+            new Among("\u03BF\u03C6", -1, 1, "", methodObject),
+            new Among("\u03C3\u03C6", -1, 1, "", methodObject),
+            new Among("\u03BB\u03BF\u03C7", -1, 1, "", methodObject)
     };
 
     private final static Among a_61[] = {
-        new Among("\u03B1\u03BC\u03B1\u03BB\u03BB\u03B9", -1, 1, "", methodObject),
-        new Among("\u03BB", -1, 1, "", methodObject),
-        new Among("\u03B1\u03BC\u03B1\u03BB", 1, 1, "", methodObject),
-        new Among("\u03BC", -1, 1, "", methodObject),
-        new Among("\u03BF\u03C5\u03BB\u03B1\u03BC", 3, 1, "", methodObject),
-        new Among("\u03B5\u03BD", -1, 1, "", methodObject),
-        new Among("\u03B4\u03B5\u03C1\u03B2\u03B5\u03BD", 5, 1, "", methodObject),
-        new Among("\u03C0", -1, 1, "", methodObject),
-        new Among("\u03B1\u03B5\u03B9\u03C0", 7, 1, "", methodObject),
-        new Among("\u03B1\u03C1\u03C4\u03B9\u03C0", 7, 1, "", methodObject),
-        new Among("\u03C3\u03C5\u03BC\u03C0", 7, 1, "", methodObject),
-        new Among("\u03BD\u03B5\u03BF\u03C0", 7, 1, "", methodObject),
-        new Among("\u03BA\u03C1\u03BF\u03BA\u03B1\u03BB\u03BF\u03C0", 7, 1, "", methodObject),
-        new Among("\u03BF\u03BB\u03BF\u03C0", 7, 1, "", methodObject),
-        new Among("\u03C0\u03C1\u03BF\u03C3\u03C9\u03C0\u03BF\u03C0", 7, 1, "", methodObject),
-        new Among("\u03C3\u03B9\u03B4\u03B7\u03C1\u03BF\u03C0", 7, 1, "", methodObject),
-        new Among("\u03B4\u03C1\u03BF\u03C3\u03BF\u03C0", 7, 1, "", methodObject),
-        new Among("\u03B1\u03C3\u03C0", 7, 1, "", methodObject),
-        new Among("\u03B1\u03BD\u03C5\u03C0", 7, 1, "", methodObject),
-        new Among("\u03C1", -1, 1, "", methodObject),
-        new Among("\u03B1\u03C3\u03C0\u03B1\u03C1", 19, 1, "", methodObject),
-        new Among("\u03C7\u03B1\u03C1", 19, 1, "", methodObject),
-        new Among("\u03B1\u03C7\u03B1\u03C1", 21, 1, "", methodObject),
-        new Among("\u03B1\u03C0\u03B5\u03C1", 19, 1, "", methodObject),
-        new Among("\u03C4\u03C1", 19, 1, "", methodObject),
-        new Among("\u03BF\u03C5\u03C1", 19, 1, "", methodObject),
-        new Among("\u03C4", -1, 1, "", methodObject),
-        new Among("\u03B4\u03B9\u03B1\u03C4", 26, 1, "", methodObject),
-        new Among("\u03B5\u03C0\u03B9\u03C4", 26, 1, "", methodObject),
-        new Among("\u03C3\u03C5\u03BD\u03C4", 26, 1, "", methodObject),
-        new Among("\u03BF\u03BC\u03BF\u03C4", 26, 1, "", methodObject),
-        new Among("\u03BD\u03BF\u03BC\u03BF\u03C4", 30, 1, "", methodObject),
-        new Among("\u03B1\u03C0\u03BF\u03C4", 26, 1, "", methodObject),
-        new Among("\u03C5\u03C0\u03BF\u03C4", 26, 1, "", methodObject),
-        new Among("\u03B1\u03B2\u03B1\u03C3\u03C4", 26, 1, "", methodObject),
-        new Among("\u03B1\u03B9\u03BC\u03BF\u03C3\u03C4", 26, 1, "", methodObject),
-        new Among("\u03C0\u03C1\u03BF\u03C3\u03C4", 26, 1, "", methodObject),
-        new Among("\u03B1\u03BD\u03C5\u03C3\u03C4", 26, 1, "", methodObject),
-        new Among("\u03BD\u03B1\u03C5", -1, 1, "", methodObject),
-        new Among("\u03B1\u03C6", -1, 1, "", methodObject),
-        new Among("\u03BE\u03B5\u03C6", -1, 1, "", methodObject),
-        new Among("\u03B1\u03B4\u03B7\u03C6", -1, 1, "", methodObject),
-        new Among("\u03C0\u03B1\u03BC\u03C6", -1, 1, "", methodObject),
-        new Among("\u03C0\u03BF\u03BB\u03C5\u03C6", -1, 1, "", methodObject)
+            new Among("\u03B1\u03BC\u03B1\u03BB\u03BB\u03B9", -1, 1, "", methodObject),
+            new Among("\u03BB", -1, 1, "", methodObject),
+            new Among("\u03B1\u03BC\u03B1\u03BB", 1, 1, "", methodObject),
+            new Among("\u03BC", -1, 1, "", methodObject),
+            new Among("\u03BF\u03C5\u03BB\u03B1\u03BC", 3, 1, "", methodObject),
+            new Among("\u03B5\u03BD", -1, 1, "", methodObject),
+            new Among("\u03B4\u03B5\u03C1\u03B2\u03B5\u03BD", 5, 1, "", methodObject),
+            new Among("\u03C0", -1, 1, "", methodObject),
+            new Among("\u03B1\u03B5\u03B9\u03C0", 7, 1, "", methodObject),
+            new Among("\u03B1\u03C1\u03C4\u03B9\u03C0", 7, 1, "", methodObject),
+            new Among("\u03C3\u03C5\u03BC\u03C0", 7, 1, "", methodObject),
+            new Among("\u03BD\u03B5\u03BF\u03C0", 7, 1, "", methodObject),
+            new Among("\u03BA\u03C1\u03BF\u03BA\u03B1\u03BB\u03BF\u03C0", 7, 1, "", methodObject),
+            new Among("\u03BF\u03BB\u03BF\u03C0", 7, 1, "", methodObject),
+            new Among("\u03C0\u03C1\u03BF\u03C3\u03C9\u03C0\u03BF\u03C0", 7, 1, "", methodObject),
+            new Among("\u03C3\u03B9\u03B4\u03B7\u03C1\u03BF\u03C0", 7, 1, "", methodObject),
+            new Among("\u03B4\u03C1\u03BF\u03C3\u03BF\u03C0", 7, 1, "", methodObject),
+            new Among("\u03B1\u03C3\u03C0", 7, 1, "", methodObject),
+            new Among("\u03B1\u03BD\u03C5\u03C0", 7, 1, "", methodObject),
+            new Among("\u03C1", -1, 1, "", methodObject),
+            new Among("\u03B1\u03C3\u03C0\u03B1\u03C1", 19, 1, "", methodObject),
+            new Among("\u03C7\u03B1\u03C1", 19, 1, "", methodObject),
+            new Among("\u03B1\u03C7\u03B1\u03C1", 21, 1, "", methodObject),
+            new Among("\u03B1\u03C0\u03B5\u03C1", 19, 1, "", methodObject),
+            new Among("\u03C4\u03C1", 19, 1, "", methodObject),
+            new Among("\u03BF\u03C5\u03C1", 19, 1, "", methodObject),
+            new Among("\u03C4", -1, 1, "", methodObject),
+            new Among("\u03B4\u03B9\u03B1\u03C4", 26, 1, "", methodObject),
+            new Among("\u03B5\u03C0\u03B9\u03C4", 26, 1, "", methodObject),
+            new Among("\u03C3\u03C5\u03BD\u03C4", 26, 1, "", methodObject),
+            new Among("\u03BF\u03BC\u03BF\u03C4", 26, 1, "", methodObject),
+            new Among("\u03BD\u03BF\u03BC\u03BF\u03C4", 30, 1, "", methodObject),
+            new Among("\u03B1\u03C0\u03BF\u03C4", 26, 1, "", methodObject),
+            new Among("\u03C5\u03C0\u03BF\u03C4", 26, 1, "", methodObject),
+            new Among("\u03B1\u03B2\u03B1\u03C3\u03C4", 26, 1, "", methodObject),
+            new Among("\u03B1\u03B9\u03BC\u03BF\u03C3\u03C4", 26, 1, "", methodObject),
+            new Among("\u03C0\u03C1\u03BF\u03C3\u03C4", 26, 1, "", methodObject),
+            new Among("\u03B1\u03BD\u03C5\u03C3\u03C4", 26, 1, "", methodObject),
+            new Among("\u03BD\u03B1\u03C5", -1, 1, "", methodObject),
+            new Among("\u03B1\u03C6", -1, 1, "", methodObject),
+            new Among("\u03BE\u03B5\u03C6", -1, 1, "", methodObject),
+            new Among("\u03B1\u03B4\u03B7\u03C6", -1, 1, "", methodObject),
+            new Among("\u03C0\u03B1\u03BC\u03C6", -1, 1, "", methodObject),
+            new Among("\u03C0\u03BF\u03BB\u03C5\u03C6", -1, 1, "", methodObject)
     };
 
     private final static Among a_62[] = {
-        new Among("\u03B1\u03B3\u03B1", -1, 1, "", methodObject),
-        new Among("\u03B1\u03B3\u03B5", -1, 1, "", methodObject),
-        new Among("\u03B1\u03B3\u03B5\u03C3", -1, 1, "", methodObject)
+            new Among("\u03B1\u03B3\u03B1", -1, 1, "", methodObject),
+            new Among("\u03B1\u03B3\u03B5", -1, 1, "", methodObject),
+            new Among("\u03B1\u03B3\u03B5\u03C3", -1, 1, "", methodObject)
     };
 
     private final static Among a_63[] = {
-        new Among("\u03B7\u03C3\u03B1", -1, 1, "", methodObject),
-        new Among("\u03B7\u03C3\u03B5", -1, 1, "", methodObject),
-        new Among("\u03B7\u03C3\u03BF\u03C5", -1, 1, "", methodObject)
+            new Among("\u03B7\u03C3\u03B1", -1, 1, "", methodObject),
+            new Among("\u03B7\u03C3\u03B5", -1, 1, "", methodObject),
+            new Among("\u03B7\u03C3\u03BF\u03C5", -1, 1, "", methodObject)
     };
 
     private final static Among a_64[] = {
-        new Among("\u03BD", -1, 1, "", methodObject),
-        new Among("\u03B4\u03C9\u03B4\u03B5\u03BA\u03B1\u03BD", 0, 1, "", methodObject),
-        new Among("\u03B5\u03C0\u03C4\u03B1\u03BD", 0, 1, "", methodObject),
-        new Among("\u03BC\u03B5\u03B3\u03B1\u03BB\u03BF\u03BD", 0, 1, "", methodObject),
-        new Among("\u03B5\u03C1\u03B7\u03BC\u03BF\u03BD", 0, 1, "", methodObject),
-        new Among("\u03C7\u03B5\u03C1\u03C3\u03BF\u03BD", 0, 1, "", methodObject)
+            new Among("\u03BD", -1, 1, "", methodObject),
+            new Among("\u03B4\u03C9\u03B4\u03B5\u03BA\u03B1\u03BD", 0, 1, "", methodObject),
+            new Among("\u03B5\u03C0\u03C4\u03B1\u03BD", 0, 1, "", methodObject),
+            new Among("\u03BC\u03B5\u03B3\u03B1\u03BB\u03BF\u03BD", 0, 1, "", methodObject),
+            new Among("\u03B5\u03C1\u03B7\u03BC\u03BF\u03BD", 0, 1, "", methodObject),
+            new Among("\u03C7\u03B5\u03C1\u03C3\u03BF\u03BD", 0, 1, "", methodObject)
     };
 
     private final static Among a_65[] = {
-        new Among("\u03B7\u03C3\u03C4\u03B5", -1, 1, "", methodObject)
+            new Among("\u03B7\u03C3\u03C4\u03B5", -1, 1, "", methodObject)
     };
 
     private final static Among a_66[] = {
-        new Among("\u03C3\u03B2", -1, 1, "", methodObject),
-        new Among("\u03B1\u03C3\u03B2", 0, 1, "", methodObject),
-        new Among("\u03B1\u03C0\u03BB", -1, 1, "", methodObject),
-        new Among("\u03B1\u03B5\u03B9\u03BC\u03BD", -1, 1, "", methodObject),
-        new Among("\u03C7\u03C1", -1, 1, "", methodObject),
-        new Among("\u03B1\u03C7\u03C1", 4, 1, "", methodObject),
-        new Among("\u03BA\u03BF\u03B9\u03BD\u03BF\u03C7\u03C1", 4, 1, "", methodObject),
-        new Among("\u03B4\u03C5\u03C3\u03C7\u03C1", 4, 1, "", methodObject),
-        new Among("\u03B5\u03C5\u03C7\u03C1", 4, 1, "", methodObject),
-        new Among("\u03C0\u03B1\u03BB\u03B9\u03BC\u03C8", -1, 1, "", methodObject)
+            new Among("\u03C3\u03B2", -1, 1, "", methodObject),
+            new Among("\u03B1\u03C3\u03B2", 0, 1, "", methodObject),
+            new Among("\u03B1\u03C0\u03BB", -1, 1, "", methodObject),
+            new Among("\u03B1\u03B5\u03B9\u03BC\u03BD", -1, 1, "", methodObject),
+            new Among("\u03C7\u03C1", -1, 1, "", methodObject),
+            new Among("\u03B1\u03C7\u03C1", 4, 1, "", methodObject),
+            new Among("\u03BA\u03BF\u03B9\u03BD\u03BF\u03C7\u03C1", 4, 1, "", methodObject),
+            new Among("\u03B4\u03C5\u03C3\u03C7\u03C1", 4, 1, "", methodObject),
+            new Among("\u03B5\u03C5\u03C7\u03C1", 4, 1, "", methodObject),
+            new Among("\u03C0\u03B1\u03BB\u03B9\u03BC\u03C8", -1, 1, "", methodObject)
     };
 
     private final static Among a_67[] = {
-        new Among("\u03BF\u03C5\u03BD\u03B5", -1, 1, "", methodObject),
-        new Among("\u03B7\u03B8\u03BF\u03C5\u03BD\u03B5", 0, 1, "", methodObject),
-        new Among("\u03B7\u03C3\u03BF\u03C5\u03BD\u03B5", 0, 1, "", methodObject)
+            new Among("\u03BF\u03C5\u03BD\u03B5", -1, 1, "", methodObject),
+            new Among("\u03B7\u03B8\u03BF\u03C5\u03BD\u03B5", 0, 1, "", methodObject),
+            new Among("\u03B7\u03C3\u03BF\u03C5\u03BD\u03B5", 0, 1, "", methodObject)
     };
 
     private final static Among a_68[] = {
-        new Among("\u03C3\u03C0\u03B9", -1, 1, "", methodObject),
-        new Among("\u03BD", -1, 1, "", methodObject),
-        new Among("\u03B5\u03BE\u03C9\u03BD", 1, 1, "", methodObject),
-        new Among("\u03C1", -1, 1, "", methodObject),
-        new Among("\u03C3\u03C4\u03C1\u03B1\u03B2\u03BF\u03BC\u03BF\u03C5\u03C4\u03C3", -1, 1, "", methodObject),
-        new Among("\u03BA\u03B1\u03BA\u03BF\u03BC\u03BF\u03C5\u03C4\u03C3", -1, 1, "", methodObject)
+            new Among("\u03C3\u03C0\u03B9", -1, 1, "", methodObject),
+            new Among("\u03BD", -1, 1, "", methodObject),
+            new Among("\u03B5\u03BE\u03C9\u03BD", 1, 1, "", methodObject),
+            new Among("\u03C1", -1, 1, "", methodObject),
+            new Among("\u03C3\u03C4\u03C1\u03B1\u03B2\u03BF\u03BC\u03BF\u03C5\u03C4\u03C3", -1, 1, "", methodObject),
+            new Among("\u03BA\u03B1\u03BA\u03BF\u03BC\u03BF\u03C5\u03C4\u03C3", -1, 1, "", methodObject)
     };
 
     private final static Among a_69[] = {
-        new Among("\u03BF\u03C5\u03BC\u03B5", -1, 1, "", methodObject),
-        new Among("\u03B7\u03B8\u03BF\u03C5\u03BC\u03B5", 0, 1, "", methodObject),
-        new Among("\u03B7\u03C3\u03BF\u03C5\u03BC\u03B5", 0, 1, "", methodObject)
+            new Among("\u03BF\u03C5\u03BC\u03B5", -1, 1, "", methodObject),
+            new Among("\u03B7\u03B8\u03BF\u03C5\u03BC\u03B5", 0, 1, "", methodObject),
+            new Among("\u03B7\u03C3\u03BF\u03C5\u03BC\u03B5", 0, 1, "", methodObject)
     };
 
     private final static Among a_70[] = {
-        new Among("\u03B1\u03B6", -1, 1, "", methodObject),
-        new Among("\u03C9\u03C1\u03B9\u03BF\u03C0\u03BB", -1, 1, "", methodObject),
-        new Among("\u03B1\u03C3\u03BF\u03C5\u03C3", -1, 1, "", methodObject),
-        new Among("\u03C0\u03B1\u03C1\u03B1\u03C3\u03BF\u03C5\u03C3", 2, 1, "", methodObject),
-        new Among("\u03B1\u03BB\u03BB\u03BF\u03C3\u03BF\u03C5\u03C3", -1, 1, "", methodObject),
-        new Among("\u03C6", -1, 1, "", methodObject),
-        new Among("\u03C7", -1, 1, "", methodObject)
+            new Among("\u03B1\u03B6", -1, 1, "", methodObject),
+            new Among("\u03C9\u03C1\u03B9\u03BF\u03C0\u03BB", -1, 1, "", methodObject),
+            new Among("\u03B1\u03C3\u03BF\u03C5\u03C3", -1, 1, "", methodObject),
+            new Among("\u03C0\u03B1\u03C1\u03B1\u03C3\u03BF\u03C5\u03C3", 2, 1, "", methodObject),
+            new Among("\u03B1\u03BB\u03BB\u03BF\u03C3\u03BF\u03C5\u03C3", -1, 1, "", methodObject),
+            new Among("\u03C6", -1, 1, "", methodObject),
+            new Among("\u03C7", -1, 1, "", methodObject)
     };
 
     private final static Among a_71[] = {
-        new Among("\u03BC\u03B1\u03C4\u03B1", -1, 1, "", methodObject),
-        new Among("\u03BC\u03B1\u03C4\u03C9\u03BD", -1, 1, "", methodObject),
-        new Among("\u03BC\u03B1\u03C4\u03BF\u03C3", -1, 1, "", methodObject)
+            new Among("\u03BC\u03B1\u03C4\u03B1", -1, 1, "", methodObject),
+            new Among("\u03BC\u03B1\u03C4\u03C9\u03BD", -1, 1, "", methodObject),
+            new Among("\u03BC\u03B1\u03C4\u03BF\u03C3", -1, 1, "", methodObject)
     };
 
     private final static Among a_72[] = {
-        new Among("\u03B1", -1, 1, "", methodObject),
-        new Among("\u03B9\u03BF\u03C5\u03BC\u03B1", 0, 1, "", methodObject),
-        new Among("\u03BF\u03BC\u03BF\u03C5\u03BD\u03B1", 0, 1, "", methodObject),
-        new Among("\u03B9\u03BF\u03BC\u03BF\u03C5\u03BD\u03B1", 2, 1, "", methodObject),
-        new Among("\u03BF\u03C3\u03BF\u03C5\u03BD\u03B1", 0, 1, "", methodObject),
-        new Among("\u03B9\u03BF\u03C3\u03BF\u03C5\u03BD\u03B1", 4, 1, "", methodObject),
-        new Among("\u03B5", -1, 1, "", methodObject),
-        new Among("\u03B1\u03B3\u03B1\u03C4\u03B5", 6, 1, "", methodObject),
-        new Among("\u03B7\u03BA\u03B1\u03C4\u03B5", 6, 1, "", methodObject),
-        new Among("\u03B7\u03B8\u03B7\u03BA\u03B1\u03C4\u03B5", 8, 1, "", methodObject),
-        new Among("\u03B7\u03C3\u03B1\u03C4\u03B5", 6, 1, "", methodObject),
-        new Among("\u03BF\u03C5\u03C3\u03B1\u03C4\u03B5", 6, 1, "", methodObject),
-        new Among("\u03B5\u03B9\u03C4\u03B5", 6, 1, "", methodObject),
-        new Among("\u03B7\u03B8\u03B5\u03B9\u03C4\u03B5", 12, 1, "", methodObject),
-        new Among("\u03B9\u03B5\u03BC\u03B1\u03C3\u03C4\u03B5", 6, 1, "", methodObject),
-        new Among("\u03BF\u03C5\u03BC\u03B1\u03C3\u03C4\u03B5", 6, 1, "", methodObject),
-        new Among("\u03B9\u03BF\u03C5\u03BC\u03B1\u03C3\u03C4\u03B5", 15, 1, "", methodObject),
-        new Among("\u03B9\u03B5\u03C3\u03B1\u03C3\u03C4\u03B5", 6, 1, "", methodObject),
-        new Among("\u03BF\u03C3\u03B1\u03C3\u03C4\u03B5", 6, 1, "", methodObject),
-        new Among("\u03B9\u03BF\u03C3\u03B1\u03C3\u03C4\u03B5", 18, 1, "", methodObject),
-        new Among("\u03B7", -1, 1, "", methodObject),
-        new Among("\u03B9", -1, 1, "", methodObject),
-        new Among("\u03B1\u03BC\u03B1\u03B9", 21, 1, "", methodObject),
-        new Among("\u03B9\u03B5\u03BC\u03B1\u03B9", 21, 1, "", methodObject),
-        new Among("\u03BF\u03BC\u03B1\u03B9", 21, 1, "", methodObject),
-        new Among("\u03BF\u03C5\u03BC\u03B1\u03B9", 21, 1, "", methodObject),
-        new Among("\u03B1\u03C3\u03B1\u03B9", 21, 1, "", methodObject),
-        new Among("\u03B5\u03C3\u03B1\u03B9", 21, 1, "", methodObject),
-        new Among("\u03B9\u03B5\u03C3\u03B1\u03B9", 27, 1, "", methodObject),
-        new Among("\u03B1\u03C4\u03B1\u03B9", 21, 1, "", methodObject),
-        new Among("\u03B5\u03C4\u03B1\u03B9", 21, 1, "", methodObject),
-        new Among("\u03B9\u03B5\u03C4\u03B1\u03B9", 30, 1, "", methodObject),
-        new Among("\u03BF\u03BD\u03C4\u03B1\u03B9", 21, 1, "", methodObject),
-        new Among("\u03BF\u03C5\u03BD\u03C4\u03B1\u03B9", 21, 1, "", methodObject),
-        new Among("\u03B9\u03BF\u03C5\u03BD\u03C4\u03B1\u03B9", 33, 1, "", methodObject),
-        new Among("\u03B5\u03B9", 21, 1, "", methodObject),
-        new Among("\u03B1\u03B5\u03B9", 35, 1, "", methodObject),
-        new Among("\u03B7\u03B8\u03B5\u03B9", 35, 1, "", methodObject),
-        new Among("\u03B7\u03C3\u03B5\u03B9", 35, 1, "", methodObject),
-        new Among("\u03BF\u03B9", 21, 1, "", methodObject),
-        new Among("\u03B1\u03BD", -1, 1, "", methodObject),
-        new Among("\u03B1\u03B3\u03B1\u03BD", 40, 1, "", methodObject),
-        new Among("\u03B7\u03BA\u03B1\u03BD", 40, 1, "", methodObject),
-        new Among("\u03B7\u03B8\u03B7\u03BA\u03B1\u03BD", 42, 1, "", methodObject),
-        new Among("\u03B7\u03C3\u03B1\u03BD", 40, 1, "", methodObject),
-        new Among("\u03BF\u03C5\u03C3\u03B1\u03BD", 40, 1, "", methodObject),
-        new Among("\u03BF\u03BD\u03C4\u03BF\u03C5\u03C3\u03B1\u03BD", 45, 1, "", methodObject),
-        new Among("\u03B9\u03BF\u03BD\u03C4\u03BF\u03C5\u03C3\u03B1\u03BD", 46, 1, "", methodObject),
-        new Among("\u03BF\u03BD\u03C4\u03B1\u03BD", 40, 1, "", methodObject),
-        new Among("\u03B9\u03BF\u03BD\u03C4\u03B1\u03BD", 48, 1, "", methodObject),
-        new Among("\u03BF\u03C5\u03BD\u03C4\u03B1\u03BD", 40, 1, "", methodObject),
-        new Among("\u03B9\u03BF\u03C5\u03BD\u03C4\u03B1\u03BD", 50, 1, "", methodObject),
-        new Among("\u03BF\u03C4\u03B1\u03BD", 40, 1, "", methodObject),
-        new Among("\u03B9\u03BF\u03C4\u03B1\u03BD", 52, 1, "", methodObject),
-        new Among("\u03BF\u03BC\u03B1\u03C3\u03C4\u03B1\u03BD", 40, 1, "", methodObject),
-        new Among("\u03B9\u03BF\u03BC\u03B1\u03C3\u03C4\u03B1\u03BD", 54, 1, "", methodObject),
-        new Among("\u03BF\u03C3\u03B1\u03C3\u03C4\u03B1\u03BD", 40, 1, "", methodObject),
-        new Among("\u03B9\u03BF\u03C3\u03B1\u03C3\u03C4\u03B1\u03BD", 56, 1, "", methodObject),
-        new Among("\u03BF\u03C5\u03BD", -1, 1, "", methodObject),
-        new Among("\u03B7\u03B8\u03BF\u03C5\u03BD", 58, 1, "", methodObject),
-        new Among("\u03BF\u03BC\u03BF\u03C5\u03BD", 58, 1, "", methodObject),
-        new Among("\u03B9\u03BF\u03BC\u03BF\u03C5\u03BD", 60, 1, "", methodObject),
-        new Among("\u03B7\u03C3\u03BF\u03C5\u03BD", 58, 1, "", methodObject),
-        new Among("\u03BF\u03C3\u03BF\u03C5\u03BD", 58, 1, "", methodObject),
-        new Among("\u03B9\u03BF\u03C3\u03BF\u03C5\u03BD", 63, 1, "", methodObject),
-        new Among("\u03C9\u03BD", -1, 1, "", methodObject),
-        new Among("\u03B7\u03B4\u03C9\u03BD", 65, 1, "", methodObject),
-        new Among("\u03BF", -1, 1, "", methodObject),
-        new Among("\u03B1\u03C3", -1, 1, "", methodObject),
-        new Among("\u03B5\u03C3", -1, 1, "", methodObject),
-        new Among("\u03B7\u03B4\u03B5\u03C3", 69, 1, "", methodObject),
-        new Among("\u03B7\u03C3\u03B5\u03C3", 69, 1, "", methodObject),
-        new Among("\u03B7\u03C3", -1, 1, "", methodObject),
-        new Among("\u03B5\u03B9\u03C3", -1, 1, "", methodObject),
-        new Among("\u03B7\u03B8\u03B5\u03B9\u03C3", 73, 1, "", methodObject),
-        new Among("\u03BF\u03C3", -1, 1, "", methodObject),
-        new Among("\u03C5\u03C3", -1, 1, "", methodObject),
-        new Among("\u03BF\u03C5\u03C3", 76, 1, "", methodObject),
-        new Among("\u03C5", -1, 1, "", methodObject),
-        new Among("\u03BF\u03C5", 78, 1, "", methodObject),
-        new Among("\u03C9", -1, 1, "", methodObject),
-        new Among("\u03B1\u03C9", 80, 1, "", methodObject),
-        new Among("\u03B7\u03B8\u03C9", 80, 1, "", methodObject),
-        new Among("\u03B7\u03C3\u03C9", 80, 1, "", methodObject)
+            new Among("\u03B1", -1, 1, "", methodObject),
+            new Among("\u03B9\u03BF\u03C5\u03BC\u03B1", 0, 1, "", methodObject),
+            new Among("\u03BF\u03BC\u03BF\u03C5\u03BD\u03B1", 0, 1, "", methodObject),
+            new Among("\u03B9\u03BF\u03BC\u03BF\u03C5\u03BD\u03B1", 2, 1, "", methodObject),
+            new Among("\u03BF\u03C3\u03BF\u03C5\u03BD\u03B1", 0, 1, "", methodObject),
+            new Among("\u03B9\u03BF\u03C3\u03BF\u03C5\u03BD\u03B1", 4, 1, "", methodObject),
+            new Among("\u03B5", -1, 1, "", methodObject),
+            new Among("\u03B1\u03B3\u03B1\u03C4\u03B5", 6, 1, "", methodObject),
+            new Among("\u03B7\u03BA\u03B1\u03C4\u03B5", 6, 1, "", methodObject),
+            new Among("\u03B7\u03B8\u03B7\u03BA\u03B1\u03C4\u03B5", 8, 1, "", methodObject),
+            new Among("\u03B7\u03C3\u03B1\u03C4\u03B5", 6, 1, "", methodObject),
+            new Among("\u03BF\u03C5\u03C3\u03B1\u03C4\u03B5", 6, 1, "", methodObject),
+            new Among("\u03B5\u03B9\u03C4\u03B5", 6, 1, "", methodObject),
+            new Among("\u03B7\u03B8\u03B5\u03B9\u03C4\u03B5", 12, 1, "", methodObject),
+            new Among("\u03B9\u03B5\u03BC\u03B1\u03C3\u03C4\u03B5", 6, 1, "", methodObject),
+            new Among("\u03BF\u03C5\u03BC\u03B1\u03C3\u03C4\u03B5", 6, 1, "", methodObject),
+            new Among("\u03B9\u03BF\u03C5\u03BC\u03B1\u03C3\u03C4\u03B5", 15, 1, "", methodObject),
+            new Among("\u03B9\u03B5\u03C3\u03B1\u03C3\u03C4\u03B5", 6, 1, "", methodObject),
+            new Among("\u03BF\u03C3\u03B1\u03C3\u03C4\u03B5", 6, 1, "", methodObject),
+            new Among("\u03B9\u03BF\u03C3\u03B1\u03C3\u03C4\u03B5", 18, 1, "", methodObject),
+            new Among("\u03B7", -1, 1, "", methodObject),
+            new Among("\u03B9", -1, 1, "", methodObject),
+            new Among("\u03B1\u03BC\u03B1\u03B9", 21, 1, "", methodObject),
+            new Among("\u03B9\u03B5\u03BC\u03B1\u03B9", 21, 1, "", methodObject),
+            new Among("\u03BF\u03BC\u03B1\u03B9", 21, 1, "", methodObject),
+            new Among("\u03BF\u03C5\u03BC\u03B1\u03B9", 21, 1, "", methodObject),
+            new Among("\u03B1\u03C3\u03B1\u03B9", 21, 1, "", methodObject),
+            new Among("\u03B5\u03C3\u03B1\u03B9", 21, 1, "", methodObject),
+            new Among("\u03B9\u03B5\u03C3\u03B1\u03B9", 27, 1, "", methodObject),
+            new Among("\u03B1\u03C4\u03B1\u03B9", 21, 1, "", methodObject),
+            new Among("\u03B5\u03C4\u03B1\u03B9", 21, 1, "", methodObject),
+            new Among("\u03B9\u03B5\u03C4\u03B1\u03B9", 30, 1, "", methodObject),
+            new Among("\u03BF\u03BD\u03C4\u03B1\u03B9", 21, 1, "", methodObject),
+            new Among("\u03BF\u03C5\u03BD\u03C4\u03B1\u03B9", 21, 1, "", methodObject),
+            new Among("\u03B9\u03BF\u03C5\u03BD\u03C4\u03B1\u03B9", 33, 1, "", methodObject),
+            new Among("\u03B5\u03B9", 21, 1, "", methodObject),
+            new Among("\u03B1\u03B5\u03B9", 35, 1, "", methodObject),
+            new Among("\u03B7\u03B8\u03B5\u03B9", 35, 1, "", methodObject),
+            new Among("\u03B7\u03C3\u03B5\u03B9", 35, 1, "", methodObject),
+            new Among("\u03BF\u03B9", 21, 1, "", methodObject),
+            new Among("\u03B1\u03BD", -1, 1, "", methodObject),
+            new Among("\u03B1\u03B3\u03B1\u03BD", 40, 1, "", methodObject),
+            new Among("\u03B7\u03BA\u03B1\u03BD", 40, 1, "", methodObject),
+            new Among("\u03B7\u03B8\u03B7\u03BA\u03B1\u03BD", 42, 1, "", methodObject),
+            new Among("\u03B7\u03C3\u03B1\u03BD", 40, 1, "", methodObject),
+            new Among("\u03BF\u03C5\u03C3\u03B1\u03BD", 40, 1, "", methodObject),
+            new Among("\u03BF\u03BD\u03C4\u03BF\u03C5\u03C3\u03B1\u03BD", 45, 1, "", methodObject),
+            new Among("\u03B9\u03BF\u03BD\u03C4\u03BF\u03C5\u03C3\u03B1\u03BD", 46, 1, "", methodObject),
+            new Among("\u03BF\u03BD\u03C4\u03B1\u03BD", 40, 1, "", methodObject),
+            new Among("\u03B9\u03BF\u03BD\u03C4\u03B1\u03BD", 48, 1, "", methodObject),
+            new Among("\u03BF\u03C5\u03BD\u03C4\u03B1\u03BD", 40, 1, "", methodObject),
+            new Among("\u03B9\u03BF\u03C5\u03BD\u03C4\u03B1\u03BD", 50, 1, "", methodObject),
+            new Among("\u03BF\u03C4\u03B1\u03BD", 40, 1, "", methodObject),
+            new Among("\u03B9\u03BF\u03C4\u03B1\u03BD", 52, 1, "", methodObject),
+            new Among("\u03BF\u03BC\u03B1\u03C3\u03C4\u03B1\u03BD", 40, 1, "", methodObject),
+            new Among("\u03B9\u03BF\u03BC\u03B1\u03C3\u03C4\u03B1\u03BD", 54, 1, "", methodObject),
+            new Among("\u03BF\u03C3\u03B1\u03C3\u03C4\u03B1\u03BD", 40, 1, "", methodObject),
+            new Among("\u03B9\u03BF\u03C3\u03B1\u03C3\u03C4\u03B1\u03BD", 56, 1, "", methodObject),
+            new Among("\u03BF\u03C5\u03BD", -1, 1, "", methodObject),
+            new Among("\u03B7\u03B8\u03BF\u03C5\u03BD", 58, 1, "", methodObject),
+            new Among("\u03BF\u03BC\u03BF\u03C5\u03BD", 58, 1, "", methodObject),
+            new Among("\u03B9\u03BF\u03BC\u03BF\u03C5\u03BD", 60, 1, "", methodObject),
+            new Among("\u03B7\u03C3\u03BF\u03C5\u03BD", 58, 1, "", methodObject),
+            new Among("\u03BF\u03C3\u03BF\u03C5\u03BD", 58, 1, "", methodObject),
+            new Among("\u03B9\u03BF\u03C3\u03BF\u03C5\u03BD", 63, 1, "", methodObject),
+            new Among("\u03C9\u03BD", -1, 1, "", methodObject),
+            new Among("\u03B7\u03B4\u03C9\u03BD", 65, 1, "", methodObject),
+            new Among("\u03BF", -1, 1, "", methodObject),
+            new Among("\u03B1\u03C3", -1, 1, "", methodObject),
+            new Among("\u03B5\u03C3", -1, 1, "", methodObject),
+            new Among("\u03B7\u03B4\u03B5\u03C3", 69, 1, "", methodObject),
+            new Among("\u03B7\u03C3\u03B5\u03C3", 69, 1, "", methodObject),
+            new Among("\u03B7\u03C3", -1, 1, "", methodObject),
+            new Among("\u03B5\u03B9\u03C3", -1, 1, "", methodObject),
+            new Among("\u03B7\u03B8\u03B5\u03B9\u03C3", 73, 1, "", methodObject),
+            new Among("\u03BF\u03C3", -1, 1, "", methodObject),
+            new Among("\u03C5\u03C3", -1, 1, "", methodObject),
+            new Among("\u03BF\u03C5\u03C3", 76, 1, "", methodObject),
+            new Among("\u03C5", -1, 1, "", methodObject),
+            new Among("\u03BF\u03C5", 78, 1, "", methodObject),
+            new Among("\u03C9", -1, 1, "", methodObject),
+            new Among("\u03B1\u03C9", 80, 1, "", methodObject),
+            new Among("\u03B7\u03B8\u03C9", 80, 1, "", methodObject),
+            new Among("\u03B7\u03C3\u03C9", 80, 1, "", methodObject)
     };
 
     private final static Among a_73[] = {
-        new Among("\u03BF\u03C4\u03B5\u03C1", -1, 1, "", methodObject),
-        new Among("\u03B5\u03C3\u03C4\u03B5\u03C1", -1, 1, "", methodObject),
-        new Among("\u03C5\u03C4\u03B5\u03C1", -1, 1, "", methodObject),
-        new Among("\u03C9\u03C4\u03B5\u03C1", -1, 1, "", methodObject),
-        new Among("\u03BF\u03C4\u03B1\u03C4", -1, 1, "", methodObject),
-        new Among("\u03B5\u03C3\u03C4\u03B1\u03C4", -1, 1, "", methodObject),
-        new Among("\u03C5\u03C4\u03B1\u03C4", -1, 1, "", methodObject),
-        new Among("\u03C9\u03C4\u03B1\u03C4", -1, 1, "", methodObject)
+            new Among("\u03BF\u03C4\u03B5\u03C1", -1, 1, "", methodObject),
+            new Among("\u03B5\u03C3\u03C4\u03B5\u03C1", -1, 1, "", methodObject),
+            new Among("\u03C5\u03C4\u03B5\u03C1", -1, 1, "", methodObject),
+            new Among("\u03C9\u03C4\u03B5\u03C1", -1, 1, "", methodObject),
+            new Among("\u03BF\u03C4\u03B1\u03C4", -1, 1, "", methodObject),
+            new Among("\u03B5\u03C3\u03C4\u03B1\u03C4", -1, 1, "", methodObject),
+            new Among("\u03C5\u03C4\u03B1\u03C4", -1, 1, "", methodObject),
+            new Among("\u03C9\u03C4\u03B1\u03C4", -1, 1, "", methodObject)
     };
 
-    private static final char g_v[] = {81, 65, 16, 1 };
+    private static final char g_v[] = {81, 65, 16, 1};
 
-    private static final char g_v2[] = {81, 65, 0, 1 };
+    private static final char g_v2[] = {81, 65, 0, 1};
 
     private StringBuilder S_s = new StringBuilder();
     private boolean B_test1;
@@ -1186,8 +1186,7 @@ public class greekStemmer extends AbstractSnowballStemmer {
 
     private boolean r_has_min_length() {
         // (, line 110
-        if (!(current.length() >= 3))
-        {
+        if (!(current.length() >= 3)) {
             return false;
         }
         return true;
@@ -1197,17 +1196,17 @@ public class greekStemmer extends AbstractSnowballStemmer {
         int among_var;
         // (, line 114
         // repeat, line 115
-        replab0: while(true)
-        {
+        replab0:
+        while (true) {
             int v_1 = limit - cursor;
-            lab1: do {
+            lab1:
+            do {
                 // (, line 115
                 // [, line 116
                 ket = cursor;
                 // substring, line 116
                 among_var = find_among_b(a_0);
-                if (among_var == 0)
-                {
+                if (among_var == 0) {
                     break lab1;
                 }
                 // ], line 116
@@ -1336,8 +1335,7 @@ public class greekStemmer extends AbstractSnowballStemmer {
                     case 25:
                         // (, line 162
                         // next, line 162
-                        if (cursor <= limit_backward)
-                        {
+                        if (cursor <= limit_backward) {
                             break lab1;
                         }
                         cursor--;
@@ -1358,8 +1356,7 @@ public class greekStemmer extends AbstractSnowballStemmer {
         ket = cursor;
         // substring, line 168
         among_var = find_among_b(a_1);
-        if (among_var == 0)
-        {
+        if (among_var == 0) {
             return false;
         }
         // ], line 168
@@ -1431,8 +1428,7 @@ public class greekStemmer extends AbstractSnowballStemmer {
         // [, line 185
         ket = cursor;
         // substring, line 185
-        if (find_among_b(a_4) == 0)
-        {
+        if (find_among_b(a_4) == 0) {
             return false;
         }
         // ], line 185
@@ -1443,22 +1439,22 @@ public class greekStemmer extends AbstractSnowballStemmer {
         // unset test1, line 189
         B_test1 = false;
         // or, line 193
-        lab0: do {
+        lab0:
+        do {
             int v_1 = limit - cursor;
-            lab1: do {
+            lab1:
+            do {
                 // (, line 190
                 // [, line 190
                 ket = cursor;
                 // substring, line 190
-                if (find_among_b(a_2) == 0)
-                {
+                if (find_among_b(a_2) == 0) {
                     break lab1;
                 }
                 // ], line 190
                 bra = cursor;
                 // atlimit, line 190
-                if (cursor > limit_backward)
-                {
+                if (cursor > limit_backward) {
                     break lab1;
                 }
                 // (, line 192
@@ -1479,15 +1475,13 @@ public class greekStemmer extends AbstractSnowballStemmer {
             // [, line 194
             ket = cursor;
             // substring, line 194
-            if (find_among_b(a_3) == 0)
-            {
+            if (find_among_b(a_3) == 0) {
                 return false;
             }
             // ], line 194
             bra = cursor;
             // atlimit, line 194
-            if (cursor > limit_backward)
-            {
+            if (cursor > limit_backward) {
                 return false;
             }
             // (, line 198
@@ -1510,8 +1504,7 @@ public class greekStemmer extends AbstractSnowballStemmer {
         // [, line 205
         ket = cursor;
         // substring, line 205
-        if (find_among_b(a_6) == 0)
-        {
+        if (find_among_b(a_6) == 0) {
             return false;
         }
         // ], line 205
@@ -1524,15 +1517,13 @@ public class greekStemmer extends AbstractSnowballStemmer {
         // [, line 209
         ket = cursor;
         // substring, line 209
-        if (find_among_b(a_5) == 0)
-        {
+        if (find_among_b(a_5) == 0) {
             return false;
         }
         // ], line 209
         bra = cursor;
         // atlimit, line 209
-        if (cursor > limit_backward)
-        {
+        if (cursor > limit_backward) {
             return false;
         }
         // (, line 210
@@ -1554,8 +1545,7 @@ public class greekStemmer extends AbstractSnowballStemmer {
         // [, line 217
         ket = cursor;
         // substring, line 217
-        if (find_among_b(a_9) == 0)
-        {
+        if (find_among_b(a_9) == 0) {
             return false;
         }
         // ], line 217
@@ -1566,18 +1556,18 @@ public class greekStemmer extends AbstractSnowballStemmer {
         // unset test1, line 220
         B_test1 = false;
         // or, line 221
-        lab0: do {
+        lab0:
+        do {
             int v_1 = limit - cursor;
-            lab1: do {
+            lab1:
+            do {
                 // (, line 221
                 // literal, line 221
-                if (!(eq_s_b("\u03B9\u03C3\u03B1")))
-                {
+                if (!(eq_s_b("\u03B9\u03C3\u03B1"))) {
                     break lab1;
                 }
                 // atlimit, line 221
-                if (cursor > limit_backward)
-                {
+                if (cursor > limit_backward) {
                     break lab1;
                 }
                 // <-, line 221
@@ -1585,20 +1575,19 @@ public class greekStemmer extends AbstractSnowballStemmer {
                 break lab0;
             } while (false);
             cursor = limit - v_1;
-            lab2: do {
+            lab2:
+            do {
                 // (, line 222
                 // [, line 222
                 ket = cursor;
                 // substring, line 222
-                if (find_among_b(a_7) == 0)
-                {
+                if (find_among_b(a_7) == 0) {
                     break lab2;
                 }
                 // ], line 222
                 bra = cursor;
                 // atlimit, line 222
-                if (cursor > limit_backward)
-                {
+                if (cursor > limit_backward) {
                     break lab2;
                 }
                 // (, line 226
@@ -1619,15 +1608,13 @@ public class greekStemmer extends AbstractSnowballStemmer {
             // [, line 228
             ket = cursor;
             // substring, line 228
-            if (find_among_b(a_8) == 0)
-            {
+            if (find_among_b(a_8) == 0) {
                 return false;
             }
             // ], line 228
             bra = cursor;
             // atlimit, line 228
-            if (cursor > limit_backward)
-            {
+            if (cursor > limit_backward) {
                 return false;
             }
             // (, line 231
@@ -1650,8 +1637,7 @@ public class greekStemmer extends AbstractSnowballStemmer {
         // [, line 238
         ket = cursor;
         // substring, line 238
-        if (find_among_b(a_11) == 0)
-        {
+        if (find_among_b(a_11) == 0) {
             return false;
         }
         // ], line 238
@@ -1664,15 +1650,13 @@ public class greekStemmer extends AbstractSnowballStemmer {
         // [, line 242
         ket = cursor;
         // substring, line 242
-        if (find_among_b(a_10) == 0)
-        {
+        if (find_among_b(a_10) == 0) {
             return false;
         }
         // ], line 242
         bra = cursor;
         // atlimit, line 242
-        if (cursor > limit_backward)
-        {
+        if (cursor > limit_backward) {
             return false;
         }
         // (, line 246
@@ -1694,8 +1678,7 @@ public class greekStemmer extends AbstractSnowballStemmer {
         // [, line 253
         ket = cursor;
         // substring, line 253
-        if (find_among_b(a_14) == 0)
-        {
+        if (find_among_b(a_14) == 0) {
             return false;
         }
         // ], line 253
@@ -1706,22 +1689,22 @@ public class greekStemmer extends AbstractSnowballStemmer {
         // unset test1, line 257
         B_test1 = false;
         // or, line 261
-        lab0: do {
+        lab0:
+        do {
             int v_1 = limit - cursor;
-            lab1: do {
+            lab1:
+            do {
                 // (, line 258
                 // [, line 258
                 ket = cursor;
                 // substring, line 258
-                if (find_among_b(a_12) == 0)
-                {
+                if (find_among_b(a_12) == 0) {
                     break lab1;
                 }
                 // ], line 258
                 bra = cursor;
                 // atlimit, line 258
-                if (cursor > limit_backward)
-                {
+                if (cursor > limit_backward) {
                     break lab1;
                 }
                 // (, line 260
@@ -1742,15 +1725,13 @@ public class greekStemmer extends AbstractSnowballStemmer {
             // [, line 262
             ket = cursor;
             // substring, line 262
-            if (find_among_b(a_13) == 0)
-            {
+            if (find_among_b(a_13) == 0) {
                 return false;
             }
             // ], line 262
             bra = cursor;
             // atlimit, line 262
-            if (cursor > limit_backward)
-            {
+            if (cursor > limit_backward) {
                 return false;
             }
             // (, line 266
@@ -1774,8 +1755,7 @@ public class greekStemmer extends AbstractSnowballStemmer {
         // [, line 273
         ket = cursor;
         // substring, line 273
-        if (find_among_b(a_18) == 0)
-        {
+        if (find_among_b(a_18) == 0) {
             return false;
         }
         // ], line 273
@@ -1786,22 +1766,22 @@ public class greekStemmer extends AbstractSnowballStemmer {
         // unset test1, line 276
         B_test1 = false;
         // or, line 280
-        lab0: do {
+        lab0:
+        do {
             int v_1 = limit - cursor;
-            lab1: do {
+            lab1:
+            do {
                 // (, line 277
                 // [, line 277
                 ket = cursor;
                 // substring, line 277
-                if (find_among_b(a_15) == 0)
-                {
+                if (find_among_b(a_15) == 0) {
                     break lab1;
                 }
                 // ], line 277
                 bra = cursor;
                 // atlimit, line 277
-                if (cursor > limit_backward)
-                {
+                if (cursor > limit_backward) {
                     break lab1;
                 }
                 // (, line 279
@@ -1818,20 +1798,19 @@ public class greekStemmer extends AbstractSnowballStemmer {
                 break lab0;
             } while (false);
             cursor = limit - v_1;
-            lab2: do {
+            lab2:
+            do {
                 // (, line 281
                 // [, line 281
                 ket = cursor;
                 // substring, line 281
-                if (find_among_b(a_16) == 0)
-                {
+                if (find_among_b(a_16) == 0) {
                     break lab2;
                 }
                 // ], line 281
                 bra = cursor;
                 // atlimit, line 281
-                if (cursor > limit_backward)
-                {
+                if (cursor > limit_backward) {
                     break lab2;
                 }
                 // (, line 283
@@ -1853,8 +1832,7 @@ public class greekStemmer extends AbstractSnowballStemmer {
             ket = cursor;
             // substring, line 285
             among_var = find_among_b(a_17);
-            if (among_var == 0)
-            {
+            if (among_var == 0) {
                 return false;
             }
             // ], line 285
@@ -1920,8 +1898,7 @@ public class greekStemmer extends AbstractSnowballStemmer {
         // [, line 302
         ket = cursor;
         // substring, line 302
-        if (find_among_b(a_20) == 0)
-        {
+        if (find_among_b(a_20) == 0) {
             return false;
         }
         // ], line 302
@@ -1934,15 +1911,13 @@ public class greekStemmer extends AbstractSnowballStemmer {
         // [, line 306
         ket = cursor;
         // substring, line 306
-        if (find_among_b(a_19) == 0)
-        {
+        if (find_among_b(a_19) == 0) {
             return false;
         }
         // ], line 306
         bra = cursor;
         // atlimit, line 306
-        if (cursor > limit_backward)
-        {
+        if (cursor > limit_backward) {
             return false;
         }
         // (, line 308
@@ -1964,8 +1939,7 @@ public class greekStemmer extends AbstractSnowballStemmer {
         // [, line 315
         ket = cursor;
         // substring, line 315
-        if (find_among_b(a_23) == 0)
-        {
+        if (find_among_b(a_23) == 0) {
             return false;
         }
         // ], line 315
@@ -1976,22 +1950,22 @@ public class greekStemmer extends AbstractSnowballStemmer {
         // unset test1, line 318
         B_test1 = false;
         // or, line 325
-        lab0: do {
+        lab0:
+        do {
             int v_1 = limit - cursor;
-            lab1: do {
+            lab1:
+            do {
                 // (, line 319
                 // [, line 319
                 ket = cursor;
                 // substring, line 319
-                if (find_among_b(a_21) == 0)
-                {
+                if (find_among_b(a_21) == 0) {
                     break lab1;
                 }
                 // ], line 319
                 bra = cursor;
                 // atlimit, line 319
-                if (cursor > limit_backward)
-                {
+                if (cursor > limit_backward) {
                     break lab1;
                 }
                 // (, line 324
@@ -2008,20 +1982,19 @@ public class greekStemmer extends AbstractSnowballStemmer {
                 break lab0;
             } while (false);
             cursor = limit - v_1;
-            lab2: do {
+            lab2:
+            do {
                 // (, line 326
                 // [, line 326
                 ket = cursor;
                 // substring, line 326
-                if (find_among_b(a_22) == 0)
-                {
+                if (find_among_b(a_22) == 0) {
                     break lab2;
                 }
                 // ], line 326
                 bra = cursor;
                 // atlimit, line 326
-                if (cursor > limit_backward)
-                {
+                if (cursor > limit_backward) {
                     break lab2;
                 }
                 // (, line 329
@@ -2042,8 +2015,7 @@ public class greekStemmer extends AbstractSnowballStemmer {
             // [, line 331
             ket = cursor;
             // literal, line 331
-            if (!(eq_s_b("\u03BA\u03BF\u03C1")))
-            {
+            if (!(eq_s_b("\u03BA\u03BF\u03C1"))) {
                 return false;
             }
             // ], line 331
@@ -2067,8 +2039,7 @@ public class greekStemmer extends AbstractSnowballStemmer {
         // [, line 337
         ket = cursor;
         // substring, line 337
-        if (find_among_b(a_26) == 0)
-        {
+        if (find_among_b(a_26) == 0) {
             return false;
         }
         // ], line 337
@@ -2079,22 +2050,22 @@ public class greekStemmer extends AbstractSnowballStemmer {
         // unset test1, line 340
         B_test1 = false;
         // or, line 343
-        lab0: do {
+        lab0:
+        do {
             int v_1 = limit - cursor;
-            lab1: do {
+            lab1:
+            do {
                 // (, line 341
                 // [, line 341
                 ket = cursor;
                 // substring, line 341
-                if (find_among_b(a_24) == 0)
-                {
+                if (find_among_b(a_24) == 0) {
                     break lab1;
                 }
                 // ], line 341
                 bra = cursor;
                 // atlimit, line 341
-                if (cursor > limit_backward)
-                {
+                if (cursor > limit_backward) {
                     break lab1;
                 }
                 // (, line 342
@@ -2115,8 +2086,7 @@ public class greekStemmer extends AbstractSnowballStemmer {
             // [, line 344
             ket = cursor;
             // substring, line 344
-            if (find_among_b(a_25) == 0)
-            {
+            if (find_among_b(a_25) == 0) {
                 return false;
             }
             // ], line 344
@@ -2141,8 +2111,7 @@ public class greekStemmer extends AbstractSnowballStemmer {
         // [, line 352
         ket = cursor;
         // substring, line 352
-        if (find_among_b(a_28) == 0)
-        {
+        if (find_among_b(a_28) == 0) {
             return false;
         }
         // ], line 352
@@ -2155,15 +2124,13 @@ public class greekStemmer extends AbstractSnowballStemmer {
         // [, line 356
         ket = cursor;
         // substring, line 356
-        if (find_among_b(a_27) == 0)
-        {
+        if (find_among_b(a_27) == 0) {
             return false;
         }
         // ], line 356
         bra = cursor;
         // atlimit, line 356
-        if (cursor > limit_backward)
-        {
+        if (cursor > limit_backward) {
             return false;
         }
         // (, line 358
@@ -2185,8 +2152,7 @@ public class greekStemmer extends AbstractSnowballStemmer {
         // [, line 365
         ket = cursor;
         // substring, line 365
-        if (find_among_b(a_29) == 0)
-        {
+        if (find_among_b(a_29) == 0) {
             return false;
         }
         // ], line 365
@@ -2197,13 +2163,13 @@ public class greekStemmer extends AbstractSnowballStemmer {
         // not, line 368
         {
             int v_1 = limit - cursor;
-            lab0: do {
+            lab0:
+            do {
                 // (, line 368
                 // [, line 368
                 ket = cursor;
                 // substring, line 368
-                if (find_among_b(a_30) == 0)
-                {
+                if (find_among_b(a_30) == 0) {
                     break lab0;
                 }
                 // ], line 368
@@ -2226,8 +2192,7 @@ public class greekStemmer extends AbstractSnowballStemmer {
         // [, line 375
         ket = cursor;
         // substring, line 375
-        if (find_among_b(a_31) == 0)
-        {
+        if (find_among_b(a_31) == 0) {
             return false;
         }
         // ], line 375
@@ -2238,8 +2203,7 @@ public class greekStemmer extends AbstractSnowballStemmer {
         // [, line 378
         ket = cursor;
         // substring, line 378
-        if (find_among_b(a_32) == 0)
-        {
+        if (find_among_b(a_32) == 0) {
             return false;
         }
         // ], line 378
@@ -2263,8 +2227,7 @@ public class greekStemmer extends AbstractSnowballStemmer {
         // [, line 384
         ket = cursor;
         // substring, line 384
-        if (find_among_b(a_33) == 0)
-        {
+        if (find_among_b(a_33) == 0) {
             return false;
         }
         // ], line 384
@@ -2275,8 +2238,7 @@ public class greekStemmer extends AbstractSnowballStemmer {
         // [, line 387
         ket = cursor;
         // substring, line 387
-        if (find_among_b(a_34) == 0)
-        {
+        if (find_among_b(a_34) == 0) {
             return false;
         }
         // ], line 387
@@ -2300,8 +2262,7 @@ public class greekStemmer extends AbstractSnowballStemmer {
         // [, line 394
         ket = cursor;
         // substring, line 394
-        if (find_among_b(a_35) == 0)
-        {
+        if (find_among_b(a_35) == 0) {
             return false;
         }
         // ], line 394
@@ -2314,15 +2275,13 @@ public class greekStemmer extends AbstractSnowballStemmer {
         // [, line 397
         ket = cursor;
         // substring, line 397
-        if (find_among_b(a_36) == 0)
-        {
+        if (find_among_b(a_36) == 0) {
             return false;
         }
         // ], line 397
         bra = cursor;
         // atlimit, line 397
-        if (cursor > limit_backward)
-        {
+        if (cursor > limit_backward) {
             return false;
         }
         // (, line 398
@@ -2344,8 +2303,7 @@ public class greekStemmer extends AbstractSnowballStemmer {
         // [, line 403
         ket = cursor;
         // substring, line 403
-        if (find_among_b(a_37) == 0)
-        {
+        if (find_among_b(a_37) == 0) {
             return false;
         }
         // ], line 403
@@ -2358,8 +2316,7 @@ public class greekStemmer extends AbstractSnowballStemmer {
         // (, line 406
         // [, line 406
         ket = cursor;
-        if (!(in_grouping_b(g_v, 945, 969)))
-        {
+        if (!(in_grouping_b(g_v, 945, 969))) {
             return false;
         }
         // ], line 406
@@ -2382,8 +2339,7 @@ public class greekStemmer extends AbstractSnowballStemmer {
         // [, line 410
         ket = cursor;
         // substring, line 410
-        if (find_among_b(a_38) == 0)
-        {
+        if (find_among_b(a_38) == 0) {
             return false;
         }
         // ], line 410
@@ -2394,14 +2350,15 @@ public class greekStemmer extends AbstractSnowballStemmer {
         // unset test1, line 411
         B_test1 = false;
         // or, line 413
-        lab0: do {
+        lab0:
+        do {
             int v_1 = limit - cursor;
-            lab1: do {
+            lab1:
+            do {
                 // (, line 413
                 // [, line 413
                 ket = cursor;
-                if (!(in_grouping_b(g_v, 945, 969)))
-                {
+                if (!(in_grouping_b(g_v, 945, 969))) {
                     break lab1;
                 }
                 // ], line 413
@@ -2423,15 +2380,13 @@ public class greekStemmer extends AbstractSnowballStemmer {
             ket = cursor;
         } while (false);
         // substring, line 414
-        if (find_among_b(a_39) == 0)
-        {
+        if (find_among_b(a_39) == 0) {
             return false;
         }
         // ], line 414
         bra = cursor;
         // atlimit, line 414
-        if (cursor > limit_backward)
-        {
+        if (cursor > limit_backward) {
             return false;
         }
         // (, line 419
@@ -2452,16 +2407,15 @@ public class greekStemmer extends AbstractSnowballStemmer {
         // (, line 423
         // do, line 424
         int v_1 = limit - cursor;
-        lab0: do {
+        lab0:
+        do {
             // (, line 424
             // literal, line 424
-            if (!(eq_s_b("\u03B1\u03B3\u03B1\u03BC\u03B5")))
-            {
+            if (!(eq_s_b("\u03B1\u03B3\u03B1\u03BC\u03B5"))) {
                 break lab0;
             }
             // atlimit, line 424
-            if (cursor > limit_backward)
-            {
+            if (cursor > limit_backward) {
                 break lab0;
             }
             // <-, line 424
@@ -2470,13 +2424,13 @@ public class greekStemmer extends AbstractSnowballStemmer {
         cursor = limit - v_1;
         // do, line 425
         int v_2 = limit - cursor;
-        lab1: do {
+        lab1:
+        do {
             // (, line 425
             // [, line 426
             ket = cursor;
             // substring, line 426
-            if (find_among_b(a_40) == 0)
-            {
+            if (find_among_b(a_40) == 0) {
                 break lab1;
             }
             // ], line 426
@@ -2491,8 +2445,7 @@ public class greekStemmer extends AbstractSnowballStemmer {
         // [, line 430
         ket = cursor;
         // literal, line 430
-        if (!(eq_s_b("\u03B1\u03BC\u03B5")))
-        {
+        if (!(eq_s_b("\u03B1\u03BC\u03B5"))) {
             return false;
         }
         // ], line 430
@@ -2504,15 +2457,13 @@ public class greekStemmer extends AbstractSnowballStemmer {
         // [, line 433
         ket = cursor;
         // substring, line 433
-        if (find_among_b(a_41) == 0)
-        {
+        if (find_among_b(a_41) == 0) {
             return false;
         }
         // ], line 433
         bra = cursor;
         // atlimit, line 433
-        if (cursor > limit_backward)
-        {
+        if (cursor > limit_backward) {
             return false;
         }
         // (, line 435
@@ -2533,13 +2484,13 @@ public class greekStemmer extends AbstractSnowballStemmer {
         // (, line 439
         // do, line 440
         int v_1 = limit - cursor;
-        lab0: do {
+        lab0:
+        do {
             // (, line 440
             // [, line 441
             ket = cursor;
             // substring, line 441
-            if (find_among_b(a_43) == 0)
-            {
+            if (find_among_b(a_43) == 0) {
                 break lab0;
             }
             // ], line 441
@@ -2552,15 +2503,13 @@ public class greekStemmer extends AbstractSnowballStemmer {
             // [, line 446
             ket = cursor;
             // substring, line 446
-            if (find_among_b(a_42) == 0)
-            {
+            if (find_among_b(a_42) == 0) {
                 break lab0;
             }
             // ], line 446
             bra = cursor;
             // atlimit, line 446
-            if (cursor > limit_backward)
-            {
+            if (cursor > limit_backward) {
                 break lab0;
             }
             // (, line 447
@@ -2579,8 +2528,7 @@ public class greekStemmer extends AbstractSnowballStemmer {
         // [, line 452
         ket = cursor;
         // literal, line 452
-        if (!(eq_s_b("\u03B1\u03BD\u03B5")))
-        {
+        if (!(eq_s_b("\u03B1\u03BD\u03B5"))) {
             return false;
         }
         // ], line 452
@@ -2590,14 +2538,15 @@ public class greekStemmer extends AbstractSnowballStemmer {
         // unset test1, line 454
         B_test1 = false;
         // or, line 455
-        lab1: do {
+        lab1:
+        do {
             int v_2 = limit - cursor;
-            lab2: do {
+            lab2:
+            do {
                 // (, line 455
                 // [, line 455
                 ket = cursor;
-                if (!(in_grouping_b(g_v2, 945, 969)))
-                {
+                if (!(in_grouping_b(g_v2, 945, 969))) {
                     break lab2;
                 }
                 // ], line 455
@@ -2619,15 +2568,13 @@ public class greekStemmer extends AbstractSnowballStemmer {
             ket = cursor;
         } while (false);
         // substring, line 456
-        if (find_among_b(a_44) == 0)
-        {
+        if (find_among_b(a_44) == 0) {
             return false;
         }
         // ], line 456
         bra = cursor;
         // atlimit, line 456
-        if (cursor > limit_backward)
-        {
+        if (cursor > limit_backward) {
             return false;
         }
         // (, line 473
@@ -2648,13 +2595,13 @@ public class greekStemmer extends AbstractSnowballStemmer {
         // (, line 477
         // do, line 478
         int v_1 = limit - cursor;
-        lab0: do {
+        lab0:
+        do {
             // (, line 478
             // [, line 479
             ket = cursor;
             // substring, line 479
-            if (find_among_b(a_45) == 0)
-            {
+            if (find_among_b(a_45) == 0) {
                 break lab0;
             }
             // ], line 479
@@ -2669,8 +2616,7 @@ public class greekStemmer extends AbstractSnowballStemmer {
         // [, line 483
         ket = cursor;
         // literal, line 483
-        if (!(eq_s_b("\u03B5\u03C4\u03B5")))
-        {
+        if (!(eq_s_b("\u03B5\u03C4\u03B5"))) {
             return false;
         }
         // ], line 483
@@ -2680,14 +2626,15 @@ public class greekStemmer extends AbstractSnowballStemmer {
         // unset test1, line 485
         B_test1 = false;
         // or, line 486
-        lab1: do {
+        lab1:
+        do {
             int v_2 = limit - cursor;
-            lab2: do {
+            lab2:
+            do {
                 // (, line 486
                 // [, line 486
                 ket = cursor;
-                if (!(in_grouping_b(g_v2, 945, 969)))
-                {
+                if (!(in_grouping_b(g_v2, 945, 969))) {
                     break lab2;
                 }
                 // ], line 486
@@ -2705,13 +2652,13 @@ public class greekStemmer extends AbstractSnowballStemmer {
                 break lab1;
             } while (false);
             cursor = limit - v_2;
-            lab3: do {
+            lab3:
+            do {
                 // (, line 487
                 // [, line 487
                 ket = cursor;
                 // substring, line 487
-                if (find_among_b(a_46) == 0)
-                {
+                if (find_among_b(a_46) == 0) {
                     break lab3;
                 }
                 // ], line 487
@@ -2734,15 +2681,13 @@ public class greekStemmer extends AbstractSnowballStemmer {
             ket = cursor;
         } while (false);
         // substring, line 493
-        if (find_among_b(a_47) == 0)
-        {
+        if (find_among_b(a_47) == 0) {
             return false;
         }
         // ], line 493
         bra = cursor;
         // atlimit, line 493
-        if (cursor > limit_backward)
-        {
+        if (cursor > limit_backward) {
             return false;
         }
         // (, line 497
@@ -2764,8 +2709,7 @@ public class greekStemmer extends AbstractSnowballStemmer {
         // [, line 502
         ket = cursor;
         // substring, line 502
-        if (find_among_b(a_48) == 0)
-        {
+        if (find_among_b(a_48) == 0) {
             return false;
         }
         // ], line 502
@@ -2776,22 +2720,22 @@ public class greekStemmer extends AbstractSnowballStemmer {
         // unset test1, line 505
         B_test1 = false;
         // or, line 506
-        lab0: do {
+        lab0:
+        do {
             int v_1 = limit - cursor;
-            lab1: do {
+            lab1:
+            do {
                 // (, line 506
                 // [, line 506
                 ket = cursor;
                 // literal, line 506
-                if (!(eq_s_b("\u03B1\u03C1\u03C7")))
-                {
+                if (!(eq_s_b("\u03B1\u03C1\u03C7"))) {
                     break lab1;
                 }
                 // ], line 506
                 bra = cursor;
                 // atlimit, line 506
-                if (cursor > limit_backward)
-                {
+                if (cursor > limit_backward) {
                     break lab1;
                 }
                 // -> s, line 506
@@ -2811,8 +2755,7 @@ public class greekStemmer extends AbstractSnowballStemmer {
             // [, line 507
             ket = cursor;
             // literal, line 507
-            if (!(eq_s_b("\u03BA\u03C1\u03B5")))
-            {
+            if (!(eq_s_b("\u03BA\u03C1\u03B5"))) {
                 return false;
             }
             // ], line 507
@@ -2836,8 +2779,7 @@ public class greekStemmer extends AbstractSnowballStemmer {
         // [, line 513
         ket = cursor;
         // substring, line 513
-        if (find_among_b(a_49) == 0)
-        {
+        if (find_among_b(a_49) == 0) {
             return false;
         }
         // ], line 513
@@ -2851,15 +2793,13 @@ public class greekStemmer extends AbstractSnowballStemmer {
         // [, line 517
         ket = cursor;
         // literal, line 517
-        if (!(eq_s_b("\u03BF\u03BD")))
-        {
+        if (!(eq_s_b("\u03BF\u03BD"))) {
             return false;
         }
         // ], line 517
         bra = cursor;
         // atlimit, line 517
-        if (cursor > limit_backward)
-        {
+        if (cursor > limit_backward) {
             return false;
         }
         // -> s, line 517
@@ -2879,13 +2819,13 @@ public class greekStemmer extends AbstractSnowballStemmer {
         // (, line 522
         // do, line 523
         int v_1 = limit - cursor;
-        lab0: do {
+        lab0:
+        do {
             // (, line 523
             // [, line 524
             ket = cursor;
             // literal, line 524
-            if (!(eq_s_b("\u03B9\u03B5\u03C3\u03C4\u03B5")))
-            {
+            if (!(eq_s_b("\u03B9\u03B5\u03C3\u03C4\u03B5"))) {
                 break lab0;
             }
             // ], line 524
@@ -2897,15 +2837,13 @@ public class greekStemmer extends AbstractSnowballStemmer {
             // [, line 527
             ket = cursor;
             // substring, line 527
-            if (find_among_b(a_50) == 0)
-            {
+            if (find_among_b(a_50) == 0) {
                 break lab0;
             }
             // ], line 527
             bra = cursor;
             // atlimit, line 527
-            if (cursor > limit_backward)
-            {
+            if (cursor > limit_backward) {
                 break lab0;
             }
             // (, line 528
@@ -2924,8 +2862,7 @@ public class greekStemmer extends AbstractSnowballStemmer {
         // [, line 531
         ket = cursor;
         // literal, line 531
-        if (!(eq_s_b("\u03B5\u03C3\u03C4\u03B5")))
-        {
+        if (!(eq_s_b("\u03B5\u03C3\u03C4\u03B5"))) {
             return false;
         }
         // ], line 531
@@ -2937,15 +2874,13 @@ public class greekStemmer extends AbstractSnowballStemmer {
         // [, line 534
         ket = cursor;
         // substring, line 534
-        if (find_among_b(a_51) == 0)
-        {
+        if (find_among_b(a_51) == 0) {
             return false;
         }
         // ], line 534
         bra = cursor;
         // atlimit, line 534
-        if (cursor > limit_backward)
-        {
+        if (cursor > limit_backward) {
             return false;
         }
         // (, line 536
@@ -2966,13 +2901,13 @@ public class greekStemmer extends AbstractSnowballStemmer {
         // (, line 540
         // do, line 541
         int v_1 = limit - cursor;
-        lab0: do {
+        lab0:
+        do {
             // (, line 541
             // [, line 542
             ket = cursor;
             // substring, line 542
-            if (find_among_b(a_52) == 0)
-            {
+            if (find_among_b(a_52) == 0) {
                 break lab0;
             }
             // ], line 542
@@ -2987,8 +2922,7 @@ public class greekStemmer extends AbstractSnowballStemmer {
         // [, line 546
         ket = cursor;
         // substring, line 546
-        if (find_among_b(a_55) == 0)
-        {
+        if (find_among_b(a_55) == 0) {
             return false;
         }
         // ], line 546
@@ -2999,15 +2933,16 @@ public class greekStemmer extends AbstractSnowballStemmer {
         // unset test1, line 549
         B_test1 = false;
         // or, line 552
-        lab1: do {
+        lab1:
+        do {
             int v_2 = limit - cursor;
-            lab2: do {
+            lab2:
+            do {
                 // (, line 550
                 // [, line 550
                 ket = cursor;
                 // substring, line 550
-                if (find_among_b(a_53) == 0)
-                {
+                if (find_among_b(a_53) == 0) {
                     break lab2;
                 }
                 // ], line 550
@@ -3030,15 +2965,13 @@ public class greekStemmer extends AbstractSnowballStemmer {
             // [, line 553
             ket = cursor;
             // substring, line 553
-            if (find_among_b(a_54) == 0)
-            {
+            if (find_among_b(a_54) == 0) {
                 return false;
             }
             // ], line 553
             bra = cursor;
             // atlimit, line 553
-            if (cursor > limit_backward)
-            {
+            if (cursor > limit_backward) {
                 return false;
             }
             // (, line 554
@@ -3061,8 +2994,7 @@ public class greekStemmer extends AbstractSnowballStemmer {
         // [, line 561
         ket = cursor;
         // substring, line 561
-        if (find_among_b(a_58) == 0)
-        {
+        if (find_among_b(a_58) == 0) {
             return false;
         }
         // ], line 561
@@ -3073,15 +3005,16 @@ public class greekStemmer extends AbstractSnowballStemmer {
         // unset test1, line 564
         B_test1 = false;
         // or, line 569
-        lab0: do {
+        lab0:
+        do {
             int v_1 = limit - cursor;
-            lab1: do {
+            lab1:
+            do {
                 // (, line 565
                 // [, line 565
                 ket = cursor;
                 // substring, line 565
-                if (find_among_b(a_56) == 0)
-                {
+                if (find_among_b(a_56) == 0) {
                     break lab1;
                 }
                 // ], line 565
@@ -3104,15 +3037,13 @@ public class greekStemmer extends AbstractSnowballStemmer {
             // [, line 570
             ket = cursor;
             // substring, line 570
-            if (find_among_b(a_57) == 0)
-            {
+            if (find_among_b(a_57) == 0) {
                 return false;
             }
             // ], line 570
             bra = cursor;
             // atlimit, line 570
-            if (cursor > limit_backward)
-            {
+            if (cursor > limit_backward) {
                 return false;
             }
             // (, line 574
@@ -3135,8 +3066,7 @@ public class greekStemmer extends AbstractSnowballStemmer {
         // [, line 581
         ket = cursor;
         // substring, line 581
-        if (find_among_b(a_62) == 0)
-        {
+        if (find_among_b(a_62) == 0) {
             return false;
         }
         // ], line 581
@@ -3147,15 +3077,16 @@ public class greekStemmer extends AbstractSnowballStemmer {
         // unset test1, line 584
         B_test1 = false;
         // or, line 585
-        lab0: do {
+        lab0:
+        do {
             int v_1 = limit - cursor;
-            lab1: do {
+            lab1:
+            do {
                 // (, line 585
                 // [, line 585
                 ket = cursor;
                 // literal, line 585
-                if (!(eq_s_b("\u03BA\u03BF\u03BB\u03BB")))
-                {
+                if (!(eq_s_b("\u03BA\u03BF\u03BB\u03BB"))) {
                     break lab1;
                 }
                 // ], line 585
@@ -3177,13 +3108,13 @@ public class greekStemmer extends AbstractSnowballStemmer {
             // not, line 586
             {
                 int v_2 = limit - cursor;
-                lab2: do {
+                lab2:
+                do {
                     // (, line 586
                     // [, line 586
                     ket = cursor;
                     // substring, line 586
-                    if (find_among_b(a_59) == 0)
-                    {
+                    if (find_among_b(a_59) == 0) {
                         break lab2;
                     }
                     // ], line 586
@@ -3193,15 +3124,16 @@ public class greekStemmer extends AbstractSnowballStemmer {
                 cursor = limit - v_2;
             }
             // or, line 590
-            lab3: do {
+            lab3:
+            do {
                 int v_3 = limit - cursor;
-                lab4: do {
+                lab4:
+                do {
                     // (, line 587
                     // [, line 587
                     ket = cursor;
                     // substring, line 587
-                    if (find_among_b(a_60) == 0)
-                    {
+                    if (find_among_b(a_60) == 0) {
                         break lab4;
                     }
                     // ], line 587
@@ -3224,15 +3156,13 @@ public class greekStemmer extends AbstractSnowballStemmer {
                 // [, line 591
                 ket = cursor;
                 // substring, line 591
-                if (find_among_b(a_61) == 0)
-                {
+                if (find_among_b(a_61) == 0) {
                     return false;
                 }
                 // ], line 591
                 bra = cursor;
                 // atlimit, line 591
-                if (cursor > limit_backward)
-                {
+                if (cursor > limit_backward) {
                     return false;
                 }
                 // (, line 597
@@ -3256,8 +3186,7 @@ public class greekStemmer extends AbstractSnowballStemmer {
         // [, line 605
         ket = cursor;
         // substring, line 605
-        if (find_among_b(a_63) == 0)
-        {
+        if (find_among_b(a_63) == 0) {
             return false;
         }
         // ], line 605
@@ -3270,15 +3199,13 @@ public class greekStemmer extends AbstractSnowballStemmer {
         // [, line 608
         ket = cursor;
         // substring, line 608
-        if (find_among_b(a_64) == 0)
-        {
+        if (find_among_b(a_64) == 0) {
             return false;
         }
         // ], line 608
         bra = cursor;
         // atlimit, line 608
-        if (cursor > limit_backward)
-        {
+        if (cursor > limit_backward) {
             return false;
         }
         // (, line 609
@@ -3300,8 +3227,7 @@ public class greekStemmer extends AbstractSnowballStemmer {
         // [, line 614
         ket = cursor;
         // substring, line 614
-        if (find_among_b(a_65) == 0)
-        {
+        if (find_among_b(a_65) == 0) {
             return false;
         }
         // ], line 614
@@ -3314,15 +3240,13 @@ public class greekStemmer extends AbstractSnowballStemmer {
         // [, line 617
         ket = cursor;
         // substring, line 617
-        if (find_among_b(a_66) == 0)
-        {
+        if (find_among_b(a_66) == 0) {
             return false;
         }
         // ], line 617
         bra = cursor;
         // atlimit, line 617
-        if (cursor > limit_backward)
-        {
+        if (cursor > limit_backward) {
             return false;
         }
         // (, line 619
@@ -3344,8 +3268,7 @@ public class greekStemmer extends AbstractSnowballStemmer {
         // [, line 624
         ket = cursor;
         // substring, line 624
-        if (find_among_b(a_67) == 0)
-        {
+        if (find_among_b(a_67) == 0) {
             return false;
         }
         // ], line 624
@@ -3358,15 +3281,13 @@ public class greekStemmer extends AbstractSnowballStemmer {
         // [, line 627
         ket = cursor;
         // substring, line 627
-        if (find_among_b(a_68) == 0)
-        {
+        if (find_among_b(a_68) == 0) {
             return false;
         }
         // ], line 627
         bra = cursor;
         // atlimit, line 627
-        if (cursor > limit_backward)
-        {
+        if (cursor > limit_backward) {
             return false;
         }
         // (, line 628
@@ -3388,8 +3309,7 @@ public class greekStemmer extends AbstractSnowballStemmer {
         // [, line 633
         ket = cursor;
         // substring, line 633
-        if (find_among_b(a_69) == 0)
-        {
+        if (find_among_b(a_69) == 0) {
             return false;
         }
         // ], line 633
@@ -3402,15 +3322,13 @@ public class greekStemmer extends AbstractSnowballStemmer {
         // [, line 636
         ket = cursor;
         // substring, line 636
-        if (find_among_b(a_70) == 0)
-        {
+        if (find_among_b(a_70) == 0) {
             return false;
         }
         // ], line 636
         bra = cursor;
         // atlimit, line 636
-        if (cursor > limit_backward)
-        {
+        if (cursor > limit_backward) {
             return false;
         }
         // (, line 638
@@ -3431,13 +3349,13 @@ public class greekStemmer extends AbstractSnowballStemmer {
         // (, line 642
         // do, line 643
         int v_1 = limit - cursor;
-        lab0: do {
+        lab0:
+        do {
             // (, line 643
             // [, line 644
             ket = cursor;
             // substring, line 644
-            if (find_among_b(a_71) == 0)
-            {
+            if (find_among_b(a_71) == 0) {
                 break lab0;
             }
             // ], line 644
@@ -3448,15 +3366,13 @@ public class greekStemmer extends AbstractSnowballStemmer {
         } while (false);
         cursor = limit - v_1;
         // Boolean test test1, line 648
-        if (!(B_test1))
-        {
+        if (!(B_test1)) {
             return false;
         }
         // [, line 649
         ket = cursor;
         // substring, line 649
-        if (find_among_b(a_72) == 0)
-        {
+        if (find_among_b(a_72) == 0) {
             return false;
         }
         // ], line 649
@@ -3472,8 +3388,7 @@ public class greekStemmer extends AbstractSnowballStemmer {
         // [, line 664
         ket = cursor;
         // substring, line 664
-        if (find_among_b(a_73) == 0)
-        {
+        if (find_among_b(a_73) == 0) {
             return false;
         }
         // ], line 664
@@ -3492,337 +3407,336 @@ public class greekStemmer extends AbstractSnowballStemmer {
         // (, line 671
         // do, line 672
         int v_1 = limit - cursor;
-        lab0: do {
+        lab0:
+        do {
             // call tolower, line 672
-            if (!r_tolower())
-            {
+            if (!r_tolower()) {
                 break lab0;
             }
         } while (false);
         cursor = limit - v_1;
         // call has_min_length, line 673
-        if (!r_has_min_length())
-        {
+        if (!r_has_min_length()) {
             return false;
         }
         // set test1, line 674
         B_test1 = true;
         // do, line 675
         int v_2 = limit - cursor;
-        lab1: do {
+        lab1:
+        do {
             // call step1, line 675
-            if (!r_step1())
-            {
+            if (!r_step1()) {
                 break lab1;
             }
         } while (false);
         cursor = limit - v_2;
         // do, line 676
         int v_3 = limit - cursor;
-        lab2: do {
+        lab2:
+        do {
             // call steps1, line 676
-            if (!r_steps1())
-            {
+            if (!r_steps1()) {
                 break lab2;
             }
         } while (false);
         cursor = limit - v_3;
         // do, line 677
         int v_4 = limit - cursor;
-        lab3: do {
+        lab3:
+        do {
             // call steps2, line 677
-            if (!r_steps2())
-            {
+            if (!r_steps2()) {
                 break lab3;
             }
         } while (false);
         cursor = limit - v_4;
         // do, line 678
         int v_5 = limit - cursor;
-        lab4: do {
+        lab4:
+        do {
             // call steps3, line 678
-            if (!r_steps3())
-            {
+            if (!r_steps3()) {
                 break lab4;
             }
         } while (false);
         cursor = limit - v_5;
         // do, line 679
         int v_6 = limit - cursor;
-        lab5: do {
+        lab5:
+        do {
             // call steps4, line 679
-            if (!r_steps4())
-            {
+            if (!r_steps4()) {
                 break lab5;
             }
         } while (false);
         cursor = limit - v_6;
         // do, line 680
         int v_7 = limit - cursor;
-        lab6: do {
+        lab6:
+        do {
             // call steps5, line 680
-            if (!r_steps5())
-            {
+            if (!r_steps5()) {
                 break lab6;
             }
         } while (false);
         cursor = limit - v_7;
         // do, line 681
         int v_8 = limit - cursor;
-        lab7: do {
+        lab7:
+        do {
             // call steps6, line 681
-            if (!r_steps6())
-            {
+            if (!r_steps6()) {
                 break lab7;
             }
         } while (false);
         cursor = limit - v_8;
         // do, line 682
         int v_9 = limit - cursor;
-        lab8: do {
+        lab8:
+        do {
             // call steps7, line 682
-            if (!r_steps7())
-            {
+            if (!r_steps7()) {
                 break lab8;
             }
         } while (false);
         cursor = limit - v_9;
         // do, line 683
         int v_10 = limit - cursor;
-        lab9: do {
+        lab9:
+        do {
             // call steps8, line 683
-            if (!r_steps8())
-            {
+            if (!r_steps8()) {
                 break lab9;
             }
         } while (false);
         cursor = limit - v_10;
         // do, line 684
         int v_11 = limit - cursor;
-        lab10: do {
+        lab10:
+        do {
             // call steps9, line 684
-            if (!r_steps9())
-            {
+            if (!r_steps9()) {
                 break lab10;
             }
         } while (false);
         cursor = limit - v_11;
         // do, line 685
         int v_12 = limit - cursor;
-        lab11: do {
+        lab11:
+        do {
             // call steps10, line 685
-            if (!r_steps10())
-            {
+            if (!r_steps10()) {
                 break lab11;
             }
         } while (false);
         cursor = limit - v_12;
         // do, line 686
         int v_13 = limit - cursor;
-        lab12: do {
+        lab12:
+        do {
             // call step2a, line 686
-            if (!r_step2a())
-            {
+            if (!r_step2a()) {
                 break lab12;
             }
         } while (false);
         cursor = limit - v_13;
         // do, line 687
         int v_14 = limit - cursor;
-        lab13: do {
+        lab13:
+        do {
             // call step2b, line 687
-            if (!r_step2b())
-            {
+            if (!r_step2b()) {
                 break lab13;
             }
         } while (false);
         cursor = limit - v_14;
         // do, line 688
         int v_15 = limit - cursor;
-        lab14: do {
+        lab14:
+        do {
             // call step2c, line 688
-            if (!r_step2c())
-            {
+            if (!r_step2c()) {
                 break lab14;
             }
         } while (false);
         cursor = limit - v_15;
         // do, line 689
         int v_16 = limit - cursor;
-        lab15: do {
+        lab15:
+        do {
             // call step2d, line 689
-            if (!r_step2d())
-            {
+            if (!r_step2d()) {
                 break lab15;
             }
         } while (false);
         cursor = limit - v_16;
         // do, line 690
         int v_17 = limit - cursor;
-        lab16: do {
+        lab16:
+        do {
             // call step3, line 690
-            if (!r_step3())
-            {
+            if (!r_step3()) {
                 break lab16;
             }
         } while (false);
         cursor = limit - v_17;
         // do, line 691
         int v_18 = limit - cursor;
-        lab17: do {
+        lab17:
+        do {
             // call step4, line 691
-            if (!r_step4())
-            {
+            if (!r_step4()) {
                 break lab17;
             }
         } while (false);
         cursor = limit - v_18;
         // do, line 692
         int v_19 = limit - cursor;
-        lab18: do {
+        lab18:
+        do {
             // call step5a, line 692
-            if (!r_step5a())
-            {
+            if (!r_step5a()) {
                 break lab18;
             }
         } while (false);
         cursor = limit - v_19;
         // do, line 693
         int v_20 = limit - cursor;
-        lab19: do {
+        lab19:
+        do {
             // call step5b, line 693
-            if (!r_step5b())
-            {
+            if (!r_step5b()) {
                 break lab19;
             }
         } while (false);
         cursor = limit - v_20;
         // do, line 694
         int v_21 = limit - cursor;
-        lab20: do {
+        lab20:
+        do {
             // call step5c, line 694
-            if (!r_step5c())
-            {
+            if (!r_step5c()) {
                 break lab20;
             }
         } while (false);
         cursor = limit - v_21;
         // do, line 695
         int v_22 = limit - cursor;
-        lab21: do {
+        lab21:
+        do {
             // call step5d, line 695
-            if (!r_step5d())
-            {
+            if (!r_step5d()) {
                 break lab21;
             }
         } while (false);
         cursor = limit - v_22;
         // do, line 696
         int v_23 = limit - cursor;
-        lab22: do {
+        lab22:
+        do {
             // call step5e, line 696
-            if (!r_step5e())
-            {
+            if (!r_step5e()) {
                 break lab22;
             }
         } while (false);
         cursor = limit - v_23;
         // do, line 697
         int v_24 = limit - cursor;
-        lab23: do {
+        lab23:
+        do {
             // call step5f, line 697
-            if (!r_step5f())
-            {
+            if (!r_step5f()) {
                 break lab23;
             }
         } while (false);
         cursor = limit - v_24;
         // do, line 698
         int v_25 = limit - cursor;
-        lab24: do {
+        lab24:
+        do {
             // call step5g, line 698
-            if (!r_step5g())
-            {
+            if (!r_step5g()) {
                 break lab24;
             }
         } while (false);
         cursor = limit - v_25;
         // do, line 699
         int v_26 = limit - cursor;
-        lab25: do {
+        lab25:
+        do {
             // call step5h, line 699
-            if (!r_step5h())
-            {
+            if (!r_step5h()) {
                 break lab25;
             }
         } while (false);
         cursor = limit - v_26;
         // do, line 700
         int v_27 = limit - cursor;
-        lab26: do {
+        lab26:
+        do {
             // call step5j, line 700
-            if (!r_step5j())
-            {
+            if (!r_step5j()) {
                 break lab26;
             }
         } while (false);
         cursor = limit - v_27;
         // do, line 701
         int v_28 = limit - cursor;
-        lab27: do {
+        lab27:
+        do {
             // call step5i, line 701
-            if (!r_step5i())
-            {
+            if (!r_step5i()) {
                 break lab27;
             }
         } while (false);
         cursor = limit - v_28;
         // do, line 702
         int v_29 = limit - cursor;
-        lab28: do {
+        lab28:
+        do {
             // call step5k, line 702
-            if (!r_step5k())
-            {
+            if (!r_step5k()) {
                 break lab28;
             }
         } while (false);
         cursor = limit - v_29;
         // do, line 703
         int v_30 = limit - cursor;
-        lab29: do {
+        lab29:
+        do {
             // call step5l, line 703
-            if (!r_step5l())
-            {
+            if (!r_step5l()) {
                 break lab29;
             }
         } while (false);
         cursor = limit - v_30;
         // do, line 704
         int v_31 = limit - cursor;
-        lab30: do {
+        lab30:
+        do {
             // call step5m, line 704
-            if (!r_step5m())
-            {
+            if (!r_step5m()) {
                 break lab30;
             }
         } while (false);
         cursor = limit - v_31;
         // do, line 705
         int v_32 = limit - cursor;
-        lab31: do {
+        lab31:
+        do {
             // call step6, line 705
-            if (!r_step6())
-            {
+            if (!r_step6()) {
                 break lab31;
             }
         } while (false);
         cursor = limit - v_32;
         // do, line 706
         int v_33 = limit - cursor;
-        lab32: do {
+        lab32:
+        do {
             // call step7, line 706
-            if (!r_step7())
-            {
+            if (!r_step7()) {
                 break lab32;
             }
         } while (false);
@@ -3831,12 +3745,12 @@ public class greekStemmer extends AbstractSnowballStemmer {
         return true;
     }
 
-    public boolean equals( Object o ) {
+    public boolean equals(Object o) {
         return o instanceof greekStemmer;
     }
 
     public int hashCode() {
         return greekStemmer.class.getName().hashCode();
     }
-    
+
 }

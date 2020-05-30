@@ -17,82 +17,81 @@
 
 package opennlp.tools.postag;
 
+import opennlp.tools.cmdline.postag.POSEvaluationErrorListener;
+import opennlp.tools.util.InvalidFormatException;
+import opennlp.tools.util.Sequence;
+import org.junit.Assert;
+import org.junit.Test;
+
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
 import java.util.Arrays;
 import java.util.List;
 
-import org.junit.Assert;
-import org.junit.Test;
-
-import opennlp.tools.cmdline.postag.POSEvaluationErrorListener;
-import opennlp.tools.util.InvalidFormatException;
-import opennlp.tools.util.Sequence;
-
 public class POSEvaluatorTest {
 
-  @Test
-  public void testPositive() throws InvalidFormatException {
-    OutputStream stream = new ByteArrayOutputStream();
-    POSTaggerEvaluationMonitor listener = new POSEvaluationErrorListener(stream);
+    @Test
+    public void testPositive() throws InvalidFormatException {
+        OutputStream stream = new ByteArrayOutputStream();
+        POSTaggerEvaluationMonitor listener = new POSEvaluationErrorListener(stream);
 
-    POSEvaluator eval = new POSEvaluator(new DummyPOSTagger(
-        POSSampleTest.createGoldSample()), listener);
+        POSEvaluator eval = new POSEvaluator(new DummyPOSTagger(
+                POSSampleTest.createGoldSample()), listener);
 
-    eval.evaluateSample(POSSampleTest.createGoldSample());
-    Assert.assertEquals(1.0, eval.getWordAccuracy(), 0.0);
-    Assert.assertEquals(0, stream.toString().length());
-  }
-
-  @Test
-  public void testNegative() throws InvalidFormatException {
-    OutputStream stream = new ByteArrayOutputStream();
-    POSTaggerEvaluationMonitor listener = new POSEvaluationErrorListener(stream);
-
-    POSEvaluator eval = new POSEvaluator(
-        new DummyPOSTagger(POSSampleTest.createGoldSample()), listener);
-
-    eval.evaluateSample(POSSampleTest.createPredSample());
-    Assert.assertEquals(.7, eval.getWordAccuracy(), .1d);
-    Assert.assertNotSame(0, stream.toString().length());
-  }
-
-  class DummyPOSTagger implements POSTagger {
-
-    private POSSample sample;
-
-    public DummyPOSTagger(POSSample sample) {
-      this.sample = sample;
+        eval.evaluateSample(POSSampleTest.createGoldSample());
+        Assert.assertEquals(1.0, eval.getWordAccuracy(), 0.0);
+        Assert.assertEquals(0, stream.toString().length());
     }
 
-    public List<String> tag(List<String> sentence) {
-      return Arrays.asList(sample.getTags());
+    @Test
+    public void testNegative() throws InvalidFormatException {
+        OutputStream stream = new ByteArrayOutputStream();
+        POSTaggerEvaluationMonitor listener = new POSEvaluationErrorListener(stream);
+
+        POSEvaluator eval = new POSEvaluator(
+                new DummyPOSTagger(POSSampleTest.createGoldSample()), listener);
+
+        eval.evaluateSample(POSSampleTest.createPredSample());
+        Assert.assertEquals(.7, eval.getWordAccuracy(), .1d);
+        Assert.assertNotSame(0, stream.toString().length());
     }
 
-    public String[] tag(String[] sentence) {
-      return sample.getTags();
-    }
+    class DummyPOSTagger implements POSTagger {
 
-    public String tag(String sentence) {
-      return null;
-    }
+        private POSSample sample;
 
-    public Sequence[] topKSequences(List<String> sentence) {
-      return null;
-    }
+        public DummyPOSTagger(POSSample sample) {
+            this.sample = sample;
+        }
 
-    public Sequence[] topKSequences(String[] sentence) {
-      return null;
-    }
+        public List<String> tag(List<String> sentence) {
+            return Arrays.asList(sample.getTags());
+        }
 
-    public String[] tag(String[] sentence, Object[] additionaContext) {
-      return tag(sentence);
-    }
+        public String[] tag(String[] sentence) {
+            return sample.getTags();
+        }
 
-    public Sequence[] topKSequences(String[] sentence, Object[] additionaContext) {
-      return topKSequences(sentence);
-    }
+        public String tag(String sentence) {
+            return null;
+        }
 
-  }
+        public Sequence[] topKSequences(List<String> sentence) {
+            return null;
+        }
+
+        public Sequence[] topKSequences(String[] sentence) {
+            return null;
+        }
+
+        public String[] tag(String[] sentence, Object[] additionaContext) {
+            return tag(sentence);
+        }
+
+        public Sequence[] topKSequences(String[] sentence, Object[] additionaContext) {
+            return topKSequences(sentence);
+        }
+
+    }
 
 }

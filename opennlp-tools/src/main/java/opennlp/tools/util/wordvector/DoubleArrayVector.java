@@ -22,43 +22,43 @@ import java.nio.FloatBuffer;
 
 class DoubleArrayVector implements WordVector {
 
-  private final double[] vector;
+    private final double[] vector;
 
-  DoubleArrayVector(double[] vector) {
-    this.vector = vector;
-  }
-
-  @Override
-  public WordVectorType getDataType() {
-    return WordVectorType.DOUBLE;
-  }
-
-  @Override
-  public float getAsFloat(int index) {
-    return (float) getAsDouble(index);
-  }
-
-  @Override
-  public double getAsDouble(int index) {
-    return vector[index];
-  }
-
-  @Override
-  public FloatBuffer toFloatBuffer() {
-    float[] floatVector = new float[vector.length];
-    for (int i = 0; i < floatVector.length ; i++) {
-      floatVector[i] = (float) vector[i];
+    DoubleArrayVector(double[] vector) {
+        this.vector = vector;
     }
-    return FloatBuffer.wrap(floatVector).asReadOnlyBuffer();
-  }
 
-  @Override
-  public DoubleBuffer toDoubleBuffer() {
-    return DoubleBuffer.wrap(vector).asReadOnlyBuffer();
-  }
+    @Override
+    public WordVectorType getDataType() {
+        return WordVectorType.DOUBLE;
+    }
 
-  @Override
-  public int dimension() {
-    return vector.length;
-  }
+    @Override
+    public float getAsFloat(int index) {
+        return (float) getAsDouble(index);
+    }
+
+    @Override
+    public double getAsDouble(int index) {
+        return vector[index];
+    }
+
+    @Override
+    public FloatBuffer toFloatBuffer() {
+        float[] floatVector = new float[vector.length];
+        for (int i = 0; i < floatVector.length; i++) {
+            floatVector[i] = (float) vector[i];
+        }
+        return FloatBuffer.wrap(floatVector).asReadOnlyBuffer();
+    }
+
+    @Override
+    public DoubleBuffer toDoubleBuffer() {
+        return DoubleBuffer.wrap(vector).asReadOnlyBuffer();
+    }
+
+    @Override
+    public int dimension() {
+        return vector.length;
+    }
 }

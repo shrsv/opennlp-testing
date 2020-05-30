@@ -2,7 +2,7 @@
 *****************************************************
 Summary
 -------
-Generated at: 2020-05-29T13:41:07-07:00
+Generated at: 2020-05-30T15:59:35-07:00
 Notes: 1
 Binaries: 4
 Archives: 0
@@ -1180,41 +1180,41 @@ Archives:
 =======================================================================
 ==/home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-tools/src/test/java/opennlp/tools/util/ParagraphStreamMockTest.java
 =======================================================================
-//package opennlp.tools.util;
-//
-//import opennlp.tools.tokenize.WhitespaceTokenizer;
-//import org.junit.Assert;
-//import org.junit.Test;
-//import org.mockito.Mockito;
-//import org.mockito.invocation.InvocationOnMock;
-//import org.mockito.stubbing.Answer;
-//
-//import java.io.IOException;
-//import java.util.ArrayList;
-//import java.util.List;
-//
-//import static org.mockito.Mockito.*;
-//
-//public class ParagraphStreamMockTest {
-//    @Test
-//    public void testSimpleReading() throws IOException {
-//        ParagraphStream paraStream = Mockito.mock(ParagraphStream.class);
-//        // following corresponds to: 1 2 " " " " 4 5 " "
-//        when(paraStream.read()).thenReturn("1\n2\n", "4\n5\n", null);
-//
-//        String the_para;
-//        List<String> para_list = new ArrayList<String>();
-//        while ((the_para = paraStream.read()) != null)
-//            para_list.add(the_para);
-//
-//        Assert.assertEquals("1\n2\n", para_list.get(0));
-//        Assert.assertEquals("4\n5\n", para_list.get(1));
-//
-//        verify(paraStream, times(3)).read();
-//        verify(paraStream, never()).reset();
-//        verifyNoMoreInteractions(paraStream);
-//    }
-//}
+package opennlp.tools.util;
+
+import opennlp.tools.tokenize.WhitespaceTokenizer;
+import org.junit.Assert;
+import org.junit.Test;
+import org.mockito.Mockito;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.mockito.Mockito.*;
+
+public class ParagraphStreamMockTest {
+    @Test
+    public void testSimpleReading() throws IOException {
+        ParagraphStream paraStream = Mockito.mock(ParagraphStream.class);
+        // following corresponds to: 1 2 " " " " 4 5 " "
+        when(paraStream.read()).thenReturn("1\n2\n", "4\n5\n", null);
+
+        String the_para;
+        List<String> para_list = new ArrayList<String>();
+        while ((the_para = paraStream.read()) != null)
+            para_list.add(the_para);
+
+        Assert.assertEquals("1\n2\n", para_list.get(0));
+        Assert.assertEquals("4\n5\n", para_list.get(1));
+
+        verify(paraStream, times(3)).read();
+        verify(paraStream, never()).reset();
+        verifyNoMoreInteractions(paraStream);
+    }
+}
 
 =======================================================================
 ==/home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-tools/src/test/java/opennlp/tools/cmdline/testGenerateManualTool.java
@@ -1246,56 +1246,56 @@ public class testGenerateManualTool {
 =======================================================================
 ==/home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-tools/src/test/java/opennlp/tools/cmdline/CmdLineUtilTest.java
 =======================================================================
-//package opennlp.tools.cmdline;
-//
-//
-//import opennlp.tools.chunker.ChunkerFactory;
-//import opennlp.tools.chunker.ChunkerME;
-//import opennlp.tools.chunker.ChunkerModel;
-//import opennlp.tools.cmdline.chunker.ChunkerTrainerTool;
-//import opennlp.tools.util.TrainingParameters;
-//import opennlp.tools.util.model.ModelUtil;
-//import org.junit.Assert;
-//import org.junit.Ignore;
-//import org.junit.Test;
-//import org.mockito.Mockito;
-//
-//import java.io.BufferedWriter;
-//import java.io.File;
-//import java.io.FileWriter;
-//import java.io.IOException;
-//
-//@Ignore
-//public class CmdLineUtilTest {
-//    @Test(expected = TerminateToolException.class)
-//    public void testCIFDoesntExist(){
-//        File existingFile = new File("sampledata2");
-//        CmdLineUtil.checkInputFile("sampledata2", existingFile);
-//    }
-//
-//    @Test
-//    public void testCIFValidFile(){
-//        File existingFile = new File("sampledata");
-//        CmdLineUtil.checkInputFile("sampledata", existingFile);
-//    }
-//
-//    @Test(expected = TerminateToolException.class)
-//    public void testCIFIsADirectory(){
-//        File directory = new File("src");
-//        CmdLineUtil.checkInputFile("src", directory);
-//    }
-//
-//    @Test(expected =  TerminateToolException.class)
-//    public void testCIFNoPermissions(){
-//        File fstab = new File("unreadablefile");
-//        CmdLineUtil.checkInputFile("unreadablefile", fstab);
-//    }
-//
-//    @Test(expected = TerminateToolException.class)
-//    public void testOutputDir(){
-//        File directory = new File("src");
-//        CmdLineUtil.checkOutputFile("src", directory);
-//    }
+package opennlp.tools.cmdline;
+
+
+import opennlp.tools.chunker.ChunkerFactory;
+import opennlp.tools.chunker.ChunkerME;
+import opennlp.tools.chunker.ChunkerModel;
+import opennlp.tools.cmdline.chunker.ChunkerTrainerTool;
+import opennlp.tools.util.TrainingParameters;
+import opennlp.tools.util.model.ModelUtil;
+import org.junit.Assert;
+import org.junit.Ignore;
+import org.junit.Test;
+import org.mockito.Mockito;
+
+
+
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+
+
+public class CmdLineUtilTest {
+    @Test(expected = TerminateToolException.class)
+    public void testCIFDoesntExist(){
+        File existingFile = new File("sampledata2");
+        CmdLineUtil.checkInputFile("sampledata2", existingFile);
+    }
+
+    @Test
+    public void testCIFValidFile(){
+        File existingFile = new File("sampledata");
+        CmdLineUtil.checkInputFile("sampledata", existingFile);
+    }
+
+    @Test(expected = TerminateToolException.class)
+    public void testCIFIsADirectory(){
+        File directory = new File("src");
+        CmdLineUtil.checkInputFile("src", directory);
+    }
+
+    @Test(expected =  TerminateToolException.class)
+    public void testCIFNoPermissions(){
+        File fstab = new File("unreadablefile");
+        CmdLineUtil.checkInputFile("unreadablefile", fstab);
+    }
+
+    @Test(expected = TerminateToolException.class)
+    public void testOutputDir(){
+        File directory = new File("src");
 
 =======================================================================
 ==/home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-tools/src/test/resources/opennlp/tools/formats/conllx.sample
@@ -3170,19 +3170,19 @@ package opennlp.tools.stemmer.snowball;
 import java.lang.reflect.Method;
 
 class Among {
-    public Among (String s, int substring_i, int result,
-		  String methodname, SnowballProgram methodobject) {
+    public final int s_size; /* search string */
+    public final char[] s; /* search string */
+    public final int substring_i; /* index to longest matching substring */
+    public final int result; /* result of the lookup */
+    public final Method method; /* method to use if substring matches */
+    public final SnowballProgram methodobject; /* object to invoke method on */
+    public Among(String s, int substring_i, int result,
+                 String methodname, SnowballProgram methodobject) {
         this.s_size = s.length();
         this.s = s.toCharArray();
         this.substring_i = substring_i;
-	this.result = result;
-	this.methodobject = methodobject;
-	if (methodname.length() == 0) {
-	    this.method = null;
-	} else {
-	    try {
-		this.method = methodobject.getClass().
-		getDeclaredMethod(methodname, new Class[0]);
+        this.result = result;
+        this.methodobject = methodobject;
 
 =======================================================================
 ==/home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-tools/src/main/java/opennlp/tools/stemmer/snowball/SnowballProgram.java
@@ -3224,19 +3224,19 @@ package opennlp.tools.stemmer.snowball;
 import java.lang.reflect.InvocationTargetException;
 
 class SnowballProgram {
-    protected SnowballProgram()
-    {
-	current = new StringBuffer();
-	setCurrent("");
+    // current string
+    protected StringBuffer current;
+    protected int cursor;
+    protected int limit;
+    protected int limit_backward;
+    protected int bra;
+    protected int ket;
+    protected SnowballProgram() {
+        current = new StringBuffer();
+        setCurrent("");
     }
 
     /**
-     * Set the current string.
-     */
-    public void setCurrent(String value)
-    {
-	current.replace(0, current.length(), value);
-	cursor = 0;
 
 =======================================================================
 ==/home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-tools/src/main/java/opennlp/tools/stemmer/snowball/porterStemmer.java
@@ -3278,19 +3278,19 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 package opennlp.tools.stemmer.snowball;
 
 
- /**
-  * This class was automatically generated by a Snowball to Java compiler
-  * It implements the stemming algorithm defined by a snowball script.
-  */
+/**
+ * This class was automatically generated by a Snowball to Java compiler
+ * It implements the stemming algorithm defined by a snowball script.
+ */
 class porterStemmer extends opennlp.tools.stemmer.snowball.AbstractSnowballStemmer {
 
-        private final static porterStemmer methodObject = new porterStemmer ();
+    private final static porterStemmer methodObject = new porterStemmer();
 
-                private final static Among a_0[] = {
-                    new Among ( "s", -1, 3, "", methodObject ),
-                    new Among ( "ies", 0, 2, "", methodObject ),
-                    new Among ( "sses", 0, 1, "", methodObject ),
-                    new Among ( "ss", 0, -1, "", methodObject )
+    private final static Among a_0[] = {
+            new Among("s", -1, 3, "", methodObject),
+            new Among("ies", 0, 2, "", methodObject),
+            new Among("sses", 0, 1, "", methodObject),
+            new Among("ss", 0, -1, "", methodObject)
 
 =======================================================================
 ==/home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-tools/src/main/java/opennlp/tools/stemmer/snowball/englishStemmer.java
@@ -3337,13 +3337,13 @@ package opennlp.tools.stemmer.snowball;
  */
 class englishStemmer extends opennlp.tools.stemmer.snowball.AbstractSnowballStemmer {
 
-        private final static englishStemmer methodObject = new englishStemmer ();
+    private final static englishStemmer methodObject = new englishStemmer();
 
-                private final static Among a_0[] = {
-                    new Among ( "arsen", -1, -1, "", methodObject ),
-                    new Among ( "commun", -1, -1, "", methodObject ),
-                    new Among ( "gener", -1, -1, "", methodObject )
-                };
+    private final static Among a_0[] = {
+            new Among("arsen", -1, -1, "", methodObject),
+            new Among("commun", -1, -1, "", methodObject),
+            new Among("gener", -1, -1, "", methodObject)
+    };
 
 
 =======================================================================
@@ -3386,19 +3386,19 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 package opennlp.tools.stemmer.snowball;
 
 
- /**
-  * This class was automatically generated by a Snowball to Java compiler
-  * It implements the stemming algorithm defined by a snowball script.
-  */
+/**
+ * This class was automatically generated by a Snowball to Java compiler
+ * It implements the stemming algorithm defined by a snowball script.
+ */
 class germanStemmer extends opennlp.tools.stemmer.snowball.AbstractSnowballStemmer {
 
-        private final static germanStemmer methodObject = new germanStemmer ();
+    private final static germanStemmer methodObject = new germanStemmer();
 
-                private final static Among a_0[] = {
-                    new Among ( "", -1, 6, "", methodObject ),
-                    new Among ( "U", 0, 2, "", methodObject ),
-                    new Among ( "Y", 0, 1, "", methodObject ),
-                    new Among ( "\u00E4", 0, 3, "", methodObject ),
+    private final static Among a_0[] = {
+            new Among("", -1, 6, "", methodObject),
+            new Among("U", 0, 2, "", methodObject),
+            new Among("Y", 0, 1, "", methodObject),
+            new Among("\u00E4", 0, 3, "", methodObject),
 
 =======================================================================
 ==/home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-tools/src/main/java/opennlp/tools/stemmer/snowball/irishStemmer.java
@@ -3439,20 +3439,20 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 package opennlp.tools.stemmer.snowball;
 
- /**
-  * This class was automatically generated by a Snowball to Java compiler
-  * It implements the stemming algorithm defined by a snowball script.
-  */
+/**
+ * This class was automatically generated by a Snowball to Java compiler
+ * It implements the stemming algorithm defined by a snowball script.
+ */
 
 public class irishStemmer extends opennlp.tools.stemmer.snowball.AbstractSnowballStemmer {
 
-        private final static irishStemmer methodObject = new irishStemmer ();
+    private final static irishStemmer methodObject = new irishStemmer();
 
-                private final static Among a_0[] = {
-                    new Among ( "b'", -1, 4, "", methodObject ),
-                    new Among ( "bh", -1, 14, "", methodObject ),
-                    new Among ( "bhf", 1, 9, "", methodObject ),
-                    new Among ( "bp", -1, 11, "", methodObject ),
+    private final static Among a_0[] = {
+            new Among("b'", -1, 4, "", methodObject),
+            new Among("bh", -1, 14, "", methodObject),
+            new Among("bhf", 1, 9, "", methodObject),
+            new Among("bp", -1, 11, "", methodObject),
 
 =======================================================================
 ==/home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-tools/src/main/java/opennlp/tools/stemmer/snowball/frenchStemmer.java
@@ -3494,19 +3494,19 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 package opennlp.tools.stemmer.snowball;
 
 
- /**
-  * This class was automatically generated by a Snowball to Java compiler
-  * It implements the stemming algorithm defined by a snowball script.
-  */
+/**
+ * This class was automatically generated by a Snowball to Java compiler
+ * It implements the stemming algorithm defined by a snowball script.
+ */
 class frenchStemmer extends opennlp.tools.stemmer.snowball.AbstractSnowballStemmer {
 
-        private final static frenchStemmer methodObject = new frenchStemmer ();
+    private final static frenchStemmer methodObject = new frenchStemmer();
 
-                private final static Among a_0[] = {
-                    new Among ( "col", -1, -1, "", methodObject ),
-                    new Among ( "par", -1, -1, "", methodObject ),
-                    new Among ( "tap", -1, -1, "", methodObject )
-                };
+    private final static Among a_0[] = {
+            new Among("col", -1, -1, "", methodObject),
+            new Among("par", -1, -1, "", methodObject),
+            new Among("tap", -1, -1, "", methodObject)
+    };
 
 =======================================================================
 ==/home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-tools/src/main/java/opennlp/tools/stemmer/snowball/danishStemmer.java
@@ -3547,20 +3547,20 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 package opennlp.tools.stemmer.snowball;
 
- /**
-  * This class was automatically generated by a Snowball to Java compiler
-  * It implements the stemming algorithm defined by a snowball script.
-  */
+/**
+ * This class was automatically generated by a Snowball to Java compiler
+ * It implements the stemming algorithm defined by a snowball script.
+ */
 class danishStemmer extends opennlp.tools.stemmer.snowball.AbstractSnowballStemmer {
 
-        private final static danishStemmer methodObject = new danishStemmer ();
+    private final static danishStemmer methodObject = new danishStemmer();
 
-                private final static Among a_0[] = {
-                    new Among ( "hed", -1, 1, "", methodObject ),
-                    new Among ( "ethed", 0, 1, "", methodObject ),
-                    new Among ( "ered", -1, 1, "", methodObject ),
-                    new Among ( "e", -1, 1, "", methodObject ),
-                    new Among ( "erede", 3, 1, "", methodObject ),
+    private final static Among a_0[] = {
+            new Among("hed", -1, 1, "", methodObject),
+            new Among("ethed", 0, 1, "", methodObject),
+            new Among("ered", -1, 1, "", methodObject),
+            new Among("e", -1, 1, "", methodObject),
+            new Among("erede", 3, 1, "", methodObject),
 
 =======================================================================
 ==/home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-tools/src/main/java/opennlp/tools/stemmer/snowball/catalanStemmer.java
@@ -3608,13 +3608,13 @@ package opennlp.tools.stemmer.snowball;
 
 public class catalanStemmer extends opennlp.tools.stemmer.snowball.AbstractSnowballStemmer {
 
-  private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-  private final static catalanStemmer methodObject = new catalanStemmer();
+    private final static catalanStemmer methodObject = new catalanStemmer();
 
-  private final static Among a_0[] = {
-      new Among("", -1, 13, "", methodObject),
-      new Among("\u00B7", 0, 12, "", methodObject),
+    private final static Among a_0[] = {
+            new Among("", -1, 13, "", methodObject),
+            new Among("\u00B7", 0, 12, "", methodObject),
 
 =======================================================================
 ==/home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-tools/src/main/java/opennlp/tools/stemmer/snowball/portugueseStemmer.java
@@ -3656,19 +3656,19 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 package opennlp.tools.stemmer.snowball;
 
 
- /**
-  * This class was automatically generated by a Snowball to Java compiler
-  * It implements the stemming algorithm defined by a snowball script.
-  */
+/**
+ * This class was automatically generated by a Snowball to Java compiler
+ * It implements the stemming algorithm defined by a snowball script.
+ */
 class portugueseStemmer extends opennlp.tools.stemmer.snowball.AbstractSnowballStemmer {
 
-        private final static portugueseStemmer methodObject = new portugueseStemmer ();
+    private final static portugueseStemmer methodObject = new portugueseStemmer();
 
-                private final static Among a_0[] = {
-                    new Among ( "", -1, 3, "", methodObject ),
-                    new Among ( "\u00E3", 0, 1, "", methodObject ),
-                    new Among ( "\u00F5", 0, 2, "", methodObject )
-                };
+    private final static Among a_0[] = {
+            new Among("", -1, 3, "", methodObject),
+            new Among("\u00E3", 0, 1, "", methodObject),
+            new Among("\u00F5", 0, 2, "", methodObject)
+    };
 
 =======================================================================
 ==/home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-tools/src/main/java/opennlp/tools/stemmer/snowball/indonesianStemmer.java
@@ -3715,14 +3715,14 @@ package opennlp.tools.stemmer.snowball;
 
 public class indonesianStemmer extends opennlp.tools.stemmer.snowball.AbstractSnowballStemmer {
 
-  private static final long serialVersionUID = 1L;
+    public final static indonesianStemmer methodObject = new indonesianStemmer();
+    private static final long serialVersionUID = 1L;
+    private final static Among a_0[] = {
+            new Among("kah", -1, 1, "", methodObject),
+            new Among("lah", -1, 1, "", methodObject),
+            new Among("pun", -1, 1, "", methodObject)
+    };
 
-  public final static indonesianStemmer methodObject = new indonesianStemmer();
-
-  private final static Among a_0[] = {
-      new Among("kah", -1, 1, "", methodObject),
-      new Among("lah", -1, 1, "", methodObject),
-      new Among("pun", -1, 1, "", methodObject)
 
 =======================================================================
 ==/home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-tools/src/main/java/opennlp/tools/stemmer/snowball/turkishStemmer.java
@@ -3764,19 +3764,19 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 package opennlp.tools.stemmer.snowball;
 
 
- /**
-  * This class was automatically generated by a Snowball to Java compiler
-  * It implements the stemming algorithm defined by a snowball script.
-  */
+/**
+ * This class was automatically generated by a Snowball to Java compiler
+ * It implements the stemming algorithm defined by a snowball script.
+ */
 class turkishStemmer extends opennlp.tools.stemmer.snowball.AbstractSnowballStemmer {
 
-        private final static turkishStemmer methodObject = new turkishStemmer ();
+    private final static turkishStemmer methodObject = new turkishStemmer();
 
-                private final static Among a_0[] = {
-                    new Among ( "m", -1, -1, "", methodObject ),
-                    new Among ( "n", -1, -1, "", methodObject ),
-                    new Among ( "miz", -1, -1, "", methodObject ),
-                    new Among ( "niz", -1, -1, "", methodObject ),
+    private final static Among a_0[] = {
+            new Among("m", -1, -1, "", methodObject),
+            new Among("n", -1, -1, "", methodObject),
+            new Among("miz", -1, -1, "", methodObject),
+            new Among("niz", -1, -1, "", methodObject),
 
 =======================================================================
 ==/home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-tools/src/main/java/opennlp/tools/stemmer/snowball/greekStemmer.java
@@ -3824,13 +3824,13 @@ package opennlp.tools.stemmer.snowball;
  */
 
 public class greekStemmer extends AbstractSnowballStemmer {
-    
+
     private final static greekStemmer methodObject = new greekStemmer();
 
     private final static Among a_0[] = {
-        new Among("", -1, 25, "", methodObject),
-        new Among("\u0386", 0, 1, "", methodObject),
-        new Among("\u0388", 0, 5, "", methodObject),
+            new Among("", -1, 25, "", methodObject),
+            new Among("\u0386", 0, 1, "", methodObject),
+            new Among("\u0388", 0, 5, "", methodObject),
 
 =======================================================================
 ==/home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-tools/src/main/java/opennlp/tools/stemmer/snowball/italianStemmer.java
@@ -3872,19 +3872,19 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 package opennlp.tools.stemmer.snowball;
 
 
- /**
-  * This class was automatically generated by a Snowball to Java compiler
-  * It implements the stemming algorithm defined by a snowball script.
-  */
+/**
+ * This class was automatically generated by a Snowball to Java compiler
+ * It implements the stemming algorithm defined by a snowball script.
+ */
 class italianStemmer extends opennlp.tools.stemmer.snowball.AbstractSnowballStemmer {
 
-        private final static italianStemmer methodObject = new italianStemmer ();
+    private final static italianStemmer methodObject = new italianStemmer();
 
-                private final static Among a_0[] = {
-                    new Among ( "", -1, 7, "", methodObject ),
-                    new Among ( "qu", 0, 6, "", methodObject ),
-                    new Among ( "\u00E1", 0, 1, "", methodObject ),
-                    new Among ( "\u00E9", 0, 2, "", methodObject ),
+    private final static Among a_0[] = {
+            new Among("", -1, 7, "", methodObject),
+            new Among("qu", 0, 6, "", methodObject),
+            new Among("\u00E1", 0, 1, "", methodObject),
+            new Among("\u00E9", 0, 2, "", methodObject),
 
 =======================================================================
 ==/home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-tools/src/main/java/opennlp/tools/stemmer/snowball/finnishStemmer.java
@@ -3925,20 +3925,20 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 package opennlp.tools.stemmer.snowball;
 
- /**
-  * This class was automatically generated by a Snowball to Java compiler
-  * It implements the stemming algorithm defined by a snowball script.
-  */
+/**
+ * This class was automatically generated by a Snowball to Java compiler
+ * It implements the stemming algorithm defined by a snowball script.
+ */
 class finnishStemmer extends opennlp.tools.stemmer.snowball.AbstractSnowballStemmer {
 
-        private final static finnishStemmer methodObject = new finnishStemmer ();
+    private final static finnishStemmer methodObject = new finnishStemmer();
 
-                private final static Among a_0[] = {
-                    new Among ( "pa", -1, 1, "", methodObject ),
-                    new Among ( "sti", -1, 2, "", methodObject ),
-                    new Among ( "kaan", -1, 1, "", methodObject ),
-                    new Among ( "han", -1, 1, "", methodObject ),
-                    new Among ( "kin", -1, 1, "", methodObject ),
+    private final static Among a_0[] = {
+            new Among("pa", -1, 1, "", methodObject),
+            new Among("sti", -1, 2, "", methodObject),
+            new Among("kaan", -1, 1, "", methodObject),
+            new Among("han", -1, 1, "", methodObject),
+            new Among("kin", -1, 1, "", methodObject),
 
 =======================================================================
 ==/home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-tools/src/main/java/opennlp/tools/stemmer/snowball/hungarianStemmer.java
@@ -3980,19 +3980,19 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 package opennlp.tools.stemmer.snowball;
 
 
- /**
-  * This class was automatically generated by a Snowball to Java compiler
-  * It implements the stemming algorithm defined by a snowball script.
-  */
+/**
+ * This class was automatically generated by a Snowball to Java compiler
+ * It implements the stemming algorithm defined by a snowball script.
+ */
 class hungarianStemmer extends opennlp.tools.stemmer.snowball.AbstractSnowballStemmer {
 
-        private final static hungarianStemmer methodObject = new hungarianStemmer ();
+    private final static hungarianStemmer methodObject = new hungarianStemmer();
 
-                private final static Among a_0[] = {
-                    new Among ( "cs", -1, -1, "", methodObject ),
-                    new Among ( "dzs", -1, -1, "", methodObject ),
-                    new Among ( "gy", -1, -1, "", methodObject ),
-                    new Among ( "ly", -1, -1, "", methodObject ),
+    private final static Among a_0[] = {
+            new Among("cs", -1, -1, "", methodObject),
+            new Among("dzs", -1, -1, "", methodObject),
+            new Among("gy", -1, -1, "", methodObject),
+            new Among("ly", -1, -1, "", methodObject),
 
 =======================================================================
 ==/home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-tools/src/main/java/opennlp/tools/stemmer/snowball/dutchStemmer.java
@@ -4033,20 +4033,20 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 package opennlp.tools.stemmer.snowball;
 
- /**
-  * This class was automatically generated by a Snowball to Java compiler
-  * It implements the stemming algorithm defined by a snowball script.
-  */
+/**
+ * This class was automatically generated by a Snowball to Java compiler
+ * It implements the stemming algorithm defined by a snowball script.
+ */
 class dutchStemmer extends opennlp.tools.stemmer.snowball.AbstractSnowballStemmer {
 
-        private final static dutchStemmer methodObject = new dutchStemmer ();
+    private final static dutchStemmer methodObject = new dutchStemmer();
 
-                private final static Among a_0[] = {
-                    new Among ( "", -1, 6, "", methodObject ),
-                    new Among ( "\u00E1", 0, 1, "", methodObject ),
-                    new Among ( "\u00E4", 0, 1, "", methodObject ),
-                    new Among ( "\u00E9", 0, 2, "", methodObject ),
-                    new Among ( "\u00EB", 0, 2, "", methodObject ),
+    private final static Among a_0[] = {
+            new Among("", -1, 6, "", methodObject),
+            new Among("\u00E1", 0, 1, "", methodObject),
+            new Among("\u00E4", 0, 1, "", methodObject),
+            new Among("\u00E9", 0, 2, "", methodObject),
+            new Among("\u00EB", 0, 2, "", methodObject),
 
 =======================================================================
 ==/home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-tools/src/main/java/opennlp/tools/stemmer/snowball/romanianStemmer.java
@@ -4088,19 +4088,19 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 package opennlp.tools.stemmer.snowball;
 
 
- /**
-  * This class was automatically generated by a Snowball to Java compiler
-  * It implements the stemming algorithm defined by a snowball script.
-  */
+/**
+ * This class was automatically generated by a Snowball to Java compiler
+ * It implements the stemming algorithm defined by a snowball script.
+ */
 class romanianStemmer extends opennlp.tools.stemmer.snowball.AbstractSnowballStemmer {
 
-        private final static romanianStemmer methodObject = new romanianStemmer ();
+    private final static romanianStemmer methodObject = new romanianStemmer();
 
-                private final static Among a_0[] = {
-                    new Among ( "", -1, 3, "", methodObject ),
-                    new Among ( "I", 0, 1, "", methodObject ),
-                    new Among ( "U", 0, 2, "", methodObject )
-                };
+    private final static Among a_0[] = {
+            new Among("", -1, 3, "", methodObject),
+            new Among("I", 0, 1, "", methodObject),
+            new Among("U", 0, 2, "", methodObject)
+    };
 
 =======================================================================
 ==/home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-tools/src/main/java/opennlp/tools/stemmer/snowball/russianStemmer.java
@@ -4142,19 +4142,19 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 package opennlp.tools.stemmer.snowball;
 
 
- /**
-  * This class was automatically generated by a Snowball to Java compiler
-  * It implements the stemming algorithm defined by a snowball script.
-  */
+/**
+ * This class was automatically generated by a Snowball to Java compiler
+ * It implements the stemming algorithm defined by a snowball script.
+ */
 class russianStemmer extends opennlp.tools.stemmer.snowball.AbstractSnowballStemmer {
 
-        private final static russianStemmer methodObject = new russianStemmer ();
+    private final static russianStemmer methodObject = new russianStemmer();
 
-                private final static Among a_0[] = {
-                    new Among ( "\u0432", -1, 1, "", methodObject ),
-                    new Among ( "\u0438\u0432", 0, 2, "", methodObject ),
-                    new Among ( "\u044B\u0432", 0, 2, "", methodObject ),
-                    new Among ( "\u0432\u0448\u0438", -1, 1, "", methodObject ),
+    private final static Among a_0[] = {
+            new Among("\u0432", -1, 1, "", methodObject),
+            new Among("\u0438\u0432", 0, 2, "", methodObject),
+            new Among("\u044B\u0432", 0, 2, "", methodObject),
+            new Among("\u0432\u0448\u0438", -1, 1, "", methodObject),
 
 =======================================================================
 ==/home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-tools/src/main/java/opennlp/tools/stemmer/snowball/arabicStemmer.java
@@ -4196,19 +4196,19 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 package opennlp.tools.stemmer.snowball;
 
 
- /**
-  * This class was automatically generated by a Snowball to Java compiler
-  * It implements the stemming algorithm defined by a snowball script.
-  */
+/**
+ * This class was automatically generated by a Snowball to Java compiler
+ * It implements the stemming algorithm defined by a snowball script.
+ */
 
 public class arabicStemmer extends AbstractSnowballStemmer {
 
-     private final static arabicStemmer methodObject = new arabicStemmer();
+    private final static arabicStemmer methodObject = new arabicStemmer();
 
     private final static Among a_0[] = {
-        new Among("!", -1, 3, "", methodObject),
-        new Among("\"", -1, 3, "", methodObject),
-        new Among("%", -1, 3, "", methodObject),
+            new Among("!", -1, 3, "", methodObject),
+            new Among("\"", -1, 3, "", methodObject),
+            new Among("%", -1, 3, "", methodObject),
 
 =======================================================================
 ==/home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-tools/src/main/java/opennlp/tools/stemmer/snowball/AbstractSnowballStemmer.java
@@ -4291,19 +4291,19 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 package opennlp.tools.stemmer.snowball;
 
 
- /**
-  * This class was automatically generated by a Snowball to Java compiler
-  * It implements the stemming algorithm defined by a snowball script.
-  */
+/**
+ * This class was automatically generated by a Snowball to Java compiler
+ * It implements the stemming algorithm defined by a snowball script.
+ */
 class swedishStemmer extends opennlp.tools.stemmer.snowball.AbstractSnowballStemmer {
 
-        private final static swedishStemmer methodObject = new swedishStemmer ();
+    private final static swedishStemmer methodObject = new swedishStemmer();
 
-                private final static Among a_0[] = {
-                    new Among ( "a", -1, 1, "", methodObject ),
-                    new Among ( "arna", 0, 1, "", methodObject ),
-                    new Among ( "erna", 0, 1, "", methodObject ),
-                    new Among ( "heterna", 2, 1, "", methodObject ),
+    private final static Among a_0[] = {
+            new Among("a", -1, 1, "", methodObject),
+            new Among("arna", 0, 1, "", methodObject),
+            new Among("erna", 0, 1, "", methodObject),
+            new Among("heterna", 2, 1, "", methodObject),
 
 =======================================================================
 ==/home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-tools/src/main/java/opennlp/tools/stemmer/snowball/norwegianStemmer.java
@@ -4345,19 +4345,19 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 package opennlp.tools.stemmer.snowball;
 
 
- /**
-  * This class was automatically generated by a Snowball to Java compiler
-  * It implements the stemming algorithm defined by a snowball script.
-  */
+/**
+ * This class was automatically generated by a Snowball to Java compiler
+ * It implements the stemming algorithm defined by a snowball script.
+ */
 class norwegianStemmer extends opennlp.tools.stemmer.snowball.AbstractSnowballStemmer {
 
-        private final static norwegianStemmer methodObject = new norwegianStemmer ();
+    private final static norwegianStemmer methodObject = new norwegianStemmer();
 
-                private final static Among a_0[] = {
-                    new Among ( "a", -1, 1, "", methodObject ),
-                    new Among ( "e", -1, 1, "", methodObject ),
-                    new Among ( "ede", 1, 1, "", methodObject ),
-                    new Among ( "ande", 1, 1, "", methodObject ),
+    private final static Among a_0[] = {
+            new Among("a", -1, 1, "", methodObject),
+            new Among("e", -1, 1, "", methodObject),
+            new Among("ede", 1, 1, "", methodObject),
+            new Among("ande", 1, 1, "", methodObject),
 
 =======================================================================
 ==/home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-tools/src/main/java/opennlp/tools/stemmer/snowball/spanishStemmer.java
@@ -4399,19 +4399,19 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 package opennlp.tools.stemmer.snowball;
 
 
- /**
-  * This class was automatically generated by a Snowball to Java compiler
-  * It implements the stemming algorithm defined by a snowball script.
-  */
+/**
+ * This class was automatically generated by a Snowball to Java compiler
+ * It implements the stemming algorithm defined by a snowball script.
+ */
 class spanishStemmer extends opennlp.tools.stemmer.snowball.AbstractSnowballStemmer {
 
-        private final static spanishStemmer methodObject = new spanishStemmer ();
+    private final static spanishStemmer methodObject = new spanishStemmer();
 
-                private final static Among a_0[] = {
-                    new Among ( "", -1, 6, "", methodObject ),
-                    new Among ( "\u00E1", 0, 1, "", methodObject ),
-                    new Among ( "\u00E9", 0, 2, "", methodObject ),
-                    new Among ( "\u00ED", 0, 3, "", methodObject ),
+    private final static Among a_0[] = {
+            new Among("", -1, 6, "", methodObject),
+            new Among("\u00E1", 0, 1, "", methodObject),
+            new Among("\u00E9", 0, 2, "", methodObject),
+            new Among("\u00ED", 0, 3, "", methodObject),
 
 =======================================================================
 ==/home/lg/2020/spring/software_testing/project/apache-opennlp-1.9.2-src/opennlp-tools/src/main/java/opennlp/tools/ml/maxent/AllEnglishAffixes.txt

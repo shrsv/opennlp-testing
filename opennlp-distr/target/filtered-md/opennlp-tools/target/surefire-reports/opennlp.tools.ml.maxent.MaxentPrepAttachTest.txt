@@ -1,4 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: opennlp.tools.ml.maxent.MaxentPrepAttachTest
 -------------------------------------------------------------------------------
-Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 4.714 s - in opennlp.tools.ml.maxent.MaxentPrepAttachTest
+Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 4.247 s - in opennlp.tools.ml.maxent.MaxentPrepAttachTest

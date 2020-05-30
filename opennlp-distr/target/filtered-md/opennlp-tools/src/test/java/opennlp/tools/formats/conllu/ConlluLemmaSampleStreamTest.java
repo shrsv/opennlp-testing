@@ -18,32 +18,31 @@
 package opennlp.tools.formats.conllu;
 
 
-import java.io.IOException;
-
-import org.junit.Assert;
-import org.junit.Test;
-
 import opennlp.tools.formats.ResourceAsStreamFactory;
 import opennlp.tools.lemmatizer.LemmaSample;
 import opennlp.tools.util.InputStreamFactory;
 import opennlp.tools.util.ObjectStream;
+import org.junit.Assert;
+import org.junit.Test;
+
+import java.io.IOException;
 
 public class ConlluLemmaSampleStreamTest {
 
 
-  @Test
-  public void testParseSpanishS300() throws IOException {
-    InputStreamFactory streamFactory =
-        new ResourceAsStreamFactory(ConlluStreamTest.class, "es-ud-sample.conllu");
+    @Test
+    public void testParseSpanishS300() throws IOException {
+        InputStreamFactory streamFactory =
+                new ResourceAsStreamFactory(ConlluStreamTest.class, "es-ud-sample.conllu");
 
-    try (ObjectStream<LemmaSample> stream = new ConlluLemmaSampleStream(
-        new ConlluStream(streamFactory), ConlluTagset.U)) {
+        try (ObjectStream<LemmaSample> stream = new ConlluLemmaSampleStream(
+                new ConlluStream(streamFactory), ConlluTagset.U)) {
 
-      LemmaSample predicted = stream.read();
-      System.out.println(predicted);
-      Assert.assertEquals("digám+tú+él", predicted.getLemmas()[0]);
-      Assert.assertEquals("la", predicted.getTokens()[3]);
-      Assert.assertEquals("el", predicted.getLemmas()[3]);
+            LemmaSample predicted = stream.read();
+            System.out.println(predicted);
+            Assert.assertEquals("digám+tú+él", predicted.getLemmas()[0]);
+            Assert.assertEquals("la", predicted.getTokens()[3]);
+            Assert.assertEquals("el", predicted.getLemmas()[3]);
+        }
     }
-  }
 }

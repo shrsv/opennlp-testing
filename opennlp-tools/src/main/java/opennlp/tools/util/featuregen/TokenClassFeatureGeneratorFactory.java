@@ -17,50 +17,49 @@
 
 package opennlp.tools.util.featuregen;
 
-import java.util.Map;
-import java.util.Objects;
-
+import opennlp.tools.util.InvalidFormatException;
 import org.w3c.dom.Element;
 
-import opennlp.tools.util.InvalidFormatException;
+import java.util.Map;
+import java.util.Objects;
 
 /**
  * @see TokenClassFeatureGenerator
  */
 public class TokenClassFeatureGeneratorFactory
-    extends GeneratorFactory.AbstractXmlFeatureGeneratorFactory
-    implements GeneratorFactory.XmlFeatureGeneratorFactory {
+        extends GeneratorFactory.AbstractXmlFeatureGeneratorFactory
+        implements GeneratorFactory.XmlFeatureGeneratorFactory {
 
-  public TokenClassFeatureGeneratorFactory() {
-    super();
-  }
-
-  @Deprecated // TODO: (OPENNLP-1174) just remove when back-compat is no longer needed
-  public AdaptiveFeatureGenerator create(Element generatorElement,
-             FeatureGeneratorResourceProvider resourceManager) {
-
-    String attribute = generatorElement.getAttribute("wordAndClass");
-
-    // Default to true.
-    boolean generateWordAndClassFeature = true;
-
-    if (!Objects.equals(attribute, "")) {
-      // Anything other than "true" sets it to false.
-      if (!"true".equalsIgnoreCase(attribute)) {
-        generateWordAndClassFeature = false;
-      }
+    public TokenClassFeatureGeneratorFactory() {
+        super();
     }
 
-    return new TokenClassFeatureGenerator(generateWordAndClassFeature);
-  }
+    @Deprecated // TODO: (OPENNLP-1174) just remove when back-compat is no longer needed
+    static void register(Map<String, GeneratorFactory.XmlFeatureGeneratorFactory> factoryMap) {
+        factoryMap.put("tokenclass", new TokenClassFeatureGeneratorFactory());
+    }
 
-  @Deprecated // TODO: (OPENNLP-1174) just remove when back-compat is no longer needed
-  static void register(Map<String, GeneratorFactory.XmlFeatureGeneratorFactory> factoryMap) {
-    factoryMap.put("tokenclass", new TokenClassFeatureGeneratorFactory());
-  }
+    @Deprecated // TODO: (OPENNLP-1174) just remove when back-compat is no longer needed
+    public AdaptiveFeatureGenerator create(Element generatorElement,
+                                           FeatureGeneratorResourceProvider resourceManager) {
 
-  @Override
-  public AdaptiveFeatureGenerator create() throws InvalidFormatException {
-    return new TokenClassFeatureGenerator(getBool("wordAndClass", true));
-  }
+        String attribute = generatorElement.getAttribute("wordAndClass");
+
+        // Default to true.
+        boolean generateWordAndClassFeature = true;
+
+        if (!Objects.equals(attribute, "")) {
+            // Anything other than "true" sets it to false.
+            if (!"true".equalsIgnoreCase(attribute)) {
+                generateWordAndClassFeature = false;
+            }
+        }
+
+        return new TokenClassFeatureGenerator(generateWordAndClassFeature);
+    }
+
+    @Override
+    public AdaptiveFeatureGenerator create() throws InvalidFormatException {
+        return new TokenClassFeatureGenerator(getBool("wordAndClass", true));
+    }
 }

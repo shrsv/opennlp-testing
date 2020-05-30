@@ -17,11 +17,11 @@
 
 package opennlp.tools.dictionary;
 
+import opennlp.tools.util.StringList;
+
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
-
-import opennlp.tools.util.StringList;
 
 /**
  * This classes indexes {@link StringList}s. This makes it possible
@@ -30,35 +30,34 @@ import opennlp.tools.util.StringList;
  */
 public class Index {
 
-  private Set<String> tokens = new HashSet<>();
+    private Set<String> tokens = new HashSet<>();
 
-  /**
-   * Initializes the current instance with the given
-   * {@link StringList} {@link Iterator}.
-   *
-   * @param tokenLists
-   */
-  public Index(Iterator<StringList> tokenLists) {
+    /**
+     * Initializes the current instance with the given
+     * {@link StringList} {@link Iterator}.
+     *
+     * @param tokenLists
+     */
+    public Index(Iterator<StringList> tokenLists) {
 
-    while (tokenLists.hasNext()) {
+        while (tokenLists.hasNext()) {
 
-      StringList tokens = tokenLists.next();
+            StringList tokens = tokenLists.next();
 
-      for (int i = 0; i < tokens.size(); i++) {
-        this.tokens.add(tokens.getToken(i));
-      }
+            for (int i = 0; i < tokens.size(); i++) {
+                this.tokens.add(tokens.getToken(i));
+            }
+        }
     }
-  }
 
-  /**
-   * Checks if at leat one {@link StringList} contains the
-   * given token.
-   *
-   * @param token
-   *
-   * @return true if the token is contained otherwise false.
-   */
-  public boolean contains(String token) {
-    return tokens.contains(token);
-  }
+    /**
+     * Checks if at leat one {@link StringList} contains the
+     * given token.
+     *
+     * @param token
+     * @return true if the token is contained otherwise false.
+     */
+    public boolean contains(String token) {
+        return tokens.contains(token);
+    }
 }

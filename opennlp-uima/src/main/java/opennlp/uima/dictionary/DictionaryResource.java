@@ -20,5 +20,5 @@ package opennlp.uima.dictionary;
 import opennlp.tools.dictionary.Dictionary;
 
 public interface DictionaryResource {
-  Dictionary getDictionary();
+    Dictionary getDictionary();
 }

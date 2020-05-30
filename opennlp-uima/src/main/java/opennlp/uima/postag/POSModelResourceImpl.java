@@ -17,21 +17,21 @@
 
 package opennlp.uima.postag;
 
-import java.io.IOException;
-import java.io.InputStream;
-
 import opennlp.tools.postag.POSModel;
 import opennlp.uima.util.AbstractModelResource;
 
+import java.io.IOException;
+import java.io.InputStream;
+
 public class POSModelResourceImpl extends AbstractModelResource<POSModel>
-    implements POSModelResource {
+        implements POSModelResource {
 
-  public POSModel getModel() {
-    return model;
-  }
+    public POSModel getModel() {
+        return model;
+    }
 
-  @Override
-  protected POSModel loadModel(InputStream in) throws IOException {
-    return new POSModel(in);
-  }
+    @Override
+    protected POSModel loadModel(InputStream in) throws IOException {
+        return new POSModel(in);
+    }
 }

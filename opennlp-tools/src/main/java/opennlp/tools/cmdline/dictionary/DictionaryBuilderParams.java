@@ -17,22 +17,22 @@
 
 package opennlp.tools.cmdline.dictionary;
 
-import java.io.File;
-
 import opennlp.tools.cmdline.ArgumentParser.ParameterDescription;
 import opennlp.tools.cmdline.params.EncodingParameter;
 
+import java.io.File;
+
 /**
  * Params for Dictionary tools.
- *
+ * <p>
  * Note: Do not use this class, internal use only!
  */
 interface DictionaryBuilderParams extends EncodingParameter {
 
-  @ParameterDescription(valueName = "in", description = "Plain file with one entry per line")
-  File getInputFile();
+    @ParameterDescription(valueName = "in", description = "Plain file with one entry per line")
+    File getInputFile();
 
-  @ParameterDescription(valueName = "out", description = "The dictionary file.")
-  File getOutputFile();
+    @ParameterDescription(valueName = "out", description = "The dictionary file.")
+    File getOutputFile();
 
 }

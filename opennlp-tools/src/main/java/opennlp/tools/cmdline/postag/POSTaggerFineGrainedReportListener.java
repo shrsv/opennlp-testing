@@ -17,61 +17,60 @@
 
 package opennlp.tools.cmdline.postag;
 
-import java.io.OutputStream;
-
 import opennlp.tools.cmdline.FineGrainedReportListener;
 import opennlp.tools.postag.POSSample;
 import opennlp.tools.postag.POSTaggerEvaluationMonitor;
+
+import java.io.OutputStream;
 
 /**
  * Generates a detailed report for the POS Tagger.
  * <p>
  * It is possible to use it from an API and access the statistics using the
  * provided getters
- *
  */
 public class POSTaggerFineGrainedReportListener
-    extends FineGrainedReportListener implements POSTaggerEvaluationMonitor {
+        extends FineGrainedReportListener implements POSTaggerEvaluationMonitor {
 
-  /**
-   * Creates a listener that will print to {@link System#err}
-   */
-  public POSTaggerFineGrainedReportListener() {
-    this(System.err);
-  }
+    /**
+     * Creates a listener that will print to {@link System#err}
+     */
+    public POSTaggerFineGrainedReportListener() {
+        this(System.err);
+    }
 
-  /**
-   * Creates a listener that prints to a given {@link OutputStream}
-   */
-  public POSTaggerFineGrainedReportListener(OutputStream outputStream) {
-    super(outputStream);
+    /**
+     * Creates a listener that prints to a given {@link OutputStream}
+     */
+    public POSTaggerFineGrainedReportListener(OutputStream outputStream) {
+        super(outputStream);
 
-  }
+    }
 
-  // methods inherited from EvaluationMonitor
+    // methods inherited from EvaluationMonitor
 
-  public void missclassified(POSSample reference, POSSample prediction) {
-    statsAdd(reference, prediction);
-  }
+    public void missclassified(POSSample reference, POSSample prediction) {
+        statsAdd(reference, prediction);
+    }
 
-  public void correctlyClassified(POSSample reference, POSSample prediction) {
-    statsAdd(reference, prediction);
-  }
+    public void correctlyClassified(POSSample reference, POSSample prediction) {
+        statsAdd(reference, prediction);
+    }
 
-  private void statsAdd(POSSample reference, POSSample prediction) {
-    getStats().add(reference.getSentence(), reference.getTags(), prediction.getTags());
-  }
+    private void statsAdd(POSSample reference, POSSample prediction) {
+        getStats().add(reference.getSentence(), reference.getTags(), prediction.getTags());
+    }
 
-  public void writeReport() {
-    printGeneralStatistics();
-    // token stats
-    printTokenErrorRank();
-    printTokenOcurrenciesRank();
-    // tag stats
-    printTagsErrorRank();
-    // confusion tables
-    printGeneralConfusionTable();
-    printDetailedConfusionMatrix();
-  }
+    public void writeReport() {
+        printGeneralStatistics();
+        // token stats
+        printTokenErrorRank();
+        printTokenOcurrenciesRank();
+        // tag stats
+        printTagsErrorRank();
+        // confusion tables
+        printGeneralConfusionTable();
+        printDetailedConfusionMatrix();
+    }
 
 }

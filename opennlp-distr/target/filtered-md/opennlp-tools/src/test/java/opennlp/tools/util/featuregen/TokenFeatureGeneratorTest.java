@@ -17,46 +17,46 @@
 
 package opennlp.tools.util.featuregen;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class TokenFeatureGeneratorTest {
 
-  private List<String> features;
-  static String[] testSentence = new String[] {"This", "is", "an", "example", "sentence"};
+    static String[] testSentence = new String[]{"This", "is", "an", "example", "sentence"};
+    private List<String> features;
 
-  @Before
-  public void setUp() throws Exception {
-    features = new ArrayList<>();
-  }
+    @Before
+    public void setUp() throws Exception {
+        features = new ArrayList<>();
+    }
 
-  @Test
-  public void test() {
+    @Test
+    public void test() {
 
-    final int testTokenIndex = 0;
+        final int testTokenIndex = 0;
 
-    AdaptiveFeatureGenerator generator = new TokenFeatureGenerator(false);
+        AdaptiveFeatureGenerator generator = new TokenFeatureGenerator(false);
 
-    generator.createFeatures(features, testSentence, testTokenIndex, null);
+        generator.createFeatures(features, testSentence, testTokenIndex, null);
 
-    Assert.assertEquals(1, features.size());
-    Assert.assertEquals("w=This", features.get(0));
-  }
+        Assert.assertEquals(1, features.size());
+        Assert.assertEquals("w=This", features.get(0));
+    }
 
-  @Test
-  public void testLowerCase() {
+    @Test
+    public void testLowerCase() {
 
-    final int testTokenIndex = 0;
+        final int testTokenIndex = 0;
 
-    AdaptiveFeatureGenerator generator = new TokenFeatureGenerator(true);
+        AdaptiveFeatureGenerator generator = new TokenFeatureGenerator(true);
 
-    generator.createFeatures(features, testSentence, testTokenIndex, null);
+        generator.createFeatures(features, testSentence, testTokenIndex, null);
 
-    Assert.assertEquals(1, features.size());
-    Assert.assertEquals("w=this", features.get(0));
-  }
+        Assert.assertEquals(1, features.size());
+        Assert.assertEquals("w=this", features.get(0));
+    }
 }

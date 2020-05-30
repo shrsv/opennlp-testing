@@ -27,56 +27,63 @@ import java.util.Objects;
  */
 public class Context {
 
-  /** The real valued parameters or expected values for this context. */
-  protected double[] parameters;
-  /** The outcomes which occur with this context. */
-  protected int[] outcomes;
+    /**
+     * The real valued parameters or expected values for this context.
+     */
+    protected double[] parameters;
+    /**
+     * The outcomes which occur with this context.
+     */
+    protected int[] outcomes;
 
-  /**
-   * Creates a new parameters object with the specified parameters associated with the specified
-   * outcome pattern.
-   * @param outcomePattern Array of outcomes for which parameters exists for this context.
-   * @param parameters Parameters for the outcomes specified.
-   */
-  public Context(int[] outcomePattern, double[] parameters) {
-    this.outcomes = outcomePattern;
-    this.parameters = parameters;
-  }
-
-  /**
-   * Returns the outcomes for which parameters exists for this context.
-   * @return Array of outcomes for which parameters exists for this context.
-   */
-  public int[] getOutcomes() {
-    return outcomes;
-  }
-
-  /**
-   * Returns the parameters or expected values for the outcomes which occur with this context.
-   * @return Array of parameters for the outcomes of this context.
-   */
-  public double[] getParameters() {
-    return parameters;
-  }
-
-  @Override
-  public int hashCode() {
-    return Objects.hash(Arrays.hashCode(parameters), Arrays.hashCode(outcomes));
-  }
-
-  @Override
-  public boolean equals(Object obj) {
-    if (obj == this) {
-      return true;
+    /**
+     * Creates a new parameters object with the specified parameters associated with the specified
+     * outcome pattern.
+     *
+     * @param outcomePattern Array of outcomes for which parameters exists for this context.
+     * @param parameters     Parameters for the outcomes specified.
+     */
+    public Context(int[] outcomePattern, double[] parameters) {
+        this.outcomes = outcomePattern;
+        this.parameters = parameters;
     }
 
-    if (obj instanceof Context) {
-      Context context = (Context) obj;
-
-      return Arrays.equals(parameters, context.parameters)
-           && Arrays.equals(outcomes, context.outcomes);
+    /**
+     * Returns the outcomes for which parameters exists for this context.
+     *
+     * @return Array of outcomes for which parameters exists for this context.
+     */
+    public int[] getOutcomes() {
+        return outcomes;
     }
 
-    return false;
-  }
+    /**
+     * Returns the parameters or expected values for the outcomes which occur with this context.
+     *
+     * @return Array of parameters for the outcomes of this context.
+     */
+    public double[] getParameters() {
+        return parameters;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(Arrays.hashCode(parameters), Arrays.hashCode(outcomes));
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this) {
+            return true;
+        }
+
+        if (obj instanceof Context) {
+            Context context = (Context) obj;
+
+            return Arrays.equals(parameters, context.parameters)
+                    && Arrays.equals(outcomes, context.outcomes);
+        }
+
+        return false;
+    }
 }

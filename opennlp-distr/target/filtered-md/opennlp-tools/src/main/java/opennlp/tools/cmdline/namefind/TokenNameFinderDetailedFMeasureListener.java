@@ -23,12 +23,12 @@ import opennlp.tools.namefind.TokenNameFinderEvaluationMonitor;
 import opennlp.tools.util.Span;
 
 public class TokenNameFinderDetailedFMeasureListener extends
-    DetailedFMeasureListener<NameSample> implements
-    TokenNameFinderEvaluationMonitor {
+        DetailedFMeasureListener<NameSample> implements
+        TokenNameFinderEvaluationMonitor {
 
-  @Override
-  protected Span[] asSpanArray(NameSample sample) {
-    return sample.getNames();
-  }
+    @Override
+    protected Span[] asSpanArray(NameSample sample) {
+        return sample.getNames();
+    }
 
 }

@@ -21,25 +21,24 @@ import java.util.List;
 
 /**
  * Adds trigram features based on tokens and token classes.
- *
  */
 public class TrigramNameFeatureGenerator implements AdaptiveFeatureGenerator {
 
-  public void createFeatures(List<String> features, String[] tokens, int index,
-      String[] previousOutcomes) {
-    String wc = FeatureGeneratorUtil.tokenFeature(tokens[index]);
-    // trigram features
-    if (index > 1) {
-      features.add("ppw,pw,w=" + tokens[index - 2] + "," + tokens[index - 1] + "," + tokens[index]);
-      String pwc = FeatureGeneratorUtil.tokenFeature(tokens[index - 1]);
-      String ppwc = FeatureGeneratorUtil.tokenFeature(tokens[index - 2]);
-      features.add("ppwc,pwc,wc=" + ppwc + "," + pwc + "," + wc);
+    public void createFeatures(List<String> features, String[] tokens, int index,
+                               String[] previousOutcomes) {
+        String wc = FeatureGeneratorUtil.tokenFeature(tokens[index]);
+        // trigram features
+        if (index > 1) {
+            features.add("ppw,pw,w=" + tokens[index - 2] + "," + tokens[index - 1] + "," + tokens[index]);
+            String pwc = FeatureGeneratorUtil.tokenFeature(tokens[index - 1]);
+            String ppwc = FeatureGeneratorUtil.tokenFeature(tokens[index - 2]);
+            features.add("ppwc,pwc,wc=" + ppwc + "," + pwc + "," + wc);
+        }
+        if (index + 2 < tokens.length) {
+            features.add("w,nw,nnw=" + tokens[index] + "," + tokens[index + 1] + "," + tokens[index + 2]);
+            String nwc = FeatureGeneratorUtil.tokenFeature(tokens[index + 1]);
+            String nnwc = FeatureGeneratorUtil.tokenFeature(tokens[index + 2]);
+            features.add("wc,nwc,nnwc=" + wc + "," + nwc + "," + nnwc);
+        }
     }
-    if (index + 2 < tokens.length) {
-      features.add("w,nw,nnw=" + tokens[index] + "," + tokens[index + 1] + "," + tokens[index + 2]);
-      String nwc = FeatureGeneratorUtil.tokenFeature(tokens[index + 1]);
-      String nnwc = FeatureGeneratorUtil.tokenFeature(tokens[index + 2]);
-      features.add("wc,nwc,nnwc=" + wc + "," + nwc + "," + nnwc);
-    }
-  }
 }

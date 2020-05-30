@@ -24,21 +24,21 @@ import opennlp.tools.cmdline.ObjectStreamFactory;
  */
 public abstract class AbstractSampleStreamFactory<T> implements ObjectStreamFactory<T> {
 
-  protected Class params;
+    protected Class params;
 
-  private AbstractSampleStreamFactory() {
-  }
+    private AbstractSampleStreamFactory() {
+    }
 
-  protected <P> AbstractSampleStreamFactory(Class<P> params) {
-    this.params = params;
-  }
+    protected <P> AbstractSampleStreamFactory(Class<P> params) {
+        this.params = params;
+    }
 
-  public String getLang() {
-    return "eng";
-  }
+    public String getLang() {
+        return "eng";
+    }
 
-  @SuppressWarnings({"unchecked"})
-  public <P> Class<P> getParameters() {
-    return params;
-  }
+    @SuppressWarnings({"unchecked"})
+    public <P> Class<P> getParameters() {
+        return params;
+    }
 }

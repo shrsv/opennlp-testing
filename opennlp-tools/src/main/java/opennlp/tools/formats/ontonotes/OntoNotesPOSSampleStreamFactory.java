@@ -26,20 +26,20 @@ import opennlp.tools.util.ObjectStream;
 
 public class OntoNotesPOSSampleStreamFactory extends AbstractSampleStreamFactory<POSSample> {
 
-  private OntoNotesParseSampleStreamFactory parseSampleStreamFactory =
-      new OntoNotesParseSampleStreamFactory();
+    private OntoNotesParseSampleStreamFactory parseSampleStreamFactory =
+            new OntoNotesParseSampleStreamFactory();
 
-  protected OntoNotesPOSSampleStreamFactory() {
-    super(OntoNotesFormatParameters.class);
-  }
+    protected OntoNotesPOSSampleStreamFactory() {
+        super(OntoNotesFormatParameters.class);
+    }
 
-  public ObjectStream<POSSample> create(String[] args) {
-    ObjectStream<Parse> parseSampleStream = parseSampleStreamFactory.create(args);
-    return new ParseToPOSSampleStream(parseSampleStream);
-  }
+    public static void registerFactory() {
+        StreamFactoryRegistry.registerFactory(POSSample.class, "ontonotes",
+                new OntoNotesPOSSampleStreamFactory());
+    }
 
-  public static void registerFactory() {
-    StreamFactoryRegistry.registerFactory(POSSample.class, "ontonotes",
-        new OntoNotesPOSSampleStreamFactory());
-  }
+    public ObjectStream<POSSample> create(String[] args) {
+        ObjectStream<Parse> parseSampleStream = parseSampleStreamFactory.create(args);
+        return new ParseToPOSSampleStream(parseSampleStream);
+    }
 }

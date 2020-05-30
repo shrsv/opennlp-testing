@@ -17,40 +17,39 @@
 
 package opennlp.tools.cmdline.sentdetect;
 
-import java.io.OutputStream;
-
 import opennlp.tools.cmdline.EvaluationErrorPrinter;
 import opennlp.tools.sentdetect.SentenceDetectorEvaluationMonitor;
 import opennlp.tools.sentdetect.SentenceSample;
 import opennlp.tools.util.eval.EvaluationMonitor;
 
+import java.io.OutputStream;
+
 /**
  * A default implementation of {@link EvaluationMonitor} that prints
  * to an output stream.
- *
  */
 public class SentenceEvaluationErrorListener extends
-    EvaluationErrorPrinter<SentenceSample> implements
-    SentenceDetectorEvaluationMonitor {
+        EvaluationErrorPrinter<SentenceSample> implements
+        SentenceDetectorEvaluationMonitor {
 
-  /**
-   * Creates a listener that will print to System.err
-   */
-  public SentenceEvaluationErrorListener() {
-    super(System.err);
-  }
+    /**
+     * Creates a listener that will print to System.err
+     */
+    public SentenceEvaluationErrorListener() {
+        super(System.err);
+    }
 
-  /**
-   * Creates a listener that will print to a given {@link OutputStream}
-   */
-  public SentenceEvaluationErrorListener(OutputStream outputStream) {
-    super(outputStream);
-  }
+    /**
+     * Creates a listener that will print to a given {@link OutputStream}
+     */
+    public SentenceEvaluationErrorListener(OutputStream outputStream) {
+        super(outputStream);
+    }
 
-  @Override
-  public void missclassified(SentenceSample reference, SentenceSample prediction) {
-    printError(reference.getSentences(), prediction.getSentences(), reference,
-        prediction, reference.getDocument());
-  }
+    @Override
+    public void missclassified(SentenceSample reference, SentenceSample prediction) {
+        printError(reference.getSentences(), prediction.getSentences(), reference,
+                prediction, reference.getDocument());
+    }
 
 }

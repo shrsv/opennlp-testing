@@ -17,60 +17,59 @@
 
 package opennlp.tools.ml.model;
 
+import opennlp.tools.util.ObjectStream;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import opennlp.tools.util.ObjectStream;
-
 public class SimpleEventStreamBuilder {
 
-  private final List<Event> eventList = new ArrayList<>();
-  private int pos = 0;
+    private final List<Event> eventList = new ArrayList<>();
+    private int pos = 0;
 
-  /*
-   * the format of event should look like:
-   * without values) other/w=he n1w=belongs n2w=to po=other pow=other,He powf=other,ic
-   * with values) other/w=he;0.5 n1w=belongs;0.4 n2w=to;0.3 po=other;0.5 pow=other,He;0.25 powf=other,ic;0.5
-   */
-  public SimpleEventStreamBuilder add(String event) {
-    String[] ss = event.split("/");
-    if (ss.length != 2) {
-      throw new RuntimeException(String.format("format error of the event \"%s\"", event));
-    }
-
-    // look for context (and values)
-    String[] cvPairs = ss[1].split("\\s+");
-    if (cvPairs[0].contains(";")) { // has values?
-      String[] context = new String[cvPairs.length];
-      float[] values = new float[cvPairs.length];
-      for (int i = 0; i < cvPairs.length; i++) {
-        String[] pair = cvPairs[i].split(";");
-        if (pair.length != 2) {
-          throw new RuntimeException(String.format("format error of the event \"%s\". "
-                       + "\"%s\" doesn't have value", event, pair));
+    /*
+     * the format of event should look like:
+     * without values) other/w=he n1w=belongs n2w=to po=other pow=other,He powf=other,ic
+     * with values) other/w=he;0.5 n1w=belongs;0.4 n2w=to;0.3 po=other;0.5 pow=other,He;0.25 powf=other,ic;0.5
+     */
+    public SimpleEventStreamBuilder add(String event) {
+        String[] ss = event.split("/");
+        if (ss.length != 2) {
+            throw new RuntimeException(String.format("format error of the event \"%s\"", event));
         }
-        context[i] = pair[0];
-        values[i] = Float.parseFloat(pair[1]);
-      }
-      eventList.add(new Event(ss[0], context, values));
-    }
-    else {
-      eventList.add(new Event(ss[0], cvPairs));
-    }
 
-    return this;
-  }
-
-  public ObjectStream<Event> build() {
-    return new ObjectStream<Event>() {
-      @Override
-      public Event read() throws IOException {
-        if (eventList.size() <= pos) {
-          return null;
+        // look for context (and values)
+        String[] cvPairs = ss[1].split("\\s+");
+        if (cvPairs[0].contains(";")) { // has values?
+            String[] context = new String[cvPairs.length];
+            float[] values = new float[cvPairs.length];
+            for (int i = 0; i < cvPairs.length; i++) {
+                String[] pair = cvPairs[i].split(";");
+                if (pair.length != 2) {
+                    throw new RuntimeException(String.format("format error of the event \"%s\". "
+                            + "\"%s\" doesn't have value", event, pair));
+                }
+                context[i] = pair[0];
+                values[i] = Float.parseFloat(pair[1]);
+            }
+            eventList.add(new Event(ss[0], context, values));
+        } else {
+            eventList.add(new Event(ss[0], cvPairs));
         }
-        return eventList.get(pos++);
-      }
-    };
-  }
+
+        return this;
+    }
+
+    public ObjectStream<Event> build() {
+        return new ObjectStream<Event>() {
+            @Override
+            public Event read() throws IOException {
+                if (eventList.size() <= pos) {
+                    return null;
+                }
+                return eventList.get(pos++);
+            }
+        };
+    }
 }

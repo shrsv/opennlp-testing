@@ -22,19 +22,19 @@ import org.junit.Test;
 
 public class PorterStemmerTest {
 
-  private PorterStemmer stemmer = new PorterStemmer();
+    private PorterStemmer stemmer = new PorterStemmer();
 
-  @Test
-  public void testNotNull() {
-    Assert.assertNotNull(stemmer);
-  }
+    @Test
+    public void testNotNull() {
+        Assert.assertNotNull(stemmer);
+    }
 
-  @Test
-  public void testStemming() {
-    Assert.assertEquals(stemmer.stem("deny"), "deni" );
-    Assert.assertEquals(stemmer.stem("declining"), "declin" );
-    Assert.assertEquals(stemmer.stem("diversity"), "divers" );
-    Assert.assertEquals(stemmer.stem("divers"), "diver" );
-    Assert.assertEquals(stemmer.stem("dental"), "dental" );
-  }
+    @Test
+    public void testStemming() {
+        Assert.assertEquals(stemmer.stem("deny"), "deni");
+        Assert.assertEquals(stemmer.stem("declining"), "declin");
+        Assert.assertEquals(stemmer.stem("diversity"), "divers");
+        Assert.assertEquals(stemmer.stem("divers"), "diver");
+        Assert.assertEquals(stemmer.stem("dental"), "dental");
+    }
 }

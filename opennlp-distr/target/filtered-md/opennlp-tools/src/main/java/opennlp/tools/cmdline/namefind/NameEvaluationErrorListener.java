@@ -17,39 +17,38 @@
 
 package opennlp.tools.cmdline.namefind;
 
-import java.io.OutputStream;
-
 import opennlp.tools.cmdline.EvaluationErrorPrinter;
 import opennlp.tools.namefind.NameSample;
 import opennlp.tools.namefind.TokenNameFinderEvaluationMonitor;
 import opennlp.tools.util.eval.EvaluationMonitor;
 
+import java.io.OutputStream;
+
 /**
  * A default implementation of {@link EvaluationMonitor} that prints
  * to an output stream.
- *
  */
 public class NameEvaluationErrorListener extends
-    EvaluationErrorPrinter<NameSample> implements TokenNameFinderEvaluationMonitor {
+        EvaluationErrorPrinter<NameSample> implements TokenNameFinderEvaluationMonitor {
 
-  /**
-   * Creates a listener that will print to System.err
-   */
-  public NameEvaluationErrorListener() {
-    super(System.err);
-  }
+    /**
+     * Creates a listener that will print to System.err
+     */
+    public NameEvaluationErrorListener() {
+        super(System.err);
+    }
 
-  /**
-   * Creates a listener that will print to a given {@link OutputStream}
-   */
-  public NameEvaluationErrorListener(OutputStream outputStream) {
-    super(outputStream);
-  }
+    /**
+     * Creates a listener that will print to a given {@link OutputStream}
+     */
+    public NameEvaluationErrorListener(OutputStream outputStream) {
+        super(outputStream);
+    }
 
-  @Override
-  public void missclassified(NameSample reference, NameSample prediction) {
-    printError(reference.getId(), reference.getNames(), prediction.getNames(), reference,
-        prediction, reference.getSentence());
-  }
+    @Override
+    public void missclassified(NameSample reference, NameSample prediction) {
+        printError(reference.getId(), reference.getNames(), prediction.getNames(), reference,
+                prediction, reference.getSentence());
+    }
 
 }

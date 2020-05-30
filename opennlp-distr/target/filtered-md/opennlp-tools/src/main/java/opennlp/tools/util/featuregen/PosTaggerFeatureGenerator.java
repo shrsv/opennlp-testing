@@ -21,42 +21,40 @@ import java.util.List;
 
 public class PosTaggerFeatureGenerator implements AdaptiveFeatureGenerator {
 
-  private final String SB = "S=begin";
+    private final String SB = "S=begin";
 
-  @Override
-  public void createFeatures(List<String> features, String[] tokens, int index,
-                             String[] tags) {
+    @Override
+    public void createFeatures(List<String> features, String[] tokens, int index,
+                               String[] tags) {
 
-    String prev, prevprev = null;
-    String tagprev, tagprevprev;
-    tagprev = tagprevprev = null;
+        String prev, prevprev = null;
+        String tagprev, tagprevprev;
+        tagprev = tagprevprev = null;
 
-    if (index - 1 >= 0) {
-      prev =  tokens[index - 1];
-      tagprev =  tags[index - 1];
+        if (index - 1 >= 0) {
+            prev = tokens[index - 1];
+            tagprev = tags[index - 1];
 
-      if (index - 2 >= 0) {
-        prevprev = tokens[index - 2];
-        tagprevprev = tags[index - 2];
-      }
-      else {
-        prevprev = SB;
-      }
-    }
-    else {
-      prev = SB;
-    }
-
-    // add the words and pos's of the surrounding context
-    if (prev != null) {
-      if (tagprev != null) {
-        features.add("t=" + tagprev);
-      }
-      if (prevprev != null) {
-        if (tagprevprev != null) {
-          features.add("t2=" + tagprevprev + "," + tagprev);
+            if (index - 2 >= 0) {
+                prevprev = tokens[index - 2];
+                tagprevprev = tags[index - 2];
+            } else {
+                prevprev = SB;
+            }
+        } else {
+            prev = SB;
         }
-      }
+
+        // add the words and pos's of the surrounding context
+        if (prev != null) {
+            if (tagprev != null) {
+                features.add("t=" + tagprev);
+            }
+            if (prevprev != null) {
+                if (tagprevprev != null) {
+                    features.add("t2=" + tagprevprev + "," + tagprev);
+                }
+            }
+        }
     }
-  }
 }

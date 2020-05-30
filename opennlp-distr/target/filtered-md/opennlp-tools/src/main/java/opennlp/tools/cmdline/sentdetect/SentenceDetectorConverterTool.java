@@ -22,7 +22,7 @@ import opennlp.tools.sentdetect.SentenceSample;
 
 public class SentenceDetectorConverterTool extends AbstractConverterTool<SentenceSample> {
 
-  public SentenceDetectorConverterTool() {
-    super(SentenceSample.class);
-  }
+    public SentenceDetectorConverterTool() {
+        super(SentenceSample.class);
+    }
 }

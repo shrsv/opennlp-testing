@@ -20,11 +20,7 @@ package opennlp.tools.langdetect;
 import opennlp.tools.util.BaseToolFactory;
 import opennlp.tools.util.InvalidFormatException;
 import opennlp.tools.util.ext.ExtensionLoader;
-import opennlp.tools.util.normalizer.EmojiCharSequenceNormalizer;
-import opennlp.tools.util.normalizer.NumberCharSequenceNormalizer;
-import opennlp.tools.util.normalizer.ShrinkCharSequenceNormalizer;
-import opennlp.tools.util.normalizer.TwitterCharSequenceNormalizer;
-import opennlp.tools.util.normalizer.UrlCharSequenceNormalizer;
+import opennlp.tools.util.normalizer.*;
 
 
 /**
@@ -39,43 +35,42 @@ import opennlp.tools.util.normalizer.UrlCharSequenceNormalizer;
  * <li> {@link NumberCharSequenceNormalizer}
  * <li> {@link ShrinkCharSequenceNormalizer}
  * </ul>
- *
  */
 public class LanguageDetectorFactory extends BaseToolFactory {
 
-  public LanguageDetectorContextGenerator getContextGenerator() {
-    return new DefaultLanguageDetectorContextGenerator(1, 3,
-        EmojiCharSequenceNormalizer.getInstance(),
-        UrlCharSequenceNormalizer.getInstance(),
-        TwitterCharSequenceNormalizer.getInstance(),
-        NumberCharSequenceNormalizer.getInstance(),
-        ShrinkCharSequenceNormalizer.getInstance());
-  }
-
-  public static LanguageDetectorFactory create(String subclassName)
-      throws InvalidFormatException {
-    if (subclassName == null) {
-      // will create the default factory
-      return new LanguageDetectorFactory();
+    public static LanguageDetectorFactory create(String subclassName)
+            throws InvalidFormatException {
+        if (subclassName == null) {
+            // will create the default factory
+            return new LanguageDetectorFactory();
+        }
+        try {
+            LanguageDetectorFactory theFactory = ExtensionLoader.instantiateExtension(
+                    LanguageDetectorFactory.class, subclassName);
+            theFactory.init();
+            return theFactory;
+        } catch (Exception e) {
+            String msg = "Could not instantiate the " + subclassName
+                    + ". The initialization throw an exception.";
+            throw new InvalidFormatException(msg, e);
+        }
     }
-    try {
-      LanguageDetectorFactory theFactory = ExtensionLoader.instantiateExtension(
-          LanguageDetectorFactory.class, subclassName);
-      theFactory.init();
-      return theFactory;
-    } catch (Exception e) {
-      String msg = "Could not instantiate the " + subclassName
-          + ". The initialization throw an exception.";
-      throw new InvalidFormatException(msg, e);
+
+    public LanguageDetectorContextGenerator getContextGenerator() {
+        return new DefaultLanguageDetectorContextGenerator(1, 3,
+                EmojiCharSequenceNormalizer.getInstance(),
+                UrlCharSequenceNormalizer.getInstance(),
+                TwitterCharSequenceNormalizer.getInstance(),
+                NumberCharSequenceNormalizer.getInstance(),
+                ShrinkCharSequenceNormalizer.getInstance());
     }
-  }
 
-  public void init() {
-    // nothing to do
-  }
+    public void init() {
+        // nothing to do
+    }
 
-  @Override
-  public void validateArtifactMap() throws InvalidFormatException {
-    // nothing to validate
-  }
+    @Override
+    public void validateArtifactMap() throws InvalidFormatException {
+        // nothing to validate
+    }
 }

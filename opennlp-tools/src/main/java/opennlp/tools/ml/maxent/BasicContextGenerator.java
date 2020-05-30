@@ -29,21 +29,22 @@ package opennlp.tools.ml.maxent;
  */
 public class BasicContextGenerator implements ContextGenerator<String> {
 
-  private String separator = " ";
+    private String separator = " ";
 
-  public BasicContextGenerator() {}
+    public BasicContextGenerator() {
+    }
 
-  public BasicContextGenerator(String sep) {
-    separator = sep;
-  }
+    public BasicContextGenerator(String sep) {
+        separator = sep;
+    }
 
-  /**
-   * Builds up the list of contextual predicates given a String.
-   */
-  public String[] getContext(String o) {
-    String s = (String) o;
-    return s.split(separator);
-  }
+    /**
+     * Builds up the list of contextual predicates given a String.
+     */
+    public String[] getContext(String o) {
+        String s = (String) o;
+        return s.split(separator);
+    }
 
 }
 

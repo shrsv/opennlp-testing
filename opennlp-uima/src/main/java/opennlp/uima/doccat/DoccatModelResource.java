@@ -20,5 +20,5 @@ package opennlp.uima.doccat;
 import opennlp.tools.doccat.DoccatModel;
 
 public interface DoccatModelResource {
-  DoccatModel getModel();
+    DoccatModel getModel();
 }

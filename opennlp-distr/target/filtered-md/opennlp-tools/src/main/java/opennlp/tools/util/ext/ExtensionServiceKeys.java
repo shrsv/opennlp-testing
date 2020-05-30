@@ -19,9 +19,9 @@ package opennlp.tools.util.ext;
 
 public class ExtensionServiceKeys {
 
-  /**
-   * Property key for the unique id which identifies an
-   * OSGi OpenNLP extension service.
-   */
-  public static final String ID = "OPENLP_EXTENSION_ID";
+    /**
+     * Property key for the unique id which identifies an
+     * OSGi OpenNLP extension service.
+     */
+    public static final String ID = "OPENLP_EXTENSION_ID";
 }

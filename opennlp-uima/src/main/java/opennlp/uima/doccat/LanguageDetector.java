@@ -26,8 +26,8 @@ import org.apache.uima.cas.CAS;
  */
 public class LanguageDetector extends AbstractDocumentCategorizer {
 
-  @Override
-  protected void setBestCategory(CAS cas, String bestCategory) {
-    cas.setDocumentLanguage(bestCategory);
-  }
+    @Override
+    protected void setBestCategory(CAS cas, String bestCategory) {
+        cas.setDocumentLanguage(bestCategory);
+    }
 }

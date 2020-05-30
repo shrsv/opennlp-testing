@@ -17,10 +17,10 @@
 
 package opennlp.tools.util.wordvector;
 
+import opennlp.tools.util.java.Experimental;
+
 import java.nio.DoubleBuffer;
 import java.nio.FloatBuffer;
-
-import opennlp.tools.util.java.Experimental;
 
 /**
  * A word vector.
@@ -30,13 +30,15 @@ import opennlp.tools.util.java.Experimental;
  */
 @Experimental
 public interface WordVector {
-  WordVectorType getDataType();
+    WordVectorType getDataType();
 
-  float getAsFloat(int index);
-  double getAsDouble(int index);
+    float getAsFloat(int index);
 
-  FloatBuffer toFloatBuffer();
-  DoubleBuffer toDoubleBuffer();
+    double getAsDouble(int index);
 
-  int dimension();
+    FloatBuffer toFloatBuffer();
+
+    DoubleBuffer toDoubleBuffer();
+
+    int dimension();
 }

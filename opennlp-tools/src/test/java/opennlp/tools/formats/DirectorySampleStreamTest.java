@@ -17,171 +17,171 @@
 
 package opennlp.tools.formats;
 
+import org.junit.Assert;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
+
 import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.Assert;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
-
 public class DirectorySampleStreamTest {
-  
-  @Rule
-  public TemporaryFolder tempDirectory = new TemporaryFolder();
-  
-  @Test
-  public void directoryTest() throws IOException {
 
-    FileFilter filter = new TempFileNameFilter();
-    
-    List<File> files = new ArrayList<>();
-    
-    File temp1 = tempDirectory.newFile();
-    files.add(temp1);
-    
-    File temp2 = tempDirectory.newFile();
-    files.add(temp2);
-    
-    DirectorySampleStream stream = new DirectorySampleStream(tempDirectory.getRoot(), filter, false);
-    
-    File file = stream.read();
-    Assert.assertTrue(files.contains(file));
-    
-    file = stream.read();
-    Assert.assertTrue(files.contains(file));
-    
-    file = stream.read();
-    Assert.assertNull(file);
-    
-    stream.close();
-    
-  }
-  
-  @Test
-  public void directoryNullFilterTest() throws IOException {
+    @Rule
+    public TemporaryFolder tempDirectory = new TemporaryFolder();
 
-    List<File> files = new ArrayList<>();
-    
-    File temp1 = tempDirectory.newFile();
-    files.add(temp1);
-    
-    File temp2 = tempDirectory.newFile();
-    files.add(temp2);
-    
-    DirectorySampleStream stream = new DirectorySampleStream(tempDirectory.getRoot(), null, false);
-    
-    File file = stream.read();
-    Assert.assertTrue(files.contains(file));
-    
-    file = stream.read();
-    Assert.assertTrue(files.contains(file));
-    
-    file = stream.read();
-    Assert.assertNull(file);
-    
-    stream.close();
-    
-  }
-  
-  @Test
-  public void recursiveDirectoryTest() throws IOException {
+    @Test
+    public void directoryTest() throws IOException {
 
-    FileFilter filter = new TempFileNameFilter();
-    
-    List<File> files = new ArrayList<>();
-    
-    File temp1 = tempDirectory.newFile();
-    files.add(temp1);
-    
-    File tempSubDirectory = tempDirectory.newFolder("sub1");
-    File temp2 = File.createTempFile("sub1", ".tmp", tempSubDirectory);
-    files.add(temp2);
+        FileFilter filter = new TempFileNameFilter();
 
-    DirectorySampleStream stream = new DirectorySampleStream(tempDirectory.getRoot(), filter, true);
-    
-    File file = stream.read();
-    Assert.assertTrue(files.contains(file));
-    
-    file = stream.read();
-    Assert.assertTrue(files.contains(file));
-    
-    file = stream.read();
-    Assert.assertNull(file);
-    
-    stream.close();
-    
-  }
-  
-  @Test
-  public void resetDirectoryTest() throws IOException {
+        List<File> files = new ArrayList<>();
 
-    FileFilter filter = new TempFileNameFilter();
-    
-    List<File> files = new ArrayList<>();
-    
-    File temp1 = tempDirectory.newFile();
-    files.add(temp1);
-    
-    File temp2 = tempDirectory.newFile();
-    files.add(temp2);
+        File temp1 = tempDirectory.newFile();
+        files.add(temp1);
 
-    DirectorySampleStream stream = new DirectorySampleStream(tempDirectory.getRoot(), filter, false);
-    
-    File file = stream.read();
-    Assert.assertTrue(files.contains(file));
-    
-    stream.reset();
-    
-    file = stream.read();
-    Assert.assertTrue(files.contains(file));
-    
-    file = stream.read();
-    Assert.assertTrue(files.contains(file));
-    
-    file = stream.read();
-    Assert.assertNull(file);
-    
-    stream.close();
-    
-  }
-  
-  @Test
-  public void emptyDirectoryTest() throws IOException {
+        File temp2 = tempDirectory.newFile();
+        files.add(temp2);
 
-    FileFilter filter = new TempFileNameFilter();
-    
-    DirectorySampleStream stream = new DirectorySampleStream(tempDirectory.getRoot(), filter, false);
-    
-    Assert.assertNull(stream.read());
-    
-    stream.close();
-    
-  }
-  
-  @Test(expected = IllegalArgumentException.class)
-  public void invalidDirectoryTest() throws IOException {
+        DirectorySampleStream stream = new DirectorySampleStream(tempDirectory.getRoot(), filter, false);
 
-    FileFilter filter = new TempFileNameFilter();
-    
-    DirectorySampleStream stream = new DirectorySampleStream(tempDirectory.newFile(), filter, false);
-    
-    Assert.assertNull(stream.read());
-    
-    stream.close();
-    
-  }
-  
-  class TempFileNameFilter implements FileFilter {
-  
-    @Override
-    public boolean accept(File file) {
-      return file.isDirectory() || file.getName().endsWith(".tmp");
+        File file = stream.read();
+        Assert.assertTrue(files.contains(file));
+
+        file = stream.read();
+        Assert.assertTrue(files.contains(file));
+
+        file = stream.read();
+        Assert.assertNull(file);
+
+        stream.close();
+
     }
-    
-  }
-      
+
+    @Test
+    public void directoryNullFilterTest() throws IOException {
+
+        List<File> files = new ArrayList<>();
+
+        File temp1 = tempDirectory.newFile();
+        files.add(temp1);
+
+        File temp2 = tempDirectory.newFile();
+        files.add(temp2);
+
+        DirectorySampleStream stream = new DirectorySampleStream(tempDirectory.getRoot(), null, false);
+
+        File file = stream.read();
+        Assert.assertTrue(files.contains(file));
+
+        file = stream.read();
+        Assert.assertTrue(files.contains(file));
+
+        file = stream.read();
+        Assert.assertNull(file);
+
+        stream.close();
+
+    }
+
+    @Test
+    public void recursiveDirectoryTest() throws IOException {
+
+        FileFilter filter = new TempFileNameFilter();
+
+        List<File> files = new ArrayList<>();
+
+        File temp1 = tempDirectory.newFile();
+        files.add(temp1);
+
+        File tempSubDirectory = tempDirectory.newFolder("sub1");
+        File temp2 = File.createTempFile("sub1", ".tmp", tempSubDirectory);
+        files.add(temp2);
+
+        DirectorySampleStream stream = new DirectorySampleStream(tempDirectory.getRoot(), filter, true);
+
+        File file = stream.read();
+        Assert.assertTrue(files.contains(file));
+
+        file = stream.read();
+        Assert.assertTrue(files.contains(file));
+
+        file = stream.read();
+        Assert.assertNull(file);
+
+        stream.close();
+
+    }
+
+    @Test
+    public void resetDirectoryTest() throws IOException {
+
+        FileFilter filter = new TempFileNameFilter();
+
+        List<File> files = new ArrayList<>();
+
+        File temp1 = tempDirectory.newFile();
+        files.add(temp1);
+
+        File temp2 = tempDirectory.newFile();
+        files.add(temp2);
+
+        DirectorySampleStream stream = new DirectorySampleStream(tempDirectory.getRoot(), filter, false);
+
+        File file = stream.read();
+        Assert.assertTrue(files.contains(file));
+
+        stream.reset();
+
+        file = stream.read();
+        Assert.assertTrue(files.contains(file));
+
+        file = stream.read();
+        Assert.assertTrue(files.contains(file));
+
+        file = stream.read();
+        Assert.assertNull(file);
+
+        stream.close();
+
+    }
+
+    @Test
+    public void emptyDirectoryTest() throws IOException {
+
+        FileFilter filter = new TempFileNameFilter();
+
+        DirectorySampleStream stream = new DirectorySampleStream(tempDirectory.getRoot(), filter, false);
+
+        Assert.assertNull(stream.read());
+
+        stream.close();
+
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void invalidDirectoryTest() throws IOException {
+
+        FileFilter filter = new TempFileNameFilter();
+
+        DirectorySampleStream stream = new DirectorySampleStream(tempDirectory.newFile(), filter, false);
+
+        Assert.assertNull(stream.read());
+
+        stream.close();
+
+    }
+
+    class TempFileNameFilter implements FileFilter {
+
+        @Override
+        public boolean accept(File file) {
+            return file.isDirectory() || file.getName().endsWith(".tmp");
+        }
+
+    }
+
 }

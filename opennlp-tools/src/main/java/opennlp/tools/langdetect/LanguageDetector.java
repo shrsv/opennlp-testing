@@ -24,10 +24,10 @@ import java.io.Serializable;
  */
 public interface LanguageDetector extends Serializable {
 
-  Language[] predictLanguages(CharSequence content);
+    Language[] predictLanguages(CharSequence content);
 
-  Language predictLanguage(CharSequence content);
+    Language predictLanguage(CharSequence content);
 
-  String[] getSupportedLanguages();
+    String[] getSupportedLanguages();
 
 }

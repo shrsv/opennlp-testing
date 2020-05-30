@@ -17,91 +17,88 @@
 
 package opennlp.tools.langdetect;
 
-import java.io.IOException;
-
 import opennlp.tools.doccat.FeatureGenerator;
 import opennlp.tools.util.ObjectStream;
 import opennlp.tools.util.TrainingParameters;
 import opennlp.tools.util.eval.CrossValidationPartitioner;
 import opennlp.tools.util.eval.Mean;
 
+import java.io.IOException;
+
 /**
  * Cross validator for language detector
  */
 public class LanguageDetectorCrossValidator {
 
-  private final TrainingParameters params;
+    private final TrainingParameters params;
 
-  private Mean documentAccuracy = new Mean();
+    private Mean documentAccuracy = new Mean();
 
-  private LanguageDetectorEvaluationMonitor[] listeners;
+    private LanguageDetectorEvaluationMonitor[] listeners;
 
-  private LanguageDetectorFactory factory;
+    private LanguageDetectorFactory factory;
 
 
-  /**
-   * Creates a {@link LanguageDetectorCrossValidator} with the given
-   * {@link FeatureGenerator}s.
-   */
-  public LanguageDetectorCrossValidator(TrainingParameters mlParams,
-                                        LanguageDetectorFactory factory,
-                                        LanguageDetectorEvaluationMonitor ... listeners) {
-    this.params = mlParams;
-    this.listeners = listeners;
-    this.factory = factory;
-  }
-
-  /**
-   * Starts the evaluation.
-   *
-   * @param samples
-   *          the data to train and test
-   * @param nFolds
-   *          number of folds
-   *
-   * @throws IOException
-   */
-  public void evaluate(ObjectStream<LanguageSample> samples, int nFolds)
-      throws IOException {
-
-    CrossValidationPartitioner<LanguageSample> partitioner =
-        new CrossValidationPartitioner<>(samples, nFolds);
-
-    while (partitioner.hasNext()) {
-
-      CrossValidationPartitioner.TrainingSampleStream<LanguageSample> trainingSampleStream =
-          partitioner.next();
-
-      LanguageDetectorModel model = LanguageDetectorME.train(
-          trainingSampleStream, params, factory);
-
-      LanguageDetectorEvaluator evaluator = new LanguageDetectorEvaluator(
-          new LanguageDetectorME(model), listeners);
-
-      evaluator.evaluate(trainingSampleStream.getTestSampleStream());
-
-      documentAccuracy.add(evaluator.getAccuracy(),
-          evaluator.getDocumentCount());
-
+    /**
+     * Creates a {@link LanguageDetectorCrossValidator} with the given
+     * {@link FeatureGenerator}s.
+     */
+    public LanguageDetectorCrossValidator(TrainingParameters mlParams,
+                                          LanguageDetectorFactory factory,
+                                          LanguageDetectorEvaluationMonitor... listeners) {
+        this.params = mlParams;
+        this.listeners = listeners;
+        this.factory = factory;
     }
-  }
 
-  /**
-   * Retrieves the accuracy for all iterations.
-   *
-   * @return the word accuracy
-   */
-  public double getDocumentAccuracy() {
-    return documentAccuracy.mean();
-  }
+    /**
+     * Starts the evaluation.
+     *
+     * @param samples the data to train and test
+     * @param nFolds  number of folds
+     * @throws IOException
+     */
+    public void evaluate(ObjectStream<LanguageSample> samples, int nFolds)
+            throws IOException {
 
-  /**
-   * Retrieves the number of words which where validated over all iterations.
-   * The result is the amount of folds multiplied by the total number of words.
-   *
-   * @return the word count
-   */
-  public long getDocumentCount() {
-    return documentAccuracy.count();
-  }
+        CrossValidationPartitioner<LanguageSample> partitioner =
+                new CrossValidationPartitioner<>(samples, nFolds);
+
+        while (partitioner.hasNext()) {
+
+            CrossValidationPartitioner.TrainingSampleStream<LanguageSample> trainingSampleStream =
+                    partitioner.next();
+
+            LanguageDetectorModel model = LanguageDetectorME.train(
+                    trainingSampleStream, params, factory);
+
+            LanguageDetectorEvaluator evaluator = new LanguageDetectorEvaluator(
+                    new LanguageDetectorME(model), listeners);
+
+            evaluator.evaluate(trainingSampleStream.getTestSampleStream());
+
+            documentAccuracy.add(evaluator.getAccuracy(),
+                    evaluator.getDocumentCount());
+
+        }
+    }
+
+    /**
+     * Retrieves the accuracy for all iterations.
+     *
+     * @return the word accuracy
+     */
+    public double getDocumentAccuracy() {
+        return documentAccuracy.mean();
+    }
+
+    /**
+     * Retrieves the number of words which where validated over all iterations.
+     * The result is the amount of folds multiplied by the total number of words.
+     *
+     * @return the word count
+     */
+    public long getDocumentCount() {
+        return documentAccuracy.count();
+    }
 }

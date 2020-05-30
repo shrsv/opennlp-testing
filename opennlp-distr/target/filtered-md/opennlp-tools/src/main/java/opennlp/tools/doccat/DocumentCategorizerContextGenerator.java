@@ -26,22 +26,22 @@ import java.util.Map;
  */
 class DocumentCategorizerContextGenerator {
 
-  private FeatureGenerator[] mFeatureGenerators;
+    private FeatureGenerator[] mFeatureGenerators;
 
-  DocumentCategorizerContextGenerator(FeatureGenerator... featureGenerators) {
-    mFeatureGenerators = featureGenerators;
-  }
-
-  public String[] getContext(String[] text, Map<String, Object> extraInformation) {
-
-    Collection<String> context = new LinkedList<>();
-
-    for (FeatureGenerator mFeatureGenerator : mFeatureGenerators) {
-      Collection<String> extractedFeatures =
-          mFeatureGenerator.extractFeatures(text, extraInformation);
-      context.addAll(extractedFeatures);
+    DocumentCategorizerContextGenerator(FeatureGenerator... featureGenerators) {
+        mFeatureGenerators = featureGenerators;
     }
 
-    return context.toArray(new String[context.size()]);
-  }
+    public String[] getContext(String[] text, Map<String, Object> extraInformation) {
+
+        Collection<String> context = new LinkedList<>();
+
+        for (FeatureGenerator mFeatureGenerator : mFeatureGenerators) {
+            Collection<String> extractedFeatures =
+                    mFeatureGenerator.extractFeatures(text, extraInformation);
+            context.addAll(extractedFeatures);
+        }
+
+        return context.toArray(new String[context.size()]);
+    }
 }

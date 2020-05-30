@@ -17,118 +17,111 @@
 
 package opennlp.tools.tokenize;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.ObjectInput;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutput;
-import java.io.ObjectOutputStream;
-
+import opennlp.tools.util.Span;
 import org.junit.Assert;
 import org.junit.Test;
 
-import opennlp.tools.util.Span;
+import java.io.*;
 
 public class TokenSampleTest {
 
-  public static TokenSample createGoldSample() {
-    return new TokenSample("A test.", new Span[] {new Span(0, 1),
-        new Span(2, 6)});
-  }
-
-  public static TokenSample createPredSample() {
-    return new TokenSample("A test.", new Span[] {new Span(0, 3),
-        new Span(2, 6)});
-  }
-
-  public static TokenSample createPredSilverSample() {
-    return new TokenSample("A t st.", new Span[] {new Span(0, 1),
-        new Span(2, 6)});
-  }
-
-  @Test
-  public void testRetrievingContent() {
-
-    String sentence = "A test";
-
-    TokenSample sample = new TokenSample(sentence, new Span[] {new Span(0, 1),
-        new Span(2, 6)});
-
-    Assert.assertEquals("A test", sample.getText());
-
-    Assert.assertEquals(new Span(0, 1), sample.getTokenSpans()[0]);
-    Assert.assertEquals(new Span(2, 6), sample.getTokenSpans()[1]);
-  }
-
-  @Test
-  public void testTokenSampleSerDe() throws IOException {
-    TokenSample tokenSample = createGoldSample();
-    ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-    ObjectOutput out = new ObjectOutputStream(byteArrayOutputStream);
-    out.writeObject(tokenSample);
-    out.flush();
-    byte[] bytes = byteArrayOutputStream.toByteArray();
-
-    ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(bytes);
-    ObjectInput objectInput = new ObjectInputStream(byteArrayInputStream);
-
-    TokenSample deSerializedTokenSample = null;
-    try {
-      deSerializedTokenSample = (TokenSample) objectInput.readObject();
-    } catch (ClassNotFoundException e) {
-      // do nothing
+    public static TokenSample createGoldSample() {
+        return new TokenSample("A test.", new Span[]{new Span(0, 1),
+                new Span(2, 6)});
     }
 
-    Assert.assertNotNull(deSerializedTokenSample);
-    Assert.assertEquals(tokenSample.getText(), deSerializedTokenSample.getText());
-    Assert.assertArrayEquals(tokenSample.getTokenSpans(), deSerializedTokenSample.getTokenSpans());
-  }
+    public static TokenSample createPredSample() {
+        return new TokenSample("A test.", new Span[]{new Span(0, 3),
+                new Span(2, 6)});
+    }
 
-  @Test
-  public void testCreationWithDetokenizer() throws IOException {
+    public static TokenSample createPredSilverSample() {
+        return new TokenSample("A t st.", new Span[]{new Span(0, 1),
+                new Span(2, 6)});
+    }
 
-    Detokenizer detokenizer = DictionaryDetokenizerTest.createLatinDetokenizer();
+    @Test
+    public void testRetrievingContent() {
 
-    String[] tokens = new String[] {
-        "start",
-        "(", // move right
-        ")", // move left
-        "end",
-        ".", // move left
-        "hyphen",
-        "-", // move both
-        "string",
-        "."
-    };
+        String sentence = "A test";
 
-    TokenSample a = new TokenSample(detokenizer, tokens);
+        TokenSample sample = new TokenSample(sentence, new Span[]{new Span(0, 1),
+                new Span(2, 6)});
 
-    Assert.assertEquals("start () end. hyphen-string.", a.getText());
-    Assert.assertEquals("start (" + TokenSample.DEFAULT_SEPARATOR_CHARS + ") end"
-        + TokenSample.DEFAULT_SEPARATOR_CHARS + "."
-        + " hyphen" + TokenSample.DEFAULT_SEPARATOR_CHARS + "-" + TokenSample.DEFAULT_SEPARATOR_CHARS
-        + "string" + TokenSample.DEFAULT_SEPARATOR_CHARS + ".", a.toString());
+        Assert.assertEquals("A test", sample.getText());
 
-    Assert.assertEquals(9, a.getTokenSpans().length);
+        Assert.assertEquals(new Span(0, 1), sample.getTokenSpans()[0]);
+        Assert.assertEquals(new Span(2, 6), sample.getTokenSpans()[1]);
+    }
 
-    Assert.assertEquals(new Span(0, 5), a.getTokenSpans()[0]);
-    Assert.assertEquals(new Span(6, 7), a.getTokenSpans()[1]);
-    Assert.assertEquals(new Span(7, 8), a.getTokenSpans()[2]);
-    Assert.assertEquals(new Span(9, 12), a.getTokenSpans()[3]);
-    Assert.assertEquals(new Span(12, 13), a.getTokenSpans()[4]);
+    @Test
+    public void testTokenSampleSerDe() throws IOException {
+        TokenSample tokenSample = createGoldSample();
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        ObjectOutput out = new ObjectOutputStream(byteArrayOutputStream);
+        out.writeObject(tokenSample);
+        out.flush();
+        byte[] bytes = byteArrayOutputStream.toByteArray();
 
-    Assert.assertEquals(new Span(14, 20), a.getTokenSpans()[5]);
-    Assert.assertEquals(new Span(20, 21), a.getTokenSpans()[6]);
-    Assert.assertEquals(new Span(21, 27), a.getTokenSpans()[7]);
-    Assert.assertEquals(new Span(27, 28), a.getTokenSpans()[8]);
-  }
+        ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(bytes);
+        ObjectInput objectInput = new ObjectInputStream(byteArrayInputStream);
 
-  @Test
-  public void testEquals() {
-    Assert.assertFalse(createGoldSample() == createGoldSample());
-    Assert.assertTrue(createGoldSample().equals(createGoldSample()));
-    Assert.assertFalse(createPredSample().equals(createGoldSample()));
-    Assert.assertFalse(createPredSample().equals(new Object()));
-  }
+        TokenSample deSerializedTokenSample = null;
+        try {
+            deSerializedTokenSample = (TokenSample) objectInput.readObject();
+        } catch (ClassNotFoundException e) {
+            // do nothing
+        }
+
+        Assert.assertNotNull(deSerializedTokenSample);
+        Assert.assertEquals(tokenSample.getText(), deSerializedTokenSample.getText());
+        Assert.assertArrayEquals(tokenSample.getTokenSpans(), deSerializedTokenSample.getTokenSpans());
+    }
+
+    @Test
+    public void testCreationWithDetokenizer() throws IOException {
+
+        Detokenizer detokenizer = DictionaryDetokenizerTest.createLatinDetokenizer();
+
+        String[] tokens = new String[]{
+                "start",
+                "(", // move right
+                ")", // move left
+                "end",
+                ".", // move left
+                "hyphen",
+                "-", // move both
+                "string",
+                "."
+        };
+
+        TokenSample a = new TokenSample(detokenizer, tokens);
+
+        Assert.assertEquals("start () end. hyphen-string.", a.getText());
+        Assert.assertEquals("start (" + TokenSample.DEFAULT_SEPARATOR_CHARS + ") end"
+                + TokenSample.DEFAULT_SEPARATOR_CHARS + "."
+                + " hyphen" + TokenSample.DEFAULT_SEPARATOR_CHARS + "-" + TokenSample.DEFAULT_SEPARATOR_CHARS
+                + "string" + TokenSample.DEFAULT_SEPARATOR_CHARS + ".", a.toString());
+
+        Assert.assertEquals(9, a.getTokenSpans().length);
+
+        Assert.assertEquals(new Span(0, 5), a.getTokenSpans()[0]);
+        Assert.assertEquals(new Span(6, 7), a.getTokenSpans()[1]);
+        Assert.assertEquals(new Span(7, 8), a.getTokenSpans()[2]);
+        Assert.assertEquals(new Span(9, 12), a.getTokenSpans()[3]);
+        Assert.assertEquals(new Span(12, 13), a.getTokenSpans()[4]);
+
+        Assert.assertEquals(new Span(14, 20), a.getTokenSpans()[5]);
+        Assert.assertEquals(new Span(20, 21), a.getTokenSpans()[6]);
+        Assert.assertEquals(new Span(21, 27), a.getTokenSpans()[7]);
+        Assert.assertEquals(new Span(27, 28), a.getTokenSpans()[8]);
+    }
+
+    @Test
+    public void testEquals() {
+        Assert.assertFalse(createGoldSample() == createGoldSample());
+        Assert.assertTrue(createGoldSample().equals(createGoldSample()));
+        Assert.assertFalse(createPredSample().equals(createGoldSample()));
+        Assert.assertFalse(createPredSample().equals(new Object()));
+    }
 }

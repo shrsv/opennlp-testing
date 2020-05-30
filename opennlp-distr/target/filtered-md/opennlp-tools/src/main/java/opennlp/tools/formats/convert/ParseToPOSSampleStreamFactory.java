@@ -30,24 +30,24 @@ import opennlp.tools.util.ObjectStream;
  */
 public class ParseToPOSSampleStreamFactory extends LanguageSampleStreamFactory<POSSample> {
 
-  private ParseToPOSSampleStreamFactory() {
-    super(ParseSampleStreamFactory.Parameters.class);
-  }
+    private ParseToPOSSampleStreamFactory() {
+        super(ParseSampleStreamFactory.Parameters.class);
+    }
 
-  public ObjectStream<POSSample> create(String[] args) {
+    public static void registerFactory() {
+        StreamFactoryRegistry.registerFactory(POSSample.class,
+                "parse", new ParseToPOSSampleStreamFactory());
+    }
 
-    ParseSampleStreamFactory.Parameters params =
-        ArgumentParser.parse(args, ParseSampleStreamFactory.Parameters.class);
+    public ObjectStream<POSSample> create(String[] args) {
 
-    ObjectStream<Parse> parseSampleStream = StreamFactoryRegistry.getFactory(Parse.class,
-        StreamFactoryRegistry.DEFAULT_FORMAT).create(
-        ArgumentParser.filter(args, ParseSampleStreamFactory.Parameters.class));
+        ParseSampleStreamFactory.Parameters params =
+                ArgumentParser.parse(args, ParseSampleStreamFactory.Parameters.class);
 
-    return new ParseToPOSSampleStream(parseSampleStream);
-  }
+        ObjectStream<Parse> parseSampleStream = StreamFactoryRegistry.getFactory(Parse.class,
+                StreamFactoryRegistry.DEFAULT_FORMAT).create(
+                ArgumentParser.filter(args, ParseSampleStreamFactory.Parameters.class));
 
-  public static void registerFactory() {
-    StreamFactoryRegistry.registerFactory(POSSample.class,
-        "parse", new ParseToPOSSampleStreamFactory());
-  }
+        return new ParseToPOSSampleStream(parseSampleStream);
+    }
 }

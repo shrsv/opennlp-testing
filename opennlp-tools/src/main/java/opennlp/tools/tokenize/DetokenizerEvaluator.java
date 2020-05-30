@@ -17,12 +17,12 @@
 package opennlp.tools.tokenize;
 
 
-import java.util.ArrayList;
-
 import opennlp.tools.cmdline.tokenizer.DetokenEvaluationErrorListener;
 import opennlp.tools.util.Span;
 import opennlp.tools.util.eval.Evaluator;
 import opennlp.tools.util.eval.FMeasure;
+
+import java.util.ArrayList;
 
 /**
  * The {@link DetokenizerEvaluator} measures the performance of
@@ -35,45 +35,45 @@ import opennlp.tools.util.eval.FMeasure;
  */
 
 public class DetokenizerEvaluator extends Evaluator<TokenSample> {
-  private FMeasure fmeasure = new FMeasure();
+    private FMeasure fmeasure = new FMeasure();
 
-  /**
-   * The {@link Detokenizer} used to create the
-   * predicted tokens.
-   */
-  private Detokenizer detokenizer;
+    /**
+     * The {@link Detokenizer} used to create the
+     * predicted tokens.
+     */
+    private Detokenizer detokenizer;
 
-  /**
-   * Initializes the current instance with the
-   * given {@link Detokenizer}.
-   *
-   * @param detokenizer the {@link Detokenizer} to evaluate.
-   * @param listeners   evaluation sample listeners
-   */
-  public DetokenizerEvaluator(Detokenizer detokenizer, DetokenEvaluationErrorListener... listeners) {
-    super(listeners);
-    this.detokenizer = detokenizer;
-  }
+    /**
+     * Initializes the current instance with the
+     * given {@link Detokenizer}.
+     *
+     * @param detokenizer the {@link Detokenizer} to evaluate.
+     * @param listeners   evaluation sample listeners
+     */
+    public DetokenizerEvaluator(Detokenizer detokenizer, DetokenEvaluationErrorListener... listeners) {
+        super(listeners);
+        this.detokenizer = detokenizer;
+    }
 
-  @Override
-  protected TokenSample processSample(TokenSample reference) {
-    String[] tokens = Span.spansToStrings(reference.getTokenSpans(), reference.getText());
-    String tokensstring = detokenizer.detokenize(tokens, null);
+    @Override
+    protected TokenSample processSample(TokenSample reference) {
+        String[] tokens = Span.spansToStrings(reference.getTokenSpans(), reference.getText());
+        String tokensstring = detokenizer.detokenize(tokens, null);
 
-    ArrayList<String> predictionsArray = new ArrayList<>();
-    ArrayList<String> referencesArray = new ArrayList<>();
+        ArrayList<String> predictionsArray = new ArrayList<>();
+        ArrayList<String> referencesArray = new ArrayList<>();
 
-    predictionsArray.add(tokensstring);
-    referencesArray.add(reference.getText());
+        predictionsArray.add(tokensstring);
+        referencesArray.add(reference.getText());
 
-    Object[] references = referencesArray.toArray();
-    Object[] predictions = predictionsArray.toArray();
-    fmeasure.updateScores(references, predictions);
+        Object[] references = referencesArray.toArray();
+        Object[] predictions = predictionsArray.toArray();
+        fmeasure.updateScores(references, predictions);
 
-    return new TokenSample(tokensstring, reference.getTokenSpans());
-  }
+        return new TokenSample(tokensstring, reference.getTokenSpans());
+    }
 
-  public FMeasure getFMeasure() {
-    return fmeasure;
-  }
+    public FMeasure getFMeasure() {
+        return fmeasure;
+    }
 }

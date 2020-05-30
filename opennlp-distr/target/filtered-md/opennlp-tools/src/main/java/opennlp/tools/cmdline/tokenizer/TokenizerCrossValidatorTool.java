@@ -17,8 +17,6 @@
 
 package opennlp.tools.cmdline.tokenizer;
 
-import java.io.IOException;
-
 import opennlp.tools.cmdline.AbstractCrossValidatorTool;
 import opennlp.tools.cmdline.CmdLineUtil;
 import opennlp.tools.cmdline.params.CVParams;
@@ -31,59 +29,59 @@ import opennlp.tools.tokenize.TokenizerFactory;
 import opennlp.tools.util.eval.FMeasure;
 import opennlp.tools.util.model.ModelUtil;
 
+import java.io.IOException;
+
 public final class TokenizerCrossValidatorTool
-    extends AbstractCrossValidatorTool<TokenSample, CVToolParams> {
+        extends AbstractCrossValidatorTool<TokenSample, CVToolParams> {
 
-  interface CVToolParams extends CVParams, TrainingParams {
-  }
-
-  public TokenizerCrossValidatorTool() {
-    super(TokenSample.class, CVToolParams.class);
-  }
-
-  public String getShortDescription() {
-    return "K-fold cross validator for the learnable tokenizer";
-  }
-
-  public void run(String format, String[] args) {
-    super.run(format, args);
-
-    mlParams = CmdLineUtil.loadTrainingParameters(params.getParams(), false);
-    if (mlParams == null) {
-      mlParams = ModelUtil.createDefaultTrainingParameters();
+    public TokenizerCrossValidatorTool() {
+        super(TokenSample.class, CVToolParams.class);
     }
 
-    TokenizerCrossValidator validator;
-
-    TokenizerEvaluationMonitor listener = null;
-    if (params.getMisclassified()) {
-      listener = new TokenEvaluationErrorListener();
+    public String getShortDescription() {
+        return "K-fold cross validator for the learnable tokenizer";
     }
 
-    try {
-      Dictionary dict = TokenizerTrainerTool.loadDict(params.getAbbDict());
+    public void run(String format, String[] args) {
+        super.run(format, args);
 
-      TokenizerFactory tokFactory = TokenizerFactory.create(
-          params.getFactory(), params.getLang(), dict,
-          params.getAlphaNumOpt(), null);
-      validator = new opennlp.tools.tokenize.TokenizerCrossValidator(mlParams,
-          tokFactory, listener);
+        mlParams = CmdLineUtil.loadTrainingParameters(params.getParams(), false);
+        if (mlParams == null) {
+            mlParams = ModelUtil.createDefaultTrainingParameters();
+        }
 
-      validator.evaluate(sampleStream, params.getFolds());
+        TokenizerCrossValidator validator;
+
+        TokenizerEvaluationMonitor listener = null;
+        if (params.getMisclassified()) {
+            listener = new TokenEvaluationErrorListener();
+        }
+
+        try {
+            Dictionary dict = TokenizerTrainerTool.loadDict(params.getAbbDict());
+
+            TokenizerFactory tokFactory = TokenizerFactory.create(
+                    params.getFactory(), params.getLang(), dict,
+                    params.getAlphaNumOpt(), null);
+            validator = new opennlp.tools.tokenize.TokenizerCrossValidator(mlParams,
+                    tokFactory, listener);
+
+            validator.evaluate(sampleStream, params.getFolds());
+        } catch (IOException e) {
+            throw createTerminationIOException(e);
+        } finally {
+            try {
+                sampleStream.close();
+            } catch (IOException e) {
+                // sorry that this can fail
+            }
+        }
+
+        FMeasure result = validator.getFMeasure();
+
+        System.out.println(result.toString());
     }
-    catch (IOException e) {
-      throw createTerminationIOException(e);
-    }
-    finally {
-      try {
-        sampleStream.close();
-      } catch (IOException e) {
-        // sorry that this can fail
-      }
-    }
 
-    FMeasure result = validator.getFMeasure();
-
-    System.out.println(result.toString());
-  }
+    interface CVToolParams extends CVParams, TrainingParams {
+    }
 }

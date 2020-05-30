@@ -17,48 +17,47 @@
 
 package opennlp.tools.languagemodel;
 
-import java.util.Collection;
-
+import opennlp.tools.util.StringList;
 import org.junit.Assert;
 import org.junit.Test;
 
-import opennlp.tools.util.StringList;
+import java.util.Collection;
 
 /**
  * Tests for evaluating accuracy of language models
  */
 public class LanguageModelEvaluationTest {
 
-  @Test
-  public void testPerplexityComparison() throws Exception {
+    @Test
+    public void testPerplexityComparison() throws Exception {
 
-    Collection<String[]> trainingVocabulary =
-        LanguageModelTestUtils.generateRandomVocabulary(1100000);
-    Collection<String[]> testVocabulary =
-        LanguageModelTestUtils.generateRandomVocabulary(100);
+        Collection<String[]> trainingVocabulary =
+                LanguageModelTestUtils.generateRandomVocabulary(1100000);
+        Collection<String[]> testVocabulary =
+                LanguageModelTestUtils.generateRandomVocabulary(100);
 
-    NGramLanguageModel unigramLM = new NGramLanguageModel(1);
-    for (String[] sentence : trainingVocabulary) {
-      unigramLM.add(new StringList(sentence), 1, 1);
+        NGramLanguageModel unigramLM = new NGramLanguageModel(1);
+        for (String[] sentence : trainingVocabulary) {
+            unigramLM.add(new StringList(sentence), 1, 1);
+        }
+        double unigramPerplexity =
+                LanguageModelTestUtils.getPerplexity(unigramLM, testVocabulary, 1);
+
+        NGramLanguageModel bigramLM = new NGramLanguageModel(2);
+        for (String[] sentence : trainingVocabulary) {
+            bigramLM.add(new StringList(sentence), 1, 2);
+        }
+        double bigramPerplexity =
+                LanguageModelTestUtils.getPerplexity(bigramLM, testVocabulary, 2);
+        Assert.assertTrue(unigramPerplexity >= bigramPerplexity);
+
+        NGramLanguageModel trigramLM = new NGramLanguageModel(3);
+        for (String[] sentence : trainingVocabulary) {
+            trigramLM.add(new StringList(sentence), 1, 3);
+        }
+        double trigramPerplexity =
+                LanguageModelTestUtils.getPerplexity(trigramLM, testVocabulary, 3);
+        Assert.assertTrue(bigramPerplexity >= trigramPerplexity);
+
     }
-    double unigramPerplexity =
-        LanguageModelTestUtils.getPerplexity(unigramLM, testVocabulary, 1);
-
-    NGramLanguageModel bigramLM = new NGramLanguageModel(2);
-    for (String[] sentence : trainingVocabulary) {
-      bigramLM.add(new StringList(sentence), 1, 2);
-    }
-    double bigramPerplexity =
-        LanguageModelTestUtils.getPerplexity(bigramLM, testVocabulary, 2);
-    Assert.assertTrue(unigramPerplexity >= bigramPerplexity);
-
-    NGramLanguageModel trigramLM = new NGramLanguageModel(3);
-    for (String[] sentence : trainingVocabulary) {
-      trigramLM.add(new StringList(sentence), 1, 3);
-    }
-    double trigramPerplexity =
-        LanguageModelTestUtils.getPerplexity(trigramLM, testVocabulary, 3);
-    Assert.assertTrue(bigramPerplexity >= trigramPerplexity);
-
-  }
 }

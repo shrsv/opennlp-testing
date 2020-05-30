@@ -17,13 +17,13 @@
 
 package opennlp.tools.namefind;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Objects;
-
 import opennlp.tools.dictionary.Dictionary;
 import opennlp.tools.util.Span;
 import opennlp.tools.util.StringList;
+
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Objects;
 
 /**
  * This is a dictionary based name finder, it scans text
@@ -31,67 +31,66 @@ import opennlp.tools.util.StringList;
  */
 public class DictionaryNameFinder implements TokenNameFinder {
 
-  private static final String DEFAULT_TYPE = "default";
+    private static final String DEFAULT_TYPE = "default";
+    private final String type;
+    private Dictionary mDictionary;
 
-  private Dictionary mDictionary;
-  private final String type;
-
-  /**
-   * Initialized the current instance with he provided dictionary
-   * and a type.
-   *
-   * @param dictionary
-   * @param type the name type used for the produced spans
-   */
-  public DictionaryNameFinder(Dictionary dictionary, String type) {
-    mDictionary = Objects.requireNonNull(dictionary, "dictionary must not be null");
-    this.type = Objects.requireNonNull(type, "type must not be null");
-  }
-
-  /**
-   * Initializes the current instance with the provided dictionary.
-   *
-   * @param dictionary
-   */
-  public DictionaryNameFinder(Dictionary dictionary) {
-    this(dictionary, DEFAULT_TYPE);
-  }
-
-  public Span[] find(String[] textTokenized) {
-    List<Span> namesFound = new LinkedList<>();
-
-    for (int offsetFrom = 0; offsetFrom < textTokenized.length; offsetFrom++) {
-      Span nameFound = null;
-      String[] tokensSearching;
-
-      for (int offsetTo = offsetFrom; offsetTo < textTokenized.length; offsetTo++) {
-        int lengthSearching = offsetTo - offsetFrom + 1;
-
-        if (lengthSearching > mDictionary.getMaxTokenCount()) {
-          break;
-        } else {
-          tokensSearching = new String[lengthSearching];
-          System.arraycopy(textTokenized, offsetFrom, tokensSearching, 0,
-              lengthSearching);
-
-          StringList entryForSearch = new StringList(tokensSearching);
-
-          if (mDictionary.contains(entryForSearch)) {
-            nameFound = new Span(offsetFrom, offsetTo + 1, type);
-          }
-        }
-      }
-
-      if (nameFound != null) {
-        namesFound.add(nameFound);
-        // skip over the found tokens for the next search
-        offsetFrom += nameFound.length() - 1;
-      }
+    /**
+     * Initialized the current instance with he provided dictionary
+     * and a type.
+     *
+     * @param dictionary
+     * @param type       the name type used for the produced spans
+     */
+    public DictionaryNameFinder(Dictionary dictionary, String type) {
+        mDictionary = Objects.requireNonNull(dictionary, "dictionary must not be null");
+        this.type = Objects.requireNonNull(type, "type must not be null");
     }
-    return namesFound.toArray(new Span[namesFound.size()]);
-  }
 
-  public void clearAdaptiveData() {
-    // nothing to clear
-  }
+    /**
+     * Initializes the current instance with the provided dictionary.
+     *
+     * @param dictionary
+     */
+    public DictionaryNameFinder(Dictionary dictionary) {
+        this(dictionary, DEFAULT_TYPE);
+    }
+
+    public Span[] find(String[] textTokenized) {
+        List<Span> namesFound = new LinkedList<>();
+
+        for (int offsetFrom = 0; offsetFrom < textTokenized.length; offsetFrom++) {
+            Span nameFound = null;
+            String[] tokensSearching;
+
+            for (int offsetTo = offsetFrom; offsetTo < textTokenized.length; offsetTo++) {
+                int lengthSearching = offsetTo - offsetFrom + 1;
+
+                if (lengthSearching > mDictionary.getMaxTokenCount()) {
+                    break;
+                } else {
+                    tokensSearching = new String[lengthSearching];
+                    System.arraycopy(textTokenized, offsetFrom, tokensSearching, 0,
+                            lengthSearching);
+
+                    StringList entryForSearch = new StringList(tokensSearching);
+
+                    if (mDictionary.contains(entryForSearch)) {
+                        nameFound = new Span(offsetFrom, offsetTo + 1, type);
+                    }
+                }
+            }
+
+            if (nameFound != null) {
+                namesFound.add(nameFound);
+                // skip over the found tokens for the next search
+                offsetFrom += nameFound.length() - 1;
+            }
+        }
+        return namesFound.toArray(new Span[namesFound.size()]);
+    }
+
+    public void clearAdaptiveData() {
+        // nothing to clear
+    }
 }

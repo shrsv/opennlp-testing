@@ -17,37 +17,37 @@
 
 package opennlp.tools.cmdline.tokenizer;
 
-import java.io.OutputStream;
-
 import opennlp.tools.cmdline.EvaluationErrorPrinter;
 import opennlp.tools.tokenize.TokenSample;
 import opennlp.tools.tokenize.TokenizerEvaluationMonitor;
 import opennlp.tools.util.eval.EvaluationMonitor;
+
+import java.io.OutputStream;
 
 /**
  * A default implementation of {@link EvaluationMonitor} that prints
  * to an output stream.
  */
 public class DetokenEvaluationErrorListener extends
-    EvaluationErrorPrinter<TokenSample> implements TokenizerEvaluationMonitor {
+        EvaluationErrorPrinter<TokenSample> implements TokenizerEvaluationMonitor {
 
-  /**
-   * Creates a listener that will print to System.err
-   */
-  public DetokenEvaluationErrorListener() {
-    super(System.err);
-  }
+    /**
+     * Creates a listener that will print to System.err
+     */
+    public DetokenEvaluationErrorListener() {
+        super(System.err);
+    }
 
-  /**
-   * Creates a listener that will print to a given {@link OutputStream}
-   */
-  public DetokenEvaluationErrorListener(OutputStream outputStream) {
-    super(outputStream);
-  }
+    /**
+     * Creates a listener that will print to a given {@link OutputStream}
+     */
+    public DetokenEvaluationErrorListener(OutputStream outputStream) {
+        super(outputStream);
+    }
 
-  @Override
-  public void missclassified(TokenSample reference, TokenSample prediction) {
-    printError(reference, prediction);
-  }
+    @Override
+    public void missclassified(TokenSample reference, TokenSample prediction) {
+        printError(reference, prediction);
+    }
 
 }

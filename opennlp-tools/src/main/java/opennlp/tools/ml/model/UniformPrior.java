@@ -24,46 +24,46 @@ import java.util.Objects;
  */
 public class UniformPrior implements Prior {
 
-  private int numOutcomes;
-  private double r;
+    private int numOutcomes;
+    private double r;
 
-  public void logPrior(double[] dist, int[] context, float[] values) {
-    for (int oi = 0; oi < numOutcomes; oi++) {
-      dist[oi] = r;
-    }
-  }
-
-  @Override
-  public void logPrior(double[] dist, Context[] context, float[] values) {
-    logPrior(dist, (int[]) null, values);
-  }
-
-  public void logPrior(double[] dist, int[] context) {
-    logPrior(dist,context,null);
-  }
-
-  public void setLabels(String[] outcomeLabels, String[] contextLabels) {
-    this.numOutcomes = outcomeLabels.length;
-    r = Math.log(1.0 / numOutcomes);
-  }
-
-  @Override
-  public int hashCode() {
-    return Objects.hash(numOutcomes, r);
-  }
-
-  @Override
-  public boolean equals(Object obj) {
-    if (obj == this) {
-      return true;
+    public void logPrior(double[] dist, int[] context, float[] values) {
+        for (int oi = 0; oi < numOutcomes; oi++) {
+            dist[oi] = r;
+        }
     }
 
-    if (obj instanceof UniformPrior) {
-      UniformPrior prior = (UniformPrior) obj;
-
-      return numOutcomes == prior.numOutcomes && r == prior.r;
+    @Override
+    public void logPrior(double[] dist, Context[] context, float[] values) {
+        logPrior(dist, (int[]) null, values);
     }
 
-    return false;
-  }
+    public void logPrior(double[] dist, int[] context) {
+        logPrior(dist, context, null);
+    }
+
+    public void setLabels(String[] outcomeLabels, String[] contextLabels) {
+        this.numOutcomes = outcomeLabels.length;
+        r = Math.log(1.0 / numOutcomes);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(numOutcomes, r);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this) {
+            return true;
+        }
+
+        if (obj instanceof UniformPrior) {
+            UniformPrior prior = (UniformPrior) obj;
+
+            return numOutcomes == prior.numOutcomes && r == prior.r;
+        }
+
+        return false;
+    }
 }

@@ -24,44 +24,43 @@ import java.util.Objects;
 
 /**
  * The {@link Attributes} class stores name value pairs.
- *
+ * <p>
  * Problem: The HashMap for storing the name value pairs has a very high
  * memory footprint, replace it.
  */
 public class Attributes {
 
-  private Map<String, String> mNameValueMap = new HashMap<>();
+    private Map<String, String> mNameValueMap = new HashMap<>();
 
-  /**
-   * Retrieves the value for the given key or null if attribute it not set.
-   *
-   * @param key
-   *
-   * @return the value
-   */
-  public  String getValue(String key) {
-    return mNameValueMap.get(key);
-  }
+    /**
+     * Retrieves the value for the given key or null if attribute it not set.
+     *
+     * @param key
+     * @return the value
+     */
+    public String getValue(String key) {
+        return mNameValueMap.get(key);
+    }
 
-  /**
-   * Sets a key/value pair.
-   *
-   * @param key
-   * @param value
-   */
-  public void setValue(String key, String value) {
-    Objects.requireNonNull(key, "key must not be null");
-    Objects.requireNonNull(value, "value must not be null");
+    /**
+     * Sets a key/value pair.
+     *
+     * @param key
+     * @param value
+     */
+    public void setValue(String key, String value) {
+        Objects.requireNonNull(key, "key must not be null");
+        Objects.requireNonNull(value, "value must not be null");
 
-    mNameValueMap.put(key, value);
-  }
+        mNameValueMap.put(key, value);
+    }
 
-  /**
-   * Iterates over the keys.
-   *
-   * @return key-{@link Iterator}
-   */
-  public Iterator<String> iterator() {
-    return mNameValueMap.keySet().iterator();
-  }
+    /**
+     * Iterates over the keys.
+     *
+     * @return key-{@link Iterator}
+     */
+    public Iterator<String> iterator() {
+        return mNameValueMap.keySet().iterator();
+    }
 }

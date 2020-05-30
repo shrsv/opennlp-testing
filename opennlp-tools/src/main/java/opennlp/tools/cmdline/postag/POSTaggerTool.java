@@ -17,14 +17,7 @@
 
 package opennlp.tools.cmdline.postag;
 
-import java.io.File;
-import java.io.IOException;
-
-import opennlp.tools.cmdline.BasicCmdLineTool;
-import opennlp.tools.cmdline.CLI;
-import opennlp.tools.cmdline.CmdLineUtil;
-import opennlp.tools.cmdline.PerformanceMonitor;
-import opennlp.tools.cmdline.SystemInputStreamFactory;
+import opennlp.tools.cmdline.*;
 import opennlp.tools.postag.POSModel;
 import opennlp.tools.postag.POSSample;
 import opennlp.tools.postag.POSTaggerME;
@@ -32,50 +25,53 @@ import opennlp.tools.tokenize.WhitespaceTokenizer;
 import opennlp.tools.util.ObjectStream;
 import opennlp.tools.util.PlainTextByLineStream;
 
+import java.io.File;
+import java.io.IOException;
+
 public final class POSTaggerTool extends BasicCmdLineTool {
 
-  public String getShortDescription() {
-    return "learnable part of speech tagger";
-  }
-
-  public String getHelp() {
-    return "Usage: " + CLI.CMD + " " + getName() + " model < sentences";
-  }
-
-  public void run(String[] args) {
-
-    if (args.length != 1) {
-      System.out.println(getHelp());
-    } else {
-
-      POSModel model = new POSModelLoader().load(new File(args[0]));
-
-      POSTaggerME tagger = new POSTaggerME(model);
-
-      ObjectStream<String> lineStream;
-      PerformanceMonitor perfMon = null;
-
-      try {
-        lineStream =
-            new PlainTextByLineStream(new SystemInputStreamFactory(), SystemInputStreamFactory.encoding());
-        perfMon = new PerformanceMonitor(System.err, "sent");
-        perfMon.start();
-        String line;
-        while ((line = lineStream.read()) != null) {
-
-          String[] whitespaceTokenizerLine = WhitespaceTokenizer.INSTANCE.tokenize(line);
-          String[] tags = tagger.tag(whitespaceTokenizerLine);
-
-          POSSample sample = new POSSample(whitespaceTokenizerLine, tags);
-          System.out.println(sample.toString());
-
-          perfMon.incrementCounter();
-        }
-      } catch (IOException e) {
-        CmdLineUtil.handleStdinIoError(e);
-      }
-
-      perfMon.stopAndPrintFinalResult();
+    public String getShortDescription() {
+        return "learnable part of speech tagger";
     }
-  }
+
+    public String getHelp() {
+        return "Usage: " + CLI.CMD + " " + getName() + " model < sentences";
+    }
+
+    public void run(String[] args) {
+
+        if (args.length != 1) {
+            System.out.println(getHelp());
+        } else {
+
+            POSModel model = new POSModelLoader().load(new File(args[0]));
+
+            POSTaggerME tagger = new POSTaggerME(model);
+
+            ObjectStream<String> lineStream;
+            PerformanceMonitor perfMon = null;
+
+            try {
+                lineStream =
+                        new PlainTextByLineStream(new SystemInputStreamFactory(), SystemInputStreamFactory.encoding());
+                perfMon = new PerformanceMonitor(System.err, "sent");
+                perfMon.start();
+                String line;
+                while ((line = lineStream.read()) != null) {
+
+                    String[] whitespaceTokenizerLine = WhitespaceTokenizer.INSTANCE.tokenize(line);
+                    String[] tags = tagger.tag(whitespaceTokenizerLine);
+
+                    POSSample sample = new POSSample(whitespaceTokenizerLine, tags);
+                    System.out.println(sample.toString());
+
+                    perfMon.incrementCounter();
+                }
+            } catch (IOException e) {
+                CmdLineUtil.handleStdinIoError(e);
+            }
+
+            perfMon.stopAndPrintFinalResult();
+        }
+    }
 }

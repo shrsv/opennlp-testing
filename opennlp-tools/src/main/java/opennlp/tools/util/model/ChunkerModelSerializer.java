@@ -17,33 +17,33 @@
 
 package opennlp.tools.util.model;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-
 import opennlp.tools.chunker.ChunkerModel;
 import opennlp.tools.parser.ParserChunkerFactory;
 import opennlp.tools.util.Version;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+
 
 public class ChunkerModelSerializer implements ArtifactSerializer<ChunkerModel> {
 
-  public ChunkerModel create(InputStream in) throws IOException {
+    public ChunkerModel create(InputStream in) throws IOException {
 
-    ChunkerModel model = new ChunkerModel(new UncloseableInputStream(in));
+        ChunkerModel model = new ChunkerModel(new UncloseableInputStream(in));
 
-    Version version = model.getVersion();
-    if (version.getMajor() == 1 && version.getMinor() == 5) {
+        Version version = model.getVersion();
+        if (version.getMajor() == 1 && version.getMinor() == 5) {
 
-      model = new ChunkerModel(model.getLanguage(), model.getChunkerModel(), new ParserChunkerFactory());
+            model = new ChunkerModel(model.getLanguage(), model.getChunkerModel(), new ParserChunkerFactory());
 
+        }
+
+        return model;
     }
 
-    return model;
-  }
-
-  public void serialize(ChunkerModel artifact, OutputStream out)
-      throws IOException {
-    artifact.serialize(out);
-  }
+    public void serialize(ChunkerModel artifact, OutputStream out)
+            throws IOException {
+        artifact.serialize(out);
+    }
 }

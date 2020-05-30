@@ -17,43 +17,43 @@
 
 package opennlp.tools.formats.conllu;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
 import opennlp.tools.sentdetect.SentenceSample;
 import opennlp.tools.util.FilterObjectStream;
 import opennlp.tools.util.ObjectStream;
 import opennlp.tools.util.Span;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
 public class ConlluSentenceSampleStream extends FilterObjectStream<ConlluSentence, SentenceSample> {
 
-  private final int sentencesPerSample;
+    private final int sentencesPerSample;
 
-  public ConlluSentenceSampleStream(ObjectStream<ConlluSentence> samples, int sentencesPerSample) {
-    super(samples);
-    this.sentencesPerSample = sentencesPerSample;
-  }
-
-  @Override
-  public SentenceSample read() throws IOException {
-    StringBuilder documentText = new StringBuilder();
-
-    List<Span> sentenceSpans = new ArrayList<>();
-
-    ConlluSentence sentence;
-    for (int i = 0; i <  sentencesPerSample && (sentence = samples.read()) != null; i++) {
-
-      int startIndex = documentText.length();
-      documentText.append(sentence.getTextComment()).append(' ');
-      sentenceSpans.add(new Span(startIndex, documentText.length() - 1));
+    public ConlluSentenceSampleStream(ObjectStream<ConlluSentence> samples, int sentencesPerSample) {
+        super(samples);
+        this.sentencesPerSample = sentencesPerSample;
     }
 
-    if (documentText.length() > 0) {
-      documentText.setLength(documentText.length() - 1);
-      return new SentenceSample(documentText, sentenceSpans.toArray(new Span[sentenceSpans.size()]));
-    }
+    @Override
+    public SentenceSample read() throws IOException {
+        StringBuilder documentText = new StringBuilder();
 
-    return null;
-  }
+        List<Span> sentenceSpans = new ArrayList<>();
+
+        ConlluSentence sentence;
+        for (int i = 0; i < sentencesPerSample && (sentence = samples.read()) != null; i++) {
+
+            int startIndex = documentText.length();
+            documentText.append(sentence.getTextComment()).append(' ');
+            sentenceSpans.add(new Span(startIndex, documentText.length() - 1));
+        }
+
+        if (documentText.length() > 0) {
+            documentText.setLength(documentText.length() - 1);
+            return new SentenceSample(documentText, sentenceSpans.toArray(new Span[sentenceSpans.size()]));
+        }
+
+        return null;
+    }
 }

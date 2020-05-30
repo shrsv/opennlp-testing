@@ -17,6 +17,9 @@
 
 package opennlp.tools.tokenize.lang.en;
 
+import opennlp.tools.tokenize.TokenSample;
+import opennlp.tools.util.Span;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -26,9 +29,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import opennlp.tools.tokenize.TokenSample;
-import opennlp.tools.util.Span;
-
 /**
  * Class which produces an Iterator&lt;TokenSample&gt; from a file of space delimited token.
  * This class uses a number of English-specific heuristics to un-separate tokens which
@@ -36,89 +36,87 @@ import opennlp.tools.util.Span;
  */
 public class TokenSampleStream implements Iterator<TokenSample> {
 
-  private BufferedReader in;
-  private String line;
-  private Pattern alphaNumeric = Pattern.compile("[A-Za-z0-9]");
-  private boolean evenq = true;
+    private BufferedReader in;
+    private String line;
+    private Pattern alphaNumeric = Pattern.compile("[A-Za-z0-9]");
+    private boolean evenq = true;
 
-  public TokenSampleStream(InputStream is) throws IOException {
-    this.in = new BufferedReader(new InputStreamReader(is));
-    line = in.readLine();
-  }
-
-  public boolean hasNext() {
-    return line != null;
-  }
-
-  public TokenSample next() {
-    String[] tokens = line.split("\\s+");
-    if (tokens.length == 0) {
-      evenq = true;
+    public TokenSampleStream(InputStream is) throws IOException {
+        this.in = new BufferedReader(new InputStreamReader(is));
+        line = in.readLine();
     }
-    StringBuilder sb = new StringBuilder(line.length());
-    List<Span> spans = new ArrayList<>();
-    int length = 0;
-    for (int ti = 0; ti < tokens.length; ti++) {
-      String token = tokens[ti];
-      String lastToken = ti - 1 >= 0 ? tokens[ti - 1] : "";
-      switch (token) {
-        case "-LRB-":
-          token = "(";
-          break;
-        case "-LCB-":
-          token = "{";
-          break;
-        case "-RRB-":
-          token = ")";
-          break;
-        case "-RCB-":
-          token = "}";
-          break;
-      }
-      if (sb.length() != 0) {
-        if (!alphaNumeric.matcher(token).find() || token.startsWith("'") || token.equalsIgnoreCase("n't")) {
-          if ((token.equals("``") || token.equals("--") || token.equals("$") ||
-              token.equals("(")  || token.equals("&")  || token.equals("#") ||
-              (token.equals("\"") && (evenq && ti != tokens.length - 1)))
-              && (!lastToken.equals("(") || !lastToken.equals("{"))) {
-            //System.out.print(" "+token);
-            length++;
-          }
+
+    private static void usage() {
+        System.err.println("TokenSampleStream [-spans] < in");
+        System.err.println("Where in is a space delimited list of tokens.");
+    }
+
+    public boolean hasNext() {
+        return line != null;
+    }
+
+    public TokenSample next() {
+        String[] tokens = line.split("\\s+");
+        if (tokens.length == 0) {
+            evenq = true;
         }
-        else {
-          if (!lastToken.equals("``") && (!lastToken.equals("\"") || evenq) && !lastToken.equals("(")
-              && !lastToken.equals("{") && !lastToken.equals("$") && !lastToken.equals("#")) {
-            length++;
-          }
+        StringBuilder sb = new StringBuilder(line.length());
+        List<Span> spans = new ArrayList<>();
+        int length = 0;
+        for (int ti = 0; ti < tokens.length; ti++) {
+            String token = tokens[ti];
+            String lastToken = ti - 1 >= 0 ? tokens[ti - 1] : "";
+            switch (token) {
+                case "-LRB-":
+                    token = "(";
+                    break;
+                case "-LCB-":
+                    token = "{";
+                    break;
+                case "-RRB-":
+                    token = ")";
+                    break;
+                case "-RCB-":
+                    token = "}";
+                    break;
+            }
+            if (sb.length() != 0) {
+                if (!alphaNumeric.matcher(token).find() || token.startsWith("'") || token.equalsIgnoreCase("n't")) {
+                    if ((token.equals("``") || token.equals("--") || token.equals("$") ||
+                            token.equals("(") || token.equals("&") || token.equals("#") ||
+                            (token.equals("\"") && (evenq && ti != tokens.length - 1)))
+                            && (!lastToken.equals("(") || !lastToken.equals("{"))) {
+                        //System.out.print(" "+token);
+                        length++;
+                    }
+                } else {
+                    if (!lastToken.equals("``") && (!lastToken.equals("\"") || evenq) && !lastToken.equals("(")
+                            && !lastToken.equals("{") && !lastToken.equals("$") && !lastToken.equals("#")) {
+                        length++;
+                    }
+                }
+            }
+            if (token.equals("\"")) {
+                evenq = ti == tokens.length - 1 || !evenq;
+            }
+            if (sb.length() < length) {
+                sb.append(" ");
+            }
+            sb.append(token);
+            spans.add(new Span(length, length + token.length()));
+            length += token.length();
         }
-      }
-      if (token.equals("\"")) {
-        evenq = ti == tokens.length - 1 || !evenq;
-      }
-      if (sb.length() < length) {
-        sb.append(" ");
-      }
-      sb.append(token);
-      spans.add(new Span(length, length + token.length()));
-      length += token.length();
+
+        try {
+            line = in.readLine();
+        } catch (IOException e) {
+            e.printStackTrace();
+            line = null;
+        }
+        return new TokenSample(sb.toString(), spans.toArray(new Span[spans.size()]));
     }
 
-    try {
-      line = in.readLine();
-    } catch (IOException e) {
-      e.printStackTrace();
-      line = null;
+    public void remove() {
+        throw new UnsupportedOperationException();
     }
-    return new TokenSample(sb.toString(),spans.toArray(new Span[spans.size()]));
-  }
-
-
-  public void remove() {
-    throw new UnsupportedOperationException();
-  }
-
-  private static void usage() {
-    System.err.println("TokenSampleStream [-spans] < in");
-    System.err.println("Where in is a space delimited list of tokens.");
-  }
 }

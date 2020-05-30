@@ -17,41 +17,41 @@
 
 package opennlp.tools.util.featuregen;
 
+import opennlp.tools.util.InvalidFormatException;
+import opennlp.tools.util.model.ArtifactSerializer;
+
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import opennlp.tools.util.InvalidFormatException;
-import opennlp.tools.util.model.ArtifactSerializer;
-
 @Deprecated   // TODO: (OPENNLP-1174) remove back-compat support when it is unnecessary
 public class FeatureGenWithSerializerMapping extends CustomFeatureGenerator
-    implements ArtifactToSerializerMapper {
+        implements ArtifactToSerializerMapper {
 
-  @Override
-  public void createFeatures(List<String> features, String[] tokens, int index,
-      String[] previousOutcomes) {
-  }
+    @Override
+    public void createFeatures(List<String> features, String[] tokens, int index,
+                               String[] previousOutcomes) {
+    }
 
-  @Override
-  public void updateAdaptiveData(String[] tokens, String[] outcomes) {
-  }
+    @Override
+    public void updateAdaptiveData(String[] tokens, String[] outcomes) {
+    }
 
-  @Override
-  public void clearAdaptiveData() {
-  }
+    @Override
+    public void clearAdaptiveData() {
+    }
 
-  @Override
-  public Map<String, ArtifactSerializer<?>> getArtifactSerializerMapping() {
-    Map<String, ArtifactSerializer<?>> mapping = new HashMap<>();
-    mapping.put("test.resource", new WordClusterDictionary.WordClusterDictionarySerializer());
-    return Collections.unmodifiableMap(mapping);
-  }
+    @Override
+    public Map<String, ArtifactSerializer<?>> getArtifactSerializerMapping() {
+        Map<String, ArtifactSerializer<?>> mapping = new HashMap<>();
+        mapping.put("test.resource", new WordClusterDictionary.WordClusterDictionarySerializer());
+        return Collections.unmodifiableMap(mapping);
+    }
 
-  @Override
-  public void init(Map<String, String> properties,
-      FeatureGeneratorResourceProvider resourceProvider)
-      throws InvalidFormatException {
-  }
+    @Override
+    public void init(Map<String, String> properties,
+                     FeatureGeneratorResourceProvider resourceProvider)
+            throws InvalidFormatException {
+    }
 }

@@ -21,7 +21,7 @@ import opennlp.tools.cmdline.ArgumentParser.ParameterDescription;
 
 public interface LanguageParams {
 
-  @ParameterDescription(valueName = "language", description = "language which is being processed.")
-  String getLang();
+    @ParameterDescription(valueName = "language", description = "language which is being processed.")
+    String getLang();
 
 }

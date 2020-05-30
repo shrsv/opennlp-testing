@@ -17,33 +17,33 @@
 
 package opennlp.morfologik.cmdline.builder;
 
-import java.io.File;
-
 import opennlp.tools.cmdline.ArgumentParser.OptionalParameter;
 import opennlp.tools.cmdline.ArgumentParser.ParameterDescription;
 import opennlp.tools.cmdline.params.EncodingParameter;
+
+import java.io.File;
 
 /**
  * Params for Dictionary tools.
  */
 interface XMLDictionaryToTableParams extends EncodingParameter {
 
-  @ParameterDescription(valueName = "in", description = "OpenNLP XML Tag Dictionary.")
-  File getInputFile();
+    @ParameterDescription(valueName = "in", description = "OpenNLP XML Tag Dictionary.")
+    File getInputFile();
 
-  @ParameterDescription(valueName = "out", description = "Output for Morfologik "
-      + "(.info will be also created).")
-  File getOutputFile();
+    @ParameterDescription(valueName = "out", description = "Output for Morfologik "
+            + "(.info will be also created).")
+    File getOutputFile();
 
-  @ParameterDescription(valueName = "char", description = "Columm separator "
-      + "(must be a single character)")
-  @OptionalParameter(defaultValue = ",")
-  String getSeparator();
+    @ParameterDescription(valueName = "char", description = "Columm separator "
+            + "(must be a single character)")
+    @OptionalParameter(defaultValue = ",")
+    String getSeparator();
 
-  @ParameterDescription(valueName = "value", description = " Type of lemma-inflected "
-      + "form encoding compression that precedes automaton construction. Allowed "
-      + "values: [suffix, infix, prefix, none].")
-  @OptionalParameter(defaultValue = "prefix")
-  String getEncoder();
+    @ParameterDescription(valueName = "value", description = " Type of lemma-inflected "
+            + "form encoding compression that precedes automaton construction. Allowed "
+            + "values: [suffix, infix, prefix, none].")
+    @OptionalParameter(defaultValue = "prefix")
+    String getEncoder();
 
 }

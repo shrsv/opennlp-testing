@@ -23,20 +23,20 @@ import org.apache.uima.cas.text.AnnotationFS;
  * A pair of a UIMA annotation and an annotation iterator.
  */
 public final class AnnotationIteratorPair {
-  private final AnnotationFS annot;
-  private final Iterable<AnnotationFS> it;
+    private final AnnotationFS annot;
+    private final Iterable<AnnotationFS> it;
 
-  public AnnotationIteratorPair(AnnotationFS a, Iterable<AnnotationFS> it) {
-    super();
-    this.annot = a;
-    this.it = it;
-  }
+    public AnnotationIteratorPair(AnnotationFS a, Iterable<AnnotationFS> it) {
+        super();
+        this.annot = a;
+        this.it = it;
+    }
 
-  public AnnotationFS getAnnotation() {
-    return this.annot;
-  }
+    public AnnotationFS getAnnotation() {
+        return this.annot;
+    }
 
-  public Iterable<AnnotationFS> getSubIterator() {
-    return this.it;
-  }
+    public Iterable<AnnotationFS> getSubIterator() {
+        return this.it;
+    }
 }

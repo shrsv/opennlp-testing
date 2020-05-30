@@ -17,9 +17,6 @@
 
 package opennlp.tools.formats.ontonotes;
 
-import java.io.File;
-import java.nio.charset.StandardCharsets;
-
 import opennlp.tools.cmdline.ArgumentParser;
 import opennlp.tools.cmdline.StreamFactoryRegistry;
 import opennlp.tools.formats.AbstractSampleStreamFactory;
@@ -28,33 +25,36 @@ import opennlp.tools.formats.convert.FileToStringSampleStream;
 import opennlp.tools.namefind.NameSample;
 import opennlp.tools.util.ObjectStream;
 
+import java.io.File;
+import java.nio.charset.StandardCharsets;
+
 public class OntoNotesNameSampleStreamFactory extends
-    AbstractSampleStreamFactory<NameSample> {
+        AbstractSampleStreamFactory<NameSample> {
 
-  public OntoNotesNameSampleStreamFactory() {
-    super(OntoNotesFormatParameters.class);
-  }
+    public OntoNotesNameSampleStreamFactory() {
+        super(OntoNotesFormatParameters.class);
+    }
 
-  public ObjectStream<NameSample> create(String[] args) {
+    public static void registerFactory() {
+        StreamFactoryRegistry.registerFactory(NameSample.class,
+                "ontonotes", new OntoNotesNameSampleStreamFactory());
+    }
 
-    OntoNotesFormatParameters params = ArgumentParser.parse(args, OntoNotesFormatParameters.class);
+    public ObjectStream<NameSample> create(String[] args) {
 
-    ObjectStream<File> documentStream = new DirectorySampleStream(new File(
-        params.getOntoNotesDir()),
-        file -> {
-          if (file.isFile()) {
-            return file.getName().endsWith(".name");
-          }
+        OntoNotesFormatParameters params = ArgumentParser.parse(args, OntoNotesFormatParameters.class);
 
-          return file.isDirectory();
-        }, true);
+        ObjectStream<File> documentStream = new DirectorySampleStream(new File(
+                params.getOntoNotesDir()),
+                file -> {
+                    if (file.isFile()) {
+                        return file.getName().endsWith(".name");
+                    }
 
-    return new OntoNotesNameSampleStream(
-        new FileToStringSampleStream(documentStream, StandardCharsets.UTF_8));
-  }
+                    return file.isDirectory();
+                }, true);
 
-  public static void registerFactory() {
-    StreamFactoryRegistry.registerFactory(NameSample.class,
-        "ontonotes", new OntoNotesNameSampleStreamFactory());
-  }
+        return new OntoNotesNameSampleStream(
+                new FileToStringSampleStream(documentStream, StandardCharsets.UTF_8));
+    }
 }

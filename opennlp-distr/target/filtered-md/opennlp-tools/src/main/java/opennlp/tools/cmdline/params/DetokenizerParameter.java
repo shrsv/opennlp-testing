@@ -20,7 +20,7 @@ package opennlp.tools.cmdline.params;
 import opennlp.tools.cmdline.ArgumentParser.ParameterDescription;
 
 public interface DetokenizerParameter {
-  @ParameterDescription(valueName = "dictionary",
-      description = "specifies the file with detokenizer dictionary.")
-  String getDetokenizer();
+    @ParameterDescription(valueName = "dictionary",
+            description = "specifies the file with detokenizer dictionary.")
+    String getDetokenizer();
 }

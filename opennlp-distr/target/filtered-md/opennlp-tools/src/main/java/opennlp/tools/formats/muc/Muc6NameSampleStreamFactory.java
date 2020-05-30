@@ -17,9 +17,6 @@
 
 package opennlp.tools.formats.muc;
 
-import java.io.File;
-import java.nio.charset.StandardCharsets;
-
 import opennlp.tools.cmdline.ArgumentParser;
 import opennlp.tools.cmdline.ArgumentParser.ParameterDescription;
 import opennlp.tools.cmdline.StreamFactoryRegistry;
@@ -35,34 +32,37 @@ import opennlp.tools.tokenize.TokenizerModel;
 import opennlp.tools.util.ObjectStream;
 import opennlp.tools.util.StringUtil;
 
+import java.io.File;
+import java.nio.charset.StandardCharsets;
+
 public class Muc6NameSampleStreamFactory extends AbstractSampleStreamFactory<NameSample> {
 
-  protected Muc6NameSampleStreamFactory() {
-    super(Parameters.class);
-  }
+    protected Muc6NameSampleStreamFactory() {
+        super(Parameters.class);
+    }
 
-  public static void registerFactory() {
-    StreamFactoryRegistry.registerFactory(NameSample.class, "muc6",
-        new Muc6NameSampleStreamFactory());
-  }
+    public static void registerFactory() {
+        StreamFactoryRegistry.registerFactory(NameSample.class, "muc6",
+                new Muc6NameSampleStreamFactory());
+    }
 
-  public ObjectStream<NameSample> create(String[] args) {
+    public ObjectStream<NameSample> create(String[] args) {
 
-    Parameters params = ArgumentParser.parse(args, Parameters.class);
+        Parameters params = ArgumentParser.parse(args, Parameters.class);
 
-    TokenizerModel tokenizerModel = new TokenizerModelLoader().load(params.getTokenizerModel());
-    Tokenizer tokenizer = new TokenizerME(tokenizerModel);
+        TokenizerModel tokenizerModel = new TokenizerModelLoader().load(params.getTokenizerModel());
+        Tokenizer tokenizer = new TokenizerME(tokenizerModel);
 
-    ObjectStream<String> mucDocStream = new FileToStringSampleStream(
-        new DirectorySampleStream(params.getData(),
-            file -> StringUtil.toLowerCase(file.getName()).endsWith(".sgm"), false),
-        StandardCharsets.UTF_8);
+        ObjectStream<String> mucDocStream = new FileToStringSampleStream(
+                new DirectorySampleStream(params.getData(),
+                        file -> StringUtil.toLowerCase(file.getName()).endsWith(".sgm"), false),
+                StandardCharsets.UTF_8);
 
-    return new MucNameSampleStream(tokenizer, mucDocStream);
-  }
+        return new MucNameSampleStream(tokenizer, mucDocStream);
+    }
 
-  interface Parameters extends BasicFormatParams {
-    @ParameterDescription(valueName = "modelFile")
-    File getTokenizerModel();
-  }
+    interface Parameters extends BasicFormatParams {
+        @ParameterDescription(valueName = "modelFile")
+        File getTokenizerModel();
+    }
 }

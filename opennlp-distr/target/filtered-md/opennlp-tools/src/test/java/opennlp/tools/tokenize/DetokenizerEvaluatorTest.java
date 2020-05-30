@@ -17,65 +17,64 @@
 
 package opennlp.tools.tokenize;
 
-import java.io.ByteArrayOutputStream;
-import java.io.OutputStream;
-
+import opennlp.tools.cmdline.tokenizer.DetokenEvaluationErrorListener;
+import opennlp.tools.util.InvalidFormatException;
 import org.junit.Assert;
 import org.junit.Test;
 
-import opennlp.tools.cmdline.tokenizer.DetokenEvaluationErrorListener;
-import opennlp.tools.util.InvalidFormatException;
+import java.io.ByteArrayOutputStream;
+import java.io.OutputStream;
 
 
 public class DetokenizerEvaluatorTest {
-  @Test
-  public void testPositive() throws InvalidFormatException {
-    OutputStream stream = new ByteArrayOutputStream();
-    DetokenEvaluationErrorListener listener = new DetokenEvaluationErrorListener(stream);
+    @Test
+    public void testPositive() throws InvalidFormatException {
+        OutputStream stream = new ByteArrayOutputStream();
+        DetokenEvaluationErrorListener listener = new DetokenEvaluationErrorListener(stream);
 
-    DetokenizerEvaluator eval = new DetokenizerEvaluator(new DummyDetokenizer(
-        TokenSampleTest.createGoldSample()), listener);
+        DetokenizerEvaluator eval = new DetokenizerEvaluator(new DummyDetokenizer(
+                TokenSampleTest.createGoldSample()), listener);
 
-    eval.evaluateSample(TokenSampleTest.createGoldSample());
+        eval.evaluateSample(TokenSampleTest.createGoldSample());
 
-    Assert.assertEquals(1.0, eval.getFMeasure().getFMeasure(), 0.0);
+        Assert.assertEquals(1.0, eval.getFMeasure().getFMeasure(), 0.0);
 
-    Assert.assertEquals(0, stream.toString().length());
-  }
-
-  @Test
-  public void testNegative() throws InvalidFormatException {
-    OutputStream stream = new ByteArrayOutputStream();
-    DetokenEvaluationErrorListener listener = new DetokenEvaluationErrorListener(
-        stream);
-
-    DetokenizerEvaluator eval = new DetokenizerEvaluator(new DummyDetokenizer(
-        TokenSampleTest.createGoldSample()), listener);
-
-    eval.evaluateSample(TokenSampleTest.createPredSilverSample());
-
-    Assert.assertEquals(-1.0d, eval.getFMeasure().getFMeasure(), .1d);
-
-    Assert.assertNotSame(0, stream.toString().length());
-  }
-
-  /**
-   * a dummy tokenizer that always return something expected
-   */
-  class DummyDetokenizer implements Detokenizer {
-
-    private TokenSample sample;
-
-    public DummyDetokenizer(TokenSample sample) {
-      this.sample = sample;
+        Assert.assertEquals(0, stream.toString().length());
     }
 
-    public DetokenizationOperation[] detokenize(String[] tokens) {
-      return null;
+    @Test
+    public void testNegative() throws InvalidFormatException {
+        OutputStream stream = new ByteArrayOutputStream();
+        DetokenEvaluationErrorListener listener = new DetokenEvaluationErrorListener(
+                stream);
+
+        DetokenizerEvaluator eval = new DetokenizerEvaluator(new DummyDetokenizer(
+                TokenSampleTest.createGoldSample()), listener);
+
+        eval.evaluateSample(TokenSampleTest.createPredSilverSample());
+
+        Assert.assertEquals(-1.0d, eval.getFMeasure().getFMeasure(), .1d);
+
+        Assert.assertNotSame(0, stream.toString().length());
     }
 
-    public String detokenize(String[] tokens, String splitMarker) {
-      return this.sample.getText();
+    /**
+     * a dummy tokenizer that always return something expected
+     */
+    class DummyDetokenizer implements Detokenizer {
+
+        private TokenSample sample;
+
+        public DummyDetokenizer(TokenSample sample) {
+            this.sample = sample;
+        }
+
+        public DetokenizationOperation[] detokenize(String[] tokens) {
+            return null;
+        }
+
+        public String detokenize(String[] tokens, String splitMarker) {
+            return this.sample.getText();
+        }
     }
-  }
 }

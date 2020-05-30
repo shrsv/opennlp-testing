@@ -17,62 +17,62 @@
 
 package opennlp.tools.chunker;
 
-import java.io.IOException;
-
 import opennlp.tools.ml.model.AbstractModel;
 import opennlp.tools.ml.model.Event;
 import opennlp.tools.ml.model.Sequence;
 import opennlp.tools.ml.model.SequenceStream;
 import opennlp.tools.util.ObjectStream;
 
+import java.io.IOException;
+
 public class ChunkSampleSequenceStream implements SequenceStream {
 
-  private final ObjectStream<ChunkSample> samples;
-  private final ChunkerContextGenerator contextGenerator;
+    private final ObjectStream<ChunkSample> samples;
+    private final ChunkerContextGenerator contextGenerator;
 
-  public ChunkSampleSequenceStream(ObjectStream<ChunkSample> samples,
-      ChunkerContextGenerator contextGenerator) {
-    this.samples = samples;
-    this.contextGenerator = contextGenerator;
-  }
-
-  @Override
-  public Sequence read() throws IOException {
-    ChunkSample sample = samples.read();
-
-    if (sample != null) {
-      String[] sentence = sample.getSentence();
-      String[] tags = sample.getTags();
-      Event[] events = new Event[sentence.length];
-
-      for (int i = 0; i < sentence.length; i++) {
-
-        // it is safe to pass the tags as previous tags because
-        // the context generator does not look for non predicted tags
-        String[] context = contextGenerator.getContext(i, sentence, tags, null);
-
-        events[i] = new Event(tags[i], context);
-      }
-      return new Sequence<>(events,sample);
+    public ChunkSampleSequenceStream(ObjectStream<ChunkSample> samples,
+                                     ChunkerContextGenerator contextGenerator) {
+        this.samples = samples;
+        this.contextGenerator = contextGenerator;
     }
 
-    return null;
-  }
+    @Override
+    public Sequence read() throws IOException {
+        ChunkSample sample = samples.read();
 
-  @Override
-  public Event[] updateContext(Sequence sequence, AbstractModel model) {
-    // TODO: Should be implemented for Perceptron sequence learning ...
-    return null;
-  }
+        if (sample != null) {
+            String[] sentence = sample.getSentence();
+            String[] tags = sample.getTags();
+            Event[] events = new Event[sentence.length];
 
-  @Override
-  public void reset() throws IOException, UnsupportedOperationException {
-    samples.reset();
-  }
+            for (int i = 0; i < sentence.length; i++) {
 
-  @Override
-  public void close() throws IOException {
-    samples.close();
-  }
+                // it is safe to pass the tags as previous tags because
+                // the context generator does not look for non predicted tags
+                String[] context = contextGenerator.getContext(i, sentence, tags, null);
+
+                events[i] = new Event(tags[i], context);
+            }
+            return new Sequence<>(events, sample);
+        }
+
+        return null;
+    }
+
+    @Override
+    public Event[] updateContext(Sequence sequence, AbstractModel model) {
+        // TODO: Should be implemented for Perceptron sequence learning ...
+        return null;
+    }
+
+    @Override
+    public void reset() throws IOException, UnsupportedOperationException {
+        samples.reset();
+    }
+
+    @Override
+    public void close() throws IOException {
+        samples.close();
+    }
 
 }

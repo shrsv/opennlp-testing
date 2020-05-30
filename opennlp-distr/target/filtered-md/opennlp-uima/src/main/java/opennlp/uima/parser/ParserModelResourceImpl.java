@@ -17,21 +17,21 @@
 
 package opennlp.uima.parser;
 
-import java.io.IOException;
-import java.io.InputStream;
-
 import opennlp.tools.parser.ParserModel;
 import opennlp.uima.util.AbstractModelResource;
 
+import java.io.IOException;
+import java.io.InputStream;
+
 public class ParserModelResourceImpl extends AbstractModelResource<ParserModel> implements
-    ParserModelResource {
+        ParserModelResource {
 
-  public ParserModel getModel() {
-    return model;
-  }
+    public ParserModel getModel() {
+        return model;
+    }
 
-  @Override
-  protected ParserModel loadModel(InputStream in) throws IOException {
-    return new ParserModel(in);
-  }
+    @Override
+    protected ParserModel loadModel(InputStream in) throws IOException {
+        return new ParserModel(in);
+    }
 }

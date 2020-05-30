@@ -27,26 +27,26 @@ import java.util.Map;
  */
 public class PreviousMapFeatureGenerator implements AdaptiveFeatureGenerator {
 
-  private Map<String, String> previousMap = new HashMap<>();
+    private Map<String, String> previousMap = new HashMap<>();
 
-  public void createFeatures(List<String> features, String[] tokens, int index, String[] preds) {
-    features.add("pd=" + previousMap.get(tokens[index]));
-  }
-
-  /**
-   * Generates previous decision features for the token based on contents of the previous map.
-   */
-  public void updateAdaptiveData(String[] tokens, String[] outcomes) {
-
-    for (int i = 0; i < tokens.length; i++) {
-      previousMap.put(tokens[i], outcomes[i]);
+    public void createFeatures(List<String> features, String[] tokens, int index, String[] preds) {
+        features.add("pd=" + previousMap.get(tokens[index]));
     }
-  }
 
-  /**
-   * Clears the previous map.
-   */
-  public void clearAdaptiveData() {
-    previousMap.clear();
-  }
+    /**
+     * Generates previous decision features for the token based on contents of the previous map.
+     */
+    public void updateAdaptiveData(String[] tokens, String[] outcomes) {
+
+        for (int i = 0; i < tokens.length; i++) {
+            previousMap.put(tokens[i], outcomes[i]);
+        }
+    }
+
+    /**
+     * Clears the previous map.
+     */
+    public void clearAdaptiveData() {
+        previousMap.clear();
+    }
 }

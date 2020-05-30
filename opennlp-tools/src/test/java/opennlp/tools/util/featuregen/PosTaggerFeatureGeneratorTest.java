@@ -17,60 +17,60 @@
 
 package opennlp.tools.util.featuregen;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class PosTaggerFeatureGeneratorTest {
 
-  private List<String> features;
-  static String[] testSentence = new String[] {"This", "is", "an", "example", "sentence"};
-  static String[] testTags = new String[] {"DT", "VBZ", "DT", "NN", "NN"};
+    static String[] testSentence = new String[]{"This", "is", "an", "example", "sentence"};
+    static String[] testTags = new String[]{"DT", "VBZ", "DT", "NN", "NN"};
+    private List<String> features;
 
-  @Before
-  public void setUp() throws Exception {
-    features = new ArrayList<>();
-  }
+    @Before
+    public void setUp() throws Exception {
+        features = new ArrayList<>();
+    }
 
-  @Test
-  public void testBegin() {
+    @Test
+    public void testBegin() {
 
-    final int testTokenIndex = 0;
+        final int testTokenIndex = 0;
 
-    AdaptiveFeatureGenerator generator = new PosTaggerFeatureGenerator();
+        AdaptiveFeatureGenerator generator = new PosTaggerFeatureGenerator();
 
-    generator.createFeatures(features, testSentence, testTokenIndex, testTags);
+        generator.createFeatures(features, testSentence, testTokenIndex, testTags);
 
-    Assert.assertEquals(0, features.size());
-  }
+        Assert.assertEquals(0, features.size());
+    }
 
-  @Test
-  public void testNext() {
+    @Test
+    public void testNext() {
 
-    final int testTokenIndex = 1;
+        final int testTokenIndex = 1;
 
-    AdaptiveFeatureGenerator generator = new PosTaggerFeatureGenerator();
+        AdaptiveFeatureGenerator generator = new PosTaggerFeatureGenerator();
 
-    generator.createFeatures(features, testSentence, testTokenIndex, testTags);
+        generator.createFeatures(features, testSentence, testTokenIndex, testTags);
 
-    Assert.assertEquals(1, features.size());
-    Assert.assertEquals("t=DT", features.get(0));
-  }
+        Assert.assertEquals(1, features.size());
+        Assert.assertEquals("t=DT", features.get(0));
+    }
 
-  @Test
-  public void testMiddle() {
+    @Test
+    public void testMiddle() {
 
-    final int testTokenIndex = 3;
+        final int testTokenIndex = 3;
 
-    AdaptiveFeatureGenerator generator = new PosTaggerFeatureGenerator();
+        AdaptiveFeatureGenerator generator = new PosTaggerFeatureGenerator();
 
-    generator.createFeatures(features, testSentence, testTokenIndex, testTags);
+        generator.createFeatures(features, testSentence, testTokenIndex, testTags);
 
-    Assert.assertEquals(2, features.size());
-    Assert.assertEquals("t=DT", features.get(0));
-    Assert.assertEquals("t2=VBZ,DT", features.get(1));
-  }
+        Assert.assertEquals(2, features.size());
+        Assert.assertEquals("t=DT", features.get(0));
+        Assert.assertEquals("t2=VBZ,DT", features.get(1));
+    }
 }

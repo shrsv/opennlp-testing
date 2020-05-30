@@ -18,11 +18,11 @@
 
 package opennlp.tools.postag;
 
-import java.io.IOException;
-
 import opennlp.tools.util.FilterObjectStream;
 import opennlp.tools.util.InvalidFormatException;
 import opennlp.tools.util.ObjectStream;
+
+import java.io.IOException;
 
 /**
  * A stream filter which reads a sentence per line which contains
@@ -30,44 +30,43 @@ import opennlp.tools.util.ObjectStream;
  */
 public class WordTagSampleStream extends FilterObjectStream<String, POSSample> {
 
-  /**
-   * Initializes the current instance.
-   *
-   * @param sentences the sentences
-   */
-  public WordTagSampleStream(ObjectStream<String> sentences) {
-    super(sentences);
-  }
-
-  /**
-   * Parses the next sentence and return the next
-   * {@link POSSample} object.
-   *
-   * If an error occurs an empty {@link POSSample} object is returned
-   * and an warning message is logged. Usually it does not matter if one
-   * of many sentences is ignored.
-   *
-   * TODO: An exception in error case should be thrown.
-   */
-  public POSSample read() throws IOException {
-
-    String sentence = samples.read();
-
-    if (sentence != null) {
-      POSSample sample;
-      try {
-        sample = POSSample.parse(sentence);
-      } catch (InvalidFormatException e) {
-        System.out.println("Error during parsing, ignoring sentence: " + sentence);
-
-        sample = new POSSample(new String[]{}, new String[]{});
-      }
-
-      return sample;
+    /**
+     * Initializes the current instance.
+     *
+     * @param sentences the sentences
+     */
+    public WordTagSampleStream(ObjectStream<String> sentences) {
+        super(sentences);
     }
-    else {
-      // sentences stream is exhausted
-      return null;
+
+    /**
+     * Parses the next sentence and return the next
+     * {@link POSSample} object.
+     * <p>
+     * If an error occurs an empty {@link POSSample} object is returned
+     * and an warning message is logged. Usually it does not matter if one
+     * of many sentences is ignored.
+     * <p>
+     * TODO: An exception in error case should be thrown.
+     */
+    public POSSample read() throws IOException {
+
+        String sentence = samples.read();
+
+        if (sentence != null) {
+            POSSample sample;
+            try {
+                sample = POSSample.parse(sentence);
+            } catch (InvalidFormatException e) {
+                System.out.println("Error during parsing, ignoring sentence: " + sentence);
+
+                sample = new POSSample(new String[]{}, new String[]{});
+            }
+
+            return sample;
+        } else {
+            // sentences stream is exhausted
+            return null;
+        }
     }
-  }
 }

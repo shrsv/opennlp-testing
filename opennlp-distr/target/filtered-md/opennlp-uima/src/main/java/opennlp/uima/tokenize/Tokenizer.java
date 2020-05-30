@@ -17,6 +17,11 @@
 
 package opennlp.uima.tokenize;
 
+import opennlp.tools.tokenize.TokenizerME;
+import opennlp.tools.tokenize.TokenizerModel;
+import opennlp.tools.util.Span;
+import opennlp.uima.util.AnnotatorUtil;
+import opennlp.uima.util.UimaUtil;
 import org.apache.uima.UimaContext;
 import org.apache.uima.analysis_engine.AnalysisEngineProcessException;
 import org.apache.uima.cas.CAS;
@@ -25,12 +30,6 @@ import org.apache.uima.cas.TypeSystem;
 import org.apache.uima.cas.text.AnnotationFS;
 import org.apache.uima.resource.ResourceAccessException;
 import org.apache.uima.resource.ResourceInitializationException;
-
-import opennlp.tools.tokenize.TokenizerME;
-import opennlp.tools.tokenize.TokenizerModel;
-import opennlp.tools.util.Span;
-import opennlp.uima.util.AnnotatorUtil;
-import opennlp.uima.util.UimaUtil;
 
 /**
  * OpenNLP Tokenizer annotator.
@@ -56,87 +55,87 @@ import opennlp.uima.util.UimaUtil;
  */
 public final class Tokenizer extends AbstractTokenizer {
 
-  /**
-   * The OpenNLP tokenizer.
-   */
-  private TokenizerME tokenizer;
+    /**
+     * The OpenNLP tokenizer.
+     */
+    private TokenizerME tokenizer;
 
-  private Feature probabilityFeature;
+    private Feature probabilityFeature;
 
-  /**
-   * Initializes a new instance.
-   * <p>
-   * Note: Use {@link #initialize(UimaContext) } to initialize
-   * this instance. Not use the constructor.
-   */
-  public Tokenizer() {
-    super("OpenNLP Tokenizer");
+    /**
+     * Initializes a new instance.
+     * <p>
+     * Note: Use {@link #initialize(UimaContext) } to initialize
+     * this instance. Not use the constructor.
+     */
+    public Tokenizer() {
+        super("OpenNLP Tokenizer");
 
-    // must not be implemented !
-  }
-
-  /**
-   * Initializes the current instance with the given context.
-   * <p>
-   * Note: Do all initialization in this method, do not use the constructor.
-   */
-  public void initialize(UimaContext context)
-      throws ResourceInitializationException {
-
-    super.initialize(context);
-
-    TokenizerModel model;
-
-    try {
-      TokenizerModelResource modelResource = (TokenizerModelResource) context
-          .getResourceObject(UimaUtil.MODEL_PARAMETER);
-
-      model = modelResource.getModel();
-    } catch (ResourceAccessException e) {
-      throw new ResourceInitializationException(e);
+        // must not be implemented !
     }
 
-    tokenizer = new TokenizerME(model);
-  }
+    /**
+     * Initializes the current instance with the given context.
+     * <p>
+     * Note: Do all initialization in this method, do not use the constructor.
+     */
+    public void initialize(UimaContext context)
+            throws ResourceInitializationException {
 
-  /**
-   * Initializes the type system.
-   */
-  public void typeSystemInit(TypeSystem typeSystem)
-      throws AnalysisEngineProcessException {
+        super.initialize(context);
 
-    super.typeSystemInit(typeSystem);
+        TokenizerModel model;
 
-    probabilityFeature = AnnotatorUtil
-        .getOptionalFeatureParameter(context, tokenType,
-            UimaUtil.PROBABILITY_FEATURE_PARAMETER, CAS.TYPE_NAME_DOUBLE);
-  }
+        try {
+            TokenizerModelResource modelResource = (TokenizerModelResource) context
+                    .getResourceObject(UimaUtil.MODEL_PARAMETER);
 
+            model = modelResource.getModel();
+        } catch (ResourceAccessException e) {
+            throw new ResourceInitializationException(e);
+        }
 
-  @Override
-  protected Span[] tokenize(CAS cas, AnnotationFS sentence) {
-    return tokenizer.tokenizePos(sentence.getCoveredText());
-  }
-
-  @Override
-  protected void postProcessAnnotations(Span[] tokens,
-                                        AnnotationFS[] tokenAnnotations) {
-    // if interest
-    if (probabilityFeature != null) {
-      double[] tokenProbabilties = tokenizer.getTokenProbabilities();
-
-      for (int i = 0; i < tokenAnnotations.length; i++) {
-        tokenAnnotations[i].setDoubleValue(probabilityFeature,
-            tokenProbabilties[i]);
-      }
+        tokenizer = new TokenizerME(model);
     }
-  }
 
-  /**
-   * Releases allocated resources.
-   */
-  public void destroy() {
-    // dereference model to allow garbage collection
-    tokenizer = null;
-  }
+    /**
+     * Initializes the type system.
+     */
+    public void typeSystemInit(TypeSystem typeSystem)
+            throws AnalysisEngineProcessException {
+
+        super.typeSystemInit(typeSystem);
+
+        probabilityFeature = AnnotatorUtil
+                .getOptionalFeatureParameter(context, tokenType,
+                        UimaUtil.PROBABILITY_FEATURE_PARAMETER, CAS.TYPE_NAME_DOUBLE);
+    }
+
+
+    @Override
+    protected Span[] tokenize(CAS cas, AnnotationFS sentence) {
+        return tokenizer.tokenizePos(sentence.getCoveredText());
+    }
+
+    @Override
+    protected void postProcessAnnotations(Span[] tokens,
+                                          AnnotationFS[] tokenAnnotations) {
+        // if interest
+        if (probabilityFeature != null) {
+            double[] tokenProbabilties = tokenizer.getTokenProbabilities();
+
+            for (int i = 0; i < tokenAnnotations.length; i++) {
+                tokenAnnotations[i].setDoubleValue(probabilityFeature,
+                        tokenProbabilties[i]);
+            }
+        }
+    }
+
+    /**
+     * Releases allocated resources.
+     */
+    public void destroy() {
+        // dereference model to allow garbage collection
+        tokenizer = null;
+    }
 }

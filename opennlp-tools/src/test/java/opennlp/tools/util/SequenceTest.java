@@ -25,64 +25,64 @@ import org.junit.Test;
  */
 public class SequenceTest {
 
-  /**
-   * Tests the copy constructor {@link Sequence#Sequence(Sequence)}.
-   */
-  @Test
-  public void testCopyConstructor() {
-    Sequence sequence = new Sequence();
-    sequence.add("a", 10);
-    sequence.add("b", 20);
+    /**
+     * Tests the copy constructor {@link Sequence#Sequence(Sequence)}.
+     */
+    @Test
+    public void testCopyConstructor() {
+        Sequence sequence = new Sequence();
+        sequence.add("a", 10);
+        sequence.add("b", 20);
 
-    Sequence copy = new Sequence(sequence);
+        Sequence copy = new Sequence(sequence);
 
-    Assert.assertEquals(sequence.getOutcomes(), copy.getOutcomes());
-    Assert.assertArrayEquals(sequence.getProbs(), copy.getProbs(), 0.0);
-    Assert.assertTrue(sequence.compareTo(copy) == 0);
-  }
+        Assert.assertEquals(sequence.getOutcomes(), copy.getOutcomes());
+        Assert.assertArrayEquals(sequence.getProbs(), copy.getProbs(), 0.0);
+        Assert.assertTrue(sequence.compareTo(copy) == 0);
+    }
 
-  /**
-   * Tests {@link Sequence#add(String, double)}, also
-   * tests {@link Sequence#getOutcomes()} and {@link Sequence#getProbs()}.
-   */
-  @Test
-  public void testAddMethod() {
-    Sequence sequence = new Sequence();
-    sequence.add("a", 10d);
+    /**
+     * Tests {@link Sequence#add(String, double)}, also
+     * tests {@link Sequence#getOutcomes()} and {@link Sequence#getProbs()}.
+     */
+    @Test
+    public void testAddMethod() {
+        Sequence sequence = new Sequence();
+        sequence.add("a", 10d);
 
-    // check if insert was successful
-    Assert.assertEquals("a", sequence.getOutcomes().get(0));
-    Assert.assertEquals(10d, sequence.getProbs()[0], 0d);
-  }
+        // check if insert was successful
+        Assert.assertEquals("a", sequence.getOutcomes().get(0));
+        Assert.assertEquals(10d, sequence.getProbs()[0], 0d);
+    }
 
-  /**
-   * Tests {@link Sequence#compareTo(Sequence)}.
-   */
-  @Test
-  public void testCompareTo() {
-    Sequence lowScore = new Sequence();
-    lowScore.add("A", 1d);
-    lowScore.add("B", 2d);
-    lowScore.add("C", 3d);
+    /**
+     * Tests {@link Sequence#compareTo(Sequence)}.
+     */
+    @Test
+    public void testCompareTo() {
+        Sequence lowScore = new Sequence();
+        lowScore.add("A", 1d);
+        lowScore.add("B", 2d);
+        lowScore.add("C", 3d);
 
-    Sequence highScore = new Sequence();
-    lowScore.add("A", 7d);
-    lowScore.add("B", 8d);
-    lowScore.add("C", 9d);
+        Sequence highScore = new Sequence();
+        lowScore.add("A", 7d);
+        lowScore.add("B", 8d);
+        lowScore.add("C", 9d);
 
-    Assert.assertEquals(-1, lowScore.compareTo(highScore));
-    Assert.assertEquals(1, highScore.compareTo(lowScore));
-  }
+        Assert.assertEquals(-1, lowScore.compareTo(highScore));
+        Assert.assertEquals(1, highScore.compareTo(lowScore));
+    }
 
-  /**
-   * Checks that {@link Sequence#toString()} is executable.
-   */
-  @Test
-  public void testToString() {
-    new Sequence().toString();
+    /**
+     * Checks that {@link Sequence#toString()} is executable.
+     */
+    @Test
+    public void testToString() {
+        new Sequence().toString();
 
-    Sequence sequence = new Sequence();
-    sequence.add("test", 0.1d);
-    sequence.toString();
-  }
+        Sequence sequence = new Sequence();
+        sequence.add("test", 0.1d);
+        sequence.toString();
+    }
 }

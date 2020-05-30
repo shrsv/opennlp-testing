@@ -28,79 +28,77 @@ import opennlp.tools.util.eval.Mean;
  */
 public class POSEvaluator extends Evaluator<POSSample> {
 
-  private POSTagger tagger;
+    private POSTagger tagger;
 
-  private Mean wordAccuracy = new Mean();
+    private Mean wordAccuracy = new Mean();
 
-  /**
-   * Initializes the current instance.
-   *
-   * @param tagger
-   * @param listeners an array of evaluation listeners
-   */
-  public POSEvaluator(POSTagger tagger, POSTaggerEvaluationMonitor ... listeners) {
-    super(listeners);
-    this.tagger = tagger;
-  }
-
-  /**
-   * Evaluates the given reference {@link POSSample} object.
-   *
-   * This is done by tagging the sentence from the reference
-   * {@link POSSample} with the {@link POSTagger}. The
-   * tags are then used to update the word accuracy score.
-   *
-   * @param reference the reference {@link POSSample}.
-   *
-   * @return the predicted {@link POSSample}.
-   */
-  @Override
-  protected POSSample processSample(POSSample reference) {
-
-    String[] predictedTags = tagger.tag(reference.getSentence(), reference.getAddictionalContext());
-    String[] referenceTags = reference.getTags();
-
-    for (int i = 0; i < referenceTags.length; i++) {
-      if (referenceTags[i].equals(predictedTags[i])) {
-        wordAccuracy.add(1);
-      }
-      else {
-        wordAccuracy.add(0);
-      }
+    /**
+     * Initializes the current instance.
+     *
+     * @param tagger
+     * @param listeners an array of evaluation listeners
+     */
+    public POSEvaluator(POSTagger tagger, POSTaggerEvaluationMonitor... listeners) {
+        super(listeners);
+        this.tagger = tagger;
     }
 
-    return new POSSample(reference.getSentence(), predictedTags);
-  }
+    /**
+     * Evaluates the given reference {@link POSSample} object.
+     * <p>
+     * This is done by tagging the sentence from the reference
+     * {@link POSSample} with the {@link POSTagger}. The
+     * tags are then used to update the word accuracy score.
+     *
+     * @param reference the reference {@link POSSample}.
+     * @return the predicted {@link POSSample}.
+     */
+    @Override
+    protected POSSample processSample(POSSample reference) {
 
-  /**
-   * Retrieves the word accuracy.
-   *
-   * This is defined as:
-   * word accuracy = correctly detected tags / total words
-   *
-   * @return the word accuracy
-   */
-  public double getWordAccuracy() {
-    return wordAccuracy.mean();
-  }
+        String[] predictedTags = tagger.tag(reference.getSentence(), reference.getAddictionalContext());
+        String[] referenceTags = reference.getTags();
 
-  /**
-   * Retrieves the total number of words considered
-   * in the evaluation.
-   *
-   * @return the word count
-   */
-  public long getWordCount() {
-    return wordAccuracy.count();
-  }
+        for (int i = 0; i < referenceTags.length; i++) {
+            if (referenceTags[i].equals(predictedTags[i])) {
+                wordAccuracy.add(1);
+            } else {
+                wordAccuracy.add(0);
+            }
+        }
 
-  /**
-   * Represents this objects as human readable {@link String}.
-   */
-  @Override
-  public String toString() {
-    return "Accuracy:" + wordAccuracy.mean() +
-        " Number of Samples: " + wordAccuracy.count();
-  }
+        return new POSSample(reference.getSentence(), predictedTags);
+    }
+
+    /**
+     * Retrieves the word accuracy.
+     * <p>
+     * This is defined as:
+     * word accuracy = correctly detected tags / total words
+     *
+     * @return the word accuracy
+     */
+    public double getWordAccuracy() {
+        return wordAccuracy.mean();
+    }
+
+    /**
+     * Retrieves the total number of words considered
+     * in the evaluation.
+     *
+     * @return the word count
+     */
+    public long getWordCount() {
+        return wordAccuracy.count();
+    }
+
+    /**
+     * Represents this objects as human readable {@link String}.
+     */
+    @Override
+    public String toString() {
+        return "Accuracy:" + wordAccuracy.mean() +
+                " Number of Samples: " + wordAccuracy.count();
+    }
 
 }

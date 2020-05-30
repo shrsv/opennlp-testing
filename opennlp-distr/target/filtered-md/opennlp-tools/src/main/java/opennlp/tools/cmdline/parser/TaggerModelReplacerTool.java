@@ -17,8 +17,6 @@
 
 package opennlp.tools.cmdline.parser;
 
-import java.io.File;
-
 import opennlp.tools.cmdline.BasicCmdLineTool;
 import opennlp.tools.cmdline.CLI;
 import opennlp.tools.cmdline.CmdLineUtil;
@@ -26,32 +24,34 @@ import opennlp.tools.cmdline.postag.POSModelLoader;
 import opennlp.tools.parser.ParserModel;
 import opennlp.tools.postag.POSModel;
 
+import java.io.File;
+
 // user should train with the POS tool
 public final class TaggerModelReplacerTool extends BasicCmdLineTool {
 
-  public String getShortDescription() {
-    return "replaces the tagger model in a parser model";
-  }
-
-  public String getHelp() {
-    return "Usage: " + CLI.CMD + " " + getName() + " parser.model tagger.model";
-  }
-
-  public void run(String[] args) {
-
-    if (args.length != 2) {
-      System.out.println(getHelp());
-    } else {
-
-      File parserModelInFile = new File(args[0]);
-      ParserModel parserModel = new ParserModelLoader().load(parserModelInFile);
-
-      File taggerModelInFile = new File(args[1]);
-      POSModel taggerModel = new POSModelLoader().load(taggerModelInFile);
-
-      ParserModel updatedParserModel = parserModel.updateTaggerModel(taggerModel);
-
-      CmdLineUtil.writeModel("parser", parserModelInFile, updatedParserModel);
+    public String getShortDescription() {
+        return "replaces the tagger model in a parser model";
     }
-  }
+
+    public String getHelp() {
+        return "Usage: " + CLI.CMD + " " + getName() + " parser.model tagger.model";
+    }
+
+    public void run(String[] args) {
+
+        if (args.length != 2) {
+            System.out.println(getHelp());
+        } else {
+
+            File parserModelInFile = new File(args[0]);
+            ParserModel parserModel = new ParserModelLoader().load(parserModelInFile);
+
+            File taggerModelInFile = new File(args[1]);
+            POSModel taggerModel = new POSModelLoader().load(taggerModelInFile);
+
+            ParserModel updatedParserModel = parserModel.updateTaggerModel(taggerModel);
+
+            CmdLineUtil.writeModel("parser", parserModelInFile, updatedParserModel);
+        }
+    }
 }

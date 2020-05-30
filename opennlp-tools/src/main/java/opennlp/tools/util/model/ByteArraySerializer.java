@@ -23,11 +23,11 @@ import java.io.OutputStream;
 
 public class ByteArraySerializer implements ArtifactSerializer<byte[]> {
 
-  public byte[] create(InputStream in) throws IOException {
-    return ModelUtil.read(in);
-  }
+    public byte[] create(InputStream in) throws IOException {
+        return ModelUtil.read(in);
+    }
 
-  public void serialize(byte[] artifact, OutputStream out) throws IOException {
-    out.write(artifact);
-  }
+    public void serialize(byte[] artifact, OutputStream out) throws IOException {
+        out.write(artifact);
+    }
 }

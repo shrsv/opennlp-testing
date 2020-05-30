@@ -17,6 +17,13 @@
 
 package opennlp.tools.formats.brat;
 
+import opennlp.tools.namefind.NameSample;
+import opennlp.tools.sentdetect.NewlineSentenceDetector;
+import opennlp.tools.tokenize.WhitespaceTokenizer;
+import opennlp.tools.util.ObjectStream;
+import org.junit.Assert;
+import org.junit.Test;
+
 import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
@@ -25,74 +32,66 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import org.junit.Assert;
-import org.junit.Test;
-
-import opennlp.tools.namefind.NameSample;
-import opennlp.tools.sentdetect.NewlineSentenceDetector;
-import opennlp.tools.tokenize.WhitespaceTokenizer;
-import opennlp.tools.util.ObjectStream;
-
 public class BratNameSampleStreamTest {
 
-  private BratNameSampleStream createNameSampleWith(String nameContainsFilter,
-                                                    Set<String> nameTypes) throws IOException {
-    Map<String, String> typeToClassMap = new HashMap<>();
-    BratAnnotationStreamTest.addEntityTypes(typeToClassMap);
-    AnnotationConfiguration config = new AnnotationConfiguration(typeToClassMap);
+    private BratNameSampleStream createNameSampleWith(String nameContainsFilter,
+                                                      Set<String> nameTypes) throws IOException {
+        Map<String, String> typeToClassMap = new HashMap<>();
+        BratAnnotationStreamTest.addEntityTypes(typeToClassMap);
+        AnnotationConfiguration config = new AnnotationConfiguration(typeToClassMap);
 
-    File dir = new File(this.getClass().getResource("/opennlp/tools/formats/brat/").getFile());
-    FileFilter fileFilter = pathname -> pathname.getName().contains(nameContainsFilter);
+        File dir = new File(this.getClass().getResource("/opennlp/tools/formats/brat/").getFile());
+        FileFilter fileFilter = pathname -> pathname.getName().contains(nameContainsFilter);
 
-    ObjectStream<BratDocument> bratDocumentStream = new BratDocumentStream(config, dir,
-        false, fileFilter);
+        ObjectStream<BratDocument> bratDocumentStream = new BratDocumentStream(config, dir,
+                false, fileFilter);
 
-    return new BratNameSampleStream(new NewlineSentenceDetector(),
-        WhitespaceTokenizer.INSTANCE, bratDocumentStream, nameTypes);
-  }
-
-  @Test
-  public void readNoOverlap() throws IOException {
-    BratNameSampleStream stream = createNameSampleWith("-entities.",
-        null);
-    int count = 0;
-    NameSample sample = stream.read();
-    while (sample != null) {
-      count++;
-      sample = stream.read();
+        return new BratNameSampleStream(new NewlineSentenceDetector(),
+                WhitespaceTokenizer.INSTANCE, bratDocumentStream, nameTypes);
     }
 
-    Assert.assertEquals(8, count);
-  }
+    @Test
+    public void readNoOverlap() throws IOException {
+        BratNameSampleStream stream = createNameSampleWith("-entities.",
+                null);
+        int count = 0;
+        NameSample sample = stream.read();
+        while (sample != null) {
+            count++;
+            sample = stream.read();
+        }
 
-  @Test(expected = RuntimeException.class)
-  public void readOverlapFail() throws IOException {
-    BratNameSampleStream stream = createNameSampleWith("overlapping",
-        null);
-
-    NameSample sample = stream.read();
-    while (sample != null) {
-      sample = stream.read();
-    }
-  }
-
-  @Test(expected = IllegalArgumentException.class)
-  public void emptySample() throws IOException {
-    createNameSampleWith("overlapping",
-        Collections.emptySet());
-  }
-
-  @Test
-  public void readOverlapFilter() throws IOException {
-    BratNameSampleStream stream = createNameSampleWith("overlapping",
-        Collections.singleton("Person"));
-    int count = 0;
-    NameSample sample = stream.read();
-    while (sample != null) {
-      count++;
-      sample = stream.read();
+        Assert.assertEquals(8, count);
     }
 
-    Assert.assertEquals(8, count);
-  }
+    @Test(expected = RuntimeException.class)
+    public void readOverlapFail() throws IOException {
+        BratNameSampleStream stream = createNameSampleWith("overlapping",
+                null);
+
+        NameSample sample = stream.read();
+        while (sample != null) {
+            sample = stream.read();
+        }
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void emptySample() throws IOException {
+        createNameSampleWith("overlapping",
+                Collections.emptySet());
+    }
+
+    @Test
+    public void readOverlapFilter() throws IOException {
+        BratNameSampleStream stream = createNameSampleWith("overlapping",
+                Collections.singleton("Person"));
+        int count = 0;
+        NameSample sample = stream.read();
+        while (sample != null) {
+            count++;
+            sample = stream.read();
+        }
+
+        Assert.assertEquals(8, count);
+    }
 }

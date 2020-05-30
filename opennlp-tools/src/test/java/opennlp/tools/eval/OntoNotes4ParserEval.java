@@ -17,17 +17,6 @@
 
 package opennlp.tools.eval;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.math.BigInteger;
-import java.nio.charset.StandardCharsets;
-
-import org.junit.Assert;
-import org.junit.BeforeClass;
-import org.junit.Test;
-
 import opennlp.tools.formats.DirectorySampleStream;
 import opennlp.tools.formats.convert.FileToStringSampleStream;
 import opennlp.tools.formats.ontonotes.DocumentToLineStream;
@@ -40,57 +29,67 @@ import opennlp.tools.parser.lang.en.HeadRulesTest;
 import opennlp.tools.util.ObjectStream;
 import opennlp.tools.util.TrainingParameters;
 import opennlp.tools.util.model.ModelUtil;
+import org.junit.Assert;
+import org.junit.BeforeClass;
+import org.junit.Test;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.math.BigInteger;
+import java.nio.charset.StandardCharsets;
 
 public class OntoNotes4ParserEval extends AbstractEvalTest {
 
-  private static ObjectStream<Parse> createParseSampleStream() throws IOException {
-    ObjectStream<File> documentStream = new DirectorySampleStream(new File(
-        getOpennlpDataDir(), "ontonotes4/data/files/data/english"),
-        file -> {
-          if (file.isFile()) {
-            return file.getName().endsWith(".parse");
-          }
+    private static ObjectStream<Parse> createParseSampleStream() throws IOException {
+        ObjectStream<File> documentStream = new DirectorySampleStream(new File(
+                getOpennlpDataDir(), "ontonotes4/data/files/data/english"),
+                file -> {
+                    if (file.isFile()) {
+                        return file.getName().endsWith(".parse");
+                    }
 
-          return file.isDirectory();
-        }, true);
+                    return file.isDirectory();
+                }, true);
 
-    return new OntoNotesParseSampleStream(
-        new DocumentToLineStream(new FileToStringSampleStream(
-            documentStream, StandardCharsets.UTF_8)));
-  }
-
-  private void crossEval(TrainingParameters params, HeadRules rules, double expectedScore)
-      throws IOException {
-    try (ObjectStream<Parse> samples = createParseSampleStream()) {
-      ParserCrossValidator cv = new ParserCrossValidator("eng", params, rules, ParserType.CHUNKING);
-      cv.evaluate(samples, 5);
-
-      Assert.assertEquals(expectedScore, cv.getFMeasure().getFMeasure(), 0.0001d);
-    }
-  }
-
-  @BeforeClass
-  public static void verifyTrainingData() throws Exception {
-    verifyTrainingData(createParseSampleStream(), new BigInteger("83833369887442127665956850482411800415"));
-  }
-
-  @Test
-  public void evalEnglishMaxent() throws IOException {
-
-    HeadRules headRules;
-    try (InputStream headRulesIn =
-             HeadRulesTest.class.getResourceAsStream("/opennlp/tools/parser/en_head_rules")) {
-      headRules = new opennlp.tools.parser.lang.en.HeadRules(
-          new InputStreamReader(headRulesIn, StandardCharsets.UTF_8));
+        return new OntoNotesParseSampleStream(
+                new DocumentToLineStream(new FileToStringSampleStream(
+                        documentStream, StandardCharsets.UTF_8)));
     }
 
-    TrainingParameters params = ModelUtil.createDefaultTrainingParameters();
-    params.put("build.Threads", 4);
-    params.put("tagger.Threads", 4);
-    params.put("chunker.Threads", 4);
-    params.put("check.Threads", 4);
+    @BeforeClass
+    public static void verifyTrainingData() throws Exception {
+        verifyTrainingData(createParseSampleStream(), new BigInteger("83833369887442127665956850482411800415"));
+    }
+
+    private void crossEval(TrainingParameters params, HeadRules rules, double expectedScore)
+            throws IOException {
+        try (ObjectStream<Parse> samples = createParseSampleStream()) {
+            ParserCrossValidator cv = new ParserCrossValidator("eng", params, rules, ParserType.CHUNKING);
+            cv.evaluate(samples, 5);
+
+            Assert.assertEquals(expectedScore, cv.getFMeasure().getFMeasure(), 0.0001d);
+        }
+    }
+
+    @Test
+    public void evalEnglishMaxent() throws IOException {
+
+        HeadRules headRules;
+        try (InputStream headRulesIn =
+                     HeadRulesTest.class.getResourceAsStream("/opennlp/tools/parser/en_head_rules")) {
+            headRules = new opennlp.tools.parser.lang.en.HeadRules(
+                    new InputStreamReader(headRulesIn, StandardCharsets.UTF_8));
+        }
+
+        TrainingParameters params = ModelUtil.createDefaultTrainingParameters();
+        params.put("build.Threads", 4);
+        params.put("tagger.Threads", 4);
+        params.put("chunker.Threads", 4);
+        params.put("check.Threads", 4);
 
 
-    crossEval(params, headRules, 0.9373673649973432d);
-  }
+        crossEval(params, headRules, 0.9373673649973432d);
+    }
 }

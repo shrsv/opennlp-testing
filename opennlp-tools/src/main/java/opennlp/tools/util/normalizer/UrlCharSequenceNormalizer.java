@@ -23,19 +23,19 @@ import java.util.regex.Pattern;
  */
 public class UrlCharSequenceNormalizer implements CharSequenceNormalizer {
 
-  private static final Pattern URL_REGEX =
-      Pattern.compile("https?://[-_.?&~;+=/#0-9A-Za-z]+");
-  private static final Pattern MAIL_REGEX =
-      Pattern.compile("[-_.0-9A-Za-z]+@[-_0-9A-Za-z]+[-_.0-9A-Za-z]+");
+    private static final Pattern URL_REGEX =
+            Pattern.compile("https?://[-_.?&~;+=/#0-9A-Za-z]+");
+    private static final Pattern MAIL_REGEX =
+            Pattern.compile("[-_.0-9A-Za-z]+@[-_0-9A-Za-z]+[-_.0-9A-Za-z]+");
 
-  private static final UrlCharSequenceNormalizer INSTANCE = new UrlCharSequenceNormalizer();
+    private static final UrlCharSequenceNormalizer INSTANCE = new UrlCharSequenceNormalizer();
 
-  public static UrlCharSequenceNormalizer getInstance() {
-    return INSTANCE;
-  }
+    public static UrlCharSequenceNormalizer getInstance() {
+        return INSTANCE;
+    }
 
-  public CharSequence normalize (CharSequence text) {
-    String modified = URL_REGEX.matcher(text).replaceAll(" ");
-    return MAIL_REGEX.matcher(modified).replaceAll(" ");
-  }
+    public CharSequence normalize(CharSequence text) {
+        String modified = URL_REGEX.matcher(text).replaceAll(" ");
+        return MAIL_REGEX.matcher(modified).replaceAll(" ");
+    }
 }

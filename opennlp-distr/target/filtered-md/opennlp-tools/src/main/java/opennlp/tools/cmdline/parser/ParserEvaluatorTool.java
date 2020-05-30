@@ -17,56 +17,51 @@
 
 package opennlp.tools.cmdline.parser;
 
-import java.io.IOException;
-
 import opennlp.tools.cmdline.AbstractEvaluatorTool;
 import opennlp.tools.cmdline.TerminateToolException;
 import opennlp.tools.cmdline.params.EvaluatorParams;
-import opennlp.tools.parser.Parse;
-import opennlp.tools.parser.Parser;
-import opennlp.tools.parser.ParserEvaluator;
-import opennlp.tools.parser.ParserFactory;
-import opennlp.tools.parser.ParserModel;
+import opennlp.tools.parser.*;
+
+import java.io.IOException;
 
 public class ParserEvaluatorTool extends AbstractEvaluatorTool<Parse, EvaluatorParams> {
 
-  public ParserEvaluatorTool() {
-    super(Parse.class, EvaluatorParams.class);
-  }
-
-  public String getShortDescription() {
-    return "Measures the performance of the Parser model with the reference data";
-  }
-
-  @Override
-  public void run(String format, String[] args) {
-
-    super.run(format, args);
-
-    ParserModel model = new ParserModelLoader().load(params.getModel());
-
-    Parser parser = ParserFactory.create(model);
-
-    ParserEvaluator evaluator = new ParserEvaluator(parser);
-
-    System.out.print("Evaluating ... ");
-    try {
-      evaluator.evaluate(sampleStream);
+    public ParserEvaluatorTool() {
+        super(Parse.class, EvaluatorParams.class);
     }
-    catch (IOException e) {
-      System.err.println("failed");
-      throw new TerminateToolException(-1, "IO error while reading test data: " + e.getMessage(), e);
-    } finally {
-      try {
-        sampleStream.close();
-      } catch (IOException e) {
-        // sorry that this can fail
-      }
+
+    public String getShortDescription() {
+        return "Measures the performance of the Parser model with the reference data";
     }
-    System.out.println("done");
 
-    System.out.println();
+    @Override
+    public void run(String format, String[] args) {
 
-    System.out.println(evaluator.getFMeasure());
-  }
+        super.run(format, args);
+
+        ParserModel model = new ParserModelLoader().load(params.getModel());
+
+        Parser parser = ParserFactory.create(model);
+
+        ParserEvaluator evaluator = new ParserEvaluator(parser);
+
+        System.out.print("Evaluating ... ");
+        try {
+            evaluator.evaluate(sampleStream);
+        } catch (IOException e) {
+            System.err.println("failed");
+            throw new TerminateToolException(-1, "IO error while reading test data: " + e.getMessage(), e);
+        } finally {
+            try {
+                sampleStream.close();
+            } catch (IOException e) {
+                // sorry that this can fail
+            }
+        }
+        System.out.println("done");
+
+        System.out.println();
+
+        System.out.println(evaluator.getFMeasure());
+    }
 }

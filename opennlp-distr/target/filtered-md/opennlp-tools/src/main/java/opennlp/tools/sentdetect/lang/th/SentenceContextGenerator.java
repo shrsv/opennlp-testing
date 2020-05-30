@@ -24,38 +24,38 @@ import opennlp.tools.sentdetect.DefaultSDContextGenerator;
  */
 public class SentenceContextGenerator extends DefaultSDContextGenerator {
 
-  public static final char[] eosCharacters =  {' ','\n'};
+    public static final char[] eosCharacters = {' ', '\n'};
 
-  public SentenceContextGenerator() {
-    super(eosCharacters);
-  }
+    public SentenceContextGenerator() {
+        super(eosCharacters);
+    }
 
-  @Override
-  protected void collectFeatures(String prefix, String suffix, String previous, String next) {
-    buf.append("p=");
-    buf.append(prefix);
-    collectFeats.add(buf.toString());
-    buf.setLength(0);
+    @Override
+    protected void collectFeatures(String prefix, String suffix, String previous, String next) {
+        buf.append("p=");
+        buf.append(prefix);
+        collectFeats.add(buf.toString());
+        buf.setLength(0);
 
-    buf.append("s=");
-    buf.append(suffix);
-    collectFeats.add(buf.toString());
-    buf.setLength(0);
+        buf.append("s=");
+        buf.append(suffix);
+        collectFeats.add(buf.toString());
+        buf.setLength(0);
 
-    collectFeats.add("p1=" + prefix.substring(Math.max(prefix.length() - 1,0)));
-    collectFeats.add("p2=" + prefix.substring(Math.max(prefix.length() - 2,0)));
-    collectFeats.add("p3=" + prefix.substring(Math.max(prefix.length() - 3,0)));
-    collectFeats.add("p4=" + prefix.substring(Math.max(prefix.length() - 4,0)));
-    collectFeats.add("p5=" + prefix.substring(Math.max(prefix.length() - 5,0)));
-    collectFeats.add("p6=" + prefix.substring(Math.max(prefix.length() - 6,0)));
-    collectFeats.add("p7=" + prefix.substring(Math.max(prefix.length() - 7,0)));
+        collectFeats.add("p1=" + prefix.substring(Math.max(prefix.length() - 1, 0)));
+        collectFeats.add("p2=" + prefix.substring(Math.max(prefix.length() - 2, 0)));
+        collectFeats.add("p3=" + prefix.substring(Math.max(prefix.length() - 3, 0)));
+        collectFeats.add("p4=" + prefix.substring(Math.max(prefix.length() - 4, 0)));
+        collectFeats.add("p5=" + prefix.substring(Math.max(prefix.length() - 5, 0)));
+        collectFeats.add("p6=" + prefix.substring(Math.max(prefix.length() - 6, 0)));
+        collectFeats.add("p7=" + prefix.substring(Math.max(prefix.length() - 7, 0)));
 
-    collectFeats.add("n1=" + suffix.substring(0,Math.min(1, suffix.length())));
-    collectFeats.add("n2=" + suffix.substring(0,Math.min(2, suffix.length())));
-    collectFeats.add("n3=" + suffix.substring(0,Math.min(3, suffix.length())));
-    collectFeats.add("n4=" + suffix.substring(0,Math.min(4, suffix.length())));
-    collectFeats.add("n5=" + suffix.substring(0,Math.min(5, suffix.length())));
-    collectFeats.add("n6=" + suffix.substring(0,Math.min(6, suffix.length())));
-    collectFeats.add("n7=" + suffix.substring(0,Math.min(7, suffix.length())));
-  }
+        collectFeats.add("n1=" + suffix.substring(0, Math.min(1, suffix.length())));
+        collectFeats.add("n2=" + suffix.substring(0, Math.min(2, suffix.length())));
+        collectFeats.add("n3=" + suffix.substring(0, Math.min(3, suffix.length())));
+        collectFeats.add("n4=" + suffix.substring(0, Math.min(4, suffix.length())));
+        collectFeats.add("n5=" + suffix.substring(0, Math.min(5, suffix.length())));
+        collectFeats.add("n6=" + suffix.substring(0, Math.min(6, suffix.length())));
+        collectFeats.add("n7=" + suffix.substring(0, Math.min(7, suffix.length())));
+    }
 }

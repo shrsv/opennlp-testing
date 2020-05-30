@@ -26,13 +26,13 @@ import opennlp.tools.util.ObjectStream;
  */
 public class NameToSentenceSampleStream extends AbstractToSentenceSampleStream<NameSample> {
 
-  public NameToSentenceSampleStream(Detokenizer detokenizer,
-      ObjectStream<NameSample> samples, int chunkSize) {
-    super(detokenizer, samples, chunkSize);
-  }
+    public NameToSentenceSampleStream(Detokenizer detokenizer,
+                                      ObjectStream<NameSample> samples, int chunkSize) {
+        super(detokenizer, samples, chunkSize);
+    }
 
-  @Override
-  protected String[] toSentence(NameSample sample) {
-    return sample.getSentence();
-  }
+    @Override
+    protected String[] toSentence(NameSample sample) {
+        return sample.getSentence();
+    }
 }

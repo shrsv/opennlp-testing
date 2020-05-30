@@ -17,76 +17,76 @@
 
 package opennlp.tools.util.featuregen;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class SuffixFeatureGeneratorTest {
 
-  private List<String> features;
+    private List<String> features;
 
-  @Before
-  public void setUp() throws Exception {
-    features = new ArrayList<>();
-  }
+    @Before
+    public void setUp() throws Exception {
+        features = new ArrayList<>();
+    }
 
-  @Test
-  public void lengthTest1() {
-      
-    String[] testSentence = new String[] {"This", "is", "an", "example", "sentence"};
+    @Test
+    public void lengthTest1() {
 
-    int testTokenIndex = 0;
-    int suffixLength = 2;
-      
-    AdaptiveFeatureGenerator generator = new SuffixFeatureGenerator(suffixLength);    
+        String[] testSentence = new String[]{"This", "is", "an", "example", "sentence"};
 
-    generator.createFeatures(features, testSentence, testTokenIndex, null);
+        int testTokenIndex = 0;
+        int suffixLength = 2;
 
-    Assert.assertEquals(2, features.size());
-    Assert.assertEquals("suf=s", features.get(0));
-    Assert.assertEquals("suf=is", features.get(1));
-    
-  }
-  
-  @Test
-  public void lengthTest2() {
-      
-    String[] testSentence = new String[] {"This", "is", "an", "example", "sentence"};
+        AdaptiveFeatureGenerator generator = new SuffixFeatureGenerator(suffixLength);
 
-    int testTokenIndex = 3;
-    int suffixLength = 5;
-      
-    AdaptiveFeatureGenerator generator = new SuffixFeatureGenerator(suffixLength);    
+        generator.createFeatures(features, testSentence, testTokenIndex, null);
 
-    generator.createFeatures(features, testSentence, testTokenIndex, null);
+        Assert.assertEquals(2, features.size());
+        Assert.assertEquals("suf=s", features.get(0));
+        Assert.assertEquals("suf=is", features.get(1));
 
-    Assert.assertEquals(5, features.size());
-    Assert.assertEquals("suf=e", features.get(0));
-    Assert.assertEquals("suf=le", features.get(1));
-    Assert.assertEquals("suf=ple", features.get(2));
-    Assert.assertEquals("suf=mple", features.get(3));
-    Assert.assertEquals("suf=ample", features.get(4));
-    
-  }
-  
-  @Test
-  public void lengthTest3() {
-      
-    String[] testSentence = new String[] {"This", "is", "an", "example", "sentence"};
+    }
 
-    int testTokenIndex = 1;
-    int suffixLength = 5;
-      
-    AdaptiveFeatureGenerator generator = new SuffixFeatureGenerator(suffixLength);    
+    @Test
+    public void lengthTest2() {
 
-    generator.createFeatures(features, testSentence, testTokenIndex, null);
-    
-    Assert.assertEquals(2, features.size());
-    Assert.assertEquals("suf=s", features.get(0));
-    Assert.assertEquals("suf=is", features.get(1));
-    
-  }
+        String[] testSentence = new String[]{"This", "is", "an", "example", "sentence"};
+
+        int testTokenIndex = 3;
+        int suffixLength = 5;
+
+        AdaptiveFeatureGenerator generator = new SuffixFeatureGenerator(suffixLength);
+
+        generator.createFeatures(features, testSentence, testTokenIndex, null);
+
+        Assert.assertEquals(5, features.size());
+        Assert.assertEquals("suf=e", features.get(0));
+        Assert.assertEquals("suf=le", features.get(1));
+        Assert.assertEquals("suf=ple", features.get(2));
+        Assert.assertEquals("suf=mple", features.get(3));
+        Assert.assertEquals("suf=ample", features.get(4));
+
+    }
+
+    @Test
+    public void lengthTest3() {
+
+        String[] testSentence = new String[]{"This", "is", "an", "example", "sentence"};
+
+        int testTokenIndex = 1;
+        int suffixLength = 5;
+
+        AdaptiveFeatureGenerator generator = new SuffixFeatureGenerator(suffixLength);
+
+        generator.createFeatures(features, testSentence, testTokenIndex, null);
+
+        Assert.assertEquals(2, features.size());
+        Assert.assertEquals("suf=s", features.get(0));
+        Assert.assertEquals("suf=is", features.get(1));
+
+    }
 }

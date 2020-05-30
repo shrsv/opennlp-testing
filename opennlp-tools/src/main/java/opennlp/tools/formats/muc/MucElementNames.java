@@ -23,24 +23,24 @@ import java.util.Set;
 
 class MucElementNames {
 
-  static final String DOC_ELEMENT = "DOC";
-  static final String HEADLINE_ELEMENT = "HL";
-  static final String DATELINE_ELEMENT = "DATELINE";
-  static final String DD_ELEMENT = "DD";
-  static final String SENTENCE_ELEMENT = "s";
+    static final String DOC_ELEMENT = "DOC";
+    static final String HEADLINE_ELEMENT = "HL";
+    static final String DATELINE_ELEMENT = "DATELINE";
+    static final String DD_ELEMENT = "DD";
+    static final String SENTENCE_ELEMENT = "s";
 
-  static final Set<String> CONTENT_ELEMENTS;
+    static final Set<String> CONTENT_ELEMENTS;
 
-  static {
-    Set<String> contentElementNames = new HashSet<>();
-    contentElementNames.add(MucElementNames.HEADLINE_ELEMENT);
-    contentElementNames.add(MucElementNames.DATELINE_ELEMENT);
-    contentElementNames.add(MucElementNames.DD_ELEMENT);
-    contentElementNames.add(MucElementNames.SENTENCE_ELEMENT);
+    static {
+        Set<String> contentElementNames = new HashSet<>();
+        contentElementNames.add(MucElementNames.HEADLINE_ELEMENT);
+        contentElementNames.add(MucElementNames.DATELINE_ELEMENT);
+        contentElementNames.add(MucElementNames.DD_ELEMENT);
+        contentElementNames.add(MucElementNames.SENTENCE_ELEMENT);
 
-    CONTENT_ELEMENTS = Collections.unmodifiableSet(contentElementNames);
-  }
+        CONTENT_ELEMENTS = Collections.unmodifiableSet(contentElementNames);
+    }
 
-  private MucElementNames() {
-  }
+    private MucElementNames() {
+    }
 }

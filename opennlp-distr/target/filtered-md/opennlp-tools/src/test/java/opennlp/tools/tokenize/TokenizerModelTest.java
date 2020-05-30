@@ -17,36 +17,36 @@
 
 package opennlp.tools.tokenize;
 
+import org.junit.Test;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-
-import org.junit.Test;
 
 /**
  * Tests for the {@link TokenizerModel} class.
  */
 public class TokenizerModelTest {
 
-  @Test
-  public void testSentenceModel() throws IOException {
+    @Test
+    public void testSentenceModel() throws IOException {
 
-    TokenizerModel model = TokenizerTestUtil.createSimpleMaxentTokenModel();
+        TokenizerModel model = TokenizerTestUtil.createSimpleMaxentTokenModel();
 
-    ByteArrayOutputStream arrayOut = new ByteArrayOutputStream();
-    model.serialize(arrayOut);
-    arrayOut.close();
+        ByteArrayOutputStream arrayOut = new ByteArrayOutputStream();
+        model.serialize(arrayOut);
+        arrayOut.close();
 
-    model = new TokenizerModel(new ByteArrayInputStream(arrayOut.toByteArray()));
-    // TODO: check that both maxent models are equal
+        model = new TokenizerModel(new ByteArrayInputStream(arrayOut.toByteArray()));
+        // TODO: check that both maxent models are equal
 
-    // Also test serialization after building model from an inputstream
-    arrayOut = new ByteArrayOutputStream();
-    model.serialize(arrayOut);
-    arrayOut.close();
+        // Also test serialization after building model from an inputstream
+        arrayOut = new ByteArrayOutputStream();
+        model.serialize(arrayOut);
+        arrayOut.close();
 
-    new TokenizerModel(new ByteArrayInputStream(arrayOut.toByteArray()));
+        new TokenizerModel(new ByteArrayInputStream(arrayOut.toByteArray()));
 
-    // TODO: check that both maxent models are equal
-  }
+        // TODO: check that both maxent models are equal
+    }
 }

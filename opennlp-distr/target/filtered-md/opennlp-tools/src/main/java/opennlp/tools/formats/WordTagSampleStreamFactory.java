@@ -17,8 +17,6 @@
 
 package opennlp.tools.formats;
 
-import java.io.IOException;
-
 import opennlp.tools.cmdline.ArgumentParser;
 import opennlp.tools.cmdline.CmdLineUtil;
 import opennlp.tools.cmdline.StreamFactoryRegistry;
@@ -29,36 +27,38 @@ import opennlp.tools.util.InputStreamFactory;
 import opennlp.tools.util.ObjectStream;
 import opennlp.tools.util.PlainTextByLineStream;
 
+import java.io.IOException;
+
 /**
  * <b>Note:</b> Do not use this class, internal use only!
  */
 public class WordTagSampleStreamFactory extends AbstractSampleStreamFactory<POSSample> {
 
-  public static interface Parameters extends BasicFormatParams {
-  }
-
-  public static void registerFactory() {
-    StreamFactoryRegistry.registerFactory(POSSample.class,
-        StreamFactoryRegistry.DEFAULT_FORMAT, new WordTagSampleStreamFactory(Parameters.class));
-  }
-
-  protected <P> WordTagSampleStreamFactory(Class<P> params) {
-    super(params);
-  }
-
-  public ObjectStream<POSSample> create(String[] args) {
-    Parameters params = ArgumentParser.parse(args, Parameters.class);
-
-    CmdLineUtil.checkInputFile("Data", params.getData());
-    InputStreamFactory sampleDataIn = CmdLineUtil.createInputStreamFactory(params.getData());
-
-    ObjectStream<String> lineStream = null;
-    try {
-      lineStream = new PlainTextByLineStream(sampleDataIn, params.getEncoding());
-    } catch (IOException ex) {
-      CmdLineUtil.handleCreateObjectStreamError(ex);
+    protected <P> WordTagSampleStreamFactory(Class<P> params) {
+        super(params);
     }
 
-    return new WordTagSampleStream(lineStream);
-  }
+    public static void registerFactory() {
+        StreamFactoryRegistry.registerFactory(POSSample.class,
+                StreamFactoryRegistry.DEFAULT_FORMAT, new WordTagSampleStreamFactory(Parameters.class));
+    }
+
+    public ObjectStream<POSSample> create(String[] args) {
+        Parameters params = ArgumentParser.parse(args, Parameters.class);
+
+        CmdLineUtil.checkInputFile("Data", params.getData());
+        InputStreamFactory sampleDataIn = CmdLineUtil.createInputStreamFactory(params.getData());
+
+        ObjectStream<String> lineStream = null;
+        try {
+            lineStream = new PlainTextByLineStream(sampleDataIn, params.getEncoding());
+        } catch (IOException ex) {
+            CmdLineUtil.handleCreateObjectStreamError(ex);
+        }
+
+        return new WordTagSampleStream(lineStream);
+    }
+
+    public static interface Parameters extends BasicFormatParams {
+    }
 }

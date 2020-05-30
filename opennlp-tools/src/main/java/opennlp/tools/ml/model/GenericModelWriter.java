@@ -17,76 +17,72 @@
 
 package opennlp.tools.ml.model;
 
-import java.io.DataOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.util.zip.GZIPOutputStream;
-
 import opennlp.tools.ml.maxent.io.BinaryGISModelWriter;
 import opennlp.tools.ml.maxent.io.BinaryQNModelWriter;
 import opennlp.tools.ml.model.AbstractModel.ModelType;
 import opennlp.tools.ml.naivebayes.BinaryNaiveBayesModelWriter;
 import opennlp.tools.ml.perceptron.BinaryPerceptronModelWriter;
 
+import java.io.*;
+import java.util.zip.GZIPOutputStream;
+
 public class GenericModelWriter extends AbstractModelWriter {
 
-  private AbstractModelWriter delegateWriter;
+    private AbstractModelWriter delegateWriter;
 
-  public GenericModelWriter(AbstractModel model, File file) throws IOException {
-    String filename = file.getName();
-    OutputStream os;
-    // handle the zipped/not zipped distinction
-    if (filename.endsWith(".gz")) {
-      os = new GZIPOutputStream(new FileOutputStream(file));
-      filename = filename.substring(0, filename.length() - 3);
-    } else {
-      os = new FileOutputStream(file);
+    public GenericModelWriter(AbstractModel model, File file) throws IOException {
+        String filename = file.getName();
+        OutputStream os;
+        // handle the zipped/not zipped distinction
+        if (filename.endsWith(".gz")) {
+            os = new GZIPOutputStream(new FileOutputStream(file));
+            filename = filename.substring(0, filename.length() - 3);
+        } else {
+            os = new FileOutputStream(file);
+        }
+
+        init(model, new DataOutputStream(os));
     }
 
-    init(model, new DataOutputStream(os));
-  }
-
-  public GenericModelWriter(AbstractModel model, DataOutputStream dos) {
-    init(model, dos);
-  }
-
-  private void init(AbstractModel model, DataOutputStream dos) {
-    if (model.getModelType() == ModelType.Perceptron) {
-      delegateWriter = new BinaryPerceptronModelWriter(model, dos);
-    } else if (model.getModelType() == ModelType.Maxent) {
-      delegateWriter = new BinaryGISModelWriter(model, dos);
-    } else if (model.getModelType() == ModelType.MaxentQn) {
-      delegateWriter = new BinaryQNModelWriter(model, dos);
+    public GenericModelWriter(AbstractModel model, DataOutputStream dos) {
+        init(model, dos);
     }
-    if (model.getModelType() == ModelType.NaiveBayes) {
-      delegateWriter = new BinaryNaiveBayesModelWriter(model, dos);
+
+    private void init(AbstractModel model, DataOutputStream dos) {
+        if (model.getModelType() == ModelType.Perceptron) {
+            delegateWriter = new BinaryPerceptronModelWriter(model, dos);
+        } else if (model.getModelType() == ModelType.Maxent) {
+            delegateWriter = new BinaryGISModelWriter(model, dos);
+        } else if (model.getModelType() == ModelType.MaxentQn) {
+            delegateWriter = new BinaryQNModelWriter(model, dos);
+        }
+        if (model.getModelType() == ModelType.NaiveBayes) {
+            delegateWriter = new BinaryNaiveBayesModelWriter(model, dos);
+        }
     }
-  }
 
-  @Override
-  public void close() throws IOException {
-    delegateWriter.close();
-  }
+    @Override
+    public void close() throws IOException {
+        delegateWriter.close();
+    }
 
-  @Override
-  public void persist() throws IOException {
-    delegateWriter.persist();
-  }
+    @Override
+    public void persist() throws IOException {
+        delegateWriter.persist();
+    }
 
-  @Override
-  public void writeDouble(double d) throws IOException {
-    delegateWriter.writeDouble(d);
-  }
+    @Override
+    public void writeDouble(double d) throws IOException {
+        delegateWriter.writeDouble(d);
+    }
 
-  @Override
-  public void writeInt(int i) throws IOException {
-    delegateWriter.writeInt(i);
-  }
+    @Override
+    public void writeInt(int i) throws IOException {
+        delegateWriter.writeInt(i);
+    }
 
-  @Override
-  public void writeUTF(String s) throws IOException {
-    delegateWriter.writeUTF(s);
-  }
+    @Override
+    public void writeUTF(String s) throws IOException {
+        delegateWriter.writeUTF(s);
+    }
 }

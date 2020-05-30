@@ -17,24 +17,24 @@
 
 package opennlp.tools.formats.muc;
 
+import org.junit.Test;
+
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.nio.charset.StandardCharsets;
 
-import org.junit.Test;
-
 public class SgmlParserTest {
 
-  @Test
-  public void testParse1() throws IOException {
+    @Test
+    public void testParse1() throws IOException {
 
-    try (Reader in = new InputStreamReader(
-        SgmlParserTest.class.getResourceAsStream("parsertest1.sgml"), StandardCharsets.UTF_8)) {
-      SgmlParser parser = new SgmlParser();
-      parser.parse(in, new SgmlParser.ContentHandler() {
-      });
+        try (Reader in = new InputStreamReader(
+                SgmlParserTest.class.getResourceAsStream("parsertest1.sgml"), StandardCharsets.UTF_8)) {
+            SgmlParser parser = new SgmlParser();
+            parser.parse(in, new SgmlParser.ContentHandler() {
+            });
+        }
     }
-  }
 
 }

@@ -17,59 +17,55 @@
 
 package opennlp.tools.tokenize;
 
-import java.io.IOException;
-
 import opennlp.tools.util.ObjectStream;
 import opennlp.tools.util.TrainingParameters;
 import opennlp.tools.util.eval.CrossValidationPartitioner;
 import opennlp.tools.util.eval.FMeasure;
 
+import java.io.IOException;
+
 public class TokenizerCrossValidator {
 
-  private final TrainingParameters params;
+    private final TrainingParameters params;
+    private final TokenizerFactory factory;
+    private FMeasure fmeasure = new FMeasure();
+    private TokenizerEvaluationMonitor[] listeners;
 
-  private FMeasure fmeasure = new FMeasure();
-  private TokenizerEvaluationMonitor[] listeners;
-  private final TokenizerFactory factory;
-
-  public TokenizerCrossValidator(TrainingParameters params,
-      TokenizerFactory factory, TokenizerEvaluationMonitor... listeners) {
-    this.params = params;
-    this.listeners = listeners;
-    this.factory = factory;
-  }
-
-  /**
-   * Starts the evaluation.
-   *
-   * @param samples
-   *          the data to train and test
-   * @param nFolds
-   *          number of folds
-   *
-   * @throws IOException
-   */
-  public void evaluate(ObjectStream<TokenSample> samples, int nFolds) throws IOException {
-
-    CrossValidationPartitioner<TokenSample> partitioner =
-        new CrossValidationPartitioner<>(samples, nFolds);
-
-    while (partitioner.hasNext()) {
-
-      CrossValidationPartitioner.TrainingSampleStream<TokenSample> trainingSampleStream =
-          partitioner.next();
-
-      // Maybe throws IOException if temporary file handling fails ...
-      TokenizerModel model = TokenizerME.train(trainingSampleStream, this.factory, params);
-
-      TokenizerEvaluator evaluator = new TokenizerEvaluator(new TokenizerME(model), listeners);
-
-      evaluator.evaluate(trainingSampleStream.getTestSampleStream());
-      fmeasure.mergeInto(evaluator.getFMeasure());
+    public TokenizerCrossValidator(TrainingParameters params,
+                                   TokenizerFactory factory, TokenizerEvaluationMonitor... listeners) {
+        this.params = params;
+        this.listeners = listeners;
+        this.factory = factory;
     }
-  }
 
-  public FMeasure getFMeasure() {
-    return fmeasure;
-  }
+    /**
+     * Starts the evaluation.
+     *
+     * @param samples the data to train and test
+     * @param nFolds  number of folds
+     * @throws IOException
+     */
+    public void evaluate(ObjectStream<TokenSample> samples, int nFolds) throws IOException {
+
+        CrossValidationPartitioner<TokenSample> partitioner =
+                new CrossValidationPartitioner<>(samples, nFolds);
+
+        while (partitioner.hasNext()) {
+
+            CrossValidationPartitioner.TrainingSampleStream<TokenSample> trainingSampleStream =
+                    partitioner.next();
+
+            // Maybe throws IOException if temporary file handling fails ...
+            TokenizerModel model = TokenizerME.train(trainingSampleStream, this.factory, params);
+
+            TokenizerEvaluator evaluator = new TokenizerEvaluator(new TokenizerME(model), listeners);
+
+            evaluator.evaluate(trainingSampleStream.getTestSampleStream());
+            fmeasure.mergeInto(evaluator.getFMeasure());
+        }
+    }
+
+    public FMeasure getFMeasure() {
+        return fmeasure;
+    }
 }

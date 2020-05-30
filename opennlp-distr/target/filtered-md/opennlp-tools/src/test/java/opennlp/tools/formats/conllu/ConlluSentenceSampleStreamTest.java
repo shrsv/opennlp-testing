@@ -17,53 +17,52 @@
 
 package opennlp.tools.formats.conllu;
 
-import java.io.IOException;
-
-import org.junit.Assert;
-import org.junit.Test;
-
 import opennlp.tools.formats.ResourceAsStreamFactory;
 import opennlp.tools.sentdetect.SentenceSample;
 import opennlp.tools.util.InputStreamFactory;
 import opennlp.tools.util.ObjectStream;
 import opennlp.tools.util.Span;
+import org.junit.Assert;
+import org.junit.Test;
+
+import java.io.IOException;
 
 public class ConlluSentenceSampleStreamTest {
 
-  @Test
-  public void testParseTwoSentences() throws IOException {
-    InputStreamFactory streamFactory =
-        new ResourceAsStreamFactory(ConlluStreamTest.class, "de-ud-train-sample.conllu");
+    @Test
+    public void testParseTwoSentences() throws IOException {
+        InputStreamFactory streamFactory =
+                new ResourceAsStreamFactory(ConlluStreamTest.class, "de-ud-train-sample.conllu");
 
-    try (ObjectStream<SentenceSample> stream =
-             new ConlluSentenceSampleStream(new ConlluStream(streamFactory), 1)) {
+        try (ObjectStream<SentenceSample> stream =
+                     new ConlluSentenceSampleStream(new ConlluStream(streamFactory), 1)) {
 
-      SentenceSample sample1 = stream.read();
+            SentenceSample sample1 = stream.read();
 
-      Assert.assertEquals("Fachlich kompetent, sehr gute Beratung und ein freundliches Team.",
-          sample1.getDocument());
+            Assert.assertEquals("Fachlich kompetent, sehr gute Beratung und ein freundliches Team.",
+                    sample1.getDocument());
 
-      Assert.assertEquals(new Span(0, 65), sample1.getSentences()[0]);
+            Assert.assertEquals(new Span(0, 65), sample1.getSentences()[0]);
 
-      SentenceSample sample2 = stream.read();
+            SentenceSample sample2 = stream.read();
 
-      Assert.assertEquals("Beiden Zahnärzten verdanke ich einen neuen Biss und dadurch " +
-          "endlich keine Rückenschmerzen mehr.", sample2.getDocument());
-      Assert.assertEquals(new Span(0, 95), sample2.getSentences()[0]);
+            Assert.assertEquals("Beiden Zahnärzten verdanke ich einen neuen Biss und dadurch " +
+                    "endlich keine Rückenschmerzen mehr.", sample2.getDocument());
+            Assert.assertEquals(new Span(0, 95), sample2.getSentences()[0]);
 
-      Assert.assertNull("Stream must be exhausted", stream.read());
+            Assert.assertNull("Stream must be exhausted", stream.read());
+        }
+
+        try (ObjectStream<SentenceSample> stream =
+                     new ConlluSentenceSampleStream(new ConlluStream(streamFactory), 3)) {
+            SentenceSample sample = stream.read();
+
+            Assert.assertEquals("Fachlich kompetent, sehr gute Beratung und ein freundliches Team."
+                            + " Beiden Zahnärzten verdanke ich einen neuen Biss und dadurch endlich keine "
+                            + "Rückenschmerzen mehr.",
+                    sample.getDocument());
+
+            Assert.assertNull("Stream must be exhausted", stream.read());
+        }
     }
-
-    try (ObjectStream<SentenceSample> stream =
-             new ConlluSentenceSampleStream(new ConlluStream(streamFactory), 3)) {
-      SentenceSample sample = stream.read();
-
-      Assert.assertEquals("Fachlich kompetent, sehr gute Beratung und ein freundliches Team."
-           + " Beiden Zahnärzten verdanke ich einen neuen Biss und dadurch endlich keine "
-           + "Rückenschmerzen mehr.",
-          sample.getDocument());
-
-      Assert.assertNull("Stream must be exhausted", stream.read());
-    }
-  }
 }

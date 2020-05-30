@@ -22,7 +22,7 @@ import opennlp.tools.parser.Parse;
 
 public class ParserConverterTool extends AbstractConverterTool<Parse> {
 
-  public ParserConverterTool() {
-    super(Parse.class);
-  }
+    public ParserConverterTool() {
+        super(Parse.class);
+    }
 }

@@ -24,21 +24,21 @@ import java.util.Objects;
 
 public class EventAnnotation extends BratAnnotation {
 
-  private final String eventTrigger;
-  private final Map<String, String> arguments;
+    private final String eventTrigger;
+    private final Map<String, String> arguments;
 
-  protected EventAnnotation(String id, String type, String eventTrigger, Map<String, String> arguments) {
-    super(id, type);
+    protected EventAnnotation(String id, String type, String eventTrigger, Map<String, String> arguments) {
+        super(id, type);
 
-    this.eventTrigger = Objects.requireNonNull(eventTrigger);
-    this.arguments = Collections.unmodifiableMap(new HashMap<>(arguments));
-  }
+        this.eventTrigger = Objects.requireNonNull(eventTrigger);
+        this.arguments = Collections.unmodifiableMap(new HashMap<>(arguments));
+    }
 
-  public String getEventTrigger() {
-    return eventTrigger;
-  }
+    public String getEventTrigger() {
+        return eventTrigger;
+    }
 
-  public Map<String, String> getArguments() {
-    return arguments;
-  }
+    public Map<String, String> getArguments() {
+        return arguments;
+    }
 }

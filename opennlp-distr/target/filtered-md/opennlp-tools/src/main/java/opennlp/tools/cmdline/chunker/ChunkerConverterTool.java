@@ -26,7 +26,7 @@ import opennlp.tools.cmdline.AbstractConverterTool;
  */
 public class ChunkerConverterTool extends AbstractConverterTool<ChunkSample> {
 
-  public ChunkerConverterTool() {
-    super(ChunkSample.class);
-  }
+    public ChunkerConverterTool() {
+        super(ChunkSample.class);
+    }
 }

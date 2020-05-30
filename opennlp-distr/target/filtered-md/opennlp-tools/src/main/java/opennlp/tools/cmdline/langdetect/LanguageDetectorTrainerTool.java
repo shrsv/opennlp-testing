@@ -17,9 +17,6 @@
 
 package opennlp.tools.cmdline.langdetect;
 
-import java.io.File;
-import java.io.IOException;
-
 import opennlp.tools.cmdline.AbstractTrainerTool;
 import opennlp.tools.cmdline.ArgumentParser;
 import opennlp.tools.cmdline.CmdLineUtil;
@@ -29,55 +26,57 @@ import opennlp.tools.langdetect.LanguageDetectorModel;
 import opennlp.tools.langdetect.LanguageSample;
 import opennlp.tools.util.model.ModelUtil;
 
+import java.io.File;
+import java.io.IOException;
+
 public class LanguageDetectorTrainerTool
-    extends AbstractTrainerTool<LanguageSample, LanguageDetectorTrainerTool.TrainerToolParams> {
+        extends AbstractTrainerTool<LanguageSample, LanguageDetectorTrainerTool.TrainerToolParams> {
 
-  interface TrainerToolParams extends TrainingParams {
-    @ArgumentParser.ParameterDescription(valueName = "modelFile", description = "output model file.")
-    File getModel();
-
-    @ArgumentParser.ParameterDescription(valueName = "paramsFile", description = "training parameters file.")
-    @ArgumentParser.OptionalParameter()
-    String getParams();
-  }
-
-  public LanguageDetectorTrainerTool() {
-    super(LanguageSample.class, TrainerToolParams.class);
-  }
-
-  @Override
-  public String getShortDescription() {
-    return "trainer for the learnable language detector";
-  }
-
-  @Override
-  public void run(String format, String[] args) {
-    super.run(format, args);
-
-    mlParams = CmdLineUtil.loadTrainingParameters(params.getParams(), false);
-    if (mlParams == null) {
-      mlParams = ModelUtil.createDefaultTrainingParameters();
+    public LanguageDetectorTrainerTool() {
+        super(LanguageSample.class, TrainerToolParams.class);
     }
 
-    File modelOutFile = params.getModel();
-
-    CmdLineUtil.checkOutputFile("language detector model", modelOutFile);
-
-    LanguageDetectorModel model;
-    try {
-      LanguageDetectorFactory factory = LanguageDetectorFactory.create(params.getFactory());
-      model = LanguageDetectorME.train(sampleStream, mlParams, factory);
-    } catch (IOException e) {
-      throw createTerminationIOException(e);
-    }
-    finally {
-      try {
-        sampleStream.close();
-      } catch (IOException e) {
-        // sorry that this can fail
-      }
+    @Override
+    public String getShortDescription() {
+        return "trainer for the learnable language detector";
     }
 
-    CmdLineUtil.writeModel("language detector", modelOutFile, model);
-  }
+    @Override
+    public void run(String format, String[] args) {
+        super.run(format, args);
+
+        mlParams = CmdLineUtil.loadTrainingParameters(params.getParams(), false);
+        if (mlParams == null) {
+            mlParams = ModelUtil.createDefaultTrainingParameters();
+        }
+
+        File modelOutFile = params.getModel();
+
+        CmdLineUtil.checkOutputFile("language detector model", modelOutFile);
+
+        LanguageDetectorModel model;
+        try {
+            LanguageDetectorFactory factory = LanguageDetectorFactory.create(params.getFactory());
+            model = LanguageDetectorME.train(sampleStream, mlParams, factory);
+        } catch (IOException e) {
+            throw createTerminationIOException(e);
+        } finally {
+            try {
+                sampleStream.close();
+            } catch (IOException e) {
+                // sorry that this can fail
+            }
+        }
+
+        CmdLineUtil.writeModel("language detector", modelOutFile, model);
+    }
+
+    interface TrainerToolParams extends TrainingParams {
+        @ArgumentParser.ParameterDescription(valueName = "modelFile", description = "output model file.")
+        File getModel();
+
+        @ArgumentParser.ParameterDescription(valueName = "paramsFile", description = "training parameters file.")
+        @ArgumentParser.OptionalParameter()
+        String getParams();
+    }
 }

@@ -17,53 +17,53 @@
 
 package opennlp.tools.langdetect;
 
-import java.util.Iterator;
-
 import opennlp.tools.ml.model.Event;
 import opennlp.tools.util.AbstractEventStream;
 import opennlp.tools.util.ObjectStream;
+
+import java.util.Iterator;
 
 /**
  * Iterator-like class for modeling language detector events.
  */
 public class LanguageDetectorEventStream extends AbstractEventStream<LanguageSample> {
 
-  private LanguageDetectorContextGenerator mContextGenerator;
+    private LanguageDetectorContextGenerator mContextGenerator;
 
-  /**
-   * Initializes the current instance via samples and feature generators.
-   *
-   * @param data {@link ObjectStream} of {@link LanguageSample}s
-   */
-  public LanguageDetectorEventStream(ObjectStream<LanguageSample> data,
-                                     LanguageDetectorContextGenerator contextGenerator) {
-    super(data);
+    /**
+     * Initializes the current instance via samples and feature generators.
+     *
+     * @param data {@link ObjectStream} of {@link LanguageSample}s
+     */
+    public LanguageDetectorEventStream(ObjectStream<LanguageSample> data,
+                                       LanguageDetectorContextGenerator contextGenerator) {
+        super(data);
 
-    mContextGenerator = contextGenerator;
-  }
+        mContextGenerator = contextGenerator;
+    }
 
-  @Override
-  protected Iterator<Event> createEvents(final LanguageSample sample) {
+    @Override
+    protected Iterator<Event> createEvents(final LanguageSample sample) {
 
-    return new Iterator<Event>() {
+        return new Iterator<Event>() {
 
-      private boolean isVirgin = true;
+            private boolean isVirgin = true;
 
-      public boolean hasNext() {
-        return isVirgin;
-      }
+            public boolean hasNext() {
+                return isVirgin;
+            }
 
-      public Event next() {
+            public Event next() {
 
-        isVirgin = false;
+                isVirgin = false;
 
-        return new Event(sample.getLanguage().getLang(),
-            mContextGenerator.getContext(sample.getContext().toString()));
-      }
+                return new Event(sample.getLanguage().getLang(),
+                        mContextGenerator.getContext(sample.getContext().toString()));
+            }
 
-      public void remove() {
-        throw new UnsupportedOperationException();
-      }
-    };
-  }
+            public void remove() {
+                throw new UnsupportedOperationException();
+            }
+        };
+    }
 }

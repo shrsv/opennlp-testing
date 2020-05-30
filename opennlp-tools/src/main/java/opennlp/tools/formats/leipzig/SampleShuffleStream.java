@@ -17,45 +17,41 @@
 
 package opennlp.tools.formats.leipzig;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Random;
-
 import opennlp.tools.util.ObjectStream;
+
+import java.io.IOException;
+import java.util.*;
 
 class SampleShuffleStream<T> implements ObjectStream<T> {
 
-  private List<T> bufferedSamples = new ArrayList<>();
+    private List<T> bufferedSamples = new ArrayList<>();
 
-  private Iterator<T> sampleIt;
+    private Iterator<T> sampleIt;
 
-  SampleShuffleStream(ObjectStream<T> samples) throws IOException {
+    SampleShuffleStream(ObjectStream<T> samples) throws IOException {
 
-    T sample;
-    while ((sample = samples.read()) != null) {
-      bufferedSamples.add(sample);
+        T sample;
+        while ((sample = samples.read()) != null) {
+            bufferedSamples.add(sample);
+        }
+
+        Collections.shuffle(bufferedSamples, new Random(23));
+
+        reset();
     }
 
-    Collections.shuffle(bufferedSamples, new Random(23));
+    @Override
+    public T read() throws IOException {
 
-    reset();
-  }
+        if (sampleIt.hasNext()) {
+            return sampleIt.next();
+        }
 
-  @Override
-  public T read() throws IOException {
-
-    if (sampleIt.hasNext()) {
-      return sampleIt.next();
+        return null;
     }
 
-    return null;
-  }
-
-  @Override
-  public void reset() throws IOException, UnsupportedOperationException {
-    sampleIt = bufferedSamples.iterator();
-  }
+    @Override
+    public void reset() throws IOException, UnsupportedOperationException {
+        sampleIt = bufferedSamples.iterator();
+    }
 }

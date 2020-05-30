@@ -17,12 +17,6 @@
 
 package opennlp.tools.ml.maxent;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import org.junit.Assert;
-import org.junit.Test;
-
 import opennlp.tools.ml.EventTrainer;
 import opennlp.tools.ml.TrainerFactory;
 import opennlp.tools.ml.model.AbstractModel;
@@ -30,50 +24,55 @@ import opennlp.tools.ml.model.Context;
 import opennlp.tools.ml.model.Event;
 import opennlp.tools.util.ObjectStream;
 import opennlp.tools.util.TrainingParameters;
+import org.junit.Assert;
+import org.junit.Test;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class GISTrainerTest {
 
-  @SuppressWarnings("unchecked")
-  @Test
-  public void testGaussianSmoothing() throws Exception {
-   
-    TrainingParameters params = new TrainingParameters();
-    params.put("Algorithm", "MAXENT");
-    params.put("DataIndexer", "OnePass");
-    params.put("Cutoff", 0);
-    params.put("Iterations", 5);
-    params.put("GaussianSmoothing", true);
+    @SuppressWarnings("unchecked")
+    @Test
+    public void testGaussianSmoothing() throws Exception {
 
-    Map<String, String> reportMap = new HashMap<>();
-    EventTrainer trainer = TrainerFactory.getEventTrainer(params, reportMap);
-    
-    ObjectStream<Event> eventStream = new FootballEventStream();
-    AbstractModel smoothedModel = (AbstractModel)trainer.train(eventStream);
-    Map<String, Context> predMap = (Map<String, Context>)smoothedModel.getDataStructures()[1];
+        TrainingParameters params = new TrainingParameters();
+        params.put("Algorithm", "MAXENT");
+        params.put("DataIndexer", "OnePass");
+        params.put("Cutoff", 0);
+        params.put("Iterations", 5);
+        params.put("GaussianSmoothing", true);
 
-    double[] nevilleFalseExpected = new double[] {-0.17,.10,0.05};
-    double[] nevilleTrueExpected = new double[] {0.080,-0.047,-0.080};
+        Map<String, String> reportMap = new HashMap<>();
+        EventTrainer trainer = TrainerFactory.getEventTrainer(params, reportMap);
 
-    String predicateToTest = "Neville=false";
-    Assert.assertArrayEquals(nevilleFalseExpected, predMap.get(predicateToTest).getParameters(), 0.01);
-    predicateToTest = "Neville=true";
-    Assert.assertArrayEquals(nevilleTrueExpected, predMap.get(predicateToTest).getParameters(), 0.001);
-    
-    eventStream.reset();
-    params.put("GaussianSmoothing", false);
-    trainer = TrainerFactory.getEventTrainer(params, reportMap);
-    AbstractModel unsmoothedModel = (AbstractModel)trainer.train(eventStream);
-    predMap = (Map<String, Context>)unsmoothedModel.getDataStructures()[1];
-    
-    nevilleFalseExpected = new double[] {-0.19,0.11,0.06};
-    nevilleTrueExpected = new double[] {0.081,-0.050,-0.084};
+        ObjectStream<Event> eventStream = new FootballEventStream();
+        AbstractModel smoothedModel = (AbstractModel) trainer.train(eventStream);
+        Map<String, Context> predMap = (Map<String, Context>) smoothedModel.getDataStructures()[1];
 
-    predicateToTest = "Neville=false";
-    Assert.assertArrayEquals(nevilleFalseExpected, predMap.get(predicateToTest).getParameters(), 0.01);
-    predicateToTest = "Neville=true";
-    Assert.assertArrayEquals(nevilleTrueExpected, predMap.get(predicateToTest).getParameters(), 0.001);
+        double[] nevilleFalseExpected = new double[]{-0.17, .10, 0.05};
+        double[] nevilleTrueExpected = new double[]{0.080, -0.047, -0.080};
 
-    eventStream.close();
-  }
-  
+        String predicateToTest = "Neville=false";
+        Assert.assertArrayEquals(nevilleFalseExpected, predMap.get(predicateToTest).getParameters(), 0.01);
+        predicateToTest = "Neville=true";
+        Assert.assertArrayEquals(nevilleTrueExpected, predMap.get(predicateToTest).getParameters(), 0.001);
+
+        eventStream.reset();
+        params.put("GaussianSmoothing", false);
+        trainer = TrainerFactory.getEventTrainer(params, reportMap);
+        AbstractModel unsmoothedModel = (AbstractModel) trainer.train(eventStream);
+        predMap = (Map<String, Context>) unsmoothedModel.getDataStructures()[1];
+
+        nevilleFalseExpected = new double[]{-0.19, 0.11, 0.06};
+        nevilleTrueExpected = new double[]{0.081, -0.050, -0.084};
+
+        predicateToTest = "Neville=false";
+        Assert.assertArrayEquals(nevilleFalseExpected, predMap.get(predicateToTest).getParameters(), 0.01);
+        predicateToTest = "Neville=true";
+        Assert.assertArrayEquals(nevilleTrueExpected, predMap.get(predicateToTest).getParameters(), 0.001);
+
+        eventStream.close();
+    }
+
 }

@@ -17,139 +17,139 @@
 
 package opennlp.tools.ml.naivebayes;
 
-import java.util.Map;
-
 import opennlp.tools.ml.model.AbstractModel;
 import opennlp.tools.ml.model.Context;
 import opennlp.tools.ml.model.EvalParameters;
+
+import java.util.Map;
 
 /**
  * Class implementing the multinomial Naive Bayes classifier model.
  */
 public class NaiveBayesModel extends AbstractModel {
 
-  protected double[] outcomeTotals;
-  protected long vocabulary;
+    protected double[] outcomeTotals;
+    protected long vocabulary;
 
-  NaiveBayesModel(Context[] params, String[] predLabels, Map<String, Context> pmap,
-                         String[] outcomeNames) {
-    super(params, predLabels, pmap, outcomeNames);
-    outcomeTotals = initOutcomeTotals(outcomeNames, params);
-    this.evalParams = new NaiveBayesEvalParameters(params, outcomeNames.length,
-        outcomeTotals, predLabels.length);
-    modelType = ModelType.NaiveBayes;
-  }
-
-  public NaiveBayesModel(Context[] params, String[] predLabels, String[] outcomeNames) {
-    super(params, predLabels, outcomeNames);
-    outcomeTotals = initOutcomeTotals(outcomeNames, params);
-    this.evalParams = new NaiveBayesEvalParameters(params, outcomeNames.length,
-        outcomeTotals, predLabels.length);
-    modelType = ModelType.NaiveBayes;
-  }
-
-  protected double[] initOutcomeTotals(String[] outcomeNames, Context[] params) {
-    double[] outcomeTotals = new double[outcomeNames.length];
-    for (int i = 0; i < params.length; ++i) {
-      Context context = params[i];
-      for (int j = 0; j < context.getOutcomes().length; ++j) {
-        int outcome = context.getOutcomes()[j];
-        double count = context.getParameters()[j];
-        outcomeTotals[outcome] += count;
-      }
+    NaiveBayesModel(Context[] params, String[] predLabels, Map<String, Context> pmap,
+                    String[] outcomeNames) {
+        super(params, predLabels, pmap, outcomeNames);
+        outcomeTotals = initOutcomeTotals(outcomeNames, params);
+        this.evalParams = new NaiveBayesEvalParameters(params, outcomeNames.length,
+                outcomeTotals, predLabels.length);
+        modelType = ModelType.NaiveBayes;
     }
-    return outcomeTotals;
-  }
 
-  public double[] eval(String[] context) {
-    return eval(context, new double[evalParams.getNumOutcomes()]);
-  }
-
-  public double[] eval(String[] context, float[] values) {
-    return eval(context, values, new double[evalParams.getNumOutcomes()]);
-  }
-
-  public double[] eval(String[] context, double[] probs) {
-    return eval(context, null, probs);
-  }
-
-  public double[] eval(String[] context, float[] values, double[] outsums) {
-    Context[] scontexts = new Context[context.length];
-    java.util.Arrays.fill(outsums, 0);
-    for (int i = 0; i < context.length; i++) {
-      scontexts[i] = pmap.get(context[i]);
+    public NaiveBayesModel(Context[] params, String[] predLabels, String[] outcomeNames) {
+        super(params, predLabels, outcomeNames);
+        outcomeTotals = initOutcomeTotals(outcomeNames, params);
+        this.evalParams = new NaiveBayesEvalParameters(params, outcomeNames.length,
+                outcomeTotals, predLabels.length);
+        modelType = ModelType.NaiveBayes;
     }
-    return eval(scontexts, values, outsums, evalParams, true);
-  }
 
-  public static double[] eval(int[] context, double[] prior, EvalParameters model) {
-    return eval(context, null, prior, model, true);
-  }
+    public static double[] eval(int[] context, double[] prior, EvalParameters model) {
+        return eval(context, null, prior, model, true);
+    }
 
-  static double[] eval(Context[] context, float[] values, double[] prior,
-                       EvalParameters model, boolean normalize) {
-    Probabilities<Integer> probabilities = new LogProbabilities<>();
-    double[] outcomeTotals = model instanceof NaiveBayesEvalParameters
-        ? ((NaiveBayesEvalParameters) model).getOutcomeTotals() : new double[prior.length];
-    long vocabulary = model instanceof NaiveBayesEvalParameters
-        ? ((NaiveBayesEvalParameters) model).getVocabulary() : 0;
-    double[] activeParameters;
-    int[] activeOutcomes;
-    double value = 1;
-    for (int ci = 0; ci < context.length; ci++) {
-      if (context[ci] != null) {
-        Context predParams = context[ci];
-        activeOutcomes = predParams.getOutcomes();
-        activeParameters = predParams.getParameters();
-        if (values != null) {
-          value = values[ci];
+    static double[] eval(Context[] context, float[] values, double[] prior,
+                         EvalParameters model, boolean normalize) {
+        Probabilities<Integer> probabilities = new LogProbabilities<>();
+        double[] outcomeTotals = model instanceof NaiveBayesEvalParameters
+                ? ((NaiveBayesEvalParameters) model).getOutcomeTotals() : new double[prior.length];
+        long vocabulary = model instanceof NaiveBayesEvalParameters
+                ? ((NaiveBayesEvalParameters) model).getVocabulary() : 0;
+        double[] activeParameters;
+        int[] activeOutcomes;
+        double value = 1;
+        for (int ci = 0; ci < context.length; ci++) {
+            if (context[ci] != null) {
+                Context predParams = context[ci];
+                activeOutcomes = predParams.getOutcomes();
+                activeParameters = predParams.getParameters();
+                if (values != null) {
+                    value = values[ci];
+                }
+                int ai = 0;
+                for (int i = 0; i < outcomeTotals.length && ai < activeOutcomes.length; ++i) {
+                    int oid = activeOutcomes[ai];
+                    double numerator = oid == i ? activeParameters[ai++] * value : 0;
+                    double denominator = outcomeTotals[i];
+                    probabilities.addIn(i, getProbability(numerator, denominator, vocabulary, true), 1);
+                }
+            }
         }
-        int ai = 0;
-        for (int i = 0; i < outcomeTotals.length && ai < activeOutcomes.length; ++i) {
-          int oid = activeOutcomes[ai];
-          double numerator = oid == i ? activeParameters[ai++] * value : 0;
-          double denominator = outcomeTotals[i];
-          probabilities.addIn(i, getProbability(numerator, denominator, vocabulary, true), 1);
+        double total = 0;
+        for (int i = 0; i < outcomeTotals.length; ++i) {
+            total += outcomeTotals[i];
         }
-      }
-    }
-    double total = 0;
-    for (int i = 0; i < outcomeTotals.length; ++i) {
-      total += outcomeTotals[i];
-    }
-    for (int i = 0; i < outcomeTotals.length; ++i) {
-      double numerator = outcomeTotals[i];
-      probabilities.addIn(i, numerator / total, 1);
-    }
-    for (int i = 0; i < outcomeTotals.length; ++i) {
-      prior[i] = probabilities.get(i);
-    }
-    return prior;
-  }
-
-  static double[] eval(int[] context, float[] values, double[] prior,
-                              EvalParameters model, boolean normalize) {
-    Context[] scontexts = new Context[context.length];
-    for (int i = 0; i < context.length; i++) {
-      scontexts[i] = model.getParams()[context[i]];
+        for (int i = 0; i < outcomeTotals.length; ++i) {
+            double numerator = outcomeTotals[i];
+            probabilities.addIn(i, numerator / total, 1);
+        }
+        for (int i = 0; i < outcomeTotals.length; ++i) {
+            prior[i] = probabilities.get(i);
+        }
+        return prior;
     }
 
-    return eval(scontexts, values, prior, model, normalize);
-  }
+    static double[] eval(int[] context, float[] values, double[] prior,
+                         EvalParameters model, boolean normalize) {
+        Context[] scontexts = new Context[context.length];
+        for (int i = 0; i < context.length; i++) {
+            scontexts[i] = model.getParams()[context[i]];
+        }
 
-  private static double getProbability(double numerator, double denominator,
-                                       double vocabulary, boolean isSmoothed) {
-    if (isSmoothed)
-      return getSmoothedProbability(numerator, denominator, vocabulary);
-    else if (denominator == 0 || denominator < Double.MIN_VALUE)
-      return 0;
-    else
-      return 1.0 * numerator / denominator;
-  }
+        return eval(scontexts, values, prior, model, normalize);
+    }
 
-  private static double getSmoothedProbability(double numerator, double denominator, double vocabulary) {
-    final double delta = 0.05; // Lidstone smoothing
+    private static double getProbability(double numerator, double denominator,
+                                         double vocabulary, boolean isSmoothed) {
+        if (isSmoothed)
+            return getSmoothedProbability(numerator, denominator, vocabulary);
+        else if (denominator == 0 || denominator < Double.MIN_VALUE)
+            return 0;
+        else
+            return 1.0 * numerator / denominator;
+    }
 
-    return 1.0 * (numerator + delta) / (denominator + delta * vocabulary);
-  }
+    private static double getSmoothedProbability(double numerator, double denominator, double vocabulary) {
+        final double delta = 0.05; // Lidstone smoothing
+
+        return 1.0 * (numerator + delta) / (denominator + delta * vocabulary);
+    }
+
+    protected double[] initOutcomeTotals(String[] outcomeNames, Context[] params) {
+        double[] outcomeTotals = new double[outcomeNames.length];
+        for (int i = 0; i < params.length; ++i) {
+            Context context = params[i];
+            for (int j = 0; j < context.getOutcomes().length; ++j) {
+                int outcome = context.getOutcomes()[j];
+                double count = context.getParameters()[j];
+                outcomeTotals[outcome] += count;
+            }
+        }
+        return outcomeTotals;
+    }
+
+    public double[] eval(String[] context) {
+        return eval(context, new double[evalParams.getNumOutcomes()]);
+    }
+
+    public double[] eval(String[] context, float[] values) {
+        return eval(context, values, new double[evalParams.getNumOutcomes()]);
+    }
+
+    public double[] eval(String[] context, double[] probs) {
+        return eval(context, null, probs);
+    }
+
+    public double[] eval(String[] context, float[] values, double[] outsums) {
+        Context[] scontexts = new Context[context.length];
+        java.util.Arrays.fill(outsums, 0);
+        for (int i = 0; i < context.length; i++) {
+            scontexts[i] = pmap.get(context[i]);
+        }
+        return eval(scontexts, values, outsums, evalParams, true);
+    }
 }

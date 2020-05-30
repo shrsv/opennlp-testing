@@ -17,38 +17,38 @@
 
 package opennlp.tools.formats.convert;
 
-import java.io.IOException;
-import java.util.Objects;
-
 import opennlp.tools.postag.POSSample;
 import opennlp.tools.tokenize.Detokenizer;
 import opennlp.tools.tokenize.TokenSample;
 import opennlp.tools.util.FilterObjectStream;
 import opennlp.tools.util.ObjectStream;
 
+import java.io.IOException;
+import java.util.Objects;
+
 /**
  * <b>Note:</b> Do not use this class, internal use only!
  */
 public class POSToTokenSampleStream extends FilterObjectStream<POSSample, TokenSample> {
 
-  private final Detokenizer detokenizer;
+    private final Detokenizer detokenizer;
 
-  public POSToTokenSampleStream(Detokenizer detokenizer, ObjectStream<POSSample> samples) {
-    super(samples);
+    public POSToTokenSampleStream(Detokenizer detokenizer, ObjectStream<POSSample> samples) {
+        super(samples);
 
-    this.detokenizer = Objects.requireNonNull(detokenizer, "detokenizer must not be null!");
-  }
-
-  public TokenSample read() throws IOException {
-
-    POSSample posSample = samples.read();
-
-    TokenSample tokenSample = null;
-
-    if (posSample != null ) {
-      tokenSample = new TokenSample(detokenizer, posSample.getSentence());
+        this.detokenizer = Objects.requireNonNull(detokenizer, "detokenizer must not be null!");
     }
 
-    return tokenSample;
-  }
+    public TokenSample read() throws IOException {
+
+        POSSample posSample = samples.read();
+
+        TokenSample tokenSample = null;
+
+        if (posSample != null) {
+            tokenSample = new TokenSample(detokenizer, posSample.getSentence());
+        }
+
+        return tokenSample;
+    }
 }

@@ -17,11 +17,11 @@
 
 package opennlp.tools.cmdline.namefind;
 
-import java.io.IOException;
-import java.io.InputStream;
-
 import opennlp.tools.cmdline.ModelLoader;
 import opennlp.tools.namefind.TokenNameFinderModel;
+
+import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * Loads a Token Name Finder Model for the command line tools.
@@ -30,13 +30,13 @@ import opennlp.tools.namefind.TokenNameFinderModel;
  */
 public final class TokenNameFinderModelLoader extends ModelLoader<TokenNameFinderModel> {
 
-  public TokenNameFinderModelLoader() {
-    super("Token Name Finder");
-  }
+    public TokenNameFinderModelLoader() {
+        super("Token Name Finder");
+    }
 
-  @Override
-  protected TokenNameFinderModel loadModel(InputStream modelIn) throws IOException {
-    return new TokenNameFinderModel(modelIn);
-  }
+    @Override
+    protected TokenNameFinderModel loadModel(InputStream modelIn) throws IOException {
+        return new TokenNameFinderModel(modelIn);
+    }
 
 }

@@ -21,23 +21,23 @@ import java.util.Collection;
 import java.util.Iterator;
 
 public class CollectionObjectStream<E> implements ObjectStream<E> {
-  private Collection<E> collection;
+    private Collection<E> collection;
 
-  private Iterator<E> iterator;
+    private Iterator<E> iterator;
 
-  public CollectionObjectStream(Collection<E> collection) {
-    this.collection = collection;
-    reset();
-  }
+    public CollectionObjectStream(Collection<E> collection) {
+        this.collection = collection;
+        reset();
+    }
 
-  public E read() {
-    return iterator.hasNext() ? iterator.next() : null;
-  }
+    public E read() {
+        return iterator.hasNext() ? iterator.next() : null;
+    }
 
-  public void reset() {
-    this.iterator = collection.iterator();
-  }
+    public void reset() {
+        this.iterator = collection.iterator();
+    }
 
-  public void close() {
-  }
+    public void close() {
+    }
 }

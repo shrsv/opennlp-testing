@@ -22,11 +22,11 @@ import org.junit.Test;
 
 public class NumberCharSequenceNormalizerTest {
 
-  public NumberCharSequenceNormalizer normalizer = NumberCharSequenceNormalizer.getInstance();
+    public NumberCharSequenceNormalizer normalizer = NumberCharSequenceNormalizer.getInstance();
 
 
-  @Test
-  public void normalize() throws Exception {
-    Assert.assertEquals("absc  ,  abcd", normalizer.normalize("absc 123,0123 abcd"));
-  }
+    @Test
+    public void normalize() throws Exception {
+        Assert.assertEquals("absc  ,  abcd", normalizer.normalize("absc 123,0123 abcd"));
+    }
 }

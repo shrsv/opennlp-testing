@@ -17,63 +17,58 @@
 
 package opennlp.tools.tokenize;
 
+import opennlp.tools.formats.ResourceAsStreamFactory;
+import opennlp.tools.util.*;
+
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
-
-import opennlp.tools.formats.ResourceAsStreamFactory;
-import opennlp.tools.util.CollectionObjectStream;
-import opennlp.tools.util.InputStreamFactory;
-import opennlp.tools.util.ObjectStream;
-import opennlp.tools.util.PlainTextByLineStream;
-import opennlp.tools.util.Span;
-import opennlp.tools.util.TrainingParameters;
 
 /**
  * Utility class for testing the {@link Tokenizer}.
  */
 public class TokenizerTestUtil {
 
-  static TokenizerModel createSimpleMaxentTokenModel() throws IOException {
-    List<TokenSample> samples = new ArrayList<>();
+    static TokenizerModel createSimpleMaxentTokenModel() throws IOException {
+        List<TokenSample> samples = new ArrayList<>();
 
-    samples.add(new TokenSample("year", new Span[]{new Span(0, 4)}));
-    samples.add(new TokenSample("year,", new Span[]{
-        new Span(0, 4),
-        new Span(4, 5)}));
-    samples.add(new TokenSample("it,", new Span[]{
-        new Span(0, 2),
-        new Span(2, 3)}));
-    samples.add(new TokenSample("it", new Span[]{
-        new Span(0, 2)}));
-    samples.add(new TokenSample("yes", new Span[]{
-        new Span(0, 3)}));
-    samples.add(new TokenSample("yes,", new Span[]{
-        new Span(0, 3),
-        new Span(3, 4)}));
+        samples.add(new TokenSample("year", new Span[]{new Span(0, 4)}));
+        samples.add(new TokenSample("year,", new Span[]{
+                new Span(0, 4),
+                new Span(4, 5)}));
+        samples.add(new TokenSample("it,", new Span[]{
+                new Span(0, 2),
+                new Span(2, 3)}));
+        samples.add(new TokenSample("it", new Span[]{
+                new Span(0, 2)}));
+        samples.add(new TokenSample("yes", new Span[]{
+                new Span(0, 3)}));
+        samples.add(new TokenSample("yes,", new Span[]{
+                new Span(0, 3),
+                new Span(3, 4)}));
 
-    TrainingParameters mlParams = new TrainingParameters();
-    mlParams.put(TrainingParameters.ITERATIONS_PARAM, 100);
-    mlParams.put(TrainingParameters.CUTOFF_PARAM, 0);
+        TrainingParameters mlParams = new TrainingParameters();
+        mlParams.put(TrainingParameters.ITERATIONS_PARAM, 100);
+        mlParams.put(TrainingParameters.CUTOFF_PARAM, 0);
 
-    return TokenizerME.train(new CollectionObjectStream<>(samples),
-      TokenizerFactory.create(null, "eng", null, true, null), mlParams);
-  }
+        return TokenizerME.train(new CollectionObjectStream<>(samples),
+                TokenizerFactory.create(null, "eng", null, true, null), mlParams);
+    }
 
-  static TokenizerModel createMaxentTokenModel() throws IOException {
+    static TokenizerModel createMaxentTokenModel() throws IOException {
 
-    InputStreamFactory trainDataIn = new ResourceAsStreamFactory(
-        TokenizerModel.class, "/opennlp/tools/tokenize/token.train");
+        InputStreamFactory trainDataIn = new ResourceAsStreamFactory(
+                TokenizerModel.class, "/opennlp/tools/tokenize/token.train");
 
-    ObjectStream<TokenSample> samples = new TokenSampleStream(
-        new PlainTextByLineStream(trainDataIn, StandardCharsets.UTF_8));
+        ObjectStream<TokenSample> samples = new TokenSampleStream(
+                new PlainTextByLineStream(trainDataIn, StandardCharsets.UTF_8));
 
-    TrainingParameters mlParams = new TrainingParameters();
-    mlParams.put(TrainingParameters.ITERATIONS_PARAM, 100);
-    mlParams.put(TrainingParameters.CUTOFF_PARAM, 0);
+        TrainingParameters mlParams = new TrainingParameters();
+        mlParams.put(TrainingParameters.ITERATIONS_PARAM, 100);
+        mlParams.put(TrainingParameters.CUTOFF_PARAM, 0);
 
-    return TokenizerME.train(samples, TokenizerFactory.create(null, "eng", null, true, null), mlParams);
-  }
+        return TokenizerME.train(samples, TokenizerFactory.create(null, "eng", null, true, null), mlParams);
+    }
 
 }

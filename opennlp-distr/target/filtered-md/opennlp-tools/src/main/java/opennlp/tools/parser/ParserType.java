@@ -18,18 +18,16 @@
 package opennlp.tools.parser;
 
 public enum ParserType {
-  CHUNKING,
-  TREEINSERT;
+    CHUNKING,
+    TREEINSERT;
 
-  public static ParserType parse(String type) {
-    if (ParserType.CHUNKING.name().equals(type)) {
-      return ParserType.CHUNKING;
+    public static ParserType parse(String type) {
+        if (ParserType.CHUNKING.name().equals(type)) {
+            return ParserType.CHUNKING;
+        } else if (ParserType.TREEINSERT.name().equals(type)) {
+            return ParserType.TREEINSERT;
+        } else {
+            return null;
+        }
     }
-    else if (ParserType.TREEINSERT.name().equals(type)) {
-      return ParserType.TREEINSERT;
-    }
-    else {
-      return null;
-    }
-  }
 }

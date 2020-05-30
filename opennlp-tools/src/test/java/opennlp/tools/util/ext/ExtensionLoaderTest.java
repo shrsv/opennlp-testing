@@ -22,22 +22,22 @@ import org.junit.Test;
 
 public class ExtensionLoaderTest {
 
-  // define an interface here
-  interface TestStringGenerator {
-    String generateTestString();
-  }
-
-  static class TestStringGeneratorImpl implements TestStringGenerator {
-    public String generateTestString() {
-      return "test";
+    @Test
+    public void testLoadingStringGenerator() throws ClassNotFoundException {
+        TestStringGenerator g = ExtensionLoader.instantiateExtension(TestStringGenerator.class,
+                TestStringGeneratorImpl.class.getName());
+        Assert.assertEquals("test", g.generateTestString());
     }
-  }
 
-  @Test
-  public void testLoadingStringGenerator() throws ClassNotFoundException {
-    TestStringGenerator g = ExtensionLoader.instantiateExtension(TestStringGenerator.class,
-        TestStringGeneratorImpl.class.getName());
-    Assert.assertEquals("test", g.generateTestString());
-  }
+    // define an interface here
+    interface TestStringGenerator {
+        String generateTestString();
+    }
+
+    static class TestStringGeneratorImpl implements TestStringGenerator {
+        public String generateTestString() {
+            return "test";
+        }
+    }
 
 }

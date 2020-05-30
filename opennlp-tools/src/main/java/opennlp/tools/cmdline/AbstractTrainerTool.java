@@ -17,38 +17,38 @@
 
 package opennlp.tools.cmdline;
 
-import java.io.IOException;
-
 import opennlp.tools.util.InsufficientTrainingDataException;
 import opennlp.tools.util.TrainingParameters;
+
+import java.io.IOException;
 
 /**
  * Base class for trainer tools.
  */
 public class AbstractTrainerTool<T, P> extends AbstractEvaluatorTool<T, P> {
 
-  protected TrainingParameters mlParams;
+    protected TrainingParameters mlParams;
 
-  /**
-   * Constructor with type parameters.
-   *
-   * @param sampleType class of the template parameter
-   * @param params     interface with parameters
-   */
-  protected AbstractTrainerTool(Class<T> sampleType, Class<P> params) {
-    super(sampleType, params);
-  }
-
-  protected TerminateToolException createTerminationIOException(IOException e) {
-
-    if (e instanceof InsufficientTrainingDataException) {
-      return new TerminateToolException(-1, "\n\nERROR: Not enough training data\n" +
-          "The provided training data is not sufficient to create enough events to train a model.\n" +
-          "To resolve this error use more training data, if this doesn't help there might\n" +
-          "be some fundamental problem with the training data itself.");
+    /**
+     * Constructor with type parameters.
+     *
+     * @param sampleType class of the template parameter
+     * @param params     interface with parameters
+     */
+    protected AbstractTrainerTool(Class<T> sampleType, Class<P> params) {
+        super(sampleType, params);
     }
 
-    return new TerminateToolException(-1, "IO error while reading training data or indexing data: " +
-        e.getMessage(), e);
-  }
+    protected TerminateToolException createTerminationIOException(IOException e) {
+
+        if (e instanceof InsufficientTrainingDataException) {
+            return new TerminateToolException(-1, "\n\nERROR: Not enough training data\n" +
+                    "The provided training data is not sufficient to create enough events to train a model.\n" +
+                    "To resolve this error use more training data, if this doesn't help there might\n" +
+                    "be some fundamental problem with the training data itself.");
+        }
+
+        return new TerminateToolException(-1, "IO error while reading training data or indexing data: " +
+                e.getMessage(), e);
+    }
 }

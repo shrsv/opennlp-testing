@@ -17,23 +17,22 @@
 
 package opennlp.tools.ml.maxent.io;
 
-import java.io.DataInputStream;
-
 import opennlp.tools.ml.model.BinaryFileDataReader;
+
+import java.io.DataInputStream;
 
 /**
  * A reader for quasi-newton models stored in binary format.
  */
 public class BinaryQNModelReader extends QNModelReader {
 
-  /**
-   * Constructor which directly instantiates the DataInputStream containing the
-   * model contents.
-   *
-   * @param dis
-   *          The DataInputStream containing the model information.
-   */
-  public BinaryQNModelReader(DataInputStream dis) {
-    super(new BinaryFileDataReader(dis));
-  }
+    /**
+     * Constructor which directly instantiates the DataInputStream containing the
+     * model contents.
+     *
+     * @param dis The DataInputStream containing the model information.
+     */
+    public BinaryQNModelReader(DataInputStream dis) {
+        super(new BinaryFileDataReader(dis));
+    }
 }

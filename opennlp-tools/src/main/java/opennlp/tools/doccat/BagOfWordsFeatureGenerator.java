@@ -18,45 +18,44 @@
 
 package opennlp.tools.doccat;
 
+import opennlp.tools.util.featuregen.StringPattern;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Objects;
-
-import opennlp.tools.util.featuregen.StringPattern;
 
 /**
  * Generates a feature for each word in a document.
  */
 public class BagOfWordsFeatureGenerator implements FeatureGenerator {
 
-  private final boolean useOnlyAllLetterTokens;
+    private final boolean useOnlyAllLetterTokens;
 
-  public BagOfWordsFeatureGenerator() {
-    this(false);
-  }
-
-  BagOfWordsFeatureGenerator(boolean useOnlyAllLetterTokens) {
-    this.useOnlyAllLetterTokens = useOnlyAllLetterTokens;
-  }
-
-  @Override
-  public Collection<String> extractFeatures(String[] text, Map<String, Object> extraInformation) {
-    Objects.requireNonNull(text, "text must not be null");
-    Collection<String> bagOfWords = new ArrayList<>(text.length);
-
-    for (String word : text) {
-      if (useOnlyAllLetterTokens) {
-        StringPattern pattern = StringPattern.recognize(word);
-
-        if (pattern.isAllLetter())
-          bagOfWords.add("bow=" + word);
-      }
-      else {
-        bagOfWords.add("bow=" + word);
-      }
+    public BagOfWordsFeatureGenerator() {
+        this(false);
     }
 
-    return bagOfWords;
-  }
+    BagOfWordsFeatureGenerator(boolean useOnlyAllLetterTokens) {
+        this.useOnlyAllLetterTokens = useOnlyAllLetterTokens;
+    }
+
+    @Override
+    public Collection<String> extractFeatures(String[] text, Map<String, Object> extraInformation) {
+        Objects.requireNonNull(text, "text must not be null");
+        Collection<String> bagOfWords = new ArrayList<>(text.length);
+
+        for (String word : text) {
+            if (useOnlyAllLetterTokens) {
+                StringPattern pattern = StringPattern.recognize(word);
+
+                if (pattern.isAllLetter())
+                    bagOfWords.add("bow=" + word);
+            } else {
+                bagOfWords.add("bow=" + word);
+            }
+        }
+
+        return bagOfWords;
+    }
 }

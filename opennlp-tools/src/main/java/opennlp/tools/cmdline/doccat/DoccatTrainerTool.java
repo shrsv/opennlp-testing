@@ -17,82 +17,76 @@
 
 package opennlp.tools.cmdline.doccat;
 
-import java.io.File;
-import java.io.IOException;
-
 import opennlp.tools.cmdline.AbstractTrainerTool;
 import opennlp.tools.cmdline.CmdLineUtil;
 import opennlp.tools.cmdline.doccat.DoccatTrainerTool.TrainerToolParams;
 import opennlp.tools.cmdline.params.TrainingToolParams;
-import opennlp.tools.doccat.BagOfWordsFeatureGenerator;
-import opennlp.tools.doccat.DoccatFactory;
-import opennlp.tools.doccat.DoccatModel;
-import opennlp.tools.doccat.DocumentCategorizerME;
-import opennlp.tools.doccat.DocumentSample;
-import opennlp.tools.doccat.FeatureGenerator;
+import opennlp.tools.doccat.*;
 import opennlp.tools.util.ext.ExtensionLoader;
 import opennlp.tools.util.model.ModelUtil;
 
+import java.io.File;
+import java.io.IOException;
+
 public class DoccatTrainerTool
-    extends AbstractTrainerTool<DocumentSample, TrainerToolParams> {
+        extends AbstractTrainerTool<DocumentSample, TrainerToolParams> {
 
-  interface TrainerToolParams extends TrainingParams, TrainingToolParams {
-  }
-
-  public DoccatTrainerTool() {
-    super(DocumentSample.class, TrainerToolParams.class);
-  }
-
-  @Override
-  public String getShortDescription() {
-    return "trainer for the learnable document categorizer";
-  }
-
-  @Override
-  public void run(String format, String[] args) {
-    super.run(format, args);
-
-    mlParams = CmdLineUtil.loadTrainingParameters(params.getParams(), false);
-    if (mlParams == null) {
-      mlParams = ModelUtil.createDefaultTrainingParameters();
+    public DoccatTrainerTool() {
+        super(DocumentSample.class, TrainerToolParams.class);
     }
 
-    File modelOutFile = params.getModel();
-
-    CmdLineUtil.checkOutputFile("document categorizer model", modelOutFile);
-
-    FeatureGenerator[] featureGenerators = createFeatureGenerators(params
-        .getFeatureGenerators());
-
-    DoccatModel model;
-    try {
-      DoccatFactory factory = DoccatFactory.create(params.getFactory(), featureGenerators);
-      model = DocumentCategorizerME.train(params.getLang(), sampleStream,
-          mlParams, factory);
-    } catch (IOException e) {
-      throw createTerminationIOException(e);
-    }
-    finally {
-      try {
-        sampleStream.close();
-      } catch (IOException e) {
-        // sorry that this can fail
-      }
+    static FeatureGenerator[] createFeatureGenerators(String featureGeneratorsNames) {
+        if (featureGeneratorsNames == null) {
+            return new FeatureGenerator[]{new BagOfWordsFeatureGenerator()};
+        }
+        String[] classes = featureGeneratorsNames.split(",");
+        FeatureGenerator[] featureGenerators = new FeatureGenerator[classes.length];
+        for (int i = 0; i < featureGenerators.length; i++) {
+            featureGenerators[i] = ExtensionLoader.instantiateExtension(
+                    FeatureGenerator.class, classes[i]);
+        }
+        return featureGenerators;
     }
 
-    CmdLineUtil.writeModel("document categorizer", modelOutFile, model);
-  }
+    @Override
+    public String getShortDescription() {
+        return "trainer for the learnable document categorizer";
+    }
 
-  static FeatureGenerator[] createFeatureGenerators(String featureGeneratorsNames) {
-    if (featureGeneratorsNames == null) {
-      return new FeatureGenerator[]{new BagOfWordsFeatureGenerator()};
+    @Override
+    public void run(String format, String[] args) {
+        super.run(format, args);
+
+        mlParams = CmdLineUtil.loadTrainingParameters(params.getParams(), false);
+        if (mlParams == null) {
+            mlParams = ModelUtil.createDefaultTrainingParameters();
+        }
+
+        File modelOutFile = params.getModel();
+
+        CmdLineUtil.checkOutputFile("document categorizer model", modelOutFile);
+
+        FeatureGenerator[] featureGenerators = createFeatureGenerators(params
+                .getFeatureGenerators());
+
+        DoccatModel model;
+        try {
+            DoccatFactory factory = DoccatFactory.create(params.getFactory(), featureGenerators);
+            model = DocumentCategorizerME.train(params.getLang(), sampleStream,
+                    mlParams, factory);
+        } catch (IOException e) {
+            throw createTerminationIOException(e);
+        } finally {
+            try {
+                sampleStream.close();
+            } catch (IOException e) {
+                // sorry that this can fail
+            }
+        }
+
+        CmdLineUtil.writeModel("document categorizer", modelOutFile, model);
     }
-    String[] classes = featureGeneratorsNames.split(",");
-    FeatureGenerator[] featureGenerators = new FeatureGenerator[classes.length];
-    for (int i = 0; i < featureGenerators.length; i++) {
-      featureGenerators[i] = ExtensionLoader.instantiateExtension(
-          FeatureGenerator.class, classes[i]);
+
+    interface TrainerToolParams extends TrainingParams, TrainingToolParams {
     }
-    return featureGenerators;
-  }
 }

@@ -25,42 +25,40 @@ import opennlp.tools.util.Span;
  */
 public interface Chunker {
 
-  /**
-   * Generates chunk tags for the given sequence returning the result in an array.
-   *
-   * @param toks an array of the tokens or words of the sequence.
-   * @param tags an array of the pos tags of the sequence.
-   *
-   * @return an array of chunk tags for each token in the sequence.
-   */
-  String[] chunk(String[] toks, String[] tags);
+    /**
+     * Generates chunk tags for the given sequence returning the result in an array.
+     *
+     * @param toks an array of the tokens or words of the sequence.
+     * @param tags an array of the pos tags of the sequence.
+     * @return an array of chunk tags for each token in the sequence.
+     */
+    String[] chunk(String[] toks, String[] tags);
 
-  /**
-   * Generates tagged chunk spans for the given sequence returning the result in a span array.
-   *
-   * @param toks an array of the tokens or words of the sequence.
-   * @param tags an array of the pos tags of the sequence.
-   *
-   * @return an array of spans with chunk tags for each chunk in the sequence.
-   */
-  Span[] chunkAsSpans(String[] toks, String[] tags);
+    /**
+     * Generates tagged chunk spans for the given sequence returning the result in a span array.
+     *
+     * @param toks an array of the tokens or words of the sequence.
+     * @param tags an array of the pos tags of the sequence.
+     * @return an array of spans with chunk tags for each chunk in the sequence.
+     */
+    Span[] chunkAsSpans(String[] toks, String[] tags);
 
-  /**
-   * Returns the top k chunk sequences for the specified sentence with the specified pos-tags
-   * @param sentence The tokens of the sentence.
-   * @param tags The pos-tags for the specified sentence.
-   *
-   * @return the top k chunk sequences for the specified sentence.
-   */
-  Sequence[] topKSequences(String[] sentence, String[] tags);
+    /**
+     * Returns the top k chunk sequences for the specified sentence with the specified pos-tags
+     *
+     * @param sentence The tokens of the sentence.
+     * @param tags     The pos-tags for the specified sentence.
+     * @return the top k chunk sequences for the specified sentence.
+     */
+    Sequence[] topKSequences(String[] sentence, String[] tags);
 
-  /**
-   * Returns the top k chunk sequences for the specified sentence with the specified pos-tags
-   * @param sentence The tokens of the sentence.
-   * @param tags The pos-tags for the specified sentence.
-   * @param minSequenceScore A lower bound on the score of a returned sequence.
-   *
-   * @return the top k chunk sequences for the specified sentence.
-   */
-  Sequence[] topKSequences(String[] sentence, String[] tags, double minSequenceScore);
+    /**
+     * Returns the top k chunk sequences for the specified sentence with the specified pos-tags
+     *
+     * @param sentence         The tokens of the sentence.
+     * @param tags             The pos-tags for the specified sentence.
+     * @param minSequenceScore A lower bound on the score of a returned sequence.
+     * @return the top k chunk sequences for the specified sentence.
+     */
+    Sequence[] topKSequences(String[] sentence, String[] tags, double minSequenceScore);
 }

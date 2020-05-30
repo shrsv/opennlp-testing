@@ -18,6 +18,6 @@
 package opennlp.tools.formats.conllu;
 
 public enum ConlluTagset {
-  U,
-  X
+    U,
+    X
 }

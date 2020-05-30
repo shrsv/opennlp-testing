@@ -21,20 +21,19 @@ import opennlp.tools.util.ObjectStream;
 
 public interface ObjectStreamFactory<T> {
 
-  /**
-   * Returns interface with parameters description.
-   *
-   * @param <P> interfaces which describes the parameters.
-   *
-   * @return interface with parameters description
-   */
-  <P> Class<P> getParameters();
+    /**
+     * Returns interface with parameters description.
+     *
+     * @param <P> interfaces which describes the parameters.
+     * @return interface with parameters description
+     */
+    <P> Class<P> getParameters();
 
-  /**
-   * Creates the <code>ObjectStream</code>.
-   *
-   * @param args arguments
-   * @return ObjectStream instance
-   */
-  ObjectStream<T> create(String[] args);
+    /**
+     * Creates the <code>ObjectStream</code>.
+     *
+     * @param args arguments
+     * @return ObjectStream instance
+     */
+    ObjectStream<T> create(String[] args);
 }

@@ -17,65 +17,64 @@
 
 package opennlp.tools.util.featuregen;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import org.w3c.dom.Element;
-
 import opennlp.tools.util.InvalidFormatException;
 import opennlp.tools.util.model.ArtifactSerializer;
+import org.w3c.dom.Element;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Generates Brown clustering features for current token.
  */
 public class BrownClusterTokenFeatureGeneratorFactory
-    extends GeneratorFactory.AbstractXmlFeatureGeneratorFactory
-    implements GeneratorFactory.XmlFeatureGeneratorFactory {
+        extends GeneratorFactory.AbstractXmlFeatureGeneratorFactory
+        implements GeneratorFactory.XmlFeatureGeneratorFactory {
 
-  public BrownClusterTokenFeatureGeneratorFactory() {
-    super();
-  }
-
-  @Deprecated // TODO: (OPENNLP-1174) just remove when back-compat is no longer needed
-  public AdaptiveFeatureGenerator create(Element generatorElement,
-             FeatureGeneratorResourceProvider resourceManager) throws InvalidFormatException {
-
-    String dictResourceKey = generatorElement.getAttribute("dict");
-
-    Object dictResource = resourceManager.getResource(dictResourceKey);
-
-
-    if (!(dictResource instanceof BrownCluster)) {
-      throw new InvalidFormatException("Not a BrownLexicon resource for key: " + dictResourceKey);
+    public BrownClusterTokenFeatureGeneratorFactory() {
+        super();
     }
 
-    return new BrownTokenFeatureGenerator((BrownCluster) dictResource);
-  }
-
-  @Deprecated // TODO: (OPENNLP-1174) just remove when back-compat is no longer needed
-  static void register(Map<String, GeneratorFactory.XmlFeatureGeneratorFactory> factoryMap) {
-    factoryMap.put("brownclustertoken", new BrownClusterTokenFeatureGeneratorFactory());
-  }
-
-  @Override
-  public AdaptiveFeatureGenerator create() throws InvalidFormatException {
-    // if resourceManager is null, we don't instantiate
-    if (resourceManager == null)
-      return null;
-
-    String dictResourceKey = getStr("dict");
-    Object dictResource = resourceManager.getResource(dictResourceKey);
-    if (!(dictResource instanceof BrownCluster)) {
-      throw new InvalidFormatException("Not a BrownLexicon resource for key: " + dictResourceKey);
+    @Deprecated // TODO: (OPENNLP-1174) just remove when back-compat is no longer needed
+    static void register(Map<String, GeneratorFactory.XmlFeatureGeneratorFactory> factoryMap) {
+        factoryMap.put("brownclustertoken", new BrownClusterTokenFeatureGeneratorFactory());
     }
 
-    return new BrownTokenFeatureGenerator((BrownCluster) dictResource);
-  }
+    @Deprecated // TODO: (OPENNLP-1174) just remove when back-compat is no longer needed
+    public AdaptiveFeatureGenerator create(Element generatorElement,
+                                           FeatureGeneratorResourceProvider resourceManager) throws InvalidFormatException {
 
-  @Override
-  public Map<String, ArtifactSerializer<?>> getArtifactSerializerMapping() throws InvalidFormatException {
-    Map<String, ArtifactSerializer<?>> mapping = new HashMap<>();
-    mapping.put(getStr("dict"), new BrownCluster.BrownClusterSerializer());
-    return mapping;
-  }
+        String dictResourceKey = generatorElement.getAttribute("dict");
+
+        Object dictResource = resourceManager.getResource(dictResourceKey);
+
+
+        if (!(dictResource instanceof BrownCluster)) {
+            throw new InvalidFormatException("Not a BrownLexicon resource for key: " + dictResourceKey);
+        }
+
+        return new BrownTokenFeatureGenerator((BrownCluster) dictResource);
+    }
+
+    @Override
+    public AdaptiveFeatureGenerator create() throws InvalidFormatException {
+        // if resourceManager is null, we don't instantiate
+        if (resourceManager == null)
+            return null;
+
+        String dictResourceKey = getStr("dict");
+        Object dictResource = resourceManager.getResource(dictResourceKey);
+        if (!(dictResource instanceof BrownCluster)) {
+            throw new InvalidFormatException("Not a BrownLexicon resource for key: " + dictResourceKey);
+        }
+
+        return new BrownTokenFeatureGenerator((BrownCluster) dictResource);
+    }
+
+    @Override
+    public Map<String, ArtifactSerializer<?>> getArtifactSerializerMapping() throws InvalidFormatException {
+        Map<String, ArtifactSerializer<?>> mapping = new HashMap<>();
+        mapping.put(getStr("dict"), new BrownCluster.BrownClusterSerializer());
+        return mapping;
+    }
 }

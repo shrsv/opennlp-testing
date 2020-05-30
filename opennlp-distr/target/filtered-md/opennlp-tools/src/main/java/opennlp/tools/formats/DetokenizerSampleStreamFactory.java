@@ -17,31 +17,31 @@
 
 package opennlp.tools.formats;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-
 import opennlp.tools.cmdline.TerminateToolException;
 import opennlp.tools.cmdline.params.DetokenizerParameter;
 import opennlp.tools.tokenize.DetokenizationDictionary;
 import opennlp.tools.tokenize.Detokenizer;
 import opennlp.tools.tokenize.DictionaryDetokenizer;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+
 /**
  * Base class for factories which need detokenizer.
  */
 public abstract class DetokenizerSampleStreamFactory<T> extends AbstractSampleStreamFactory<T> {
 
-  protected <P> DetokenizerSampleStreamFactory(Class<P> params) {
-    super(params);
-  }
-
-  protected Detokenizer createDetokenizer(DetokenizerParameter p) {
-    try {
-      return new DictionaryDetokenizer(new DetokenizationDictionary(
-          new FileInputStream(new File(p.getDetokenizer()))));
-    } catch (IOException e) {
-      throw new TerminateToolException(-1, "IO error while loading detokenizer dict: " + e.getMessage(), e);
+    protected <P> DetokenizerSampleStreamFactory(Class<P> params) {
+        super(params);
     }
-  }
+
+    protected Detokenizer createDetokenizer(DetokenizerParameter p) {
+        try {
+            return new DictionaryDetokenizer(new DetokenizationDictionary(
+                    new FileInputStream(new File(p.getDetokenizer()))));
+        } catch (IOException e) {
+            throw new TerminateToolException(-1, "IO error while loading detokenizer dict: " + e.getMessage(), e);
+        }
+    }
 }

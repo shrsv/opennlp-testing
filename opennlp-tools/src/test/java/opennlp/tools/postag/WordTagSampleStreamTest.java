@@ -17,49 +17,48 @@
 
 package opennlp.tools.postag;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-
+import opennlp.tools.util.CollectionObjectStream;
 import org.junit.Assert;
 import org.junit.Test;
 
-import opennlp.tools.util.CollectionObjectStream;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
 
 /**
  * Tests for the {@link WordTagSampleStream} class.
  */
 public class WordTagSampleStreamTest {
 
-  @Test
-  public void testParseSimpleSample() throws IOException {
+    @Test
+    public void testParseSimpleSample() throws IOException {
 
-    Collection<String> sampleString = new ArrayList<>(1);
-    sampleString.add("This_x1 is_x2 a_x3 test_x4 sentence_x5 ._x6");
+        Collection<String> sampleString = new ArrayList<>(1);
+        sampleString.add("This_x1 is_x2 a_x3 test_x4 sentence_x5 ._x6");
 
-    try (WordTagSampleStream stream =
-        new WordTagSampleStream(new CollectionObjectStream<>(sampleString))) {
-      POSSample sample = stream.read();
-      String[] words = sample.getSentence();
+        try (WordTagSampleStream stream =
+                     new WordTagSampleStream(new CollectionObjectStream<>(sampleString))) {
+            POSSample sample = stream.read();
+            String[] words = sample.getSentence();
 
-      Assert.assertEquals("This", words[0]);
-      Assert.assertEquals("is", words[1]);
-      Assert.assertEquals("a", words[2]);
-      Assert.assertEquals("test", words[3]);
-      Assert.assertEquals("sentence", words[4]);
-      Assert.assertEquals(".", words[5]);
+            Assert.assertEquals("This", words[0]);
+            Assert.assertEquals("is", words[1]);
+            Assert.assertEquals("a", words[2]);
+            Assert.assertEquals("test", words[3]);
+            Assert.assertEquals("sentence", words[4]);
+            Assert.assertEquals(".", words[5]);
 
-      String[] tags = sample.getTags();
-      Assert.assertEquals("x1", tags[0]);
-      Assert.assertEquals("x2", tags[1]);
-      Assert.assertEquals("x3", tags[2]);
-      Assert.assertEquals("x4", tags[3]);
-      Assert.assertEquals("x5", tags[4]);
-      Assert.assertEquals("x6", tags[5]);
+            String[] tags = sample.getTags();
+            Assert.assertEquals("x1", tags[0]);
+            Assert.assertEquals("x2", tags[1]);
+            Assert.assertEquals("x3", tags[2]);
+            Assert.assertEquals("x4", tags[3]);
+            Assert.assertEquals("x5", tags[4]);
+            Assert.assertEquals("x6", tags[5]);
 
-      Assert.assertNull(stream.read());
-      stream.reset();
-      Assert.assertNotNull(stream.read());
+            Assert.assertNull(stream.read());
+            stream.reset();
+            Assert.assertNotNull(stream.read());
+        }
     }
-  }
 }

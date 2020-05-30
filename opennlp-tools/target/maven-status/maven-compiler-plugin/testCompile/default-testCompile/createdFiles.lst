@@ -34,6 +34,7 @@ opennlp/tools/tokenize/TokenizerFactoryTest.class
 opennlp/tools/postag/DummyPOSTaggerFactory$DummyPOSContextGenerator.class
 opennlp/tools/ml/MockSequenceTrainer.class
 opennlp/tools/namefind/RegexNameFinderFactoryTest.class
+opennlp/tools/util/ParagraphStreamMockTest.class
 opennlp/tools/util/featuregen/PrefixFeatureGeneratorTest.class
 opennlp/tools/formats/muc/DocumentSplitterStreamTest.class
 opennlp/tools/postag/ConfigurablePOSContextGeneratorTest.class
@@ -199,6 +200,7 @@ opennlp/tools/parser/treeinsert/ParserTest.class
 opennlp/tools/tokenize/DummyTokenizerFactory$DummyDictionarySerializer.class
 opennlp/tools/cmdline/CLITest.class
 opennlp/tools/util/featuregen/TrigramNameFeatureGeneratorTest.class
+opennlp/tools/cmdline/CmdLineUtilTest.class
 opennlp/tools/langdetect/DummyFactory$UpperCaseNormalizer.class
 opennlp/tools/langdetect/LanguageDetectorFactoryTest.class
 opennlp/tools/sentdetect/SentenceDetectorEvaluatorTest$DummySD.class

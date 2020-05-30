@@ -18,92 +18,89 @@
 
 package opennlp.tools.util.eval;
 
+import opennlp.tools.util.ObjectStream;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import opennlp.tools.util.ObjectStream;
-
 /**
  * The {@link Evaluator} is an abstract base class for evaluators.
- *
+ * <p>
  * Evaluation results are the arithmetic mean of the
  * scores calculated for each reference sample.
  */
 public abstract class Evaluator<T> {
 
-  private List<EvaluationMonitor<T>> listeners;
+    private List<EvaluationMonitor<T>> listeners;
 
-  @SafeVarargs
-  public Evaluator(EvaluationMonitor<T>... aListeners) {
-    if (aListeners != null) {
-      List<EvaluationMonitor<T>> listenersList = new ArrayList<>(aListeners.length);
-      for (EvaluationMonitor<T> evaluationMonitor : aListeners) {
-        if (evaluationMonitor != null) {
-          listenersList.add(evaluationMonitor);
+    @SafeVarargs
+    public Evaluator(EvaluationMonitor<T>... aListeners) {
+        if (aListeners != null) {
+            List<EvaluationMonitor<T>> listenersList = new ArrayList<>(aListeners.length);
+            for (EvaluationMonitor<T> evaluationMonitor : aListeners) {
+                if (evaluationMonitor != null) {
+                    listenersList.add(evaluationMonitor);
+                }
+            }
+            listeners = Collections.unmodifiableList(listenersList);
+        } else {
+            listeners = Collections.emptyList();
         }
-      }
-      listeners = Collections.unmodifiableList(listenersList);
-    } else {
-      listeners = Collections.emptyList();
     }
-  }
 
-  /**
-   * Evaluates the given reference sample object.
-   *
-   * The implementation has to update the score after every invocation.
-   *
-   * @param reference the reference sample.
-   *
-   * @return the predicted sample
-   */
-  protected abstract T processSample(T reference);
+    /**
+     * Evaluates the given reference sample object.
+     * <p>
+     * The implementation has to update the score after every invocation.
+     *
+     * @param reference the reference sample.
+     * @return the predicted sample
+     */
+    protected abstract T processSample(T reference);
 
-  /**
-   * Evaluates the given reference object. The default implementation calls
-   * {@link Evaluator#processSample(Object)}
-   *
-   * <p>
-   * <b>note:</b> this method will be changed to private in the future.
-   * Implementations should override {@link Evaluator#processSample(Object)} instead.
-   * If this method is override, the implementation has to update the score
-   * after every invocation.
-   * </p>
-   *
-   * @param sample
-   *          the sample to be evaluated
-   */
-  public void evaluateSample(T sample) {
-    T predicted = processSample(sample);
-    if (!listeners.isEmpty()) {
-      if (sample.equals(predicted)) {
-        for (EvaluationMonitor<T> listener : listeners) {
-          listener.correctlyClassified(sample, predicted);
+    /**
+     * Evaluates the given reference object. The default implementation calls
+     * {@link Evaluator#processSample(Object)}
+     *
+     * <p>
+     * <b>note:</b> this method will be changed to private in the future.
+     * Implementations should override {@link Evaluator#processSample(Object)} instead.
+     * If this method is override, the implementation has to update the score
+     * after every invocation.
+     * </p>
+     *
+     * @param sample the sample to be evaluated
+     */
+    public void evaluateSample(T sample) {
+        T predicted = processSample(sample);
+        if (!listeners.isEmpty()) {
+            if (sample.equals(predicted)) {
+                for (EvaluationMonitor<T> listener : listeners) {
+                    listener.correctlyClassified(sample, predicted);
+                }
+            } else {
+                for (EvaluationMonitor<T> listener : listeners) {
+                    listener.missclassified(sample, predicted);
+                }
+            }
         }
-      } else {
-        for (EvaluationMonitor<T> listener : listeners) {
-          listener.missclassified(sample, predicted);
-        }
-      }
     }
-  }
 
-  /**
-   * Reads all sample objects from the stream
-   * and evaluates each sample object with
-   * {@link #evaluateSample(Object)} method.
-   *
-   * @param samples the stream of reference which
-   *     should be evaluated.
-   *
-   * @throws IOException IOException
-   */
-  public void evaluate(ObjectStream<T> samples) throws IOException {
-    T sample;
-    while ((sample = samples.read()) != null) {
-      evaluateSample(sample);
+    /**
+     * Reads all sample objects from the stream
+     * and evaluates each sample object with
+     * {@link #evaluateSample(Object)} method.
+     *
+     * @param samples the stream of reference which
+     *                should be evaluated.
+     * @throws IOException IOException
+     */
+    public void evaluate(ObjectStream<T> samples) throws IOException {
+        T sample;
+        while ((sample = samples.read()) != null) {
+            evaluateSample(sample);
+        }
     }
-  }
 }

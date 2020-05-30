@@ -17,16 +17,15 @@
 
 package opennlp.morfologik.tagdict;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
 import morfologik.stemming.Dictionary;
 import morfologik.stemming.DictionaryLookup;
 import morfologik.stemming.IStemmer;
 import morfologik.stemming.WordData;
-
 import opennlp.tools.postag.TagDictionary;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A POS Tagger dictionary implementation based on Morfologik binary
@@ -34,58 +33,51 @@ import opennlp.tools.postag.TagDictionary;
  */
 public class MorfologikTagDictionary implements TagDictionary {
 
-  private IStemmer dictLookup;
-  private boolean isCaseSensitive;
+    private IStemmer dictLookup;
+    private boolean isCaseSensitive;
 
-  /**
-   * Creates a case sensitive {@link MorfologikTagDictionary}
-   *
-   * @param dict
-   *          a Morfologik FSA dictionary
-   * @throws IllegalArgumentException
-   *           if FSA's root node cannot be acquired (dictionary is empty).
-   * @throws IOException
-   *           could not read dictionary from dictURL
-   */
-  public MorfologikTagDictionary(Dictionary dict)
-      throws IllegalArgumentException, IOException {
-    this(dict, true);
-  }
-
-  /**
-   * Creates MorfologikLemmatizer
-   *
-   * @param dict
-   *          a Morfologik FSA dictionary
-   * @param caseSensitive
-   *          if true it performs case sensitive lookup
-   * @throws IllegalArgumentException
-   *           if FSA's root node cannot be acquired (dictionary is empty).
-   * @throws IOException
-   *           could not read dictionary from dictURL
-   */
-  public MorfologikTagDictionary(Dictionary dict, boolean caseSensitive)
-      throws IllegalArgumentException, IOException {
-    this.dictLookup = new DictionaryLookup(dict);
-    this.isCaseSensitive = caseSensitive;
-  }
-
-  @Override
-  public String[] getTags(String word) {
-    if (!isCaseSensitive) {
-      word = word.toLowerCase();
+    /**
+     * Creates a case sensitive {@link MorfologikTagDictionary}
+     *
+     * @param dict a Morfologik FSA dictionary
+     * @throws IllegalArgumentException if FSA's root node cannot be acquired (dictionary is empty).
+     * @throws IOException              could not read dictionary from dictURL
+     */
+    public MorfologikTagDictionary(Dictionary dict)
+            throws IllegalArgumentException, IOException {
+        this(dict, true);
     }
 
-    List<WordData> data = dictLookup.lookup(word);
-    if (data != null && data.size() > 0) {
-      List<String> tags = new ArrayList<>(data.size());
-      for (WordData aData : data) {
-        tags.add(aData.getTag().toString());
-      }
-      if (tags.size() > 0)
-        return tags.toArray(new String[tags.size()]);
-      return null;
+    /**
+     * Creates MorfologikLemmatizer
+     *
+     * @param dict          a Morfologik FSA dictionary
+     * @param caseSensitive if true it performs case sensitive lookup
+     * @throws IllegalArgumentException if FSA's root node cannot be acquired (dictionary is empty).
+     * @throws IOException              could not read dictionary from dictURL
+     */
+    public MorfologikTagDictionary(Dictionary dict, boolean caseSensitive)
+            throws IllegalArgumentException, IOException {
+        this.dictLookup = new DictionaryLookup(dict);
+        this.isCaseSensitive = caseSensitive;
     }
-    return null;
-  }
+
+    @Override
+    public String[] getTags(String word) {
+        if (!isCaseSensitive) {
+            word = word.toLowerCase();
+        }
+
+        List<WordData> data = dictLookup.lookup(word);
+        if (data != null && data.size() > 0) {
+            List<String> tags = new ArrayList<>(data.size());
+            for (WordData aData : data) {
+                tags.add(aData.getTag().toString());
+            }
+            if (tags.size() > 0)
+                return tags.toArray(new String[tags.size()]);
+            return null;
+        }
+        return null;
+    }
 }

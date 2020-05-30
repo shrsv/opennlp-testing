@@ -17,48 +17,47 @@
 
 package opennlp.tools.lemmatizer;
 
+import opennlp.tools.util.FilterObjectStream;
+import opennlp.tools.util.ObjectStream;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
-import opennlp.tools.util.FilterObjectStream;
-import opennlp.tools.util.ObjectStream;
 
 
 /**
  * Reads data for training and testing the lemmatizer. The format consists of:
  * word\tpostag\tlemma.
+ *
  * @version 2016-02-16
  */
 public class LemmaSampleStream extends FilterObjectStream<String, LemmaSample> {
 
-  public LemmaSampleStream(ObjectStream<String> samples) {
-    super(samples);
-  }
-
-  public LemmaSample read() throws IOException {
-
-    List<String> toks = new ArrayList<>();
-    List<String> tags = new ArrayList<>();
-    List<String> preds = new ArrayList<>();
-
-    for (String line = samples.read(); line != null && !line.equals(""); line = samples.read()) {
-      String[] parts = line.split("\t");
-      if (parts.length != 3) {
-        System.err.println("Skipping corrupt line: " + line);
-      }
-      else {
-        toks.add(parts[0]);
-        tags.add(parts[1]);
-        preds.add(parts[2]);
-      }
+    public LemmaSampleStream(ObjectStream<String> samples) {
+        super(samples);
     }
-    if (toks.size() > 0) {
-      return new LemmaSample(toks.toArray(new String[toks.size()]), tags.toArray(new String[tags.size()]),
-          preds.toArray(new String[preds.size()]));
+
+    public LemmaSample read() throws IOException {
+
+        List<String> toks = new ArrayList<>();
+        List<String> tags = new ArrayList<>();
+        List<String> preds = new ArrayList<>();
+
+        for (String line = samples.read(); line != null && !line.equals(""); line = samples.read()) {
+            String[] parts = line.split("\t");
+            if (parts.length != 3) {
+                System.err.println("Skipping corrupt line: " + line);
+            } else {
+                toks.add(parts[0]);
+                tags.add(parts[1]);
+                preds.add(parts[2]);
+            }
+        }
+        if (toks.size() > 0) {
+            return new LemmaSample(toks.toArray(new String[toks.size()]), tags.toArray(new String[tags.size()]),
+                    preds.toArray(new String[preds.size()]));
+        } else {
+            return null;
+        }
     }
-    else {
-      return null;
-    }
-  }
 }

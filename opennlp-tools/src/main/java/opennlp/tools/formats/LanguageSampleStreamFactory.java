@@ -22,14 +22,14 @@ package opennlp.tools.formats;
  */
 public abstract class LanguageSampleStreamFactory<T> extends AbstractSampleStreamFactory<T> {
 
-  protected String language;
+    protected String language;
 
-  protected <P> LanguageSampleStreamFactory(Class<P> params) {
-    super(params);
-  }
+    protected <P> LanguageSampleStreamFactory(Class<P> params) {
+        super(params);
+    }
 
-  @Override
-  public String getLang() {
-    return language;
-  }
+    @Override
+    public String getLang() {
+        return language;
+    }
 }

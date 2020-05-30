@@ -26,17 +26,17 @@ import java.util.Properties;
 
 class PropertiesSerializer implements ArtifactSerializer<Properties> {
 
-  public Properties create(InputStream in) throws IOException {
-    Properties properties = new Properties();
-    properties.load(in);
-    return properties;
-  }
+    static void register(Map<String, ArtifactSerializer> factories) {
+        factories.put("properties", new PropertiesSerializer());
+    }
 
-  public void serialize(Properties properties, OutputStream out) throws IOException {
-    properties.store(out, "");
-  }
+    public Properties create(InputStream in) throws IOException {
+        Properties properties = new Properties();
+        properties.load(in);
+        return properties;
+    }
 
-  static void register(Map<String, ArtifactSerializer> factories) {
-    factories.put("properties", new PropertiesSerializer());
-  }
+    public void serialize(Properties properties, OutputStream out) throws IOException {
+        properties.store(out, "");
+    }
 }

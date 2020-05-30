@@ -17,9 +17,6 @@
 
 package opennlp.tools.formats.leipzig;
 
-import java.io.File;
-import java.io.IOException;
-
 import opennlp.tools.cmdline.ArgumentParser;
 import opennlp.tools.cmdline.ArgumentParser.OptionalParameter;
 import opennlp.tools.cmdline.ArgumentParser.ParameterDescription;
@@ -30,53 +27,56 @@ import opennlp.tools.formats.AbstractSampleStreamFactory;
 import opennlp.tools.langdetect.LanguageSample;
 import opennlp.tools.util.ObjectStream;
 
+import java.io.File;
+import java.io.IOException;
+
 /**
  * <b>Note:</b> Do not use this class, internal use only!
  */
 public class LeipzigLanguageSampleStreamFactory
-    extends AbstractSampleStreamFactory<LanguageSample> {
+        extends AbstractSampleStreamFactory<LanguageSample> {
 
-  interface Parameters extends EncodingParameter {
-    @ParameterDescription(valueName = "sentencesDir",
-        description = "dir with Leipig sentences to be used")
-    File getSentencesDir();
-
-    @ParameterDescription(valueName = "sentencesPerSample",
-        description = "number of sentences per sample")
-    String getSentencesPerSample();
-
-    @ParameterDescription(valueName = "samplesPerLanguage",
-        description = "number of samples per language")
-    String getSamplesPerLanguage();
-
-    @ParameterDescription(valueName = "samplesToSkip",
-        description = "number of samples to skip before returning")
-    @OptionalParameter(defaultValue = "0")
-    String getSamplesToSkip();
-  }
-
-  protected <P> LeipzigLanguageSampleStreamFactory(Class<P> params) {
-    super(params);
-  }
-
-  public static void registerFactory() {
-    StreamFactoryRegistry.registerFactory(LanguageSample.class,
-        "leipzig", new LeipzigLanguageSampleStreamFactory(Parameters.class));
-  }
-
-  public ObjectStream<LanguageSample> create(String[] args) {
-
-    Parameters params = ArgumentParser.parse(args, Parameters.class);
-    File sentencesFileDir = params.getSentencesDir();
-
-    try {
-      return new SampleSkipStream(new SampleShuffleStream(
-          new LeipzigLanguageSampleStream(sentencesFileDir,
-          Integer.parseInt(params.getSentencesPerSample()),
-          Integer.parseInt(params.getSamplesPerLanguage()) + Integer.parseInt(params.getSamplesToSkip()))),
-          Integer.parseInt(params.getSamplesToSkip()));
-    } catch (IOException e) {
-      throw new TerminateToolException(-1, "IO error while opening sample data.", e);
+    protected <P> LeipzigLanguageSampleStreamFactory(Class<P> params) {
+        super(params);
     }
-  }
+
+    public static void registerFactory() {
+        StreamFactoryRegistry.registerFactory(LanguageSample.class,
+                "leipzig", new LeipzigLanguageSampleStreamFactory(Parameters.class));
+    }
+
+    public ObjectStream<LanguageSample> create(String[] args) {
+
+        Parameters params = ArgumentParser.parse(args, Parameters.class);
+        File sentencesFileDir = params.getSentencesDir();
+
+        try {
+            return new SampleSkipStream(new SampleShuffleStream(
+                    new LeipzigLanguageSampleStream(sentencesFileDir,
+                            Integer.parseInt(params.getSentencesPerSample()),
+                            Integer.parseInt(params.getSamplesPerLanguage()) + Integer.parseInt(params.getSamplesToSkip()))),
+                    Integer.parseInt(params.getSamplesToSkip()));
+        } catch (IOException e) {
+            throw new TerminateToolException(-1, "IO error while opening sample data.", e);
+        }
+    }
+
+    interface Parameters extends EncodingParameter {
+        @ParameterDescription(valueName = "sentencesDir",
+                description = "dir with Leipig sentences to be used")
+        File getSentencesDir();
+
+        @ParameterDescription(valueName = "sentencesPerSample",
+                description = "number of sentences per sample")
+        String getSentencesPerSample();
+
+        @ParameterDescription(valueName = "samplesPerLanguage",
+                description = "number of samples per language")
+        String getSamplesPerLanguage();
+
+        @ParameterDescription(valueName = "samplesToSkip",
+                description = "number of samples to skip before returning")
+        @OptionalParameter(defaultValue = "0")
+        String getSamplesToSkip();
+    }
 }

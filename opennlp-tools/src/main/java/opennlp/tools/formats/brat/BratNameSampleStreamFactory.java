@@ -17,12 +17,6 @@
 
 package opennlp.tools.formats.brat;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.Set;
-import java.util.stream.Collectors;
-
 import opennlp.tools.cmdline.ArgumentParser;
 import opennlp.tools.cmdline.ArgumentParser.OptionalParameter;
 import opennlp.tools.cmdline.ArgumentParser.ParameterDescription;
@@ -34,139 +28,136 @@ import opennlp.tools.sentdetect.NewlineSentenceDetector;
 import opennlp.tools.sentdetect.SentenceDetector;
 import opennlp.tools.sentdetect.SentenceDetectorME;
 import opennlp.tools.sentdetect.SentenceModel;
-import opennlp.tools.tokenize.SimpleTokenizer;
-import opennlp.tools.tokenize.Tokenizer;
-import opennlp.tools.tokenize.TokenizerME;
-import opennlp.tools.tokenize.TokenizerModel;
-import opennlp.tools.tokenize.WhitespaceTokenizer;
+import opennlp.tools.tokenize.*;
 import opennlp.tools.util.ObjectStream;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class BratNameSampleStreamFactory extends AbstractSampleStreamFactory<NameSample> {
 
-  interface Parameters {
-    @ParameterDescription(valueName = "bratDataDir", description = "location of brat data dir")
-    File getBratDataDir();
-
-    @ParameterDescription(valueName = "annConfFile")
-    File getAnnotationConfig();
-
-    @ParameterDescription(valueName = "modelFile")
-    @OptionalParameter
-    File getSentenceDetectorModel();
-
-    @ParameterDescription(valueName = "modelFile")
-    @OptionalParameter
-    File getTokenizerModel();
-
-    @ParameterDescription(valueName = "name")
-    @OptionalParameter
-    String getRuleBasedTokenizer();
-
-    @ParameterDescription(valueName = "value")
-    @OptionalParameter(defaultValue = "false")
-    Boolean getRecursive();
-
-    @ParameterDescription(valueName = "names")
-    @OptionalParameter
-    String getNameTypes();
-  }
-
-  protected BratNameSampleStreamFactory() {
-    super(Parameters.class);
-  }
-
-  /**
-   * Checks that non of the passed values are null.
-   *
-   * @param objects
-   * @return true or false
-   */
-  private boolean notNull(Object... objects) {
-
-    for (Object obj : objects) {
-      if (obj == null)
-        return false;
+    protected BratNameSampleStreamFactory() {
+        super(Parameters.class);
     }
 
-    return true;
-  }
-
-  public ObjectStream<NameSample> create(String[] args) {
-
-    Parameters params = ArgumentParser.parse(args, Parameters.class);
-
-    if (notNull(params.getRuleBasedTokenizer(), params.getTokenizerModel())) {
-      throw new TerminateToolException(-1, "Either use rule based or statistical tokenizer!");
+    public static void registerFactory() {
+        StreamFactoryRegistry.registerFactory(NameSample.class, "brat",
+                new BratNameSampleStreamFactory());
     }
 
-    // TODO: Provide the file name to the annotation.conf file and implement the parser ...
-    AnnotationConfiguration annConfig;
-    try {
-      annConfig = AnnotationConfiguration.parse(params.getAnnotationConfig());
-    }
-    catch (IOException e) {
-      throw new TerminateToolException(1, "Failed to parse annotation.conf file!");
-    }
+    /**
+     * Checks that non of the passed values are null.
+     *
+     * @param objects
+     * @return true or false
+     */
+    private boolean notNull(Object... objects) {
 
-    // TODO: Add an optional parameter to search recursive
-    // TODO: How to handle the error here ? terminate the tool? not nice if used by API!
-    ObjectStream<BratDocument> samples;
-    try {
-      samples = new BratDocumentStream(annConfig,
-          params.getBratDataDir(), params.getRecursive(), null);
-    } catch (IOException e) {
-      throw new TerminateToolException(-1, e.getMessage());
+        for (Object obj : objects) {
+            if (obj == null)
+                return false;
+        }
+
+        return true;
     }
 
-    SentenceDetector sentDetector;
+    public ObjectStream<NameSample> create(String[] args) {
 
-    if (params.getSentenceDetectorModel() != null) {
-      try {
-        sentDetector = new SentenceDetectorME(new SentenceModel(params.getSentenceDetectorModel()));
-      } catch (IOException e) {
-        throw new TerminateToolException(-1, "Failed to load sentence detector model!", e);
-      }
+        Parameters params = ArgumentParser.parse(args, Parameters.class);
+
+        if (notNull(params.getRuleBasedTokenizer(), params.getTokenizerModel())) {
+            throw new TerminateToolException(-1, "Either use rule based or statistical tokenizer!");
+        }
+
+        // TODO: Provide the file name to the annotation.conf file and implement the parser ...
+        AnnotationConfiguration annConfig;
+        try {
+            annConfig = AnnotationConfiguration.parse(params.getAnnotationConfig());
+        } catch (IOException e) {
+            throw new TerminateToolException(1, "Failed to parse annotation.conf file!");
+        }
+
+        // TODO: Add an optional parameter to search recursive
+        // TODO: How to handle the error here ? terminate the tool? not nice if used by API!
+        ObjectStream<BratDocument> samples;
+        try {
+            samples = new BratDocumentStream(annConfig,
+                    params.getBratDataDir(), params.getRecursive(), null);
+        } catch (IOException e) {
+            throw new TerminateToolException(-1, e.getMessage());
+        }
+
+        SentenceDetector sentDetector;
+
+        if (params.getSentenceDetectorModel() != null) {
+            try {
+                sentDetector = new SentenceDetectorME(new SentenceModel(params.getSentenceDetectorModel()));
+            } catch (IOException e) {
+                throw new TerminateToolException(-1, "Failed to load sentence detector model!", e);
+            }
+        } else {
+            sentDetector = new NewlineSentenceDetector();
+        }
+
+        Tokenizer tokenizer = WhitespaceTokenizer.INSTANCE;
+
+        if (params.getTokenizerModel() != null) {
+            try {
+                tokenizer = new TokenizerME(new TokenizerModel(params.getTokenizerModel()));
+            } catch (IOException e) {
+                throw new TerminateToolException(-1, "Failed to load tokenizer model!", e);
+            }
+        } else if (params.getRuleBasedTokenizer() != null) {
+            String tokenizerName = params.getRuleBasedTokenizer();
+
+            if ("simple".equals(tokenizerName)) {
+                tokenizer = SimpleTokenizer.INSTANCE;
+            } else if ("whitespace".equals(tokenizerName)) {
+                tokenizer = WhitespaceTokenizer.INSTANCE;
+            } else {
+                throw new TerminateToolException(-1, "Unkown tokenizer: " + tokenizerName);
+            }
+        }
+
+        Set<String> nameTypes = null;
+        if (params.getNameTypes() != null) {
+            String[] nameTypesArr = params.getNameTypes().split(",");
+            if (nameTypesArr.length > 0) {
+                nameTypes = Arrays.stream(nameTypesArr).map(String::trim).collect(Collectors.toSet());
+            }
+        }
+
+        return new BratNameSampleStream(sentDetector, tokenizer, samples, nameTypes);
     }
-    else {
-      sentDetector = new NewlineSentenceDetector();
+
+    interface Parameters {
+        @ParameterDescription(valueName = "bratDataDir", description = "location of brat data dir")
+        File getBratDataDir();
+
+        @ParameterDescription(valueName = "annConfFile")
+        File getAnnotationConfig();
+
+        @ParameterDescription(valueName = "modelFile")
+        @OptionalParameter
+        File getSentenceDetectorModel();
+
+        @ParameterDescription(valueName = "modelFile")
+        @OptionalParameter
+        File getTokenizerModel();
+
+        @ParameterDescription(valueName = "name")
+        @OptionalParameter
+        String getRuleBasedTokenizer();
+
+        @ParameterDescription(valueName = "value")
+        @OptionalParameter(defaultValue = "false")
+        Boolean getRecursive();
+
+        @ParameterDescription(valueName = "names")
+        @OptionalParameter
+        String getNameTypes();
     }
-
-    Tokenizer tokenizer = WhitespaceTokenizer.INSTANCE;
-
-    if (params.getTokenizerModel() != null) {
-      try {
-        tokenizer = new TokenizerME(new TokenizerModel(params.getTokenizerModel()));
-      } catch (IOException e) {
-        throw new TerminateToolException(-1, "Failed to load tokenizer model!", e);
-      }
-    }
-    else if (params.getRuleBasedTokenizer() != null) {
-      String tokenizerName = params.getRuleBasedTokenizer();
-
-      if ("simple".equals(tokenizerName)) {
-        tokenizer = SimpleTokenizer.INSTANCE;
-      }
-      else if ("whitespace".equals(tokenizerName)) {
-        tokenizer = WhitespaceTokenizer.INSTANCE;
-      }
-      else {
-        throw new TerminateToolException(-1, "Unkown tokenizer: " + tokenizerName);
-      }
-    }
-
-    Set<String> nameTypes = null;
-    if (params.getNameTypes() != null) {
-      String[] nameTypesArr = params.getNameTypes().split(",");
-      if (nameTypesArr.length > 0) {
-        nameTypes = Arrays.stream(nameTypesArr).map(String::trim).collect(Collectors.toSet());
-      }
-    }
-
-    return new BratNameSampleStream(sentDetector, tokenizer, samples, nameTypes);
-  }
-
-  public static void registerFactory() {
-    StreamFactoryRegistry.registerFactory(NameSample.class, "brat",
-        new BratNameSampleStreamFactory());
-  }
 }

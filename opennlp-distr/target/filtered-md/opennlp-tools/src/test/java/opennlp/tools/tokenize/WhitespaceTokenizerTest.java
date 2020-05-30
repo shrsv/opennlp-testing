@@ -25,38 +25,38 @@ import org.junit.Test;
  */
 public class WhitespaceTokenizerTest {
 
-  @Test
-  public void testOneToken() {
-    Assert.assertEquals("one", WhitespaceTokenizer.INSTANCE.tokenize("one")[0]);
-    Assert.assertEquals("one", WhitespaceTokenizer.INSTANCE.tokenize(" one")[0]);
-    Assert.assertEquals("one", WhitespaceTokenizer.INSTANCE.tokenize("one ")[0]);
-  }
+    @Test
+    public void testOneToken() {
+        Assert.assertEquals("one", WhitespaceTokenizer.INSTANCE.tokenize("one")[0]);
+        Assert.assertEquals("one", WhitespaceTokenizer.INSTANCE.tokenize(" one")[0]);
+        Assert.assertEquals("one", WhitespaceTokenizer.INSTANCE.tokenize("one ")[0]);
+    }
 
-  /**
-   * Tests if it can tokenize whitespace separated tokens.
-   */
-  @Test
-  public void testWhitespaceTokenization() {
+    /**
+     * Tests if it can tokenize whitespace separated tokens.
+     */
+    @Test
+    public void testWhitespaceTokenization() {
 
-    String text = "a b c  d     e                f    ";
+        String text = "a b c  d     e                f    ";
 
-    String[] tokenizedText = WhitespaceTokenizer.INSTANCE.tokenize(text);
+        String[] tokenizedText = WhitespaceTokenizer.INSTANCE.tokenize(text);
 
-    Assert.assertTrue("a".equals(tokenizedText[0]));
-    Assert.assertTrue("b".equals(tokenizedText[1]));
-    Assert.assertTrue("c".equals(tokenizedText[2]));
-    Assert.assertTrue("d".equals(tokenizedText[3]));
-    Assert.assertTrue("e".equals(tokenizedText[4]));
-    Assert.assertTrue("f".equals(tokenizedText[5]));
+        Assert.assertTrue("a".equals(tokenizedText[0]));
+        Assert.assertTrue("b".equals(tokenizedText[1]));
+        Assert.assertTrue("c".equals(tokenizedText[2]));
+        Assert.assertTrue("d".equals(tokenizedText[3]));
+        Assert.assertTrue("e".equals(tokenizedText[4]));
+        Assert.assertTrue("f".equals(tokenizedText[5]));
 
-    Assert.assertTrue(tokenizedText.length == 6);
-  }
+        Assert.assertTrue(tokenizedText.length == 6);
+    }
 
-  @Test
-  public void testTokenizationOfStringWithoutTokens() {
-    Assert.assertEquals(0, WhitespaceTokenizer.INSTANCE.tokenize("").length); // empty
-    Assert.assertEquals(0, WhitespaceTokenizer.INSTANCE.tokenize(" ").length); // space
-    Assert.assertEquals(0, WhitespaceTokenizer.INSTANCE.tokenize(" ").length); // tab
-    Assert.assertEquals(0, WhitespaceTokenizer.INSTANCE.tokenize("     ").length);
-  }
+    @Test
+    public void testTokenizationOfStringWithoutTokens() {
+        Assert.assertEquals(0, WhitespaceTokenizer.INSTANCE.tokenize("").length); // empty
+        Assert.assertEquals(0, WhitespaceTokenizer.INSTANCE.tokenize(" ").length); // space
+        Assert.assertEquals(0, WhitespaceTokenizer.INSTANCE.tokenize(" ").length); // tab
+        Assert.assertEquals(0, WhitespaceTokenizer.INSTANCE.tokenize("     ").length);
+    }
 }

@@ -17,91 +17,83 @@
 
 package opennlp.tools.formats.brat;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import opennlp.tools.tokenize.WhitespaceTokenizer;
+
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import opennlp.tools.tokenize.WhitespaceTokenizer;
-
 public class AnnotationConfiguration {
 
-  public static final String SPAN_TYPE = "Span";
-  public static final String ENTITY_TYPE = "Entity";
-  public static final String RELATION_TYPE = "Relation";
-  public static final String ATTRIBUTE_TYPE = "Attribute";
-  public static final String EVENT_TYPE = "Event";
+    public static final String SPAN_TYPE = "Span";
+    public static final String ENTITY_TYPE = "Entity";
+    public static final String RELATION_TYPE = "Relation";
+    public static final String ATTRIBUTE_TYPE = "Attribute";
+    public static final String EVENT_TYPE = "Event";
 
-  private final Map<String, String> typeToClassMap;
+    private final Map<String, String> typeToClassMap;
 
-  public AnnotationConfiguration(Map<String, String> typeToClassMap) {
+    public AnnotationConfiguration(Map<String, String> typeToClassMap) {
 
-    this.typeToClassMap = Collections.unmodifiableMap(new HashMap<>(typeToClassMap));
-  }
+        this.typeToClassMap = Collections.unmodifiableMap(new HashMap<>(typeToClassMap));
+    }
 
-  public String getTypeClass(String type) {
-    return typeToClassMap.get(type);
-  }
+    public static AnnotationConfiguration parse(InputStream in) throws IOException {
+        Map<String, String> typeToClassMap = new HashMap<>();
 
+        BufferedReader reader = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
 
-  public static AnnotationConfiguration parse(InputStream in) throws IOException {
-    Map<String, String> typeToClassMap = new HashMap<>();
+        // Note: This only supports entities and relations section
+        String line;
+        String sectionType = null;
 
-    BufferedReader reader = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
+        while ((line = reader.readLine()) != null) {
+            line = line.trim();
 
-    // Note: This only supports entities and relations section
-    String line;
-    String sectionType = null;
+            if (!line.isEmpty()) {
+                if (!line.startsWith("#")) {
+                    if (line.startsWith("[") && line.endsWith("]")) {
+                        sectionType = line.substring(line.indexOf('[') + 1, line.indexOf(']'));
+                    } else {
+                        String typeName = WhitespaceTokenizer.INSTANCE.tokenize(line)[0];
 
-    while ((line = reader.readLine()) != null) {
-      line = line.trim();
+                        switch (sectionType) {
+                            case "entities":
+                                typeToClassMap.put(typeName, AnnotationConfiguration.ENTITY_TYPE);
+                                break;
 
-      if (!line.isEmpty()) {
-        if (!line.startsWith("#")) {
-          if (line.startsWith("[") && line.endsWith("]")) {
-            sectionType = line.substring(line.indexOf('[') + 1, line.indexOf(']'));
-          }
-          else {
-            String typeName = WhitespaceTokenizer.INSTANCE.tokenize(line)[0];
+                            case "relations":
+                                typeToClassMap.put(typeName, AnnotationConfiguration.RELATION_TYPE);
+                                break;
 
-            switch (sectionType) {
-              case "entities":
-                typeToClassMap.put(typeName, AnnotationConfiguration.ENTITY_TYPE);
-                break;
+                            case "attributes":
+                                typeToClassMap.put(typeName, AnnotationConfiguration.ATTRIBUTE_TYPE);
+                                break;
 
-              case "relations":
-                typeToClassMap.put(typeName, AnnotationConfiguration.RELATION_TYPE);
-                break;
+                            case "events":
+                                typeToClassMap.put(typeName, AnnotationConfiguration.EVENT_TYPE);
+                                break;
 
-              case "attributes":
-                typeToClassMap.put(typeName, AnnotationConfiguration.ATTRIBUTE_TYPE);
-                break;
-
-              case "events":
-                typeToClassMap.put(typeName, AnnotationConfiguration.EVENT_TYPE);
-                break;
-
-              default:
-                break;
+                            default:
+                                break;
+                        }
+                    }
+                }
             }
-          }
         }
-      }
+
+        return new AnnotationConfiguration(typeToClassMap);
     }
 
-    return new AnnotationConfiguration(typeToClassMap);
-  }
-
-  public static AnnotationConfiguration parse(File annConfigFile) throws IOException {
-    try (InputStream in = new BufferedInputStream(new FileInputStream(annConfigFile))) {
-      return parse(in);
+    public static AnnotationConfiguration parse(File annConfigFile) throws IOException {
+        try (InputStream in = new BufferedInputStream(new FileInputStream(annConfigFile))) {
+            return parse(in);
+        }
     }
-  }
+
+    public String getTypeClass(String type) {
+        return typeToClassMap.get(type);
+    }
 }

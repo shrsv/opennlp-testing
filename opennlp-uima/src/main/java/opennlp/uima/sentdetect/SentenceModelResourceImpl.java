@@ -17,21 +17,21 @@
 
 package opennlp.uima.sentdetect;
 
-import java.io.IOException;
-import java.io.InputStream;
-
 import opennlp.tools.sentdetect.SentenceModel;
 import opennlp.uima.util.AbstractModelResource;
 
+import java.io.IOException;
+import java.io.InputStream;
+
 public class SentenceModelResourceImpl extends AbstractModelResource<SentenceModel>
-    implements SentenceModelResource {
+        implements SentenceModelResource {
 
-  public SentenceModel getModel() {
-    return model;
-  }
+    public SentenceModel getModel() {
+        return model;
+    }
 
-  @Override
-  protected SentenceModel loadModel(InputStream in) throws IOException {
-    return new SentenceModel(in);
-  }
+    @Override
+    protected SentenceModel loadModel(InputStream in) throws IOException {
+        return new SentenceModel(in);
+    }
 }

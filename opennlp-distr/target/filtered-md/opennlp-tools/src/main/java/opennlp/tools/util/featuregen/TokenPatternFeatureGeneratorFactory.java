@@ -17,36 +17,35 @@
 
 package opennlp.tools.util.featuregen;
 
-import java.util.Map;
-
+import opennlp.tools.util.InvalidFormatException;
 import org.w3c.dom.Element;
 
-import opennlp.tools.util.InvalidFormatException;
+import java.util.Map;
 
 /**
  * @see TokenPatternFeatureGenerator
  */
 public class TokenPatternFeatureGeneratorFactory
-    extends GeneratorFactory.AbstractXmlFeatureGeneratorFactory
-    implements GeneratorFactory.XmlFeatureGeneratorFactory {
+        extends GeneratorFactory.AbstractXmlFeatureGeneratorFactory
+        implements GeneratorFactory.XmlFeatureGeneratorFactory {
 
-  public TokenPatternFeatureGeneratorFactory() {
-    super();
-  }
+    public TokenPatternFeatureGeneratorFactory() {
+        super();
+    }
 
-  @Deprecated // TODO: (OPENNLP-1174) just remove when back-compat is no longer needed
-  public AdaptiveFeatureGenerator create(Element generatorElement,
-             FeatureGeneratorResourceProvider resourceManager) {
-    return new TokenPatternFeatureGenerator();
-  }
+    @Deprecated // TODO: (OPENNLP-1174) just remove when back-compat is no longer needed
+    static void register(Map<String, GeneratorFactory.XmlFeatureGeneratorFactory> factoryMap) {
+        factoryMap.put("tokenpattern", new TokenPatternFeatureGeneratorFactory());
+    }
 
-  @Deprecated // TODO: (OPENNLP-1174) just remove when back-compat is no longer needed
-  static void register(Map<String, GeneratorFactory.XmlFeatureGeneratorFactory> factoryMap) {
-    factoryMap.put("tokenpattern", new TokenPatternFeatureGeneratorFactory());
-  }
+    @Deprecated // TODO: (OPENNLP-1174) just remove when back-compat is no longer needed
+    public AdaptiveFeatureGenerator create(Element generatorElement,
+                                           FeatureGeneratorResourceProvider resourceManager) {
+        return new TokenPatternFeatureGenerator();
+    }
 
-  @Override
-  public AdaptiveFeatureGenerator create() throws InvalidFormatException {
-    return new TokenPatternFeatureGenerator();
-  }
+    @Override
+    public AdaptiveFeatureGenerator create() throws InvalidFormatException {
+        return new TokenPatternFeatureGenerator();
+    }
 }

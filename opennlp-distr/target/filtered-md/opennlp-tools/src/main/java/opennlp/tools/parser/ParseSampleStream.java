@@ -17,31 +17,29 @@
 
 package opennlp.tools.parser;
 
-import java.io.IOException;
-
 import opennlp.tools.util.FilterObjectStream;
 import opennlp.tools.util.ObjectStream;
 
+import java.io.IOException;
+
 public class ParseSampleStream extends FilterObjectStream<String, Parse> {
 
-  public ParseSampleStream(ObjectStream<String> in) {
-    super(in);
-  }
-
-  public Parse read() throws IOException {
-
-    String parse = samples.read();
-
-    if (parse != null) {
-      if (!parse.trim().isEmpty()) {
-        return Parse.parseParse(parse);
-      }
-      else {
-        return read();
-      }
+    public ParseSampleStream(ObjectStream<String> in) {
+        super(in);
     }
-    else {
-      return null;
+
+    public Parse read() throws IOException {
+
+        String parse = samples.read();
+
+        if (parse != null) {
+            if (!parse.trim().isEmpty()) {
+                return Parse.parseParse(parse);
+            } else {
+                return read();
+            }
+        } else {
+            return null;
+        }
     }
-  }
 }

@@ -20,20 +20,20 @@ package opennlp.tools.util.normalizer;
 
 public class AggregateCharSequenceNormalizer implements CharSequenceNormalizer {
 
-  private final CharSequenceNormalizer[] normalizers;
+    private final CharSequenceNormalizer[] normalizers;
 
-  public AggregateCharSequenceNormalizer(CharSequenceNormalizer ... normalizers) {
-    this.normalizers = normalizers;
-  }
-
-  public CharSequence normalize (CharSequence text) {
-
-    for (CharSequenceNormalizer normalizers :
-        normalizers) {
-      text = normalizers.normalize(text);
+    public AggregateCharSequenceNormalizer(CharSequenceNormalizer... normalizers) {
+        this.normalizers = normalizers;
     }
 
-    return text;
-  }
+    public CharSequence normalize(CharSequence text) {
+
+        for (CharSequenceNormalizer normalizers :
+                normalizers) {
+            text = normalizers.normalize(text);
+        }
+
+        return text;
+    }
 
 }

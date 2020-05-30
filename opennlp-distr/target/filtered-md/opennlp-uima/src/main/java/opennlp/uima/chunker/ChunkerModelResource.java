@@ -21,6 +21,6 @@ import opennlp.tools.chunker.ChunkerModel;
 
 public interface ChunkerModelResource {
 
-  ChunkerModel getModel();
+    ChunkerModel getModel();
 
 }

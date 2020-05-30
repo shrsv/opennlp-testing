@@ -17,25 +17,25 @@
 
 package opennlp.tools.postag;
 
-import java.util.Arrays;
-
 import opennlp.tools.util.SequenceValidator;
+
+import java.util.Arrays;
 
 public class DefaultPOSSequenceValidator implements SequenceValidator<String> {
 
-  private TagDictionary tagDictionary;
+    private TagDictionary tagDictionary;
 
-  public DefaultPOSSequenceValidator(TagDictionary tagDictionary) {
-    this.tagDictionary = tagDictionary;
-  }
-
-  public boolean validSequence(int i, String[] inputSequence,
-      String[] outcomesSequence, String outcome) {
-    if (tagDictionary == null) {
-      return true;
-    } else {
-      String[] tags = tagDictionary.getTags(inputSequence[i]);
-      return tags == null || Arrays.asList(tags).contains(outcome);
+    public DefaultPOSSequenceValidator(TagDictionary tagDictionary) {
+        this.tagDictionary = tagDictionary;
     }
-  }
+
+    public boolean validSequence(int i, String[] inputSequence,
+                                 String[] outcomesSequence, String outcome) {
+        if (tagDictionary == null) {
+            return true;
+        } else {
+            String[] tags = tagDictionary.getTags(inputSequence[i]);
+            return tags == null || Arrays.asList(tags).contains(outcome);
+        }
+    }
 }

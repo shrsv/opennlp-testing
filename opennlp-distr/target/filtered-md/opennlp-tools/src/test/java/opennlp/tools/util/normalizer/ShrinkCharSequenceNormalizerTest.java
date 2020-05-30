@@ -23,19 +23,19 @@ import org.junit.Test;
 
 public class ShrinkCharSequenceNormalizerTest {
 
-  public ShrinkCharSequenceNormalizer normalizer = ShrinkCharSequenceNormalizer.getInstance();
+    public ShrinkCharSequenceNormalizer normalizer = ShrinkCharSequenceNormalizer.getInstance();
 
-  @Test
-  public void normalizeSpace() throws Exception {
-    Assert.assertEquals(
-        "a text extra space", normalizer.normalize("a text    extra space"));
-  }
+    @Test
+    public void normalizeSpace() throws Exception {
+        Assert.assertEquals(
+                "a text extra space", normalizer.normalize("a text    extra space"));
+    }
 
-  @Test
-  public void normalizeChar() throws Exception {
-    Assert.assertEquals("Helloo", normalizer.normalize("Helllllloooooo"));
-    Assert.assertEquals("Hello", normalizer.normalize("Hello"));
-    Assert.assertEquals("HHello", normalizer.normalize("HHello"));
-  }
+    @Test
+    public void normalizeChar() throws Exception {
+        Assert.assertEquals("Helloo", normalizer.normalize("Helllllloooooo"));
+        Assert.assertEquals("Hello", normalizer.normalize("Hello"));
+        Assert.assertEquals("HHello", normalizer.normalize("HHello"));
+    }
 
 }

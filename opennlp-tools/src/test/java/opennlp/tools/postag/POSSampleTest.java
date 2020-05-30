@@ -18,131 +18,121 @@
 
 package opennlp.tools.postag;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.ObjectInput;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutput;
-import java.io.ObjectOutputStream;
-
+import opennlp.tools.util.InvalidFormatException;
 import org.junit.Assert;
 import org.junit.Test;
 
-import opennlp.tools.util.InvalidFormatException;
+import java.io.*;
 
 /**
  * Tests for the {@link POSSample} class.
  */
 public class POSSampleTest {
 
-  @Test
-  public void testEquals() throws InvalidFormatException {
-    Assert.assertFalse(createGoldSample() == createGoldSample());
-    Assert.assertTrue(createGoldSample().equals(createGoldSample()));
-    Assert.assertFalse(createPredSample().equals(createGoldSample()));
-    Assert.assertFalse(createPredSample().equals(new Object()));
-  }
-
-  public static POSSample createGoldSample() throws InvalidFormatException {
-    String sentence = "the_DT stories_NNS about_IN well-heeled_JJ "
-        + "communities_NNS and_CC developers_NNS";
-    return POSSample.parse(sentence);
-  }
-
-  public static POSSample createPredSample() throws InvalidFormatException {
-    String sentence = "the_DT stories_NNS about_NNS well-heeled_JJ "
-        + "communities_NNS and_CC developers_CC";
-    return POSSample.parse(sentence);
-  }
-
-  @Test
-  public void testPOSSampleSerDe() throws IOException {
-    POSSample posSample = createGoldSample();
-    ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-    ObjectOutput out = new ObjectOutputStream(byteArrayOutputStream);
-    out.writeObject(posSample);
-    out.flush();
-    byte[] bytes = byteArrayOutputStream.toByteArray();
-
-    ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(bytes);
-    ObjectInput objectInput = new ObjectInputStream(byteArrayInputStream);
-
-    POSSample deSerializedPOSSample = null;
-    try {
-      deSerializedPOSSample = (POSSample) objectInput.readObject();
-    } catch (ClassNotFoundException e) {
-      // do nothing
+    public static POSSample createGoldSample() throws InvalidFormatException {
+        String sentence = "the_DT stories_NNS about_IN well-heeled_JJ "
+                + "communities_NNS and_CC developers_NNS";
+        return POSSample.parse(sentence);
     }
 
-    Assert.assertNotNull(deSerializedPOSSample);
-    Assert.assertArrayEquals(posSample.getAddictionalContext(),
-        deSerializedPOSSample.getAddictionalContext());
-    Assert.assertArrayEquals(posSample.getSentence(), deSerializedPOSSample.getSentence());
-    Assert.assertArrayEquals(posSample.getTags(), deSerializedPOSSample.getTags());
-  }
-
-  /**
-   * Tests if it can parse a valid token_tag sentence.
-   *
-   */
-  @Test
-  public void testParse() throws InvalidFormatException {
-    String sentence = "the_DT stories_NNS about_IN well-heeled_JJ " +
-        "communities_NNS and_CC developers_NNS";
-    POSSample sample = POSSample.parse(sentence);
-    Assert.assertEquals(sentence, sample.toString());
-  }
-
-  /**
-   * Tests if it can parse an empty {@link String}.
-   */
-  @Test
-  public void testParseEmptyString() throws InvalidFormatException {
-    String sentence = "";
-
-    POSSample sample = POSSample.parse(sentence);
-
-    Assert.assertEquals(sample.getSentence().length, 0);
-    Assert.assertEquals(sample.getTags().length, 0);
-  }
-
-  /**
-   * Tests if it can parse an empty token.
-   *
-   */
-  @Test
-  public void testParseEmtpyToken() throws InvalidFormatException {
-    String sentence = "the_DT _NNS";
-    POSSample sample = POSSample.parse(sentence);
-    Assert.assertEquals(sample.getSentence()[1], "");
-  }
-
-  /**
-   * Tests if it can parse an empty tag.
-   *
-   */
-  @Test
-  public void testParseEmtpyTag() throws InvalidFormatException {
-    String sentence = "the_DT stories_";
-    POSSample sample = POSSample.parse(sentence);
-    Assert.assertEquals(sample.getTags()[1], "");
-  }
-
-  /**
-   * Tests if an exception is thrown if there is only a token/tag
-   * in the sentence.
-   */
-  @Test
-  public void testParseWithError() {
-    String sentence = "the_DT stories";
-
-    try {
-      POSSample.parse(sentence);
-    } catch (InvalidFormatException e) {
-      return;
+    public static POSSample createPredSample() throws InvalidFormatException {
+        String sentence = "the_DT stories_NNS about_NNS well-heeled_JJ "
+                + "communities_NNS and_CC developers_CC";
+        return POSSample.parse(sentence);
     }
 
-    Assert.fail();
-  }
+    @Test
+    public void testEquals() throws InvalidFormatException {
+        Assert.assertFalse(createGoldSample() == createGoldSample());
+        Assert.assertTrue(createGoldSample().equals(createGoldSample()));
+        Assert.assertFalse(createPredSample().equals(createGoldSample()));
+        Assert.assertFalse(createPredSample().equals(new Object()));
+    }
+
+    @Test
+    public void testPOSSampleSerDe() throws IOException {
+        POSSample posSample = createGoldSample();
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        ObjectOutput out = new ObjectOutputStream(byteArrayOutputStream);
+        out.writeObject(posSample);
+        out.flush();
+        byte[] bytes = byteArrayOutputStream.toByteArray();
+
+        ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(bytes);
+        ObjectInput objectInput = new ObjectInputStream(byteArrayInputStream);
+
+        POSSample deSerializedPOSSample = null;
+        try {
+            deSerializedPOSSample = (POSSample) objectInput.readObject();
+        } catch (ClassNotFoundException e) {
+            // do nothing
+        }
+
+        Assert.assertNotNull(deSerializedPOSSample);
+        Assert.assertArrayEquals(posSample.getAddictionalContext(),
+                deSerializedPOSSample.getAddictionalContext());
+        Assert.assertArrayEquals(posSample.getSentence(), deSerializedPOSSample.getSentence());
+        Assert.assertArrayEquals(posSample.getTags(), deSerializedPOSSample.getTags());
+    }
+
+    /**
+     * Tests if it can parse a valid token_tag sentence.
+     */
+    @Test
+    public void testParse() throws InvalidFormatException {
+        String sentence = "the_DT stories_NNS about_IN well-heeled_JJ " +
+                "communities_NNS and_CC developers_NNS";
+        POSSample sample = POSSample.parse(sentence);
+        Assert.assertEquals(sentence, sample.toString());
+    }
+
+    /**
+     * Tests if it can parse an empty {@link String}.
+     */
+    @Test
+    public void testParseEmptyString() throws InvalidFormatException {
+        String sentence = "";
+
+        POSSample sample = POSSample.parse(sentence);
+
+        Assert.assertEquals(sample.getSentence().length, 0);
+        Assert.assertEquals(sample.getTags().length, 0);
+    }
+
+    /**
+     * Tests if it can parse an empty token.
+     */
+    @Test
+    public void testParseEmtpyToken() throws InvalidFormatException {
+        String sentence = "the_DT _NNS";
+        POSSample sample = POSSample.parse(sentence);
+        Assert.assertEquals(sample.getSentence()[1], "");
+    }
+
+    /**
+     * Tests if it can parse an empty tag.
+     */
+    @Test
+    public void testParseEmtpyTag() throws InvalidFormatException {
+        String sentence = "the_DT stories_";
+        POSSample sample = POSSample.parse(sentence);
+        Assert.assertEquals(sample.getTags()[1], "");
+    }
+
+    /**
+     * Tests if an exception is thrown if there is only a token/tag
+     * in the sentence.
+     */
+    @Test
+    public void testParseWithError() {
+        String sentence = "the_DT stories";
+
+        try {
+            POSSample.parse(sentence);
+        } catch (InvalidFormatException e) {
+            return;
+        }
+
+        Assert.fail();
+    }
 }

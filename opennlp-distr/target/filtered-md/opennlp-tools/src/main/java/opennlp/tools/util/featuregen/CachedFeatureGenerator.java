@@ -18,99 +18,99 @@
 
 package opennlp.tools.util.featuregen;
 
+import opennlp.tools.util.Cache;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import opennlp.tools.util.Cache;
 
 /**
  * Caches features of the aggregated {@link AdaptiveFeatureGenerator}s.
  */
 public class CachedFeatureGenerator implements AdaptiveFeatureGenerator {
 
-  private final AdaptiveFeatureGenerator generator;
+    private final AdaptiveFeatureGenerator generator;
 
-  private String[] prevTokens;
+    private String[] prevTokens;
 
-  private Cache<Integer, List<String>> contextsCache;
+    private Cache<Integer, List<String>> contextsCache;
 
-  private long numberOfCacheHits;
-  private long numberOfCacheMisses;
+    private long numberOfCacheHits;
+    private long numberOfCacheMisses;
 
-  @Deprecated
-  public CachedFeatureGenerator(AdaptiveFeatureGenerator... generators) {
-    this.generator = new AggregatedFeatureGenerator(generators);
-    contextsCache = new Cache<>(100);
-  }
-
-  public CachedFeatureGenerator(AdaptiveFeatureGenerator generator) {
-    this.generator = generator;
-    contextsCache = new Cache<>(100);
-  }
-
-  public void createFeatures(List<String> features, String[] tokens, int index,
-      String[] previousOutcomes) {
-
-    List<String> cacheFeatures;
-
-    if (tokens == prevTokens) {
-      cacheFeatures = contextsCache.get(index);
-
-      if (cacheFeatures != null) {
-        numberOfCacheHits++;
-        features.addAll(cacheFeatures);
-        return;
-      }
-
-    } else {
-      contextsCache.clear();
-      prevTokens = tokens;
+    @Deprecated
+    public CachedFeatureGenerator(AdaptiveFeatureGenerator... generators) {
+        this.generator = new AggregatedFeatureGenerator(generators);
+        contextsCache = new Cache<>(100);
     }
 
-    cacheFeatures = new ArrayList<>();
+    public CachedFeatureGenerator(AdaptiveFeatureGenerator generator) {
+        this.generator = generator;
+        contextsCache = new Cache<>(100);
+    }
 
-    numberOfCacheMisses++;
+    public void createFeatures(List<String> features, String[] tokens, int index,
+                               String[] previousOutcomes) {
 
-    generator.createFeatures(cacheFeatures, tokens, index, previousOutcomes);
+        List<String> cacheFeatures;
 
-    contextsCache.put(index, cacheFeatures);
-    features.addAll(cacheFeatures);
-  }
+        if (tokens == prevTokens) {
+            cacheFeatures = contextsCache.get(index);
 
-  public void updateAdaptiveData(String[] tokens, String[] outcomes) {
-    generator.updateAdaptiveData(tokens, outcomes);
-  }
+            if (cacheFeatures != null) {
+                numberOfCacheHits++;
+                features.addAll(cacheFeatures);
+                return;
+            }
 
-  public void clearAdaptiveData() {
-    generator.clearAdaptiveData();
-  }
+        } else {
+            contextsCache.clear();
+            prevTokens = tokens;
+        }
 
-  /**
-   * Retrieves the number of times a cache hit occurred.
-   *
-   * @return number of cache hits
-   */
-  public long getNumberOfCacheHits() {
-    return numberOfCacheHits;
-  }
+        cacheFeatures = new ArrayList<>();
 
-  /**
-   * Retrieves the number of times a cache miss occurred.
-   *
-   * @return number of cache misses
-   */
-  public long getNumberOfCacheMisses() {
-    return numberOfCacheMisses;
-  }
+        numberOfCacheMisses++;
 
-  @Override
-  public String toString() {
-    return super.toString() + ": hits=" + numberOfCacheHits
-        + " misses=" + numberOfCacheMisses + " hit%" + (numberOfCacheHits > 0 ?
-        (double) numberOfCacheHits / (numberOfCacheMisses + numberOfCacheHits) : 0);
-  }
+        generator.createFeatures(cacheFeatures, tokens, index, previousOutcomes);
 
-  public AdaptiveFeatureGenerator getCachedFeatureGenerator() {
-    return generator;
-  }
+        contextsCache.put(index, cacheFeatures);
+        features.addAll(cacheFeatures);
+    }
+
+    public void updateAdaptiveData(String[] tokens, String[] outcomes) {
+        generator.updateAdaptiveData(tokens, outcomes);
+    }
+
+    public void clearAdaptiveData() {
+        generator.clearAdaptiveData();
+    }
+
+    /**
+     * Retrieves the number of times a cache hit occurred.
+     *
+     * @return number of cache hits
+     */
+    public long getNumberOfCacheHits() {
+        return numberOfCacheHits;
+    }
+
+    /**
+     * Retrieves the number of times a cache miss occurred.
+     *
+     * @return number of cache misses
+     */
+    public long getNumberOfCacheMisses() {
+        return numberOfCacheMisses;
+    }
+
+    @Override
+    public String toString() {
+        return super.toString() + ": hits=" + numberOfCacheHits
+                + " misses=" + numberOfCacheMisses + " hit%" + (numberOfCacheHits > 0 ?
+                (double) numberOfCacheHits / (numberOfCacheMisses + numberOfCacheHits) : 0);
+    }
+
+    public AdaptiveFeatureGenerator getCachedFeatureGenerator() {
+        return generator;
+    }
 }

@@ -33,35 +33,35 @@ import opennlp.tools.util.eval.FMeasure;
  */
 public class TokenizerEvaluator extends Evaluator<TokenSample> {
 
-  private FMeasure fmeasure = new FMeasure();
+    private FMeasure fmeasure = new FMeasure();
 
-  /**
-   * The {@link Tokenizer} used to create the
-   * predicted tokens.
-   */
-  private Tokenizer tokenizer;
+    /**
+     * The {@link Tokenizer} used to create the
+     * predicted tokens.
+     */
+    private Tokenizer tokenizer;
 
-  /**
-   * Initializes the current instance with the
-   * given {@link Tokenizer}.
-   *
-   * @param tokenizer the {@link Tokenizer} to evaluate.
-   * @param listeners evaluation sample listeners
-   */
-  public TokenizerEvaluator(Tokenizer tokenizer, TokenizerEvaluationMonitor ... listeners) {
-    super(listeners);
-    this.tokenizer = tokenizer;
-  }
+    /**
+     * Initializes the current instance with the
+     * given {@link Tokenizer}.
+     *
+     * @param tokenizer the {@link Tokenizer} to evaluate.
+     * @param listeners evaluation sample listeners
+     */
+    public TokenizerEvaluator(Tokenizer tokenizer, TokenizerEvaluationMonitor... listeners) {
+        super(listeners);
+        this.tokenizer = tokenizer;
+    }
 
-  @Override
-  protected TokenSample processSample(TokenSample reference) {
-    Span[] predictions = tokenizer.tokenizePos(reference.getText());
-    fmeasure.updateScores(reference.getTokenSpans(), predictions);
+    @Override
+    protected TokenSample processSample(TokenSample reference) {
+        Span[] predictions = tokenizer.tokenizePos(reference.getText());
+        fmeasure.updateScores(reference.getTokenSpans(), predictions);
 
-    return new TokenSample(reference.getText(), predictions);
-  }
+        return new TokenSample(reference.getText(), predictions);
+    }
 
-  public FMeasure getFMeasure() {
-    return fmeasure;
-  }
+    public FMeasure getFMeasure() {
+        return fmeasure;
+    }
 }

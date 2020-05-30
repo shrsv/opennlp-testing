@@ -17,53 +17,53 @@
 
 package opennlp.tools.ml.model;
 
+import opennlp.tools.util.AbstractObjectStream;
+import opennlp.tools.util.ObjectStream;
+
 import java.io.IOException;
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-import opennlp.tools.util.AbstractObjectStream;
-import opennlp.tools.util.ObjectStream;
-
 public class HashSumEventStream extends AbstractObjectStream<Event> {
 
-  private MessageDigest digest;
+    private MessageDigest digest;
 
-  public HashSumEventStream(ObjectStream<Event> eventStream) {
-    super(eventStream);
+    public HashSumEventStream(ObjectStream<Event> eventStream) {
+        super(eventStream);
 
-    try {
-      digest = MessageDigest.getInstance("MD5");
-    } catch (NoSuchAlgorithmException e) {
-      // should never happen, does all java runtimes have md5 ?!
-      throw new IllegalStateException(e);
-    }
-  }
-
-  @Override
-  public Event read() throws IOException {
-    Event event = super.read();
-
-    if (event != null) {
-      digest.update(event.toString().getBytes(StandardCharsets.UTF_8));
+        try {
+            digest = MessageDigest.getInstance("MD5");
+        } catch (NoSuchAlgorithmException e) {
+            // should never happen, does all java runtimes have md5 ?!
+            throw new IllegalStateException(e);
+        }
     }
 
-    return event;
-  }
+    @Override
+    public Event read() throws IOException {
+        Event event = super.read();
 
-  /**
-   * Calculates the hash sum of the stream. The method must be
-   * called after the stream is completely consumed.
-   *
-   * @return the hash sum
-   * @throws IllegalStateException if the stream is not consumed completely,
-   *     completely means that hasNext() returns false
-   */
-  public BigInteger calculateHashSum() {
-    return new BigInteger(1, digest.digest());
-  }
+        if (event != null) {
+            digest.update(event.toString().getBytes(StandardCharsets.UTF_8));
+        }
 
-  public void remove() {
-  }
+        return event;
+    }
+
+    /**
+     * Calculates the hash sum of the stream. The method must be
+     * called after the stream is completely consumed.
+     *
+     * @return the hash sum
+     * @throws IllegalStateException if the stream is not consumed completely,
+     *                               completely means that hasNext() returns false
+     */
+    public BigInteger calculateHashSum() {
+        return new BigInteger(1, digest.digest());
+    }
+
+    public void remove() {
+    }
 }

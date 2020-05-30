@@ -20,6 +20,6 @@ package opennlp.tools.sentdetect;
 import opennlp.tools.util.eval.EvaluationMonitor;
 
 public interface SentenceDetectorEvaluationMonitor extends
-    EvaluationMonitor<SentenceSample> {
+        EvaluationMonitor<SentenceSample> {
 
 }

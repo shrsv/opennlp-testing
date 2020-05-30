@@ -17,21 +17,21 @@
 
 package opennlp.tools.cmdline.tokenizer;
 
-import java.io.IOException;
-import java.io.InputStream;
-
 import opennlp.tools.cmdline.ModelLoader;
 import opennlp.tools.tokenize.DetokenizationDictionary;
 
+import java.io.IOException;
+import java.io.InputStream;
+
 final class DetokenizationDictionaryLoader extends ModelLoader<DetokenizationDictionary> {
 
-  DetokenizationDictionaryLoader() {
-    super("detokenizer dictionary");
-  }
+    DetokenizationDictionaryLoader() {
+        super("detokenizer dictionary");
+    }
 
-  @Override
-  protected DetokenizationDictionary loadModel(InputStream modelIn) throws IOException {
-    return new DetokenizationDictionary(modelIn);
-  }
+    @Override
+    protected DetokenizationDictionary loadModel(InputStream modelIn) throws IOException {
+        return new DetokenizationDictionary(modelIn);
+    }
 
 }

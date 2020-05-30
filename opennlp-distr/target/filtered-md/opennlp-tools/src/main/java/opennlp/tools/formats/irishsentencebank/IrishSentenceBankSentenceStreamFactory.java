@@ -17,8 +17,6 @@
 
 package opennlp.tools.formats.irishsentencebank;
 
-import java.io.IOException;
-
 import opennlp.tools.cmdline.ArgumentParser;
 import opennlp.tools.cmdline.CmdLineUtil;
 import opennlp.tools.cmdline.StreamFactoryRegistry;
@@ -27,35 +25,37 @@ import opennlp.tools.formats.AbstractSampleStreamFactory;
 import opennlp.tools.sentdetect.SentenceSample;
 import opennlp.tools.util.ObjectStream;
 
+import java.io.IOException;
+
 public class IrishSentenceBankSentenceStreamFactory extends AbstractSampleStreamFactory<SentenceSample> {
 
-  interface Parameters extends BasicFormatParams {
-  }
-
-  public static void registerFactory() {
-    StreamFactoryRegistry.registerFactory(SentenceSample.class,
-        "irishsentencebank", new IrishSentenceBankSentenceStreamFactory(
-        IrishSentenceBankSentenceStreamFactory.Parameters.class));
-  }
-
-  protected <P> IrishSentenceBankSentenceStreamFactory(Class<P> params) {
-    super(params);
-  }
-
-  @Override
-  public ObjectStream<SentenceSample> create(String[] args) {
-
-    Parameters params = ArgumentParser.parse(args, Parameters.class);
-
-    CmdLineUtil.checkInputFile("Data", params.getData());
-
-    IrishSentenceBankDocument isbDoc = null;
-    try {
-      isbDoc = IrishSentenceBankDocument.parse(params.getData());
-    } catch (IOException ex) {
-      CmdLineUtil.handleCreateObjectStreamError(ex);
+    protected <P> IrishSentenceBankSentenceStreamFactory(Class<P> params) {
+        super(params);
     }
 
-    return new IrishSentenceBankSentenceStream(isbDoc);
-  }
+    public static void registerFactory() {
+        StreamFactoryRegistry.registerFactory(SentenceSample.class,
+                "irishsentencebank", new IrishSentenceBankSentenceStreamFactory(
+                        IrishSentenceBankSentenceStreamFactory.Parameters.class));
+    }
+
+    @Override
+    public ObjectStream<SentenceSample> create(String[] args) {
+
+        Parameters params = ArgumentParser.parse(args, Parameters.class);
+
+        CmdLineUtil.checkInputFile("Data", params.getData());
+
+        IrishSentenceBankDocument isbDoc = null;
+        try {
+            isbDoc = IrishSentenceBankDocument.parse(params.getData());
+        } catch (IOException ex) {
+            CmdLineUtil.handleCreateObjectStreamError(ex);
+        }
+
+        return new IrishSentenceBankSentenceStream(isbDoc);
+    }
+
+    interface Parameters extends BasicFormatParams {
+    }
 }

@@ -17,47 +17,46 @@
 
 package opennlp.tools.util.featuregen;
 
-import java.util.Map;
-import java.util.Objects;
-
+import opennlp.tools.util.InvalidFormatException;
 import org.w3c.dom.Element;
 
-import opennlp.tools.util.InvalidFormatException;
+import java.util.Map;
+import java.util.Objects;
 
 /**
  * @see PrefixFeatureGenerator
  */
 public class PrefixFeatureGeneratorFactory
-    extends GeneratorFactory.AbstractXmlFeatureGeneratorFactory
-    implements GeneratorFactory.XmlFeatureGeneratorFactory {
+        extends GeneratorFactory.AbstractXmlFeatureGeneratorFactory
+        implements GeneratorFactory.XmlFeatureGeneratorFactory {
 
-  public PrefixFeatureGeneratorFactory() {
-    super();
-  }
-
-  @Deprecated // TODO: (OPENNLP-1174) just remove when back-compat is no longer needed
-  public AdaptiveFeatureGenerator create(Element generatorElement,
-                                         FeatureGeneratorResourceProvider resourceManager) {
-
-    String attribute = generatorElement.getAttribute("length");
-
-    int prefixLength = PrefixFeatureGenerator.DEFAULT_MAX_LENGTH;
-
-    if (!Objects.equals(attribute, "")) {
-      prefixLength = Integer.parseInt(attribute);
+    public PrefixFeatureGeneratorFactory() {
+        super();
     }
 
-    return new PrefixFeatureGenerator(prefixLength);
-  }
+    @Deprecated // TODO: (OPENNLP-1174) just remove when back-compat is no longer needed
+    static void register(Map<String, GeneratorFactory.XmlFeatureGeneratorFactory> factoryMap) {
+        factoryMap.put("prefix", new PrefixFeatureGeneratorFactory());
+    }
 
-  @Deprecated // TODO: (OPENNLP-1174) just remove when back-compat is no longer needed
-  static void register(Map<String, GeneratorFactory.XmlFeatureGeneratorFactory> factoryMap) {
-    factoryMap.put("prefix", new PrefixFeatureGeneratorFactory());
-  }
+    @Deprecated // TODO: (OPENNLP-1174) just remove when back-compat is no longer needed
+    public AdaptiveFeatureGenerator create(Element generatorElement,
+                                           FeatureGeneratorResourceProvider resourceManager) {
 
-  @Override
-  public AdaptiveFeatureGenerator create() throws InvalidFormatException {
-    return new PrefixFeatureGenerator(getInt("length",
-        PrefixFeatureGenerator.DEFAULT_MAX_LENGTH));
-  }
+        String attribute = generatorElement.getAttribute("length");
+
+        int prefixLength = PrefixFeatureGenerator.DEFAULT_MAX_LENGTH;
+
+        if (!Objects.equals(attribute, "")) {
+            prefixLength = Integer.parseInt(attribute);
+        }
+
+        return new PrefixFeatureGenerator(prefixLength);
+    }
+
+    @Override
+    public AdaptiveFeatureGenerator create() throws InvalidFormatException {
+        return new PrefixFeatureGenerator(getInt("length",
+                PrefixFeatureGenerator.DEFAULT_MAX_LENGTH));
+    }
 }

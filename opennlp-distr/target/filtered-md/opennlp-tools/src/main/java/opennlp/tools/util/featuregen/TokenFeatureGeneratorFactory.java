@@ -17,33 +17,32 @@
 
 package opennlp.tools.util.featuregen;
 
-import java.util.Map;
-
+import opennlp.tools.util.InvalidFormatException;
 import org.w3c.dom.Element;
 
-import opennlp.tools.util.InvalidFormatException;
+import java.util.Map;
 
 public class TokenFeatureGeneratorFactory
-    extends GeneratorFactory.AbstractXmlFeatureGeneratorFactory
-    implements GeneratorFactory.XmlFeatureGeneratorFactory {
+        extends GeneratorFactory.AbstractXmlFeatureGeneratorFactory
+        implements GeneratorFactory.XmlFeatureGeneratorFactory {
 
-  public TokenFeatureGeneratorFactory() {
-    super();
-  }
+    public TokenFeatureGeneratorFactory() {
+        super();
+    }
 
-  @Deprecated // TODO: (OPENNLP-1174) just remove when back-compat is no longer needed
-  public AdaptiveFeatureGenerator create(Element generatorElement,
-             FeatureGeneratorResourceProvider resourceManager) {
-    return new TokenFeatureGenerator();
-  }
+    @Deprecated // TODO: (OPENNLP-1174) just remove when back-compat is no longer needed
+    static void register(Map<String, GeneratorFactory.XmlFeatureGeneratorFactory> factoryMap) {
+        factoryMap.put("token", new TokenFeatureGeneratorFactory());
+    }
 
-  @Deprecated // TODO: (OPENNLP-1174) just remove when back-compat is no longer needed
-  static void register(Map<String, GeneratorFactory.XmlFeatureGeneratorFactory> factoryMap) {
-    factoryMap.put("token", new TokenFeatureGeneratorFactory());
-  }
+    @Deprecated // TODO: (OPENNLP-1174) just remove when back-compat is no longer needed
+    public AdaptiveFeatureGenerator create(Element generatorElement,
+                                           FeatureGeneratorResourceProvider resourceManager) {
+        return new TokenFeatureGenerator();
+    }
 
-  @Override
-  public AdaptiveFeatureGenerator create() throws InvalidFormatException {
-    return new TokenFeatureGenerator(getBool("lowercase", true));
-  }
+    @Override
+    public AdaptiveFeatureGenerator create() throws InvalidFormatException {
+        return new TokenFeatureGenerator(getBool("lowercase", true));
+    }
 }

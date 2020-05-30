@@ -17,57 +17,56 @@
 
 package opennlp.tools.formats.ad;
 
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-
-import org.junit.Assert;
-import org.junit.Test;
-
 import opennlp.tools.formats.ResourceAsStreamFactory;
 import opennlp.tools.util.InputStreamFactory;
 import opennlp.tools.util.PlainTextByLineStream;
+import org.junit.Assert;
+import org.junit.Test;
+
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 
 public class ADParagraphStreamTest {
 
-  public static final int NUM_SENTENCES = 8;
+    public static final int NUM_SENTENCES = 8;
 
-  @Test
-  public void testSimpleReading() throws IOException {
-    int count = 0;
+    private static ADSentenceStream openData() throws IOException {
+        InputStreamFactory in = new ResourceAsStreamFactory(ADParagraphStreamTest.class,
+                "/opennlp/tools/formats/ad.sample");
 
-    ADSentenceStream stream = openData();
-
-    ADSentenceStream.Sentence paragraph = stream.read();
-    paragraph.getRoot();
-    while (paragraph != null) {
-      count++;
-      paragraph = stream.read();
-      // paragraph.getRoot();
+        return new ADSentenceStream(new PlainTextByLineStream(in, StandardCharsets.UTF_8));
     }
 
-    Assert.assertEquals(ADParagraphStreamTest.NUM_SENTENCES, count);
-  }
+    @Test
+    public void testSimpleReading() throws IOException {
+        int count = 0;
 
-  @Test
-  public void testLeadingWithContraction() throws IOException {
-    int count = 0;
+        ADSentenceStream stream = openData();
 
-    ADSentenceStream stream = openData();
+        ADSentenceStream.Sentence paragraph = stream.read();
+        paragraph.getRoot();
+        while (paragraph != null) {
+            count++;
+            paragraph = stream.read();
+            // paragraph.getRoot();
+        }
 
-    ADSentenceStream.Sentence paragraph = stream.read();
-    while (paragraph != null) {
-
-      count++;
-      paragraph = stream.read();
+        Assert.assertEquals(ADParagraphStreamTest.NUM_SENTENCES, count);
     }
 
-    Assert.assertEquals(ADParagraphStreamTest.NUM_SENTENCES, count);
-  }
+    @Test
+    public void testLeadingWithContraction() throws IOException {
+        int count = 0;
 
-  private static ADSentenceStream openData() throws IOException {
-    InputStreamFactory in = new ResourceAsStreamFactory(ADParagraphStreamTest.class,
-        "/opennlp/tools/formats/ad.sample");
+        ADSentenceStream stream = openData();
 
-    return new ADSentenceStream(new PlainTextByLineStream(in, StandardCharsets.UTF_8));
-  }
+        ADSentenceStream.Sentence paragraph = stream.read();
+        while (paragraph != null) {
+
+            count++;
+            paragraph = stream.read();
+        }
+
+        Assert.assertEquals(ADParagraphStreamTest.NUM_SENTENCES, count);
+    }
 }

@@ -17,47 +17,47 @@
 
 package opennlp.tools.util.featuregen;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class TokenClassFeatureGeneratorTest {
 
-  private List<String> features;
-  static String[] testSentence = new String[] {"This", "is", "an", "Example", "sentence"};
+    static String[] testSentence = new String[]{"This", "is", "an", "Example", "sentence"};
+    private List<String> features;
 
-  @Before
-  public void setUp() throws Exception {
-    features = new ArrayList<>();
-  }
+    @Before
+    public void setUp() throws Exception {
+        features = new ArrayList<>();
+    }
 
-  @Test
-  public void testGenWAC() {
+    @Test
+    public void testGenWAC() {
 
-    final int testTokenIndex = 3;
+        final int testTokenIndex = 3;
 
-    AdaptiveFeatureGenerator generator = new TokenClassFeatureGenerator(true);
+        AdaptiveFeatureGenerator generator = new TokenClassFeatureGenerator(true);
 
-    generator.createFeatures(features, testSentence, testTokenIndex, null);
+        generator.createFeatures(features, testSentence, testTokenIndex, null);
 
-    Assert.assertEquals(2, features.size());
-    Assert.assertEquals("wc=ic", features.get(0));
-    Assert.assertEquals("w&c=example,ic", features.get(1));
-  }
+        Assert.assertEquals(2, features.size());
+        Assert.assertEquals("wc=ic", features.get(0));
+        Assert.assertEquals("w&c=example,ic", features.get(1));
+    }
 
-  @Test
-  public void testNoWAC() {
+    @Test
+    public void testNoWAC() {
 
-    final int testTokenIndex = 3;
+        final int testTokenIndex = 3;
 
-    AdaptiveFeatureGenerator generator = new TokenClassFeatureGenerator(false);
+        AdaptiveFeatureGenerator generator = new TokenClassFeatureGenerator(false);
 
-    generator.createFeatures(features, testSentence, testTokenIndex, null);
+        generator.createFeatures(features, testSentence, testTokenIndex, null);
 
-    Assert.assertEquals(1, features.size());
-    Assert.assertEquals("wc=ic", features.get(0));
-  }
+        Assert.assertEquals(1, features.size());
+        Assert.assertEquals("wc=ic", features.get(0));
+    }
 }

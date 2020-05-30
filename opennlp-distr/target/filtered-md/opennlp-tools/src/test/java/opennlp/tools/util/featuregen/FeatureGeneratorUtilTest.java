@@ -22,46 +22,46 @@ import org.junit.Test;
 
 public class FeatureGeneratorUtilTest {
 
-  @Test
-  public void test() {
-    // digits
-    Assert.assertEquals("2d", FeatureGeneratorUtil.tokenFeature("12"));
-    Assert.assertEquals("4d", FeatureGeneratorUtil.tokenFeature("1234"));
-    Assert.assertEquals("an", FeatureGeneratorUtil.tokenFeature("abcd234"));
-    Assert.assertEquals("dd", FeatureGeneratorUtil.tokenFeature("1234-56"));
-    Assert.assertEquals("ds", FeatureGeneratorUtil.tokenFeature("4/6/2017"));
-    Assert.assertEquals("dc", FeatureGeneratorUtil.tokenFeature("1,234,567"));
-    Assert.assertEquals("dp", FeatureGeneratorUtil.tokenFeature("12.34567"));
-    Assert.assertEquals("num", FeatureGeneratorUtil.tokenFeature("123(456)7890"));
+    @Test
+    public void test() {
+        // digits
+        Assert.assertEquals("2d", FeatureGeneratorUtil.tokenFeature("12"));
+        Assert.assertEquals("4d", FeatureGeneratorUtil.tokenFeature("1234"));
+        Assert.assertEquals("an", FeatureGeneratorUtil.tokenFeature("abcd234"));
+        Assert.assertEquals("dd", FeatureGeneratorUtil.tokenFeature("1234-56"));
+        Assert.assertEquals("ds", FeatureGeneratorUtil.tokenFeature("4/6/2017"));
+        Assert.assertEquals("dc", FeatureGeneratorUtil.tokenFeature("1,234,567"));
+        Assert.assertEquals("dp", FeatureGeneratorUtil.tokenFeature("12.34567"));
+        Assert.assertEquals("num", FeatureGeneratorUtil.tokenFeature("123(456)7890"));
 
-    // letters
-    Assert.assertEquals("lc", FeatureGeneratorUtil.tokenFeature("opennlp"));
-    Assert.assertEquals("sc", FeatureGeneratorUtil.tokenFeature("O"));
-    Assert.assertEquals("ac", FeatureGeneratorUtil.tokenFeature("OPENNLP"));
-    Assert.assertEquals("cp", FeatureGeneratorUtil.tokenFeature("A."));
-    Assert.assertEquals("ic", FeatureGeneratorUtil.tokenFeature("Mike"));
-    Assert.assertEquals("other", FeatureGeneratorUtil.tokenFeature("somethingStupid"));
+        // letters
+        Assert.assertEquals("lc", FeatureGeneratorUtil.tokenFeature("opennlp"));
+        Assert.assertEquals("sc", FeatureGeneratorUtil.tokenFeature("O"));
+        Assert.assertEquals("ac", FeatureGeneratorUtil.tokenFeature("OPENNLP"));
+        Assert.assertEquals("cp", FeatureGeneratorUtil.tokenFeature("A."));
+        Assert.assertEquals("ic", FeatureGeneratorUtil.tokenFeature("Mike"));
+        Assert.assertEquals("other", FeatureGeneratorUtil.tokenFeature("somethingStupid"));
 
-    // symbols
-    Assert.assertEquals("other", FeatureGeneratorUtil.tokenFeature(","));
-    Assert.assertEquals("other", FeatureGeneratorUtil.tokenFeature("."));
-    Assert.assertEquals("other", FeatureGeneratorUtil.tokenFeature("?"));
-    Assert.assertEquals("other", FeatureGeneratorUtil.tokenFeature("!"));
-    Assert.assertEquals("other", FeatureGeneratorUtil.tokenFeature("#"));
-    Assert.assertEquals("other", FeatureGeneratorUtil.tokenFeature("%"));
-    Assert.assertEquals("other", FeatureGeneratorUtil.tokenFeature("&"));
-  }
+        // symbols
+        Assert.assertEquals("other", FeatureGeneratorUtil.tokenFeature(","));
+        Assert.assertEquals("other", FeatureGeneratorUtil.tokenFeature("."));
+        Assert.assertEquals("other", FeatureGeneratorUtil.tokenFeature("?"));
+        Assert.assertEquals("other", FeatureGeneratorUtil.tokenFeature("!"));
+        Assert.assertEquals("other", FeatureGeneratorUtil.tokenFeature("#"));
+        Assert.assertEquals("other", FeatureGeneratorUtil.tokenFeature("%"));
+        Assert.assertEquals("other", FeatureGeneratorUtil.tokenFeature("&"));
+    }
 
-  @Test
-  public void testJapanese() {
-    // Hiragana
-    Assert.assertEquals("jah", FeatureGeneratorUtil.tokenFeature("そういえば"));
-    Assert.assertEquals("jah", FeatureGeneratorUtil.tokenFeature("おーぷん・そ〜す・そふとうぇあ"));
-    Assert.assertEquals("other", FeatureGeneratorUtil.tokenFeature("あぱっち・そふとうぇあ財団"));
+    @Test
+    public void testJapanese() {
+        // Hiragana
+        Assert.assertEquals("jah", FeatureGeneratorUtil.tokenFeature("そういえば"));
+        Assert.assertEquals("jah", FeatureGeneratorUtil.tokenFeature("おーぷん・そ〜す・そふとうぇあ"));
+        Assert.assertEquals("other", FeatureGeneratorUtil.tokenFeature("あぱっち・そふとうぇあ財団"));
 
-    // Katakana
-    Assert.assertEquals("jak", FeatureGeneratorUtil.tokenFeature("ジャパン"));
-    Assert.assertEquals("jak", FeatureGeneratorUtil.tokenFeature("オープン・ソ〜ス・ソフトウェア"));
-    Assert.assertEquals("other", FeatureGeneratorUtil.tokenFeature("アパッチ・ソフトウェア財団"));
-  }
+        // Katakana
+        Assert.assertEquals("jak", FeatureGeneratorUtil.tokenFeature("ジャパン"));
+        Assert.assertEquals("jak", FeatureGeneratorUtil.tokenFeature("オープン・ソ〜ス・ソフトウェア"));
+        Assert.assertEquals("other", FeatureGeneratorUtil.tokenFeature("アパッチ・ソフトウェア財団"));
+    }
 }

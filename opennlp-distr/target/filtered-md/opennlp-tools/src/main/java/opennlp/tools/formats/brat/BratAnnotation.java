@@ -21,34 +21,34 @@ import java.util.Objects;
 
 public abstract class BratAnnotation {
 
-  private final String id;
-  private final String type;
-  private String note;
-  
-  protected BratAnnotation(String id, String type) {
-    this.id = Objects.requireNonNull(id);
-    this.type = Objects.requireNonNull(type);
-    this.note = "";
-  }
+    private final String id;
+    private final String type;
+    private String note;
 
-  public String getId() {
-    return id;
-  }
+    protected BratAnnotation(String id, String type) {
+        this.id = Objects.requireNonNull(id);
+        this.type = Objects.requireNonNull(type);
+        this.note = "";
+    }
 
-  public String getType() {
-    return type;
-  }
+    public String getId() {
+        return id;
+    }
 
-  public void setNote(String note) {
-    this.note = note;
-  }
-  
-  public String getNote() {
-    return note;
-  }
-  
-  @Override
-  public String toString() {
-    return (id + " " + type + " " + note).trim();
-  }
+    public String getType() {
+        return type;
+    }
+
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
+    }
+
+    @Override
+    public String toString() {
+        return (id + " " + type + " " + note).trim();
+    }
 }

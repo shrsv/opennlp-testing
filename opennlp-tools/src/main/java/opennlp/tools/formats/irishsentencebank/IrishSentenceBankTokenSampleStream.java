@@ -17,36 +17,36 @@
 
 package opennlp.tools.formats.irishsentencebank;
 
-import java.io.IOException;
-import java.util.Iterator;
-
 import opennlp.tools.tokenize.TokenSample;
 import opennlp.tools.util.ObjectStream;
 
-class IrishSentenceBankTokenSampleStream implements ObjectStream<TokenSample>  {
+import java.io.IOException;
+import java.util.Iterator;
 
-  private final IrishSentenceBankDocument source;
+class IrishSentenceBankTokenSampleStream implements ObjectStream<TokenSample> {
 
-  private Iterator<IrishSentenceBankDocument.IrishSentenceBankSentence> sentenceIt;
+    private final IrishSentenceBankDocument source;
 
-  IrishSentenceBankTokenSampleStream(IrishSentenceBankDocument source) {
-    this.source = source;
-    reset();
-  }
+    private Iterator<IrishSentenceBankDocument.IrishSentenceBankSentence> sentenceIt;
 
-  @Override
-  public TokenSample read() throws IOException {
-
-    if (sentenceIt.hasNext()) {
-      IrishSentenceBankDocument.IrishSentenceBankSentence sentence = sentenceIt.next();
-      return sentence.getTokenSample();
-    } else {
-      return null;
+    IrishSentenceBankTokenSampleStream(IrishSentenceBankDocument source) {
+        this.source = source;
+        reset();
     }
-  }
 
-  @Override
-  public void reset() {
-    sentenceIt = source.getSentences().iterator();
-  }
+    @Override
+    public TokenSample read() throws IOException {
+
+        if (sentenceIt.hasNext()) {
+            IrishSentenceBankDocument.IrishSentenceBankSentence sentence = sentenceIt.next();
+            return sentence.getTokenSample();
+        } else {
+            return null;
+        }
+    }
+
+    @Override
+    public void reset() {
+        sentenceIt = source.getSentences().iterator();
+    }
 }

@@ -29,27 +29,27 @@ import opennlp.tools.util.ObjectStream;
  * <b>Note:</b> Do not use this class, internal use only!
  */
 public class ConllXSentenceSampleStreamFactory extends
-    DetokenizerSampleStreamFactory<SentenceSample> {
+        DetokenizerSampleStreamFactory<SentenceSample> {
 
-  interface Parameters extends ConllXPOSSampleStreamFactory.Parameters, DetokenizerParameter {
-    // TODO: make chunk size configurable
-  }
+    protected <P> ConllXSentenceSampleStreamFactory(Class<P> params) {
+        super(params);
+    }
 
-  public static void registerFactory() {
-    StreamFactoryRegistry.registerFactory(SentenceSample.class,
-        ConllXPOSSampleStreamFactory.CONLLX_FORMAT, new ConllXSentenceSampleStreamFactory(Parameters.class));
-  }
+    public static void registerFactory() {
+        StreamFactoryRegistry.registerFactory(SentenceSample.class,
+                ConllXPOSSampleStreamFactory.CONLLX_FORMAT, new ConllXSentenceSampleStreamFactory(Parameters.class));
+    }
 
-  protected <P> ConllXSentenceSampleStreamFactory(Class<P> params) {
-    super(params);
-  }
+    public ObjectStream<SentenceSample> create(String[] args) {
+        Parameters params = ArgumentParser.parse(args, Parameters.class);
 
-  public ObjectStream<SentenceSample> create(String[] args) {
-    Parameters params = ArgumentParser.parse(args, Parameters.class);
+        ObjectStream<POSSample> posSampleStream = StreamFactoryRegistry.getFactory(POSSample.class,
+                ConllXPOSSampleStreamFactory.CONLLX_FORMAT).create(
+                ArgumentParser.filter(args, ConllXPOSSampleStreamFactory.Parameters.class));
+        return new POSToSentenceSampleStream(createDetokenizer(params), posSampleStream, 30);
+    }
 
-    ObjectStream<POSSample> posSampleStream = StreamFactoryRegistry.getFactory(POSSample.class,
-        ConllXPOSSampleStreamFactory.CONLLX_FORMAT).create(
-        ArgumentParser.filter(args, ConllXPOSSampleStreamFactory.Parameters.class));
-    return new POSToSentenceSampleStream(createDetokenizer(params), posSampleStream, 30);
-  }
+    interface Parameters extends ConllXPOSSampleStreamFactory.Parameters, DetokenizerParameter {
+        // TODO: make chunk size configurable
+    }
 }

@@ -17,24 +17,24 @@
 
 package opennlp.tools.util.model;
 
+import opennlp.tools.dictionary.Dictionary;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Map;
 
-import opennlp.tools.dictionary.Dictionary;
-
 public class DictionarySerializer implements ArtifactSerializer<Dictionary> {
 
-  public Dictionary create(InputStream in) throws IOException {
-    return new Dictionary(in);
-  }
+    static void register(Map<String, ArtifactSerializer> factories) {
+        factories.put("dictionary", new DictionarySerializer());
+    }
 
-  public void serialize(Dictionary dictionary, OutputStream out) throws IOException {
-    dictionary.serialize(out);
-  }
+    public Dictionary create(InputStream in) throws IOException {
+        return new Dictionary(in);
+    }
 
-  static void register(Map<String, ArtifactSerializer> factories) {
-    factories.put("dictionary", new DictionarySerializer());
-  }
+    public void serialize(Dictionary dictionary, OutputStream out) throws IOException {
+        dictionary.serialize(out);
+    }
 }

@@ -17,27 +17,27 @@
 
 package opennlp.tools.langdetect;
 
-import java.util.Arrays;
-import java.util.Collection;
-
 import org.junit.Assert;
 import org.junit.Test;
+
+import java.util.Arrays;
+import java.util.Collection;
 
 
 public class DefaultLanguageDetectorContextGeneratorTest {
 
-  @Test
-  public void extractContext() throws Exception {
-    String doc = "abcde fghijk";
+    @Test
+    public void extractContext() throws Exception {
+        String doc = "abcde fghijk";
 
-    LanguageDetectorContextGenerator cg = new DefaultLanguageDetectorContextGenerator(1, 3);
+        LanguageDetectorContextGenerator cg = new DefaultLanguageDetectorContextGenerator(1, 3);
 
-    Collection<String> features = Arrays.asList(cg.getContext(doc));
+        Collection<String> features = Arrays.asList(cg.getContext(doc));
 
-    Assert.assertEquals(33, features.size());
-    Assert.assertTrue(features.contains("ab"));
-    Assert.assertTrue(features.contains("abc"));
-    Assert.assertTrue(features.contains("e f"));
-    Assert.assertTrue(features.contains(" fg"));
-  }
+        Assert.assertEquals(33, features.size());
+        Assert.assertTrue(features.contains("ab"));
+        Assert.assertTrue(features.contains("abc"));
+        Assert.assertTrue(features.contains("e f"));
+        Assert.assertTrue(features.contains(" fg"));
+    }
 }

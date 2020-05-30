@@ -17,50 +17,50 @@
 
 package opennlp.tools.ml.maxent;
 
-import java.io.IOException;
-
 import opennlp.tools.ml.model.Event;
 import opennlp.tools.ml.model.RealValueFileEventStream;
 import opennlp.tools.util.ObjectStream;
 
+import java.io.IOException;
+
 public class RealBasicEventStream implements ObjectStream<Event> {
-  ContextGenerator<String> cg = new BasicContextGenerator();
-  private ObjectStream<String> ds;
+    ContextGenerator<String> cg = new BasicContextGenerator();
+    private ObjectStream<String> ds;
 
-  public RealBasicEventStream(ObjectStream<String> ds) {
-    this.ds = ds;
-  }
-
-  public Event read() throws IOException {
-
-    String eventString = ds.read();
-
-    if (eventString != null) {
-      return createEvent(eventString);
+    public RealBasicEventStream(ObjectStream<String> ds) {
+        this.ds = ds;
     }
 
-    return null;
-  }
+    public Event read() throws IOException {
 
-  private Event createEvent(String obs) {
-    int lastSpace = obs.lastIndexOf(' ');
-    if (lastSpace == -1)
-      return null;
-    else {
-      String[] contexts = obs.substring(0,lastSpace).split("\\s+");
-      float[] values = RealValueFileEventStream.parseContexts(contexts);
-      return new Event(obs.substring(lastSpace + 1),contexts,values);
+        String eventString = ds.read();
+
+        if (eventString != null) {
+            return createEvent(eventString);
+        }
+
+        return null;
     }
-  }
 
-  @Override
-  public void reset() throws IOException, UnsupportedOperationException {
-    ds.reset();
-  }
+    private Event createEvent(String obs) {
+        int lastSpace = obs.lastIndexOf(' ');
+        if (lastSpace == -1)
+            return null;
+        else {
+            String[] contexts = obs.substring(0, lastSpace).split("\\s+");
+            float[] values = RealValueFileEventStream.parseContexts(contexts);
+            return new Event(obs.substring(lastSpace + 1), contexts, values);
+        }
+    }
 
-  @Override
-  public void close() throws IOException {
-    ds.close();
-  }
+    @Override
+    public void reset() throws IOException, UnsupportedOperationException {
+        ds.reset();
+    }
+
+    @Override
+    public void close() throws IOException {
+        ds.close();
+    }
 
 }

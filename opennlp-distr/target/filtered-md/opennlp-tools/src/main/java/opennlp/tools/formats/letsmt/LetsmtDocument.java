@@ -17,6 +17,13 @@
 
 package opennlp.tools.formats.letsmt;
 
+import opennlp.tools.util.XmlUtil;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+import org.xml.sax.XMLReader;
+import org.xml.sax.helpers.DefaultHandler;
+
+import javax.xml.parsers.SAXParser;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -25,15 +32,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-
-import javax.xml.parsers.SAXParser;
-
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
-import org.xml.sax.XMLReader;
-import org.xml.sax.helpers.DefaultHandler;
-
-import opennlp.tools.util.XmlUtil;
 
 /**
  * A structure to hold the letsmt document. The documents contains sentences and depending on the
@@ -44,96 +42,95 @@ import opennlp.tools.util.XmlUtil;
  */
 public class LetsmtDocument {
 
-  public static class LetsmtSentence {
-    private String nonTokenizedText;
-    private String[] tokens;
-
-    public String getNonTokenizedText() {
-      return nonTokenizedText;
-    }
-
-    public String[] getTokens() {
-      if (tokens != null) {
-        return Arrays.copyOf(tokens, tokens.length);
-      }
-
-      return null;
-    }
-  }
-
-  // define a content handler to receive the sax events ...
-  public static class LetsmtDocumentHandler extends DefaultHandler {
-
     private List<LetsmtSentence> sentences = new ArrayList<>();
 
-    private StringBuilder chars = new StringBuilder();
-    private List<String> tokens = new ArrayList<>();
-
-    @Override
-    public void characters(char[] ch, int start, int length) throws SAXException {
-      chars.append(ch, start, length);
+    private LetsmtDocument(List<LetsmtSentence> sentences) {
+        this.sentences = sentences;
     }
 
-    @Override
-    public void endElement(String uri, String localName, String qName) throws SAXException {
-      super.endElement(uri, localName, qName);
+    static LetsmtDocument parse(InputStream letsmtXmlIn) throws IOException {
+        SAXParser saxParser = XmlUtil.createSaxParser();
 
-      // Note:
-      // words are optional in sentences, if there are no words just the chars have to be captured
-
-      switch (qName) {
-        case "w":
-          tokens.add(chars.toString().trim());
-          chars.setLength(0);
-          break;
-
-        // TODO: The sentence should contain the id, so it can be tracked back to the
-        // place it came from
-        case "s":
-          LetsmtSentence sentence = new LetsmtSentence();
-
-          if (tokens.size() > 0) {
-            sentence.tokens = tokens.toArray(new String[tokens.size()]);
-            tokens = new ArrayList<>();
-          }
-          else {
-            sentence.nonTokenizedText = chars.toString().trim();
-          }
-
-          sentences.add(sentence);
-
-          chars.setLength(0);
-      }
+        try {
+            XMLReader xmlReader = saxParser.getXMLReader();
+            LetsmtDocumentHandler docHandler = new LetsmtDocumentHandler();
+            xmlReader.setContentHandler(docHandler);
+            xmlReader.parse(new InputSource(letsmtXmlIn));
+            return new LetsmtDocument(docHandler.sentences);
+        } catch (SAXException e) {
+            throw new IOException("Failed to parse letsmt xml!", e);
+        }
     }
-  }
 
-  private List<LetsmtSentence> sentences = new ArrayList<>();
-
-  private LetsmtDocument(List<LetsmtSentence> sentences) {
-    this.sentences = sentences;
-  }
-
-  public List<LetsmtSentence> getSentences() {
-    return Collections.unmodifiableList(sentences);
-  }
-
-  static LetsmtDocument parse(InputStream letsmtXmlIn) throws IOException {
-    SAXParser saxParser = XmlUtil.createSaxParser();
-
-    try {
-      XMLReader xmlReader = saxParser.getXMLReader();
-      LetsmtDocumentHandler docHandler = new LetsmtDocumentHandler();
-      xmlReader.setContentHandler(docHandler);
-      xmlReader.parse(new InputSource(letsmtXmlIn));
-      return new LetsmtDocument(docHandler.sentences);
-    } catch (SAXException e) {
-      throw new IOException("Failed to parse letsmt xml!", e);
+    static LetsmtDocument parse(File file) throws IOException {
+        try (InputStream in = new FileInputStream(file)) {
+            return parse(in);
+        }
     }
-  }
 
-  static LetsmtDocument parse(File file) throws IOException {
-    try (InputStream in = new FileInputStream(file)) {
-      return parse(in);
+    public List<LetsmtSentence> getSentences() {
+        return Collections.unmodifiableList(sentences);
     }
-  }
+
+    public static class LetsmtSentence {
+        private String nonTokenizedText;
+        private String[] tokens;
+
+        public String getNonTokenizedText() {
+            return nonTokenizedText;
+        }
+
+        public String[] getTokens() {
+            if (tokens != null) {
+                return Arrays.copyOf(tokens, tokens.length);
+            }
+
+            return null;
+        }
+    }
+
+    // define a content handler to receive the sax events ...
+    public static class LetsmtDocumentHandler extends DefaultHandler {
+
+        private List<LetsmtSentence> sentences = new ArrayList<>();
+
+        private StringBuilder chars = new StringBuilder();
+        private List<String> tokens = new ArrayList<>();
+
+        @Override
+        public void characters(char[] ch, int start, int length) throws SAXException {
+            chars.append(ch, start, length);
+        }
+
+        @Override
+        public void endElement(String uri, String localName, String qName) throws SAXException {
+            super.endElement(uri, localName, qName);
+
+            // Note:
+            // words are optional in sentences, if there are no words just the chars have to be captured
+
+            switch (qName) {
+                case "w":
+                    tokens.add(chars.toString().trim());
+                    chars.setLength(0);
+                    break;
+
+                // TODO: The sentence should contain the id, so it can be tracked back to the
+                // place it came from
+                case "s":
+                    LetsmtSentence sentence = new LetsmtSentence();
+
+                    if (tokens.size() > 0) {
+                        sentence.tokens = tokens.toArray(new String[tokens.size()]);
+                        tokens = new ArrayList<>();
+                    } else {
+                        sentence.nonTokenizedText = chars.toString().trim();
+                    }
+
+                    sentences.add(sentence);
+
+                    chars.setLength(0);
+            }
+        }
+    }
 }

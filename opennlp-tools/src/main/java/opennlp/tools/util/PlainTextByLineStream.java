@@ -28,39 +28,39 @@ import java.util.Objects;
  */
 public class PlainTextByLineStream implements ObjectStream<String> {
 
-  private final Charset encoding;
+    private final Charset encoding;
 
-  private InputStreamFactory inputStreamFactory;
+    private InputStreamFactory inputStreamFactory;
 
-  private BufferedReader in;
+    private BufferedReader in;
 
-  public PlainTextByLineStream(InputStreamFactory inputStreamFactory,
-                               String charsetName) throws IOException {
-    this(inputStreamFactory, Charset.forName(charsetName));
-  }
-
-  public PlainTextByLineStream(InputStreamFactory inputStreamFactory,
-                               Charset charset) throws IOException {
-    this.inputStreamFactory =
-        Objects.requireNonNull(inputStreamFactory, "inputStreamFactory must not be null!");
-    this.encoding = charset;
-
-    reset();
-  }
-
-  public String read() throws IOException {
-    return in.readLine();
-  }
-
-  public void reset() throws IOException {
-
-    in = new BufferedReader(new InputStreamReader(inputStreamFactory.createInputStream(),
-          encoding));
-  }
-
-  public void close() throws IOException {
-    if (in != null) {
-      in.close();
+    public PlainTextByLineStream(InputStreamFactory inputStreamFactory,
+                                 String charsetName) throws IOException {
+        this(inputStreamFactory, Charset.forName(charsetName));
     }
-  }
+
+    public PlainTextByLineStream(InputStreamFactory inputStreamFactory,
+                                 Charset charset) throws IOException {
+        this.inputStreamFactory =
+                Objects.requireNonNull(inputStreamFactory, "inputStreamFactory must not be null!");
+        this.encoding = charset;
+
+        reset();
+    }
+
+    public String read() throws IOException {
+        return in.readLine();
+    }
+
+    public void reset() throws IOException {
+
+        in = new BufferedReader(new InputStreamReader(inputStreamFactory.createInputStream(),
+                encoding));
+    }
+
+    public void close() throws IOException {
+        if (in != null) {
+            in.close();
+        }
+    }
 }

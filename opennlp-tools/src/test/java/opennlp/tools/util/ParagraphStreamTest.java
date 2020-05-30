@@ -17,39 +17,39 @@
 
 package opennlp.tools.util;
 
-import java.io.IOException;
-
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.io.IOException;
+
 public class ParagraphStreamTest {
 
-  @Test
-  public void testSimpleReading() throws IOException {
-    try (ParagraphStream paraStream = new ParagraphStream(
-            ObjectStreamUtils.createObjectStream("1", "2", "", "", "4", "5"))) {
-      Assert.assertEquals("1\n2\n", paraStream.read());
-      Assert.assertEquals("4\n5\n", paraStream.read());
-      Assert.assertNull(paraStream.read());
+    @Test
+    public void testSimpleReading() throws IOException {
+        try (ParagraphStream paraStream = new ParagraphStream(
+                ObjectStreamUtils.createObjectStream("1", "2", "", "", "4", "5"))) {
+            Assert.assertEquals("1\n2\n", paraStream.read());
+            Assert.assertEquals("4\n5\n", paraStream.read());
+            Assert.assertNull(paraStream.read());
+        }
+        try (ParagraphStream paraStream = new ParagraphStream(
+                ObjectStreamUtils.createObjectStream("1", "2", "", "", "4", "5", ""))) {
+            Assert.assertEquals("1\n2\n", paraStream.read());
+            Assert.assertEquals("4\n5\n", paraStream.read());
+            Assert.assertNull(paraStream.read());
+        }
     }
-    try (ParagraphStream paraStream = new ParagraphStream(
-              ObjectStreamUtils.createObjectStream("1", "2", "", "", "4", "5", ""))) {
-      Assert.assertEquals("1\n2\n", paraStream.read());
-      Assert.assertEquals("4\n5\n", paraStream.read());
-      Assert.assertNull(paraStream.read());
-    }
-  }
 
-  @Test
-  public void testReset() throws IOException {
-    try (ParagraphStream paraStream = new ParagraphStream(
-            ObjectStreamUtils.createObjectStream("1", "2", "", "", "4", "5", ""))) {
-      Assert.assertEquals("1\n2\n", paraStream.read());
-      paraStream.reset();
+    @Test
+    public void testReset() throws IOException {
+        try (ParagraphStream paraStream = new ParagraphStream(
+                ObjectStreamUtils.createObjectStream("1", "2", "", "", "4", "5", ""))) {
+            Assert.assertEquals("1\n2\n", paraStream.read());
+            paraStream.reset();
 
-      Assert.assertEquals("1\n2\n", paraStream.read());
-      Assert.assertEquals("4\n5\n", paraStream.read());
-      Assert.assertNull(paraStream.read());
+            Assert.assertEquals("1\n2\n", paraStream.read());
+            Assert.assertEquals("4\n5\n", paraStream.read());
+            Assert.assertNull(paraStream.read());
+        }
     }
-  }
 }

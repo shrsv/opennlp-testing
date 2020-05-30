@@ -17,15 +17,15 @@
 
 package opennlp.tools.cmdline.params;
 
-import java.io.File;
-
 import opennlp.tools.cmdline.ArgumentParser.ParameterDescription;
+
+import java.io.File;
 
 /**
  * Common format parameters.
  */
 public interface BasicFormatParams extends EncodingParameter {
 
-  @ParameterDescription(valueName = "sampleData", description = "data to be used, usually a file name.")
-  File getData();
+    @ParameterDescription(valueName = "sampleData", description = "data to be used, usually a file name.")
+    File getData();
 }

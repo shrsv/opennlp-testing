@@ -24,49 +24,49 @@ import java.util.Objects;
  * Class for holding the document language and its confidence
  */
 public class Language implements Serializable {
-  private final String lang;
-  private final double confidence;
+    private final String lang;
+    private final double confidence;
 
-  public Language(String lang) {
-    this(lang, 0);
-  }
-
-  public Language(String lang, double confidence) {
-    Objects.requireNonNull(lang, "lang must not be null");
-    this.lang = lang;
-    this.confidence = confidence;
-  }
-
-  public String getLang() {
-    return lang;
-  }
-
-  public double getConfidence() {
-    return confidence;
-  }
-
-  @Override
-  public String toString() {
-    return getLang() + " (" + this.confidence + ")";
-  }
-
-  @Override
-  public int hashCode() {
-    return Objects.hash(getLang(), getConfidence());
-  }
-
-  @Override
-  public boolean equals(Object obj) {
-    if (this == obj) {
-      return true;
+    public Language(String lang) {
+        this(lang, 0);
     }
 
-    if (obj instanceof Language) {
-      Language a = (Language) obj;
-
-      return getLang().equals(a.getLang());
+    public Language(String lang, double confidence) {
+        Objects.requireNonNull(lang, "lang must not be null");
+        this.lang = lang;
+        this.confidence = confidence;
     }
 
-    return false;
-  }
+    public String getLang() {
+        return lang;
+    }
+
+    public double getConfidence() {
+        return confidence;
+    }
+
+    @Override
+    public String toString() {
+        return getLang() + " (" + this.confidence + ")";
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getLang(), getConfidence());
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+
+        if (obj instanceof Language) {
+            Language a = (Language) obj;
+
+            return getLang().equals(a.getLang());
+        }
+
+        return false;
+    }
 }

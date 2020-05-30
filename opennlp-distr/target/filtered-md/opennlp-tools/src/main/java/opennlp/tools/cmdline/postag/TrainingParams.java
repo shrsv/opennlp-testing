@@ -17,37 +17,37 @@
 
 package opennlp.tools.cmdline.postag;
 
-import java.io.File;
-
 import opennlp.tools.cmdline.ArgumentParser.OptionalParameter;
 import opennlp.tools.cmdline.ArgumentParser.ParameterDescription;
 import opennlp.tools.cmdline.params.BasicTrainingParams;
 
+import java.io.File;
+
 /**
  * TrainingParameters for Name Finder.
- *
+ * <p>
  * Note: Do not use this class, internal use only!
  */
 interface TrainingParams extends BasicTrainingParams {
-  @ParameterDescription(valueName = "featuregenFile", description = "The feature generator descriptor file")
-  @OptionalParameter
-  File getFeaturegen();
+    @ParameterDescription(valueName = "featuregenFile", description = "The feature generator descriptor file")
+    @OptionalParameter
+    File getFeaturegen();
 
-  @ParameterDescription(valueName = "resourcesDir", description = "The resources directory")
-  @OptionalParameter
-  File getResources();
+    @ParameterDescription(valueName = "resourcesDir", description = "The resources directory")
+    @OptionalParameter
+    File getResources();
 
-  @ParameterDescription(valueName = "dictionaryPath", description = "The XML tag dictionary file")
-  @OptionalParameter
-  File getDict();
+    @ParameterDescription(valueName = "dictionaryPath", description = "The XML tag dictionary file")
+    @OptionalParameter
+    File getDict();
 
-  @ParameterDescription(valueName = "tagDictCutoff",
-      description = "TagDictionary cutoff. If specified will create/expand a mutable TagDictionary")
-  @OptionalParameter
-  Integer getTagDictCutoff();
+    @ParameterDescription(valueName = "tagDictCutoff",
+            description = "TagDictionary cutoff. If specified will create/expand a mutable TagDictionary")
+    @OptionalParameter
+    Integer getTagDictCutoff();
 
-  @ParameterDescription(valueName = "factoryName",
-      description = "A sub-class of POSTaggerFactory where to get implementation and resources.")
-  @OptionalParameter
-  String getFactory();
+    @ParameterDescription(valueName = "factoryName",
+            description = "A sub-class of POSTaggerFactory where to get implementation and resources.")
+    @OptionalParameter
+    String getFactory();
 }

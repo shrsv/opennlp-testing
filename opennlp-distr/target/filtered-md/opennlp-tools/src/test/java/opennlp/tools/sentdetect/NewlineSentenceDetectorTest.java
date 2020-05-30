@@ -26,29 +26,29 @@ import org.junit.Test;
 public class NewlineSentenceDetectorTest {
 
 
-  private static void testSentenceValues(String sentences) {
-    NewlineSentenceDetector sd = new NewlineSentenceDetector();
+    private static void testSentenceValues(String sentences) {
+        NewlineSentenceDetector sd = new NewlineSentenceDetector();
 
-    String[] results = sd.sentDetect(sentences);
+        String[] results = sd.sentDetect(sentences);
 
-    Assert.assertEquals(3, results.length);
-    Assert.assertEquals("one.", results[0]);
-    Assert.assertEquals("two.", results[1]);
-    Assert.assertEquals("three.", results[2]);
-  }
+        Assert.assertEquals(3, results.length);
+        Assert.assertEquals("one.", results[0]);
+        Assert.assertEquals("two.", results[1]);
+        Assert.assertEquals("three.", results[2]);
+    }
 
-  @Test
-  public void testNewlineCr() {
-    testSentenceValues("one.\rtwo. \r\r three.\r");
-  }
+    @Test
+    public void testNewlineCr() {
+        testSentenceValues("one.\rtwo. \r\r three.\r");
+    }
 
-  @Test
-  public void testNewlineLf() {
-    testSentenceValues("one.\ntwo. \n\n three.\n");
-  }
+    @Test
+    public void testNewlineLf() {
+        testSentenceValues("one.\ntwo. \n\n three.\n");
+    }
 
-  @Test
-  public void testNewlineCrLf() {
-    testSentenceValues("one.\r\ntwo. \r\n\r\n three.\r\n");
-  }
+    @Test
+    public void testNewlineCrLf() {
+        testSentenceValues("one.\r\ntwo. \r\n\r\n three.\r\n");
+    }
 }

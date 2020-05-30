@@ -17,39 +17,38 @@
 
 package opennlp.tools.cmdline.lemmatizer;
 
-import java.io.OutputStream;
-
 import opennlp.tools.cmdline.EvaluationErrorPrinter;
 import opennlp.tools.lemmatizer.LemmaSample;
 import opennlp.tools.lemmatizer.LemmatizerEvaluationMonitor;
 import opennlp.tools.util.eval.EvaluationMonitor;
 
+import java.io.OutputStream;
+
 /**
  * A default implementation of {@link EvaluationMonitor} that prints to an
  * output stream.
- *
  */
 public class LemmaEvaluationErrorListener extends
-    EvaluationErrorPrinter<LemmaSample> implements LemmatizerEvaluationMonitor {
+        EvaluationErrorPrinter<LemmaSample> implements LemmatizerEvaluationMonitor {
 
-  /**
-   * Creates a listener that will print to System.err
-   */
-  public LemmaEvaluationErrorListener() {
-    super(System.err);
-  }
+    /**
+     * Creates a listener that will print to System.err
+     */
+    public LemmaEvaluationErrorListener() {
+        super(System.err);
+    }
 
-  /**
-   * Creates a listener that will print to a given {@link OutputStream}
-   */
-  public LemmaEvaluationErrorListener(OutputStream outputStream) {
-    super(outputStream);
-  }
+    /**
+     * Creates a listener that will print to a given {@link OutputStream}
+     */
+    public LemmaEvaluationErrorListener(OutputStream outputStream) {
+        super(outputStream);
+    }
 
-  @Override
-  public void missclassified(LemmaSample reference, LemmaSample prediction) {
-    printError(reference.getLemmas(), prediction.getLemmas(), reference,
-        prediction, reference.getTokens());
-  }
+    @Override
+    public void missclassified(LemmaSample reference, LemmaSample prediction) {
+        printError(reference.getLemmas(), prediction.getLemmas(), reference,
+                prediction, reference.getTokens());
+    }
 
 }

@@ -17,93 +17,92 @@
 
 package opennlp.tools.doccat;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-
-import org.junit.Assert;
-import org.junit.Test;
-
 import opennlp.tools.formats.ResourceAsStreamFactory;
 import opennlp.tools.util.InputStreamFactory;
 import opennlp.tools.util.ObjectStream;
 import opennlp.tools.util.PlainTextByLineStream;
 import opennlp.tools.util.TrainingParameters;
+import org.junit.Assert;
+import org.junit.Test;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 
 /**
  * Tests for the {@link DoccatFactory} class.
  */
 public class DoccatFactoryTest {
 
-  private static ObjectStream<DocumentSample> createSampleStream()
-      throws IOException {
+    private static ObjectStream<DocumentSample> createSampleStream()
+            throws IOException {
 
-    InputStreamFactory isf = new ResourceAsStreamFactory(
-        DoccatFactoryTest.class, "/opennlp/tools/doccat/DoccatSample.txt");
+        InputStreamFactory isf = new ResourceAsStreamFactory(
+                DoccatFactoryTest.class, "/opennlp/tools/doccat/DoccatSample.txt");
 
-    return new DocumentSampleStream(new PlainTextByLineStream(isf, StandardCharsets.UTF_8));
-  }
+        return new DocumentSampleStream(new PlainTextByLineStream(isf, StandardCharsets.UTF_8));
+    }
 
-  private static DoccatModel train() throws IOException {
-    return DocumentCategorizerME.train("x-unspecified", createSampleStream(),
-        TrainingParameters.defaultParams(), new DoccatFactory());
-  }
+    private static DoccatModel train() throws IOException {
+        return DocumentCategorizerME.train("x-unspecified", createSampleStream(),
+                TrainingParameters.defaultParams(), new DoccatFactory());
+    }
 
-  private static DoccatModel train(DoccatFactory factory) throws IOException {
-    return DocumentCategorizerME.train("x-unspecified", createSampleStream(),
-        TrainingParameters.defaultParams(), factory);
-  }
+    private static DoccatModel train(DoccatFactory factory) throws IOException {
+        return DocumentCategorizerME.train("x-unspecified", createSampleStream(),
+                TrainingParameters.defaultParams(), factory);
+    }
 
-  @Test
-  public void testDefault() throws IOException {
-    DoccatModel model = train();
+    @Test
+    public void testDefault() throws IOException {
+        DoccatModel model = train();
 
-    Assert.assertNotNull(model);
+        Assert.assertNotNull(model);
 
-    ByteArrayOutputStream out = new ByteArrayOutputStream();
-    model.serialize(out);
-    ByteArrayInputStream in = new ByteArrayInputStream(out.toByteArray());
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        model.serialize(out);
+        ByteArrayInputStream in = new ByteArrayInputStream(out.toByteArray());
 
-    DoccatModel fromSerialized = new DoccatModel(in);
+        DoccatModel fromSerialized = new DoccatModel(in);
 
-    DoccatFactory factory = fromSerialized.getFactory();
+        DoccatFactory factory = fromSerialized.getFactory();
 
-    Assert.assertNotNull(factory);
+        Assert.assertNotNull(factory);
 
-    Assert.assertEquals(1, factory.getFeatureGenerators().length);
-    Assert.assertEquals(BagOfWordsFeatureGenerator.class,
-        factory.getFeatureGenerators()[0].getClass());
+        Assert.assertEquals(1, factory.getFeatureGenerators().length);
+        Assert.assertEquals(BagOfWordsFeatureGenerator.class,
+                factory.getFeatureGenerators()[0].getClass());
 
-  }
+    }
 
-  @Test
-  public void testCustom() throws IOException {
-    FeatureGenerator[] featureGenerators = { new BagOfWordsFeatureGenerator(),
-        new NGramFeatureGenerator(), new NGramFeatureGenerator(2,3) };
+    @Test
+    public void testCustom() throws IOException {
+        FeatureGenerator[] featureGenerators = {new BagOfWordsFeatureGenerator(),
+                new NGramFeatureGenerator(), new NGramFeatureGenerator(2, 3)};
 
-    DoccatFactory factory = new DoccatFactory(featureGenerators);
+        DoccatFactory factory = new DoccatFactory(featureGenerators);
 
-    DoccatModel model = train(factory);
+        DoccatModel model = train(factory);
 
-    Assert.assertNotNull(model);
+        Assert.assertNotNull(model);
 
-    ByteArrayOutputStream out = new ByteArrayOutputStream();
-    model.serialize(out);
-    ByteArrayInputStream in = new ByteArrayInputStream(out.toByteArray());
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        model.serialize(out);
+        ByteArrayInputStream in = new ByteArrayInputStream(out.toByteArray());
 
-    DoccatModel fromSerialized = new DoccatModel(in);
+        DoccatModel fromSerialized = new DoccatModel(in);
 
-    factory = fromSerialized.getFactory();
+        factory = fromSerialized.getFactory();
 
-    Assert.assertNotNull(factory);
+        Assert.assertNotNull(factory);
 
-    Assert.assertEquals(3, factory.getFeatureGenerators().length);
-    Assert.assertEquals(BagOfWordsFeatureGenerator.class,
-        factory.getFeatureGenerators()[0].getClass());
-    Assert.assertEquals(NGramFeatureGenerator.class,
-        factory.getFeatureGenerators()[1].getClass());
-    Assert.assertEquals(NGramFeatureGenerator.class,factory.getFeatureGenerators()[2].getClass());
-  }
+        Assert.assertEquals(3, factory.getFeatureGenerators().length);
+        Assert.assertEquals(BagOfWordsFeatureGenerator.class,
+                factory.getFeatureGenerators()[0].getClass());
+        Assert.assertEquals(NGramFeatureGenerator.class,
+                factory.getFeatureGenerators()[1].getClass());
+        Assert.assertEquals(NGramFeatureGenerator.class, factory.getFeatureGenerators()[2].getClass());
+    }
 
 }

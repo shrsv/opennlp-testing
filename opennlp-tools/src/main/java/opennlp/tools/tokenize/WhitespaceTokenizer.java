@@ -17,59 +17,58 @@
 
 package opennlp.tools.tokenize;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import opennlp.tools.util.Span;
 import opennlp.tools.util.StringUtil;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * This tokenizer uses white spaces to tokenize the input text.
- *
+ * <p>
  * To obtain an instance of this tokenizer use the static final
  * <code>INSTANCE</code> field.
  */
 public class WhitespaceTokenizer extends AbstractTokenizer {
 
-  /**
-   * Use this static reference to retrieve an instance of the
-   * {@link WhitespaceTokenizer}.
-   */
-  public static final WhitespaceTokenizer INSTANCE = new WhitespaceTokenizer();
+    /**
+     * Use this static reference to retrieve an instance of the
+     * {@link WhitespaceTokenizer}.
+     */
+    public static final WhitespaceTokenizer INSTANCE = new WhitespaceTokenizer();
 
-  /**
-   * Use the {@link WhitespaceTokenizer#INSTANCE} field to retrieve an instance.
-   */
-  private WhitespaceTokenizer() {
-  }
+    /**
+     * Use the {@link WhitespaceTokenizer#INSTANCE} field to retrieve an instance.
+     */
+    private WhitespaceTokenizer() {
+    }
 
-  public Span[] tokenizePos(String d) {
-    int tokStart = -1;
-    List<Span> tokens = new ArrayList<>();
-    boolean inTok = false;
+    public Span[] tokenizePos(String d) {
+        int tokStart = -1;
+        List<Span> tokens = new ArrayList<>();
+        boolean inTok = false;
 
-    //gather up potential tokens
-    int end = d.length();
-    for (int i = 0; i < end; i++) {
-      if (StringUtil.isWhitespace(d.charAt(i))) {
+        //gather up potential tokens
+        int end = d.length();
+        for (int i = 0; i < end; i++) {
+            if (StringUtil.isWhitespace(d.charAt(i))) {
+                if (inTok) {
+                    tokens.add(new Span(tokStart, i));
+                    inTok = false;
+                    tokStart = -1;
+                }
+            } else {
+                if (!inTok) {
+                    tokStart = i;
+                    inTok = true;
+                }
+            }
+        }
+
         if (inTok) {
-          tokens.add(new Span(tokStart, i));
-          inTok = false;
-          tokStart = -1;
+            tokens.add(new Span(tokStart, end));
         }
-      }
-      else {
-        if (!inTok) {
-          tokStart = i;
-          inTok = true;
-        }
-      }
-    }
 
-    if (inTok) {
-      tokens.add(new Span(tokStart, end));
+        return tokens.toArray(new Span[tokens.size()]);
     }
-
-    return tokens.toArray(new Span[tokens.size()]);
-  }
 }

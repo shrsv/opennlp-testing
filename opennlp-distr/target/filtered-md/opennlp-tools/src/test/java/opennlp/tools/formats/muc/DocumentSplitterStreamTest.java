@@ -17,39 +17,38 @@
 
 package opennlp.tools.formats.muc;
 
-import java.io.IOException;
-
+import opennlp.tools.util.ObjectStream;
+import opennlp.tools.util.ObjectStreamUtils;
 import org.junit.Assert;
 import org.junit.Test;
 
-import opennlp.tools.util.ObjectStream;
-import opennlp.tools.util.ObjectStreamUtils;
+import java.io.IOException;
 
 public class DocumentSplitterStreamTest {
 
-  @Test
-  public void testSplitTwoDocuments() throws IOException {
+    @Test
+    public void testSplitTwoDocuments() throws IOException {
 
-    StringBuilder docsString = new StringBuilder();
+        StringBuilder docsString = new StringBuilder();
 
-    for (int i = 0; i < 2; i++) {
-      docsString.append("<DOC>\n");
-      docsString.append("test document #").append(i).append("\n");
-      docsString.append("</DOC>\n");
+        for (int i = 0; i < 2; i++) {
+            docsString.append("<DOC>\n");
+            docsString.append("test document #").append(i).append("\n");
+            docsString.append("</DOC>\n");
+        }
+
+        try (ObjectStream<String> docs = new DocumentSplitterStream(
+                ObjectStreamUtils.createObjectStream(docsString.toString()))) {
+            String doc1 = docs.read();
+            Assert.assertEquals(docsString.length() / 2, doc1.length() + 1);
+            Assert.assertTrue(doc1.contains("#0"));
+
+            String doc2 = docs.read();
+            Assert.assertEquals(docsString.length() / 2, doc2.length() + 1);
+            Assert.assertTrue(doc2.contains("#1"));
+
+            Assert.assertNull(docs.read());
+            Assert.assertNull(docs.read());
+        }
     }
-
-    try (ObjectStream<String> docs = new DocumentSplitterStream(
-        ObjectStreamUtils.createObjectStream(docsString.toString()))) {
-      String doc1 = docs.read();
-      Assert.assertEquals(docsString.length() / 2, doc1.length() + 1);
-      Assert.assertTrue(doc1.contains("#0"));
-
-      String doc2 = docs.read();
-      Assert.assertEquals(docsString.length() / 2, doc2.length() + 1);
-      Assert.assertTrue(doc2.contains("#1"));
-
-      Assert.assertNull(docs.read());
-      Assert.assertNull(docs.read());
-    }
-  }
 }

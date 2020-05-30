@@ -17,52 +17,51 @@
 
 package opennlp.tools.tokenize;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-
+import opennlp.tools.tokenize.DetokenizationDictionary.Operation;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import opennlp.tools.tokenize.DetokenizationDictionary.Operation;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 
 public class DetokenizationDictionaryTest {
 
-  private DetokenizationDictionary dict;
+    private DetokenizationDictionary dict;
 
-  @Before
-  public void setUp() throws Exception {
+    private static void testEntries(DetokenizationDictionary dict) {
+        Assert.assertEquals(Operation.RIGHT_LEFT_MATCHING, dict.getOperation("\""));
+        Assert.assertEquals(Operation.MOVE_RIGHT, dict.getOperation("("));
+        Assert.assertEquals(Operation.MOVE_LEFT, dict.getOperation(")"));
+        Assert.assertEquals(Operation.MOVE_BOTH, dict.getOperation("-"));
+    }
 
-    String[] tokens = new String[] {"\"", "(", ")", "-"};
+    @Before
+    public void setUp() throws Exception {
 
-    Operation[] operations = new Operation[] {Operation.RIGHT_LEFT_MATCHING,
-        Operation.MOVE_RIGHT, Operation.MOVE_LEFT, Operation.MOVE_BOTH};
+        String[] tokens = new String[]{"\"", "(", ")", "-"};
 
-    dict = new DetokenizationDictionary(tokens, operations);
-  }
+        Operation[] operations = new Operation[]{Operation.RIGHT_LEFT_MATCHING,
+                Operation.MOVE_RIGHT, Operation.MOVE_LEFT, Operation.MOVE_BOTH};
 
-  private static void testEntries(DetokenizationDictionary dict) {
-    Assert.assertEquals(Operation.RIGHT_LEFT_MATCHING, dict.getOperation("\""));
-    Assert.assertEquals(Operation.MOVE_RIGHT, dict.getOperation("("));
-    Assert.assertEquals(Operation.MOVE_LEFT, dict.getOperation(")"));
-    Assert.assertEquals(Operation.MOVE_BOTH, dict.getOperation("-"));
-  }
+        dict = new DetokenizationDictionary(tokens, operations);
+    }
 
-  @Test
-  public void testSimpleDict() {
-    testEntries(dict);
-  }
+    @Test
+    public void testSimpleDict() {
+        testEntries(dict);
+    }
 
-  @Test
-  public void testSerialization() throws IOException {
-    ByteArrayOutputStream out = new ByteArrayOutputStream();
-    dict.serialize(out);
+    @Test
+    public void testSerialization() throws IOException {
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        dict.serialize(out);
 
-    DetokenizationDictionary parsedDict = new DetokenizationDictionary(
-        new ByteArrayInputStream(out.toByteArray()));
+        DetokenizationDictionary parsedDict = new DetokenizationDictionary(
+                new ByteArrayInputStream(out.toByteArray()));
 
-    // should contain the same entries like the original
-    testEntries(parsedDict);
-  }
+        // should contain the same entries like the original
+        testEntries(parsedDict);
+    }
 }

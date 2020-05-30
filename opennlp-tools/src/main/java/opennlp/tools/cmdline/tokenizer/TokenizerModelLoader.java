@@ -17,11 +17,11 @@
 
 package opennlp.tools.cmdline.tokenizer;
 
-import java.io.IOException;
-import java.io.InputStream;
-
 import opennlp.tools.cmdline.ModelLoader;
 import opennlp.tools.tokenize.TokenizerModel;
+
+import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * Loads a Tokenizer Model for the command line tools.
@@ -30,12 +30,12 @@ import opennlp.tools.tokenize.TokenizerModel;
  */
 public final class TokenizerModelLoader extends ModelLoader<TokenizerModel> {
 
-  public TokenizerModelLoader() {
-    super("Tokenizer");
-  }
+    public TokenizerModelLoader() {
+        super("Tokenizer");
+    }
 
-  @Override
-  protected TokenizerModel loadModel(InputStream modelIn) throws IOException {
-    return new TokenizerModel(modelIn);
-  }
+    @Override
+    protected TokenizerModel loadModel(InputStream modelIn) throws IOException {
+        return new TokenizerModel(modelIn);
+    }
 }

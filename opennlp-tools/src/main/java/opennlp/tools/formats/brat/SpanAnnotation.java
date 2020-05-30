@@ -17,32 +17,32 @@
 
 package opennlp.tools.formats.brat;
 
-import java.util.Arrays;
-
 import opennlp.tools.util.Span;
+
+import java.util.Arrays;
 
 public class SpanAnnotation extends BratAnnotation {
 
-  private final Span[] spans;
-  private final String coveredText;
+    private final Span[] spans;
+    private final String coveredText;
 
-  SpanAnnotation(String id, String type, Span[] spans, String coveredText) {
-    super(id, type);
-    this.spans = Arrays.copyOf(spans, spans.length);
-    Arrays.sort(this.spans);
-    this.coveredText = coveredText;
-  }
+    SpanAnnotation(String id, String type, Span[] spans, String coveredText) {
+        super(id, type);
+        this.spans = Arrays.copyOf(spans, spans.length);
+        Arrays.sort(this.spans);
+        this.coveredText = coveredText;
+    }
 
-  public Span[] getSpans() {
-    return spans;
-  }
+    public Span[] getSpans() {
+        return spans;
+    }
 
-  public String getCoveredText() {
-    return coveredText;
-  }
+    public String getCoveredText() {
+        return coveredText;
+    }
 
-  @Override
-  public String toString() {
-    return super.toString() + " " + Arrays.toString(spans) + " " + getCoveredText();
-  }
+    @Override
+    public String toString() {
+        return super.toString() + " " + Arrays.toString(spans) + " " + getCoveredText();
+    }
 }

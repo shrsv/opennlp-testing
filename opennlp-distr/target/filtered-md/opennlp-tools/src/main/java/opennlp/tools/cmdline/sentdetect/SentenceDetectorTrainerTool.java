@@ -17,10 +17,6 @@
 
 package opennlp.tools.cmdline.sentdetect;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-
 import opennlp.tools.cmdline.AbstractTrainerTool;
 import opennlp.tools.cmdline.CmdLineUtil;
 import opennlp.tools.cmdline.TerminateToolException;
@@ -29,80 +25,79 @@ import opennlp.tools.cmdline.sentdetect.SentenceDetectorTrainerTool.TrainerToolP
 import opennlp.tools.dictionary.Dictionary;
 import opennlp.tools.ml.TrainerFactory;
 import opennlp.tools.ml.TrainerFactory.TrainerType;
-import opennlp.tools.sentdetect.SentenceDetectorFactory;
-import opennlp.tools.sentdetect.SentenceDetectorME;
-import opennlp.tools.sentdetect.SentenceModel;
-import opennlp.tools.sentdetect.SentenceSample;
-import opennlp.tools.sentdetect.SentenceSampleStream;
+import opennlp.tools.sentdetect.*;
 import opennlp.tools.util.model.ModelUtil;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+
 public final class SentenceDetectorTrainerTool
-    extends AbstractTrainerTool<SentenceSample, TrainerToolParams> {
+        extends AbstractTrainerTool<SentenceSample, TrainerToolParams> {
 
-  interface TrainerToolParams extends TrainingParams, TrainingToolParams {
-  }
-
-  public SentenceDetectorTrainerTool() {
-    super(SentenceSample.class, TrainerToolParams.class);
-  }
-
-  public String getShortDescription() {
-    return "trainer for the learnable sentence detector";
-  }
-
-  static Dictionary loadDict(File f) throws IOException {
-    Dictionary dict = null;
-    if (f != null) {
-      CmdLineUtil.checkInputFile("abb dict", f);
-      dict = new Dictionary(new FileInputStream(f));
-    }
-    return dict;
-  }
-
-  public void run(String format, String[] args) {
-    super.run(format, args);
-
-    mlParams = CmdLineUtil.loadTrainingParameters(params.getParams(), false);
-
-    if (mlParams != null) {
-      if (!TrainerType.EVENT_MODEL_TRAINER.equals(TrainerFactory.getTrainerType(mlParams))) {
-        throw new TerminateToolException(1, "Sequence training is not supported!");
-      }
+    public SentenceDetectorTrainerTool() {
+        super(SentenceSample.class, TrainerToolParams.class);
     }
 
-    if (mlParams == null) {
-      mlParams = ModelUtil.createDefaultTrainingParameters();
+    static Dictionary loadDict(File f) throws IOException {
+        Dictionary dict = null;
+        if (f != null) {
+            CmdLineUtil.checkInputFile("abb dict", f);
+            dict = new Dictionary(new FileInputStream(f));
+        }
+        return dict;
     }
 
-    File modelOutFile = params.getModel();
-    CmdLineUtil.checkOutputFile("sentence detector model", modelOutFile);
-
-    char[] eos = null;
-    if (params.getEosChars() != null) {
-      String eosString = SentenceSampleStream.replaceNewLineEscapeTags(
-          params.getEosChars());
-      eos = eosString.toCharArray();
+    public String getShortDescription() {
+        return "trainer for the learnable sentence detector";
     }
 
-    SentenceModel model;
+    public void run(String format, String[] args) {
+        super.run(format, args);
 
-    try {
-      Dictionary dict = loadDict(params.getAbbDict());
-      SentenceDetectorFactory sdFactory = SentenceDetectorFactory.create(
-          params.getFactory(), params.getLang(), true, dict, eos);
-      model = SentenceDetectorME.train(params.getLang(), sampleStream,
-          sdFactory, mlParams);
-    } catch (IOException e) {
-      throw createTerminationIOException(e);
-    }
-    finally {
-      try {
-        sampleStream.close();
-      } catch (IOException e) {
-        // sorry that this can fail
-      }
+        mlParams = CmdLineUtil.loadTrainingParameters(params.getParams(), false);
+
+        if (mlParams != null) {
+            if (!TrainerType.EVENT_MODEL_TRAINER.equals(TrainerFactory.getTrainerType(mlParams))) {
+                throw new TerminateToolException(1, "Sequence training is not supported!");
+            }
+        }
+
+        if (mlParams == null) {
+            mlParams = ModelUtil.createDefaultTrainingParameters();
+        }
+
+        File modelOutFile = params.getModel();
+        CmdLineUtil.checkOutputFile("sentence detector model", modelOutFile);
+
+        char[] eos = null;
+        if (params.getEosChars() != null) {
+            String eosString = SentenceSampleStream.replaceNewLineEscapeTags(
+                    params.getEosChars());
+            eos = eosString.toCharArray();
+        }
+
+        SentenceModel model;
+
+        try {
+            Dictionary dict = loadDict(params.getAbbDict());
+            SentenceDetectorFactory sdFactory = SentenceDetectorFactory.create(
+                    params.getFactory(), params.getLang(), true, dict, eos);
+            model = SentenceDetectorME.train(params.getLang(), sampleStream,
+                    sdFactory, mlParams);
+        } catch (IOException e) {
+            throw createTerminationIOException(e);
+        } finally {
+            try {
+                sampleStream.close();
+            } catch (IOException e) {
+                // sorry that this can fail
+            }
+        }
+
+        CmdLineUtil.writeModel("sentence detector", modelOutFile, model);
     }
 
-    CmdLineUtil.writeModel("sentence detector", modelOutFile, model);
-  }
+    interface TrainerToolParams extends TrainingParams, TrainingToolParams {
+    }
 }

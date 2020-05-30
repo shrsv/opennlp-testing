@@ -17,12 +17,6 @@
 
 package opennlp.tools.cmdline.postag;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-
 import opennlp.tools.cmdline.AbstractEvaluatorTool;
 import opennlp.tools.cmdline.CmdLineUtil;
 import opennlp.tools.cmdline.TerminateToolException;
@@ -34,82 +28,83 @@ import opennlp.tools.postag.POSModel;
 import opennlp.tools.postag.POSSample;
 import opennlp.tools.postag.POSTaggerEvaluationMonitor;
 
+import java.io.*;
+
 public final class POSTaggerEvaluatorTool
-    extends AbstractEvaluatorTool<POSSample, EvalToolParams> {
+        extends AbstractEvaluatorTool<POSSample, EvalToolParams> {
 
-  interface EvalToolParams extends EvaluatorParams, FineGrainedEvaluatorParams {
-  }
-
-  public POSTaggerEvaluatorTool() {
-    super(POSSample.class, EvalToolParams.class);
-  }
-
-  public String getShortDescription() {
-    return "Measures the performance of the POS tagger model with the reference data";
-  }
-
-  public void run(String format, String[] args) {
-    super.run(format, args);
-
-    POSModel model = new POSModelLoader().load(params.getModel());
-
-    POSTaggerEvaluationMonitor missclassifiedListener = null;
-    if (params.getMisclassified()) {
-      missclassifiedListener = new POSEvaluationErrorListener();
+    public POSTaggerEvaluatorTool() {
+        super(POSSample.class, EvalToolParams.class);
     }
 
-    POSTaggerFineGrainedReportListener reportListener = null;
-    File reportFile = params.getReportOutputFile();
-    OutputStream reportOutputStream = null;
-    if (reportFile != null) {
-      CmdLineUtil.checkOutputFile("Report Output File", reportFile);
-      try {
-        reportOutputStream = new FileOutputStream(reportFile);
-        reportListener = new POSTaggerFineGrainedReportListener(
-            reportOutputStream);
-      } catch (FileNotFoundException e) {
-        throw new TerminateToolException(-1,
-            "IO error while creating POS Tagger fine-grained report file: "
-                + e.getMessage());
-      }
+    public String getShortDescription() {
+        return "Measures the performance of the POS tagger model with the reference data";
     }
 
-    POSEvaluator evaluator = new POSEvaluator(
-        new opennlp.tools.postag.POSTaggerME(model), missclassifiedListener,
-        reportListener);
+    public void run(String format, String[] args) {
+        super.run(format, args);
 
-    System.out.print("Evaluating ... ");
-    try {
-      evaluator.evaluate(sampleStream);
+        POSModel model = new POSModelLoader().load(params.getModel());
+
+        POSTaggerEvaluationMonitor missclassifiedListener = null;
+        if (params.getMisclassified()) {
+            missclassifiedListener = new POSEvaluationErrorListener();
+        }
+
+        POSTaggerFineGrainedReportListener reportListener = null;
+        File reportFile = params.getReportOutputFile();
+        OutputStream reportOutputStream = null;
+        if (reportFile != null) {
+            CmdLineUtil.checkOutputFile("Report Output File", reportFile);
+            try {
+                reportOutputStream = new FileOutputStream(reportFile);
+                reportListener = new POSTaggerFineGrainedReportListener(
+                        reportOutputStream);
+            } catch (FileNotFoundException e) {
+                throw new TerminateToolException(-1,
+                        "IO error while creating POS Tagger fine-grained report file: "
+                                + e.getMessage());
+            }
+        }
+
+        POSEvaluator evaluator = new POSEvaluator(
+                new opennlp.tools.postag.POSTaggerME(model), missclassifiedListener,
+                reportListener);
+
+        System.out.print("Evaluating ... ");
+        try {
+            evaluator.evaluate(sampleStream);
+        } catch (IOException e) {
+            System.err.println("failed");
+            throw new TerminateToolException(-1, "IO error while reading test data: " + e.getMessage(), e);
+        } finally {
+            try {
+                sampleStream.close();
+            } catch (IOException e) {
+                // sorry that this can fail
+            }
+        }
+
+        System.out.println("done");
+
+        if (reportListener != null) {
+            System.out.println("Writing fine-grained report to "
+                    + params.getReportOutputFile().getAbsolutePath());
+            reportListener.writeReport();
+
+            try {
+                // TODO: is it a problem to close the stream now?
+                reportOutputStream.close();
+            } catch (IOException e) {
+                // nothing to do
+            }
+        }
+
+        System.out.println();
+
+        System.out.println("Accuracy: " + evaluator.getWordAccuracy());
     }
-    catch (IOException e) {
-      System.err.println("failed");
-      throw new TerminateToolException(-1, "IO error while reading test data: " + e.getMessage(), e);
-    } finally {
-      try {
-        sampleStream.close();
-      } catch (IOException e) {
-        // sorry that this can fail
-      }
+
+    interface EvalToolParams extends EvaluatorParams, FineGrainedEvaluatorParams {
     }
-
-    System.out.println("done");
-
-    if (reportListener != null) {
-      System.out.println("Writing fine-grained report to "
-          + params.getReportOutputFile().getAbsolutePath());
-      reportListener.writeReport();
-
-      try {
-        // TODO: is it a problem to close the stream now?
-        reportOutputStream.close();
-      } catch (IOException e) {
-        // nothing to do
-      }
-    }
-
-    System.out.println();
-
-    System.out.println("Accuracy: " + evaluator.getWordAccuracy());
-  }
 }

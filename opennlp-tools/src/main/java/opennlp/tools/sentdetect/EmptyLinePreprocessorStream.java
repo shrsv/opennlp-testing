@@ -17,14 +17,14 @@
 
 package opennlp.tools.sentdetect;
 
-import java.io.IOException;
-
 import opennlp.tools.util.FilterObjectStream;
 import opennlp.tools.util.ObjectStream;
 
+import java.io.IOException;
+
 /**
  * Stream to to clean up empty lines for empty line separated document streams.<br>
- *
+ * <p>
  * - Skips empty line at training data start<br>
  * - Transforms multiple empty lines in a row into one <br>
  * - Replaces white space lines with empty lines <br>
@@ -38,33 +38,33 @@ import opennlp.tools.util.ObjectStream;
  */
 public class EmptyLinePreprocessorStream extends FilterObjectStream<String, String> {
 
-  private boolean lastLineWasEmpty = true;
+    private boolean lastLineWasEmpty = true;
 
-  public EmptyLinePreprocessorStream(ObjectStream<String> in) {
-    super(in);
-  }
-
-  private static boolean isLineEmpty(String line) {
-    return line.trim().length() == 0;
-  }
-
-  public String read() throws IOException {
-
-    String line = samples.read();
-
-    if (lastLineWasEmpty) {
-      lastLineWasEmpty = false;
-
-      while (line != null && isLineEmpty(line)) {
-        line = samples.read();
-      }
+    public EmptyLinePreprocessorStream(ObjectStream<String> in) {
+        super(in);
     }
 
-    if (line != null && isLineEmpty(line)) {
-      lastLineWasEmpty = true;
-      line = "";
+    private static boolean isLineEmpty(String line) {
+        return line.trim().length() == 0;
     }
 
-    return line;
-  }
+    public String read() throws IOException {
+
+        String line = samples.read();
+
+        if (lastLineWasEmpty) {
+            lastLineWasEmpty = false;
+
+            while (line != null && isLineEmpty(line)) {
+                line = samples.read();
+            }
+        }
+
+        if (line != null && isLineEmpty(line)) {
+            lastLineWasEmpty = true;
+            line = "";
+        }
+
+        return line;
+    }
 }

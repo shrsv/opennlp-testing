@@ -17,60 +17,59 @@
 
 package opennlp.tools.util.featuregen;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import org.w3c.dom.Element;
-
 import opennlp.tools.postag.POSModel;
 import opennlp.tools.util.InvalidFormatException;
 import opennlp.tools.util.model.ArtifactSerializer;
 import opennlp.tools.util.model.POSModelSerializer;
+import org.w3c.dom.Element;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @see POSTaggerNameFeatureGenerator
  */
 public class POSTaggerNameFeatureGeneratorFactory
-    extends GeneratorFactory.AbstractXmlFeatureGeneratorFactory
-    implements GeneratorFactory.XmlFeatureGeneratorFactory {
+        extends GeneratorFactory.AbstractXmlFeatureGeneratorFactory
+        implements GeneratorFactory.XmlFeatureGeneratorFactory {
 
-  public POSTaggerNameFeatureGeneratorFactory() {
-    super();
-  }
+    public POSTaggerNameFeatureGeneratorFactory() {
+        super();
+    }
 
-  @Deprecated // TODO: (OPENNLP-1174) just remove when back-compat is no longer needed
-  public AdaptiveFeatureGenerator create(Element generatorElement,
-             FeatureGeneratorResourceProvider resourceManager)
-      throws InvalidFormatException {
+    @Deprecated // TODO: (OPENNLP-1174) just remove when back-compat is no longer needed
+    static void register(Map<String, GeneratorFactory.XmlFeatureGeneratorFactory> factoryMap) {
+        factoryMap.put("tokenpos", new POSTaggerNameFeatureGeneratorFactory());
+    }
 
-    String modelResourceKey = generatorElement.getAttribute("model");
+    @Deprecated // TODO: (OPENNLP-1174) just remove when back-compat is no longer needed
+    public AdaptiveFeatureGenerator create(Element generatorElement,
+                                           FeatureGeneratorResourceProvider resourceManager)
+            throws InvalidFormatException {
 
-    POSModel model = (POSModel)resourceManager.getResource(modelResourceKey);
+        String modelResourceKey = generatorElement.getAttribute("model");
 
-    return new POSTaggerNameFeatureGenerator(model);
+        POSModel model = (POSModel) resourceManager.getResource(modelResourceKey);
 
-  }
+        return new POSTaggerNameFeatureGenerator(model);
 
-  @Deprecated // TODO: (OPENNLP-1174) just remove when back-compat is no longer needed
-  static void register(Map<String, GeneratorFactory.XmlFeatureGeneratorFactory> factoryMap) {
-    factoryMap.put("tokenpos", new POSTaggerNameFeatureGeneratorFactory());
-  }
+    }
 
-  @Override
-  public AdaptiveFeatureGenerator create() throws InvalidFormatException {
-    // if resourceManager is null, we don't instantiate
-    if (resourceManager == null)
-      return null;
+    @Override
+    public AdaptiveFeatureGenerator create() throws InvalidFormatException {
+        // if resourceManager is null, we don't instantiate
+        if (resourceManager == null)
+            return null;
 
-    String modelResourceKey = getStr("model");
-    POSModel model = (POSModel)resourceManager.getResource(modelResourceKey);
-    return new POSTaggerNameFeatureGenerator(model);
-  }
+        String modelResourceKey = getStr("model");
+        POSModel model = (POSModel) resourceManager.getResource(modelResourceKey);
+        return new POSTaggerNameFeatureGenerator(model);
+    }
 
-  @Override
-  public Map<String, ArtifactSerializer<?>> getArtifactSerializerMapping() throws InvalidFormatException {
-    Map<String, ArtifactSerializer<?>> mapping = new HashMap<>();
-    mapping.put(getStr("model"), new POSModelSerializer());
-    return mapping;
-  }
+    @Override
+    public Map<String, ArtifactSerializer<?>> getArtifactSerializerMapping() throws InvalidFormatException {
+        Map<String, ArtifactSerializer<?>> mapping = new HashMap<>();
+        mapping.put(getStr("model"), new POSModelSerializer());
+        return mapping;
+    }
 }

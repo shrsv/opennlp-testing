@@ -24,10 +24,10 @@ package opennlp.tools.cmdline;
  */
 public abstract class BasicCmdLineTool extends CmdLineTool {
 
-  /**
-   * Executes the tool with the given parameters.
-   *
-   * @param args arguments
-   */
-  public abstract void run(String[] args);
+    /**
+     * Executes the tool with the given parameters.
+     *
+     * @param args arguments
+     */
+    public abstract void run(String[] args);
 }

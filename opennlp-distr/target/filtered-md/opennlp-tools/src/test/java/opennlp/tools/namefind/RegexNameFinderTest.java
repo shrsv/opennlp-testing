@@ -17,83 +17,82 @@
 
 package opennlp.tools.namefind;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.regex.Pattern;
-
+import opennlp.tools.util.Span;
 import org.junit.Assert;
 import org.junit.Test;
 
-import opennlp.tools.util.Span;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.regex.Pattern;
 
 /**
  * Tests for the {@link RegexNameFinder} class.
  */
 public class RegexNameFinderTest {
 
-  @Test
-  public void testFindSingleTokenPattern() {
+    @Test
+    public void testFindSingleTokenPattern() {
 
-    Pattern testPattern = Pattern.compile("test");
-    String[] sentence = new String[]{"a", "test", "b", "c"};
+        Pattern testPattern = Pattern.compile("test");
+        String[] sentence = new String[]{"a", "test", "b", "c"};
 
 
-    Pattern[] patterns = new Pattern[]{testPattern};
-    Map<String, Pattern[]> regexMap = new HashMap<>();
-    String type = "testtype";
+        Pattern[] patterns = new Pattern[]{testPattern};
+        Map<String, Pattern[]> regexMap = new HashMap<>();
+        String type = "testtype";
 
-    regexMap.put(type, patterns);
+        regexMap.put(type, patterns);
 
-    RegexNameFinder finder =
-            new RegexNameFinder(regexMap);
+        RegexNameFinder finder =
+                new RegexNameFinder(regexMap);
 
-    Span[] result = finder.find(sentence);
+        Span[] result = finder.find(sentence);
 
-    Assert.assertTrue(result.length == 1);
+        Assert.assertTrue(result.length == 1);
 
-    Assert.assertTrue(result[0].getStart() == 1);
-    Assert.assertTrue(result[0].getEnd() == 2);
-  }
+        Assert.assertTrue(result[0].getStart() == 1);
+        Assert.assertTrue(result[0].getEnd() == 2);
+    }
 
-  @Test
-  public void testFindTokenizdPattern() {
-    Pattern testPattern = Pattern.compile("[0-9]+ year");
+    @Test
+    public void testFindTokenizdPattern() {
+        Pattern testPattern = Pattern.compile("[0-9]+ year");
 
-    String[] sentence = new String[]{"a", "80", "year", "b", "c"};
+        String[] sentence = new String[]{"a", "80", "year", "b", "c"};
 
-    Pattern[] patterns = new Pattern[]{testPattern};
-    Map<String, Pattern[]> regexMap = new HashMap<>();
-    String type = "match";
+        Pattern[] patterns = new Pattern[]{testPattern};
+        Map<String, Pattern[]> regexMap = new HashMap<>();
+        String type = "match";
 
-    regexMap.put(type, patterns);
+        regexMap.put(type, patterns);
 
-    RegexNameFinder finder =
-            new RegexNameFinder(regexMap);
+        RegexNameFinder finder =
+                new RegexNameFinder(regexMap);
 
-    Span[] result = finder.find(sentence);
+        Span[] result = finder.find(sentence);
 
-    Assert.assertTrue(result.length == 1);
+        Assert.assertTrue(result.length == 1);
 
-    Assert.assertTrue(result[0].getStart() == 1);
-    Assert.assertTrue(result[0].getEnd() == 3);
-    Assert.assertTrue(result[0].getType().equals("match"));
-  }
+        Assert.assertTrue(result[0].getStart() == 1);
+        Assert.assertTrue(result[0].getEnd() == 3);
+        Assert.assertTrue(result[0].getType().equals("match"));
+    }
 
-  @Test
-  public void testFindMatchingPatternWithoutMatchingTokenBounds() {
-    Pattern testPattern = Pattern.compile("[0-8] year"); // does match "0 year"
+    @Test
+    public void testFindMatchingPatternWithoutMatchingTokenBounds() {
+        Pattern testPattern = Pattern.compile("[0-8] year"); // does match "0 year"
 
-    String[] sentence = new String[]{"a", "80", "year", "c"};
-    Pattern[] patterns = new Pattern[]{testPattern};
-    Map<String, Pattern[]> regexMap = new HashMap<>();
-    String type = "testtype";
+        String[] sentence = new String[]{"a", "80", "year", "c"};
+        Pattern[] patterns = new Pattern[]{testPattern};
+        Map<String, Pattern[]> regexMap = new HashMap<>();
+        String type = "testtype";
 
-    regexMap.put(type, patterns);
+        regexMap.put(type, patterns);
 
-    RegexNameFinder finder = new RegexNameFinder(regexMap);
+        RegexNameFinder finder = new RegexNameFinder(regexMap);
 
-    Span[] result = finder.find(sentence);
+        Span[] result = finder.find(sentence);
 
-    Assert.assertTrue(result.length == 0);
-  }
+        Assert.assertTrue(result.length == 0);
+    }
 }

@@ -17,39 +17,38 @@
 
 package opennlp.tools.parser;
 
-import java.io.IOException;
-
 import opennlp.tools.postag.POSSample;
 import opennlp.tools.util.FilterObjectStream;
 import opennlp.tools.util.ObjectStream;
 
+import java.io.IOException;
+
 public class PosSampleStream extends FilterObjectStream<Parse, POSSample> {
 
-  public PosSampleStream(ObjectStream<Parse> in) {
-    super(in);
-  }
-
-  public POSSample read() throws IOException {
-
-    Parse parse = samples.read();
-
-    if (parse != null) {
-
-      Parse[] nodes = parse.getTagNodes();
-
-      String[] toks = new String[nodes.length];
-      String[] preds = new String[nodes.length];
-
-      for (int ti = 0; ti < nodes.length; ti++) {
-        Parse tok = nodes[ti];
-        toks[ti] = tok.getCoveredText();
-        preds[ti] = tok.getType();
-      }
-
-      return new POSSample(toks, preds);
+    public PosSampleStream(ObjectStream<Parse> in) {
+        super(in);
     }
-    else {
-      return null;
+
+    public POSSample read() throws IOException {
+
+        Parse parse = samples.read();
+
+        if (parse != null) {
+
+            Parse[] nodes = parse.getTagNodes();
+
+            String[] toks = new String[nodes.length];
+            String[] preds = new String[nodes.length];
+
+            for (int ti = 0; ti < nodes.length; ti++) {
+                Parse tok = nodes[ti];
+                toks[ti] = tok.getCoveredText();
+                preds[ti] = tok.getType();
+            }
+
+            return new POSSample(toks, preds);
+        } else {
+            return null;
+        }
     }
-  }
 }

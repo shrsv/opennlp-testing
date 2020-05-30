@@ -30,48 +30,48 @@ import java.util.Set;
  */
 public class DefaultEndOfSentenceScanner implements EndOfSentenceScanner {
 
-  private Set<Character> eosCharacters;
-  @Deprecated
-  private char[] eosChars;
+    private Set<Character> eosCharacters;
+    @Deprecated
+    private char[] eosChars;
 
-  /**
-   * Initializes the current instance.
-   *
-   * @param eosCharacters
-   */
-  public DefaultEndOfSentenceScanner(char[] eosCharacters) {
-    this.eosCharacters = new HashSet<>();
-    for (char eosChar: eosCharacters) {
-      this.eosCharacters.add(eosChar);
+    /**
+     * Initializes the current instance.
+     *
+     * @param eosCharacters
+     */
+    public DefaultEndOfSentenceScanner(char[] eosCharacters) {
+        this.eosCharacters = new HashSet<>();
+        for (char eosChar : eosCharacters) {
+            this.eosCharacters.add(eosChar);
+        }
+        this.eosChars = eosCharacters;
     }
-    this.eosChars = eosCharacters;
-  }
 
-  public List<Integer> getPositions(String s) {
-    return getPositions(s.toCharArray());
-  }
-
-  public List<Integer> getPositions(StringBuffer buf) {
-    return getPositions(buf.toString().toCharArray());
-  }
-
-  public List<Integer> getPositions(char[] cbuf) {
-    List<Integer> l = new ArrayList<>();
-    for (int i = 0; i < cbuf.length; i++) {
-      if (eosCharacters.contains(cbuf[i])) {
-        l.add(i);
-      }
+    public List<Integer> getPositions(String s) {
+        return getPositions(s.toCharArray());
     }
-    return l;
-  }
 
-  @Deprecated
-  public char[] getEndOfSentenceCharacters() {
-    return eosChars;
-  }
+    public List<Integer> getPositions(StringBuffer buf) {
+        return getPositions(buf.toString().toCharArray());
+    }
 
-  @Override
-  public Set<Character> getEOSCharacters() {
-    return eosCharacters;
-  }
+    public List<Integer> getPositions(char[] cbuf) {
+        List<Integer> l = new ArrayList<>();
+        for (int i = 0; i < cbuf.length; i++) {
+            if (eosCharacters.contains(cbuf[i])) {
+                l.add(i);
+            }
+        }
+        return l;
+    }
+
+    @Deprecated
+    public char[] getEndOfSentenceCharacters() {
+        return eosChars;
+    }
+
+    @Override
+    public Set<Character> getEOSCharacters() {
+        return eosCharacters;
+    }
 }

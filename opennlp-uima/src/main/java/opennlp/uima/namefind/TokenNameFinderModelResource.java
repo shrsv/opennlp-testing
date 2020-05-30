@@ -20,5 +20,5 @@ package opennlp.uima.namefind;
 import opennlp.tools.namefind.TokenNameFinderModel;
 
 public interface TokenNameFinderModelResource {
-  TokenNameFinderModel getModel();
+    TokenNameFinderModel getModel();
 }

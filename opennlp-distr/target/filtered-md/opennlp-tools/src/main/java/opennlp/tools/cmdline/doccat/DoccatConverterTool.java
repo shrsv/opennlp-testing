@@ -22,7 +22,7 @@ import opennlp.tools.doccat.DocumentSample;
 
 public class DoccatConverterTool extends AbstractConverterTool<DocumentSample> {
 
-  public DoccatConverterTool() {
-    super(DocumentSample.class);
-  }
+    public DoccatConverterTool() {
+        super(DocumentSample.class);
+    }
 }

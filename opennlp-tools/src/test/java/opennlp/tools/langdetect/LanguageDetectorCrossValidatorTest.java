@@ -17,48 +17,47 @@
 
 package opennlp.tools.langdetect;
 
-import java.util.concurrent.atomic.AtomicInteger;
-
+import opennlp.tools.util.TrainingParameters;
 import org.junit.Assert;
 import org.junit.Test;
 
-import opennlp.tools.util.TrainingParameters;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class LanguageDetectorCrossValidatorTest {
 
-  @Test
-  public void evaluate() throws Exception {
+    @Test
+    public void evaluate() throws Exception {
 
-    TrainingParameters params = new TrainingParameters();
-    params.put(TrainingParameters.ITERATIONS_PARAM, 100);
-    params.put(TrainingParameters.CUTOFF_PARAM, 5);
-    params.put("PrintMessages", false);
+        TrainingParameters params = new TrainingParameters();
+        params.put(TrainingParameters.ITERATIONS_PARAM, 100);
+        params.put(TrainingParameters.CUTOFF_PARAM, 5);
+        params.put("PrintMessages", false);
 
 
-    final AtomicInteger correctCount = new AtomicInteger();
-    final AtomicInteger incorrectCount = new AtomicInteger();
+        final AtomicInteger correctCount = new AtomicInteger();
+        final AtomicInteger incorrectCount = new AtomicInteger();
 
-    LanguageDetectorCrossValidator cv = new LanguageDetectorCrossValidator(params,
-        new LanguageDetectorFactory(), new LanguageDetectorEvaluationMonitor() {
-          @Override
-          public void correctlyClassified(LanguageSample reference,
-                                          LanguageSample prediction) {
-            correctCount.incrementAndGet();
-          }
+        LanguageDetectorCrossValidator cv = new LanguageDetectorCrossValidator(params,
+                new LanguageDetectorFactory(), new LanguageDetectorEvaluationMonitor() {
+            @Override
+            public void correctlyClassified(LanguageSample reference,
+                                            LanguageSample prediction) {
+                correctCount.incrementAndGet();
+            }
 
-          @Override
-          public void missclassified(LanguageSample reference,
-                                     LanguageSample prediction) {
-            incorrectCount.incrementAndGet();
-          }
+            @Override
+            public void missclassified(LanguageSample reference,
+                                       LanguageSample prediction) {
+                incorrectCount.incrementAndGet();
+            }
         });
 
-    LanguageDetectorSampleStream sampleStream = LanguageDetectorMETest.createSampleStream();
+        LanguageDetectorSampleStream sampleStream = LanguageDetectorMETest.createSampleStream();
 
-    cv.evaluate(sampleStream, 2);
+        cv.evaluate(sampleStream, 2);
 
-    Assert.assertEquals(99, cv.getDocumentCount());
-    Assert.assertEquals(0.98989898989899, cv.getDocumentAccuracy(), 0.01);
-  }
+        Assert.assertEquals(99, cv.getDocumentCount());
+        Assert.assertEquals(0.98989898989899, cv.getDocumentAccuracy(), 0.01);
+    }
 
 }

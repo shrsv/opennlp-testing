@@ -17,21 +17,21 @@
 
 package opennlp.uima.doccat;
 
-import java.io.IOException;
-import java.io.InputStream;
-
 import opennlp.tools.doccat.DoccatModel;
 import opennlp.uima.util.AbstractModelResource;
 
+import java.io.IOException;
+import java.io.InputStream;
+
 public class DoccatModelResourceImpl extends AbstractModelResource<DoccatModel>
-    implements DoccatModelResource {
+        implements DoccatModelResource {
 
-  public DoccatModel getModel() {
-    return model;
-  }
+    public DoccatModel getModel() {
+        return model;
+    }
 
-  @Override
-  protected DoccatModel loadModel(InputStream in) throws IOException {
-    return new DoccatModel(in);
-  }
+    @Override
+    protected DoccatModel loadModel(InputStream in) throws IOException {
+        return new DoccatModel(in);
+    }
 }

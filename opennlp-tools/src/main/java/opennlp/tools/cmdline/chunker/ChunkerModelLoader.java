@@ -17,11 +17,11 @@
 
 package opennlp.tools.cmdline.chunker;
 
-import java.io.IOException;
-import java.io.InputStream;
-
 import opennlp.tools.chunker.ChunkerModel;
 import opennlp.tools.cmdline.ModelLoader;
+
+import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * Loads a Chunker Model for the command line tools.
@@ -30,13 +30,13 @@ import opennlp.tools.cmdline.ModelLoader;
  */
 public class ChunkerModelLoader extends ModelLoader<ChunkerModel> {
 
-  public ChunkerModelLoader() {
-    super("Chunker");
-  }
+    public ChunkerModelLoader() {
+        super("Chunker");
+    }
 
-  @Override
-  protected ChunkerModel loadModel(InputStream modelIn) throws IOException {
-    return new ChunkerModel(modelIn);
-  }
+    @Override
+    protected ChunkerModel loadModel(InputStream modelIn) throws IOException {
+        return new ChunkerModel(modelIn);
+    }
 
 }

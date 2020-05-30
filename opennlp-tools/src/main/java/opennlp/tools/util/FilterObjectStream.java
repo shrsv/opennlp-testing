@@ -31,19 +31,19 @@ import java.util.Objects;
  */
 public abstract class FilterObjectStream<S, T> implements ObjectStream<T> {
 
-  protected final ObjectStream<S> samples;
+    protected final ObjectStream<S> samples;
 
-  protected FilterObjectStream(ObjectStream<S> samples) {
-    this.samples = Objects.requireNonNull(samples, "samples must not be null!");
-  }
+    protected FilterObjectStream(ObjectStream<S> samples) {
+        this.samples = Objects.requireNonNull(samples, "samples must not be null!");
+    }
 
-  @Override
-  public void reset() throws IOException, UnsupportedOperationException {
-    samples.reset();
-  }
+    @Override
+    public void reset() throws IOException, UnsupportedOperationException {
+        samples.reset();
+    }
 
-  @Override
-  public void close() throws IOException {
-    samples.close();
-  }
+    @Override
+    public void close() throws IOException {
+        samples.close();
+    }
 }

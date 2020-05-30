@@ -26,31 +26,30 @@ import java.io.IOException;
  */
 public class ParagraphStream extends FilterObjectStream<String, String> {
 
-  public ParagraphStream(ObjectStream<String> lineStream) {
-    super(lineStream);
-  }
-
-  public String read() throws IOException {
-
-    StringBuilder paragraph = new StringBuilder();
-
-    while (true) {
-      String line = samples.read();
-
-      // The last paragraph in the input might not
-      // be terminated well with a new line at the end.
-
-      if (line == null || line.equals("")) {
-        if (paragraph.length() > 0) {
-          return paragraph.toString();
-        }
-      }
-      else {
-        paragraph.append(line).append('\n');
-      }
-
-      if (line == null)
-        return null;
+    public ParagraphStream(ObjectStream<String> lineStream) {
+        super(lineStream);
     }
-  }
+
+    public String read() throws IOException {
+
+        StringBuilder paragraph = new StringBuilder();
+
+        while (true) {
+            String line = samples.read();
+
+            // The last paragraph in the input might not
+            // be terminated well with a new line at the end.
+
+            if (line == null || line.equals("")) {
+                if (paragraph.length() > 0) {
+                    return paragraph.toString();
+                }
+            } else {
+                paragraph.append(line).append('\n');
+            }
+
+            if (line == null)
+                return null;
+        }
+    }
 }

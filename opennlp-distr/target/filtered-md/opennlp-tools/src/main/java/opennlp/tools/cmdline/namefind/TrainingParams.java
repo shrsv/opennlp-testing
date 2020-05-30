@@ -17,40 +17,40 @@
 
 package opennlp.tools.cmdline.namefind;
 
-import java.io.File;
-
 import opennlp.tools.cmdline.ArgumentParser.OptionalParameter;
 import opennlp.tools.cmdline.ArgumentParser.ParameterDescription;
 import opennlp.tools.cmdline.params.BasicTrainingParams;
 
+import java.io.File;
+
 /**
  * TrainingParameters for Name Finder.
- *
+ * <p>
  * Note: Do not use this class, internal use only!
  */
 interface TrainingParams extends BasicTrainingParams {
 
-  @ParameterDescription(valueName = "modelType", description = "The type of the token name finder model")
-  @OptionalParameter
-  String getType();
+    @ParameterDescription(valueName = "modelType", description = "The type of the token name finder model")
+    @OptionalParameter
+    String getType();
 
-  @ParameterDescription(valueName = "resourcesDir", description = "The resources directory")
-  @OptionalParameter
-  File getResources();
+    @ParameterDescription(valueName = "resourcesDir", description = "The resources directory")
+    @OptionalParameter
+    File getResources();
 
-  @ParameterDescription(valueName = "featuregenFile", description = "The feature generator descriptor file")
-  @OptionalParameter
-  File getFeaturegen();
+    @ParameterDescription(valueName = "featuregenFile", description = "The feature generator descriptor file")
+    @OptionalParameter
+    File getFeaturegen();
 
-  @OptionalParameter
-  @ParameterDescription(valueName = "types", description = "name types to use for training")
-  String getNameTypes();
+    @OptionalParameter
+    @ParameterDescription(valueName = "types", description = "name types to use for training")
+    String getNameTypes();
 
-  @OptionalParameter(defaultValue = "opennlp.tools.namefind.BioCodec")
-  @ParameterDescription(valueName = "codec", description = "sequence codec used to code name spans")
-  String getSequenceCodec();
+    @OptionalParameter(defaultValue = "opennlp.tools.namefind.BioCodec")
+    @ParameterDescription(valueName = "codec", description = "sequence codec used to code name spans")
+    String getSequenceCodec();
 
-  @ParameterDescription(valueName = "factoryName", description = "A sub-class of TokenNameFinderFactory")
-  @OptionalParameter
-  String getFactory();
+    @ParameterDescription(valueName = "factoryName", description = "A sub-class of TokenNameFinderFactory")
+    @OptionalParameter
+    String getFactory();
 }

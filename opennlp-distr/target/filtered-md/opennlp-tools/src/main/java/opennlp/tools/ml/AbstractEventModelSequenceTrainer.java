@@ -17,27 +17,27 @@
 
 package opennlp.tools.ml;
 
-import java.io.IOException;
-
 import opennlp.tools.ml.model.MaxentModel;
 import opennlp.tools.ml.model.SequenceStream;
 
+import java.io.IOException;
+
 public abstract class AbstractEventModelSequenceTrainer extends AbstractTrainer implements
-    EventModelSequenceTrainer {
+        EventModelSequenceTrainer {
 
-  public AbstractEventModelSequenceTrainer() {
-  }
+    public AbstractEventModelSequenceTrainer() {
+    }
 
-  public abstract MaxentModel doTrain(SequenceStream events)
-      throws IOException;
+    public abstract MaxentModel doTrain(SequenceStream events)
+            throws IOException;
 
-  public final MaxentModel train(SequenceStream events) throws IOException {
-    validate();
+    public final MaxentModel train(SequenceStream events) throws IOException {
+        validate();
 
-    MaxentModel model = doTrain(events);
-    addToReport(AbstractTrainer.TRAINER_TYPE_PARAM,
-        EventModelSequenceTrainer.SEQUENCE_VALUE);
-    return model;
-  }
+        MaxentModel model = doTrain(events);
+        addToReport(AbstractTrainer.TRAINER_TYPE_PARAM,
+                EventModelSequenceTrainer.SEQUENCE_VALUE);
+        return model;
+    }
 
 }

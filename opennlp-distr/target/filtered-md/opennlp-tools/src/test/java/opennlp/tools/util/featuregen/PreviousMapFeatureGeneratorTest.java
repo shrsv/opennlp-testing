@@ -17,46 +17,46 @@
 
 package opennlp.tools.util.featuregen;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.junit.Assert;
 import org.junit.Test;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Test for the {@link PreviousMapFeatureGenerator} class.
  */
 public class PreviousMapFeatureGeneratorTest {
 
-  @Test
-  public void testFeatureGeneration() {
+    @Test
+    public void testFeatureGeneration() {
 
-    AdaptiveFeatureGenerator fg = new PreviousMapFeatureGenerator();
+        AdaptiveFeatureGenerator fg = new PreviousMapFeatureGenerator();
 
-    String[] sentence = new String[] {"a", "b", "c"};
+        String[] sentence = new String[]{"a", "b", "c"};
 
-    List<String> features = new ArrayList<>();
+        List<String> features = new ArrayList<>();
 
-    // this should generate the pd=null feature
-    fg.createFeatures(features, sentence, 0, null);
-    Assert.assertEquals(1, features.size());
-    Assert.assertEquals("pd=null", features.get(0));
+        // this should generate the pd=null feature
+        fg.createFeatures(features, sentence, 0, null);
+        Assert.assertEquals(1, features.size());
+        Assert.assertEquals("pd=null", features.get(0));
 
-    features.clear();
+        features.clear();
 
-    // this should generate the pd=1 feature
-    fg.updateAdaptiveData(sentence, new String[] {"1", "2", "3"});
-    fg.createFeatures(features, sentence, 0, null);
-    Assert.assertEquals(1, features.size());
-    Assert.assertEquals("pd=1", features.get(0));
+        // this should generate the pd=1 feature
+        fg.updateAdaptiveData(sentence, new String[]{"1", "2", "3"});
+        fg.createFeatures(features, sentence, 0, null);
+        Assert.assertEquals(1, features.size());
+        Assert.assertEquals("pd=1", features.get(0));
 
-    features.clear();
+        features.clear();
 
-    // this should generate the pd=null feature again after
-    // the adaptive data was cleared
-    fg.clearAdaptiveData();
-    fg.createFeatures(features, sentence, 0, null);
-    Assert.assertEquals(1, features.size());
-    Assert.assertEquals("pd=null", features.get(0));
-  }
+        // this should generate the pd=null feature again after
+        // the adaptive data was cleared
+        fg.clearAdaptiveData();
+        fg.createFeatures(features, sentence, 0, null);
+        Assert.assertEquals(1, features.size());
+        Assert.assertEquals("pd=null", features.get(0));
+    }
 }

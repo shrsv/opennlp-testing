@@ -24,22 +24,22 @@ import java.util.List;
  */
 public class BrownTokenClassFeatureGenerator implements AdaptiveFeatureGenerator {
 
-  private BrownCluster brownLexicon;
+    private BrownCluster brownLexicon;
 
-  public BrownTokenClassFeatureGenerator(BrownCluster dict) {
-    this.brownLexicon = dict;
-  }
-
-  public void createFeatures(List<String> features, String[] tokens, int index,
-      String[] previousOutcomes) {
-
-    String wordShape = FeatureGeneratorUtil.tokenFeature(tokens[index]);
-    List<String> wordClasses = BrownTokenClasses.getWordClasses(tokens[index], brownLexicon);
-
-    for (int i = 0; i < wordClasses.size(); i++) {
-      features.add("c," + "browncluster" + "=" + wordShape + "," + wordClasses.get(i));
+    public BrownTokenClassFeatureGenerator(BrownCluster dict) {
+        this.brownLexicon = dict;
     }
-  }
+
+    public void createFeatures(List<String> features, String[] tokens, int index,
+                               String[] previousOutcomes) {
+
+        String wordShape = FeatureGeneratorUtil.tokenFeature(tokens[index]);
+        List<String> wordClasses = BrownTokenClasses.getWordClasses(tokens[index], brownLexicon);
+
+        for (int i = 0; i < wordClasses.size(); i++) {
+            features.add("c," + "browncluster" + "=" + wordShape + "," + wordClasses.get(i));
+        }
+    }
 
 }
 

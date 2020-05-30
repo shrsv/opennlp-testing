@@ -21,6 +21,6 @@ import opennlp.tools.util.java.Experimental;
 
 @Experimental
 public enum WordVectorType {
-  FLOAT,
-  DOUBLE;
+    FLOAT,
+    DOUBLE;
 }

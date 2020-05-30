@@ -25,32 +25,32 @@ import org.junit.Test;
  */
 public class MeanTest {
 
-  @Test
-  public void testMeanCalculation() {
-    Mean a = new Mean();
-    a.add(1);
-    Assert.assertEquals(1, a.count());
-    Assert.assertEquals(1d, a.mean(), 0.00001d);
+    @Test
+    public void testMeanCalculation() {
+        Mean a = new Mean();
+        a.add(1);
+        Assert.assertEquals(1, a.count());
+        Assert.assertEquals(1d, a.mean(), 0.00001d);
 
-    a.add(1);
-    Assert.assertEquals(2, a.count());
-    Assert.assertEquals(1d, a.mean(), 0.00001d);
-    a.toString();
+        a.add(1);
+        Assert.assertEquals(2, a.count());
+        Assert.assertEquals(1d, a.mean(), 0.00001d);
+        a.toString();
 
-    Mean b = new Mean();
-    b.add(0.5);
-    Assert.assertEquals(1, b.count());
-    Assert.assertEquals(0.5d, b.mean(), 0.00001d);
+        Mean b = new Mean();
+        b.add(0.5);
+        Assert.assertEquals(1, b.count());
+        Assert.assertEquals(0.5d, b.mean(), 0.00001d);
 
-    b.add(2);
-    Assert.assertEquals(2, b.count());
-    Assert.assertEquals(1.25d, b.mean(), 0.00001d);
-    b.toString();
+        b.add(2);
+        Assert.assertEquals(2, b.count());
+        Assert.assertEquals(1.25d, b.mean(), 0.00001d);
+        b.toString();
 
-    Mean c = new Mean();
-    Assert.assertEquals(0, c.count());
-    Assert.assertEquals(0d, c.mean(), 0.00001d);
-    c.toString();
-  }
+        Mean c = new Mean();
+        Assert.assertEquals(0, c.count());
+        Assert.assertEquals(0d, c.mean(), 0.00001d);
+        c.toString();
+    }
 
 }

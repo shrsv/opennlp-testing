@@ -27,25 +27,24 @@ import java.io.OutputStream;
  */
 public interface ArtifactSerializer<T> {
 
-  /**
-   * Creates the artifact from the provided {@link InputStream}.
-   *
-   * The {@link InputStream} remains open.
-   *
-   * @return the artifact
-   *
-   * @throws IOException
-   */
-  T create(InputStream in) throws IOException;
+    /**
+     * Creates the artifact from the provided {@link InputStream}.
+     * <p>
+     * The {@link InputStream} remains open.
+     *
+     * @return the artifact
+     * @throws IOException
+     */
+    T create(InputStream in) throws IOException;
 
-  /**
-   * Serializes the artifact to the provided {@link OutputStream}.
-   *
-   * The {@link OutputStream} remains open.
-   *
-   * @param artifact
-   * @param out
-   * @throws IOException
-   */
-  void serialize(T artifact, OutputStream out) throws IOException;
+    /**
+     * Serializes the artifact to the provided {@link OutputStream}.
+     * <p>
+     * The {@link OutputStream} remains open.
+     *
+     * @param artifact
+     * @param out
+     * @throws IOException
+     */
+    void serialize(T artifact, OutputStream out) throws IOException;
 }

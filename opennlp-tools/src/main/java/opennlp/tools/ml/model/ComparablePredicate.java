@@ -26,62 +26,62 @@ import java.util.Objects;
  * much more compact.
  */
 public class ComparablePredicate implements Comparable<ComparablePredicate> {
-  public String name;
-  public int[] outcomes;
-  public double[] params;
+    public String name;
+    public int[] outcomes;
+    public double[] params;
 
-  public ComparablePredicate(String n, int[] ocs, double[] ps) {
-    name = n;
-    outcomes = ocs;
-    params = ps;
-  }
-
-  public int compareTo(ComparablePredicate cp) {
-    int smallerLength = Math.min(outcomes.length, cp.outcomes.length);
-
-    for (int i = 0; i < smallerLength; i++) {
-      int compareOutcomes = Integer.compare(outcomes[i], cp.outcomes[i]);
-      if (compareOutcomes != 0) {
-        return compareOutcomes;
-      }
+    public ComparablePredicate(String n, int[] ocs, double[] ps) {
+        name = n;
+        outcomes = ocs;
+        params = ps;
     }
 
-    int compareOutcomesLength = Integer.compare(outcomes.length, cp.outcomes.length);
-    if (compareOutcomesLength != 0) {
-      return compareOutcomesLength;
+    public int compareTo(ComparablePredicate cp) {
+        int smallerLength = Math.min(outcomes.length, cp.outcomes.length);
+
+        for (int i = 0; i < smallerLength; i++) {
+            int compareOutcomes = Integer.compare(outcomes[i], cp.outcomes[i]);
+            if (compareOutcomes != 0) {
+                return compareOutcomes;
+            }
+        }
+
+        int compareOutcomesLength = Integer.compare(outcomes.length, cp.outcomes.length);
+        if (compareOutcomesLength != 0) {
+            return compareOutcomesLength;
+        }
+
+        return 0;
     }
 
-    return 0;
-  }
-
-  @Override
-  public int hashCode() {
-    return Objects.hash(name, Arrays.hashCode(outcomes), Arrays.hashCode(params));
-  }
-
-  @Override
-  public boolean equals(Object obj) {
-
-    if (this == obj)
-      return true;
-
-    if (obj instanceof ComparablePredicate) {
-      ComparablePredicate other = (ComparablePredicate) obj;
-      return Objects.equals(name, other.name) &&
-          Arrays.equals(outcomes, other.outcomes) &&
-          Arrays.equals(params, other.params);
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, Arrays.hashCode(outcomes), Arrays.hashCode(params));
     }
 
-    return false;
-  }
+    @Override
+    public boolean equals(Object obj) {
 
-  public String toString() {
-    StringBuilder s = new StringBuilder();
-    for (int outcome : outcomes) {
-      s.append(" ").append(outcome);
+        if (this == obj)
+            return true;
+
+        if (obj instanceof ComparablePredicate) {
+            ComparablePredicate other = (ComparablePredicate) obj;
+            return Objects.equals(name, other.name) &&
+                    Arrays.equals(outcomes, other.outcomes) &&
+                    Arrays.equals(params, other.params);
+        }
+
+        return false;
     }
-    return s.toString();
-  }
+
+    public String toString() {
+        StringBuilder s = new StringBuilder();
+        for (int outcome : outcomes) {
+            s.append(" ").append(outcome);
+        }
+        return s.toString();
+    }
 
 }
 

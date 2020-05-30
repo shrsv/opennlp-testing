@@ -23,6 +23,6 @@ import opennlp.tools.util.eval.EvaluationMonitor;
  * {@link EvaluationMonitor} for Language Detector.
  */
 public interface LanguageDetectorEvaluationMonitor extends
-    EvaluationMonitor<LanguageSample> {
+        EvaluationMonitor<LanguageSample> {
 
 }

@@ -30,26 +30,26 @@ import opennlp.tools.util.ObjectStream;
  * <b>Note:</b> Do not use this class, internal use only!
  */
 public class ADTokenSampleStreamFactory extends
-    DetokenizerSampleStreamFactory<TokenSample> {
+        DetokenizerSampleStreamFactory<TokenSample> {
 
-  interface Parameters extends ADNameSampleStreamFactory.Parameters, DetokenizerParameter {
-  }
+    protected <P> ADTokenSampleStreamFactory(Class<P> params) {
+        super(params);
+    }
 
-  public static void registerFactory() {
-    StreamFactoryRegistry.registerFactory(TokenSample.class, "ad",
-        new ADTokenSampleStreamFactory(Parameters.class));
-  }
+    public static void registerFactory() {
+        StreamFactoryRegistry.registerFactory(TokenSample.class, "ad",
+                new ADTokenSampleStreamFactory(Parameters.class));
+    }
 
-  protected <P> ADTokenSampleStreamFactory(Class<P> params) {
-    super(params);
-  }
+    public ObjectStream<TokenSample> create(String[] args) {
+        Parameters params = ArgumentParser.parse(args, Parameters.class);
 
-  public ObjectStream<TokenSample> create(String[] args) {
-    Parameters params = ArgumentParser.parse(args, Parameters.class);
+        ObjectStream<NameSample> samples = StreamFactoryRegistry.getFactory(
+                NameSample.class, "ad").create(
+                ArgumentParser.filter(args, ADNameSampleStreamFactory.Parameters.class));
+        return new NameToTokenSampleStream(createDetokenizer(params), samples);
+    }
 
-    ObjectStream<NameSample> samples = StreamFactoryRegistry.getFactory(
-        NameSample.class, "ad").create(
-            ArgumentParser.filter(args, ADNameSampleStreamFactory.Parameters.class));
-    return new NameToTokenSampleStream(createDetokenizer(params), samples);
-  }
+    interface Parameters extends ADNameSampleStreamFactory.Parameters, DetokenizerParameter {
+    }
 }

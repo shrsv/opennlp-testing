@@ -21,7 +21,7 @@ import opennlp.tools.util.Span;
 
 abstract class AbstractTokenizer implements Tokenizer {
 
-  public String[] tokenize(String s) {
-    return Span.spansToStrings(tokenizePos(s), s);
-  }
+    public String[] tokenize(String s) {
+        return Span.spansToStrings(tokenizePos(s), s);
+    }
 }

@@ -17,10 +17,6 @@
 
 package opennlp.tools.cmdline.postag;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.Map;
-
 import opennlp.tools.cmdline.AbstractTrainerTool;
 import opennlp.tools.cmdline.CmdLineUtil;
 import opennlp.tools.cmdline.TerminateToolException;
@@ -28,114 +24,110 @@ import opennlp.tools.cmdline.namefind.TokenNameFinderTrainerTool;
 import opennlp.tools.cmdline.params.TrainingToolParams;
 import opennlp.tools.cmdline.postag.POSTaggerTrainerTool.TrainerToolParams;
 import opennlp.tools.ml.TrainerFactory;
-import opennlp.tools.postag.MutableTagDictionary;
-import opennlp.tools.postag.POSModel;
-import opennlp.tools.postag.POSSample;
-import opennlp.tools.postag.POSTaggerFactory;
-import opennlp.tools.postag.POSTaggerME;
-import opennlp.tools.postag.TagDictionary;
+import opennlp.tools.postag.*;
 import opennlp.tools.util.InvalidFormatException;
 import opennlp.tools.util.model.ModelUtil;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.Map;
+
 public final class POSTaggerTrainerTool
-    extends AbstractTrainerTool<POSSample, TrainerToolParams> {
+        extends AbstractTrainerTool<POSSample, TrainerToolParams> {
 
-  interface TrainerToolParams extends TrainingParams, TrainingToolParams {
-  }
-
-  public POSTaggerTrainerTool() {
-    super(POSSample.class, TrainerToolParams.class);
-  }
-
-  public String getShortDescription() {
-    return "trains a model for the part-of-speech tagger";
-  }
-
-  public void run(String format, String[] args) {
-    super.run(format, args);
-
-    mlParams = CmdLineUtil.loadTrainingParameters(params.getParams(), true);
-    if (mlParams != null && !TrainerFactory.isValid(mlParams)) {
-      throw new TerminateToolException(1, "Training parameters file '" + params.getParams() +
-          "' is invalid!");
+    public POSTaggerTrainerTool() {
+        super(POSSample.class, TrainerToolParams.class);
     }
 
-    if (mlParams == null) {
-      mlParams = ModelUtil.createDefaultTrainingParameters();
+    public String getShortDescription() {
+        return "trains a model for the part-of-speech tagger";
     }
 
-    File modelOutFile = params.getModel();
-    CmdLineUtil.checkOutputFile("pos tagger model", modelOutFile);
+    public void run(String format, String[] args) {
+        super.run(format, args);
 
-    Map<String, Object> resources;
-
-    try {
-      resources = TokenNameFinderTrainerTool.loadResources(
-          params.getResources(), params.getFeaturegen());
-    }
-    catch (IOException e) {
-      throw new TerminateToolException(-1,"IO error while loading resources", e);
-    }
-
-    byte[] featureGeneratorBytes =
-        TokenNameFinderTrainerTool.openFeatureGeneratorBytes(params.getFeaturegen());
-
-    POSTaggerFactory postaggerFactory;
-    try {
-      postaggerFactory = POSTaggerFactory.create(params.getFactory(), featureGeneratorBytes,
-          resources, null);
-    } catch (InvalidFormatException e) {
-      throw new TerminateToolException(-1, e.getMessage(), e);
-    }
-
-    if (params.getDict() != null) {
-      try {
-        postaggerFactory.setTagDictionary(postaggerFactory
-            .createTagDictionary(params.getDict()));
-      } catch (IOException e) {
-        throw new TerminateToolException(-1,
-            "IO error while loading POS Dictionary", e);
-      }
-    }
-
-    if (params.getTagDictCutoff() != null) {
-      try {
-        TagDictionary dict = postaggerFactory.getTagDictionary();
-        if (dict == null) {
-          dict = postaggerFactory.createEmptyTagDictionary();
-          postaggerFactory.setTagDictionary(dict);
+        mlParams = CmdLineUtil.loadTrainingParameters(params.getParams(), true);
+        if (mlParams != null && !TrainerFactory.isValid(mlParams)) {
+            throw new TerminateToolException(1, "Training parameters file '" + params.getParams() +
+                    "' is invalid!");
         }
-        if (dict instanceof MutableTagDictionary) {
-          POSTaggerME.populatePOSDictionary(sampleStream, (MutableTagDictionary)dict,
-              params.getTagDictCutoff());
-        } else {
-          throw new IllegalArgumentException(
-              "Can't extend a POSDictionary that does not implement MutableTagDictionary.");
+
+        if (mlParams == null) {
+            mlParams = ModelUtil.createDefaultTrainingParameters();
         }
-        sampleStream.reset();
-      } catch (IOException e) {
-        throw new TerminateToolException(-1,
-            "IO error while creating/extending POS Dictionary: "
-                + e.getMessage(), e);
-      }
+
+        File modelOutFile = params.getModel();
+        CmdLineUtil.checkOutputFile("pos tagger model", modelOutFile);
+
+        Map<String, Object> resources;
+
+        try {
+            resources = TokenNameFinderTrainerTool.loadResources(
+                    params.getResources(), params.getFeaturegen());
+        } catch (IOException e) {
+            throw new TerminateToolException(-1, "IO error while loading resources", e);
+        }
+
+        byte[] featureGeneratorBytes =
+                TokenNameFinderTrainerTool.openFeatureGeneratorBytes(params.getFeaturegen());
+
+        POSTaggerFactory postaggerFactory;
+        try {
+            postaggerFactory = POSTaggerFactory.create(params.getFactory(), featureGeneratorBytes,
+                    resources, null);
+        } catch (InvalidFormatException e) {
+            throw new TerminateToolException(-1, e.getMessage(), e);
+        }
+
+        if (params.getDict() != null) {
+            try {
+                postaggerFactory.setTagDictionary(postaggerFactory
+                        .createTagDictionary(params.getDict()));
+            } catch (IOException e) {
+                throw new TerminateToolException(-1,
+                        "IO error while loading POS Dictionary", e);
+            }
+        }
+
+        if (params.getTagDictCutoff() != null) {
+            try {
+                TagDictionary dict = postaggerFactory.getTagDictionary();
+                if (dict == null) {
+                    dict = postaggerFactory.createEmptyTagDictionary();
+                    postaggerFactory.setTagDictionary(dict);
+                }
+                if (dict instanceof MutableTagDictionary) {
+                    POSTaggerME.populatePOSDictionary(sampleStream, (MutableTagDictionary) dict,
+                            params.getTagDictCutoff());
+                } else {
+                    throw new IllegalArgumentException(
+                            "Can't extend a POSDictionary that does not implement MutableTagDictionary.");
+                }
+                sampleStream.reset();
+            } catch (IOException e) {
+                throw new TerminateToolException(-1,
+                        "IO error while creating/extending POS Dictionary: "
+                                + e.getMessage(), e);
+            }
+        }
+
+        POSModel model;
+        try {
+            model = opennlp.tools.postag.POSTaggerME.train(params.getLang(),
+                    sampleStream, mlParams, postaggerFactory);
+        } catch (IOException e) {
+            throw createTerminationIOException(e);
+        } finally {
+            try {
+                sampleStream.close();
+            } catch (IOException e) {
+                // sorry that this can fail
+            }
+        }
+
+        CmdLineUtil.writeModel("pos tagger", modelOutFile, model);
     }
 
-    POSModel model;
-    try {
-      model = opennlp.tools.postag.POSTaggerME.train(params.getLang(),
-          sampleStream, mlParams, postaggerFactory);
+    interface TrainerToolParams extends TrainingParams, TrainingToolParams {
     }
-    catch (IOException e) {
-      throw createTerminationIOException(e);
-    }
-    finally {
-      try {
-        sampleStream.close();
-      } catch (IOException e) {
-        // sorry that this can fail
-      }
-    }
-
-    CmdLineUtil.writeModel("pos tagger", modelOutFile, model);
-  }
 }

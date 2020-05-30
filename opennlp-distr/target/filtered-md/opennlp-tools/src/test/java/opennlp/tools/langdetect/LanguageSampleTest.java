@@ -17,108 +17,102 @@
 
 package opennlp.tools.langdetect;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.ObjectInput;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutput;
-import java.io.ObjectOutputStream;
-
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.io.*;
+
 public class LanguageSampleTest {
 
-  @Test
-  public void testConstructor() {
-    Language lang = new Language("aLang");
-    CharSequence context = "aContext";
+    @Test
+    public void testConstructor() {
+        Language lang = new Language("aLang");
+        CharSequence context = "aContext";
 
-    LanguageSample sample = new LanguageSample(lang, context);
+        LanguageSample sample = new LanguageSample(lang, context);
 
-    Assert.assertEquals(lang, sample.getLanguage());
-    Assert.assertEquals(context, sample.getContext());
-  }
-
-  @Test
-  public void testLanguageSampleSerDe() throws IOException {
-    Language lang = new Language("aLang");
-    CharSequence context = "aContext";
-
-    LanguageSample languageSample = new LanguageSample(lang, context);
-
-    ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-    ObjectOutput out = new ObjectOutputStream(byteArrayOutputStream);
-    out.writeObject(languageSample);
-    out.flush();
-    byte[] bytes = byteArrayOutputStream.toByteArray();
-
-    ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(bytes);
-    ObjectInput objectInput = new ObjectInputStream(byteArrayInputStream);
-
-    LanguageSample deSerializedLanguageSample = null;
-    try {
-      deSerializedLanguageSample = (LanguageSample) objectInput.readObject();
-    } catch (ClassNotFoundException e) {
-      // do nothing
+        Assert.assertEquals(lang, sample.getLanguage());
+        Assert.assertEquals(context, sample.getContext());
     }
 
-    Assert.assertNotNull(deSerializedLanguageSample);
-    Assert.assertEquals(languageSample.getContext(), deSerializedLanguageSample.getContext());
-    Assert.assertEquals(languageSample.getLanguage(), deSerializedLanguageSample.getLanguage());
-    Assert.assertEquals(languageSample, deSerializedLanguageSample);
-  }
+    @Test
+    public void testLanguageSampleSerDe() throws IOException {
+        Language lang = new Language("aLang");
+        CharSequence context = "aContext";
 
-  @Test(expected = NullPointerException.class)
-  public void testNullLang() throws Exception {
-    CharSequence context = "aContext";
+        LanguageSample languageSample = new LanguageSample(lang, context);
 
-    new LanguageSample(null, context);
-  }
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        ObjectOutput out = new ObjectOutputStream(byteArrayOutputStream);
+        out.writeObject(languageSample);
+        out.flush();
+        byte[] bytes = byteArrayOutputStream.toByteArray();
 
-  @Test(expected = NullPointerException.class)
-  public void testNullContext() {
-    Language lang = new Language("aLang");
+        ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(bytes);
+        ObjectInput objectInput = new ObjectInputStream(byteArrayInputStream);
 
-    new LanguageSample(lang, null);
-  }
+        LanguageSample deSerializedLanguageSample = null;
+        try {
+            deSerializedLanguageSample = (LanguageSample) objectInput.readObject();
+        } catch (ClassNotFoundException e) {
+            // do nothing
+        }
 
-  @Test
-  public void testToString() {
-    Language lang = new Language("aLang");
-    CharSequence context = "aContext";
+        Assert.assertNotNull(deSerializedLanguageSample);
+        Assert.assertEquals(languageSample.getContext(), deSerializedLanguageSample.getContext());
+        Assert.assertEquals(languageSample.getLanguage(), deSerializedLanguageSample.getLanguage());
+        Assert.assertEquals(languageSample, deSerializedLanguageSample);
+    }
 
-    LanguageSample sample = new LanguageSample(lang, context);
+    @Test(expected = NullPointerException.class)
+    public void testNullLang() throws Exception {
+        CharSequence context = "aContext";
 
-    Assert.assertEquals(lang.getLang() + "\t" + context, sample.toString());
-  }
+        new LanguageSample(null, context);
+    }
 
-  @Test
-  public void testHash() {
+    @Test(expected = NullPointerException.class)
+    public void testNullContext() {
+        Language lang = new Language("aLang");
 
-    int hashA = new LanguageSample(new Language("aLang"), "aContext").hashCode();
-    int hashB = new LanguageSample(new Language("bLang"), "aContext").hashCode();
-    int hashC = new LanguageSample(new Language("aLang"), "bContext").hashCode();
+        new LanguageSample(lang, null);
+    }
 
-    Assert.assertNotEquals(hashA, hashB);
-    Assert.assertNotEquals(hashA, hashC);
-    Assert.assertNotEquals(hashB, hashC);
-  }
+    @Test
+    public void testToString() {
+        Language lang = new Language("aLang");
+        CharSequence context = "aContext";
 
-  @Test
-  public void testEquals() throws Exception {
+        LanguageSample sample = new LanguageSample(lang, context);
 
-    LanguageSample sampleA = new LanguageSample(new Language("aLang"), "aContext");
-    LanguageSample sampleA1 = new LanguageSample(new Language("aLang"), "aContext");
-    LanguageSample sampleB = new LanguageSample(new Language("bLang"), "aContext");
-    LanguageSample sampleC = new LanguageSample(new Language("aLang"), "bContext");
+        Assert.assertEquals(lang.getLang() + "\t" + context, sample.toString());
+    }
 
-    Assert.assertEquals(sampleA, sampleA);
-    Assert.assertEquals(sampleA, sampleA1);
-    Assert.assertNotEquals(sampleA, sampleB);
-    Assert.assertNotEquals(sampleA, sampleC);
-    Assert.assertNotEquals(sampleB, sampleC);
-    Assert.assertNotEquals(sampleA, "something else");
-  }
+    @Test
+    public void testHash() {
+
+        int hashA = new LanguageSample(new Language("aLang"), "aContext").hashCode();
+        int hashB = new LanguageSample(new Language("bLang"), "aContext").hashCode();
+        int hashC = new LanguageSample(new Language("aLang"), "bContext").hashCode();
+
+        Assert.assertNotEquals(hashA, hashB);
+        Assert.assertNotEquals(hashA, hashC);
+        Assert.assertNotEquals(hashB, hashC);
+    }
+
+    @Test
+    public void testEquals() throws Exception {
+
+        LanguageSample sampleA = new LanguageSample(new Language("aLang"), "aContext");
+        LanguageSample sampleA1 = new LanguageSample(new Language("aLang"), "aContext");
+        LanguageSample sampleB = new LanguageSample(new Language("bLang"), "aContext");
+        LanguageSample sampleC = new LanguageSample(new Language("aLang"), "bContext");
+
+        Assert.assertEquals(sampleA, sampleA);
+        Assert.assertEquals(sampleA, sampleA1);
+        Assert.assertNotEquals(sampleA, sampleB);
+        Assert.assertNotEquals(sampleA, sampleC);
+        Assert.assertNotEquals(sampleB, sampleC);
+        Assert.assertNotEquals(sampleA, "something else");
+    }
 }

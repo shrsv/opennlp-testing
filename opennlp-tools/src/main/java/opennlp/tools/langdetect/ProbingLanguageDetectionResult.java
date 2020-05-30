@@ -18,24 +18,23 @@
 package opennlp.tools.langdetect;
 
 public class ProbingLanguageDetectionResult {
-  private final Language[] languages;
-  private final int length;
+    private final Language[] languages;
+    private final int length;
 
-  public ProbingLanguageDetectionResult(Language[] languages, int length) {
-    this.languages = languages;
-    this.length = length;
-  }
+    public ProbingLanguageDetectionResult(Language[] languages, int length) {
+        this.languages = languages;
+        this.length = length;
+    }
 
-  public Language[] getLanguages() {
-    return languages;
-  }
+    public Language[] getLanguages() {
+        return languages;
+    }
 
-  /**
-   *
-   * @return length in codepoints of text processed
-   */
-  public int getLength() {
-    return length;
-  }
+    /**
+     * @return length in codepoints of text processed
+     */
+    public int getLength() {
+        return length;
+    }
 
 }

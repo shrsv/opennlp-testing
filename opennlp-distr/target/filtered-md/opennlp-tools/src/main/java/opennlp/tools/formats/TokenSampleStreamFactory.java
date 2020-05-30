@@ -17,8 +17,6 @@
 
 package opennlp.tools.formats;
 
-import java.io.IOException;
-
 import opennlp.tools.cmdline.ArgumentParser;
 import opennlp.tools.cmdline.CmdLineUtil;
 import opennlp.tools.cmdline.StreamFactoryRegistry;
@@ -29,36 +27,38 @@ import opennlp.tools.util.InputStreamFactory;
 import opennlp.tools.util.ObjectStream;
 import opennlp.tools.util.PlainTextByLineStream;
 
+import java.io.IOException;
+
 /**
  * Factory producing OpenNLP {@link TokenSampleStream}s.
  */
 public class TokenSampleStreamFactory extends LanguageSampleStreamFactory<TokenSample> {
 
-  interface Parameters extends BasicFormatParams {
-  }
-
-  public static void registerFactory() {
-    StreamFactoryRegistry.registerFactory(TokenSample.class,
-            StreamFactoryRegistry.DEFAULT_FORMAT, new TokenSampleStreamFactory(Parameters.class));
-  }
-
-  protected <P> TokenSampleStreamFactory(Class<P> params) {
-    super(params);
-  }
-
-  public ObjectStream<TokenSample> create(String[] args) {
-    Parameters params = ArgumentParser.parse(args, Parameters.class);
-
-    CmdLineUtil.checkInputFile("Data", params.getData());
-    InputStreamFactory sampleDataIn = CmdLineUtil.createInputStreamFactory(params.getData());
-
-    ObjectStream<String> lineStream = null;
-    try {
-      lineStream = new PlainTextByLineStream(sampleDataIn, params.getEncoding());
-    } catch (IOException ex) {
-      CmdLineUtil.handleCreateObjectStreamError(ex);
+    protected <P> TokenSampleStreamFactory(Class<P> params) {
+        super(params);
     }
 
-    return new TokenSampleStream(lineStream);
-  }
+    public static void registerFactory() {
+        StreamFactoryRegistry.registerFactory(TokenSample.class,
+                StreamFactoryRegistry.DEFAULT_FORMAT, new TokenSampleStreamFactory(Parameters.class));
+    }
+
+    public ObjectStream<TokenSample> create(String[] args) {
+        Parameters params = ArgumentParser.parse(args, Parameters.class);
+
+        CmdLineUtil.checkInputFile("Data", params.getData());
+        InputStreamFactory sampleDataIn = CmdLineUtil.createInputStreamFactory(params.getData());
+
+        ObjectStream<String> lineStream = null;
+        try {
+            lineStream = new PlainTextByLineStream(sampleDataIn, params.getEncoding());
+        } catch (IOException ex) {
+            CmdLineUtil.handleCreateObjectStreamError(ex);
+        }
+
+        return new TokenSampleStream(lineStream);
+    }
+
+    interface Parameters extends BasicFormatParams {
+    }
 }

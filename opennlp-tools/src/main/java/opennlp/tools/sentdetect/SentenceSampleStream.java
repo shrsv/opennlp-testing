@@ -18,13 +18,13 @@
 
 package opennlp.tools.sentdetect;
 
-import java.io.IOException;
-import java.util.LinkedList;
-import java.util.List;
-
 import opennlp.tools.util.FilterObjectStream;
 import opennlp.tools.util.ObjectStream;
 import opennlp.tools.util.Span;
+
+import java.io.IOException;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * This class is a stream filter which reads a sentence by line samples from
@@ -33,34 +33,34 @@ import opennlp.tools.util.Span;
  */
 public class SentenceSampleStream extends FilterObjectStream<String, SentenceSample> {
 
-  public SentenceSampleStream(ObjectStream<String> sentences) {
-    super(new EmptyLinePreprocessorStream(sentences));
-  }
-
-  public static String replaceNewLineEscapeTags(String s) {
-    return s.replace("<LF>", "\n").replace("<CR>", "\r");
-  }
-
-  public SentenceSample read() throws IOException {
-
-    StringBuilder sentencesString = new StringBuilder();
-    List<Span> sentenceSpans = new LinkedList<>();
-
-    String sentence;
-    while ((sentence = samples.read()) != null && !sentence.equals("")) {
-      int begin = sentencesString.length();
-      sentence = sentence.trim();
-      sentence = replaceNewLineEscapeTags(sentence);
-      sentencesString.append(sentence);
-      int end = sentencesString.length();
-      sentenceSpans.add(new Span(begin, end));
-      sentencesString.append(' ');
+    public SentenceSampleStream(ObjectStream<String> sentences) {
+        super(new EmptyLinePreprocessorStream(sentences));
     }
 
-    if (sentenceSpans.size() > 0) {
-      return new SentenceSample(sentencesString.toString(),
-          sentenceSpans.toArray(new Span[sentenceSpans.size()]));
+    public static String replaceNewLineEscapeTags(String s) {
+        return s.replace("<LF>", "\n").replace("<CR>", "\r");
     }
-    return null;
-  }
+
+    public SentenceSample read() throws IOException {
+
+        StringBuilder sentencesString = new StringBuilder();
+        List<Span> sentenceSpans = new LinkedList<>();
+
+        String sentence;
+        while ((sentence = samples.read()) != null && !sentence.equals("")) {
+            int begin = sentencesString.length();
+            sentence = sentence.trim();
+            sentence = replaceNewLineEscapeTags(sentence);
+            sentencesString.append(sentence);
+            int end = sentencesString.length();
+            sentenceSpans.add(new Span(begin, end));
+            sentencesString.append(' ');
+        }
+
+        if (sentenceSpans.size() > 0) {
+            return new SentenceSample(sentencesString.toString(),
+                    sentenceSpans.toArray(new Span[sentenceSpans.size()]));
+        }
+        return null;
+    }
 }

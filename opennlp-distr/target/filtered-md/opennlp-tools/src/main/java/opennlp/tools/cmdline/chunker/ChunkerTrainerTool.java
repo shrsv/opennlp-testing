@@ -17,9 +17,6 @@
 
 package opennlp.tools.cmdline.chunker;
 
-import java.io.File;
-import java.io.IOException;
-
 import opennlp.tools.chunker.ChunkSample;
 import opennlp.tools.chunker.ChunkerFactory;
 import opennlp.tools.chunker.ChunkerME;
@@ -30,52 +27,54 @@ import opennlp.tools.cmdline.chunker.ChunkerTrainerTool.TrainerToolParams;
 import opennlp.tools.cmdline.params.TrainingToolParams;
 import opennlp.tools.util.model.ModelUtil;
 
+import java.io.File;
+import java.io.IOException;
+
 public class ChunkerTrainerTool
-    extends AbstractTrainerTool<ChunkSample, TrainerToolParams> {
+        extends AbstractTrainerTool<ChunkSample, TrainerToolParams> {
 
-  interface TrainerToolParams extends TrainingParams, TrainingToolParams {
-  }
-
-  public ChunkerTrainerTool() {
-    super(ChunkSample.class, TrainerToolParams.class);
-  }
-
-  public String getName() {
-    return "ChunkerTrainerME";
-  }
-
-  public String getShortDescription() {
-    return "trainer for the learnable chunker";
-  }
-
-  public void run(String format, String[] args) {
-    super.run(format, args);
-
-    mlParams = CmdLineUtil.loadTrainingParameters(params.getParams(), false);
-    if (mlParams == null) {
-      mlParams = ModelUtil.createDefaultTrainingParameters();
+    public ChunkerTrainerTool() {
+        super(ChunkSample.class, TrainerToolParams.class);
     }
 
-    File modelOutFile = params.getModel();
-    CmdLineUtil.checkOutputFile("sentence detector model", modelOutFile);
-
-    ChunkerModel model;
-    try {
-      ChunkerFactory chunkerFactory = ChunkerFactory
-          .create(params.getFactory());
-      model = ChunkerME.train(params.getLang(), sampleStream, mlParams,
-          chunkerFactory);
-    } catch (IOException e) {
-      throw createTerminationIOException(e);
-    }
-    finally {
-      try {
-        sampleStream.close();
-      } catch (IOException e) {
-        // sorry that this can fail
-      }
+    public String getName() {
+        return "ChunkerTrainerME";
     }
 
-    CmdLineUtil.writeModel("chunker", modelOutFile, model);
-  }
+    public String getShortDescription() {
+        return "trainer for the learnable chunker";
+    }
+
+    public void run(String format, String[] args) {
+        super.run(format, args);
+
+        mlParams = CmdLineUtil.loadTrainingParameters(params.getParams(), false);
+        if (mlParams == null) {
+            mlParams = ModelUtil.createDefaultTrainingParameters();
+        }
+
+        File modelOutFile = params.getModel();
+        CmdLineUtil.checkOutputFile("sentence detector model", modelOutFile);
+
+        ChunkerModel model;
+        try {
+            ChunkerFactory chunkerFactory = ChunkerFactory
+                    .create(params.getFactory());
+            model = ChunkerME.train(params.getLang(), sampleStream, mlParams,
+                    chunkerFactory);
+        } catch (IOException e) {
+            throw createTerminationIOException(e);
+        } finally {
+            try {
+                sampleStream.close();
+            } catch (IOException e) {
+                // sorry that this can fail
+            }
+        }
+
+        CmdLineUtil.writeModel("chunker", modelOutFile, model);
+    }
+
+    interface TrainerToolParams extends TrainingParams, TrainingToolParams {
+    }
 }

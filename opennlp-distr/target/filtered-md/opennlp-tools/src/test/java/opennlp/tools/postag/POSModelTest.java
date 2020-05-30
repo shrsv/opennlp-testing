@@ -17,49 +17,46 @@
 
 package opennlp.tools.postag;
 
+import opennlp.tools.util.model.ModelType;
+import org.junit.Test;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
-import org.junit.Test;
-
-import opennlp.tools.util.model.ModelType;
-
 public class POSModelTest {
 
-  @Test
-  public void testPOSModelSerializationMaxent() throws IOException {
-    POSModel posModel = POSTaggerMETest.trainPOSModel(ModelType.MAXENT);
+    @Test
+    public void testPOSModelSerializationMaxent() throws IOException {
+        POSModel posModel = POSTaggerMETest.trainPOSModel(ModelType.MAXENT);
 
-    ByteArrayOutputStream out = new ByteArrayOutputStream();
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
 
-    try {
-      posModel.serialize(out);
-    }
-    finally {
-      out.close();
-    }
+        try {
+            posModel.serialize(out);
+        } finally {
+            out.close();
+        }
 
-    POSModel recreatedPosModel = new POSModel(new ByteArrayInputStream(out.toByteArray()));
+        POSModel recreatedPosModel = new POSModel(new ByteArrayInputStream(out.toByteArray()));
 
-    // TODO: add equals to pos model
-  }
-
-  @Test
-  public void testPOSModelSerializationPerceptron() throws IOException {
-    POSModel posModel = POSTaggerMETest.trainPOSModel(ModelType.PERCEPTRON);
-
-    ByteArrayOutputStream out = new ByteArrayOutputStream();
-
-    try {
-      posModel.serialize(out);
-    }
-    finally {
-      out.close();
+        // TODO: add equals to pos model
     }
 
-    POSModel recreatedPosModel = new POSModel(new ByteArrayInputStream(out.toByteArray()));
+    @Test
+    public void testPOSModelSerializationPerceptron() throws IOException {
+        POSModel posModel = POSTaggerMETest.trainPOSModel(ModelType.PERCEPTRON);
 
-    // TODO: add equals to pos model
-  }
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+
+        try {
+            posModel.serialize(out);
+        } finally {
+            out.close();
+        }
+
+        POSModel recreatedPosModel = new POSModel(new ByteArrayInputStream(out.toByteArray()));
+
+        // TODO: add equals to pos model
+    }
 }

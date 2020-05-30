@@ -17,13 +17,13 @@
 
 package opennlp.tools.cmdline;
 
+import opennlp.tools.util.InvalidFormatException;
+
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Objects;
-
-import opennlp.tools.util.InvalidFormatException;
 
 /**
  * Loads a model and does all the error handling for the command line tools.
@@ -34,40 +34,38 @@ import opennlp.tools.util.InvalidFormatException;
  */
 public abstract class ModelLoader<T> {
 
-  private final String modelName;
+    private final String modelName;
 
-  protected ModelLoader(String modelName) {
-    this.modelName = Objects.requireNonNull(modelName, "modelName must not be null!");
-  }
-
-  protected abstract T loadModel(InputStream modelIn) throws IOException;
-
-  public T load(File modelFile) {
-
-    long beginModelLoadingTime = System.currentTimeMillis();
-
-    CmdLineUtil.checkInputFile(modelName + " model", modelFile);
-
-    System.err.print("Loading " + modelName + " model ... ");
-
-    T model;
-    try (InputStream modelIn = new BufferedInputStream(
-        CmdLineUtil.openInFile(modelFile), CmdLineUtil.IO_BUFFER_SIZE)) {
-      model = loadModel(modelIn);
-    }
-    catch (InvalidFormatException e) {
-      System.err.println("failed");
-      throw new TerminateToolException(-1, "Model has invalid format", e);
-    }
-    catch (IOException e) {
-      System.err.println("failed");
-      throw new TerminateToolException(-1, "IO error while loading model file '" + modelFile + "'", e);
+    protected ModelLoader(String modelName) {
+        this.modelName = Objects.requireNonNull(modelName, "modelName must not be null!");
     }
 
-    long modelLoadingDuration = System.currentTimeMillis() - beginModelLoadingTime;
+    protected abstract T loadModel(InputStream modelIn) throws IOException;
 
-    System.err.printf("done (%.3fs)\n", modelLoadingDuration / 1000d);
+    public T load(File modelFile) {
 
-    return model;
-  }
+        long beginModelLoadingTime = System.currentTimeMillis();
+
+        CmdLineUtil.checkInputFile(modelName + " model", modelFile);
+
+        System.err.print("Loading " + modelName + " model ... ");
+
+        T model;
+        try (InputStream modelIn = new BufferedInputStream(
+                CmdLineUtil.openInFile(modelFile), CmdLineUtil.IO_BUFFER_SIZE)) {
+            model = loadModel(modelIn);
+        } catch (InvalidFormatException e) {
+            System.err.println("failed");
+            throw new TerminateToolException(-1, "Model has invalid format", e);
+        } catch (IOException e) {
+            System.err.println("failed");
+            throw new TerminateToolException(-1, "IO error while loading model file '" + modelFile + "'", e);
+        }
+
+        long modelLoadingDuration = System.currentTimeMillis() - beginModelLoadingTime;
+
+        System.err.printf("done (%.3fs)\n", modelLoadingDuration / 1000d);
+
+        return model;
+    }
 }

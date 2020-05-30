@@ -17,22 +17,22 @@
 
 package opennlp.uima.dictionary;
 
-import java.io.IOException;
-import java.io.InputStream;
-
 import opennlp.tools.dictionary.Dictionary;
 import opennlp.uima.util.AbstractModelResource;
 
+import java.io.IOException;
+import java.io.InputStream;
+
 public class DictionaryResourceImpl extends AbstractModelResource<Dictionary>
-    implements DictionaryResource {
+        implements DictionaryResource {
 
-  @Override
-  public Dictionary getDictionary() {
-    return model;
-  }
+    @Override
+    public Dictionary getDictionary() {
+        return model;
+    }
 
-  @Override
-  protected Dictionary loadModel(InputStream in) throws IOException {
-    return new Dictionary(in);
-  }
+    @Override
+    protected Dictionary loadModel(InputStream in) throws IOException {
+        return new Dictionary(in);
+    }
 }

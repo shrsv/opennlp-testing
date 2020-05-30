@@ -24,16 +24,17 @@ import opennlp.tools.util.Sequence;
  */
 public interface POSTagger {
 
-  /**
-   * Assigns the sentence of tokens pos tags.
-   * @param sentence The sentece of tokens to be tagged.
-   * @return an array of pos tags for each token provided in sentence.
-   */
-  String[] tag(String[] sentence);
+    /**
+     * Assigns the sentence of tokens pos tags.
+     *
+     * @param sentence The sentece of tokens to be tagged.
+     * @return an array of pos tags for each token provided in sentence.
+     */
+    String[] tag(String[] sentence);
 
-  String[] tag(String[] sentence, Object[] additionaContext);
+    String[] tag(String[] sentence, Object[] additionaContext);
 
-  Sequence[] topKSequences(String[] sentence);
+    Sequence[] topKSequences(String[] sentence);
 
-  Sequence[] topKSequences(String[] sentence, Object[] additionaContext);
+    Sequence[] topKSequences(String[] sentence, Object[] additionaContext);
 }

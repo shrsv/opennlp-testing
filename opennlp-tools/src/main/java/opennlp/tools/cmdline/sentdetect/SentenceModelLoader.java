@@ -17,12 +17,12 @@
 
 package opennlp.tools.cmdline.sentdetect;
 
-import java.io.IOException;
-import java.io.InputStream;
-
 import opennlp.tools.cmdline.ModelLoader;
 import opennlp.tools.sentdetect.SentenceModel;
 import opennlp.tools.util.InvalidFormatException;
+
+import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * Loads a Tokenizer Model for the command line tools.
@@ -31,14 +31,14 @@ import opennlp.tools.util.InvalidFormatException;
  */
 final class SentenceModelLoader extends ModelLoader<SentenceModel> {
 
-  public SentenceModelLoader() {
-    super("Sentence Detector");
-  }
+    public SentenceModelLoader() {
+        super("Sentence Detector");
+    }
 
-  @Override
-  protected SentenceModel loadModel(InputStream modelIn) throws IOException,
-      InvalidFormatException {
-    return new SentenceModel(modelIn);
-  }
+    @Override
+    protected SentenceModel loadModel(InputStream modelIn) throws IOException,
+            InvalidFormatException {
+        return new SentenceModel(modelIn);
+    }
 
 }

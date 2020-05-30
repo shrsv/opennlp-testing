@@ -17,42 +17,41 @@
 
 package opennlp.tools.sentdetect;
 
-import java.io.IOException;
-
-import org.junit.Assert;
-import org.junit.Test;
-
 import opennlp.tools.ml.model.Event;
 import opennlp.tools.sentdetect.lang.Factory;
 import opennlp.tools.util.ObjectStream;
 import opennlp.tools.util.ObjectStreamUtils;
 import opennlp.tools.util.Span;
+import org.junit.Assert;
+import org.junit.Test;
+
+import java.io.IOException;
 
 /**
  * Tests for the {@link SDEventStream} class.
  */
 public class SDEventStreamTest {
 
-  @Test
-  public void testEventOutcomes() throws IOException {
-    // Sample with two sentences
-    SentenceSample sample = new SentenceSample("Test sent. one. Test sent. 2?",
-        new Span(0, 15), new Span(16, 29));
+    @Test
+    public void testEventOutcomes() throws IOException {
+        // Sample with two sentences
+        SentenceSample sample = new SentenceSample("Test sent. one. Test sent. 2?",
+                new Span(0, 15), new Span(16, 29));
 
-    ObjectStream<SentenceSample> sampleStream =
-        ObjectStreamUtils.createObjectStream(sample);
+        ObjectStream<SentenceSample> sampleStream =
+                ObjectStreamUtils.createObjectStream(sample);
 
-    Factory factory = new Factory();
+        Factory factory = new Factory();
 
-    ObjectStream<Event> eventStream = new SDEventStream(sampleStream,
-        factory.createSentenceContextGenerator("eng"),
-        factory.createEndOfSentenceScanner("eng"));
+        ObjectStream<Event> eventStream = new SDEventStream(sampleStream,
+                factory.createSentenceContextGenerator("eng"),
+                factory.createEndOfSentenceScanner("eng"));
 
-    Assert.assertEquals(SentenceDetectorME.NO_SPLIT, eventStream.read().getOutcome());
-    Assert.assertEquals(SentenceDetectorME.SPLIT, eventStream.read().getOutcome());
-    Assert.assertEquals(SentenceDetectorME.NO_SPLIT, eventStream.read().getOutcome());
-    Assert.assertEquals(SentenceDetectorME.SPLIT, eventStream.read().getOutcome());
+        Assert.assertEquals(SentenceDetectorME.NO_SPLIT, eventStream.read().getOutcome());
+        Assert.assertEquals(SentenceDetectorME.SPLIT, eventStream.read().getOutcome());
+        Assert.assertEquals(SentenceDetectorME.NO_SPLIT, eventStream.read().getOutcome());
+        Assert.assertEquals(SentenceDetectorME.SPLIT, eventStream.read().getOutcome());
 
-    Assert.assertNull(eventStream.read());
-  }
+        Assert.assertNull(eventStream.read());
+    }
 }

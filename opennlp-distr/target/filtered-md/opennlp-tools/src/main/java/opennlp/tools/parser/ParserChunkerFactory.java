@@ -26,22 +26,22 @@ import opennlp.tools.util.TokenTag;
 
 public class ParserChunkerFactory extends ChunkerFactory {
 
-  @Override
-  public ChunkerContextGenerator getContextGenerator() {
-    return new ChunkContextGenerator(ChunkerME.DEFAULT_BEAM_SIZE);
-  }
-
-  @Override
-  public SequenceValidator<TokenTag> getSequenceValidator() {
-
-    MaxentModel model = artifactProvider.getArtifact("chunker.model");
-
-    String[] outcomes = new String[model.getNumOutcomes()];
-    for (int i = 0; i < outcomes.length; i++) {
-      outcomes[i] = model.getOutcome(i);
+    @Override
+    public ChunkerContextGenerator getContextGenerator() {
+        return new ChunkContextGenerator(ChunkerME.DEFAULT_BEAM_SIZE);
     }
 
-    return new ParserChunkerSequenceValidator(outcomes);
-  }
+    @Override
+    public SequenceValidator<TokenTag> getSequenceValidator() {
+
+        MaxentModel model = artifactProvider.getArtifact("chunker.model");
+
+        String[] outcomes = new String[model.getNumOutcomes()];
+        for (int i = 0; i < outcomes.length; i++) {
+            outcomes[i] = model.getOutcome(i);
+        }
+
+        return new ParserChunkerSequenceValidator(outcomes);
+    }
 
 }

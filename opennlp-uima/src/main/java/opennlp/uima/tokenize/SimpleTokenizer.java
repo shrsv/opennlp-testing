@@ -17,11 +17,10 @@
 
 package opennlp.uima.tokenize;
 
+import opennlp.tools.util.Span;
 import org.apache.uima.UimaContext;
 import org.apache.uima.cas.CAS;
 import org.apache.uima.cas.text.AnnotationFS;
-
-import opennlp.tools.util.Span;
 
 /**
  * OpenNLP Simple Tokenizer annotator.
@@ -36,25 +35,25 @@ import opennlp.tools.util.Span;
  */
 public final class SimpleTokenizer extends AbstractTokenizer {
 
-  /**
-   * The OpenNLP simple tokenizer.
-   */
-  private opennlp.tools.tokenize.SimpleTokenizer tokenizer =
-      opennlp.tools.tokenize.SimpleTokenizer.INSTANCE;
+    /**
+     * The OpenNLP simple tokenizer.
+     */
+    private opennlp.tools.tokenize.SimpleTokenizer tokenizer =
+            opennlp.tools.tokenize.SimpleTokenizer.INSTANCE;
 
-  /**
-   * Initializes the current instance.
-   * <p>
-   * Note: Use {@link #initialize(UimaContext) } to initialize
-   * this instance. Not use the constructor.
-   */
-  public SimpleTokenizer() {
-    super("OpenNLP Simple Tokenizer");
-    // must not be implemented !
-  }
+    /**
+     * Initializes the current instance.
+     * <p>
+     * Note: Use {@link #initialize(UimaContext) } to initialize
+     * this instance. Not use the constructor.
+     */
+    public SimpleTokenizer() {
+        super("OpenNLP Simple Tokenizer");
+        // must not be implemented !
+    }
 
-  @Override
-  protected Span[] tokenize(CAS cas, AnnotationFS sentence) {
-    return tokenizer.tokenizePos(sentence.getCoveredText());
-  }
+    @Override
+    protected Span[] tokenize(CAS cas, AnnotationFS sentence) {
+        return tokenizer.tokenizePos(sentence.getCoveredText());
+    }
 }

@@ -17,11 +17,11 @@
 
 package opennlp.tools.tokenize;
 
-import java.io.IOException;
-import java.util.Objects;
-
 import opennlp.tools.util.FilterObjectStream;
 import opennlp.tools.util.ObjectStream;
+
+import java.io.IOException;
+import java.util.Objects;
 
 /**
  * This class is a stream filter which reads in string encoded samples and creates
@@ -38,25 +38,24 @@ import opennlp.tools.util.ObjectStream;
  */
 public class TokenSampleStream extends FilterObjectStream<String, TokenSample> {
 
-  private final String separatorChars;
+    private final String separatorChars;
 
-  public TokenSampleStream(ObjectStream<String> sampleStrings, String separatorChars) {
-    super(Objects.requireNonNull(sampleStrings, "sampleStrings must not be null"));
-    this.separatorChars = Objects.requireNonNull(separatorChars,"separatorChars must not be null");
-  }
-
-  public TokenSampleStream(ObjectStream<String> sentences) {
-    this(sentences, TokenSample.DEFAULT_SEPARATOR_CHARS);
-  }
-
-  public TokenSample read() throws IOException {
-    String sampleString = samples.read();
-
-    if (sampleString != null) {
-      return TokenSample.parse(sampleString, separatorChars);
+    public TokenSampleStream(ObjectStream<String> sampleStrings, String separatorChars) {
+        super(Objects.requireNonNull(sampleStrings, "sampleStrings must not be null"));
+        this.separatorChars = Objects.requireNonNull(separatorChars, "separatorChars must not be null");
     }
-    else {
-      return null;
+
+    public TokenSampleStream(ObjectStream<String> sentences) {
+        this(sentences, TokenSample.DEFAULT_SEPARATOR_CHARS);
     }
-  }
+
+    public TokenSample read() throws IOException {
+        String sampleString = samples.read();
+
+        if (sampleString != null) {
+            return TokenSample.parse(sampleString, separatorChars);
+        } else {
+            return null;
+        }
+    }
 }

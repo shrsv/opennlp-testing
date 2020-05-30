@@ -17,29 +17,29 @@
 
 package opennlp.tools.cmdline.tokenizer;
 
-import java.io.File;
-
 import opennlp.tools.cmdline.ArgumentParser.OptionalParameter;
 import opennlp.tools.cmdline.ArgumentParser.ParameterDescription;
 import opennlp.tools.cmdline.params.BasicTrainingParams;
 
+import java.io.File;
+
 /**
  * TrainingParameters for Tokenizer.
- *
+ * <p>
  * Note: Do not use this class, internal use only!
  */
 interface TrainingParams extends BasicTrainingParams {
-  @ParameterDescription(valueName = "isAlphaNumOpt",
-      description = "Optimization flag to skip alpha numeric tokens for further tokenization")
-  @OptionalParameter(defaultValue = "false")
-  Boolean getAlphaNumOpt();
+    @ParameterDescription(valueName = "isAlphaNumOpt",
+            description = "Optimization flag to skip alpha numeric tokens for further tokenization")
+    @OptionalParameter(defaultValue = "false")
+    Boolean getAlphaNumOpt();
 
-  @ParameterDescription(valueName = "path", description = "abbreviation dictionary in XML format.")
-  @OptionalParameter
-  File getAbbDict();
+    @ParameterDescription(valueName = "path", description = "abbreviation dictionary in XML format.")
+    @OptionalParameter
+    File getAbbDict();
 
-  @ParameterDescription(valueName = "factoryName",
-      description = "A sub-class of TokenizerFactory where to get implementation and resources.")
-  @OptionalParameter
-  String getFactory();
+    @ParameterDescription(valueName = "factoryName",
+            description = "A sub-class of TokenizerFactory where to get implementation and resources.")
+    @OptionalParameter
+    String getFactory();
 }

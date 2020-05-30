@@ -17,18 +17,17 @@
 
 package opennlp.tools.lemmatizer;
 
+import opennlp.tools.cmdline.lemmatizer.LemmaEvaluationErrorListener;
+import opennlp.tools.util.MockInputStreamFactory;
+import opennlp.tools.util.PlainTextByLineStream;
+import org.junit.Assert;
+import org.junit.Test;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
-
-import org.junit.Assert;
-import org.junit.Test;
-
-import opennlp.tools.cmdline.lemmatizer.LemmaEvaluationErrorListener;
-import opennlp.tools.util.MockInputStreamFactory;
-import opennlp.tools.util.PlainTextByLineStream;
 
 /**
  * Tests for {@link LemmatizerEvaluator}.
@@ -37,41 +36,41 @@ import opennlp.tools.util.PlainTextByLineStream;
  */
 public class LemmatizerEvaluatorTest {
 
-  private static final double DELTA = 1.0E-9d;
+    private static final double DELTA = 1.0E-9d;
 
-  /**
-   * Checks the evaluator results against the results got using the conlleval,
-   * available at http://www.cnts.ua.ac.be/conll2000/chunking/output.html but
-   * containing lemmas instead of chunks.
-   *
-   * @throws IOException
-   */
-  @Test
-  public void testEvaluator() throws IOException {
-    String inPredicted = "opennlp/tools/lemmatizer/output.txt";
-    String inExpected = "opennlp/tools/lemmatizer/output.txt";
+    /**
+     * Checks the evaluator results against the results got using the conlleval,
+     * available at http://www.cnts.ua.ac.be/conll2000/chunking/output.html but
+     * containing lemmas instead of chunks.
+     *
+     * @throws IOException
+     */
+    @Test
+    public void testEvaluator() throws IOException {
+        String inPredicted = "opennlp/tools/lemmatizer/output.txt";
+        String inExpected = "opennlp/tools/lemmatizer/output.txt";
 
-    String encoding = StandardCharsets.UTF_8.name();
+        String encoding = StandardCharsets.UTF_8.name();
 
-    DummyLemmaSampleStream predictedSample = new DummyLemmaSampleStream(
-        new PlainTextByLineStream(
-          new MockInputStreamFactory(new File(inPredicted)), encoding), true);
+        DummyLemmaSampleStream predictedSample = new DummyLemmaSampleStream(
+                new PlainTextByLineStream(
+                        new MockInputStreamFactory(new File(inPredicted)), encoding), true);
 
-    DummyLemmaSampleStream expectedSample = new DummyLemmaSampleStream(
-        new PlainTextByLineStream(
-          new MockInputStreamFactory(new File(inExpected)), encoding), false);
+        DummyLemmaSampleStream expectedSample = new DummyLemmaSampleStream(
+                new PlainTextByLineStream(
+                        new MockInputStreamFactory(new File(inExpected)), encoding), false);
 
-    Lemmatizer dummyLemmatizer = new DummyLemmatizer(predictedSample);
+        Lemmatizer dummyLemmatizer = new DummyLemmatizer(predictedSample);
 
-    OutputStream stream = new ByteArrayOutputStream();
-    LemmatizerEvaluationMonitor listener = new LemmaEvaluationErrorListener(stream);
-    LemmatizerEvaluator evaluator = new LemmatizerEvaluator(dummyLemmatizer, listener);
+        OutputStream stream = new ByteArrayOutputStream();
+        LemmatizerEvaluationMonitor listener = new LemmaEvaluationErrorListener(stream);
+        LemmatizerEvaluator evaluator = new LemmatizerEvaluator(dummyLemmatizer, listener);
 
-    evaluator.evaluate(expectedSample);
+        evaluator.evaluate(expectedSample);
 
-    Assert.assertEquals(0.9877049180327869, evaluator.getWordAccuracy(), DELTA);
-    Assert.assertNotSame(stream.toString().length(), 0);
+        Assert.assertEquals(0.9877049180327869, evaluator.getWordAccuracy(), DELTA);
+        Assert.assertNotSame(stream.toString().length(), 0);
 
-  }
+    }
 
 }

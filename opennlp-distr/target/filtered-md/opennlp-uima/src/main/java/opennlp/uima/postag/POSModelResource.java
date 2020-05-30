@@ -20,5 +20,5 @@ package opennlp.uima.postag;
 import opennlp.tools.postag.POSModel;
 
 public interface POSModelResource {
-  POSModel getModel();
+    POSModel getModel();
 }

@@ -20,6 +20,6 @@ package opennlp.tools.formats.ontonotes;
 import opennlp.tools.cmdline.ArgumentParser.ParameterDescription;
 
 public interface OntoNotesFormatParameters {
-  @ParameterDescription(valueName = "OntoNotes 4.0 corpus directory")
-  String getOntoNotesDir();
+    @ParameterDescription(valueName = "OntoNotes 4.0 corpus directory")
+    String getOntoNotesDir();
 }

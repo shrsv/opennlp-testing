@@ -17,11 +17,10 @@
 
 package opennlp.uima.tokenize;
 
+import opennlp.tools.util.Span;
 import org.apache.uima.UimaContext;
 import org.apache.uima.cas.CAS;
 import org.apache.uima.cas.text.AnnotationFS;
-
-import opennlp.tools.util.Span;
 
 /**
  * OpenNLP Whitespace Tokenizer annotator.
@@ -36,20 +35,20 @@ import opennlp.tools.util.Span;
  */
 public final class WhitespaceTokenizer extends AbstractTokenizer {
 
-  /**
-   * Initializes the current instance.
-   * <p>
-   * Note: Use {@link #initialize(UimaContext) } to initialize
-   * this instance. Not use the constructor.
-   */
-  public WhitespaceTokenizer() {
-    super("OpenNLP Whitespace Tokenizer");
-    // must not be implemented !
-  }
+    /**
+     * Initializes the current instance.
+     * <p>
+     * Note: Use {@link #initialize(UimaContext) } to initialize
+     * this instance. Not use the constructor.
+     */
+    public WhitespaceTokenizer() {
+        super("OpenNLP Whitespace Tokenizer");
+        // must not be implemented !
+    }
 
-  @Override
-  protected Span[] tokenize(CAS cas, AnnotationFS sentence) {
-    return opennlp.tools.tokenize.WhitespaceTokenizer.INSTANCE.
-        tokenizePos(sentence.getCoveredText());
-  }
+    @Override
+    protected Span[] tokenize(CAS cas, AnnotationFS sentence) {
+        return opennlp.tools.tokenize.WhitespaceTokenizer.INSTANCE.
+                tokenizePos(sentence.getCoveredText());
+    }
 }

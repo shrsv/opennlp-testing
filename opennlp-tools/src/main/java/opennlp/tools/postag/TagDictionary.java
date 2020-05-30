@@ -24,12 +24,12 @@ package opennlp.tools.postag;
  */
 public interface TagDictionary {
 
-  /**
-   * Returns a list of valid tags for the specified word.
-   *
-   * @param word The word.
-   * @return A list of valid tags for the specified word or null if no information
-   * is available for that word.
-   */
-  String[] getTags(String word);
+    /**
+     * Returns a list of valid tags for the specified word.
+     *
+     * @param word The word.
+     * @return A list of valid tags for the specified word or null if no information
+     * is available for that word.
+     */
+    String[] getTags(String word);
 }

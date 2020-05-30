@@ -17,33 +17,28 @@
 
 package opennlp.tools.parser.lang.en;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.nio.charset.StandardCharsets;
-
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.io.*;
+import java.nio.charset.StandardCharsets;
+
 public class HeadRulesTest {
 
-  @Test
-  public void testSerialization() throws IOException {
-    InputStream headRulesIn =
-        HeadRulesTest.class.getResourceAsStream("/opennlp/tools/parser/en_head_rules");
+    @Test
+    public void testSerialization() throws IOException {
+        InputStream headRulesIn =
+                HeadRulesTest.class.getResourceAsStream("/opennlp/tools/parser/en_head_rules");
 
-    HeadRules headRulesOrginal = new HeadRules(new InputStreamReader(headRulesIn, StandardCharsets.UTF_8));
+        HeadRules headRulesOrginal = new HeadRules(new InputStreamReader(headRulesIn, StandardCharsets.UTF_8));
 
-    ByteArrayOutputStream out = new ByteArrayOutputStream();
-    headRulesOrginal.serialize(new OutputStreamWriter(out, StandardCharsets.UTF_8));
-    out.close();
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        headRulesOrginal.serialize(new OutputStreamWriter(out, StandardCharsets.UTF_8));
+        out.close();
 
-    HeadRules headRulesRecreated = new HeadRules(new InputStreamReader(
-        new ByteArrayInputStream(out.toByteArray()), StandardCharsets.UTF_8));
+        HeadRules headRulesRecreated = new HeadRules(new InputStreamReader(
+                new ByteArrayInputStream(out.toByteArray()), StandardCharsets.UTF_8));
 
-    Assert.assertEquals(headRulesOrginal, headRulesRecreated);
-  }
+        Assert.assertEquals(headRulesOrginal, headRulesRecreated);
+    }
 }

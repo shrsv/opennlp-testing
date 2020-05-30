@@ -17,22 +17,22 @@
 
 package opennlp.uima.namefind;
 
-import java.io.IOException;
-import java.io.InputStream;
-
 import opennlp.tools.namefind.TokenNameFinderModel;
 import opennlp.uima.util.AbstractModelResource;
 
+import java.io.IOException;
+import java.io.InputStream;
+
 public class TokenNameFinderModelResourceImpl extends AbstractModelResource<TokenNameFinderModel>
-    implements TokenNameFinderModelResource {
+        implements TokenNameFinderModelResource {
 
-  public TokenNameFinderModel getModel() {
-    return model;
-  }
+    public TokenNameFinderModel getModel() {
+        return model;
+    }
 
-  @Override
-  protected TokenNameFinderModel loadModel(InputStream in) throws IOException {
-    return new TokenNameFinderModel(in);
-  }
+    @Override
+    protected TokenNameFinderModel loadModel(InputStream in) throws IOException {
+        return new TokenNameFinderModel(in);
+    }
 
 }

@@ -25,45 +25,45 @@ import java.util.Objects;
  */
 public class LanguageSample implements Serializable {
 
-  private final Language language;
-  private final CharSequence context;
+    private final Language language;
+    private final CharSequence context;
 
-  public LanguageSample(Language language, CharSequence context) {
-    this.language = Objects.requireNonNull(language, "language must not be null");
-    this.context = Objects.requireNonNull(context, "context must not be null");
-  }
-
-  public Language getLanguage() {
-    return language;
-  }
-
-  public CharSequence getContext() {
-    return context;
-  }
-
-  @Override
-  public String toString() {
-    return language.getLang() + '\t' +  context;
-  }
-
-  @Override
-  public int hashCode() {
-    return Objects.hash(getContext(), getLanguage());
-  }
-
-  @Override
-  public boolean equals(Object obj) {
-    if (this == obj) {
-      return true;
+    public LanguageSample(Language language, CharSequence context) {
+        this.language = Objects.requireNonNull(language, "language must not be null");
+        this.context = Objects.requireNonNull(context, "context must not be null");
     }
 
-    if (obj instanceof LanguageSample) {
-      LanguageSample a = (LanguageSample) obj;
-
-      return getLanguage().equals(a.getLanguage())
-          && getContext().equals(a.getContext());
+    public Language getLanguage() {
+        return language;
     }
 
-    return false;
-  }
+    public CharSequence getContext() {
+        return context;
+    }
+
+    @Override
+    public String toString() {
+        return language.getLang() + '\t' + context;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getContext(), getLanguage());
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+
+        if (obj instanceof LanguageSample) {
+            LanguageSample a = (LanguageSample) obj;
+
+            return getLanguage().equals(a.getLanguage())
+                    && getContext().equals(a.getContext());
+        }
+
+        return false;
+    }
 }

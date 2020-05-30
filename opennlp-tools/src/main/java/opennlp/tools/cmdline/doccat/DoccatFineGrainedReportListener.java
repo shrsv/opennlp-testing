@@ -17,11 +17,11 @@
 
 package opennlp.tools.cmdline.doccat;
 
-import java.io.OutputStream;
-
 import opennlp.tools.cmdline.FineGrainedReportListener;
 import opennlp.tools.doccat.DoccatEvaluationMonitor;
 import opennlp.tools.doccat.DocumentSample;
+
+import java.io.OutputStream;
 
 /**
  * Generates a detailed report for the POS Tagger.
@@ -30,40 +30,40 @@ import opennlp.tools.doccat.DocumentSample;
  * provided getters
  */
 public class DoccatFineGrainedReportListener
-    extends FineGrainedReportListener implements DoccatEvaluationMonitor {
+        extends FineGrainedReportListener implements DoccatEvaluationMonitor {
 
-  /**
-   * Creates a listener that will print to {@link System#err}
-   */
-  public DoccatFineGrainedReportListener() {
-    this(System.err);
-  }
+    /**
+     * Creates a listener that will print to {@link System#err}
+     */
+    public DoccatFineGrainedReportListener() {
+        this(System.err);
+    }
 
-  /**
-   * Creates a listener that prints to a given {@link OutputStream}
-   */
-  public DoccatFineGrainedReportListener(OutputStream outputStream) {
-    super(outputStream);
-  }
+    /**
+     * Creates a listener that prints to a given {@link OutputStream}
+     */
+    public DoccatFineGrainedReportListener(OutputStream outputStream) {
+        super(outputStream);
+    }
 
-  // methods inherited from EvaluationMonitor
+    // methods inherited from EvaluationMonitor
 
-  public void missclassified(DocumentSample reference, DocumentSample prediction) {
-    statsAdd(reference, prediction);
-  }
+    public void missclassified(DocumentSample reference, DocumentSample prediction) {
+        statsAdd(reference, prediction);
+    }
 
-  public void correctlyClassified(DocumentSample reference, DocumentSample prediction) {
-    statsAdd(reference, prediction);
-  }
+    public void correctlyClassified(DocumentSample reference, DocumentSample prediction) {
+        statsAdd(reference, prediction);
+    }
 
-  private void statsAdd(DocumentSample reference, DocumentSample prediction) {
-    getStats().add(reference.getText(), reference.getCategory(), prediction.getCategory());
-  }
+    private void statsAdd(DocumentSample reference, DocumentSample prediction) {
+        getStats().add(reference.getText(), reference.getCategory(), prediction.getCategory());
+    }
 
-  public void writeReport() {
-    printGeneralStatistics();
-    printTagsErrorRank();
-    printGeneralConfusionTable();
-  }
+    public void writeReport() {
+        printGeneralStatistics();
+        printTagsErrorRank();
+        printGeneralConfusionTable();
+    }
 
 }

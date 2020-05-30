@@ -26,21 +26,21 @@ import java.util.List;
  */
 public class AdditionalContextFeatureGenerator implements AdaptiveFeatureGenerator {
 
-  private String[][] additionalContext;
+    private String[][] additionalContext;
 
-  public void createFeatures(List<String> features, String[] tokens, int index, String[] preds) {
+    public void createFeatures(List<String> features, String[] tokens, int index, String[] preds) {
 
-    if (additionalContext != null && additionalContext.length != 0) {
+        if (additionalContext != null && additionalContext.length != 0) {
 
-      String[] context = additionalContext[index];
+            String[] context = additionalContext[index];
 
-      for (String s : context) {
-        features.add("ne=" + s);
-      }
+            for (String s : context) {
+                features.add("ne=" + s);
+            }
+        }
     }
-  }
 
-  public void setCurrentContext(String[][] context) {
-    additionalContext = context;
-  }
+    public void setCurrentContext(String[][] context) {
+        additionalContext = context;
+    }
 }

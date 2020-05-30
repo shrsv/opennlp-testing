@@ -25,23 +25,23 @@ import java.util.List;
  */
 public class ReverseListIterator<T> implements Iterator<T> {
 
-  private int index;
-  private List<T> list;
+    private int index;
+    private List<T> list;
 
-  public ReverseListIterator(List<T> list) {
-    index = list.size() - 1;
-    this.list = list;
-  }
+    public ReverseListIterator(List<T> list) {
+        index = list.size() - 1;
+        this.list = list;
+    }
 
-  public T next() {
-    return list.get(index--);
-  }
+    public T next() {
+        return list.get(index--);
+    }
 
-  public boolean hasNext() {
-    return index >= 0;
-  }
+    public boolean hasNext() {
+        return index >= 0;
+    }
 
-  public void remove() {
-    throw new UnsupportedOperationException();
-  }
+    public void remove() {
+        throw new UnsupportedOperationException();
+    }
 }

@@ -22,33 +22,33 @@ package opennlp.tools.cmdline;
  */
 public abstract class AbstractTypedParamTool<T, P> extends TypedCmdLineTool<T> {
 
-  /**
-   * variable to access the parameters
-   */
-  protected final Class<P> paramsClass;
+    /**
+     * variable to access the parameters
+     */
+    protected final Class<P> paramsClass;
 
-  /**
-   * Constructor with type parameters.
-   *
-   * @param sampleType class of the template parameter
-   * @param paramsClass interface with parameters
-   */
-  protected AbstractTypedParamTool(Class<T> sampleType, Class<P> paramsClass) {
-    super(sampleType);
-    this.paramsClass = paramsClass;
-  }
-
-  public String getHelp(String format) {
-    if ("".equals(format) || StreamFactoryRegistry.DEFAULT_FORMAT.equals(format)) {
-      return getBasicHelp(paramsClass,
-          StreamFactoryRegistry.getFactory(type, StreamFactoryRegistry.DEFAULT_FORMAT).getParameters());
-    } else {
-      ObjectStreamFactory<T> factory = StreamFactoryRegistry.getFactory(type, format);
-      if (null == factory) {
-        throw new TerminateToolException(1, "Format " + format + " is not found.\n" + getHelp());
-      }
-      return "Usage: " + CLI.CMD + " " + getName() + "." + format + " " +
-          ArgumentParser.createUsage(paramsClass, factory.getParameters());
+    /**
+     * Constructor with type parameters.
+     *
+     * @param sampleType  class of the template parameter
+     * @param paramsClass interface with parameters
+     */
+    protected AbstractTypedParamTool(Class<T> sampleType, Class<P> paramsClass) {
+        super(sampleType);
+        this.paramsClass = paramsClass;
     }
-  }
+
+    public String getHelp(String format) {
+        if ("".equals(format) || StreamFactoryRegistry.DEFAULT_FORMAT.equals(format)) {
+            return getBasicHelp(paramsClass,
+                    StreamFactoryRegistry.getFactory(type, StreamFactoryRegistry.DEFAULT_FORMAT).getParameters());
+        } else {
+            ObjectStreamFactory<T> factory = StreamFactoryRegistry.getFactory(type, format);
+            if (null == factory) {
+                throw new TerminateToolException(1, "Format " + format + " is not found.\n" + getHelp());
+            }
+            return "Usage: " + CLI.CMD + " " + getName() + "." + format + " " +
+                    ArgumentParser.createUsage(paramsClass, factory.getParameters());
+        }
+    }
 }

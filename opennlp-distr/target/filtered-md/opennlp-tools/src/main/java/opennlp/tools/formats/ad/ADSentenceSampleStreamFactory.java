@@ -17,10 +17,6 @@
 
 package opennlp.tools.formats.ad;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.charset.Charset;
-
 import opennlp.tools.cmdline.ArgumentParser;
 import opennlp.tools.cmdline.ArgumentParser.OptionalParameter;
 import opennlp.tools.cmdline.ArgumentParser.ParameterDescription;
@@ -32,54 +28,58 @@ import opennlp.tools.util.InputStreamFactory;
 import opennlp.tools.util.ObjectStream;
 import opennlp.tools.util.PlainTextByLineStream;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.charset.Charset;
+
 /**
  * <b>Note:</b> Do not use this class, internal use only!
  */
 public class ADSentenceSampleStreamFactory extends
-    LanguageSampleStreamFactory<SentenceSample> {
+        LanguageSampleStreamFactory<SentenceSample> {
 
-  interface Parameters {
-    @ParameterDescription(valueName = "charsetName", description = "encoding for reading and writing text.")
-    Charset getEncoding();
-
-    @ParameterDescription(valueName = "sampleData", description = "data to be used, usually a file name.")
-    File getData();
-
-    @ParameterDescription(valueName = "language", description = "language which is being processed.")
-    String getLang();
-
-    @ParameterDescription(valueName = "includeTitles",
-        description = "if true will include sentences marked as headlines.")
-    @OptionalParameter(defaultValue = "false")
-    Boolean getIncludeTitles();
-  }
-
-  public static void registerFactory() {
-    StreamFactoryRegistry.registerFactory(SentenceSample.class, "ad",
-        new ADSentenceSampleStreamFactory(Parameters.class));
-  }
-
-  protected <P> ADSentenceSampleStreamFactory(Class<P> params) {
-    super(params);
-  }
-
-  public ObjectStream<SentenceSample> create(String[] args) {
-
-    Parameters params = ArgumentParser.parse(args, Parameters.class);
-
-    language = params.getLang();
-
-    boolean includeTitle = params.getIncludeTitles();
-
-    InputStreamFactory sampleDataIn = CmdLineUtil.createInputStreamFactory(params.getData());
-
-    ObjectStream<String> lineStream = null;
-    try {
-      lineStream = new PlainTextByLineStream(sampleDataIn, params.getEncoding());
-    } catch (IOException ex) {
-      CmdLineUtil.handleCreateObjectStreamError(ex);
+    protected <P> ADSentenceSampleStreamFactory(Class<P> params) {
+        super(params);
     }
 
-    return new ADSentenceSampleStream(lineStream, includeTitle);
-  }
+    public static void registerFactory() {
+        StreamFactoryRegistry.registerFactory(SentenceSample.class, "ad",
+                new ADSentenceSampleStreamFactory(Parameters.class));
+    }
+
+    public ObjectStream<SentenceSample> create(String[] args) {
+
+        Parameters params = ArgumentParser.parse(args, Parameters.class);
+
+        language = params.getLang();
+
+        boolean includeTitle = params.getIncludeTitles();
+
+        InputStreamFactory sampleDataIn = CmdLineUtil.createInputStreamFactory(params.getData());
+
+        ObjectStream<String> lineStream = null;
+        try {
+            lineStream = new PlainTextByLineStream(sampleDataIn, params.getEncoding());
+        } catch (IOException ex) {
+            CmdLineUtil.handleCreateObjectStreamError(ex);
+        }
+
+        return new ADSentenceSampleStream(lineStream, includeTitle);
+    }
+
+    interface Parameters {
+        @ParameterDescription(valueName = "charsetName", description = "encoding for reading and writing text.")
+        Charset getEncoding();
+
+        @ParameterDescription(valueName = "sampleData", description = "data to be used, usually a file name.")
+        File getData();
+
+        @ParameterDescription(valueName = "language", description = "language which is being processed.")
+        String getLang();
+
+        @ParameterDescription(valueName = "includeTitles",
+                description = "if true will include sentences marked as headlines.")
+        @OptionalParameter(defaultValue = "false")
+        Boolean getIncludeTitles();
+    }
 }

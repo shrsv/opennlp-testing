@@ -18,10 +18,10 @@
 
 package opennlp.tools.tokenize;
 
-import java.io.IOException;
-
 import opennlp.tools.util.ObjectStream;
 import opennlp.tools.util.Span;
+
+import java.io.IOException;
 
 /**
  * The {@link TokenizerStream} uses a tokenizer to tokenize the
@@ -29,32 +29,32 @@ import opennlp.tools.util.Span;
  */
 public class TokenizerStream implements ObjectStream<TokenSample> {
 
-  private Tokenizer tokenizer;
-  private ObjectStream<String> input;
+    private Tokenizer tokenizer;
+    private ObjectStream<String> input;
 
-  public TokenizerStream(Tokenizer tokenizer, ObjectStream<String> input) {
-    this.tokenizer = tokenizer;
-    this.input = input;
-  }
-
-  public TokenSample read() throws IOException {
-    String inputString = input.read();
-
-    if (inputString != null) {
-      Span[] tokens = tokenizer.tokenizePos(inputString);
-
-      return new TokenSample(inputString, tokens);
+    public TokenizerStream(Tokenizer tokenizer, ObjectStream<String> input) {
+        this.tokenizer = tokenizer;
+        this.input = input;
     }
 
-    return null;
-  }
+    public TokenSample read() throws IOException {
+        String inputString = input.read();
 
-  public void close() throws IOException {
-    input.close();
-  }
+        if (inputString != null) {
+            Span[] tokens = tokenizer.tokenizePos(inputString);
 
-  public void reset() throws IOException,
-      UnsupportedOperationException {
-    input.reset();
-  }
+            return new TokenSample(inputString, tokens);
+        }
+
+        return null;
+    }
+
+    public void close() throws IOException {
+        input.close();
+    }
+
+    public void reset() throws IOException,
+            UnsupportedOperationException {
+        input.reset();
+    }
 }

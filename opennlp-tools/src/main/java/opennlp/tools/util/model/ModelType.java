@@ -18,7 +18,7 @@
 package opennlp.tools.util.model;
 
 public enum ModelType {
-  MAXENT,
-  PERCEPTRON,
-  PERCEPTRON_SEQUENCE
+    MAXENT,
+    PERCEPTRON,
+    PERCEPTRON_SEQUENCE
 }

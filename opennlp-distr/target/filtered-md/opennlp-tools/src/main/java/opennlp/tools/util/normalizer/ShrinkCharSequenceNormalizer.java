@@ -23,19 +23,19 @@ import java.util.regex.Pattern;
  */
 public class ShrinkCharSequenceNormalizer implements CharSequenceNormalizer {
 
-  private static final Pattern REPEATED_CHAR_REGEX = Pattern.compile("(.)\\1{2,}",
-      Pattern.CASE_INSENSITIVE);
-  private static final Pattern SPACE_REGEX = Pattern.compile("\\s{2,}",
-      Pattern.CASE_INSENSITIVE);
+    private static final Pattern REPEATED_CHAR_REGEX = Pattern.compile("(.)\\1{2,}",
+            Pattern.CASE_INSENSITIVE);
+    private static final Pattern SPACE_REGEX = Pattern.compile("\\s{2,}",
+            Pattern.CASE_INSENSITIVE);
 
-  private static final ShrinkCharSequenceNormalizer INSTANCE = new ShrinkCharSequenceNormalizer();
+    private static final ShrinkCharSequenceNormalizer INSTANCE = new ShrinkCharSequenceNormalizer();
 
-  public static ShrinkCharSequenceNormalizer getInstance() {
-    return INSTANCE;
-  }
+    public static ShrinkCharSequenceNormalizer getInstance() {
+        return INSTANCE;
+    }
 
-  public CharSequence normalize (CharSequence text) {
-    text = SPACE_REGEX.matcher(text).replaceAll(" ");
-    return REPEATED_CHAR_REGEX.matcher(text).replaceAll("$1$1").trim();
-  }
+    public CharSequence normalize(CharSequence text) {
+        text = SPACE_REGEX.matcher(text).replaceAll(" ");
+        return REPEATED_CHAR_REGEX.matcher(text).replaceAll("$1$1").trim();
+    }
 }

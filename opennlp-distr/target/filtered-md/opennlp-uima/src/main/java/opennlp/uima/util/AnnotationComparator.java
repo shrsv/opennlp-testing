@@ -17,25 +17,23 @@
 
 package opennlp.uima.util;
 
-import java.util.Comparator;
-
 import org.apache.uima.cas.text.AnnotationFS;
+
+import java.util.Comparator;
 
 /**
  * Checks two annotations for equality.
  */
-public class AnnotationComparator implements Comparator<AnnotationFS>
-{
+public class AnnotationComparator implements Comparator<AnnotationFS> {
 
-  /**
-   * Compares the begin indexes of the annotations.
-   *
-   * @param a - first annotation
-   * @param b - second annotation
-   *
-   * @return 0 if equals,  &lt; 0 if before and &gt; 0 if after
-   */
-  public int compare(AnnotationFS a, AnnotationFS b) {
-    return a.getBegin() - b.getBegin();
-  }
+    /**
+     * Compares the begin indexes of the annotations.
+     *
+     * @param a - first annotation
+     * @param b - second annotation
+     * @return 0 if equals,  &lt; 0 if before and &gt; 0 if after
+     */
+    public int compare(AnnotationFS a, AnnotationFS b) {
+        return a.getBegin() - b.getBegin();
+    }
 }

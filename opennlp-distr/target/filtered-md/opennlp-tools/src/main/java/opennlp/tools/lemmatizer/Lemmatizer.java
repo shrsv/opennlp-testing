@@ -24,24 +24,23 @@ import java.util.List;
  */
 public interface Lemmatizer {
 
-  /**
-   * Generates lemmas for the word and postag returning the result in an array.
-   *
-   * @param toks an array of the tokens
-   * @param tags an array of the pos tags
-   *
-   * @return an array of possible lemmas for each token in the sequence.
-   */
-  String[] lemmatize(String[] toks, String[] tags);
+    /**
+     * Generates lemmas for the word and postag returning the result in an array.
+     *
+     * @param toks an array of the tokens
+     * @param tags an array of the pos tags
+     * @return an array of possible lemmas for each token in the sequence.
+     */
+    String[] lemmatize(String[] toks, String[] tags);
 
-  /**
-   * Generates a lemma tags for the word and postag returning the result in a list
-   * of every possible lemma for each token and postag.
-   *
-   * @param toks an array of the tokens
-   * @param tags an array of the pos tags
-   * @return a list of every possible lemma for each token in the sequence.
-   */
-  List<List<String>> lemmatize(List<String> toks, List<String> tags);
+    /**
+     * Generates a lemma tags for the word and postag returning the result in a list
+     * of every possible lemma for each token and postag.
+     *
+     * @param toks an array of the tokens
+     * @param tags an array of the pos tags
+     * @return a list of every possible lemma for each token in the sequence.
+     */
+    List<List<String>> lemmatize(List<String> toks, List<String> tags);
 
 }

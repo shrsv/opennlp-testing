@@ -17,10 +17,10 @@
 
 package opennlp.tools.sentdetect;
 
+import opennlp.tools.util.Span;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import opennlp.tools.util.Span;
 
 /**
  * The Newline Sentence Detector assumes that sentences are line delimited and
@@ -28,38 +28,38 @@ import opennlp.tools.util.Span;
  */
 public class NewlineSentenceDetector implements SentenceDetector {
 
-  public String[] sentDetect(String s) {
-    return Span.spansToStrings(sentPosDetect(s), s);
-  }
+    public String[] sentDetect(String s) {
+        return Span.spansToStrings(sentPosDetect(s), s);
+    }
 
-  public Span[] sentPosDetect(String s) {
+    public Span[] sentPosDetect(String s) {
 
-    List<Span> sentences = new ArrayList<>();
+        List<Span> sentences = new ArrayList<>();
 
-    int start = 0;
+        int start = 0;
 
-    for (int i = 0; i < s.length(); i++) {
-      char c = s.charAt(i);
+        for (int i = 0; i < s.length(); i++) {
+            char c = s.charAt(i);
 
-      if (c == '\n' || c == '\r') {
-        if (i - start > 0) {
-          Span span = new Span(start, i).trim(s);
-          if (span.length() > 0) {
-            sentences.add(span);
-          }
+            if (c == '\n' || c == '\r') {
+                if (i - start > 0) {
+                    Span span = new Span(start, i).trim(s);
+                    if (span.length() > 0) {
+                        sentences.add(span);
+                    }
 
-          start = i + 1;
+                    start = i + 1;
+                }
+            }
         }
-      }
-    }
 
-    if (s.length() - start > 0) {
-      Span span = new Span(start, s.length()).trim(s);
-      if (span.length() > 0) {
-        sentences.add(span);
-      }
-    }
+        if (s.length() - start > 0) {
+            Span span = new Span(start, s.length()).trim(s);
+            if (span.length() > 0) {
+                sentences.add(span);
+            }
+        }
 
-    return sentences.toArray(new Span[sentences.size()]);
-  }
+        return sentences.toArray(new Span[sentences.size()]);
+    }
 }

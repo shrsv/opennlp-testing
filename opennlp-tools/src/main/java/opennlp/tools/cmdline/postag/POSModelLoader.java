@@ -17,11 +17,11 @@
 
 package opennlp.tools.cmdline.postag;
 
-import java.io.IOException;
-import java.io.InputStream;
-
 import opennlp.tools.cmdline.ModelLoader;
 import opennlp.tools.postag.POSModel;
+
+import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * Loads a POS Tagger Model for the command line tools.
@@ -30,12 +30,12 @@ import opennlp.tools.postag.POSModel;
  */
 public final class POSModelLoader extends ModelLoader<POSModel> {
 
-  public POSModelLoader() {
-    super("POS Tagger");
-  }
+    public POSModelLoader() {
+        super("POS Tagger");
+    }
 
-  @Override
-  protected POSModel loadModel(InputStream modelIn) throws IOException {
-    return new POSModel(modelIn);
-  }
+    @Override
+    protected POSModel loadModel(InputStream modelIn) throws IOException {
+        return new POSModel(modelIn);
+    }
 }

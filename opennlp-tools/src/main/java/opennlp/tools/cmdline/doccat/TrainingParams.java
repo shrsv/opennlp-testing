@@ -23,18 +23,18 @@ import opennlp.tools.cmdline.params.BasicTrainingParams;
 
 /**
  * TrainingParams for DocCat.
- *
+ * <p>
  * Note: Do not use this class, internal use only!
  */
 interface TrainingParams extends BasicTrainingParams {
 
-  @ParameterDescription(valueName = "fg",
-      description = "Comma separated feature generator classes. Bag of words is used if not specified.")
-  @OptionalParameter
-  String getFeatureGenerators();
+    @ParameterDescription(valueName = "fg",
+            description = "Comma separated feature generator classes. Bag of words is used if not specified.")
+    @OptionalParameter
+    String getFeatureGenerators();
 
-  @ParameterDescription(valueName = "factoryName",
-      description = "A sub-class of DoccatFactory where to get implementation and resources.")
-  @OptionalParameter
-  String getFactory();
+    @ParameterDescription(valueName = "factoryName",
+            description = "A sub-class of DoccatFactory where to get implementation and resources.")
+    @OptionalParameter
+    String getFactory();
 }

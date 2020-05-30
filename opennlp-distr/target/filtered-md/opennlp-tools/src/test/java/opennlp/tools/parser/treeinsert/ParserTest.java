@@ -17,49 +17,44 @@
 
 package opennlp.tools.parser.treeinsert;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-
+import opennlp.tools.parser.*;
+import opennlp.tools.util.ObjectStream;
 import org.junit.Test;
 
-import opennlp.tools.parser.HeadRules;
-import opennlp.tools.parser.Parse;
-import opennlp.tools.parser.ParserFactory;
-import opennlp.tools.parser.ParserModel;
-import opennlp.tools.parser.ParserTestUtil;
-import opennlp.tools.util.ObjectStream;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 
 /**
  * Tests for the {@link Parser} class.
  */
 public class ParserTest {
 
-  /**
-   * Verify that training and tagging does not cause
-   * runtime problems.
-   */
-  @Test
-  public void testTreeInsertParserTraining() throws Exception {
+    /**
+     * Verify that training and tagging does not cause
+     * runtime problems.
+     */
+    @Test
+    public void testTreeInsertParserTraining() throws Exception {
 
-    ObjectStream<Parse> parseSamples = ParserTestUtil.openTestTrainingData();
-    HeadRules headRules = ParserTestUtil.createTestHeadRules();
+        ObjectStream<Parse> parseSamples = ParserTestUtil.openTestTrainingData();
+        HeadRules headRules = ParserTestUtil.createTestHeadRules();
 
-    ParserModel model = Parser.train("eng", parseSamples, headRules, 100, 0);
+        ParserModel model = Parser.train("eng", parseSamples, headRules, 100, 0);
 
-    opennlp.tools.parser.Parser parser = ParserFactory.create(model);
+        opennlp.tools.parser.Parser parser = ParserFactory.create(model);
 
-    // Tests parsing to make sure the code does not has
-    // a bug which fails always with a runtime exception
-    parser.parse(Parse.parseParse("She was just another freighter from the " +
-        "States and she seemed as commonplace as her name ."));
+        // Tests parsing to make sure the code does not has
+        // a bug which fails always with a runtime exception
+        parser.parse(Parse.parseParse("She was just another freighter from the " +
+                "States and she seemed as commonplace as her name ."));
 
-    // Test serializing and de-serializing model
-    ByteArrayOutputStream outArray = new ByteArrayOutputStream();
-    model.serialize(outArray);
-    outArray.close();
+        // Test serializing and de-serializing model
+        ByteArrayOutputStream outArray = new ByteArrayOutputStream();
+        model.serialize(outArray);
+        outArray.close();
 
-    new ParserModel(new ByteArrayInputStream(outArray.toByteArray()));
+        new ParserModel(new ByteArrayInputStream(outArray.toByteArray()));
 
-    // TODO: compare both models
-  }
+        // TODO: compare both models
+    }
 }

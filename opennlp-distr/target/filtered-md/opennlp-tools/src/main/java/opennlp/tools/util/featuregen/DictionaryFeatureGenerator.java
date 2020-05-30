@@ -18,10 +18,10 @@
 
 package opennlp.tools.util.featuregen;
 
-import java.util.List;
-
 import opennlp.tools.dictionary.Dictionary;
 import opennlp.tools.namefind.DictionaryNameFinder;
+
+import java.util.List;
 
 /**
  * The {@link DictionaryFeatureGenerator} uses the {@link DictionaryNameFinder}
@@ -33,26 +33,26 @@ import opennlp.tools.namefind.DictionaryNameFinder;
  */
 public class DictionaryFeatureGenerator implements AdaptiveFeatureGenerator {
 
-  private InSpanGenerator isg;
+    private InSpanGenerator isg;
 
-  public DictionaryFeatureGenerator(Dictionary dict) {
-    this("",dict);
-  }
+    public DictionaryFeatureGenerator(Dictionary dict) {
+        this("", dict);
+    }
 
-  public DictionaryFeatureGenerator(String prefix, Dictionary dict) {
-    setDictionary(prefix,dict);
-  }
+    public DictionaryFeatureGenerator(String prefix, Dictionary dict) {
+        setDictionary(prefix, dict);
+    }
 
-  public void setDictionary(Dictionary dict) {
-    setDictionary("",dict);
-  }
+    public void setDictionary(Dictionary dict) {
+        setDictionary("", dict);
+    }
 
-  public void setDictionary(String name, Dictionary dict) {
-    isg = new InSpanGenerator(name, new DictionaryNameFinder(dict));
-  }
+    public void setDictionary(String name, Dictionary dict) {
+        isg = new InSpanGenerator(name, new DictionaryNameFinder(dict));
+    }
 
-  public void createFeatures(List<String> features, String[] tokens, int index, String[] previousOutcomes) {
-    isg.createFeatures(features, tokens, index, previousOutcomes);
-  }
+    public void createFeatures(List<String> features, String[] tokens, int index, String[] previousOutcomes) {
+        isg.createFeatures(features, tokens, index, previousOutcomes);
+    }
 
 }

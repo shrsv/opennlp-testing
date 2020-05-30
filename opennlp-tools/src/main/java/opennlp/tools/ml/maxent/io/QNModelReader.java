@@ -17,36 +17,36 @@
 
 package opennlp.tools.ml.maxent.io;
 
-import java.io.File;
-import java.io.IOException;
-
 import opennlp.tools.ml.maxent.quasinewton.QNModel;
 import opennlp.tools.ml.model.Context;
 import opennlp.tools.ml.model.DataReader;
 
+import java.io.File;
+import java.io.IOException;
+
 public class QNModelReader extends GISModelReader {
-  public QNModelReader(DataReader dataReader) {
-    super(dataReader);
-  }
+    public QNModelReader(DataReader dataReader) {
+        super(dataReader);
+    }
 
-  public QNModelReader(File file) throws IOException {
-    super(file);
-  }
+    public QNModelReader(File file) throws IOException {
+        super(file);
+    }
 
-  @Override
-  public void checkModelType() throws IOException {
-    String modelType = readUTF();
-    if (!modelType.equals("QN"))
-      System.out.println("Error: attempting to load a " + modelType
-          + " model as a MAXENT_QN model." + " You should expect problems.");
-  }
+    @Override
+    public void checkModelType() throws IOException {
+        String modelType = readUTF();
+        if (!modelType.equals("QN"))
+            System.out.println("Error: attempting to load a " + modelType
+                    + " model as a MAXENT_QN model." + " You should expect problems.");
+    }
 
-  public QNModel constructModel() throws IOException {
-    String[] outcomeLabels = getOutcomes();
-    int[][] outcomePatterns = getOutcomePatterns();
-    String[] predLabels = getPredicates();
-    Context[] params = getParameters(outcomePatterns);
+    public QNModel constructModel() throws IOException {
+        String[] outcomeLabels = getOutcomes();
+        int[][] outcomePatterns = getOutcomePatterns();
+        String[] predLabels = getPredicates();
+        Context[] params = getParameters(outcomePatterns);
 
-    return new QNModel(params, predLabels, outcomeLabels);
-  }
+        return new QNModel(params, predLabels, outcomeLabels);
+    }
 }

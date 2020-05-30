@@ -17,12 +17,12 @@
 
 package opennlp.tools.chunker;
 
+import opennlp.tools.util.FilterObjectStream;
+import opennlp.tools.util.ObjectStream;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
-import opennlp.tools.util.FilterObjectStream;
-import opennlp.tools.util.ObjectStream;
 
 /**
  * Parses the conll 2000 shared task shallow parser training data.
@@ -33,38 +33,37 @@ import opennlp.tools.util.ObjectStream;
  */
 public class ChunkSampleStream extends FilterObjectStream<String, ChunkSample> {
 
-  /**
-   * Initializes the current instance.
-   *
-   * @param samples a plain text line stream
-   */
-  public ChunkSampleStream(ObjectStream<String> samples) {
-    super(samples);
-  }
-
-  public ChunkSample read() throws IOException {
-
-    List<String> toks = new ArrayList<>();
-    List<String> tags = new ArrayList<>();
-    List<String> preds = new ArrayList<>();
-
-    for (String line = samples.read(); line != null && !line.equals(""); line = samples.read()) {
-      String[] parts = line.split(" ");
-      if (parts.length != 3) {
-        System.err.println("Skipping corrupt line: " + line);
-      }
-      else {
-        toks.add(parts[0]);
-        tags.add(parts[1]);
-        preds.add(parts[2]);
-      }
+    /**
+     * Initializes the current instance.
+     *
+     * @param samples a plain text line stream
+     */
+    public ChunkSampleStream(ObjectStream<String> samples) {
+        super(samples);
     }
 
-    if (toks.size() > 0) {
-      return new ChunkSample(toks.toArray(new String[toks.size()]),
-          tags.toArray(new String[tags.size()]), preds.toArray(new String[preds.size()]));
-    }
+    public ChunkSample read() throws IOException {
 
-    return null;
-  }
+        List<String> toks = new ArrayList<>();
+        List<String> tags = new ArrayList<>();
+        List<String> preds = new ArrayList<>();
+
+        for (String line = samples.read(); line != null && !line.equals(""); line = samples.read()) {
+            String[] parts = line.split(" ");
+            if (parts.length != 3) {
+                System.err.println("Skipping corrupt line: " + line);
+            } else {
+                toks.add(parts[0]);
+                tags.add(parts[1]);
+                preds.add(parts[2]);
+            }
+        }
+
+        if (toks.size() > 0) {
+            return new ChunkSample(toks.toArray(new String[toks.size()]),
+                    tags.toArray(new String[tags.size()]), preds.toArray(new String[preds.size()]));
+        }
+
+        return null;
+    }
 }

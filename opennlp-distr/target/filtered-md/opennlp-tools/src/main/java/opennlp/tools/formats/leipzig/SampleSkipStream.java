@@ -17,39 +17,39 @@
 
 package opennlp.tools.formats.leipzig;
 
-import java.io.IOException;
-
 import opennlp.tools.util.ObjectStream;
+
+import java.io.IOException;
 
 class SampleSkipStream<T> implements ObjectStream<T> {
 
 
-  private final ObjectStream<T> samples;
-  private final int samplesToSkip;
+    private final ObjectStream<T> samples;
+    private final int samplesToSkip;
 
-  SampleSkipStream(ObjectStream<T> samples, int samplesToSkip) throws IOException {
-    this.samples = samples;
-    this.samplesToSkip = samplesToSkip;
+    SampleSkipStream(ObjectStream<T> samples, int samplesToSkip) throws IOException {
+        this.samples = samples;
+        this.samplesToSkip = samplesToSkip;
 
-    skipSamples();
-  }
-
-  @Override
-  public T read() throws IOException {
-    return samples.read();
-  }
-
-  @Override
-  public void reset() throws IOException, UnsupportedOperationException {
-    this.samples.reset();
-    skipSamples();
-  }
-
-  private void skipSamples() throws IOException {
-    int i = 0;
-
-    while (i < samplesToSkip && (samples.read()) != null) {
-      i++;
+        skipSamples();
     }
-  }
+
+    @Override
+    public T read() throws IOException {
+        return samples.read();
+    }
+
+    @Override
+    public void reset() throws IOException, UnsupportedOperationException {
+        this.samples.reset();
+        skipSamples();
+    }
+
+    private void skipSamples() throws IOException {
+        int i = 0;
+
+        while (i < samplesToSkip && (samples.read()) != null) {
+            i++;
+        }
+    }
 }

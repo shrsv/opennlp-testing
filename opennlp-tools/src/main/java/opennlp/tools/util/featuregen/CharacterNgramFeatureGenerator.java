@@ -17,11 +17,11 @@
 
 package opennlp.tools.util.featuregen;
 
-import java.util.List;
-
 import opennlp.tools.ngram.NGramModel;
 import opennlp.tools.util.StringList;
 import opennlp.tools.util.StringUtil;
+
+import java.util.List;
 
 /**
  * The {@link CharacterNgramFeatureGenerator} uses character ngrams to
@@ -30,29 +30,29 @@ import opennlp.tools.util.StringUtil;
  */
 public class CharacterNgramFeatureGenerator implements AdaptiveFeatureGenerator {
 
-  private final int minLength;
-  private final int maxLength;
+    private final int minLength;
+    private final int maxLength;
 
-  public CharacterNgramFeatureGenerator(int minLength, int maxLength) {
-    this.minLength = minLength;
-    this.maxLength = maxLength;
-  }
-
-  /**
-   * Initializes the current instance with min 2 length and max 5 length of ngrams.
-   */
-  public CharacterNgramFeatureGenerator() {
-    this(2, 5);
-  }
-
-  public void createFeatures(List<String> features, String[] tokens, int index, String[] preds) {
-    NGramModel model = new NGramModel();
-    model.add(tokens[index], minLength, maxLength);
-
-    for (StringList tokenList : model) {
-      if (tokenList.size() > 0) {
-        features.add("ng=" + StringUtil.toLowerCase(tokenList.getToken(0)));
-      }
+    public CharacterNgramFeatureGenerator(int minLength, int maxLength) {
+        this.minLength = minLength;
+        this.maxLength = maxLength;
     }
-  }
+
+    /**
+     * Initializes the current instance with min 2 length and max 5 length of ngrams.
+     */
+    public CharacterNgramFeatureGenerator() {
+        this(2, 5);
+    }
+
+    public void createFeatures(List<String> features, String[] tokens, int index, String[] preds) {
+        NGramModel model = new NGramModel();
+        model.add(tokens[index], minLength, maxLength);
+
+        for (StringList tokenList : model) {
+            if (tokenList.size() > 0) {
+                features.add("ng=" + StringUtil.toLowerCase(tokenList.getToken(0)));
+            }
+        }
+    }
 }

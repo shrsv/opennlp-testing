@@ -17,9 +17,9 @@
 
 package opennlp.tools.util.wordvector;
 
-import java.util.Iterator;
-
 import opennlp.tools.util.java.Experimental;
+
+import java.util.Iterator;
 
 /**
  * A table that maps tokens to word vectors.
@@ -30,11 +30,11 @@ import opennlp.tools.util.java.Experimental;
 @Experimental
 public interface WordVectorTable {
 
-  WordVector get(String token);
+    WordVector get(String token);
 
-  Iterator<String> tokens();
+    Iterator<String> tokens();
 
-  int size();
+    int size();
 
-  int dimension();
+    int dimension();
 }

@@ -17,41 +17,40 @@
 
 package opennlp.tools.tokenize;
 
-import java.io.IOException;
-
-import org.junit.Assert;
-import org.junit.Test;
-
 import opennlp.tools.ml.model.Event;
 import opennlp.tools.util.ObjectStream;
 import opennlp.tools.util.ObjectStreamUtils;
+import org.junit.Assert;
+import org.junit.Test;
+
+import java.io.IOException;
 
 /**
  * Tests for the {@link TokSpanEventStream} class.
  */
 public class TokSpanEventStreamTest {
 
-  /**
-   * Tests the event stream for correctly generated outcomes.
-   */
-  @Test
-  public void testEventOutcomes() throws IOException {
+    /**
+     * Tests the event stream for correctly generated outcomes.
+     */
+    @Test
+    public void testEventOutcomes() throws IOException {
 
-    ObjectStream<String> sentenceStream =
-        ObjectStreamUtils.createObjectStream("\"<SPLIT>out<SPLIT>.<SPLIT>\"");
+        ObjectStream<String> sentenceStream =
+                ObjectStreamUtils.createObjectStream("\"<SPLIT>out<SPLIT>.<SPLIT>\"");
 
-    ObjectStream<TokenSample> tokenSampleStream = new TokenSampleStream(sentenceStream);
+        ObjectStream<TokenSample> tokenSampleStream = new TokenSampleStream(sentenceStream);
 
-    try (ObjectStream<Event> eventStream = new TokSpanEventStream(tokenSampleStream, false)) {
+        try (ObjectStream<Event> eventStream = new TokSpanEventStream(tokenSampleStream, false)) {
 
-      Assert.assertEquals(TokenizerME.SPLIT, eventStream.read().getOutcome());
-      Assert.assertEquals(TokenizerME.NO_SPLIT, eventStream.read().getOutcome());
-      Assert.assertEquals(TokenizerME.NO_SPLIT, eventStream.read().getOutcome());
-      Assert.assertEquals(TokenizerME.SPLIT, eventStream.read().getOutcome());
-      Assert.assertEquals(TokenizerME.SPLIT, eventStream.read().getOutcome());
+            Assert.assertEquals(TokenizerME.SPLIT, eventStream.read().getOutcome());
+            Assert.assertEquals(TokenizerME.NO_SPLIT, eventStream.read().getOutcome());
+            Assert.assertEquals(TokenizerME.NO_SPLIT, eventStream.read().getOutcome());
+            Assert.assertEquals(TokenizerME.SPLIT, eventStream.read().getOutcome());
+            Assert.assertEquals(TokenizerME.SPLIT, eventStream.read().getOutcome());
 
-      Assert.assertNull(eventStream.read());
-      Assert.assertNull(eventStream.read());
+            Assert.assertNull(eventStream.read());
+            Assert.assertNull(eventStream.read());
+        }
     }
-  }
 }

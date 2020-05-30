@@ -23,15 +23,15 @@ import java.util.regex.Pattern;
  */
 public class NumberCharSequenceNormalizer implements CharSequenceNormalizer {
 
-  private static final Pattern NUMBER_REGEX = Pattern.compile("\\d+");
+    private static final Pattern NUMBER_REGEX = Pattern.compile("\\d+");
 
-  private static final NumberCharSequenceNormalizer INSTANCE = new NumberCharSequenceNormalizer();
+    private static final NumberCharSequenceNormalizer INSTANCE = new NumberCharSequenceNormalizer();
 
-  public static NumberCharSequenceNormalizer getInstance() {
-    return INSTANCE;
-  }
+    public static NumberCharSequenceNormalizer getInstance() {
+        return INSTANCE;
+    }
 
-  public CharSequence normalize (CharSequence text) {
-    return NUMBER_REGEX.matcher(text).replaceAll(" ");
-  }
+    public CharSequence normalize(CharSequence text) {
+        return NUMBER_REGEX.matcher(text).replaceAll(" ");
+    }
 }

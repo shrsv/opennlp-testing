@@ -17,35 +17,34 @@
 
 package opennlp.tools.tokenize.lang;
 
-import java.util.Set;
-import java.util.regex.Pattern;
-
 import opennlp.tools.tokenize.DefaultTokenContextGenerator;
 import opennlp.tools.tokenize.TokenContextGenerator;
 
+import java.util.Set;
+import java.util.regex.Pattern;
+
 public class Factory {
 
-  public static final String DEFAULT_ALPHANUMERIC = "^[A-Za-z0-9]+$";
+    public static final String DEFAULT_ALPHANUMERIC = "^[A-Za-z0-9]+$";
 
-  /**
-   * Gets the alpha numeric pattern for the language. Please save the value
-   * locally because this call is expensive.
-   *
-   * @param languageCode
-   *          the language code. If null or unknow the default pattern will be
-   *          returned.
-   * @return the alpha numeric pattern for the language or the default pattern.
-   */
-  public Pattern getAlphanumeric(String languageCode) {
-    if ("pt".equals(languageCode) || "por".equals(languageCode)) {
-      return Pattern.compile("^[0-9a-záãâàéêíóõôúüçA-ZÁÃÂÀÉÊÍÓÕÔÚÜÇ]+$");
+    /**
+     * Gets the alpha numeric pattern for the language. Please save the value
+     * locally because this call is expensive.
+     *
+     * @param languageCode the language code. If null or unknow the default pattern will be
+     *                     returned.
+     * @return the alpha numeric pattern for the language or the default pattern.
+     */
+    public Pattern getAlphanumeric(String languageCode) {
+        if ("pt".equals(languageCode) || "por".equals(languageCode)) {
+            return Pattern.compile("^[0-9a-záãâàéêíóõôúüçA-ZÁÃÂÀÉÊÍÓÕÔÚÜÇ]+$");
+        }
+
+        return Pattern.compile(DEFAULT_ALPHANUMERIC);
     }
 
-    return Pattern.compile(DEFAULT_ALPHANUMERIC);
-  }
-
-  public TokenContextGenerator createTokenContextGenerator(String languageCode, Set<String> abbreviations) {
-    return new DefaultTokenContextGenerator(abbreviations);
-  }
+    public TokenContextGenerator createTokenContextGenerator(String languageCode, Set<String> abbreviations) {
+        return new DefaultTokenContextGenerator(abbreviations);
+    }
 
 }

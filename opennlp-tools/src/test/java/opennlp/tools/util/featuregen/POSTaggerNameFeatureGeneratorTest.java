@@ -17,29 +17,28 @@
 
 package opennlp.tools.util.featuregen;
 
+import opennlp.tools.postag.POSTaggerMETest;
+import opennlp.tools.util.model.ModelType;
+import org.junit.Assert;
+import org.junit.Test;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.Assert;
-import org.junit.Test;
-
-import opennlp.tools.postag.POSTaggerMETest;
-import opennlp.tools.util.model.ModelType;
-
 public class POSTaggerNameFeatureGeneratorTest {
 
 
-  @Test
-  public void testFeatureGeneration() throws IOException {
-    POSTaggerNameFeatureGenerator fg = new POSTaggerNameFeatureGenerator(
-        POSTaggerMETest.trainPOSModel(ModelType.MAXENT));
+    @Test
+    public void testFeatureGeneration() throws IOException {
+        POSTaggerNameFeatureGenerator fg = new POSTaggerNameFeatureGenerator(
+                POSTaggerMETest.trainPOSModel(ModelType.MAXENT));
 
-    String[] tokens = {"Hi", "Mike", ",", "it", "'s", "Stefanie", "Schmidt", "."};
-    for (int i = 0; i < tokens.length; i++) {
-      List<String> feats = new ArrayList<>();
-      fg.createFeatures(feats, tokens, i, null);
-      Assert.assertTrue(feats.get(0).startsWith("pos="));
+        String[] tokens = {"Hi", "Mike", ",", "it", "'s", "Stefanie", "Schmidt", "."};
+        for (int i = 0; i < tokens.length; i++) {
+            List<String> feats = new ArrayList<>();
+            fg.createFeatures(feats, tokens, i, null);
+            Assert.assertTrue(feats.get(0).startsWith("pos="));
+        }
     }
-  }
 }

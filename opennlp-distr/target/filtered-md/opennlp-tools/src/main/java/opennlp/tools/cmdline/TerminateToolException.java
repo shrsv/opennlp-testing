@@ -33,30 +33,30 @@ package opennlp.tools.cmdline;
 @SuppressWarnings("serial")
 public class TerminateToolException extends RuntimeException {
 
-  private final int code;
-  private final String message;
+    private final int code;
+    private final String message;
 
-  public TerminateToolException(int code, String message, Throwable t) {
-    super(t);
-    this.code = code;
-    this.message = message;
-  }
+    public TerminateToolException(int code, String message, Throwable t) {
+        super(t);
+        this.code = code;
+        this.message = message;
+    }
 
-  public TerminateToolException(int code, String message) {
-    this.code = code;
-    this.message = message;
-  }
+    public TerminateToolException(int code, String message) {
+        this.code = code;
+        this.message = message;
+    }
 
-  public TerminateToolException(int code) {
-    this(code, null);
-  }
+    public TerminateToolException(int code) {
+        this(code, null);
+    }
 
-  public int getCode() {
-    return code;
-  }
+    public int getCode() {
+        return code;
+    }
 
-  @Override
-  public String getMessage() {
-    return message;
-  }
+    @Override
+    public String getMessage() {
+        return message;
+    }
 }

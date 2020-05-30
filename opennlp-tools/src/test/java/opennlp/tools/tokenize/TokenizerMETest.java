@@ -17,22 +17,17 @@
 
 package opennlp.tools.tokenize;
 
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-
+import opennlp.tools.formats.ResourceAsStreamFactory;
+import opennlp.tools.util.*;
 import org.junit.Assert;
 import org.junit.Test;
 
-import opennlp.tools.formats.ResourceAsStreamFactory;
-import opennlp.tools.util.InputStreamFactory;
-import opennlp.tools.util.InsufficientTrainingDataException;
-import opennlp.tools.util.ObjectStream;
-import opennlp.tools.util.PlainTextByLineStream;
-import opennlp.tools.util.TrainingParameters;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 
 /**
  * Tests for the {@link TokenizerME} class.
- *
+ * <p>
  * This test trains the tokenizer with a few sample tokens
  * and then predicts a token. This test checks if the
  * tokenizer code can be executed.
@@ -41,54 +36,54 @@ import opennlp.tools.util.TrainingParameters;
  */
 public class TokenizerMETest {
 
-  @Test
-  public void testTokenizerSimpleModel() throws IOException {
+    @Test
+    public void testTokenizerSimpleModel() throws IOException {
 
-    TokenizerModel model = TokenizerTestUtil.createSimpleMaxentTokenModel();
+        TokenizerModel model = TokenizerTestUtil.createSimpleMaxentTokenModel();
 
-    TokenizerME tokenizer = new TokenizerME(model);
+        TokenizerME tokenizer = new TokenizerME(model);
 
-    String[] tokens = tokenizer.tokenize("test,");
+        String[] tokens = tokenizer.tokenize("test,");
 
-    Assert.assertEquals(2, tokens.length);
-    Assert.assertEquals("test", tokens[0]);
-    Assert.assertEquals(",", tokens[1]);
-  }
+        Assert.assertEquals(2, tokens.length);
+        Assert.assertEquals("test", tokens[0]);
+        Assert.assertEquals(",", tokens[1]);
+    }
 
-  @Test
-  public void testTokenizer() throws IOException {
-    TokenizerModel model = TokenizerTestUtil.createMaxentTokenModel();
+    @Test
+    public void testTokenizer() throws IOException {
+        TokenizerModel model = TokenizerTestUtil.createMaxentTokenModel();
 
-    TokenizerME tokenizer = new TokenizerME(model);
-    String[] tokens = tokenizer.tokenize("Sounds like it's not properly thought through!");
+        TokenizerME tokenizer = new TokenizerME(model);
+        String[] tokens = tokenizer.tokenize("Sounds like it's not properly thought through!");
 
-    Assert.assertEquals(9, tokens.length);
-    Assert.assertEquals("Sounds", tokens[0]);
-    Assert.assertEquals("like", tokens[1]);
-    Assert.assertEquals("it", tokens[2]);
-    Assert.assertEquals("'s", tokens[3]);
-    Assert.assertEquals("not", tokens[4]);
-    Assert.assertEquals("properly", tokens[5]);
-    Assert.assertEquals("thought", tokens[6]);
-    Assert.assertEquals("through", tokens[7]);
-    Assert.assertEquals("!", tokens[8]);
-  }
-  
-  @Test(expected = InsufficientTrainingDataException.class)
-  public void testInsufficientData() throws IOException {
+        Assert.assertEquals(9, tokens.length);
+        Assert.assertEquals("Sounds", tokens[0]);
+        Assert.assertEquals("like", tokens[1]);
+        Assert.assertEquals("it", tokens[2]);
+        Assert.assertEquals("'s", tokens[3]);
+        Assert.assertEquals("not", tokens[4]);
+        Assert.assertEquals("properly", tokens[5]);
+        Assert.assertEquals("thought", tokens[6]);
+        Assert.assertEquals("through", tokens[7]);
+        Assert.assertEquals("!", tokens[8]);
+    }
 
-    InputStreamFactory trainDataIn = new ResourceAsStreamFactory(
-        TokenizerModel.class, "/opennlp/tools/tokenize/token-insufficient.train");
+    @Test(expected = InsufficientTrainingDataException.class)
+    public void testInsufficientData() throws IOException {
 
-    ObjectStream<TokenSample> samples = new TokenSampleStream(
-        new PlainTextByLineStream(trainDataIn, StandardCharsets.UTF_8));
+        InputStreamFactory trainDataIn = new ResourceAsStreamFactory(
+                TokenizerModel.class, "/opennlp/tools/tokenize/token-insufficient.train");
 
-    TrainingParameters mlParams = new TrainingParameters();
-    mlParams.put(TrainingParameters.ITERATIONS_PARAM, 100);
-    mlParams.put(TrainingParameters.CUTOFF_PARAM, 5);
+        ObjectStream<TokenSample> samples = new TokenSampleStream(
+                new PlainTextByLineStream(trainDataIn, StandardCharsets.UTF_8));
 
-    TokenizerME.train(samples, TokenizerFactory.create(null, "eng", null, true, null), mlParams);
+        TrainingParameters mlParams = new TrainingParameters();
+        mlParams.put(TrainingParameters.ITERATIONS_PARAM, 100);
+        mlParams.put(TrainingParameters.CUTOFF_PARAM, 5);
 
-  }
-  
+        TokenizerME.train(samples, TokenizerFactory.create(null, "eng", null, true, null), mlParams);
+
+    }
+
 }

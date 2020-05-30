@@ -27,20 +27,20 @@ import java.io.IOException;
 @SuppressWarnings("serial")
 public class InsufficientTrainingDataException extends IOException {
 
-  public InsufficientTrainingDataException() {
-  }
+    public InsufficientTrainingDataException() {
+    }
 
-  public InsufficientTrainingDataException(String message) {
-    super(message);
-  }
+    public InsufficientTrainingDataException(String message) {
+        super(message);
+    }
 
-  public InsufficientTrainingDataException(Throwable t) {
-    super();
-    initCause(t);
-  }
+    public InsufficientTrainingDataException(Throwable t) {
+        super();
+        initCause(t);
+    }
 
-  public InsufficientTrainingDataException(String message, Throwable t) {
-    super(message);
-    initCause(t);
-  }
+    public InsufficientTrainingDataException(String message, Throwable t) {
+        super(message);
+        initCause(t);
+    }
 }

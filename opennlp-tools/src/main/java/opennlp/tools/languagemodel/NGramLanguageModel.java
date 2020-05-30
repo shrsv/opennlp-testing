@@ -17,12 +17,12 @@
 
 package opennlp.tools.languagemodel;
 
-import java.io.IOException;
-import java.io.InputStream;
-
 import opennlp.tools.ngram.NGramModel;
 import opennlp.tools.ngram.NGramUtils;
 import opennlp.tools.util.StringList;
+
+import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * A {@link opennlp.tools.languagemodel.LanguageModel} based on a {@link opennlp.tools.ngram.NGramModel}
@@ -30,131 +30,131 @@ import opennlp.tools.util.StringList;
  */
 public class NGramLanguageModel extends NGramModel implements LanguageModel {
 
-  private static final int DEFAULT_N = 3;
+    private static final int DEFAULT_N = 3;
 
-  private final int n;
+    private final int n;
 
-  public NGramLanguageModel() {
-    this(DEFAULT_N);
-  }
+    public NGramLanguageModel() {
+        this(DEFAULT_N);
+    }
 
-  public NGramLanguageModel(int n) {
-    this.n = n;
-  }
+    public NGramLanguageModel(int n) {
+        this.n = n;
+    }
 
-  public NGramLanguageModel(InputStream in) throws IOException {
-    this(in, DEFAULT_N);
-  }
+    public NGramLanguageModel(InputStream in) throws IOException {
+        this(in, DEFAULT_N);
+    }
 
-  public NGramLanguageModel(InputStream in, int n)
-      throws IOException {
-    super(in);
-    this.n = n;
-  }
+    public NGramLanguageModel(InputStream in, int n)
+            throws IOException {
+        super(in);
+        this.n = n;
+    }
 
-  public void add(String... tokens) {
-    add(new StringList(tokens), 1, n);
-  }
+    public void add(String... tokens) {
+        add(new StringList(tokens), 1, n);
+    }
 
-  @Override
-  public double calculateProbability(StringList tokens) {
-    double probability = 0d;
-    if (size() > 0) {
-      for (StringList ngram : NGramUtils.getNGrams(tokens, n)) {
-        double score = stupidBackoff(ngram);
-        probability += Math.log(score);
-        if (Double.isNaN(probability)) {
-          probability = 0d;
-          break;
+    @Override
+    public double calculateProbability(StringList tokens) {
+        double probability = 0d;
+        if (size() > 0) {
+            for (StringList ngram : NGramUtils.getNGrams(tokens, n)) {
+                double score = stupidBackoff(ngram);
+                probability += Math.log(score);
+                if (Double.isNaN(probability)) {
+                    probability = 0d;
+                    break;
+                }
+            }
+            probability = Math.exp(probability);
         }
-      }
-      probability = Math.exp(probability);
+        return probability;
     }
-    return probability;
-  }
 
-  @Override
-  public double calculateProbability(String... tokens) {
-    double probability = 0d;
-    if (size() > 0) {
-      for (String[] ngram : NGramUtils.getNGrams(tokens, n)) {
-        double score = stupidBackoff(new StringList(ngram));
-        probability += Math.log(score);
-        if (Double.isNaN(probability)) {
-          probability = 0d;
-          break;
+    @Override
+    public double calculateProbability(String... tokens) {
+        double probability = 0d;
+        if (size() > 0) {
+            for (String[] ngram : NGramUtils.getNGrams(tokens, n)) {
+                double score = stupidBackoff(new StringList(ngram));
+                probability += Math.log(score);
+                if (Double.isNaN(probability)) {
+                    probability = 0d;
+                    break;
+                }
+            }
+            probability = Math.exp(probability);
         }
-      }
-      probability = Math.exp(probability);
-    }
-    return probability;
-  }
-
-  @Override
-  public StringList predictNextTokens(StringList tokens) {
-    double maxProb = Double.NEGATIVE_INFINITY;
-    StringList token = null;
-
-    for (StringList ngram : this) {
-      String[] sequence = new String[ngram.size() + tokens.size()];
-      for (int i = 0; i < tokens.size(); i++) {
-        sequence[i] = tokens.getToken(i);
-      }
-      for (int i = 0; i < ngram.size(); i++) {
-        sequence[i + tokens.size()] = ngram.getToken(i);
-      }
-      StringList sample = new StringList(sequence);
-      double v = calculateProbability(sample);
-      if (v > maxProb) {
-        maxProb = v;
-        token = ngram;
-      }
+        return probability;
     }
 
-    return token;
-  }
+    @Override
+    public StringList predictNextTokens(StringList tokens) {
+        double maxProb = Double.NEGATIVE_INFINITY;
+        StringList token = null;
 
-  @Override
-  public String[] predictNextTokens(String... tokens) {
-    double maxProb = Double.NEGATIVE_INFINITY;
-    String[] token = null;
-
-    for (StringList ngram : this) {
-      String[] sequence = new String[ngram.size() + tokens.length];
-      for (int i = 0; i < tokens.length; i++) {
-        sequence[i] = tokens[i];
-      }
-      for (int i = 0; i < ngram.size(); i++) {
-        sequence[i + tokens.length] = ngram.getToken(i);
-      }
-      double v = calculateProbability(sequence);
-      if (v > maxProb) {
-        maxProb = v;
-        token = new String[ngram.size()];
-        for (int i = 0; i < ngram.size(); i++) {
-          token[i] = ngram.getToken(i);
+        for (StringList ngram : this) {
+            String[] sequence = new String[ngram.size() + tokens.size()];
+            for (int i = 0; i < tokens.size(); i++) {
+                sequence[i] = tokens.getToken(i);
+            }
+            for (int i = 0; i < ngram.size(); i++) {
+                sequence[i + tokens.size()] = ngram.getToken(i);
+            }
+            StringList sample = new StringList(sequence);
+            double v = calculateProbability(sample);
+            if (v > maxProb) {
+                maxProb = v;
+                token = ngram;
+            }
         }
-      }
+
+        return token;
     }
 
-    return token;
-  }
+    @Override
+    public String[] predictNextTokens(String... tokens) {
+        double maxProb = Double.NEGATIVE_INFINITY;
+        String[] token = null;
 
-  private double stupidBackoff(StringList ngram) {
-    int count = getCount(ngram);
-    StringList nMinusOneToken = NGramUtils.getNMinusOneTokenFirst(ngram);
-    if (nMinusOneToken == null || nMinusOneToken.size() == 0) {
-      return (double) count / (double) size();
-    } else if (count > 0) {
-      double countM1 = getCount(nMinusOneToken);
-      if (countM1 == 0d) {
-        countM1 = size(); // to avoid Infinite if n-1grams do not exist
-      }
-      return (double) count / countM1;
-    } else {
-      return 0.4 * stupidBackoff(NGramUtils.getNMinusOneTokenLast(ngram));
+        for (StringList ngram : this) {
+            String[] sequence = new String[ngram.size() + tokens.length];
+            for (int i = 0; i < tokens.length; i++) {
+                sequence[i] = tokens[i];
+            }
+            for (int i = 0; i < ngram.size(); i++) {
+                sequence[i + tokens.length] = ngram.getToken(i);
+            }
+            double v = calculateProbability(sequence);
+            if (v > maxProb) {
+                maxProb = v;
+                token = new String[ngram.size()];
+                for (int i = 0; i < ngram.size(); i++) {
+                    token[i] = ngram.getToken(i);
+                }
+            }
+        }
+
+        return token;
     }
 
-  }
+    private double stupidBackoff(StringList ngram) {
+        int count = getCount(ngram);
+        StringList nMinusOneToken = NGramUtils.getNMinusOneTokenFirst(ngram);
+        if (nMinusOneToken == null || nMinusOneToken.size() == 0) {
+            return (double) count / (double) size();
+        } else if (count > 0) {
+            double countM1 = getCount(nMinusOneToken);
+            if (countM1 == 0d) {
+                countM1 = size(); // to avoid Infinite if n-1grams do not exist
+            }
+            return (double) count / countM1;
+        } else {
+            return 0.4 * stupidBackoff(NGramUtils.getNMinusOneTokenLast(ngram));
+        }
+
+    }
 
 }

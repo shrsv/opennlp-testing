@@ -22,17 +22,17 @@ package opennlp.tools.util;
  */
 public class MutableInt {
 
-  private int i;
+    private int i;
 
-  public MutableInt(int i) {
-    this.i = i;
-  }
+    public MutableInt(int i) {
+        this.i = i;
+    }
 
-  public void increment() {
-    i++;
-  }
+    public void increment() {
+        i++;
+    }
 
-  public int getValue() {
-    return i;
-  }
+    public int getValue() {
+        return i;
+    }
 }

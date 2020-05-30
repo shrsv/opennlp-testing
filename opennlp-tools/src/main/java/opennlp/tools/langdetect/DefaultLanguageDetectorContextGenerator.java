@@ -17,52 +17,54 @@
 
 package opennlp.tools.langdetect;
 
-import java.util.ArrayList;
-import java.util.Collection;
-
 import opennlp.tools.ngram.NGramCharModel;
 import opennlp.tools.util.normalizer.AggregateCharSequenceNormalizer;
 import opennlp.tools.util.normalizer.CharSequenceNormalizer;
+
+import java.util.ArrayList;
+import java.util.Collection;
 
 /**
  * A context generator for language detector.
  */
 public class DefaultLanguageDetectorContextGenerator implements LanguageDetectorContextGenerator {
 
-  protected final int minLength;
-  protected final int maxLength;
-  protected final CharSequenceNormalizer normalizer;
+    protected final int minLength;
+    protected final int maxLength;
+    protected final CharSequenceNormalizer normalizer;
 
-  /**
-   * Creates a customizable @{@link DefaultLanguageDetectorContextGenerator} that computes ngrams from text
-   * @param minLength min ngrams chars
-   * @param maxLength max ngrams chars
-   * @param normalizers zero or more normalizers to
-   *                    be applied in to the text before extracting ngrams
-   */
-  public DefaultLanguageDetectorContextGenerator(int minLength, int maxLength,
-                                                 CharSequenceNormalizer... normalizers) {
-    this.minLength = minLength;
-    this.maxLength = maxLength;
+    /**
+     * Creates a customizable @{@link DefaultLanguageDetectorContextGenerator} that computes ngrams from text
+     *
+     * @param minLength   min ngrams chars
+     * @param maxLength   max ngrams chars
+     * @param normalizers zero or more normalizers to
+     *                    be applied in to the text before extracting ngrams
+     */
+    public DefaultLanguageDetectorContextGenerator(int minLength, int maxLength,
+                                                   CharSequenceNormalizer... normalizers) {
+        this.minLength = minLength;
+        this.maxLength = maxLength;
 
-    this.normalizer = new AggregateCharSequenceNormalizer(normalizers);
-  }
-
-  /**
-   * Generates the context for a document using character ngrams.
-   * @param document document to extract context from
-   * @return the generated context
-   */
-  @Override
-  public String[] getContext(CharSequence document) {
-    Collection<String> context = new ArrayList<>();
-
-    NGramCharModel model = new NGramCharModel();
-    model.add(normalizer.normalize(document), minLength, maxLength);
-
-    for (String token : model) {
-      context.add(token);
+        this.normalizer = new AggregateCharSequenceNormalizer(normalizers);
     }
-    return context.toArray(new String[context.size()]);
-  }
+
+    /**
+     * Generates the context for a document using character ngrams.
+     *
+     * @param document document to extract context from
+     * @return the generated context
+     */
+    @Override
+    public String[] getContext(CharSequence document) {
+        Collection<String> context = new ArrayList<>();
+
+        NGramCharModel model = new NGramCharModel();
+        model.add(normalizer.normalize(document), minLength, maxLength);
+
+        for (String token : model) {
+            context.add(token);
+        }
+        return context.toArray(new String[context.size()]);
+    }
 }

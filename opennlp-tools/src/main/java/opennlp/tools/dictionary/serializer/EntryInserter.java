@@ -22,10 +22,9 @@ import opennlp.tools.util.InvalidFormatException;
 
 public interface EntryInserter {
 
-  /**
-   *
-   * @param entry
-   * @throws InvalidFormatException
-   */
-  void insert(Entry entry) throws InvalidFormatException;
+    /**
+     * @param entry
+     * @throws InvalidFormatException
+     */
+    void insert(Entry entry) throws InvalidFormatException;
 }

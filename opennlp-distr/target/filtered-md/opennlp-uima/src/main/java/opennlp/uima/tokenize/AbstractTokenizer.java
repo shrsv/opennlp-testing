@@ -17,6 +17,9 @@
 
 package opennlp.uima.tokenize;
 
+import opennlp.tools.util.Span;
+import opennlp.uima.util.AnnotatorUtil;
+import opennlp.uima.util.UimaUtil;
 import org.apache.uima.UimaContext;
 import org.apache.uima.analysis_component.CasAnnotator_ImplBase;
 import org.apache.uima.analysis_engine.AnalysisEngineProcessException;
@@ -29,115 +32,111 @@ import org.apache.uima.resource.ResourceInitializationException;
 import org.apache.uima.util.Level;
 import org.apache.uima.util.Logger;
 
-import opennlp.tools.util.Span;
-import opennlp.uima.util.AnnotatorUtil;
-import opennlp.uima.util.UimaUtil;
-
 public abstract class AbstractTokenizer extends CasAnnotator_ImplBase {
 
-  protected final String name;
+    protected final String name;
 
-  protected UimaContext context;
+    protected UimaContext context;
 
-  protected Logger logger;
+    protected Logger logger;
 
-  /**
-   * Type of the sentence containing the tokens.
-   */
-  protected Type sentenceType;
+    /**
+     * Type of the sentence containing the tokens.
+     */
+    protected Type sentenceType;
 
-  /**
-   * Type of the tokens to be created.
-   */
-  protected Type tokenType;
+    /**
+     * Type of the tokens to be created.
+     */
+    protected Type tokenType;
 
-  private Boolean isRemoveExistingAnnotations;
+    private Boolean isRemoveExistingAnnotations;
 
-  protected AbstractTokenizer(String name) {
-    this.name = name;
-  }
-
-  @Override
-  public void initialize(UimaContext context)
-      throws ResourceInitializationException {
-
-    super.initialize(context);
-
-    this.context = context;
-
-    logger = context.getLogger();
-
-    if (logger.isLoggable(Level.INFO)) {
-      logger.log(Level.INFO, "Initializing the " + name + " annotator.");
+    protected AbstractTokenizer(String name) {
+        this.name = name;
     }
 
-    isRemoveExistingAnnotations = AnnotatorUtil.getOptionalBooleanParameter(
-        context, UimaUtil.IS_REMOVE_EXISTINGS_ANNOTAIONS);
+    @Override
+    public void initialize(UimaContext context)
+            throws ResourceInitializationException {
 
-    if (isRemoveExistingAnnotations == null) {
-      isRemoveExistingAnnotations = false;
-    }
-  }
+        super.initialize(context);
 
-  @Override
-  public void typeSystemInit(TypeSystem typeSystem)
-      throws AnalysisEngineProcessException {
-    super.typeSystemInit(typeSystem);
+        this.context = context;
 
-    sentenceType = AnnotatorUtil.getRequiredTypeParameter(context, typeSystem,
-        UimaUtil.SENTENCE_TYPE_PARAMETER);
+        logger = context.getLogger();
 
-    tokenType = AnnotatorUtil.getRequiredTypeParameter(context, typeSystem,
-        UimaUtil.TOKEN_TYPE_PARAMETER);
-  }
-
-  protected void postProcessAnnotations(Span[] tokens,
-                                        AnnotationFS[] tokenAnnotations) {
-  }
-
-  protected abstract Span[] tokenize(CAS cas, AnnotationFS sentence);
-
-  @Override
-  public void process(CAS cas) throws AnalysisEngineProcessException {
-    FSIndex<AnnotationFS> sentences = cas.getAnnotationIndex(sentenceType);
-
-    for (AnnotationFS sentence : sentences) {
-
-      if (isRemoveExistingAnnotations) {
-        UimaUtil.removeAnnotations(cas, sentence, tokenType);
-      }
-
-      Span[] tokenSpans = tokenize(cas, sentence);
-
-      int sentenceOffset = sentence.getBegin();
-
-      StringBuilder tokeninzedSentenceLog = new StringBuilder();
-
-      AnnotationFS[] tokenAnnotations = new AnnotationFS[tokenSpans.length];
-
-      for (int i = 0; i < tokenSpans.length; i++) {
-        tokenAnnotations[i] = cas
-            .createAnnotation(tokenType,
-                sentenceOffset + tokenSpans[i].getStart(), sentenceOffset
-                    + tokenSpans[i].getEnd());
-
-        cas.getIndexRepository().addFS(tokenAnnotations[i]);
-
-        if (logger.isLoggable(Level.FINER)) {
-          tokeninzedSentenceLog.append(tokenAnnotations[i].getCoveredText());
-          tokeninzedSentenceLog.append(' ');
+        if (logger.isLoggable(Level.INFO)) {
+            logger.log(Level.INFO, "Initializing the " + name + " annotator.");
         }
-      }
 
-      if (logger.isLoggable(Level.FINER)) {
-        // remove last space
-        tokeninzedSentenceLog.delete(tokeninzedSentenceLog.length() - 2,
-            tokeninzedSentenceLog.length() - 1);
+        isRemoveExistingAnnotations = AnnotatorUtil.getOptionalBooleanParameter(
+                context, UimaUtil.IS_REMOVE_EXISTINGS_ANNOTAIONS);
 
-        logger.log(Level.FINER, "\"" + tokeninzedSentenceLog.toString() + "\"");
-      }
-
-      postProcessAnnotations(tokenSpans, tokenAnnotations);
+        if (isRemoveExistingAnnotations == null) {
+            isRemoveExistingAnnotations = false;
+        }
     }
-  }
+
+    @Override
+    public void typeSystemInit(TypeSystem typeSystem)
+            throws AnalysisEngineProcessException {
+        super.typeSystemInit(typeSystem);
+
+        sentenceType = AnnotatorUtil.getRequiredTypeParameter(context, typeSystem,
+                UimaUtil.SENTENCE_TYPE_PARAMETER);
+
+        tokenType = AnnotatorUtil.getRequiredTypeParameter(context, typeSystem,
+                UimaUtil.TOKEN_TYPE_PARAMETER);
+    }
+
+    protected void postProcessAnnotations(Span[] tokens,
+                                          AnnotationFS[] tokenAnnotations) {
+    }
+
+    protected abstract Span[] tokenize(CAS cas, AnnotationFS sentence);
+
+    @Override
+    public void process(CAS cas) throws AnalysisEngineProcessException {
+        FSIndex<AnnotationFS> sentences = cas.getAnnotationIndex(sentenceType);
+
+        for (AnnotationFS sentence : sentences) {
+
+            if (isRemoveExistingAnnotations) {
+                UimaUtil.removeAnnotations(cas, sentence, tokenType);
+            }
+
+            Span[] tokenSpans = tokenize(cas, sentence);
+
+            int sentenceOffset = sentence.getBegin();
+
+            StringBuilder tokeninzedSentenceLog = new StringBuilder();
+
+            AnnotationFS[] tokenAnnotations = new AnnotationFS[tokenSpans.length];
+
+            for (int i = 0; i < tokenSpans.length; i++) {
+                tokenAnnotations[i] = cas
+                        .createAnnotation(tokenType,
+                                sentenceOffset + tokenSpans[i].getStart(), sentenceOffset
+                                        + tokenSpans[i].getEnd());
+
+                cas.getIndexRepository().addFS(tokenAnnotations[i]);
+
+                if (logger.isLoggable(Level.FINER)) {
+                    tokeninzedSentenceLog.append(tokenAnnotations[i].getCoveredText());
+                    tokeninzedSentenceLog.append(' ');
+                }
+            }
+
+            if (logger.isLoggable(Level.FINER)) {
+                // remove last space
+                tokeninzedSentenceLog.delete(tokeninzedSentenceLog.length() - 2,
+                        tokeninzedSentenceLog.length() - 1);
+
+                logger.log(Level.FINER, "\"" + tokeninzedSentenceLog.toString() + "\"");
+            }
+
+            postProcessAnnotations(tokenSpans, tokenAnnotations);
+        }
+    }
 }

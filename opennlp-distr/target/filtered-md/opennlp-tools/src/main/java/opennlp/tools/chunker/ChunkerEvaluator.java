@@ -32,50 +32,49 @@ import opennlp.tools.util.eval.FMeasure;
  */
 public class ChunkerEvaluator extends Evaluator<ChunkSample> {
 
-  private FMeasure fmeasure = new FMeasure();
+    private FMeasure fmeasure = new FMeasure();
 
-  /**
-   * The {@link Chunker} used to create the predicted
-   * {@link ChunkSample} objects.
-   */
-  private Chunker chunker;
+    /**
+     * The {@link Chunker} used to create the predicted
+     * {@link ChunkSample} objects.
+     */
+    private Chunker chunker;
 
-  /**
-   * Initializes the current instance with the given
-   * {@link Chunker}.
-   *
-   * @param chunker the {@link Chunker} to evaluate.
-   * @param listeners evaluation listeners
-   */
-  public ChunkerEvaluator(Chunker chunker, ChunkerEvaluationMonitor... listeners) {
-    super(listeners);
-    this.chunker = chunker;
-  }
+    /**
+     * Initializes the current instance with the given
+     * {@link Chunker}.
+     *
+     * @param chunker   the {@link Chunker} to evaluate.
+     * @param listeners evaluation listeners
+     */
+    public ChunkerEvaluator(Chunker chunker, ChunkerEvaluationMonitor... listeners) {
+        super(listeners);
+        this.chunker = chunker;
+    }
 
-  /**
-   * Evaluates the given reference {@link ChunkSample} object.
-   *
-   * This is done by finding the phrases with the
-   * {@link Chunker} in the sentence from the reference
-   * {@link ChunkSample}. The found phrases are then used to
-   * calculate and update the scores.
-   *
-   * @param reference the reference {@link ChunkSample}.
-   *
-   * @return the predicted sample
-   */
-  @Override
-  protected ChunkSample processSample(ChunkSample reference) {
-    String[] preds = chunker.chunk(reference.getSentence(), reference.getTags());
-    ChunkSample result = new ChunkSample(reference.getSentence(), reference.getTags(), preds);
+    /**
+     * Evaluates the given reference {@link ChunkSample} object.
+     * <p>
+     * This is done by finding the phrases with the
+     * {@link Chunker} in the sentence from the reference
+     * {@link ChunkSample}. The found phrases are then used to
+     * calculate and update the scores.
+     *
+     * @param reference the reference {@link ChunkSample}.
+     * @return the predicted sample
+     */
+    @Override
+    protected ChunkSample processSample(ChunkSample reference) {
+        String[] preds = chunker.chunk(reference.getSentence(), reference.getTags());
+        ChunkSample result = new ChunkSample(reference.getSentence(), reference.getTags(), preds);
 
-    fmeasure.updateScores(reference.getPhrasesAsSpanList(), result.getPhrasesAsSpanList());
+        fmeasure.updateScores(reference.getPhrasesAsSpanList(), result.getPhrasesAsSpanList());
 
-    return result;
-  }
+        return result;
+    }
 
-  public FMeasure getFMeasure() {
-    return fmeasure;
-  }
+    public FMeasure getFMeasure() {
+        return fmeasure;
+    }
 
 }

@@ -26,52 +26,53 @@ import java.util.Objects;
  */
 public class EvalParameters {
 
-  /**
-   * Mapping between outcomes and parameter values for each context.
-   * The integer representation of the context can be found using <code>pmap</code>.
-   */
-  private Context[] params;
-  /**
-   * The number of outcomes being predicted.
-   */
-  private final int numOutcomes;
-  /**
-   * The maximum number of features fired in an event. Usually referred to as C.
-   * This is used to normalize the number of features which occur in an event. */
-  private double correctionConstant;
+    /**
+     * The number of outcomes being predicted.
+     */
+    private final int numOutcomes;
+    /**
+     * Mapping between outcomes and parameter values for each context.
+     * The integer representation of the context can be found using <code>pmap</code>.
+     */
+    private Context[] params;
+    /**
+     * The maximum number of features fired in an event. Usually referred to as C.
+     * This is used to normalize the number of features which occur in an event.
+     */
+    private double correctionConstant;
 
-  public EvalParameters(Context[] params, int numOutcomes) {
-    this.params = params;
-    this.numOutcomes = numOutcomes;
-  }
-
-  public Context[] getParams() {
-    return params;
-  }
-
-  public int getNumOutcomes() {
-    return numOutcomes;
-  }
-
-  @Override
-  public int hashCode() {
-    return Objects.hash(Arrays.hashCode(params), numOutcomes, correctionConstant);
-  }
-
-  @Override
-  public boolean equals(Object obj) {
-    if (obj == this) {
-      return true;
+    public EvalParameters(Context[] params, int numOutcomes) {
+        this.params = params;
+        this.numOutcomes = numOutcomes;
     }
 
-    if (obj instanceof EvalParameters) {
-      EvalParameters evalParameters = (EvalParameters) obj;
-
-      return Arrays.equals(params, evalParameters.params)
-          && numOutcomes == evalParameters.numOutcomes
-          && correctionConstant == evalParameters.correctionConstant;
+    public Context[] getParams() {
+        return params;
     }
 
-    return false;
-  }
+    public int getNumOutcomes() {
+        return numOutcomes;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(Arrays.hashCode(params), numOutcomes, correctionConstant);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this) {
+            return true;
+        }
+
+        if (obj instanceof EvalParameters) {
+            EvalParameters evalParameters = (EvalParameters) obj;
+
+            return Arrays.equals(params, evalParameters.params)
+                    && numOutcomes == evalParameters.numOutcomes
+                    && correctionConstant == evalParameters.correctionConstant;
+        }
+
+        return false;
+    }
 }

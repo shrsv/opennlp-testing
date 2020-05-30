@@ -17,30 +17,29 @@
 
 package opennlp.tools.cmdline;
 
+import opennlp.tools.util.InputStreamFactory;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.Charset;
 
-import opennlp.tools.util.InputStreamFactory;
-
 public class SystemInputStreamFactory implements InputStreamFactory {
 
-  private boolean isTainted = false;
+    private boolean isTainted = false;
 
-  public static Charset encoding() {
-    return Charset.defaultCharset();
-  }
-
-  @Override
-  public InputStream createInputStream() throws IOException {
-
-    if (!isTainted) {
-      isTainted = true;
-      return System.in;
+    public static Charset encoding() {
+        return Charset.defaultCharset();
     }
-    else {
-      throw new UnsupportedOperationException(
-          "The System.in stream can't be re-created to read from the beginning!");
+
+    @Override
+    public InputStream createInputStream() throws IOException {
+
+        if (!isTainted) {
+            isTainted = true;
+            return System.in;
+        } else {
+            throw new UnsupportedOperationException(
+                    "The System.in stream can't be re-created to read from the beginning!");
+        }
     }
-  }
 }

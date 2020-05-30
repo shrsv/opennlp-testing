@@ -27,57 +27,58 @@ import java.util.List;
 public class NGramGenerator {
 
 
-  /**
-   * Creates an ngram separated
-   * by the separator param value i.e. a,b,c,d with n = 3 and separator = "-"
-   * would return a-b-c,b-c-d
-   *
-   * @param input     the input tokens the output ngrams will be derived from
-   * @param n         the number of tokens as the sliding window
-   * @param separator each string in each gram will be separated by this value if desired.
-   *                  Pass in empty string if no separator is desired
-   * @return
-   */
-  public static List<String> generate(List<String> input, int n, String separator) {
+    /**
+     * Creates an ngram separated
+     * by the separator param value i.e. a,b,c,d with n = 3 and separator = "-"
+     * would return a-b-c,b-c-d
+     *
+     * @param input     the input tokens the output ngrams will be derived from
+     * @param n         the number of tokens as the sliding window
+     * @param separator each string in each gram will be separated by this value if desired.
+     *                  Pass in empty string if no separator is desired
+     * @return
+     */
+    public static List<String> generate(List<String> input, int n, String separator) {
 
-    List<String> outGrams = new ArrayList<>();
-    for (int i = 0; i < input.size() - (n - 1); i++) {
-      final StringBuilder sb = new StringBuilder();
-      
-      for (int x = i; x < (n + i); x++) {
-        sb.append(input.get(x));
-        sb.append(separator);
-      }
-      String gram = sb.toString();
-      gram = gram.substring(0, gram.lastIndexOf(separator));
-      outGrams.add(gram);
-      
+        List<String> outGrams = new ArrayList<>();
+        for (int i = 0; i < input.size() - (n - 1); i++) {
+            final StringBuilder sb = new StringBuilder();
+
+            for (int x = i; x < (n + i); x++) {
+                sb.append(input.get(x));
+                sb.append(separator);
+            }
+            String gram = sb.toString();
+            gram = gram.substring(0, gram.lastIndexOf(separator));
+            outGrams.add(gram);
+
+        }
+        return outGrams;
     }
-    return outGrams;
-  }
 
-  /**
-   *Generates an nGram based on a char[] input
-   * @param input the array of chars to convert to nGram
-   * @param n The number of grams (chars) that each output gram will consist of
-   * @param separator each char in each gram will be separated by this value if desired.
-   *                  Pass in empty string if no separator is desired
-   * @return
-   */
-  public static List<String> generate(char[] input, int n, String separator) {
+    /**
+     * Generates an nGram based on a char[] input
+     *
+     * @param input     the array of chars to convert to nGram
+     * @param n         The number of grams (chars) that each output gram will consist of
+     * @param separator each char in each gram will be separated by this value if desired.
+     *                  Pass in empty string if no separator is desired
+     * @return
+     */
+    public static List<String> generate(char[] input, int n, String separator) {
 
-    List<String> outGrams = new ArrayList<>();
-    for (int i = 0; i < input.length - (n - 1); i++) {
-      final StringBuilder sb = new StringBuilder();
-     
-      for (int x = i; x < (n + i); x++) {
-        sb.append(input[x]);
-        sb.append(separator);
-      }
-      String gram = sb.toString();
-      gram = gram.substring(0, gram.lastIndexOf(separator));
-      outGrams.add(gram);
+        List<String> outGrams = new ArrayList<>();
+        for (int i = 0; i < input.length - (n - 1); i++) {
+            final StringBuilder sb = new StringBuilder();
+
+            for (int x = i; x < (n + i); x++) {
+                sb.append(input[x]);
+                sb.append(separator);
+            }
+            String gram = sb.toString();
+            gram = gram.substring(0, gram.lastIndexOf(separator));
+            outGrams.add(gram);
+        }
+        return outGrams;
     }
-    return outGrams;
-  }
 }

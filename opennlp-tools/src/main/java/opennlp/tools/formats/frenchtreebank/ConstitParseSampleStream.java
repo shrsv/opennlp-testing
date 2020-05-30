@@ -17,53 +17,51 @@
 
 package opennlp.tools.formats.frenchtreebank;
 
+import opennlp.tools.parser.Parse;
+import opennlp.tools.util.FilterObjectStream;
+import opennlp.tools.util.ObjectStream;
+import opennlp.tools.util.XmlUtil;
+import org.xml.sax.SAXException;
+
+import javax.xml.parsers.SAXParser;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.xml.parsers.SAXParser;
-
-import org.xml.sax.SAXException;
-
-import opennlp.tools.parser.Parse;
-import opennlp.tools.util.FilterObjectStream;
-import opennlp.tools.util.ObjectStream;
-import opennlp.tools.util.XmlUtil;
-
 public class ConstitParseSampleStream extends FilterObjectStream<byte[], Parse> {
 
-  private SAXParser saxParser;
+    private SAXParser saxParser;
 
-  private List<Parse> parses = new ArrayList<>();
+    private List<Parse> parses = new ArrayList<>();
 
-  protected ConstitParseSampleStream(ObjectStream<byte[]> samples) {
-    super(samples);
-    saxParser = XmlUtil.createSaxParser();
-  }
+    protected ConstitParseSampleStream(ObjectStream<byte[]> samples) {
+        super(samples);
+        saxParser = XmlUtil.createSaxParser();
+    }
 
-  public Parse read() throws IOException {
-    if (parses.isEmpty()) {
-      byte[] xmlbytes = samples.read();
+    public Parse read() throws IOException {
+        if (parses.isEmpty()) {
+            byte[] xmlbytes = samples.read();
 
-      if (xmlbytes != null) {
+            if (xmlbytes != null) {
 
-        List<Parse> producedParses = new ArrayList<>();
-        try {
-          saxParser.parse(new ByteArrayInputStream(xmlbytes),
-              new ConstitDocumentHandler(producedParses));
-        } catch (SAXException e) {
-          //TODO update after Java6 upgrade
-          throw new IOException(e.getMessage(), e);
+                List<Parse> producedParses = new ArrayList<>();
+                try {
+                    saxParser.parse(new ByteArrayInputStream(xmlbytes),
+                            new ConstitDocumentHandler(producedParses));
+                } catch (SAXException e) {
+                    //TODO update after Java6 upgrade
+                    throw new IOException(e.getMessage(), e);
+                }
+
+                parses.addAll(producedParses);
+            }
         }
 
-        parses.addAll(producedParses);
-      }
+        if (parses.size() > 0) {
+            return parses.remove(0);
+        }
+        return null;
     }
-
-    if (parses.size() > 0) {
-      return parses.remove(0);
-    }
-    return null;
-  }
 }

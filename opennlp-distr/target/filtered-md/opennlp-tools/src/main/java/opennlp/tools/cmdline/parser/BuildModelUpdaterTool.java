@@ -17,8 +17,6 @@
 
 package opennlp.tools.cmdline.parser;
 
-import java.io.IOException;
-
 import opennlp.tools.dictionary.Dictionary;
 import opennlp.tools.ml.EventTrainer;
 import opennlp.tools.ml.TrainerFactory;
@@ -31,33 +29,35 @@ import opennlp.tools.parser.chunking.ParserEventStream;
 import opennlp.tools.util.ObjectStream;
 import opennlp.tools.util.model.ModelUtil;
 
+import java.io.IOException;
+
 public final class BuildModelUpdaterTool extends ModelUpdaterTool {
 
-  public String getShortDescription() {
-    return "trains and updates the build model in a parser model";
-  }
+    public String getShortDescription() {
+        return "trains and updates the build model in a parser model";
+    }
 
-  @Override
-  protected ParserModel trainAndUpdate(ParserModel originalModel,
-      ObjectStream<Parse> parseSamples, ModelUpdaterParams parameters)
-      throws IOException {
+    @Override
+    protected ParserModel trainAndUpdate(ParserModel originalModel,
+                                         ObjectStream<Parse> parseSamples, ModelUpdaterParams parameters)
+            throws IOException {
 
-    Dictionary mdict = ParserTrainerTool.buildDictionary(parseSamples, originalModel.getHeadRules(), 5);
+        Dictionary mdict = ParserTrainerTool.buildDictionary(parseSamples, originalModel.getHeadRules(), 5);
 
-    parseSamples.reset();
+        parseSamples.reset();
 
-    // TODO: training individual models should be in the chunking parser, not here
-    // Training build
-    System.out.println("Training builder");
-    ObjectStream<Event> bes = new ParserEventStream(parseSamples,
-        originalModel.getHeadRules(), ParserEventTypeEnum.BUILD, mdict);
+        // TODO: training individual models should be in the chunking parser, not here
+        // Training build
+        System.out.println("Training builder");
+        ObjectStream<Event> bes = new ParserEventStream(parseSamples,
+                originalModel.getHeadRules(), ParserEventTypeEnum.BUILD, mdict);
 
-    EventTrainer trainer = TrainerFactory.getEventTrainer(
-        ModelUtil.createDefaultTrainingParameters(), null);
-    MaxentModel buildModel = trainer.train(bes);
+        EventTrainer trainer = TrainerFactory.getEventTrainer(
+                ModelUtil.createDefaultTrainingParameters(), null);
+        MaxentModel buildModel = trainer.train(bes);
 
-    parseSamples.close();
+        parseSamples.close();
 
-    return originalModel.updateBuildModel(buildModel);
-  }
+        return originalModel.updateBuildModel(buildModel);
+    }
 }

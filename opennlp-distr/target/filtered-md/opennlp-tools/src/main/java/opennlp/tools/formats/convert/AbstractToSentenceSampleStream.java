@@ -17,61 +17,59 @@
 
 package opennlp.tools.formats.convert;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-
 import opennlp.tools.sentdetect.SentenceSample;
 import opennlp.tools.tokenize.Detokenizer;
 import opennlp.tools.util.FilterObjectStream;
 import opennlp.tools.util.ObjectStream;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+
 public abstract class AbstractToSentenceSampleStream<T> extends
-    FilterObjectStream<T, SentenceSample> {
+        FilterObjectStream<T, SentenceSample> {
 
-  private final Detokenizer detokenizer;
+    private final Detokenizer detokenizer;
 
-  private final int chunkSize;
+    private final int chunkSize;
 
-  AbstractToSentenceSampleStream(Detokenizer detokenizer,
-      ObjectStream<T> samples, int chunkSize) {
-    super(samples);
+    AbstractToSentenceSampleStream(Detokenizer detokenizer,
+                                   ObjectStream<T> samples, int chunkSize) {
+        super(samples);
 
-    this.detokenizer = Objects.requireNonNull(detokenizer, "detokenizer must not be null");
+        this.detokenizer = Objects.requireNonNull(detokenizer, "detokenizer must not be null");
 
-    if (chunkSize < 0) {
-      throw new IllegalArgumentException("chunkSize must be zero or larger but was " + chunkSize + "!");
+        if (chunkSize < 0) {
+            throw new IllegalArgumentException("chunkSize must be zero or larger but was " + chunkSize + "!");
+        }
+
+        if (chunkSize > 0) {
+            this.chunkSize = chunkSize;
+        } else {
+            this.chunkSize = Integer.MAX_VALUE;
+        }
     }
 
-    if (chunkSize > 0) {
-      this.chunkSize = chunkSize;
-    }
-    else {
-      this.chunkSize = Integer.MAX_VALUE;
-    }
-  }
+    protected abstract String[] toSentence(T sample);
 
-  protected abstract String[] toSentence(T sample);
+    public SentenceSample read() throws IOException {
+        List<String[]> sentences = new ArrayList<>();
 
-  public SentenceSample read() throws IOException {
-    List<String[]> sentences = new ArrayList<>();
+        T posSample;
+        int chunks = 0;
+        while ((posSample = samples.read()) != null && chunks < chunkSize) {
+            sentences.add(toSentence(posSample));
+            chunks++;
+        }
 
-    T posSample;
-    int chunks = 0;
-    while ((posSample = samples.read()) != null && chunks < chunkSize) {
-      sentences.add(toSentence(posSample));
-      chunks++;
+        if (sentences.size() > 0) {
+            return new SentenceSample(detokenizer,
+                    sentences.toArray(new String[sentences.size()][]));
+        } else if (posSample != null) {
+            return read(); // filter out empty line
+        }
+
+        return null; // last sample was read
     }
-
-    if (sentences.size() > 0) {
-      return new SentenceSample(detokenizer,
-          sentences.toArray(new String[sentences.size()][]));
-    }
-    else if (posSample != null) {
-      return read(); // filter out empty line
-    }
-
-    return null; // last sample was read
-  }
 }

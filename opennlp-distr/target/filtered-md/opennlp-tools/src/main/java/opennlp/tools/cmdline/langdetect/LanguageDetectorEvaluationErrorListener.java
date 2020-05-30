@@ -17,45 +17,44 @@
 
 package opennlp.tools.cmdline.langdetect;
 
-import java.io.OutputStream;
-
 import opennlp.tools.cmdline.EvaluationErrorPrinter;
 import opennlp.tools.langdetect.LanguageDetectorEvaluationMonitor;
 import opennlp.tools.langdetect.LanguageSample;
 import opennlp.tools.util.eval.EvaluationMonitor;
 
+import java.io.OutputStream;
+
 /**
  * A default implementation of {@link EvaluationMonitor} that prints to an
  * output stream.
- *
  */
 public class LanguageDetectorEvaluationErrorListener extends
-    EvaluationErrorPrinter<LanguageSample> implements LanguageDetectorEvaluationMonitor {
+        EvaluationErrorPrinter<LanguageSample> implements LanguageDetectorEvaluationMonitor {
 
-  /**
-   * Creates a listener that will print to System.err
-   */
-  public LanguageDetectorEvaluationErrorListener() {
-    super(System.err);
-  }
+    /**
+     * Creates a listener that will print to System.err
+     */
+    public LanguageDetectorEvaluationErrorListener() {
+        super(System.err);
+    }
 
-  /**
-   * Creates a listener that will print to a given {@link OutputStream}
-   */
-  public LanguageDetectorEvaluationErrorListener(OutputStream outputStream) {
-    super(outputStream);
-    printStream.println("Expected\tPredicted\tContext");
-  }
+    /**
+     * Creates a listener that will print to a given {@link OutputStream}
+     */
+    public LanguageDetectorEvaluationErrorListener(OutputStream outputStream) {
+        super(outputStream);
+        printStream.println("Expected\tPredicted\tContext");
+    }
 
-  @Override
-  public void missclassified(LanguageSample reference, LanguageSample prediction) {
-    printError(reference, prediction);
-  }
+    @Override
+    public void missclassified(LanguageSample reference, LanguageSample prediction) {
+        printError(reference, prediction);
+    }
 
-  @Override
-  protected void printError(LanguageSample referenceSample, LanguageSample predictedSample) {
-    printStream.println(String.join("\t", referenceSample.getLanguage().getLang(),
-        predictedSample.getLanguage().getLang(),
-        referenceSample.getContext()));
-  }
+    @Override
+    protected void printError(LanguageSample referenceSample, LanguageSample predictedSample) {
+        printStream.println(String.join("\t", referenceSample.getLanguage().getLang(),
+                predictedSample.getLanguage().getLang(),
+                referenceSample.getContext()));
+    }
 }

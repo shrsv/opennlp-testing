@@ -23,29 +23,29 @@ import java.util.regex.Pattern;
  */
 public class TwitterCharSequenceNormalizer implements CharSequenceNormalizer {
 
-  private static final Pattern HASH_USER_REGEX =
-      Pattern.compile("[#@]\\S+");
+    private static final Pattern HASH_USER_REGEX =
+            Pattern.compile("[#@]\\S+");
 
-  private static final Pattern RT_REGEX =
-      Pattern.compile("\\b(rt[ :])+", Pattern.CASE_INSENSITIVE);
+    private static final Pattern RT_REGEX =
+            Pattern.compile("\\b(rt[ :])+", Pattern.CASE_INSENSITIVE);
 
-  private static final Pattern FACE_REGEX =
-      Pattern.compile("[:;x]-?[()dop]", Pattern.CASE_INSENSITIVE);
+    private static final Pattern FACE_REGEX =
+            Pattern.compile("[:;x]-?[()dop]", Pattern.CASE_INSENSITIVE);
 
-  private static final Pattern LAUGH_REGEX =
-      Pattern.compile("([hj])+([aieou])+(\\1+\\2+)+", Pattern.CASE_INSENSITIVE);
+    private static final Pattern LAUGH_REGEX =
+            Pattern.compile("([hj])+([aieou])+(\\1+\\2+)+", Pattern.CASE_INSENSITIVE);
 
-  private static final TwitterCharSequenceNormalizer INSTANCE = new TwitterCharSequenceNormalizer();
+    private static final TwitterCharSequenceNormalizer INSTANCE = new TwitterCharSequenceNormalizer();
 
-  public static TwitterCharSequenceNormalizer getInstance() {
-    return INSTANCE;
-  }
+    public static TwitterCharSequenceNormalizer getInstance() {
+        return INSTANCE;
+    }
 
-  public CharSequence normalize (CharSequence text) {
-    String modified = HASH_USER_REGEX.matcher(text).replaceAll(" ");
-    modified = RT_REGEX.matcher(modified).replaceAll(" ");
-    modified = FACE_REGEX.matcher(modified).replaceAll(" ");
-    modified = LAUGH_REGEX.matcher(modified).replaceAll("$1$2$1$2");
-    return modified;
-  }
+    public CharSequence normalize(CharSequence text) {
+        String modified = HASH_USER_REGEX.matcher(text).replaceAll(" ");
+        modified = RT_REGEX.matcher(modified).replaceAll(" ");
+        modified = FACE_REGEX.matcher(modified).replaceAll(" ");
+        modified = LAUGH_REGEX.matcher(modified).replaceAll("$1$2$1$2");
+        return modified;
+    }
 }

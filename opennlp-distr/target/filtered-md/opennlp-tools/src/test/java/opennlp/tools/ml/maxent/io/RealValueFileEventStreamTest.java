@@ -17,43 +17,42 @@
 
 package opennlp.tools.ml.maxent.io;
 
-import java.io.IOException;
-import java.util.HashMap;
-
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-
 import opennlp.tools.ml.AbstractTrainer;
 import opennlp.tools.ml.model.DataIndexer;
 import opennlp.tools.ml.model.OnePassRealValueDataIndexer;
 import opennlp.tools.ml.model.RealValueFileEventStream;
 import opennlp.tools.util.TrainingParameters;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+
+import java.io.IOException;
+import java.util.HashMap;
 
 public class RealValueFileEventStreamTest {
 
-  private DataIndexer indexer;
+    private DataIndexer indexer;
 
-  @Before
-  public void initIndexer() {
-    TrainingParameters trainingParameters = new TrainingParameters();
-    trainingParameters.put(AbstractTrainer.CUTOFF_PARAM, 1);
-    indexer = new OnePassRealValueDataIndexer();
-    indexer.init(trainingParameters, new HashMap<>());
-  }
-
-  @Test
-  public void testLastLineBug() throws IOException {
-    try (RealValueFileEventStream rvfes = new RealValueFileEventStream(
-        "src/test/resources/data/opennlp/maxent/io/rvfes-bug-data-ok.txt")) {
-      indexer.index(rvfes);
+    @Before
+    public void initIndexer() {
+        TrainingParameters trainingParameters = new TrainingParameters();
+        trainingParameters.put(AbstractTrainer.CUTOFF_PARAM, 1);
+        indexer = new OnePassRealValueDataIndexer();
+        indexer.init(trainingParameters, new HashMap<>());
     }
-    Assert.assertEquals(1, indexer.getOutcomeLabels().length);
 
-    try (RealValueFileEventStream rvfes = new RealValueFileEventStream(
-        "src/test/resources/data/opennlp/maxent/io/rvfes-bug-data-broken.txt")) {
-      indexer.index(rvfes);
+    @Test
+    public void testLastLineBug() throws IOException {
+        try (RealValueFileEventStream rvfes = new RealValueFileEventStream(
+                "src/test/resources/data/opennlp/maxent/io/rvfes-bug-data-ok.txt")) {
+            indexer.index(rvfes);
+        }
+        Assert.assertEquals(1, indexer.getOutcomeLabels().length);
+
+        try (RealValueFileEventStream rvfes = new RealValueFileEventStream(
+                "src/test/resources/data/opennlp/maxent/io/rvfes-bug-data-broken.txt")) {
+            indexer.index(rvfes);
+        }
+        Assert.assertEquals(1, indexer.getOutcomeLabels().length);
     }
-    Assert.assertEquals(1, indexer.getOutcomeLabels().length);
-  }
 }

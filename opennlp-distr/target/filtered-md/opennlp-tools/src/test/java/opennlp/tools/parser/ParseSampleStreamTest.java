@@ -17,34 +17,33 @@
 
 package opennlp.tools.parser;
 
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-
-import org.junit.Assert;
-import org.junit.Test;
-
 import opennlp.tools.formats.ResourceAsStreamFactory;
 import opennlp.tools.util.InputStreamFactory;
 import opennlp.tools.util.ObjectStream;
 import opennlp.tools.util.PlainTextByLineStream;
+import org.junit.Assert;
+import org.junit.Test;
+
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 
 public class ParseSampleStreamTest {
 
-  private static ObjectStream<Parse> createParseSampleStream() throws IOException {
+    private static ObjectStream<Parse> createParseSampleStream() throws IOException {
 
-    InputStreamFactory in = new ResourceAsStreamFactory(
-        ParseSampleStreamTest.class, "/opennlp/tools/parser/test.parse");
+        InputStreamFactory in = new ResourceAsStreamFactory(
+                ParseSampleStreamTest.class, "/opennlp/tools/parser/test.parse");
 
-    return new ParseSampleStream(new PlainTextByLineStream(in, StandardCharsets.UTF_8));
-  }
+        return new ParseSampleStream(new PlainTextByLineStream(in, StandardCharsets.UTF_8));
+    }
 
-  @Test
-  public void testReadTestStream() throws IOException {
-    ObjectStream<Parse> parseStream = createParseSampleStream();
-    Assert.assertNotNull(parseStream.read());
-    Assert.assertNotNull(parseStream.read());
-    Assert.assertNotNull(parseStream.read());
-    Assert.assertNotNull(parseStream.read());
-    Assert.assertNull(parseStream.read());
-  }
+    @Test
+    public void testReadTestStream() throws IOException {
+        ObjectStream<Parse> parseStream = createParseSampleStream();
+        Assert.assertNotNull(parseStream.read());
+        Assert.assertNotNull(parseStream.read());
+        Assert.assertNotNull(parseStream.read());
+        Assert.assertNotNull(parseStream.read());
+        Assert.assertNull(parseStream.read());
+    }
 }

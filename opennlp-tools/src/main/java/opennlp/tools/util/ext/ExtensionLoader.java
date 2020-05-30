@@ -26,97 +26,96 @@ import java.lang.reflect.Field;
  */
 public class ExtensionLoader {
 
-  private static boolean isOsgiAvailable = false;
+    private static boolean isOsgiAvailable = false;
 
-  private ExtensionLoader() {
-  }
+    private ExtensionLoader() {
+    }
 
-  static boolean isOSGiAvailable() {
-    return isOsgiAvailable;
-  }
+    static boolean isOSGiAvailable() {
+        return isOsgiAvailable;
+    }
 
-  static void setOSGiAvailable() {
-    isOsgiAvailable = true;
-  }
+    static void setOSGiAvailable() {
+        isOsgiAvailable = true;
+    }
 
-  // Pass in the type (interface) of the class to load
-  /**
-   * Instantiates an user provided extension to OpenNLP.
-   * <p>
-   * The extension is either loaded from the class path or if running
-   * inside an OSGi environment via an OSGi service.
-   * <p>
-   * Initially it tries using the public default
-   * constructor. If it is not found, it will check if the class follows the singleton
-   * pattern: a static field named <code>INSTANCE</code> that returns an object of the type
-   * <code>T</code>.
-   *
-   * @param clazz
-   * @param extensionClassName
-   *
-   * @return the instance of the extension class
-   */
-  // TODO: Throw custom exception if loading fails ...
-  @SuppressWarnings("unchecked")
-  public static <T> T instantiateExtension(Class<T> clazz, String extensionClassName) {
+    // Pass in the type (interface) of the class to load
 
-    // First try to load extension and instantiate extension from class path
-    try {
-      Class<?> extClazz = Class.forName(extensionClassName);
+    /**
+     * Instantiates an user provided extension to OpenNLP.
+     * <p>
+     * The extension is either loaded from the class path or if running
+     * inside an OSGi environment via an OSGi service.
+     * <p>
+     * Initially it tries using the public default
+     * constructor. If it is not found, it will check if the class follows the singleton
+     * pattern: a static field named <code>INSTANCE</code> that returns an object of the type
+     * <code>T</code>.
+     *
+     * @param clazz
+     * @param extensionClassName
+     * @return the instance of the extension class
+     */
+    // TODO: Throw custom exception if loading fails ...
+    @SuppressWarnings("unchecked")
+    public static <T> T instantiateExtension(Class<T> clazz, String extensionClassName) {
 
-      if (clazz.isAssignableFrom(extClazz)) {
-
+        // First try to load extension and instantiate extension from class path
         try {
-          return (T) extClazz.newInstance();
-        } catch (InstantiationException e) {
-          throw new ExtensionNotLoadedException(e);
-        } catch (IllegalAccessException e) {
-          // constructor is private. Try to load using INSTANCE
-          Field instanceField;
-          try {
-            instanceField = extClazz.getDeclaredField("INSTANCE");
-          } catch (NoSuchFieldException | SecurityException e1) {
-            throw new ExtensionNotLoadedException(e1);
-          }
-          if (instanceField != null) {
-            try {
-              return (T) instanceField.get(null);
-            } catch (IllegalArgumentException | IllegalAccessException e1) {
-              throw new ExtensionNotLoadedException(e1);
+            Class<?> extClazz = Class.forName(extensionClassName);
+
+            if (clazz.isAssignableFrom(extClazz)) {
+
+                try {
+                    return (T) extClazz.newInstance();
+                } catch (InstantiationException e) {
+                    throw new ExtensionNotLoadedException(e);
+                } catch (IllegalAccessException e) {
+                    // constructor is private. Try to load using INSTANCE
+                    Field instanceField;
+                    try {
+                        instanceField = extClazz.getDeclaredField("INSTANCE");
+                    } catch (NoSuchFieldException | SecurityException e1) {
+                        throw new ExtensionNotLoadedException(e1);
+                    }
+                    if (instanceField != null) {
+                        try {
+                            return (T) instanceField.get(null);
+                        } catch (IllegalArgumentException | IllegalAccessException e1) {
+                            throw new ExtensionNotLoadedException(e1);
+                        }
+                    }
+                    throw new ExtensionNotLoadedException(e);
+                }
+            } else {
+                throw new ExtensionNotLoadedException("Extension class '" + extClazz.getName() +
+                        "' needs to have type: " + clazz.getName());
             }
-          }
-          throw new ExtensionNotLoadedException(e);
+        } catch (ClassNotFoundException e) {
+            // Class is not on classpath
         }
-      }
-      else {
-        throw new ExtensionNotLoadedException("Extension class '" + extClazz.getName() +
-                "' needs to have type: " + clazz.getName());
-      }
-    } catch (ClassNotFoundException e) {
-      // Class is not on classpath
+
+        // Loading from class path failed
+
+        // Either something is wrong with the class name or OpenNLP is
+        // running in an OSGi environment. The extension classes are not
+        // on our classpath in this case.
+        // In OSGi we need to use services to get access to extensions.
+
+        // Determine if OSGi class is on class path
+
+        // Now load class which depends on OSGi API
+        if (isOsgiAvailable) {
+
+            // The OSGIExtensionLoader class will be loaded when the next line
+            // is executed, but not prior, and that is why it is safe to directly
+            // reference it here.
+            OSGiExtensionLoader extLoader = OSGiExtensionLoader.getInstance();
+            return extLoader.getExtension(clazz, extensionClassName);
+        }
+
+        throw new ExtensionNotLoadedException("Unable to find implementation for " +
+                clazz.getName() + ", the class or service " + extensionClassName +
+                " could not be located!");
     }
-
-    // Loading from class path failed
-
-    // Either something is wrong with the class name or OpenNLP is
-    // running in an OSGi environment. The extension classes are not
-    // on our classpath in this case.
-    // In OSGi we need to use services to get access to extensions.
-
-    // Determine if OSGi class is on class path
-
-    // Now load class which depends on OSGi API
-    if (isOsgiAvailable) {
-
-      // The OSGIExtensionLoader class will be loaded when the next line
-      // is executed, but not prior, and that is why it is safe to directly
-      // reference it here.
-      OSGiExtensionLoader extLoader = OSGiExtensionLoader.getInstance();
-      return extLoader.getExtension(clazz, extensionClassName);
-    }
-
-    throw new ExtensionNotLoadedException("Unable to find implementation for " +
-          clazz.getName() + ", the class or service " + extensionClassName +
-          " could not be located!");
-  }
 }

@@ -21,8 +21,8 @@ import java.util.List;
 
 class IdentityFeatureGenerator implements AdaptiveFeatureGenerator {
 
-  public void createFeatures(List<String> features, String[] tokens, int index,
-      String[] previousOutcomes) {
-    features.add(tokens[index]);
-  }
+    public void createFeatures(List<String> features, String[] tokens, int index,
+                               String[] previousOutcomes) {
+        features.add(tokens[index]);
+    }
 }

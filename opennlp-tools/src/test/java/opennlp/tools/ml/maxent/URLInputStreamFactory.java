@@ -17,23 +17,24 @@
 
 package opennlp.tools.ml.maxent;
 
+import opennlp.tools.util.InputStreamFactory;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 
-import opennlp.tools.util.InputStreamFactory;
-
 public class URLInputStreamFactory implements InputStreamFactory {
 
 
-  private URL url;
-  public URLInputStreamFactory(URL url) {
-    this.url = url;
-  }
-  
-  @Override
-  public InputStream createInputStream() throws IOException {
-    return url.openStream();
-  }
+    private URL url;
+
+    public URLInputStreamFactory(URL url) {
+        this.url = url;
+    }
+
+    @Override
+    public InputStream createInputStream() throws IOException {
+        return url.openStream();
+    }
 
 }
